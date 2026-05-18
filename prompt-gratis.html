@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>20 Prompt Claude Terbaik — Gratis | Klaud.id</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #042C53;
+    --navy-mid: #0C447C;
+    --blue: #378ADD;
+    --blue-light: #85B7EB;
+    --blue-pale: #E6F1FB;
+    --green: #1D9E75;
+    --green-light: #5DCAA5;
+    --warm-white: #F5F3EE;
+    --warm-white-2: #EBE9E3;
+    --gray-mid: #888780;
+    --gold: #FAC775;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--navy);
+    color: var(--warm-white);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 20px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(4, 44, 83, 0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(55, 138, 221, 0.12);
+  }
+  .logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: var(--warm-white); text-decoration: none; }
+  .logo span { color: var(--blue); }
+  .nav-back {
+    font-size: 14px; font-weight: 500; color: var(--blue-light);
+    text-decoration: none; display: flex; align-items: center; gap: 6px;
+    transition: color 0.2s;
+  }
+  .nav-back:hover { color: var(--warm-white); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 120px 24px 80px;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(55,138,221,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(29,158,117,0.08) 0%, transparent 60%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(55,138,221,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(55,138,221,0.06) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 80%);
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 700px; }
+
+  .free-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(29,158,117,0.15); border: 1px solid rgba(29,158,117,0.35);
+    border-radius: 100px; padding: 6px 18px; margin-bottom: 28px;
+    font-size: 13px; font-weight: 700; color: var(--green-light);
+    letter-spacing: 0.5px; text-transform: uppercase;
+    animation: fadeUp 0.6s ease both;
+  }
+  .free-badge .dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--green-light);
+    animation: pulse 2s ease infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
+
+  .hero h1 {
+    font-size: clamp(36px, 6vw, 62px); font-weight: 800;
+    line-height: 1.08; letter-spacing: -2px; margin-bottom: 20px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+  .hero h1 .accent { color: var(--blue); }
+  .hero h1 .num {
+    font-size: clamp(52px, 9vw, 90px); color: var(--gold);
+    display: block; line-height: 1;
+  }
+
+  .hero-sub {
+    font-size: 17px; color: var(--blue-light); line-height: 1.7;
+    max-width: 520px; margin: 0 auto 36px;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  /* SIGNUP FORM */
+  .signup-box {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(55,138,221,0.25);
+    border-radius: 16px; padding: 32px;
+    max-width: 480px; margin: 0 auto;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+  .signup-box h3 {
+    font-size: 18px; font-weight: 700; margin-bottom: 6px;
+  }
+  .signup-box p {
+    font-size: 13px; color: var(--blue-light); margin-bottom: 20px;
+  }
+  .form-group { display: flex; flex-direction: column; gap: 10px; }
+  .form-row { display: flex; gap: 10px; }
+  .form-input {
+    flex: 1; background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(55,138,221,0.2);
+    border-radius: 10px; padding: 13px 16px;
+    font-size: 14px; color: var(--warm-white);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    outline: none; transition: border-color 0.2s;
+  }
+  .form-input::placeholder { color: var(--gray-mid); }
+  .form-input:focus { border-color: var(--blue); }
+  .btn-download {
+    width: 100%; background: var(--blue); color: #fff;
+    border: none; border-radius: 10px; padding: 14px;
+    font-size: 15px; font-weight: 700; cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-download:hover { background: #2a72c4; transform: translateY(-1px); }
+  .form-note {
+    font-size: 12px; color: var(--gray-mid); text-align: center; margin-top: 10px;
+  }
+
+  /* PREVIEW SECTION */
+  .preview { padding: 96px 24px; }
+  .container { max-width: 1000px; margin: 0 auto; }
+  .section-label {
+    font-size: 12px; font-weight: 700; letter-spacing: 2px;
+    color: var(--blue); text-transform: uppercase; margin-bottom: 12px;
+    font-family: 'DM Mono', monospace;
+  }
+  .section-title {
+    font-size: clamp(26px, 4vw, 38px); font-weight: 800;
+    letter-spacing: -1px; line-height: 1.15; margin-bottom: 12px;
+  }
+  .section-sub { font-size: 15px; color: var(--blue-light); line-height: 1.75; margin-bottom: 48px; }
+
+  /* PROMPT PREVIEW CARDS */
+  .prompts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .prompt-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(55,138,221,0.12);
+    border-radius: 14px; padding: 22px 20px;
+    transition: border-color 0.2s, background 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .prompt-card:hover { border-color: rgba(55,138,221,0.35); background: rgba(55,138,221,0.06); }
+  .prompt-num {
+    font-size: 28px; font-weight: 800; color: var(--blue);
+    font-family: 'DM Mono', monospace; line-height: 1;
+    margin-bottom: 4px;
+  }
+  .prompt-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .cat-badge {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    padding: 3px 9px; border-radius: 100px; margin-bottom: 10px;
+    letter-spacing: 0.5px;
+  }
+  .prompt-preview {
+    font-size: 12px; color: var(--blue-light); line-height: 1.6;
+    font-family: 'DM Mono', monospace;
+    background: rgba(12,68,124,0.5);
+    border-radius: 8px; padding: 10px 12px;
+    position: relative;
+  }
+  .prompt-preview::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 40px;
+    background: linear-gradient(transparent, rgba(4,44,83,0.95));
+    border-radius: 0 0 8px 8px;
+  }
+  .lock-overlay {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 12px;
+    font-size: 12px; font-weight: 600; color: var(--blue-light);
+  }
+
+  /* WHAT YOU GET */
+  .benefits { padding: 0 24px 96px; }
+  .benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+  .benefit-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(55,138,221,0.12);
+    border-radius: 14px; padding: 24px 20px; text-align: center;
+  }
+  .benefit-icon { font-size: 28px; margin-bottom: 12px; }
+  .benefit-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .benefit-card p { font-size: 13px; color: var(--blue-light); line-height: 1.6; }
+
+  /* CTA BOTTOM */
+  .cta-bottom {
+    background: rgba(55,138,221,0.08);
+    border-top: 1px solid rgba(55,138,221,0.15);
+    padding: 72px 24px; text-align: center;
+  }
+  .cta-bottom h2 { font-size: clamp(24px, 4vw, 36px); font-weight: 800; letter-spacing: -1px; margin-bottom: 12px; }
+  .cta-bottom p { font-size: 15px; color: var(--blue-light); margin-bottom: 32px; }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(4,44,83,0.95);
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px; opacity: 0; pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .modal-overlay.active { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--navy-mid); border: 1px solid rgba(55,138,221,0.3);
+    border-radius: 20px; padding: 40px; max-width: 440px; width: 100%;
+    text-align: center; transform: scale(0.95);
+    transition: transform 0.3s;
+  }
+  .modal-overlay.active .modal { transform: scale(1); }
+  .modal-icon { font-size: 48px; margin-bottom: 16px; }
+  .modal h3 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+  .modal p { font-size: 14px; color: var(--blue-light); margin-bottom: 24px; line-height: 1.6; }
+  .modal .btn-download { max-width: 300px; margin: 0 auto 12px; }
+  .modal-sub { font-size: 12px; color: var(--gray-mid); }
+
+  /* FOOTER */
+  footer {
+    background: #021e3a; padding: 32px 24px;
+    border-top: 1px solid rgba(55,138,221,0.1);
+    text-align: center;
+  }
+  footer p { font-size: 12px; color: var(--gray-mid); }
+  footer a { color: var(--blue-light); text-decoration: none; }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    .form-row { flex-direction: column; }
+    .hero { padding: 100px 20px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo">Klaud<span>.id</span></a>
+  <a href="index.html" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Kembali ke beranda
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="free-badge">
+      <span class="dot"></span>
+      100% Gratis — Tidak Perlu Kartu Kredit
+    </div>
+    <h1>
+      <span class="num">20</span>
+      Prompt <span class="accent">Claude AI</span><br>
+      Terbaik untuk Indonesia
+    </h1>
+    <p class="hero-sub">
+      Prompt siap pakai untuk email, laporan, konten media sosial, marketing, HRD, dan lebih banyak lagi — semuanya dalam Bahasa Indonesia.
+    </p>
+
+    <!-- SIGNUP FORM -->
+    <div class="signup-box">
+      <h3>📥 Dapatkan PDF Gratis Sekarang</h3>
+      <p>Masukkan nama dan email Anda — kami kirim langsung ke inbox Anda.</p>
+      <div class="form-group">
+        <div class="form-row">
+          <input type="text" class="form-input" placeholder="Nama Anda" id="inputName">
+          <input type="email" class="form-input" placeholder="Email aktif Anda" id="inputEmail">
+        </div>
+        <button class="btn-download" onclick="handleDownload()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Download PDF Gratis
+        </button>
+      </div>
+      <p class="form-note">🔒 Kami tidak pernah spam. Unsubscribe kapan saja.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PREVIEW -->
+<section class="preview">
+  <div class="container">
+    <div class="section-label">Preview Isi PDF</div>
+    <h2 class="section-title">Intip dulu isinya</h2>
+    <p class="section-sub">Berikut sebagian dari 20 prompt yang akan Anda dapatkan — gratis sepenuhnya.</p>
+
+    <div class="prompts-grid">
+
+      <div class="prompt-card">
+        <div class="prompt-num">01</div>
+        <span class="cat-badge" style="background:rgba(55,138,221,0.2);color:#85B7EB">Email & Komunikasi</span>
+        <h4>Tulis Email Profesional</h4>
+        <div class="prompt-preview">
+          Tulis email profesional dalam Bahasa Indonesia dengan konteks berikut:
+- Tujuan: [jelaskan tujuan]
+- Penerima: [jabatan]...
+          <div class="lock-overlay">🔒 Download untuk lihat lengkap</div>
+        </div>
+      </div>
+
+      <div class="prompt-card">
+        <div class="prompt-num">03</div>
+        <span class="cat-badge" style="background:rgba(29,158,117,0.2);color:#5DCAA5">Laporan & Dokumen</span>
+        <h4>Buat Ringkasan Laporan</h4>
+        <div class="prompt-preview">
+          Berikut adalah laporan lengkap yang perlu diringkas:
+[tempel isi laporan]
+Buat ringkasan eksekutif...
+          <div class="lock-overlay">🔒 Download untuk lihat lengkap</div>
+        </div>
+      </div>
+
+      <div class="prompt-card">
+        <div class="prompt-num">07</div>
+        <span class="cat-badge" style="background:rgba(255,107,157,0.2);color:#FF9CC5">Konten Media Sosial</span>
+        <h4>Caption Instagram Bisnis</h4>
+        <div class="prompt-preview">
+          Buatkan 3 variasi caption Instagram untuk produk berikut:
+- Produk: [nama produk]
+- Target: [audiens]...
+          <div class="lock-overlay">🔒 Download untuk lihat lengkap</div>
+        </div>
+      </div>
+
+      <div class="prompt-card">
+        <div class="prompt-num">11</div>
+        <span class="cat-badge" style="background:rgba(255,140,66,0.2);color:#FFB07A">SDM & HRD</span>
+        <h4>Buat Job Description</h4>
+        <div class="prompt-preview">
+          Buatkan job description profesional untuk:
+- Posisi: [nama posisi]
+- Perusahaan: [industri]...
+          <div class="lock-overlay">🔒 Download untuk lihat lengkap</div>
+        </div>
+      </div>
+
+      <div class="prompt-card">
+        <div class="prompt-num">15</div>
+        <span class="cat-badge" style="background:rgba(255,107,107,0.2);color:#FF9999">Copywriting</span>
+        <h4>Headline Iklan yang Menarik</h4>
+        <div class="prompt-preview">
+          Buatkan 10 variasi headline iklan untuk:
+- Produk: [nama produk]
+- Pain point: [masalah]...
+          <div class="lock-overlay">🔒 Download untuk lihat lengkap</div>
+        </div>
+      </div>
+
+      <div class="prompt-card" style="border-color:rgba(55,138,221,0.3);background:rgba(55,138,221,0.06);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:200px;">
+        <div style="font-size:32px;margin-bottom:12px">🔒</div>
+        <h4>+ 15 Prompt Lainnya</h4>
+        <p style="font-size:13px;color:var(--blue-light);margin-top:8px;line-height:1.6">Presentasi, Analisis Riset, Keuangan, Produktivitas, Akademik, dan lainnya</p>
+        <button onclick="scrollToForm()" style="margin-top:16px;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;">
+          Download Gratis →
+        </button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="benefits">
+  <div class="container">
+    <div class="section-label">Apa yang Anda Dapat</div>
+    <h2 class="section-title" style="margin-bottom:12px">Semuanya gratis,<br>langsung bisa dipakai</h2>
+    <p class="section-sub">Tidak perlu baca panjang — tinggal copy, ganti bagian dalam kurung siku, dan pakai.</p>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon">📧</div>
+        <h4>Email & Komunikasi</h4>
+        <p>2 prompt untuk email profesional dan balasan komplain pelanggan</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">📊</div>
+        <h4>Laporan & Presentasi</h4>
+        <p>4 prompt untuk laporan, ringkasan, dan presentasi yang memukau</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">📱</div>
+        <h4>Konten Media Sosial</h4>
+        <p>2 prompt untuk caption Instagram dan kalender konten 30 hari</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">📣</div>
+        <h4>Marketing & Copywriting</h4>
+        <p>2 prompt untuk headline iklan dan sales page yang menjual</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">👥</div>
+        <h4>SDM & HRD</h4>
+        <p>2 prompt untuk job description dan pertanyaan wawancara kerja</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">🎓</div>
+        <h4>Mahasiswa & Karir</h4>
+        <p>2 prompt untuk kerangka skripsi dan persiapan interview kerja pertama</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BOTTOM -->
+<section class="cta-bottom">
+  <div class="container">
+    <h2>Siap hemat waktu kerja<br>mulai hari ini?</h2>
+    <p>Gratis selamanya. Tidak perlu kartu kredit. Langsung bisa dipakai.</p>
+    <div class="signup-box" style="max-width:480px;margin:0 auto">
+      <div class="form-group">
+        <div class="form-row">
+          <input type="text" class="form-input" placeholder="Nama Anda" id="inputName2">
+          <input type="email" class="form-input" placeholder="Email aktif Anda" id="inputEmail2">
+        </div>
+        <button class="btn-download" onclick="handleDownload2()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Download PDF Gratis Sekarang
+        </button>
+      </div>
+      <p class="form-note">🔒 Privasi Anda aman. Tidak ada spam.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-icon">🎉</div>
+    <h3>Berhasil! PDF siap diunduh</h3>
+    <p>Terima kasih sudah mendaftar! Klik tombol di bawah untuk langsung download 20 Prompt Claude Terbaik Anda.</p>
+    <button class="btn-download" onclick="triggerDownload()" style="max-width:300px;margin:0 auto 12px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      Download Sekarang
+    </button>
+    <p class="modal-sub">Kami juga akan kirim link ke email Anda sebagai backup.</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 <a href="index.html">Klaud.id</a> — Platform Belajar Claude AI #1 dalam Bahasa Indonesia</p>
+</footer>
+
+<script>
+  function validateForm(name, email) {
+    if (!name.trim()) { alert('Mohon masukkan nama Anda.'); return false; }
+    if (!email.trim() || !email.includes('@')) { alert('Mohon masukkan email yang valid.'); return false; }
+    return true;
+  }
+
+  function showModal() {
+    document.getElementById('modalOverlay').classList.add('active');
+  }
+
+  function triggerDownload() {
+    // Replace '20-prompt-claude-terbaik.pdf' with actual path when deployed
+    const link = document.createElement('a');
+    link.href = '20-prompt-claude-terbaik.pdf';
+    link.download = '20-Prompt-Claude-Terbaik-Klaud.id.pdf';
+    link.click();
+    document.getElementById('modalOverlay').classList.remove('active');
+  }
+
+  function handleDownload() {
+    const name = document.getElementById('inputName').value;
+    const email = document.getElementById('inputEmail').value;
+    if (validateForm(name, email)) showModal();
+  }
+
+  function handleDownload2() {
+    const name = document.getElementById('inputName2').value;
+    const email = document.getElementById('inputEmail2').value;
+    if (validateForm(name, email)) showModal();
+  }
+
+  function scrollToForm() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => document.getElementById('inputName').focus(), 600);
+  }
+
+  // Close modal on overlay click
+  document.getElementById('modalOverlay').addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('active');
+  });
+</script>
+
+</body>
+</html>
