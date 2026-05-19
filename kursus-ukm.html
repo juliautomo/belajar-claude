@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scale Bisnis dengan Claude AI — Klaud.id</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #042C53;
+    --navy-mid: #0C447C;
+    --blue: #378ADD;
+    --blue-light: #85B7EB;
+    --blue-pale: #E6F1FB;
+    --green: #1D9E75;
+    --green-light: #5DCAA5;
+    --warm-white: #F5F3EE;
+    --warm-white-2: #EBE9E3;
+    --gray-mid: #888780;
+    --gold: #FAC775;
+    --gold-dark: #EF9F27;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--navy); color: var(--warm-white); overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 20px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(4,44,83,0.9); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(55,138,221,0.12);
+  }
+  .logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: var(--warm-white); text-decoration: none; }
+  .logo span { color: var(--blue); }
+  .nav-back { font-size: 14px; font-weight: 500; color: var(--blue-light); text-decoration: none; display: flex; align-items: center; gap: 6px; transition: color 0.2s; }
+  .nav-back:hover { color: var(--warm-white); }
+
+  /* HERO */
+  .hero { padding: 140px 24px 80px; position: relative; overflow: hidden; }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: radial-gradient(ellipse 80% 60% at 60% 0%, rgba(239,159,39,0.1) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 10% 80%, rgba(55,138,221,0.08) 0%, transparent 60%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0; z-index: 0;
+    background-image: linear-gradient(rgba(55,138,221,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(55,138,221,0.05) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 30%, transparent 80%);
+  }
+  .hero-inner { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: 1fr 380px; gap: 64px; align-items: start; }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(239,159,39,0.15); border: 1px solid rgba(239,159,39,0.3);
+    border-radius: 100px; padding: 6px 16px; margin-bottom: 24px;
+    font-size: 12px; font-weight: 700; color: var(--gold); letter-spacing: 1px; text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+  }
+  .hero h1 { font-size: clamp(32px, 5vw, 52px); font-weight: 800; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 20px; }
+  .hero h1 .accent { color: var(--gold); }
+  .hero-sub { font-size: 16px; color: var(--blue-light); line-height: 1.75; margin-bottom: 32px; max-width: 520px; }
+
+  .hero-bullets { display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
+  .bullet { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--warm-white-2); }
+  .bullet-icon { width: 22px; height: 22px; border-radius: 50%; background: rgba(239,159,39,0.2); display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; }
+
+  .hero-meta { display: flex; gap: 24px; flex-wrap: wrap; }
+  .meta-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--gray-mid); }
+
+  /* STICKY CARD */
+  .sticky-card {
+    background: rgba(12,68,124,0.6); border: 1px solid rgba(239,159,39,0.2);
+    border-radius: 20px; padding: 32px; position: sticky; top: 100px;
+    backdrop-filter: blur(12px);
+  }
+  .price-box { margin-bottom: 20px; }
+  .price-old { font-size: 14px; color: var(--gray-mid); text-decoration: line-through; margin-bottom: 4px; }
+  .price-new { font-size: 38px; font-weight: 800; letter-spacing: -1px; color: var(--warm-white); }
+  .price-note { font-size: 12px; color: var(--gold); margin-top: 4px; }
+
+  .coming-soon-btn {
+    width: 100%; background: rgba(239,159,39,0.1);
+    border: 2px dashed rgba(239,159,39,0.4);
+    border-radius: 12px; padding: 16px;
+    font-size: 15px; font-weight: 700; color: var(--gold);
+    cursor: default; font-family: 'Plus Jakarta Sans', sans-serif;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin-bottom: 16px;
+  }
+  .notify-btn {
+    width: 100%; background: var(--gold-dark); color: #fff;
+    border: none; border-radius: 12px; padding: 14px;
+    font-size: 14px; font-weight: 700; cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: background 0.2s, transform 0.15s; margin-bottom: 16px;
+  }
+  .notify-btn:hover { background: #d4891a; transform: translateY(-1px); }
+
+  .card-includes { border-top: 1px solid rgba(55,138,221,0.15); padding-top: 16px; }
+  .card-includes h4 { font-size: 12px; font-weight: 700; color: var(--gray-mid); letter-spacing: 1px; text-transform: uppercase; font-family: 'DM Mono', monospace; margin-bottom: 12px; }
+  .include-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--warm-white-2); margin-bottom: 8px; }
+
+  .guarantee-mini {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(29,158,117,0.1); border: 1px solid rgba(29,158,117,0.2);
+    border-radius: 10px; padding: 10px 12px; margin-top: 16px;
+    font-size: 12px; color: var(--green-light);
+  }
+
+  /* SECTIONS */
+  section { padding: 80px 24px; }
+  .container { max-width: 1080px; margin: 0 auto; }
+  .section-label { font-size: 12px; font-weight: 700; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; margin-bottom: 12px; font-family: 'DM Mono', monospace; }
+  .section-title { font-size: clamp(24px, 3.5vw, 36px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 12px; }
+  .section-sub { font-size: 15px; color: var(--blue-light); line-height: 1.75; margin-bottom: 48px; }
+
+  /* CURRICULUM */
+  .curriculum { background: rgba(239,159,39,0.03); border-top: 1px solid rgba(239,159,39,0.1); border-bottom: 1px solid rgba(239,159,39,0.1); }
+  .modules-grid { display: flex; flex-direction: column; gap: 0; }
+  .module-item { display: flex; align-items: flex-start; gap: 20px; padding: 20px 0; border-bottom: 1px solid rgba(55,138,221,0.08); }
+  .module-item:last-child { border-bottom: none; }
+  .module-num { font-size: 12px; font-weight: 700; color: var(--gold); font-family: 'DM Mono', monospace; min-width: 32px; padding-top: 2px; }
+  .module-info { flex: 1; }
+  .module-info h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .module-info p { font-size: 13px; color: var(--blue-light); line-height: 1.6; }
+  .module-dur { font-size: 12px; color: var(--gray-mid); white-space: nowrap; padding-top: 2px; }
+
+  /* TESTIMONIALS */
+  .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .testi-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; }
+  .stars { color: var(--gold); font-size: 14px; margin-bottom: 14px; letter-spacing: 2px; }
+  .testi-card blockquote { font-size: 14px; color: var(--warm-white-2); line-height: 1.75; margin-bottom: 20px; font-style: italic; }
+  .testi-author { display: flex; align-items: center; gap: 12px; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: rgba(239,159,39,0.2); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: var(--gold); flex-shrink: 0; }
+  .testi-author .name { font-size: 13px; font-weight: 700; }
+  .testi-author .role { font-size: 12px; color: var(--blue-light); }
+
+  /* GUARANTEE */
+  .guarantee { background: rgba(29,158,117,0.06); border-top: 1px solid rgba(29,158,117,0.15); border-bottom: 1px solid rgba(29,158,117,0.15); }
+  .guarantee-box { max-width: 640px; margin: 0 auto; text-align: center; }
+  .guarantee-icon { font-size: 56px; margin-bottom: 20px; }
+  .guarantee-box h2 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .guarantee-box p { font-size: 15px; color: var(--blue-light); line-height: 1.8; }
+  .guarantee-box strong { color: var(--green-light); }
+
+  /* FAQ */
+  .faq-list { max-width: 700px; display: flex; flex-direction: column; gap: 0; }
+  .faq-item { border-bottom: 1px solid rgba(55,138,221,0.12); }
+  .faq-q { width: 100%; background: none; border: none; text-align: left; padding: 20px 0; display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 700; color: var(--warm-white); cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; gap: 16px; }
+  .faq-q .arrow { font-size: 18px; color: var(--gold); transition: transform 0.3s; flex-shrink: 0; }
+  .faq-q.open .arrow { transform: rotate(45deg); }
+  .faq-a { font-size: 14px; color: var(--blue-light); line-height: 1.8; padding-bottom: 20px; display: none; }
+  .faq-a.open { display: block; }
+
+  /* MODAL */
+  .modal-overlay { position: fixed; inset: 0; z-index: 200; background: rgba(4,44,83,0.95); display: flex; align-items: center; justify-content: center; padding: 24px; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  .modal-overlay.active { opacity: 1; pointer-events: all; }
+  .modal { background: var(--navy-mid); border: 1px solid rgba(239,159,39,0.3); border-radius: 20px; padding: 40px; max-width: 440px; width: 100%; text-align: center; transform: scale(0.95); transition: transform 0.3s; position: relative; }
+  .modal-overlay.active .modal { transform: scale(1); }
+  .modal h3 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+  .modal p { font-size: 14px; color: var(--blue-light); margin-bottom: 24px; line-height: 1.6; }
+  .modal-input { width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(55,138,221,0.2); border-radius: 10px; padding: 13px 16px; font-size: 14px; color: var(--warm-white); font-family: 'Plus Jakarta Sans', sans-serif; outline: none; margin-bottom: 10px; transition: border-color 0.2s; }
+  .modal-input:focus { border-color: var(--gold); }
+  .modal-submit { width: 100%; background: var(--gold-dark); color: #fff; border: none; border-radius: 10px; padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: background 0.2s; }
+  .modal-submit:hover { background: #c07a15; }
+  .modal-close { position: absolute; top: 16px; right: 20px; background: none; border: none; color: var(--gray-mid); font-size: 20px; cursor: pointer; }
+
+  /* FOOTER */
+  footer { background: #021e3a; padding: 32px 24px; border-top: 1px solid rgba(55,138,221,0.1); text-align: center; }
+  footer p { font-size: 12px; color: var(--gray-mid); }
+  footer a { color: var(--blue-light); text-decoration: none; }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    .hero-inner { grid-template-columns: 1fr; }
+    .sticky-card { position: static; }
+    section { padding: 60px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">Klaud<span>.id</span></a>
+  <a href="index.html" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Kembali ke beranda
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-badge">🏪 UKM & Bisnis</div>
+      <h1>Scale Bisnis dengan<br><span class="accent">Claude AI</span></h1>
+      <p class="hero-sub">20 modul khusus untuk pemilik UKM — copywriting, konten media sosial, customer service, analisis kompetitor, dan lebih banyak lagi. Semua dalam Bahasa Indonesia dengan contoh bisnis lokal.</p>
+      <div class="hero-bullets">
+        <div class="bullet"><div class="bullet-icon">✓</div>Konten media sosial yang konsisten setiap hari</div>
+        <div class="bullet"><div class="bullet-icon">✓</div>Customer service yang responsif 24/7</div>
+        <div class="bullet"><div class="bullet-icon">✓</div>Copywriting yang menjual tanpa jasa copywriter</div>
+        <div class="bullet"><div class="bullet-icon">✓</div>Analisis bisnis setara konsultan profesional</div>
+      </div>
+      <div class="hero-meta">
+        <div class="meta-item">🎬 <span>20 modul video</span></div>
+        <div class="meta-item">⏱ <span>8 jam total</span></div>
+        <div class="meta-item">⭐ <span>4.9/5 rating</span></div>
+        <div class="meta-item">👥 <span>1.800+ pelajar</span></div>
+      </div>
+    </div>
+
+    <!-- STICKY CARD -->
+    <div class="sticky-card">
+      <div class="price-box">
+        <div class="price-old">Rp 799.000</div>
+        <div class="price-new">Rp 499.000</div>
+        <div class="price-note">⚡ Harga early bird — terbatas</div>
+      </div>
+      <div class="coming-soon-btn">🚀 Segera Hadir</div>
+      <button class="notify-btn" onclick="document.getElementById('notifyModal').classList.add('active')">
+        🔔 Beritahu Saya Saat Tersedia
+      </button>
+      <div class="card-includes">
+        <h4>Termasuk</h4>
+        <div class="include-item"><span>🎬</span><span>20 video HD berkualitas tinggi</span></div>
+        <div class="include-item"><span>📄</span><span>50+ template prompt untuk bisnis</span></div>
+        <div class="include-item"><span>♾️</span><span>Akses seumur hidup</span></div>
+        <div class="include-item"><span>🔄</span><span>Update konten gratis</span></div>
+        <div class="include-item"><span>👥</span><span>Komunitas pebisnis eksklusif</span></div>
+        <div class="include-item"><span>📱</span><span>Bisa ditonton di HP & laptop</span></div>
+      </div>
+      <div class="guarantee-mini">
+        🛡️ Garansi uang kembali 14 hari — tanpa pertanyaan
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CURRICULUM -->
+<section class="curriculum">
+  <div class="container">
+    <div class="section-label">Kurikulum</div>
+    <h2 class="section-title">20 Modul untuk<br>scale bisnis Anda lebih cepat</h2>
+    <p class="section-sub">Dari branding hingga operasional — setiap modul dirancang khusus untuk tantangan bisnis UKM Indonesia.</p>
+    <div class="modules-grid">
+      <div class="module-item">
+        <div class="module-num">01</div>
+        <div class="module-info"><h4>Claude untuk Pebisnis — Mulai dari Mana</h4><p>Pahami cara kerja Claude dan bagaimana AI bisa jadi asisten bisnis terbaik Anda yang tidak pernah libur.</p></div>
+        <div class="module-dur">⏱ 18 mnt</div>
+      </div>
+      <div class="module-item">
+        <div class="module-num">02</div>
+        <div class="module-info"><h4>Riset Pasar & Analisis Target Pelanggan</h4><p>Pahami pelanggan ideal Anda lebih dalam — demografi, psikografi, dan kebiasaan beli — tanpa riset mahal.</p></div>
+        <div class="module-dur">⏱ 32 mnt</div>
+      </div>
+      <div class="module-item">
+        <div class="module-num">03</div>
+        <div class="module-info"><h4>Branding & Identitas Bisnis yang Kuat</h4><p>Buat tagline, brand voice, dan pesan utama bisnis yang konsisten dan mudah diingat target pelanggan.</p></div>
+        <div class="module-dur">⏱ 28 mnt</div>
+      </div>
+      <div class="module-item">
+        <div class="module-num">04</div>
+        <div class="module-info"><h4>Caption Instagram & TikTok yang Viral</h4><p>Formula caption yang terbukti meningkatkan engagement — disesuaikan dengan algoritma dan gaya komunikasi Indonesia.</p></div>
+        <div class="module-dur">⏱ 35 mnt</div>
+      </div>
+      <div class="module-item">
+        <div class="module-num">05</div>
+        <div class="module-info"><h4>Kalender Konten 30 Hari dalam 1 Jam</h4><p>Buat rencana konten sebulan penuh — topik, format, jadwal posting — tanpa pusing kehabisan ide.</p></div>
+        <div class="module-dur">⏱ 30 mnt</div>
+      </div>
+      <div class="module-item">
+        <div class="module-num">06</div>
+        <div class="module-info"><h4>Copywriting Iklan Facebook & Instagram</h4><p>Tulis iklan yang langsung menarik perhatian dan mendorong orang klik — dengan formula yang sudah terbukti.</p></div>
+        <div class="module-dur">⏱ 38 mnt</div>
+      </div>
+      <div class="module-item">
+        <div class="module-num">07</div>
+        <div class="module-info"><h4>Deskripsi Produk Tokopedia & Shopee yang Menjual</h4><p>Tulis deskripsi produk yang SEO-friendly dan persuasif — tingkatkan konversi toko online Anda.</p></div>
+        <div class="module-dur">⏱ 33 mnt</div>
+      </div>
+      <div class="module-item">
+        <div class="module-num">08</div>
+        <div class="module-info"><h4>Customer Service yang Responsif & Konsisten</h4><p>Buat template balasan untuk chat WA, DM Instagram, dan marketplace — selalu on-brand dan profesional.</p></div>
+        <div class="module-dur">⏱ 30 mnt</div>
+      </div>
+      <div class="module-item">
+        <div class="module-num">09</div>
+        <div class="module-info"><h4>Tangani Komplain & Review Negatif</h4><p>Ubah pelanggan kecewa menjadi pelanggan loyal dengan respons yang tepat, empatik, dan solutif.</p></div>
+        <div class="module-dur">⏱ 25 mnt</div>
+      </div>
+      <div class="module-item">
+        <div class="module-num">10</div>
+        <div class="module-info"><h4>Email Marketing yang Dibaca & Dibalas</h4><p>Tulis newsletter, promo, dan follow-up email yang membuat pelanggan membeli lagi dan lagi.</p></div>
+        <div class="module-dur">⏱ 28 mnt</div>
+      </div>
+      <div class="module-item">
+        <div class="module-num">11</div>
+        <div class="module-info"><h4>Analisis Kompetitor yang Mendalam</h4><p>Pelajari strategi kompetitor, temukan celah pasar, dan posisikan bisnis Anda dengan lebih tepat.</p></div>
+        <div class="module-dur">⏱ 36 mnt</div>
+      </div>
+      <div class="module-item">
+        <div class="module-num">12</div>
+        <div class="module-info"><h4>Proposal & Penawaran Bisnis yang Memenangkan Klien</h4><p>Tulis proposal yang profesional, persuasif, dan langsung menjawab kebutuhan calon klien Anda.</p></div>
+        <div class="module-dur">⏱ 40 mnt</div>
+      </div>
+      <div class="module-item">
+        <div class="module-num">13</div>
+        <div class="module-info"><h4>Strategi Harga & Promosi yang Tepat</h4><p>Analisis harga kompetitor, buat strategi diskon yang menguntungkan, dan komunikasikan value dengan baik.</p></div>
+        <div class="module-dur">⏱ 32 mnt</div>
+      </div>
+      <div class="module-item">
+        <div class="module-num">14</div>
+        <div class="module-info"><h4>SOP & Panduan Operasional Bisnis</h4><p>Buat SOP yang jelas untuk tim Anda — dari rekrutmen, onboarding, hingga standar pelayanan pelanggan.</p></div>
+        <div class="module-dur">⏱ 35 mnt</div>
+      </div>
+      <div class="module-item">
+        <div class="module-num">15</div>
+        <div class="module-info"><h4>Laporan Keuangan Sederhana & Analisis Bisnis</h4><p>Pahami angka bisnis Anda, identifikasi masalah, dan buat keputusan berdasarkan data — bukan perasaan.</p></div>
+        <div class="module-dur">⏱ 38 mnt</div>
+      </div>
+      <div class="module-item">
+        <div class="module-num">16</div>
+        <div class="module-info"><h4>Kolaborasi & Negosiasi dengan Supplier</h4><p>Tulis email negosiasi harga, syarat pembayaran, dan kontrak kerjasama yang menguntungkan bisnis Anda.</p></div>
+        <div class="module-dur">⏱ 27 mnt</div>
+      </div>
+      <div class="module-item">
+        <div class="module-num">17</div>
+        <div class="module-info"><h4>Strategi Ekspansi — Masuk Pasar Baru</h4><p>Analisis peluang ekspansi, riset pasar baru, dan buat rencana masuk pasar yang terstruktur.</p></div>
+        <div class="module-dur">⏱ 33 mnt</div>
+      </div>
+      <div class="module-item">
+        <div class="module-num">18</div>
+        <div class="module-info"><h4>Program Loyalitas & Referral yang Efektif</h4><p>Desain program repeat order dan referral yang membuat pelanggan setia dan terus merekomendasikan bisnis Anda.</p></div>
+        <div class="module-dur">⏱ 29 mnt</div>
+      </div>
+      <div class="module-item">
+        <div class="module-num">19</div>
+        <div class="module-info"><h4>Kolaborasi Influencer & KOL Lokal</h4><p>Temukan, evaluasi, dan negosiasi dengan influencer yang tepat untuk bisnis Anda — tanpa kehabisan budget.</p></div>
+        <div class="module-dur">⏱ 31 mnt</div>
+      </div>
+      <div class="module-item">
+        <div class="module-num">20</div>
+        <div class="module-info"><h4>Bangun Sistem Bisnis Berbasis AI</h4><p>Integrasikan semua yang dipelajari menjadi sistem bisnis yang berjalan lebih efisien dengan bantuan Claude setiap hari.</p></div>
+        <div class="module-dur">⏱ 45 mnt</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section>
+  <div class="container">
+    <div class="section-label">Testimoni</div>
+    <h2 class="section-title">Kata pemilik bisnis yang<br>sudah merasakannya</h2>
+    <p class="section-sub" style="margin-bottom:40px">Hasil nyata dari UKM Indonesia di berbagai industri.</p>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <blockquote>"Konten Instagram toko saya meningkat drastis. Dulu posting 2-3 kali seminggu karena kehabisan ide, sekarang bisa setiap hari. Omset naik 40% dalam 2 bulan!"</blockquote>
+        <div class="testi-author">
+          <div class="avatar">SR</div>
+          <div><div class="name">Sinta R.</div><div class="role">Pemilik toko fashion online, Surabaya</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <blockquote>"Saya pemilik warung kopi. Pakai Claude untuk bikin promo, caption, dan balas pesan pelanggan. Pelanggan baru meningkat karena konten saya jauh lebih menarik."</blockquote>
+        <div class="testi-author">
+          <div class="avatar">FH</div>
+          <div><div class="name">Fajar H.</div><div class="role">Pemilik coffee shop, Yogyakarta</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <blockquote>"Proposal bisnis yang dulu saya buat sendiri asal-asalan, sekarang jauh lebih profesional. Sudah 3 klien besar berhasil saya dapatkan setelah ikut kursus ini."</blockquote>
+        <div class="testi-author">
+          <div class="avatar">LM</div>
+          <div><div class="name">Lisa M.</div><div class="role">Pemilik agency digital, Bandung</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GUARANTEE -->
+<section class="guarantee">
+  <div class="container">
+    <div class="guarantee-box">
+      <div class="guarantee-icon">🛡️</div>
+      <h2>Garansi Uang Kembali 14 Hari</h2>
+      <p>Kami yakin kursus ini akan mengubah cara Anda menjalankan bisnis. Tapi jika dalam <strong>14 hari</strong> setelah pembelian Anda merasa tidak puas — apapun alasannya — kami akan <strong>kembalikan 100% uang Anda</strong>. Tanpa pertanyaan, tanpa ribet.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section>
+  <div class="container">
+    <div class="section-label">FAQ</div>
+    <h2 class="section-title" style="margin-bottom:12px">Pertanyaan yang<br>sering ditanyakan</h2>
+    <p class="section-sub">Masih ada pertanyaan? Hubungi kami di WhatsApp.</p>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Apakah cocok untuk bisnis yang baru mulai?<span class="arrow">+</span></button>
+        <div class="faq-a">Ya! Kursus ini dirancang untuk semua tahap — mulai dari yang baru merintis hingga yang sudah berjalan tapi ingin scale lebih cepat. Modul disusun dari yang paling dasar hingga strategi lanjutan.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Apakah perlu keahlian teknis atau coding?<span class="arrow">+</span></button>
+        <div class="faq-a">Sama sekali tidak! Jika Anda bisa mengetik pesan WhatsApp, Anda sudah cukup siap. Semua materi disampaikan dengan bahasa yang mudah dipahami pemilik bisnis — bukan developer.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Apakah semua jenis bisnis bisa ikut?<span class="arrow">+</span></button>
+        <div class="faq-a">Ya! Kursus ini cocok untuk toko online, kuliner, jasa, retail, agency, dan hampir semua jenis UKM. Contoh-contoh yang diberikan beragam agar relevan dengan berbagai industri di Indonesia.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Berapa lama akses berlaku?<span class="arrow">+</span></button>
+        <div class="faq-a">Akses seumur hidup! Tonton kapan saja, sebanyak apapun. Semua update konten juga gratis — jadi ketika Claude punya fitur baru yang relevan untuk bisnis, kami tambahkan tanpa biaya tambahan.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Apakah ada komunitas sesama pebisnis?<span class="arrow">+</span></button>
+        <div class="faq-a">Ya! Anda mendapatkan akses ke grup eksklusif berisi ratusan pebisnis Indonesia yang saling berbagi prompt, tips, dan pengalaman. Sangat berguna untuk networking dan inspirasi bisnis baru.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Apakah perlu berlangganan Claude berbayar?<span class="arrow">+</span></button>
+        <div class="faq-a">Tidak wajib. Versi gratis Claude di claude.ai sudah cukup untuk memulai. Untuk penggunaan bisnis yang intensif, Claude Pro (~Rp 300K/bulan) memberikan hasil yang lebih maksimal — tapi ini opsional.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NOTIFY MODAL -->
+<div class="modal-overlay" id="notifyModal">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('notifyModal').classList.remove('active')">✕</button>
+    <div style="font-size:40px;margin-bottom:16px">🔔</div>
+    <h3>Beritahu Saya!</h3>
+    <p>Masukkan email Anda dan kami notifikasi begitu kursus tersedia — plus harga early bird eksklusif untuk Anda.</p>
+    <input type="text" class="modal-input" placeholder="Nama Anda" id="notifyName">
+    <input type="email" class="modal-input" placeholder="Email aktif Anda" id="notifyEmail">
+    <button class="modal-submit" onclick="submitNotify()">Daftarkan Saya →</button>
+  </div>
+</div>
+
+<footer>
+  <p>© 2025 <a href="index.html">Klaud.id</a> — Platform Belajar Claude AI #1 dalam Bahasa Indonesia</p>
+</footer>
+
+<script>
+  function toggleFaq(btn) {
+    const answer = btn.nextElementSibling;
+    const isOpen = answer.classList.contains('open');
+    document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+    document.querySelectorAll('.faq-q').forEach(q => q.classList.remove('open'));
+    if (!isOpen) { answer.classList.add('open'); btn.classList.add('open'); }
+  }
+
+  function submitNotify() {
+    const name = document.getElementById('notifyName').value;
+    const email = document.getElementById('notifyEmail').value;
+    if (!name.trim()) { alert('Mohon masukkan nama Anda.'); return; }
+    if (!email.trim() || !email.includes('@')) { alert('Mohon masukkan email yang valid.'); return; }
+    document.getElementById('notifyModal').innerHTML = `
+      <div style="text-align:center;padding:20px">
+        <div style="font-size:48px;margin-bottom:16px">🎉</div>
+        <h3 style="font-size:22px;font-weight:800;margin-bottom:8px">Berhasil didaftarkan!</h3>
+        <p style="font-size:14px;color:var(--blue-light);line-height:1.6">Kami akan email <strong style="color:var(--warm-white)">${email}</strong> begitu kursus tersedia. Nantikan harga early bird eksklusif!</p>
+        <button onclick="document.getElementById('notifyModal').classList.remove('active')" style="margin-top:24px;background:#EF9F27;color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;">Tutup</button>
+      </div>`;
+  }
+
+  document.getElementById('notifyModal').addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('active');
+  });
+</script>
+</body>
+</html>
