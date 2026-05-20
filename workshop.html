@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workshop Bulanan via Zoom — Klaud.id</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #042C53; --navy-mid: #0C447C; --blue: #378ADD; --blue-light: #85B7EB;
+    --green: #1D9E75; --green-light: #5DCAA5; --warm-white: #F5F3EE;
+    --warm-white-2: #EBE9E3; --gray-mid: #888780; --gold: #FAC775;
+    --purple: #9B6DFF; --purple-light: #C4A8FF;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--navy); color: var(--warm-white); overflow-x: hidden; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,44,83,0.9); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(55,138,221,0.12); }
+  .logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: var(--warm-white); text-decoration: none; }
+  .logo span { color: var(--blue); }
+  .nav-back { font-size: 14px; font-weight: 500; color: var(--blue-light); text-decoration: none; display: flex; align-items: center; gap: 6px; transition: color 0.2s; }
+  .nav-back:hover { color: var(--warm-white); }
+  .hero { padding: 140px 24px 80px; position: relative; overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; z-index: 0; background: radial-gradient(ellipse 80% 60% at 60% 0%, rgba(155,109,255,0.12) 0%, transparent 70%); }
+  .hero-grid { position: absolute; inset: 0; z-index: 0; background-image: linear-gradient(rgba(55,138,221,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(55,138,221,0.05) 1px, transparent 1px); background-size: 48px 48px; mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 30%, transparent 80%); }
+  .hero-inner { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: 1fr 380px; gap: 64px; align-items: start; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(155,109,255,0.15); border: 1px solid rgba(155,109,255,0.3); border-radius: 100px; padding: 6px 16px; margin-bottom: 24px; font-size: 12px; font-weight: 700; color: var(--purple-light); letter-spacing: 1px; text-transform: uppercase; font-family: 'DM Mono', monospace; }
+  .hero h1 { font-size: clamp(32px, 5vw, 52px); font-weight: 800; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 20px; }
+  .hero h1 .accent { color: var(--purple-light); }
+  .hero-sub { font-size: 16px; color: var(--blue-light); line-height: 1.75; margin-bottom: 32px; max-width: 520px; }
+  .hero-bullets { display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
+  .bullet { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--warm-white-2); }
+  .bullet-icon { width: 22px; height: 22px; border-radius: 50%; background: rgba(155,109,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; }
+  .hero-meta { display: flex; gap: 24px; flex-wrap: wrap; }
+  .meta-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--gray-mid); }
+  .sticky-card { background: rgba(12,68,124,0.6); border: 1px solid rgba(155,109,255,0.2); border-radius: 20px; padding: 32px; position: sticky; top: 100px; backdrop-filter: blur(12px); }
+  .price-box { margin-bottom: 20px; }
+  .price-new { font-size: 38px; font-weight: 800; letter-spacing: -1px; color: var(--warm-white); }
+  .price-per { font-size: 14px; color: var(--blue-light); font-weight: 400; }
+  .price-note { font-size: 12px; color: var(--purple-light); margin-top: 4px; }
+  .coming-soon-btn { width: 100%; background: rgba(155,109,255,0.1); border: 2px dashed rgba(155,109,255,0.4); border-radius: 12px; padding: 16px; font-size: 15px; font-weight: 700; color: var(--purple-light); cursor: default; font-family: 'Plus Jakarta Sans', sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 16px; }
+  .notify-btn { width: 100%; background: var(--purple); color: #fff; border: none; border-radius: 12px; padding: 14px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s, transform 0.15s; margin-bottom: 16px; }
+  .notify-btn:hover { background: #8255ee; transform: translateY(-1px); }
+  .card-includes { border-top: 1px solid rgba(55,138,221,0.15); padding-top: 16px; }
+  .card-includes h4 { font-size: 12px; font-weight: 700; color: var(--gray-mid); letter-spacing: 1px; text-transform: uppercase; font-family: 'DM Mono', monospace; margin-bottom: 12px; }
+  .include-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--warm-white-2); margin-bottom: 8px; }
+  .guarantee-mini { display: flex; align-items: center; gap: 8px; background: rgba(29,158,117,0.1); border: 1px solid rgba(29,158,117,0.2); border-radius: 10px; padding: 10px 12px; margin-top: 16px; font-size: 12px; color: var(--green-light); }
+  section { padding: 80px 24px; }
+  .container { max-width: 1080px; margin: 0 auto; }
+  .section-label { font-size: 12px; font-weight: 700; letter-spacing: 2px; color: var(--purple); text-transform: uppercase; margin-bottom: 12px; font-family: 'DM Mono', monospace; }
+  .section-title { font-size: clamp(24px, 3.5vw, 36px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 12px; }
+  .section-sub { font-size: 15px; color: var(--blue-light); line-height: 1.75; margin-bottom: 48px; }
+  .topics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .topic-card { background: rgba(155,109,255,0.06); border: 1px solid rgba(155,109,255,0.15); border-radius: 14px; padding: 22px 20px; transition: border-color 0.2s; }
+  .topic-card:hover { border-color: rgba(155,109,255,0.35); }
+  .topic-num { font-size: 11px; font-weight: 700; color: var(--purple-light); font-family: 'DM Mono', monospace; margin-bottom: 8px; letter-spacing: 1px; }
+  .topic-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .topic-card p { font-size: 13px; color: var(--blue-light); line-height: 1.6; }
+  .how-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+  .how-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(55,138,221,0.12); border-radius: 14px; padding: 24px 20px; text-align: center; }
+  .how-icon { font-size: 28px; margin-bottom: 12px; }
+  .how-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .how-card p { font-size: 13px; color: var(--blue-light); line-height: 1.6; }
+  .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .testi-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; }
+  .stars { color: var(--gold); font-size: 14px; margin-bottom: 14px; letter-spacing: 2px; }
+  .testi-card blockquote { font-size: 14px; color: var(--warm-white-2); line-height: 1.75; margin-bottom: 20px; font-style: italic; }
+  .testi-author { display: flex; align-items: center; gap: 12px; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: rgba(155,109,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: var(--purple-light); flex-shrink: 0; }
+  .testi-author .name { font-size: 13px; font-weight: 700; }
+  .testi-author .role { font-size: 12px; color: var(--blue-light); }
+  .faq-list { max-width: 700px; display: flex; flex-direction: column; gap: 0; }
+  .faq-item { border-bottom: 1px solid rgba(55,138,221,0.12); }
+  .faq-q { width: 100%; background: none; border: none; text-align: left; padding: 20px 0; display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 700; color: var(--warm-white); cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; gap: 16px; }
+  .faq-q .arrow { font-size: 18px; color: var(--purple); transition: transform 0.3s; flex-shrink: 0; }
+  .faq-q.open .arrow { transform: rotate(45deg); }
+  .faq-a { font-size: 14px; color: var(--blue-light); line-height: 1.8; padding-bottom: 20px; display: none; }
+  .faq-a.open { display: block; }
+  .modal-overlay { position: fixed; inset: 0; z-index: 200; background: rgba(4,44,83,0.95); display: flex; align-items: center; justify-content: center; padding: 24px; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  .modal-overlay.active { opacity: 1; pointer-events: all; }
+  .modal { background: var(--navy-mid); border: 1px solid rgba(155,109,255,0.3); border-radius: 20px; padding: 40px; max-width: 440px; width: 100%; text-align: center; transform: scale(0.95); transition: transform 0.3s; position: relative; }
+  .modal-overlay.active .modal { transform: scale(1); }
+  .modal h3 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+  .modal p { font-size: 14px; color: var(--blue-light); margin-bottom: 24px; line-height: 1.6; }
+  .modal-input { width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(55,138,221,0.2); border-radius: 10px; padding: 13px 16px; font-size: 14px; color: var(--warm-white); font-family: 'Plus Jakarta Sans', sans-serif; outline: none; margin-bottom: 10px; transition: border-color 0.2s; }
+  .modal-input:focus { border-color: var(--purple); }
+  .modal-submit { width: 100%; background: var(--purple); color: #fff; border: none; border-radius: 10px; padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: background 0.2s; }
+  .modal-submit:hover { background: #8255ee; }
+  .modal-close { position: absolute; top: 16px; right: 20px; background: none; border: none; color: var(--gray-mid); font-size: 20px; cursor: pointer; }
+  footer { background: #021e3a; padding: 32px 24px; border-top: 1px solid rgba(55,138,221,0.1); text-align: center; }
+  footer p { font-size: 12px; color: var(--gray-mid); }
+  footer a { color: var(--blue-light); text-decoration: none; }
+  @media (max-width: 768px) { nav { padding: 16px 20px; } .hero-inner { grid-template-columns: 1fr; } .sticky-card { position: static; } section { padding: 60px 20px; } }
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Klaud<span>.id</span></a>
+  <a href="index.html" class="nav-back"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Kembali ke beranda</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge">🎙 Live Workshop</div>
+      <h1>Workshop Bulanan<br><span class="accent">via Zoom</span></h1>
+      <p class="hero-sub">Sesi live interaktif 3 jam setiap bulan — topik berbeda, langsung tanya jawab dengan instruktur, dan rekaman tersedia 30 hari setelah acara.</p>
+      <div class="hero-bullets">
+        <div class="bullet"><div class="bullet-icon">✓</div>Tanya jawab langsung dengan instruktur</div>
+        <div class="bullet"><div class="bullet-icon">✓</div>Topik terbaru sesuai perkembangan Claude</div>
+        <div class="bullet"><div class="bullet-icon">✓</div>Rekaman tersedia 30 hari setelah acara</div>
+        <div class="bullet"><div class="bullet-icon">✓</div>Networking dengan peserta dari seluruh Indonesia</div>
+      </div>
+      <div class="hero-meta">
+        <div class="meta-item">🎙 <span>Live Zoom</span></div>
+        <div class="meta-item">⏱ <span>3 jam/sesi</span></div>
+        <div class="meta-item">📅 <span>Setiap bulan</span></div>
+        <div class="meta-item">👥 <span>Maks. 100 peserta</span></div>
+      </div>
+    </div>
+    <div class="sticky-card">
+      <div class="price-box">
+        <div class="price-new">Rp 149.000 <span class="price-per">/sesi</span></div>
+        <div class="price-note">⚡ Kursi terbatas setiap sesi</div>
+      </div>
+      <div class="coming-soon-btn">🚀 Sesi Berikutnya Segera</div>
+      <button class="notify-btn" onclick="document.getElementById('notifyModal').classList.add('active')">🔔 Beritahu Saya Jadwal Berikutnya</button>
+      <div class="card-includes">
+        <h4>Termasuk</h4>
+        <div class="include-item"><span>🎙</span><span>3 jam sesi live via Zoom</span></div>
+        <div class="include-item"><span>❓</span><span>Sesi tanya jawab langsung</span></div>
+        <div class="include-item"><span>🎬</span><span>Rekaman 30 hari pasca acara</span></div>
+        <div class="include-item"><span>📄</span><span>Materi & template eksklusif</span></div>
+        <div class="include-item"><span>🏆</span><span>Sertifikat kehadiran digital</span></div>
+      </div>
+      <div class="guarantee-mini">🛡️ Refund penuh jika sesi dibatalkan</div>
+    </div>
+  </div>
+</section>
+
+<section style="background:rgba(155,109,255,0.03);border-top:1px solid rgba(155,109,255,0.1);border-bottom:1px solid rgba(155,109,255,0.1)">
+  <div class="container">
+    <div class="section-label">Topik Workshop</div>
+    <h2 class="section-title">Topik yang selalu relevan<br>dan up-to-date</h2>
+    <p class="section-sub">Setiap bulan kami pilih topik paling relevan berdasarkan kebutuhan komunitas dan fitur terbaru Claude.</p>
+    <div class="topics-grid">
+      <div class="topic-card"><div class="topic-num">TOPIK 01</div><h4>Prompt Engineering Tingkat Lanjut</h4><p>Teknik prompt yang menghasilkan output jauh lebih presisi — untuk kebutuhan profesional dan bisnis.</p></div>
+      <div class="topic-card"><div class="topic-num">TOPIK 02</div><h4>Claude untuk Tim & Kolaborasi</h4><p>Cara membangun sistem kerja berbasis AI untuk tim — standarisasi prompt dan workflow bersama.</p></div>
+      <div class="topic-card"><div class="topic-num">TOPIK 03</div><h4>Otomasi Konten Media Sosial</h4><p>Bangun mesin konten yang menghasilkan puluhan post berkualitas setiap minggu secara konsisten.</p></div>
+      <div class="topic-card"><div class="topic-num">TOPIK 04</div><h4>Claude untuk Analisis Data Bisnis</h4><p>Ekstrak insight berharga dari data penjualan, survei pelanggan, dan laporan keuangan Anda.</p></div>
+      <div class="topic-card"><div class="topic-num">TOPIK 05</div><h4>Membangun Personal Branding dengan AI</h4><p>Gunakan Claude untuk membangun reputasi online yang kuat sebagai profesional atau pebisnis.</p></div>
+      <div class="topic-card"><div class="topic-num">TOPIK 06</div><h4>Claude Projects & Memory</h4><p>Manfaatkan fitur terbaru Claude untuk konteks yang lebih panjang dan konsistensi output yang lebih baik.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-label">Cara Kerja</div>
+    <h2 class="section-title">Semudah ini ikut<br>workshop kami</h2>
+    <p class="section-sub" style="margin-bottom:40px">Dari daftar hingga dapat ilmu — prosesnya simpel dan cepat.</p>
+    <div class="how-grid">
+      <div class="how-card"><div class="how-icon">📧</div><h4>1. Daftar & Bayar</h4><p>Daftar online, bayar via transfer atau dompet digital. Konfirmasi instan.</p></div>
+      <div class="how-card"><div class="how-icon">🔗</div><h4>2. Dapat Link Zoom</h4><p>Link Zoom dikirim ke email 1 hari sebelum acara beserta materi pendahuluan.</p></div>
+      <div class="how-card"><div class="how-icon">🎙</div><h4>3. Ikuti Sesi Live</h4><p>3 jam belajar interaktif — ada demo langsung, latihan, dan tanya jawab.</p></div>
+      <div class="how-card"><div class="how-icon">🎬</div><h4>4. Akses Rekaman</h4><p>Rekaman tersedia 24 jam setelah sesi selesai — tonton ulang selama 30 hari.</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="background:rgba(55,138,221,0.03);border-top:1px solid rgba(55,138,221,0.1);border-bottom:1px solid rgba(55,138,221,0.1)">
+  <div class="container">
+    <div class="section-label">Testimoni</div>
+    <h2 class="section-title">Kata peserta workshop<br>kami sebelumnya</h2>
+    <p class="section-sub" style="margin-bottom:40px">Sesi live yang interaktif dan langsung bisa dipraktikkan.</p>
+    <div class="testi-grid">
+      <div class="testi-card"><div class="stars">★★★★★</div><blockquote>"Workshop-nya sangat interaktif. Bisa langsung tanya dan dapat jawaban saat itu juga. Beda banget dengan nonton video sendiri."</blockquote><div class="testi-author"><div class="avatar">RK</div><div><div class="name">Rini K.</div><div class="role">Digital Marketer, Jakarta</div></div></div></div>
+      <div class="testi-card"><div class="stars">★★★★★</div><blockquote>"Topiknya selalu relevan dan up-to-date. Setiap bulan saya selalu nantikan workshop Klaud.id karena pasti ada ilmu baru yang bisa langsung saya terapkan."</blockquote><div class="testi-author"><div class="avatar">TP</div><div><div class="name">Tommy P.</div><div class="role">Entrepreneur, Medan</div></div></div></div>
+      <div class="testi-card"><div class="stars">★★★★★</div><blockquote>"Harga Rp 149K untuk 3 jam workshop live dengan instruktur berpengalaman? Itu sangat worth it. Sudah ikut 4 sesi dan tidak pernah kecewa."</blockquote><div class="testi-author"><div class="avatar">YS</div><div><div class="name">Yuni S.</div><div class="role">Content Creator, Bali</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-label">FAQ</div>
+    <h2 class="section-title" style="margin-bottom:12px">Pertanyaan yang sering ditanyakan</h2>
+    <p class="section-sub">Masih ada pertanyaan? Hubungi kami di WhatsApp.</p>
+    <div class="faq-list">
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Apakah saya harus hadir live?<span class="arrow">+</span></button><div class="faq-a">Disarankan hadir live agar bisa tanya jawab langsung. Tapi jika berhalangan, rekaman tersedia 24 jam setelah sesi dan bisa diakses selama 30 hari.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Berapa kapasitas peserta per sesi?<span class="arrow">+</span></button><div class="faq-a">Maksimal 100 peserta per sesi untuk menjaga kualitas interaksi. Daftar lebih awal untuk memastikan tempat Anda!</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Apakah topik setiap bulan berbeda?<span class="arrow">+</span></button><div class="faq-a">Ya! Setiap bulan kami pilih topik berbeda berdasarkan kebutuhan komunitas dan perkembangan terbaru Claude. Anda bisa ikut satu sesi atau berlangganan setiap bulan.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Bagaimana jika sesi dibatalkan?<span class="arrow">+</span></button><div class="faq-a">Jika kami membatalkan sesi karena alasan apapun, Anda mendapatkan refund penuh 100% atau bisa memindahkan ke sesi berikutnya — pilihan ada di tangan Anda.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Apakah ada sertifikat kehadiran?<span class="arrow">+</span></button><div class="faq-a">Ya! Setiap peserta mendapatkan sertifikat digital kehadiran yang bisa ditambahkan ke LinkedIn atau portfolio profesional Anda.</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="modal-overlay" id="notifyModal">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('notifyModal').classList.remove('active')">✕</button>
+    <div style="font-size:40px;margin-bottom:16px">🔔</div>
+    <h3>Beritahu Saya!</h3>
+    <p>Masukkan email Anda dan kami notifikasi begitu jadwal workshop berikutnya dibuka — plus early bird discount.</p>
+    <input type="text" class="modal-input" placeholder="Nama Anda" id="notifyName">
+    <input type="email" class="modal-input" placeholder="Email aktif Anda" id="notifyEmail">
+    <button class="modal-submit" onclick="submitNotify()">Daftarkan Saya →</button>
+  </div>
+</div>
+
+<footer><p>© 2025 <a href="index.html">Klaud.id</a> — Platform Belajar Claude AI #1 dalam Bahasa Indonesia</p></footer>
+
+<script>
+  function toggleFaq(btn) { const a = btn.nextElementSibling; const open = a.classList.contains('open'); document.querySelectorAll('.faq-a').forEach(x => x.classList.remove('open')); document.querySelectorAll('.faq-q').forEach(x => x.classList.remove('open')); if (!open) { a.classList.add('open'); btn.classList.add('open'); } }
+  function submitNotify() {
+    const name = document.getElementById('notifyName').value;
+    const email = document.getElementById('notifyEmail').value;
+    if (!name.trim()) { alert('Mohon masukkan nama Anda.'); return; }
+    if (!email.trim() || !email.includes('@')) { alert('Mohon masukkan email yang valid.'); return; }
+    document.getElementById('notifyModal').innerHTML = `<div style="text-align:center;padding:20px"><div style="font-size:48px;margin-bottom:16px">🎉</div><h3 style="font-size:22px;font-weight:800;margin-bottom:8px">Berhasil didaftarkan!</h3><p style="font-size:14px;color:var(--blue-light);line-height:1.6">Kami akan email <strong style="color:var(--warm-white)">${email}</strong> begitu jadwal berikutnya dibuka!</p><button onclick="document.getElementById('notifyModal').classList.remove('active')" style="margin-top:24px;background:var(--purple);color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;">Tutup</button></div>`;
+  }
+  document.getElementById('notifyModal').addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
+</script>
+</body>
+</html>
