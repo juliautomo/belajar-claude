@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pembayaran Berhasil — Klaud.id</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #042C53; --blue: #378ADD; --blue-light: #85B7EB;
+    --green: #1D9E75; --green-light: #5DCAA5;
+    --warm-white: #F5F3EE; --gray-mid: #888780;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--navy); color: var(--warm-white);
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 24px; text-align: center;
+  }
+  .card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(55,138,221,0.2);
+    border-radius: 20px; padding: 48px 40px;
+    max-width: 480px; width: 100%;
+  }
+  .icon { font-size: 64px; margin-bottom: 20px; }
+  h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 12px; }
+  .sub { font-size: 15px; color: var(--blue-light); line-height: 1.7; margin-bottom: 32px; }
+  .steps { text-align: left; margin-bottom: 32px; }
+  .step { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
+  .step-num {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: rgba(55,138,221,0.2); display: flex;
+    align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: var(--blue-light);
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .step p { font-size: 14px; color: var(--warm-white); line-height: 1.6; }
+  .btn {
+    display: inline-block; background: var(--blue); color: #fff;
+    padding: 14px 32px; border-radius: 10px;
+    font-size: 15px; font-weight: 700; text-decoration: none;
+    transition: background 0.2s; margin-bottom: 12px; width: 100%;
+  }
+  .btn:hover { background: #2a72c4; }
+  .btn-secondary {
+    display: inline-block; color: var(--blue-light);
+    font-size: 13px; text-decoration: none;
+  }
+  .logo { font-size: 18px; font-weight: 800; margin-bottom: 32px; }
+  .logo span { color: var(--blue); }
+</style>
+</head>
+<body>
+<div class="logo">Klaud<span>.id</span></div>
+<div class="card">
+  <div class="icon">🎉</div>
+  <h1>Pembayaran Berhasil!</h1>
+  <p class="sub">Terima kasih! Akses kursus Anda sedang kami proses dan akan dikirim ke email dalam beberapa menit.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <p>Cek inbox email Anda — link akses kursus sudah kami kirim</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <p>Jika tidak ada dalam 5 menit, cek folder Spam/Promosi</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <p>Masih belum ada? Email kami di <strong>learnwithklaud@gmail.com</strong></p>
+    </div>
+  </div>
+  <a href="index.html" class="btn">Kembali ke Beranda</a>
+  <br>
+  <a href="mailto:learnwithklaud@gmail.com" class="btn-secondary">Hubungi Support →</a>
+</div>
+</body>
+</html>

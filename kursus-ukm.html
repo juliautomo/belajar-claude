@@ -222,10 +222,15 @@
         <div class="price-new">Rp 499.000</div>
         <div class="price-note">⚡ Harga early bird — terbatas</div>
       </div>
-      <div class="coming-soon-btn">🚀 Segera Hadir</div>
-      <button class="notify-btn" onclick="document.getElementById('notifyModal').classList.add('active')">
-        🔔 Beritahu Saya Saat Tersedia
-      </button>
+      <button id="beliBtn" onclick="beliSekarang()"
+  style="width:100%;background:#378ADD;color:#fff;border:none;border-radius:12px;
+         padding:16px;font-size:15px;font-weight:700;cursor:pointer;
+         font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:16px;
+         transition:background 0.2s,transform 0.15s;"
+  onmouseover="this.style.background='#2a72c4';this.style.transform='translateY(-1px)'"
+  onmouseout="this.style.background='#378ADD';this.style.transform='translateY(0)'">
+  Beli Sekarang — Rp 499.000
+</button>
       <div class="card-includes">
         <h4>Termasuk</h4>
         <div class="include-item"><span>🎬</span><span>20 video HD berkualitas tinggi</span></div>
@@ -460,11 +465,16 @@
     if (!isOpen) { answer.classList.add('open'); btn.classList.add('open'); }
   }
 
-  function submitNotify() {
+  async function submitNotify() {
     const name = document.getElementById('notifyName').value;
     const email = document.getElementById('notifyEmail').value;
     if (!name.trim()) { alert('Mohon masukkan nama Anda.'); return; }
     if (!email.trim() || !email.includes('@')) { alert('Mohon masukkan email yang valid.'); return; }
+    await fetch('https://formspree.io/f/xlgvjdrg', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+      body: JSON.stringify({name, email, source: 'kursus-ukm'})
+    });
     document.getElementById('notifyModal').innerHTML = `
       <div style="text-align:center;padding:20px">
         <div style="font-size:48px;margin-bottom:16px">🎉</div>
@@ -477,6 +487,69 @@
   document.getElementById('notifyModal').addEventListener('click', function(e) {
     if (e.target === this) this.classList.remove('active');
   });
+</script>
+
+<!-- Midtrans Snap -->
+<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="Mid-client-4N6ZjDz9uTmirCG3"></script>
+<script>
+  async function beliSekarang() {
+    const btn = document.getElementById('beliBtn');
+    btn.disabled = true;
+    btn.textContent = 'Memproses...';
+
+    // Ask for buyer info
+    const name  = prompt('Masukkan nama lengkap Anda:');
+    if (!name) { btn.disabled = false; btn.textContent = 'Beli Sekarang — Rp 499,000'.replace(',', '.'); return; }
+    const email = prompt('Masukkan email aktif Anda:');
+    if (!email || !email.includes('@')) {
+      alert('Email tidak valid. Silakan coba lagi.');
+      btn.disabled = false;
+      btn.textContent = 'Beli Sekarang — Rp 499,000'.replace(',', '.');
+      return;
+    }
+
+    try {
+      const res = await fetch('https://klaud-backend-production.up.railway.app/create-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          courseSlug:    'kursus-ukm',
+          customerName:  name,
+          customerEmail: email,
+        })
+      });
+
+      const data = await res.json();
+      if (!data.success) throw new Error(data.message);
+
+      // Open Midtrans Snap popup
+      window.snap.pay(data.token, {
+        onSuccess: function(result) {
+          window.location.href = 'payment-success.html?course=kursus-ukm';
+        },
+        onPending: function(result) {
+          alert('Pembayaran pending — selesaikan pembayaran Anda ya!');
+          btn.disabled = false;
+          btn.textContent = 'Beli Sekarang — Rp 499,000'.replace(',', '.');
+        },
+        onError: function(result) {
+          alert('Terjadi kesalahan. Silakan coba lagi.');
+          btn.disabled = false;
+          btn.textContent = 'Beli Sekarang — Rp 499,000'.replace(',', '.');
+        },
+        onClose: function() {
+          btn.disabled = false;
+          btn.textContent = 'Beli Sekarang — Rp 499,000'.replace(',', '.');
+        }
+      });
+
+    } catch (err) {
+      console.error(err);
+      alert('Gagal memproses pembayaran. Silakan coba lagi.');
+      btn.disabled = false;
+      btn.textContent = 'Beli Sekarang — Rp 499,000'.replace(',', '.');
+    }
+  }
 </script>
 </body>
 </html>
