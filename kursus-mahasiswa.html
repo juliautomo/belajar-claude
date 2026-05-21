@@ -229,11 +229,12 @@
     const email = document.getElementById('notifyEmail').value;
     if (!name.trim()) { alert('Mohon masukkan nama Anda.'); return; }
     if (!email.trim() || !email.includes('@')) { alert('Mohon masukkan email yang valid.'); return; }
-    await fetch('https://klaud-backend-production.up.railway.app/signup', {
+    // Send to backend in background (non-blocking)
+    fetch('https://klaud-backend-production.up.railway.app/signup', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({name, email, source: 'kursus-mahasiswa'})
-    });
+    }).catch(err => console.log('Backend:', err));
     document.getElementById('notifyModal').innerHTML = `<div style="text-align:center;padding:20px"><div style="font-size:48px;margin-bottom:16px">🎉</div><h3 style="font-size:22px;font-weight:800;margin-bottom:8px">Berhasil didaftarkan!</h3><p style="font-size:14px;color:var(--blue-light);line-height:1.6">Kami akan email <strong style="color:var(--warm-white)">${email}</strong> begitu kursus tersedia!</p><button onclick="document.getElementById('notifyModal').classList.remove('active')" style="margin-top:24px;background:var(--teal);color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;">Tutup</button></div>`;
   }
   document.getElementById('notifyModal').addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });

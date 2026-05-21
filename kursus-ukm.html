@@ -470,11 +470,12 @@
     const email = document.getElementById('notifyEmail').value;
     if (!name.trim()) { alert('Mohon masukkan nama Anda.'); return; }
     if (!email.trim() || !email.includes('@')) { alert('Mohon masukkan email yang valid.'); return; }
-    await fetch('https://klaud-backend-production.up.railway.app/signup', {
+    // Send to backend in background (non-blocking)
+    fetch('https://klaud-backend-production.up.railway.app/signup', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({name, email, source: 'kursus-ukm'})
-    });
+    }).catch(err => console.log('Backend:', err));
     document.getElementById('notifyModal').innerHTML = `
       <div style="text-align:center;padding:20px">
         <div style="font-size:48px;margin-bottom:16px">🎉</div>
