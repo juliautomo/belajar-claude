@@ -485,24 +485,35 @@ Buat ringkasan eksekutif...
     document.getElementById('modalOverlay').classList.remove('active');
   }
 
-  async function submitToFormspree(name, email) {
-    await fetch('https://klaud-backend-production.up.railway.app/signup', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
-      body: JSON.stringify({name, email, source: 'prompt-gratis'})
-    });
+  async function submitToBackend(name, email) {
+    try {
+      await fetch('https://klaud-backend-production.up.railway.app/signup', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({name, email, source: 'prompt-gratis'})
+      });
+    } catch (err) {
+      console.log('Backend error (non-blocking):', err);
+      // Still show modal even if backend fails
+    }
   }
 
   async function handleDownload() {
     const name = document.getElementById('inputName').value;
     const email = document.getElementById('inputEmail').value;
-    if (validateForm(name, email)) { await submitToFormspree(name, email); showModal(); }
+    if (validateForm(name, email)) {
+      showModal(); // Show modal immediately
+      submitToBackend(name, email); // Send to backend in background
+    }
   }
 
   async function handleDownload2() {
     const name = document.getElementById('inputName2').value;
     const email = document.getElementById('inputEmail2').value;
-    if (validateForm(name, email)) { await submitToFormspree(name, email); showModal(); }
+    if (validateForm(name, email)) {
+      showModal();
+      submitToBackend(name, email);
+    }
   }
 
   function scrollToForm() {
