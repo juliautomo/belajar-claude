@@ -530,7 +530,7 @@
     const email = document.getElementById('notifyEmail').value;
     if (!name.trim()) { alert('Mohon masukkan nama Anda.'); return; }
     if (!email.trim() || !email.includes('@')) { alert('Mohon masukkan email yang valid.'); return; }
-    await fetch('https://formspree.io/f/xlgvjdrg', {
+    await fetch('https://klaud-backend-production.up.railway.app/signup', {
       method: 'POST',
       headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
       body: JSON.stringify({name, email, source: 'kursus-karyawan'})

@@ -486,7 +486,7 @@ Buat ringkasan eksekutif...
   }
 
   async function submitToFormspree(name, email) {
-    await fetch('https://formspree.io/f/xlgvjdrg', {
+    await fetch('https://klaud-backend-production.up.railway.app/signup', {
       method: 'POST',
       headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
       body: JSON.stringify({name, email, source: 'prompt-gratis'})
