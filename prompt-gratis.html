@@ -487,14 +487,16 @@ Buat ringkasan eksekutif...
 
   async function submitToBackend(name, email) {
     try {
-      await fetch('https://klaud-backend-production.up.railway.app/signup', {
+      const res = await fetch('https://klaud-backend-production.up.railway.app/signup', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({name, email, source: 'prompt-gratis'})
       });
+      const data = await res.json();
+      return data.success !== false;
     } catch (err) {
-      console.log('Backend error (non-blocking):', err);
-      // Still show modal even if backend fails
+      console.log('Backend error:', err);
+      return true; // Still show modal if network fails
     }
   }
 
@@ -502,8 +504,12 @@ Buat ringkasan eksekutif...
     const name = document.getElementById('inputName').value;
     const email = document.getElementById('inputEmail').value;
     if (validateForm(name, email)) {
-      showModal(); // Show modal immediately
-      submitToBackend(name, email); // Send to backend in background
+      const success = await submitToBackend(name, email);
+      if (success) {
+        showModal();
+        document.getElementById('inputName').value = '';
+        document.getElementById('inputEmail').value = '';
+      }
     }
   }
 
@@ -511,8 +517,12 @@ Buat ringkasan eksekutif...
     const name = document.getElementById('inputName2').value;
     const email = document.getElementById('inputEmail2').value;
     if (validateForm(name, email)) {
-      showModal();
-      submitToBackend(name, email);
+      const success = await submitToBackend(name, email);
+      if (success) {
+        showModal();
+        document.getElementById('inputName2').value = '';
+        document.getElementById('inputEmail2').value = '';
+      }
     }
   }
 

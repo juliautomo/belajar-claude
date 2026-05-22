@@ -234,6 +234,10 @@
       headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
       body: JSON.stringify({name, email, topic, source: 'coaching-1on1'})
     });
+        // Clear fields
+    if (document.getElementById('notifyName')) document.getElementById('notifyName').value = '';
+    if (document.getElementById('notifyEmail')) document.getElementById('notifyEmail').value = '';
+    if (document.getElementById('notifyTopic')) document.getElementById('notifyTopic').value = '';
     document.getElementById('notifyModal').innerHTML = `<div style="text-align:center;padding:20px"><div style="font-size:48px;margin-bottom:16px">🎉</div><h3 style="font-size:22px;font-weight:800;margin-bottom:8px">Berhasil masuk waiting list!</h3><p style="font-size:14px;color:var(--blue-light);line-height:1.6">Kami akan menghubungi <strong style="color:var(--warm-white)">${email}</strong> segera saat slot tersedia. Anda akan diprioritaskan!</p><button onclick="document.getElementById('notifyModal').classList.remove('active')" style="margin-top:24px;background:var(--rose);color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;">Tutup</button></div>`;
   }
     if (!email.trim() || !email.includes('@')) { alert('Mohon masukkan email yang valid.'); return; }
