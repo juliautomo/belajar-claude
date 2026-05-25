@@ -4,13 +4,27 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Workshop Bulanan via Zoom — Klaud.id</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --navy: #042C53; --navy-mid: #0C447C; --blue: #378ADD; --blue-light: #85B7EB;
-    --green: #1D9E75; --green-light: #5DCAA5; --warm-white: #F5F3EE;
-    --warm-white-2: #EBE9E3; --gray-mid: #888780; --gold: #FAC775;
-    --purple: #9B6DFF; --purple-light: #C4A8FF;
+    --bg:         #EDECF5;
+    --surface:    #F5F4FB;
+    --surface-2:  #FFFFFF;
+    --navy:       #13163A;
+    --navy-mid:   #1E2456;
+    --blue:       #4A72D6;
+    --blue-2:     #7098E6;
+    --blue-light: #7098E6;
+    --blue-pale:  #D4DEFA;
+    --green:      #1D9E75;
+    --green-light:#5DCAA5;
+    --warm-white: #13163A;
+    --warm-white-2:#6B7080;
+    --gray-mid:   #6B7080;
+    --muted:      #6B7080;
+    --gold:       #EF9F27;
+    --border:     rgba(74,114,214,0.15);
+    --border-2:   rgba(74,114,214,0.08);
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -91,6 +105,110 @@
   footer p { font-size: 12px; color: var(--gray-mid); }
   footer a { color: var(--blue-light); text-decoration: none; }
   @media (max-width: 768px) { nav { padding: 16px 20px; } .hero-inner { grid-template-columns: 1fr; } .sticky-card { position: static; } section { padding: 60px 20px; } }
+
+  /* ── LIGHT THEME OVERRIDES ──────────────────────────────── */
+  body { background: var(--bg) !important; color: var(--navy) !important; }
+  nav {
+    background: rgba(237,236,245,0.88) !important;
+    border-bottom: 1px solid var(--border) !important;
+  }
+  .logo { color: var(--navy) !important; }
+  .logo span { color: var(--blue) !important; }
+  .nav-back { color: var(--muted) !important; }
+  .nav-back:hover { color: var(--navy) !important; }
+  .hero-bg { background: radial-gradient(ellipse 80% 60% at 60% 0%, rgba(74,114,214,0.1) 0%, transparent 70%) !important; }
+  .hero-grid {
+    background-image:
+      linear-gradient(rgba(74,114,214,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(74,114,214,0.05) 1px, transparent 1px) !important;
+  }
+  .hero h1, .hero h2, h1, h2 { color: var(--navy) !important; }
+  .hero-sub, .hero p, .section-sub { color: var(--muted) !important; }
+  .section-label { color: var(--blue) !important; }
+  .section-title { color: var(--navy) !important; }
+
+  /* Cards & surfaces */
+  .module-card, .feature-card, .why-card, .testi-card,
+  .course-card, .detail-card, .faq-item, .pricing-card,
+  .agenda-item, .bonus-card, .stat-card {
+    background: var(--surface-2) !important;
+    border-color: var(--border) !important;
+    color: var(--navy) !important;
+  }
+  .module-card h3, .feature-card h3, .why-card h3,
+  .course-card h3, .detail-card h3, .faq-item h3,
+  .pricing-card h3, .bonus-card h3, .stat-card .num {
+    color: var(--navy) !important;
+  }
+  .module-card p, .feature-card p, .why-card p,
+  .course-card p, .detail-card p, .faq-item p,
+  .pricing-card p, .bonus-card p {
+    color: var(--muted) !important;
+  }
+
+  /* Section backgrounds */
+  .why, .modules, .features, .audience, .faq-section,
+  .about, .bonuses, .agenda { background: var(--surface) !important; }
+
+  /* Pricing / CTA sections keep dark */
+  .pricing, .cta-section { background: var(--navy) !important; }
+  .pricing h2, .pricing p, .cta-section h2 { color: #fff !important; }
+  .pricing .section-sub { color: var(--blue-light) !important; }
+  .pricing-card { background: rgba(255,255,255,0.06) !important; border-color: rgba(255,255,255,0.12) !important; }
+  .pricing-card h3, .pricing-card p, .pricing-card li { color: rgba(255,255,255,0.85) !important; }
+  .pricing-card.featured { background: var(--blue) !important; border-color: var(--blue) !important; }
+
+  /* Testimonials */
+  .testi-card blockquote { color: var(--muted) !important; }
+  .testi-author .name { color: var(--navy) !important; }
+
+  /* Form / email inputs */
+  .email-form input {
+    background: var(--surface-2) !important;
+    border: 1.5px solid var(--border) !important;
+    color: var(--navy) !important;
+  }
+  .email-form input::placeholder { color: var(--muted) !important; }
+
+  /* Instructor / about-visual */
+  .about-visual, .instructor-card { background: var(--navy) !important; }
+
+  /* Footer stays dark */
+  footer { background: #0D1030 !important; border-top: 1px solid rgba(74,114,214,0.1) !important; }
+  footer .logo { color: #fff !important; }
+  footer .logo span { color: var(--blue-light) !important; }
+  footer p, footer a { color: rgba(255,255,255,0.45) !important; }
+  footer a:hover { color: #fff !important; }
+  footer h4 { color: rgba(255,255,255,0.35) !important; }
+  .footer-bottom { border-top-color: rgba(255,255,255,0.06) !important; }
+
+  /* Breadcrumb / tags */
+  .hero-badge {
+    background: var(--blue-pale) !important;
+    border-color: rgba(74,114,214,0.25) !important;
+    color: var(--blue) !important;
+  }
+  .tag-blue  { background: var(--blue-pale) !important; color: var(--blue) !important; }
+  .tag-green { background: rgba(29,158,117,0.12) !important; color: #117A57 !important; }
+  .tag-gold  { background: rgba(239,159,39,0.12) !important; color: #A0650A !important; }
+  .course-tag { border-radius: 100px !important; }
+
+  /* Dividers */
+  .hero-stats { border-top-color: var(--border) !important; }
+  .stat .num { color: var(--navy) !important; }
+  .stat .lbl { color: var(--muted) !important; }
+
+  /* Buttons */
+  .btn-primary { background: var(--navy) !important; color: #fff !important; }
+  .btn-primary:hover { background: var(--blue) !important; }
+  .btn-secondary {
+    background: transparent !important; color: var(--navy) !important;
+    border: 1.5px solid var(--border) !important;
+  }
+  .btn-secondary:hover { background: var(--blue-pale) !important; border-color: var(--blue) !important; }
+
+  /* Google Fonts: add light weight */
+
 </style>
 </head>
 <body>
