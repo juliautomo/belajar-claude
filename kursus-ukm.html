@@ -603,8 +603,8 @@
   });
 </script>
 
-<!-- Midtrans Snap -->
-<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="Mid-client-4N6ZjDz9uTmirCG3"></script>
+<!-- Duitku POP -->
+<script src="https://app-sandbox.duitku.com/lib/js/duitku.js"></script>
 <script>
   async function beliSekarang() {
     const btn = document.getElementById('beliBtn');
@@ -637,21 +637,21 @@
       if (!data.success) throw new Error(data.message);
 
       // Open Midtrans Snap popup
-      window.snap.pay(data.token, {
-        onSuccess: function(result) {
+      checkout.process(data.reference, {
+        successEvent: function(result) {
           window.location.href = 'payment-success.html?course=kursus-ukm';
         },
-        onPending: function(result) {
+        pendingEvent: function(result) {
           alert('Pembayaran pending — selesaikan pembayaran Anda ya!');
           btn.disabled = false;
           btn.textContent = 'Beli Sekarang — Rp 499,000'.replace(',', '.');
         },
-        onError: function(result) {
+        errorEvent: function(result) {
           alert('Terjadi kesalahan. Silakan coba lagi.');
           btn.disabled = false;
           btn.textContent = 'Beli Sekarang — Rp 499,000'.replace(',', '.');
         },
-        onClose: function() {
+        closeEvent: function() {
           btn.disabled = false;
           btn.textContent = 'Beli Sekarang — Rp 499,000'.replace(',', '.');
         }
