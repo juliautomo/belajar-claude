@@ -339,14 +339,14 @@
 </div>
 
 
-<div class="modal-overlay" id="paymentModal">
-  <div class="modal" style="position:relative">
-    <button class="modal-close" onclick="closePaymentModal()">✕</button>
+<div class="modal-overlay" id="paymentModal" style="background:rgba(0,0,0,0.6)">
+  <div class="modal" style="position:relative;background:#ffffff;color:#1a1a2e">
+    <button class="modal-close" onclick="closePaymentModal()" style="color:#64748b">✕</button>
     <div style="font-size:40px;margin-bottom:16px">🛒</div>
-    <h3>Beli Sekarang</h3>
-    <p>Masukkan data Anda untuk melanjutkan pembayaran.</p>
-    <input type="text" class="modal-input" placeholder="Nama lengkap Anda" id="paymentName">
-    <input type="email" class="modal-input" placeholder="Email aktif Anda" id="paymentEmail">
+    <h3 style="color:#1a1a2e">Beli Sekarang</h3>
+    <p style="color:#475569">Masukkan data Anda untuk melanjutkan pembayaran.</p>
+    <input type="text" class="modal-input" placeholder="Nama lengkap Anda" id="paymentName" style="background:#f1f5f9;color:#1a1a2e;border:1.5px solid #cbd5e1">
+    <input type="email" class="modal-input" placeholder="Email aktif Anda" id="paymentEmail" style="background:#f1f5f9;color:#1a1a2e;border:1.5px solid #cbd5e1">
     <button class="modal-submit" id="paymentSubmitBtn" onclick="submitPayment()">Lanjutkan Pembayaran →</button>
   </div>
 </div>
