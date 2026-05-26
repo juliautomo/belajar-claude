@@ -335,6 +335,19 @@
   </div>
 </div>
 
+
+<div class="modal-overlay" id="paymentModal">
+  <div class="modal" style="position:relative">
+    <button class="modal-close" onclick="closePaymentModal()">✕</button>
+    <div style="font-size:40px;margin-bottom:16px">🛒</div>
+    <h3>Beli Sekarang</h3>
+    <p>Masukkan data Anda untuk melanjutkan pembayaran.</p>
+    <input type="text" class="modal-input" placeholder="Nama lengkap Anda" id="paymentName">
+    <input type="email" class="modal-input" placeholder="Email aktif Anda" id="paymentEmail">
+    <button class="modal-submit" id="paymentSubmitBtn" onclick="submitPayment()">Lanjutkan Pembayaran →</button>
+  </div>
+</div>
+
 <footer><p>© 2025 <a href="index.html">Klaud.id</a> — Platform Belajar Claude AI #1 dalam Bahasa Indonesia</p></footer>
 
 <script>
@@ -361,21 +374,34 @@
 <!-- Duitku POP -->
 <script src="https://app-sandbox.duitku.com/lib/js/duitku.js"></script>
 <script>
-  async function beliSekarang() {
-    const btn = document.getElementById('beliBtn');
-    btn.disabled = true;
-    btn.textContent = 'Memproses...';
+  function beliSekarang() {
+    document.getElementById('paymentName').value = '';
+    document.getElementById('paymentEmail').value = '';
+    document.getElementById('paymentSubmitBtn').disabled = false;
+    document.getElementById('paymentSubmitBtn').textContent = 'Lanjutkan Pembayaran →';
+    document.getElementById('paymentModal').classList.add('active');
+  }
 
-    // Ask for buyer info
-    const name  = prompt('Masukkan nama lengkap Anda:');
-    if (!name) { btn.disabled = false; btn.textContent = 'Beli Sekarang — Rp 149,000'.replace(',', '.'); return; }
-    const email = prompt('Masukkan email aktif Anda:');
-    if (!email || !email.includes('@')) {
-      alert('Email tidak valid. Silakan coba lagi.');
-      btn.disabled = false;
-      btn.textContent = 'Beli Sekarang — Rp 149,000'.replace(',', '.');
-      return;
-    }
+  function closePaymentModal() {
+    document.getElementById('paymentModal').classList.remove('active');
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('paymentModal').addEventListener('click', function(e) {
+      if (e.target === this) closePaymentModal();
+    });
+  });
+
+  async function submitPayment() {
+    const name  = document.getElementById('paymentName').value.trim();
+    const email = document.getElementById('paymentEmail').value.trim();
+    const submitBtn = document.getElementById('paymentSubmitBtn');
+
+    if (!name) { alert('Mohon masukkan nama Anda.'); return; }
+    if (!email || !email.includes('@')) { alert('Mohon masukkan email yang valid.'); return; }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Memproses...';
 
     try {
       const res = await fetch('https://klaud-backend-production.up.railway.app/create-payment', {
@@ -391,69 +417,38 @@
       const data = await res.json();
       if (!data.success) throw new Error(data.message);
 
-      // Open Midtrans Snap popup
+      closePaymentModal();
+
       checkout.process(data.reference, {
         successEvent: function(result) {
           window.location.href = 'payment-success.html?course=workshop-zoom';
         },
         pendingEvent: function(result) {
           alert('Pembayaran pending — selesaikan pembayaran Anda ya!');
-          btn.disabled = false;
-          btn.textContent = 'Beli Sekarang — Rp 149,000'.replace(',', '.');
         },
         errorEvent: function(result) {
           alert('Terjadi kesalahan. Silakan coba lagi.');
-          btn.disabled = false;
-          btn.textContent = 'Beli Sekarang — Rp 149,000'.replace(',', '.');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Lanjutkan Pembayaran →';
         },
         closeEvent: function() {
-          btn.disabled = false;
-          btn.textContent = 'Beli Sekarang — Rp 149,000'.replace(',', '.');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Lanjutkan Pembayaran →';
         }
       });
 
     } catch (err) {
       console.error(err);
       alert('Gagal memproses pembayaran. Silakan coba lagi.');
-      btn.disabled = false;
-      btn.textContent = 'Beli Sekarang — Rp 149,000'.replace(',', '.');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Lanjutkan Pembayaran →';
     }
   }
 </script>
 
+
 <!-- Duitku POP -->
 <script src="https://app-sandbox.duitku.com/lib/js/duitku.js"></script>
-<script>
-  async function beliSekarang() {
-    const btn = document.getElementById('beliBtn');
-    btn.disabled = true;
-    btn.textContent = 'Memproses...';
-    const name = prompt('Masukkan nama lengkap Anda:');
-    if (!name) { btn.disabled = false; btn.textContent = 'Beli Sekarang — Rp 149.000'; return; }
-    const email = prompt('Masukkan email aktif Anda:');
-    if (!email || !email.includes('@')) {
-      alert('Email tidak valid. Silakan coba lagi.');
-      btn.disabled = false; btn.textContent = 'Beli Sekarang — Rp 149.000'; return;
-    }
-    try {
-      const res = await fetch('https://klaud-backend-production.up.railway.app/create-payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ courseSlug: 'workshop-zoom', customerName: name, customerEmail: email })
-      });
-      const data = await res.json();
-      if (!data.success) throw new Error(data.message);
-      checkout.process(data.reference, {
-        onSuccess: () => { window.location.href = 'payment-success.html?course=workshop-zoom'; },
-        onPending: () => { alert('Pembayaran pending — selesaikan pembayaran Anda!'); btn.disabled = false; btn.textContent = 'Beli Sekarang — Rp 149.000'; },
-        onError:   () => { alert('Terjadi kesalahan. Silakan coba lagi.'); btn.disabled = false; btn.textContent = 'Beli Sekarang — Rp 149.000'; },
-        onClose:   () => { btn.disabled = false; btn.textContent = 'Beli Sekarang — Rp 149.000'; }
-      });
-    } catch (err) {
-      alert('Gagal memproses. Silakan coba lagi.');
-      btn.disabled = false; btn.textContent = 'Beli Sekarang — Rp 149.000';
-    }
-  }
-</script>
+
 </body>
 </html>
