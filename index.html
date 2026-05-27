@@ -716,11 +716,8 @@
     const { data: { session } } = await sbClient.auth.getSession();
     if (session) {
       const loginBtn = document.getElementById('navLoginBtn');
-      const ctaBtn   = document.getElementById('navCtaBtn');
       loginBtn.textContent = 'Dashboard';
       loginBtn.href = 'dashboard.html';
-      ctaBtn.textContent = 'Ke Dashboard →';
-      ctaBtn.href = 'dashboard.html';
     }
   })();
 </script>
