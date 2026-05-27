@@ -175,8 +175,10 @@
       btn.disabled = false;
       btn.textContent = 'Kirim Link Login →';
     } else {
-      showMessage('✉️ Link masuk sudah dikirim ke <strong>' + email + '</strong>!<br>Cek inbox kamu dan klik linknya — kamu langsung masuk, tidak perlu password.', 'success');
-      document.getElementById('loginForm').style.opacity = '0.4';
+      btn.textContent = '✉️ Link terkirim!';
+      btn.style.background = '#065F46';
+      showMessage('✉️ Link masuk sudah dikirim ke <strong>' + email + '</strong>!<br><br>Cek inbox kamu dan klik linknya — kamu langsung masuk, tidak perlu password.', 'success');
+      document.getElementById('loginForm').style.opacity = '0.6';
       document.getElementById('loginForm').style.pointerEvents = 'none';
     }
   }
