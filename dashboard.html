@@ -7,114 +7,92 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      background: #F5F3EE;
-      min-height: 100vh;
-      color: #1E293B;
-    }
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #F5F3EE; min-height: 100vh; color: #1E293B; }
+
     /* Nav */
-    nav {
-      background: #042C53;
-      padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+    nav { background: #042C53; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
     .nav-logo { font-size: 22px; font-weight: 800; color: #F5F3EE; }
     .nav-logo span { color: #378ADD; }
     .nav-right { display: flex; align-items: center; gap: 16px; }
     .nav-email { font-size: 13px; color: #85B7EB; }
-    .logout-btn {
-      background: transparent;
-      border: 1.5px solid #378ADD;
-      color: #378ADD;
-      padding: 6px 14px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
+    .logout-btn { background: transparent; border: 1.5px solid #378ADD; color: #378ADD; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
     .logout-btn:hover { background: #378ADD; color: #fff; }
 
-    /* Main */
-    .container { max-width: 760px; margin: 0 auto; padding: 40px 20px; }
-    .greeting { margin-bottom: 32px; }
-    .greeting h1 { font-size: 24px; font-weight: 800; color: #042C53; margin-bottom: 4px; }
-    .greeting p  { font-size: 14px; color: #64748B; }
+    /* Layout */
+    .container { max-width: 860px; margin: 0 auto; padding: 40px 20px 60px; }
+    .loading { text-align: center; padding: 60px 20px; color: #94A3B8; font-size: 14px; }
 
-    /* Course cards */
-    .section-title {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      color: #94A3B8;
-      margin-bottom: 14px;
-    }
-    .courses { display: flex; flex-direction: column; gap: 12px; margin-bottom: 40px; }
-    .course-card {
+    /* Greeting */
+    .greeting { margin-bottom: 36px; }
+    .greeting h1 { font-size: 26px; font-weight: 800; color: #042C53; margin-bottom: 4px; }
+    .greeting p { font-size: 14px; color: #64748B; }
+
+    /* Section headers */
+    .section-label { font-size: 18px; font-weight: 800; color: #1E293B; margin-bottom: 16px; }
+
+    /* Enrolled course card — horizontal, prominent */
+    .enrolled-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 48px; }
+    .enrolled-card {
       background: #fff;
-      border-radius: 12px;
-      padding: 20px 22px;
+      border-radius: 14px;
+      border: 1.5px solid #E2E8F0;
+      padding: 20px 24px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      border: 1.5px solid #E2E8F0;
+      gap: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
-    .course-info h3 { font-size: 15px; font-weight: 700; color: #1E293B; margin-bottom: 4px; }
-    .course-info p  { font-size: 12px; color: #64748B; }
-    .course-badge {
-      font-size: 11px;
-      font-weight: 700;
-      padding: 4px 12px;
-      border-radius: 20px;
-      background: #D1FAE5;
-      color: #065F46;
-      white-space: nowrap;
-    }
-    .access-btn {
-      display: inline-block;
-      background: #378ADD;
-      color: #fff;
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 700;
-      padding: 8px 18px;
-      border-radius: 8px;
-      margin-left: 14px;
-      white-space: nowrap;
-      transition: background 0.2s;
-    }
-    .access-btn:hover { background: #2b6cb0; }
-
-    /* Empty state */
-    .empty {
-      background: #fff;
-      border-radius: 12px;
-      padding: 40px;
-      text-align: center;
-      border: 1.5px dashed #E2E8F0;
-    }
-    .empty p { font-size: 14px; color: #64748B; margin-bottom: 16px; line-height: 1.7; }
-    .empty a {
+    .enrolled-icon { font-size: 36px; flex-shrink: 0; }
+    .enrolled-info { flex: 1; }
+    .enrolled-info h3 { font-size: 16px; font-weight: 700; color: #1E293B; margin-bottom: 4px; }
+    .enrolled-info p { font-size: 12px; color: #94A3B8; }
+    .enrolled-badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+    .badge-free { background: #EDE9FE; color: #5B21B6; }
+    .badge-paid { background: #D1FAE5; color: #065F46; }
+    .resume-btn {
       display: inline-block;
       background: #042C53;
       color: #fff;
       text-decoration: none;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
-      padding: 10px 24px;
-      border-radius: 10px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background 0.2s;
     }
+    .resume-btn:hover { background: #378ADD; }
 
-    /* Loading */
-    .loading { text-align: center; padding: 60px 20px; color: #94A3B8; font-size: 14px; }
-
-    /* Course icons map */
-    .icon { font-size: 22px; margin-right: 14px; }
+    /* Explore grid — smaller cards */
+    .explore-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+    .explore-card {
+      background: #fff;
+      border-radius: 14px;
+      border: 1.5px solid #E2E8F0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .explore-icon { font-size: 28px; }
+    .explore-card h4 { font-size: 14px; font-weight: 700; color: #1E293B; line-height: 1.4; }
+    .explore-card p { font-size: 12px; color: #64748B; line-height: 1.6; flex: 1; }
+    .explore-btn {
+      display: inline-block;
+      background: #F1F5F9;
+      color: #042C53;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 8px 14px;
+      border-radius: 8px;
+      text-align: center;
+      transition: background 0.2s;
+      margin-top: 4px;
+    }
+    .explore-btn:hover { background: #378ADD; color: #fff; }
   </style>
 </head>
 <body>
@@ -133,11 +111,18 @@
   <div id="content" style="display:none;">
     <div class="greeting">
       <h1 id="greetingText">Hei! 👋</h1>
-      <p>Ini adalah kursus yang sudah kamu beli. Selamat belajar!</p>
+      <p id="greetingSub">Selamat datang kembali di Klaud.id</p>
     </div>
 
-    <div class="section-title">Kursus Kamu</div>
-    <div class="courses" id="coursesList"></div>
+    <div id="enrolledSection" style="display:none;">
+      <div class="section-label">Kursus Kamu</div>
+      <div class="enrolled-list" id="enrolledList"></div>
+    </div>
+
+    <div id="exploreSection" style="display:none;">
+      <div class="section-label">Jelajahi Kursus Lainnya</div>
+      <div class="explore-grid" id="exploreGrid"></div>
+    </div>
   </div>
 </div>
 
@@ -146,34 +131,28 @@
   const SUPABASE_KEY = 'sb_publishable_U3DV1nZq3MXdOkfI8oUZdg_EB025f9q';
   const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const COURSE_META = {
-    'prompt-gratis':    { title: '20 Prompt Claude Terbaik',        icon: '🎁', link: 'prompt-gratis-content.html' },
-    'kursus-karyawan':  { title: 'Claude untuk Karyawan Indonesia', icon: '🎬', link: 'kursus-karyawan-content.html' },
-    'kursus-ukm':       { title: 'Scale Bisnis dengan Claude AI',   icon: '🏪', link: 'kursus-ukm-content.html' },
-    'workshop-zoom':    { title: 'Workshop Bulanan via Zoom',        icon: '🎙', link: 'workshop-zoom-content.html' },
-    'kursus-mahasiswa': { title: 'Claude untuk Karir & Studi',      icon: '🎓', link: 'kursus-mahasiswa-content.html' },
-    'coaching-1on1':    { title: 'Coaching 1-on-1',                 icon: '💬', link: 'coaching-1on1-content.html' },
+  const ALL_COURSES = {
+    'prompt-gratis':    { title: '20 Prompt Claude Terbaik',        icon: '🎁', link: 'prompt-gratis-content.html', desc: 'Prompt siap pakai untuk email, laporan, konten sosmed, dan lainnya.',      price: 'Gratis' },
+    'kursus-karyawan':  { title: 'Claude untuk Karyawan Indonesia', icon: '🎬', link: 'kursus-karyawan-content.html', desc: 'Kuasai Claude untuk produktivitas kerja sehari-hari.',                    price: 'Rp 249.000' },
+    'kursus-ukm':       { title: 'Scale Bisnis dengan Claude AI',   icon: '🏪', link: 'kursus-ukm-content.html', desc: 'Strategi AI untuk UKM dan pemilik bisnis Indonesia.',                          price: 'Rp 349.000' },
+    'workshop-zoom':    { title: 'Workshop Bulanan via Zoom',        icon: '🎙', link: 'workshop-zoom-content.html', desc: 'Sesi live interaktif bersama instruktur setiap bulan.',                    price: 'Rp 199.000' },
+    'kursus-mahasiswa': { title: 'Claude untuk Karir & Studi',      icon: '🎓', link: 'kursus-mahasiswa-content.html', desc: 'Percepat studi dan persiapkan karir dengan Claude AI.',                 price: 'Rp 149.000' },
+    'coaching-1on1':    { title: 'Coaching 1-on-1',                 icon: '💬', link: 'coaching-1on1-content.html', desc: 'Sesi privat 60 menit langsung dengan instruktur Klaud.id.',                price: 'Rp 599.000' },
   };
 
   async function init() {
-    // Handle magic link callback (Supabase puts tokens in URL hash)
-    const { data: { session }, error } = await sbClient.auth.getSession();
-
-    if (!session) {
-      // Not logged in — redirect to login
-      window.location.href = 'login.html';
-      return;
-    }
+    const { data: { session } } = await sbClient.auth.getSession();
+    if (!session) { window.location.href = 'login.html'; return; }
 
     const email = session.user.email;
     const name  = session.user.user_metadata?.full_name || email.split('@')[0];
 
     document.getElementById('navEmail').textContent = email;
-    document.getElementById('greetingText').textContent = `Hei, ${name}! 👋`;
+    document.getElementById('greetingText').textContent = `Selamat datang, ${name}! 👋`;
     document.getElementById('loading').style.display = 'none';
     document.getElementById('content').style.display = 'block';
 
-    // Auto-enroll new users in free course (upsert — safe to call every time, won't duplicate)
+    // Auto-enroll in free course
     try {
       await sbClient.from('enrollments').upsert({
         email, course_slug: 'prompt-gratis',
@@ -181,49 +160,56 @@
       }, { onConflict: 'email,course_slug', ignoreDuplicates: true });
     } catch (e) { console.log('Upsert skipped:', e.message); }
 
-    // Load all enrollments (free + paid) from single table
+    // Fetch enrollments
     const { data: enrollments, error: enrollErr } = await sbClient
       .from('enrollments')
       .select('course_slug, course_name, type, enrolled_at')
       .eq('email', email)
       .order('enrolled_at', { ascending: false });
 
-    if (enrollErr) console.error('❌ Enrollments query error:', enrollErr.message);
+    if (enrollErr) console.error('❌ Enrollments error:', enrollErr.message);
 
-    const list = document.getElementById('coursesList');
-    const allCourses = (enrollments || []).map(e => ({ ...e, date: e.enrolled_at }));
+    const enrolled = enrollments || [];
+    const enrolledSlugs = new Set(enrolled.map(e => e.course_slug));
 
-    if (allCourses.length === 0) {
-      list.innerHTML = `
-        <div class="empty">
-          <p>Kamu belum memiliki kursus.<br>Yuk mulai belajar Claude AI bersama ribuan profesional Indonesia!</p>
-          <a href="index.html#kursus">Lihat Semua Kursus →</a>
-        </div>`;
-      return;
+    // --- Enrolled section ---
+    if (enrolled.length > 0) {
+      document.getElementById('enrolledSection').style.display = 'block';
+      const list = document.getElementById('enrolledList');
+      enrolled.forEach(c => {
+        const meta    = ALL_COURSES[c.course_slug] || { title: c.course_name, icon: '📚', link: '#' };
+        const dateStr = new Date(c.enrolled_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        const badge   = c.type === 'free'
+          ? `<span class="enrolled-badge badge-free">🎁 Gratis</span>`
+          : `<span class="enrolled-badge badge-paid">✓ Aktif</span>`;
+        list.innerHTML += `
+          <div class="enrolled-card">
+            <div class="enrolled-icon">${meta.icon}</div>
+            <div class="enrolled-info">
+              <h3>${meta.title}</h3>
+              <p>${c.type === 'free' ? 'Diikuti' : 'Dibeli'} ${dateStr} &nbsp;${badge}</p>
+            </div>
+            <a href="${meta.link}" class="resume-btn">Mulai →</a>
+          </div>`;
+      });
     }
 
-    allCourses.forEach(c => {
-      const meta      = COURSE_META[c.course_slug] || { title: c.course_name, icon: '📚', link: '#' };
-      const dateStr   = new Date(c.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-      const badgeHTML = c.type === 'free'
-        ? `<span class="course-badge" style="background:#EDE9FE;color:#5B21B6;">🎁 Gratis</span>`
-        : `<span class="course-badge">✓ Aktif</span>`;
-      const dateLabel = c.type === 'free' ? `Diikuti ${dateStr}` : `Dibeli ${dateStr}`;
-      list.innerHTML += `
-        <div class="course-card">
-          <div style="display:flex;align-items:center;">
-            <span class="icon">${meta.icon}</span>
-            <div class="course-info">
-              <h3>${meta.title}</h3>
-              <p>${dateLabel}</p>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
-            ${badgeHTML}
-            <a href="${meta.link}" class="access-btn">Mulai →</a>
-          </div>
-        </div>`;
-    });
+    // --- Explore section (unenrolled courses) ---
+    const unenrolled = Object.entries(ALL_COURSES).filter(([slug]) => !enrolledSlugs.has(slug));
+    if (unenrolled.length > 0) {
+      document.getElementById('exploreSection').style.display = 'block';
+      const grid = document.getElementById('exploreGrid');
+      unenrolled.forEach(([slug, meta]) => {
+        grid.innerHTML += `
+          <div class="explore-card">
+            <div class="explore-icon">${meta.icon}</div>
+            <h4>${meta.title}</h4>
+            <p>${meta.desc}</p>
+            <div style="font-size:13px;font-weight:700;color:#042C53;">${meta.price}</div>
+            <a href="index.html#kursus" class="explore-btn">Lihat Kursus →</a>
+          </div>`;
+      });
+    }
   }
 
   async function logout() {
@@ -233,6 +219,5 @@
 
   init();
 </script>
-
 </body>
 </html>
