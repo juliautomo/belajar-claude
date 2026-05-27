@@ -123,8 +123,8 @@
     <div class="logo-sub">Platform Belajar Claude AI #1 Indonesia</div>
   </div>
 
-  <h1>Masuk ke Akun Kamu</h1>
-  <p class="subtitle">Masukkan email kamu dan kami akan kirimkan link login — tidak perlu password.</p>
+  <h1>Masuk atau Daftar</h1>
+  <p class="subtitle">Masukkan email kamu — kami kirimkan link masuk langsung ke inbox. Tidak perlu password, tidak perlu isi form panjang.</p>
 
   <div id="loginForm">
     <label for="email">Alamat Email</label>
@@ -175,7 +175,7 @@
       btn.disabled = false;
       btn.textContent = 'Kirim Link Login →';
     } else {
-      showMessage('✉️ Link login sudah dikirim ke <strong>' + email + '</strong>! Cek inbox (atau folder spam) kamu.', 'success');
+      showMessage('✉️ Link masuk sudah dikirim ke <strong>' + email + '</strong>!<br>Cek inbox kamu dan klik linknya — kamu langsung masuk, tidak perlu password.', 'success');
       document.getElementById('loginForm').style.opacity = '0.4';
       document.getElementById('loginForm').style.pointerEvents = 'none';
     }
