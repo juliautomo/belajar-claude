@@ -174,10 +174,12 @@
     document.getElementById('content').style.display = 'block';
 
     // Auto-enroll new users in free course (upsert — safe to call every time, won't duplicate)
-    await sbClient.from('enrollments').upsert({
-      email, course_slug: 'prompt-gratis',
-      course_name: '20 Prompt Claude Terbaik', type: 'free',
-    }, { onConflict: 'email,course_slug', ignoreDuplicates: true });
+    try {
+      await sbClient.from('enrollments').upsert({
+        email, course_slug: 'prompt-gratis',
+        course_name: '20 Prompt Claude Terbaik', type: 'free',
+      }, { onConflict: 'email,course_slug', ignoreDuplicates: true });
+    } catch (e) { console.log('Upsert skipped:', e.message); }
 
     // Load all enrollments (free + paid) from single table
     const { data: enrollments, error: enrollErr } = await sbClient
