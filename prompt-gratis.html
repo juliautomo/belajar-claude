@@ -404,8 +404,8 @@
           <input type="email" class="form-input" placeholder="Email aktif Anda" id="inputEmail">
         </div>
         <button class="btn-download" onclick="handleDownload()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-          Download PDF Gratis
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Akses Gratis →
         </button>
       </div>
       <p class="form-note">🔒 Kami tidak pernah spam. Unsubscribe kapan saja.</p>
@@ -548,8 +548,8 @@ Buat ringkasan eksekutif...
           <input type="email" class="form-input" placeholder="Email aktif Anda" id="inputEmail2">
         </div>
         <button class="btn-download" onclick="handleDownload2()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-          Download PDF Gratis Sekarang
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Akses Gratis Sekarang →
         </button>
       </div>
       <p class="form-note">🔒 Privasi Anda aman. Tidak ada spam.</p>
@@ -561,13 +561,13 @@ Buat ringkasan eksekutif...
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <div class="modal-icon">🎉</div>
-    <h3>Berhasil! PDF siap diunduh</h3>
-    <p>Terima kasih sudah mendaftar! Klik tombol di bawah untuk langsung download 20 Prompt Claude Terbaik Anda.</p>
+    <h3>Akun kamu sudah siap!</h3>
+    <p>Terima kasih sudah daftar! Klik tombol di bawah untuk masuk dan akses 20 Prompt Claude Terbaik kamu.</p>
     <button class="btn-download" onclick="triggerDownload()" style="max-width:300px;margin:0 auto 12px">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-      Download Sekarang
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      Akses 20 Prompt Gratis →
     </button>
-    <p class="modal-sub">Kami juga akan kirim link ke email Anda sebagai backup.</p>
+    <p class="modal-sub">Kami juga akan kirim link masuk ke email kamu.</p>
   </div>
 </div>
 
@@ -588,12 +588,8 @@ Buat ringkasan eksekutif...
   }
 
   function triggerDownload() {
-    // Replace '20-prompt-claude-terbaik.pdf' with actual path when deployed
-    const link = document.createElement('a');
-    link.href = '20-prompt-claude-terbaik.pdf';
-    link.download = '20-Prompt-Claude-Terbaik-Klaud.id.pdf';
-    link.click();
-    document.getElementById('modalOverlay').classList.remove('active');
+    // Redirect to login — user will be enrolled in the free course automatically
+    window.location.href = 'login.html';
   }
 
   async function submitToBackend(name, email) {

@@ -141,10 +141,10 @@
 <script>
   const SUPABASE_URL = 'https://bolagqhgagmiewjdjzgz.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_U3DV1nZq3MXdOkfI8oUZdg_EB025f9q';
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   // If already logged in, redirect to dashboard
-  supabase.auth.getSession().then(({ data: { session } }) => {
+  sbClient.auth.getSession().then(({ data: { session } }) => {
     if (session) window.location.href = 'dashboard.html';
   });
 
@@ -163,7 +163,7 @@
     msg.className = 'message';
     msg.style.display = 'none';
 
-    const { error } = await supabase.auth.signInWithOtp({
+    const { error } = await sbClient.auth.signInWithOtp({
       email,
       options: {
         emailRedirectTo: 'https://juliautomo.github.io/klaud-id/dashboard.html',
