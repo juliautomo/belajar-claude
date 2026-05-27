@@ -173,17 +173,15 @@
     document.getElementById('loading').style.display = 'none';
     document.getElementById('content').style.display = 'block';
 
-    // Load enrollments (free) + purchases (paid) in parallel
-    const [{ data: enrollments }, { data: purchases }] = await Promise.all([
-      supabase.from('enrollments').select('course_slug, course_name, enrolled_at').eq('email', email),
-      supabase.from('purchases').select('course_slug, course_name, paid_at').eq('email', email).order('paid_at', { ascending: false }),
-    ]);
+    // Load all enrollments (free + paid) from single table
+    const { data: enrollments } = await supabase
+      .from('enrollments')
+      .select('course_slug, course_name, type, enrolled_at')
+      .eq('email', email)
+      .order('enrolled_at', { ascending: false });
 
     const list = document.getElementById('coursesList');
-    const allCourses = [];
-
-    (enrollments || []).forEach(e => allCourses.push({ ...e, date: e.enrolled_at, type: 'free' }));
-    (purchases   || []).forEach(p => allCourses.push({ ...p, date: p.paid_at,      type: 'paid' }));
+    const allCourses = (enrollments || []).map(e => ({ ...e, date: e.enrolled_at }));
 
     if (allCourses.length === 0) {
       list.innerHTML = `
