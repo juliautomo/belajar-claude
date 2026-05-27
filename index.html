@@ -348,8 +348,8 @@
     <a href="#kursus">Kursus</a>
     <a href="#tentang">Tentang</a>
     <a href="#testimoni">Testimoni</a>
-    <a href="login.html" style="color:var(--navy);font-weight:600;font-size:13px;margin-right:-16px;">Masuk</a>
-    <a href="login.html" class="nav-cta">Gabung Gratis</a>
+    <a href="login.html" id="navLoginBtn" style="color:var(--navy);font-weight:600;font-size:13px;margin-right:-16px;">Masuk</a>
+    <a href="login.html" id="navCtaBtn" class="nav-cta">Gabung Gratis</a>
   </div>
 </nav>
 
@@ -704,6 +704,25 @@
 
   draw();
 })();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  (async () => {
+    const sbClient = window.supabase.createClient(
+      'https://bolagqhgagmiewjdjzgz.supabase.co',
+      'sb_publishable_U3DV1nZq3MXdOkfI8oUZdg_EB025f9q'
+    );
+    const { data: { session } } = await sbClient.auth.getSession();
+    if (session) {
+      const loginBtn = document.getElementById('navLoginBtn');
+      const ctaBtn   = document.getElementById('navCtaBtn');
+      loginBtn.textContent = 'Dashboard';
+      loginBtn.href = 'dashboard.html';
+      ctaBtn.textContent = 'Ke Dashboard →';
+      ctaBtn.href = 'dashboard.html';
+    }
+  })();
 </script>
 
 </body>
