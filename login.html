@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — Klaud.id</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: #F5F3EE;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 40px 36px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .logo-text {
+      font-size: 28px;
+      font-weight: 800;
+      color: #042C53;
+    }
+    .logo-text span { color: #378ADD; }
+    .logo-sub {
+      font-size: 12px;
+      color: #94A3B8;
+      margin-top: 4px;
+      letter-spacing: 0.5px;
+    }
+    h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1E293B;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    p.subtitle {
+      font-size: 14px;
+      color: #64748B;
+      text-align: center;
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+    input[type="email"] {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 10px;
+      font-size: 14px;
+      color: #1E293B;
+      outline: none;
+      transition: border 0.2s;
+      margin-bottom: 16px;
+    }
+    input[type="email"]:focus { border-color: #378ADD; }
+    button {
+      width: 100%;
+      padding: 13px;
+      background: #378ADD;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover { background: #2b6cb0; }
+    button:disabled { background: #93C5FD; cursor: not-allowed; }
+    .message {
+      margin-top: 20px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      text-align: center;
+      line-height: 1.6;
+      display: none;
+    }
+    .message.success { background: #D1FAE5; color: #065F46; display: block; }
+    .message.error   { background: #FEE2E2; color: #991B1B; display: block; }
+    .divider {
+      text-align: center;
+      font-size: 12px;
+      color: #94A3B8;
+      margin: 24px 0 16px;
+    }
+    .back-link {
+      display: block;
+      text-align: center;
+      font-size: 13px;
+      color: #378ADD;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .back-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo">
+    <div class="logo-text">Klaud<span>.id</span></div>
+    <div class="logo-sub">Platform Belajar Claude AI #1 Indonesia</div>
+  </div>
+
+  <h1>Masuk ke Akun Kamu</h1>
+  <p class="subtitle">Masukkan email kamu dan kami akan kirimkan link login — tidak perlu password.</p>
+
+  <div id="loginForm">
+    <label for="email">Alamat Email</label>
+    <input type="email" id="email" placeholder="nama@email.com" />
+    <button id="loginBtn" onclick="sendMagicLink()">Kirim Link Login →</button>
+  </div>
+
+  <div class="message" id="message"></div>
+
+  <div class="divider">— atau —</div>
+  <a href="https://juliautomo.github.io/klaud-id/index.html" class="back-link">← Kembali ke Klaud.id</a>
+</div>
+
+<script>
+  const SUPABASE_URL = 'https://bolagqhgagmiewjdjzgz.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_U3DV1nZq3MXdOkfI8oUZdg_EB025f9q';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // If already logged in, redirect to dashboard
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    if (session) window.location.href = 'dashboard.html';
+  });
+
+  async function sendMagicLink() {
+    const email = document.getElementById('email').value.trim();
+    const btn   = document.getElementById('loginBtn');
+    const msg   = document.getElementById('message');
+
+    if (!email) {
+      showMessage('Masukkan alamat email kamu dulu ya.', 'error');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Mengirim...';
+    msg.className = 'message';
+    msg.style.display = 'none';
+
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: 'https://juliautomo.github.io/klaud-id/dashboard.html',
+      },
+    });
+
+    if (error) {
+      showMessage('Gagal mengirim email. Coba lagi ya: ' + error.message, 'error');
+      btn.disabled = false;
+      btn.textContent = 'Kirim Link Login →';
+    } else {
+      showMessage('✉️ Link login sudah dikirim ke <strong>' + email + '</strong>! Cek inbox (atau folder spam) kamu.', 'success');
+      document.getElementById('loginForm').style.opacity = '0.4';
+      document.getElementById('loginForm').style.pointerEvents = 'none';
+    }
+  }
+
+  function showMessage(text, type) {
+    const msg = document.getElementById('message');
+    msg.innerHTML = text;
+    msg.className = 'message ' + type;
+  }
+
+  // Allow pressing Enter
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('email').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMagicLink();
+    });
+  });
+</script>
+
+</body>
+</html>

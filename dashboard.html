@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Klaud.id</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: #F5F3EE;
+      min-height: 100vh;
+      color: #1E293B;
+    }
+    /* Nav */
+    nav {
+      background: #042C53;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo { font-size: 22px; font-weight: 800; color: #F5F3EE; }
+    .nav-logo span { color: #378ADD; }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+    .nav-email { font-size: 13px; color: #85B7EB; }
+    .logout-btn {
+      background: transparent;
+      border: 1.5px solid #378ADD;
+      color: #378ADD;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .logout-btn:hover { background: #378ADD; color: #fff; }
+
+    /* Main */
+    .container { max-width: 760px; margin: 0 auto; padding: 40px 20px; }
+    .greeting { margin-bottom: 32px; }
+    .greeting h1 { font-size: 24px; font-weight: 800; color: #042C53; margin-bottom: 4px; }
+    .greeting p  { font-size: 14px; color: #64748B; }
+
+    /* Course cards */
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #94A3B8;
+      margin-bottom: 14px;
+    }
+    .courses { display: flex; flex-direction: column; gap: 12px; margin-bottom: 40px; }
+    .course-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border: 1.5px solid #E2E8F0;
+    }
+    .course-info h3 { font-size: 15px; font-weight: 700; color: #1E293B; margin-bottom: 4px; }
+    .course-info p  { font-size: 12px; color: #64748B; }
+    .course-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: #D1FAE5;
+      color: #065F46;
+      white-space: nowrap;
+    }
+    .access-btn {
+      display: inline-block;
+      background: #378ADD;
+      color: #fff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 18px;
+      border-radius: 8px;
+      margin-left: 14px;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .access-btn:hover { background: #2b6cb0; }
+
+    /* Empty state */
+    .empty {
+      background: #fff;
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      border: 1.5px dashed #E2E8F0;
+    }
+    .empty p { font-size: 14px; color: #64748B; margin-bottom: 16px; line-height: 1.7; }
+    .empty a {
+      display: inline-block;
+      background: #042C53;
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 10px 24px;
+      border-radius: 10px;
+    }
+
+    /* Loading */
+    .loading { text-align: center; padding: 60px 20px; color: #94A3B8; font-size: 14px; }
+
+    /* Course icons map */
+    .icon { font-size: 22px; margin-right: 14px; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Klaud<span>.id</span></div>
+  <div class="nav-right">
+    <span class="nav-email" id="navEmail"></span>
+    <button class="logout-btn" onclick="logout()">Keluar</button>
+  </div>
+</nav>
+
+<div class="container">
+  <div id="loading" class="loading">Memuat dashboard kamu...</div>
+
+  <div id="content" style="display:none;">
+    <div class="greeting">
+      <h1 id="greetingText">Hei! 👋</h1>
+      <p>Ini adalah kursus yang sudah kamu beli. Selamat belajar!</p>
+    </div>
+
+    <div class="section-title">Kursus Kamu</div>
+    <div class="courses" id="coursesList"></div>
+  </div>
+</div>
+
+<script>
+  const SUPABASE_URL = 'https://bolagqhgagmiewjdjzgz.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_U3DV1nZq3MXdOkfI8oUZdg_EB025f9q';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  const COURSE_META = {
+    'kursus-karyawan':  { title: 'Claude untuk Karyawan Indonesia', icon: '🎬', link: 'kursus-karyawan-content.html' },
+    'kursus-ukm':       { title: 'Scale Bisnis dengan Claude AI',   icon: '🏪', link: 'kursus-ukm-content.html' },
+    'workshop-zoom':    { title: 'Workshop Bulanan via Zoom',        icon: '🎙', link: 'workshop-zoom-content.html' },
+    'kursus-mahasiswa': { title: 'Claude untuk Karir & Studi',      icon: '🎓', link: 'kursus-mahasiswa-content.html' },
+    'coaching-1on1':    { title: 'Coaching 1-on-1',                 icon: '💬', link: 'coaching-1on1-content.html' },
+  };
+
+  async function init() {
+    // Handle magic link callback (Supabase puts tokens in URL hash)
+    const { data: { session }, error } = await supabase.auth.getSession();
+
+    if (!session) {
+      // Not logged in — redirect to login
+      window.location.href = 'login.html';
+      return;
+    }
+
+    const email = session.user.email;
+    const name  = session.user.user_metadata?.full_name || email.split('@')[0];
+
+    document.getElementById('navEmail').textContent = email;
+    document.getElementById('greetingText').textContent = `Hei, ${name}! 👋`;
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('content').style.display = 'block';
+
+    // Load purchases from Supabase
+    const { data: purchases, error: pErr } = await supabase
+      .from('purchases')
+      .select('course_slug, course_name, paid_at')
+      .eq('email', email)
+      .order('paid_at', { ascending: false });
+
+    const list = document.getElementById('coursesList');
+
+    if (pErr || !purchases || purchases.length === 0) {
+      list.innerHTML = `
+        <div class="empty">
+          <p>Kamu belum memiliki kursus.<br>Yuk mulai belajar Claude AI bersama ribuan profesional Indonesia!</p>
+          <a href="index.html#kursus">Lihat Semua Kursus →</a>
+        </div>`;
+      return;
+    }
+
+    purchases.forEach(p => {
+      const meta = COURSE_META[p.course_slug] || { title: p.course_name, icon: '📚', link: '#' };
+      const paidDate = new Date(p.paid_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+      list.innerHTML += `
+        <div class="course-card">
+          <div style="display:flex;align-items:center;">
+            <span class="icon">${meta.icon}</span>
+            <div class="course-info">
+              <h3>${meta.title}</h3>
+              <p>Dibeli ${paidDate}</p>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+            <span class="course-badge">✓ Aktif</span>
+            <a href="${meta.link}" class="access-btn">Mulai →</a>
+          </div>
+        </div>`;
+    });
+  }
+
+  async function logout() {
+    await supabase.auth.signOut();
+    window.location.href = 'login.html';
+  }
+
+  init();
+</script>
+
+</body>
+</html>
