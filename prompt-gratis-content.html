@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>20 Prompt Claude Terbaik — Klaud.id</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #F5F3EE; color: #1E293B; }
+
+    nav {
+      background: #042C53; padding: 16px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { font-size: 22px; font-weight: 800; color: #F5F3EE; }
+    .nav-logo span { color: #378ADD; }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-back { font-size: 13px; color: #85B7EB; text-decoration: none; font-weight: 600; }
+    .nav-back:hover { color: #fff; }
+    .logout-btn {
+      background: transparent; border: 1.5px solid #378ADD;
+      color: #378ADD; padding: 6px 14px; border-radius: 8px;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+    }
+    .logout-btn:hover { background: #378ADD; color: #fff; }
+
+    .hero {
+      background: linear-gradient(135deg, #042C53 0%, #0C447C 100%);
+      padding: 48px 24px; text-align: center;
+    }
+    .hero-badge {
+      display: inline-block; background: #378ADD; color: #fff;
+      font-size: 11px; font-weight: 700; padding: 4px 14px;
+      border-radius: 20px; letter-spacing: 1px; text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .hero h1 { font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 10px; line-height: 1.3; }
+    .hero p  { font-size: 15px; color: #85B7EB; max-width: 520px; margin: 0 auto; line-height: 1.7; }
+
+    .container { max-width: 800px; margin: 0 auto; padding: 40px 20px 60px; }
+
+    .intro {
+      background: #fff; border-radius: 12px; padding: 22px 26px;
+      margin-bottom: 32px; border: 1.5px solid #E2E8F0;
+      font-size: 14px; color: #475569; line-height: 1.75;
+    }
+    .intro strong { color: #042C53; }
+
+    .category-nav {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px;
+    }
+    .cat-btn {
+      padding: 7px 16px; border-radius: 20px; font-size: 12px; font-weight: 600;
+      border: 1.5px solid #E2E8F0; background: #fff; color: #64748B;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .cat-btn:hover, .cat-btn.active { background: #042C53; color: #fff; border-color: #042C53; }
+
+    .section { margin-bottom: 36px; }
+    .section-header {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+    }
+    .section-icon { font-size: 22px; }
+    .section-title { font-size: 16px; font-weight: 800; color: #042C53; }
+    .section-count { font-size: 11px; color: #94A3B8; font-weight: 600; }
+
+    .prompt-card {
+      background: #fff; border-radius: 12px; padding: 20px 22px;
+      margin-bottom: 12px; border: 1.5px solid #E2E8F0;
+      transition: border 0.15s;
+    }
+    .prompt-card:hover { border-color: #378ADD; }
+
+    .prompt-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+    .prompt-num { font-size: 11px; font-weight: 700; color: #94A3B8; margin-bottom: 4px; }
+    .prompt-title { font-size: 14px; font-weight: 700; color: #1E293B; }
+    .copy-btn {
+      background: #F1F5F9; border: none; color: #64748B;
+      font-size: 11px; font-weight: 600; padding: 5px 12px;
+      border-radius: 6px; cursor: pointer; white-space: nowrap;
+      flex-shrink: 0; margin-left: 12px; transition: all 0.15s;
+    }
+    .copy-btn:hover { background: #378ADD; color: #fff; }
+    .copy-btn.copied { background: #D1FAE5; color: #065F46; }
+
+    .prompt-text {
+      background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px;
+      padding: 12px 14px; font-size: 13px; color: #334155;
+      line-height: 1.7; font-family: inherit; white-space: pre-wrap;
+      margin-bottom: 10px;
+    }
+    .prompt-tip { font-size: 12px; color: #64748B; line-height: 1.6; }
+    .prompt-tip strong { color: #042C53; }
+
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Klaud<span>.id</span></div>
+  <div class="nav-right">
+    <a href="dashboard.html" class="nav-back">← Dashboard</a>
+    <button class="logout-btn" onclick="logout()">Keluar</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🎁 Gratis untuk Kamu</div>
+  <h1>20 Prompt Claude Terbaik</h1>
+  <p>Prompt siap pakai untuk produktivitas kerja, bisnis, karir, dan komunikasi sehari-hari.</p>
+</div>
+
+<div id="loading" style="text-align:center;padding:60px;color:#94A3B8;font-size:14px;">Memuat konten...</div>
+
+<div id="content" class="hidden">
+<div class="container">
+  <div class="intro">
+    Selamat datang! Di sini kamu akan menemukan <strong>20 prompt Claude</strong> yang langsung bisa kamu copy-paste dan gunakan. Setiap prompt sudah diuji dan dioptimasi untuk memberikan hasil terbaik. Klik tombol <strong>Copy</strong> untuk langsung menyalin prompt ke clipboard.
+  </div>
+
+  <div class="category-nav">
+    <button class="cat-btn active" onclick="filterCategory('all', this)">Semua (20)</button>
+    <button class="cat-btn" onclick="filterCategory('produktivitas', this)">💼 Produktivitas</button>
+    <button class="cat-btn" onclick="filterCategory('bisnis', this)">🏪 Bisnis & Marketing</button>
+    <button class="cat-btn" onclick="filterCategory('karir', this)">🎯 Karir & CV</button>
+    <button class="cat-btn" onclick="filterCategory('komunikasi', this)">✉️ Komunikasi</button>
+    <button class="cat-btn" onclick="filterCategory('belajar', this)">📚 Belajar</button>
+  </div>
+
+  <!-- PRODUKTIVITAS -->
+  <div class="section" data-category="produktivitas">
+    <div class="section-header">
+      <span class="section-icon">💼</span>
+      <span class="section-title">Produktivitas Kerja</span>
+      <span class="section-count">4 prompt</span>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div><div class="prompt-num">Prompt #1</div><div class="prompt-title">Rangkum Dokumen Panjang</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+      </div>
+      <div class="prompt-text">Tolong rangkum teks berikut ini dalam 5 poin utama yang paling penting. Gunakan bahasa Indonesia yang jelas dan mudah dipahami. Untuk setiap poin, tambahkan 1 kalimat penjelasan singkat.
+
+[Tempel teks dokumen kamu di sini]</div>
+      <div class="prompt-tip"><strong>Tips:</strong> Cocok untuk merangkum laporan, artikel, atau email panjang. Ganti angka "5 poin" sesuai kebutuhan.</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div><div class="prompt-num">Prompt #2</div><div class="prompt-title">Buat Rencana Kerja Harian</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+      </div>
+      <div class="prompt-text">Bantu saya membuat rencana kerja untuk hari ini. Berikut tugas-tugas yang perlu saya selesaikan:
+
+[Tuliskan daftar tugas kamu]
+
+Tolong urutkan berdasarkan prioritas (urgent & penting dulu), estimasikan waktu untuk setiap tugas, dan sarankan kapan waktu terbaik untuk mengerjakan tugas yang butuh fokus tinggi vs tugas ringan.</div>
+      <div class="prompt-tip"><strong>Tips:</strong> Tambahkan info seperti meeting yang sudah dijadwalkan agar Claude bisa membuat jadwal yang lebih akurat.</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div><div class="prompt-num">Prompt #3</div><div class="prompt-title">Breakdown Proyek Besar</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+      </div>
+      <div class="prompt-text">Saya punya proyek besar berikut yang terasa overwhelming:
+
+[Jelaskan proyek kamu]
+
+Deadline: [tanggal deadline]
+
+Tolong bantu saya memecah proyek ini menjadi langkah-langkah kecil yang bisa dikerjakan, lengkap dengan urutan pengerjaan dan estimasi waktu tiap langkah.</div>
+      <div class="prompt-tip"><strong>Tips:</strong> Semakin detail kamu menjelaskan proyeknya, semakin spesifik dan berguna breakdown yang akan Claude berikan.</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div><div class="prompt-num">Prompt #4</div><div class="prompt-title">Notulen Meeting Otomatis</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+      </div>
+      <div class="prompt-text">Berikut adalah catatan kasar dari meeting tadi:
+
+[Tempel catatan meeting kamu]
+
+Tolong ubah ini menjadi notulen meeting yang rapi dengan format:
+- Tanggal & peserta
+- Poin-poin yang dibahas
+- Keputusan yang diambil
+- Action items (siapa mengerjakan apa, kapan deadline-nya)</div>
+      <div class="prompt-tip"><strong>Tips:</strong> Bisa juga digunakan untuk membuat notulen dari rekaman suara yang sudah ditranskrip.</div>
+    </div>
+  </div>
+
+  <!-- BISNIS -->
+  <div class="section" data-category="bisnis">
+    <div class="section-header">
+      <span class="section-icon">🏪</span>
+      <span class="section-title">Bisnis & Marketing</span>
+      <span class="section-count">5 prompt</span>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div><div class="prompt-num">Prompt #5</div><div class="prompt-title">Konten Media Sosial</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+      </div>
+      <div class="prompt-text">Buatkan 5 ide konten media sosial untuk bisnis saya:
+
+Bisnis: [Nama & deskripsi singkat bisnis kamu]
+Target audiens: [Siapa pelanggan ideal kamu]
+Platform: [Instagram / LinkedIn / TikTok]
+Tujuan: [Brand awareness / edukasi / penjualan]
+
+Untuk setiap ide, berikan: judul/hook pembuka, poin-poin utama konten, dan call-to-action yang tepat.</div>
+      <div class="prompt-tip"><strong>Tips:</strong> Minta Claude untuk membuat konten dalam format yang spesifik — misalnya carousel 5 slide atau video 60 detik.</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div><div class="prompt-num">Prompt #6</div><div class="prompt-title">Analisis Kompetitor</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+      </div>
+      <div class="prompt-text">Bantu saya menganalisis kompetitor bisnis saya. Bisnis saya:
+
+Produk/jasa: [Apa yang kamu jual]
+Target pasar: [Siapa pelanggan kamu]
+Kompetitor: [Sebutkan 2-3 kompetitor utama]
+
+Tolong analisis: apa kekuatan dan kelemahan masing-masing kompetitor, peluang apa yang belum mereka manfaatkan, dan bagaimana saya bisa membedakan diri dari mereka.</div>
+      <div class="prompt-tip"><strong>Tips:</strong> Tambahkan info spesifik tentang kompetitor (harga, promosi, keluhan pelanggan) untuk analisis yang lebih tajam.</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div><div class="prompt-num">Prompt #7</div><div class="prompt-title">Deskripsi Produk yang Menjual</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+      </div>
+      <div class="prompt-text">Buatkan deskripsi produk yang menarik dan persuasif untuk:
+
+Produk: [Nama produk]
+Fitur utama: [Sebutkan 3-5 fitur]
+Target pembeli: [Siapa yang akan membeli]
+Harga: [Berapa harganya]
+Platform penjualan: [Tokopedia / Shopee / website / Instagram]
+
+Gunakan bahasa yang natural, fokus pada manfaat (bukan hanya fitur), dan tambahkan elemen yang mendorong orang untuk beli sekarang.</div>
+      <div class="prompt-tip"><strong>Tips:</strong> Minta beberapa versi dengan tone berbeda (profesional, casual, energik) lalu pilih yang paling cocok.</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div><div class="prompt-num">Prompt #8</div><div class="prompt-title">Riset Target Pasar</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+      </div>
+      <div class="prompt-text">Saya ingin memahami target pasar saya lebih dalam. Bisnis saya:
+
+[Deskripsikan bisnis dan produk/jasa kamu]
+
+Tolong buatkan profil lengkap target pelanggan ideal saya, meliputi: demografi (usia, pekerjaan, pendapatan), psikografi (nilai, gaya hidup, kekhawatiran), pain points utama yang ingin mereka selesaikan, dan di mana mereka biasanya mencari solusi.</div>
+      <div class="prompt-tip"><strong>Tips:</strong> Gunakan hasil ini sebagai dasar untuk membuat konten, copywriting, dan strategi pemasaran yang lebih tepat sasaran.</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div><div class="prompt-num">Prompt #9</div><div class="prompt-title">Ide Nama & Tagline Bisnis</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+      </div>
+      <div class="prompt-text">Bantu saya menemukan nama dan tagline untuk bisnis baru saya:
+
+Bisnis: [Apa yang dilakukan bisnis ini]
+Target audiens: [Siapa pelanggannya]
+Nilai utama: [3 kata yang menggambarkan bisnis ini]
+Feel yang diinginkan: [Modern / tradisional / playful / premium / dll]
+
+Berikan 10 pilihan nama yang mudah diingat, unik, dan relevan — beserta tagline singkat untuk masing-masing.</div>
+      <div class="prompt-tip"><strong>Tips:</strong> Setelah dapat kandidat nama, cek ketersediaan domain dan akun media sosialnya.</div>
+    </div>
+  </div>
+
+  <!-- KARIR -->
+  <div class="section" data-category="karir">
+    <div class="section-header">
+      <span class="section-icon">🎯</span>
+      <span class="section-title">Karir & CV</span>
+      <span class="section-count">4 prompt</span>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div><div class="prompt-num">Prompt #10</div><div class="prompt-title">Perbaiki CV Kamu</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+      </div>
+      <div class="prompt-text">Tolong bantu saya memperbaiki CV saya. Berikut isi CV saya saat ini:
+
+[Tempel isi CV kamu]
+
+Posisi yang saya lamar: [Nama posisi & perusahaan]
+
+Tolong: identifikasi kelemahan CV saya, sarankan perbaikan spesifik untuk setiap bagian, dan tulis ulang bagian pengalaman kerja agar lebih impactful dengan menggunakan kata kerja aktif dan angka/data konkret.</div>
+      <div class="prompt-tip"><strong>Tips:</strong> Sertakan juga deskripsi pekerjaan dari lowongan yang kamu lamar agar Claude bisa menyesuaikan CV dengan kebutuhan spesifik perusahaan.</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div><div class="prompt-num">Prompt #11</div><div class="prompt-title">Latihan Interview</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+      </div>
+      <div class="prompt-text">Saya akan interview untuk posisi [nama posisi] di perusahaan [nama perusahaan] yang bergerak di bidang [industri].
+
+Tolong berperan sebagai HRD dan ajukan 10 pertanyaan interview yang kemungkinan besar akan ditanyakan untuk posisi ini — campurkan pertanyaan behavioral, teknis, dan situasional. Setelah saya menjawab setiap pertanyaan, berikan feedback tentang apa yang sudah baik dan apa yang perlu diperbaiki.</div>
+      <div class="prompt-tip"><strong>Tips:</strong> Lakukan ini 2-3 kali dengan pertanyaan berbeda untuk benar-benar mempersiapkan diri.</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div><div class="prompt-num">Prompt #12</div><div class="prompt-title">Negosiasi Gaji</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+      </div>
+      <div class="prompt-text">Bantu saya mempersiapkan negosiasi gaji. Situasi saya:
+
+Posisi: [Nama posisi]
+Pengalaman: [Berapa tahun pengalaman relevan]
+Gaji saat ini / ekspektasi: [Angka yang kamu inginkan]
+Tawaran dari perusahaan: [Angka yang mereka tawarkan]
+Kota/lokasi kerja: [Jakarta / Surabaya / remote / dll]
+
+Berikan: argumen kuat yang bisa saya gunakan, cara merespons jika mereka menolak, dan script percakapan negosiasi yang bisa saya praktikkan.</div>
+      <div class="prompt-tip"><strong>Tips:</strong> Riset dulu rata-rata gaji posisi serupa di LinkedIn Salary atau Glassdoor sebelum negosiasi.</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div><div class="prompt-num">Prompt #13</div><div class="prompt-title">Personal Branding di LinkedIn</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+      </div>
+      <div class="prompt-text">Bantu saya membangun personal branding yang kuat di LinkedIn. Tentang saya:
+
+Pekerjaan/keahlian: [Apa yang kamu lakukan]
+Target audiens: [Siapa yang ingin kamu jangkau — rekruter, klien, dll]
+Tujuan: [Cari kerja / dapat klien / jadi thought leader]
+
+Tolong: tulis ulang headline LinkedIn saya agar lebih menarik, buat draf "About" section yang kuat, dan sarankan 5 jenis konten yang cocok untuk saya posting secara konsisten.</div>
+      <div class="prompt-tip"><strong>Tips:</strong> Konsistensi adalah kunci — pilih 1-2 topik utama dan jadwalkan posting minimal 2x seminggu.</div>
+    </div>
+  </div>
+
+  <!-- KOMUNIKASI -->
+  <div class="section" data-category="komunikasi">
+    <div class="section-header">
+      <span class="section-icon">✉️</span>
+      <span class="section-title">Komunikasi Profesional</span>
+      <span class="section-count">4 prompt</span>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div><div class="prompt-num">Prompt #14</div><div class="prompt-title">Draft Email Profesional</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+      </div>
+      <div class="prompt-text">Tolong bantu saya menulis email profesional dengan detail berikut:
+
+Kepada: [Siapa penerimanya — atasan / klien / rekan kerja]
+Tujuan email: [Apa yang ingin kamu sampaikan atau minta]
+Tone yang diinginkan: [Formal / semi-formal / ramah]
+Poin penting yang harus ada: [Sebutkan poin-poin utama]
+
+Buat versi email yang singkat, jelas, dan profesional. Sertakan subject line yang tepat.</div>
+      <div class="prompt-tip"><strong>Tips:</strong> Minta Claude untuk membuat 2 versi — satu singkat dan satu lebih detail — lalu pilih yang paling sesuai.</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div><div class="prompt-num">Prompt #15</div><div class="prompt-title">Balas Komplain Pelanggan</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+      </div>
+      <div class="prompt-text">Saya menerima komplain dari pelanggan berikut:
+
+[Tempel pesan komplain pelanggan]
+
+Situasi sebenarnya: [Jelaskan apa yang sebenarnya terjadi dari sisi bisnis kamu]
+
+Tolong buatkan balasan yang: mengakui perasaan pelanggan, menjelaskan situasi dengan jujur tanpa membuat alasan, menawarkan solusi konkret, dan menjaga hubungan baik dengan pelanggan.</div>
+      <div class="prompt-tip"><strong>Tips:</strong> Selalu selesaikan masalah pelanggan terlebih dahulu sebelum menjelaskan penyebabnya.</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div><div class="prompt-num">Prompt #16</div><div class="prompt-title">Slide Presentasi</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+      </div>
+      <div class="prompt-text">Bantu saya membuat outline presentasi yang kuat:
+
+Topik: [Apa yang akan dipresentasikan]
+Audiens: [Siapa yang akan menonton]
+Durasi: [Berapa menit]
+Tujuan: [Apa yang ingin dicapai dari presentasi ini]
+
+Buatkan: struktur slide (judul setiap slide + poin utama), opening yang menarik perhatian, dan closing yang kuat dengan call-to-action yang jelas.</div>
+      <div class="prompt-tip"><strong>Tips:</strong> Prinsip sederhana: 1 ide utama per slide, maksimal 5 poin per slide.</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div><div class="prompt-num">Prompt #17</div><div class="prompt-title">Pesan Sulit yang Harus Disampaikan</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+      </div>
+      <div class="prompt-text">Saya perlu menyampaikan pesan yang sulit kepada [atasan / rekan kerja / klien / anggota tim]:
+
+Pesan yang perlu disampaikan: [Apa intinya]
+Hubungan dengan orang tersebut: [Deskripsi singkat]
+Tujuan yang ingin dicapai: [Apa hasil yang kamu harapkan]
+
+Tolong bantu saya menemukan cara terbaik untuk menyampaikan ini — kapan waktu yang tepat, bagaimana memulai percakapan, dan apa yang perlu saya katakan (dan tidak katakan).</div>
+      <div class="prompt-tip"><strong>Tips:</strong> Lakukan percakapan ini langsung (tatap muka atau video call), bukan lewat teks atau email.</div>
+    </div>
+  </div>
+
+  <!-- BELAJAR -->
+  <div class="section" data-category="belajar">
+    <div class="section-header">
+      <span class="section-icon">📚</span>
+      <span class="section-title">Belajar & Riset</span>
+      <span class="section-count">3 prompt</span>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div><div class="prompt-num">Prompt #18</div><div class="prompt-title">Jelaskan Topik Kompleks dengan Mudah</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+      </div>
+      <div class="prompt-text">Jelaskan [topik yang ingin kamu pahami] kepada saya seolah-olah saya adalah seorang pemula yang sama sekali belum tahu tentang topik ini.
+
+Gunakan: analogi sederhana dari kehidupan sehari-hari, contoh nyata yang mudah dibayangkan, dan struktur dari konsep paling dasar ke yang lebih kompleks.
+
+Di akhir, berikan 3 pertanyaan untuk mengecek pemahaman saya.</div>
+      <div class="prompt-tip"><strong>Tips:</strong> Setelah paham dasarnya, minta Claude untuk menjelaskan versi yang lebih mendalam atau teknis.</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div><div class="prompt-num">Prompt #19</div><div class="prompt-title">Buat Rencana Belajar</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+      </div>
+      <div class="prompt-text">Saya ingin mempelajari [skill/topik yang ingin dipelajari] dari nol.
+
+Kondisi saya saat ini:
+- Level pengetahuan: [Pemula / ada dasar / menengah]
+- Waktu yang tersedia: [X jam per minggu]
+- Target: [Apa yang ingin bisa kamu lakukan setelah belajar]
+- Deadline: [Kapan ingin menguasainya]
+
+Buatkan rencana belajar yang realistis dan terstruktur, dengan urutan topik yang logis dan rekomendasi sumber belajar (gratis maupun berbayar).</div>
+      <div class="prompt-tip"><strong>Tips:</strong> Review dan sesuaikan rencana ini setiap 2 minggu berdasarkan progress kamu.</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div><div class="prompt-num">Prompt #20</div><div class="prompt-title">Riset Cepat untuk Artikel atau Laporan</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+      </div>
+      <div class="prompt-text">Saya perlu menulis [artikel / laporan / makalah] tentang [topik].
+
+Target pembaca: [Siapa yang akan membaca]
+Panjang yang diinginkan: [Berapa kata / halaman]
+Angle yang ingin diambil: [Sudut pandang atau fokus khusus]
+
+Tolong bantu saya dengan: outline struktur yang kuat, poin-poin kunci yang perlu dibahas, data atau fakta penting yang relevan, dan argumen utama yang bisa memperkuat tulisan ini.</div>
+      <div class="prompt-tip"><strong>Tips:</strong> Gunakan ini sebagai kerangka, lalu minta Claude untuk membantu menulis setiap bagiannya satu per satu.</div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+  const SUPABASE_URL = 'https://bolagqhgagmiewjdjzgz.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_U3DV1nZq3MXdOkfI8oUZdg_EB025f9q';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  async function init() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      window.location.href = 'login.html';
+      return;
+    }
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('content').classList.remove('hidden');
+  }
+
+  async function logout() {
+    await supabase.auth.signOut();
+    window.location.href = 'login.html';
+  }
+
+  function copyPrompt(btn) {
+    const text = btn.closest('.prompt-card').querySelector('.prompt-text').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Tersalin!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  function filterCategory(cat, btn) {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.section[data-category]').forEach(s => {
+      s.style.display = (cat === 'all' || s.dataset.category === cat) ? 'block' : 'none';
+    });
+  }
+
+  init();
+</script>
+</body>
+</html>

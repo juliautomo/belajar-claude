@@ -147,6 +147,7 @@
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   const COURSE_META = {
+    'prompt-gratis':    { title: '20 Prompt Claude Terbaik',        icon: '🎁', link: 'prompt-gratis-content.html' },
     'kursus-karyawan':  { title: 'Claude untuk Karyawan Indonesia', icon: '🎬', link: 'kursus-karyawan-content.html' },
     'kursus-ukm':       { title: 'Scale Bisnis dengan Claude AI',   icon: '🏪', link: 'kursus-ukm-content.html' },
     'workshop-zoom':    { title: 'Workshop Bulanan via Zoom',        icon: '🎙', link: 'workshop-zoom-content.html' },
@@ -172,16 +173,19 @@
     document.getElementById('loading').style.display = 'none';
     document.getElementById('content').style.display = 'block';
 
-    // Load purchases from Supabase
-    const { data: purchases, error: pErr } = await supabase
-      .from('purchases')
-      .select('course_slug, course_name, paid_at')
-      .eq('email', email)
-      .order('paid_at', { ascending: false });
+    // Load enrollments (free) + purchases (paid) in parallel
+    const [{ data: enrollments }, { data: purchases }] = await Promise.all([
+      supabase.from('enrollments').select('course_slug, course_name, enrolled_at').eq('email', email),
+      supabase.from('purchases').select('course_slug, course_name, paid_at').eq('email', email).order('paid_at', { ascending: false }),
+    ]);
 
     const list = document.getElementById('coursesList');
+    const allCourses = [];
 
-    if (pErr || !purchases || purchases.length === 0) {
+    (enrollments || []).forEach(e => allCourses.push({ ...e, date: e.enrolled_at, type: 'free' }));
+    (purchases   || []).forEach(p => allCourses.push({ ...p, date: p.paid_at,      type: 'paid' }));
+
+    if (allCourses.length === 0) {
       list.innerHTML = `
         <div class="empty">
           <p>Kamu belum memiliki kursus.<br>Yuk mulai belajar Claude AI bersama ribuan profesional Indonesia!</p>
@@ -190,20 +194,24 @@
       return;
     }
 
-    purchases.forEach(p => {
-      const meta = COURSE_META[p.course_slug] || { title: p.course_name, icon: '📚', link: '#' };
-      const paidDate = new Date(p.paid_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+    allCourses.forEach(c => {
+      const meta      = COURSE_META[c.course_slug] || { title: c.course_name, icon: '📚', link: '#' };
+      const dateStr   = new Date(c.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+      const badgeHTML = c.type === 'free'
+        ? `<span class="course-badge" style="background:#EDE9FE;color:#5B21B6;">🎁 Gratis</span>`
+        : `<span class="course-badge">✓ Aktif</span>`;
+      const dateLabel = c.type === 'free' ? `Diikuti ${dateStr}` : `Dibeli ${dateStr}`;
       list.innerHTML += `
         <div class="course-card">
           <div style="display:flex;align-items:center;">
             <span class="icon">${meta.icon}</span>
             <div class="course-info">
               <h3>${meta.title}</h3>
-              <p>Dibeli ${paidDate}</p>
+              <p>${dateLabel}</p>
             </div>
           </div>
           <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
-            <span class="course-badge">✓ Aktif</span>
+            ${badgeHTML}
             <a href="${meta.link}" class="access-btn">Mulai →</a>
           </div>
         </div>`;
