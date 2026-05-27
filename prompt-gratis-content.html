@@ -476,9 +476,9 @@ Tolong bantu saya dengan: outline struktur yang kuat, poin-poin kunci yang perlu
 </div>
 
 <script>
-  const SUPABASE_URL = 'https://bolagqhgagmiewjdjzgz.sbClient.co';
+  const SUPABASE_URL = 'https://bolagqhgagmiewjdjzgz.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_U3DV1nZq3MXdOkfI8oUZdg_EB025f9q';
-  const sbClient = window.sbClient.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   async function init() {
     const { data: { session } } = await sbClient.auth.getSession();

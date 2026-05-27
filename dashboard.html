@@ -142,9 +142,9 @@
 </div>
 
 <script>
-  const SUPABASE_URL = 'https://bolagqhgagmiewjdjzgz.sbClient.co';
+  const SUPABASE_URL = 'https://bolagqhgagmiewjdjzgz.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_U3DV1nZq3MXdOkfI8oUZdg_EB025f9q';
-  const sbClient = window.sbClient.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   const COURSE_META = {
     'prompt-gratis':    { title: '20 Prompt Claude Terbaik',        icon: '🎁', link: 'prompt-gratis-content.html' },
@@ -180,7 +180,7 @@
     }, { onConflict: 'email,course_slug', ignoreDuplicates: true });
 
     // Load all enrollments (free + paid) from single table
-    const { data: enrollments } = await supabase
+    const { data: enrollments } = await sbClient
       .from('enrollments')
       .select('course_slug, course_name, type, enrolled_at')
       .eq('email', email)
