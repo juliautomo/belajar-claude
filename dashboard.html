@@ -180,11 +180,13 @@
     }, { onConflict: 'email,course_slug', ignoreDuplicates: true });
 
     // Load all enrollments (free + paid) from single table
-    const { data: enrollments } = await sbClient
+    const { data: enrollments, error: enrollErr } = await sbClient
       .from('enrollments')
       .select('course_slug, course_name, type, enrolled_at')
       .eq('email', email)
       .order('enrolled_at', { ascending: false });
+
+    if (enrollErr) console.error('❌ Enrollments query error:', enrollErr.message);
 
     const list = document.getElementById('coursesList');
     const allCourses = (enrollments || []).map(e => ({ ...e, date: e.enrolled_at }));
