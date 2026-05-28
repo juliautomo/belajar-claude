@@ -230,6 +230,21 @@
     margin-top: auto;
   }
   .course-btn:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .course-btn.disabled { background: var(--surface); color: var(--muted); border-color: var(--border); cursor: default; pointer-events: none; }
+
+  .level-row { display: flex; align-items: center; gap: 14px; margin: 36px 0 16px; }
+  .level-row:first-child { margin-top: 0; }
+  .level-pill {
+    font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 100px; white-space: nowrap;
+  }
+  .level-pill.beginner  { background: rgba(29,158,117,0.12); color: #117A57; }
+  .level-pill.intermediate { background: rgba(239,159,39,0.12); color: #A0650A; }
+  .level-pill.advanced  { background: rgba(74,114,214,0.12); color: var(--blue); }
+  .level-line { flex: 1; height: 1px; background: var(--border); }
+  .level-price { font-size: 11px; color: var(--muted); white-space: nowrap; }
+
+  .tag-coming { background: rgba(100,116,139,0.1); color: #64748B; }
 
   /* ── ABOUT ──────────────────────────────────────────────── */
   .about { background: var(--surface); border-top: 1px solid var(--border-2); }
@@ -424,78 +439,147 @@
 <!-- COURSES -->
 <section id="kursus">
   <div class="container">
-    <div class="section-label">Produk & Kursus</div>
-    <h2 class="section-title">Mulai dari mana saja,<br>untuk siapa saja</h2>
-    <p class="section-sub">Dari panduan gratis hingga program intensif — ada produk untuk setiap tahap perjalanan belajar Anda.</p>
+    <div class="section-label">Kurikulum</div>
+    <h2 class="section-title">9 Kursus · 3 Level · ~14 Jam</h2>
+    <p class="section-sub">Setiap kursus memperkenalkan tools baru yang langsung bisa dipakai — bukan hanya teori, tapi workflow nyata untuk pekerjaan dan bisnis kamu.</p>
+
+    <!-- LEVEL 1: Beginner -->
+    <div class="level-row">
+      <span class="level-pill beginner">Level 1 · Beginner</span>
+      <div class="level-line"></div>
+      <span class="level-price">Gratis – Rp 149K</span>
+    </div>
     <div class="courses-grid">
       <div class="course-card">
         <span class="course-tag tag-green">GRATIS</span>
         <h3>20 Prompt Claude Terbaik</h3>
-        <p>Panduan PDF gratis berisi 20 prompt siap pakai untuk karyawan dan pemilik bisnis Indonesia.</p>
+        <p>Prompt siap pakai untuk email, laporan, konten sosmed, dan lainnya — langsung copy-paste.</p>
         <div class="course-meta">
-          <span>📄 PDF Guide</span>
-          <span>⏱ 5 menit baca</span>
+          <span>📄 Panduan Prompt</span>
+          <span>⏱ Bisa dipakai hari ini</span>
         </div>
         <div class="course-price">Gratis</div>
         <a href="prompt-gratis.html" class="course-btn">Pelajari →</a>
       </div>
-      <div class="course-card featured">
-        <span class="popular-badge">TERLARIS</span>
-        <span class="course-tag tag-blue">KURSUS VIDEO</span>
-        <h3>Claude untuk Karyawan Indonesia</h3>
-        <p>15 modul video: email, laporan, presentasi, analisis data — semua dengan Claude. Cocok untuk semua bidang pekerjaan.</p>
+      <div class="course-card">
+        <span class="course-tag tag-green">GRATIS</span>
+        <h3>Mulai dengan Claude AI</h3>
+        <p>Dari nol sampai bisa pakai Claude untuk kebutuhan sehari-hari. Claude Projects, Artifacts, Google Docs.</p>
         <div class="course-meta">
-          <span>🎬 15 modul</span>
-          <span>⏱ 6 jam total</span>
+          <span>🎬 6 modul</span>
+          <span>⏱ 1 jam</span>
         </div>
-        <div class="course-price"><span class="old">Rp 499K</span>Rp 299K</div>
-        <a href="kursus-karyawan.html" class="course-btn">Pelajari →</a>
+        <div class="course-price">Gratis</div>
+        <a href="mulai-claude.html" class="course-btn">Pelajari →</a>
       </div>
       <div class="course-card">
-        <span class="course-tag tag-gold">UKM & BISNIS</span>
-        <h3>Scale Bisnis dengan Claude AI</h3>
-        <p>20 modul khusus UKM: copywriting, konten medsos, customer service, hingga analisis kompetitor.</p>
+        <span class="course-tag tag-blue">BEGINNER</span>
+        <h3>Claude untuk Pekerjaan Sehari-hari</h3>
+        <p>Hemat 3–5 jam kerja per minggu. Gmail, Google Sheets, Docs, Claude Projects — workflow kantor nyata.</p>
         <div class="course-meta">
-          <span>🎬 20 modul</span>
-          <span>⏱ 8 jam total</span>
-        </div>
-        <div class="course-price"><span class="old">Rp 799K</span>Rp 499K</div>
-        <a href="kursus-ukm.html" class="course-btn">Pelajari →</a>
-      </div>
-      <div class="course-card">
-        <span class="course-tag tag-blue">LIVE WORKSHOP</span>
-        <h3>Workshop Bulanan via Zoom</h3>
-        <p>Sesi live 3 jam setiap bulan. Topik berbeda, interaktif, dan rekaman tersedia 30 hari setelah acara.</p>
-        <div class="course-meta">
-          <span>🎙 Live Zoom</span>
-          <span>⏱ 3 jam</span>
-        </div>
-        <div class="course-price">Rp 149K<span style="font-size:13px;color:var(--muted);font-weight:400">/sesi</span></div>
-        <a href="workshop-zoom.html" class="course-btn">Pelajari →</a>
-      </div>
-      <div class="course-card">
-        <span class="course-tag tag-green">MAHASISWA</span>
-        <h3>Claude untuk Karir & Studi</h3>
-        <p>Skripsi, CV, cover letter, persiapan kerja, hingga cara cari freelance dengan skill AI.</p>
-        <div class="course-meta">
-          <span>🎬 10 modul</span>
-          <span>⏱ 4 jam total</span>
+          <span>🎬 6 modul</span>
+          <span>⏱ 1.5 jam</span>
         </div>
         <div class="course-price">Rp 149K</div>
-        <a href="kursus-mahasiswa.html" class="course-btn">Pelajari →</a>
+        <a href="kerja-sehari-hari.html" class="course-btn">Pelajari →</a>
       </div>
       <div class="course-card">
-        <span class="course-tag tag-gold">PREMIUM</span>
-        <h3>Coaching 1-on-1</h3>
-        <p>Sesi 90 menit khusus kebutuhan spesifik bisnis atau pekerjaan Anda. Solusi langsung, personal, dan terukur.</p>
+        <span class="course-tag tag-blue">BEGINNER</span>
+        <h3>Claude untuk Bisnis & UKM</h3>
+        <p>Tokopedia/Shopee, Notion, WhatsApp Business, Instagram, Canva — sistem konten dan CS otomatis.</p>
         <div class="course-meta">
-          <span>👤 Private</span>
-          <span>⏱ 90 menit</span>
+          <span>🎬 6 modul</span>
+          <span>⏱ 1.5 jam</span>
         </div>
-        <div class="course-price">Rp 1,5Jt<span style="font-size:13px;color:var(--muted);font-weight:400">/sesi</span></div>
-        <a href="coaching-1on1.html" class="course-btn">Pelajari →</a>
+        <div class="course-price">Rp 149K</div>
+        <a href="bisnis-ukm.html" class="course-btn">Pelajari →</a>
       </div>
     </div>
+
+    <!-- LEVEL 2: Intermediate -->
+    <div class="level-row">
+      <span class="level-pill intermediate">Level 2 · Intermediate</span>
+      <div class="level-line"></div>
+      <span class="level-price">Rp 199K – Rp 299K</span>
+    </div>
+    <div class="courses-grid">
+      <div class="course-card">
+        <span class="course-tag tag-coming">SEGERA HADIR</span>
+        <h3>Claude untuk Konten & Copywriting</h3>
+        <p>Build mesin konten: artikel SEO, TikTok scripts, email sequence, landing page — semua workflow nyata.</p>
+        <div class="course-meta">
+          <span>🎬 6 modul</span>
+          <span>⏱ 1.5 jam</span>
+        </div>
+        <div class="course-price">Rp 199K</div>
+        <a href="#" class="course-btn disabled">🔔 Segera Hadir</a>
+      </div>
+      <div class="course-card">
+        <span class="course-tag tag-coming">SEGERA HADIR</span>
+        <h3>Claude untuk Analisis Data</h3>
+        <p>Ubah data mentah jadi insight. Google Sheets, Forms, Claude Artifacts Charts — dashboard otomatis.</p>
+        <div class="course-meta">
+          <span>🎬 6 modul</span>
+          <span>⏱ 1.5 jam</span>
+        </div>
+        <div class="course-price">Rp 199K</div>
+        <a href="#" class="course-btn disabled">🔔 Segera Hadir</a>
+      </div>
+      <div class="course-card">
+        <span class="course-tag tag-coming">SEGERA HADIR</span>
+        <h3>Build Automation dengan Claude</h3>
+        <p>3 automation aktif dengan Zapier + Make + n8n. Claude sebagai "otak" yang jalan 24/7.</p>
+        <div class="course-meta">
+          <span>🎬 7 modul</span>
+          <span>⏱ 2 jam</span>
+        </div>
+        <div class="course-price">Rp 299K</div>
+        <a href="#" class="course-btn disabled">🔔 Segera Hadir</a>
+      </div>
+    </div>
+
+    <!-- LEVEL 3: Advanced -->
+    <div class="level-row">
+      <span class="level-pill advanced">Level 3 · Advanced</span>
+      <div class="level-line"></div>
+      <span class="level-price">Rp 299K – Rp 499K</span>
+    </div>
+    <div class="courses-grid">
+      <div class="course-card">
+        <span class="course-tag tag-coming">SEGERA HADIR</span>
+        <h3>Build AI-Powered App Sederhana</h3>
+        <p>Web app AI live di GitHub Pages tanpa backend. Claude API + HTML/JS + Vercel — dari ide ke deploy.</p>
+        <div class="course-meta">
+          <span>🎬 7 modul</span>
+          <span>⏱ 2 jam</span>
+        </div>
+        <div class="course-price">Rp 299K</div>
+        <a href="#" class="course-btn disabled">🔔 Segera Hadir</a>
+      </div>
+      <div class="course-card">
+        <span class="course-tag tag-coming">SEGERA HADIR</span>
+        <h3>Claude API untuk Developer</h3>
+        <p>Streaming, tool use, caching, Railway deploy. Integrasikan Claude ke project nyata — production-ready.</p>
+        <div class="course-meta">
+          <span>🎬 7 modul</span>
+          <span>⏱ 2 jam</span>
+        </div>
+        <div class="course-price">Rp 399K</div>
+        <a href="#" class="course-btn disabled">🔔 Segera Hadir</a>
+      </div>
+      <div class="course-card">
+        <span class="course-tag tag-coming">SEGERA HADIR</span>
+        <h3>Build & Jual Produk AI</h3>
+        <p>Dari ide ke produk AI yang menghasilkan uang. Framer + Midtrans + WhatsApp — first customer hari ini.</p>
+        <div class="course-meta">
+          <span>🎬 7 modul</span>
+          <span>⏱ 2 jam</span>
+        </div>
+        <div class="course-price">Rp 499K</div>
+        <a href="#" class="course-btn disabled">🔔 Segera Hadir</a>
+      </div>
+    </div>
+
   </div>
 </section>
 

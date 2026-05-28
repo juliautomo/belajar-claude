@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude untuk Bisnis & UKM — Klaud.id</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root {
+    --bg: #F5F3EE; --surface: #FFFFFF; --navy: #042C53;
+    --blue: #378ADD; --blue-pale: #EBF3FF; --muted: #64748B;
+    --gold: #EF9F27; --gold-pale: rgba(239,159,39,0.12); --border: #E2E8F0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Helvetica Neue', Arial, sans-serif; background: var(--bg); color: #1E293B; }
+  nav { background: var(--navy); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+  .nav-logo { font-size: 20px; font-weight: 800; color: #F5F3EE; }
+  .nav-logo span { color: var(--blue); }
+  .nav-right { display: flex; align-items: center; gap: 16px; }
+  .nav-email { font-size: 13px; color: #85B7EB; }
+  .nav-links a { font-size: 13px; color: #85B7EB; text-decoration: none; font-weight: 500; }
+  .nav-links a:hover { color: #fff; }
+  .logout-btn { background: transparent; border: 1.5px solid var(--blue); color: var(--blue); padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
+  .logout-btn:hover { background: var(--blue); color: #fff; }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 20px 80px; }
+  .loading { text-align: center; padding: 60px; color: var(--muted); font-size: 14px; }
+  .course-header { background: var(--navy); border-radius: 16px; padding: 32px 36px; margin-bottom: 32px; color: #fff; }
+  .course-level { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #85B7EB; margin-bottom: 8px; }
+  .course-header h1 { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+  .course-header p { font-size: 14px; color: rgba(255,255,255,0.65); line-height: 1.6; margin-bottom: 16px; }
+  .course-meta-row { display: flex; gap: 20px; flex-wrap: wrap; }
+  .course-meta-item { font-size: 12px; color: #85B7EB; }
+  .tools-row { margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .tool-badge { font-size: 11px; font-weight: 600; background: rgba(55,138,221,0.2); color: #7EC3FF; padding: 3px 10px; border-radius: 100px; }
+  .section-label { font-size: 16px; font-weight: 800; color: #1E293B; margin-bottom: 14px; margin-top: 32px; }
+  .module-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 14px; margin-bottom: 12px; overflow: hidden; }
+  .module-header { padding: 18px 22px; display: flex; align-items: center; gap: 14px; cursor: pointer; user-select: none; transition: background 0.15s; }
+  .module-header:hover { background: #F8FAFC; }
+  .module-num { font-size: 18px; font-weight: 800; color: var(--blue); min-width: 32px; font-family: 'Courier New', monospace; }
+  .module-info { flex: 1; }
+  .module-info h3 { font-size: 15px; font-weight: 700; color: #1E293B; margin-bottom: 2px; }
+  .module-info p { font-size: 12px; color: var(--muted); }
+  .module-chip { font-size: 10px; font-weight: 700; background: var(--gold-pale); color: #A0650A; padding: 3px 9px; border-radius: 100px; white-space: nowrap; }
+  .module-arrow { font-size: 14px; color: var(--muted); transition: transform 0.2s; }
+  .module-card.open .module-arrow { transform: rotate(90deg); }
+  .module-body { display: none; padding: 0 22px 22px 22px; border-top: 1px solid var(--border); }
+  .module-card.open .module-body { display: block; }
+  .module-desc { font-size: 13px; color: var(--muted); line-height: 1.7; margin: 14px 0 16px; }
+  .prompt-section { margin-bottom: 16px; }
+  .prompt-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .prompt-box { background: #F8FAFC; border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; font-size: 13px; color: #334155; line-height: 1.7; font-family: 'Courier New', monospace; position: relative; white-space: pre-wrap; }
+  .copy-btn { position: absolute; top: 8px; right: 8px; background: var(--navy); color: #fff; border: none; border-radius: 6px; padding: 4px 10px; font-size: 11px; font-weight: 600; cursor: pointer; font-family: 'Helvetica Neue', sans-serif; }
+  .copy-btn:hover { background: var(--blue); }
+  .case-box { background: var(--gold-pale); border-radius: 10px; padding: 14px 16px; margin-top: 12px; }
+  .case-box .case-role { font-size: 11px; font-weight: 700; color: #A0650A; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .case-box p { font-size: 13px; color: #334155; line-height: 1.6; }
+  .output-box { background: var(--navy); color: #fff; border-radius: 14px; padding: 28px 32px; display: flex; align-items: flex-start; gap: 16px; margin-top: 32px; }
+  .output-icon { font-size: 32px; }
+  .output-box h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .output-box p { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.65; }
+  .next-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 14px; padding: 24px; display: flex; align-items: center; gap: 20px; margin-top: 14px; text-decoration: none; transition: border-color 0.2s; }
+  .next-card:hover { border-color: var(--blue); }
+  .next-icon { font-size: 32px; }
+  .next-info { flex: 1; }
+  .next-info h4 { font-size: 15px; font-weight: 700; color: #1E293B; margin-bottom: 2px; }
+  .next-info p { font-size: 12px; color: var(--muted); }
+  .next-arrow { font-size: 20px; color: var(--blue); }
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-logo">Klaud<span>.id</span></div>
+  <div class="nav-right">
+    <div class="nav-links"><a href="index.html">← Beranda</a></div>
+    <span class="nav-email" id="navEmail"></span>
+    <button class="logout-btn" onclick="logout()">Keluar</button>
+  </div>
+</nav>
+
+<div class="container">
+  <div id="loading" class="loading">Memuat materi kursus...</div>
+  <div id="content" style="display:none;">
+
+    <div class="course-header">
+      <div class="course-level">Level 1 · Beginner · 1.5 Jam · 6 Modul · Bisnis & UKM</div>
+      <h1>Claude untuk Bisnis & UKM 🏪</h1>
+      <p>Jalankan bisnis lebih efisien dengan Claude + tools Indonesia yang sudah kamu pakai. Konten, CS, dan riset kompetitor — semuanya lebih cepat dan lebih baik.</p>
+      <div class="course-meta-row">
+        <span class="course-meta-item">🎬 6 modul</span>
+        <span class="course-meta-item">⏱ ~1.5 jam total</span>
+      </div>
+      <div class="tools-row">
+        <span class="tool-badge">Tokopedia/Shopee</span>
+        <span class="tool-badge">Instagram</span>
+        <span class="tool-badge">WhatsApp Business</span>
+        <span class="tool-badge">Notion</span>
+        <span class="tool-badge">Canva</span>
+      </div>
+    </div>
+
+    <div class="section-label">Materi Kursus</div>
+
+    <div class="module-card" id="mod1">
+      <div class="module-header" onclick="toggleModule('mod1')">
+        <div class="module-num">01</div>
+        <div class="module-info">
+          <h3>Tokopedia/Shopee — 50 Deskripsi Produk SEO-Ready</h3>
+          <p>Generate dan upload massal dalam 45 menit</p>
+        </div>
+        <span class="module-chip">Marketplace</span>
+        <span class="module-arrow">▶</span>
+      </div>
+      <div class="module-body">
+        <p class="module-desc">Deskripsi produk yang bagus di Shopee/Tokopedia harus mengandung keyword pencarian, benefit yang jelas, dan CTA yang mendorong beli. Claude bisa generate 50 deskripsi dalam waktu yang sama kamu biasa buat 5.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Template Deskripsi Produk SEO</div>
+          <div class="prompt-box">Buatkan deskripsi produk Tokopedia/Shopee yang SEO-friendly untuk:
+
+Nama Produk: [nama produk]
+Kategori: [kategori toko]
+Target Pembeli: [deskripsi target customer]
+Keunggulan Utama: [3-5 keunggulan]
+Harga: [range harga]
+Kata Kunci Target: [2-3 keyword yang ingin muncul]
+
+Format output:
+- Judul produk (max 70 karakter, mengandung keyword utama)
+- Deskripsi pendek (2 kalimat hook)
+- Spesifikasi/fitur (list poin)
+- Alasan beli (3 benefit utama)
+- CTA penutup
+            <button class="copy-btn" onclick="copyPrompt(this)">Salin</button>
+          </div>
+        </div>
+        <div class="case-box">
+          <div class="case-role">🎯 Batch 50 Produk Sekaligus</div>
+          <p>Untuk batch besar: buat template sekali, lalu minta Claude: "Gunakan template yang sama, buat untuk 10 produk berikut: [list produk dengan detail singkat]." Hemat dari 8 jam ke 45 menit.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-card" id="mod2">
+      <div class="module-header" onclick="toggleModule('mod2')">
+        <div class="module-num">02</div>
+        <div class="module-info">
+          <h3>Instagram System — 30 Caption + Hashtag + Jadwal</h3>
+          <p>Kalender konten 1 bulan selesai dalam 1 sesi</p>
+        </div>
+        <span class="module-chip">Instagram</span>
+        <span class="module-arrow">▶</span>
+      </div>
+      <div class="module-body">
+        <p class="module-desc">Kita akan buat sistem konten IG yang lengkap: caption untuk feed, story ideas, hashtag yang relevan, dan jadwal posting — semuanya tersimpan di Notion dan siap dijadwalkan.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Template 30 Caption IG</div>
+          <div class="prompt-box">Buat kalender konten Instagram untuk [nama bisnis] selama 30 hari.
+
+PROFIL BISNIS:
+- Jenis: [tipe bisnis]
+- Target: [deskripsi pelanggan ideal]
+- Tone: [casual/inspirational/edukasi/fun]
+- Produk/jasa unggulan: [list 3-5]
+
+BUAT:
+- 30 caption (mix: edukasi 40%, promo 30%, behind-the-scenes 30%)
+- 5 hashtag relevan per post
+- Ide visual/konten yang cocok
+- Jadwal: Senin-Jumat (skip weekend)
+
+Format: tabel Notion-ready dengan kolom:
+Tanggal | Tipe | Caption | Hashtag | Ide Visual
+            <button class="copy-btn" onclick="copyPrompt(this)">Salin</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-card" id="mod3">
+      <div class="module-header" onclick="toggleModule('mod3')">
+        <div class="module-num">03</div>
+        <div class="module-info">
+          <h3>WhatsApp Business — 10 Template Quick Reply</h3>
+          <p>CS yang on-brand untuk semua situasi umum bisnis kamu</p>
+        </div>
+        <span class="module-chip">WA Business</span>
+        <span class="module-arrow">▶</span>
+      </div>
+      <div class="module-body">
+        <p class="module-desc">Template WA yang bagus harus terdengar personal, tidak robotic, dan sesuai brand tone bisnis kamu. Kita buat 10 template untuk situasi yang paling sering terjadi.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Template WA Business System</div>
+          <div class="prompt-box">Buatkan 10 template WhatsApp Business untuk [nama bisnis].
+
+BRAND VOICE: [casual/profesional/warm/fun]
+BISNIS: [deskripsi singkat bisnis]
+
+Template yang dibutuhkan:
+1. Sambutan pertama kali chat
+2. Balas inquiry harga
+3. Konfirmasi pesanan
+4. Update pengiriman
+5. Balas komplain dengan empati
+6. Follow-up pembayaran yang belum masuk
+7. Penawaran promo/diskon
+8. Permintaan review/testimoni
+9. Pesanan sold out / tidak tersedia
+10. Closing chat yang ramah
+
+Format setiap template:
+[NAMA SITUASI]
+Template: [teks WA]
+Catatan: [kapan digunakan]
+            <button class="copy-btn" onclick="copyPrompt(this)">Salin</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-card" id="mod4">
+      <div class="module-header" onclick="toggleModule('mod4')">
+        <div class="module-num">04</div>
+        <div class="module-info">
+          <h3>Notion Content OS — Build Sistem Konten Bisnis</h3>
+          <p>Satu database Notion untuk semua konten dan kampanye</p>
+        </div>
+        <span class="module-chip">Notion</span>
+        <span class="module-arrow">▶</span>
+      </div>
+      <div class="module-body">
+        <p class="module-desc">Kita bangun Notion database yang bisa menyimpan semua konten — IG, WA broadcast, email newsletter, dan ide konten. Claude jadi "content engine" yang isi database ini setiap minggu.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Prompt Isi Notion Database</div>
+          <div class="prompt-box">Saya punya Notion database konten dengan kolom:
+Judul | Platform | Tanggal | Status | Konten | Hashtag/CTA
+
+Generate konten untuk minggu ini ([tanggal]):
+
+BISNIS: [nama dan jenis bisnis]
+TEMA MINGGU INI: [tema atau kampanye yang sedang jalan]
+JADWAL: [berapa post per platform]
+
+Platform:
+- Instagram: [jumlah post]
+- WhatsApp Broadcast: [jumlah pesan]
+- [platform lain jika ada]
+
+Output dalam format tabel yang bisa langsung di-copy ke Notion.
+            <button class="copy-btn" onclick="copyPrompt(this)">Salin</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-card" id="mod5">
+      <div class="module-header" onclick="toggleModule('mod5')">
+        <div class="module-num">05</div>
+        <div class="module-info">
+          <h3>Canva Copy Workflow — Iklan Profesional dalam 20 Menit</h3>
+          <p>Claude tulis copy → kamu tinggal design di Canva</p>
+        </div>
+        <span class="module-chip">Canva</span>
+        <span class="module-arrow">▶</span>
+      </div>
+      <div class="module-body">
+        <p class="module-desc">Workflow paling cepat untuk buat iklan: Claude generate headline, subheadline, body copy, dan CTA — kamu tinggal copy ke Canva dan pilih template yang cocok. Dari ide ke iklan jadi dalam 20 menit.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Template Copy untuk Iklan</div>
+          <div class="prompt-box">Buatkan copy lengkap untuk iklan [platform: IG/Facebook/TikTok] ini:
+
+PRODUK/JASA: [deskripsi singkat]
+TARGET: [siapa yang dituju]
+TUJUAN IKLAN: [awareness/penjualan/traffic]
+PENAWARAN: [promo/diskon/bonus yang ditawarkan]
+DEADLINE: [apakah ada waktu terbatas?]
+
+Format output (siap copy ke Canva):
+1. Headline utama (max 8 kata, eye-catching)
+2. Subheadline (1 kalimat benefit)
+3. Body copy (2-3 kalimat)
+4. CTA button text (max 4 kata)
+5. Variasi headline (3 opsi berbeda untuk A/B test)
+            <button class="copy-btn" onclick="copyPrompt(this)">Salin</button>
+          </div>
+        </div>
+        <div class="case-box">
+          <div class="case-role">🎯 Tips: A/B Test Selalu</div>
+          <p>Minta Claude selalu generate 3 variasi headline. Test 2 sekaligus di Instagram — budget Rp 50K, jalankan 24 jam, pakai yang CTR-nya lebih tinggi.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-card" id="mod6">
+      <div class="module-header" onclick="toggleModule('mod6')">
+        <div class="module-num">06</div>
+        <div class="module-info">
+          <h3>Competitive Analysis — Audit 3 Kompetitor</h3>
+          <p>SWOT + rekomendasi siap presentasi dalam 30 menit</p>
+        </div>
+        <span class="module-chip">Riset</span>
+        <span class="module-arrow">▶</span>
+      </div>
+      <div class="module-body">
+        <p class="module-desc">Kita akan membuat template analisis kompetitor yang bisa dipakai berulang. Copy profil kompetitor dari website/media sosial mereka → paste ke Claude → dapat laporan SWOT + gap analysis + rekomendasi.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Template Analisis Kompetitor</div>
+          <div class="prompt-box">Lakukan analisis kompetitor untuk membantu bisnis saya:
+
+BISNIS SAYA:
+- Jenis: [deskripsi bisnis kamu]
+- Keunggulan saat ini: [apa yang sudah kamu lakukan dengan baik]
+- Target pasar: [siapa pelanggan kamu]
+
+KOMPETITOR YANG DIANALISIS:
+[Paste informasi dari website/IG/Tokopedia mereka]
+
+Kompetitor 1: [nama + info]
+Kompetitor 2: [nama + info]
+Kompetitor 3: [nama + info]
+
+OUTPUT YANG DIBUTUHKAN:
+1. Tabel perbandingan (harga, produk, target, channel)
+2. SWOT masing-masing kompetitor
+3. Gap opportunities yang bisa saya ambil
+4. 5 rekomendasi konkret untuk diferensiasi
+Format: Google Docs-ready, siap presentasi.
+            <button class="copy-btn" onclick="copyPrompt(this)">Salin</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="output-box">
+      <div class="output-icon">🎯</div>
+      <div>
+        <h3>Yang Kamu Bawa Pulang dari Kursus Ini</h3>
+        <p>Sistem konten 30 hari di Notion · Template CS WhatsApp untuk 10 situasi · 50 template deskripsi produk SEO — semuanya siap deploy ke bisnis kamu hari ini.</p>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:40px;">Lanjutkan Belajar</div>
+    <a href="kerja-sehari-hari.html" class="next-card">
+      <div class="next-icon">💼</div>
+      <div class="next-info">
+        <h4>Claude untuk Pekerjaan Sehari-hari</h4>
+        <p>Gmail, Sheets, Docs, Claude Projects — hemat 3–5 jam kerja per minggu · Rp 149K</p>
+      </div>
+      <div class="next-arrow">→</div>
+    </a>
+  </div>
+</div>
+
+<script>
+  const SUPABASE_URL = 'https://bolagqhgagmiewjdjzgz.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_U3DV1nZq3MXdOkfI8oUZdg_EB025f9q';
+  const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  async function init() {
+    const { data: { session } } = await sbClient.auth.getSession();
+    if (!session) { window.location.href = 'login.html'; return; }
+    document.getElementById('navEmail').textContent = session.user.email;
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('content').style.display = 'block';
+  }
+
+  async function logout() {
+    await sbClient.auth.signOut();
+    window.location.href = 'index.html';
+  }
+
+  function toggleModule(id) {
+    document.getElementById(id).classList.toggle('open');
+  }
+
+  function copyPrompt(btn) {
+    const box = btn.closest('.prompt-box');
+    const text = box.childNodes[0].textContent.trim();
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✓ Tersalin';
+      setTimeout(() => btn.textContent = 'Salin', 2000);
+    });
+  }
+
+  document.getElementById('mod1').classList.add('open');
+  init();
+</script>
+</body>
+</html>

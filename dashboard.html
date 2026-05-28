@@ -133,12 +133,16 @@
   const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   const ALL_COURSES = {
-    'prompt-gratis':    { title: '20 Prompt Claude Terbaik',        icon: '🎁', contentLink: 'prompt-gratis-content.html', salesLink: 'prompt-gratis.html',       desc: 'Prompt siap pakai untuk email, laporan, konten sosmed, dan lainnya.',  price: 'Gratis' },
-    'kursus-karyawan':  { title: 'Claude untuk Karyawan Indonesia', icon: '🎬', contentLink: 'kursus-karyawan-content.html', salesLink: 'kursus-karyawan.html',   desc: 'Kuasai Claude untuk produktivitas kerja sehari-hari.',                 price: 'Rp 249.000' },
-    'kursus-ukm':       { title: 'Scale Bisnis dengan Claude AI',   icon: '🏪', contentLink: 'kursus-ukm-content.html', salesLink: 'kursus-ukm.html',             desc: 'Strategi AI untuk UKM dan pemilik bisnis Indonesia.',                  price: 'Rp 349.000' },
-    'workshop-zoom':    { title: 'Workshop Bulanan via Zoom',        icon: '🎙', contentLink: 'workshop-zoom-content.html', salesLink: 'workshop-zoom.html',       desc: 'Sesi live interaktif bersama instruktur setiap bulan.',                price: 'Rp 199.000' },
-    'kursus-mahasiswa': { title: 'Claude untuk Karir & Studi',      icon: '🎓', contentLink: 'kursus-mahasiswa-content.html', salesLink: 'kursus-mahasiswa.html', desc: 'Percepat studi dan persiapkan karir dengan Claude AI.',                price: 'Rp 149.000' },
-    'coaching-1on1':    { title: 'Coaching 1-on-1',                 icon: '💬', contentLink: 'coaching-1on1-content.html', salesLink: 'coaching-1on1.html',       desc: 'Sesi privat 60 menit langsung dengan instruktur Klaud.id.',            price: 'Rp 599.000' },
+    'prompt-gratis':      { title: '20 Prompt Claude Terbaik',             icon: '🎁', contentLink: 'prompt-gratis-content.html',    salesLink: 'prompt-gratis.html',     desc: 'Prompt siap pakai untuk email, laporan, konten sosmed, dan lainnya.',             price: 'Gratis',     level: 'Gratis' },
+    'mulai-claude':       { title: 'Mulai dengan Claude AI',                icon: '🚀', contentLink: 'mulai-claude-content.html',      salesLink: 'mulai-claude.html',      desc: 'Dari nol sampai bisa pakai Claude untuk kebutuhan sehari-hari — dalam 1 jam.',    price: 'Gratis',     level: 'Beginner' },
+    'kerja-sehari-hari':  { title: 'Claude untuk Pekerjaan Sehari-hari',    icon: '💼', contentLink: 'kerja-sehari-hari-content.html', salesLink: 'kerja-sehari-hari.html', desc: 'Hemat 3–5 jam kerja per minggu dengan workflow Claude + tools kantor kamu.',     price: 'Rp 149.000', level: 'Beginner' },
+    'bisnis-ukm':         { title: 'Claude untuk Bisnis & UKM',             icon: '🏪', contentLink: 'bisnis-ukm-content.html',        salesLink: 'bisnis-ukm.html',        desc: 'Jalankan bisnis lebih efisien dengan Claude + tools Indonesia sehari-hari.',      price: 'Rp 149.000', level: 'Beginner' },
+    'konten-copywriting': { title: 'Claude untuk Konten & Copywriting',     icon: '✍️', contentLink: 'coming-soon.html',              salesLink: 'coming-soon.html',       desc: 'Build mesin konten: artikel, script, newsletter, landing page — workflow nyata.', price: 'Rp 199.000', level: 'Intermediate', comingSoon: true },
+    'analisis-data':      { title: 'Claude untuk Analisis Data',            icon: '📊', contentLink: 'coming-soon.html',              salesLink: 'coming-soon.html',       desc: 'Ubah data mentah jadi insight dengan Google Sheets + Claude Artifacts.',          price: 'Rp 199.000', level: 'Intermediate', comingSoon: true },
+    'build-automation':   { title: 'Build Automation dengan Claude',        icon: '⚡', contentLink: 'coming-soon.html',              salesLink: 'coming-soon.html',       desc: 'Buat 3 automation aktif dengan Zapier + Make + n8n yang jalan 24/7.',            price: 'Rp 299.000', level: 'Intermediate', comingSoon: true },
+    'ai-powered-app':     { title: 'Build AI-Powered App Sederhana',        icon: '🛠️', contentLink: 'coming-soon.html',             salesLink: 'coming-soon.html',       desc: 'Buat web app AI live di GitHub Pages dengan landing page monetisasi.',            price: 'Rp 299.000', level: 'Advanced',     comingSoon: true },
+    'claude-api-dev':     { title: 'Claude API untuk Developer',            icon: '👨‍💻', contentLink: 'coming-soon.html',            salesLink: 'coming-soon.html',       desc: 'Integrasikan Claude ke project nyata: streaming, tool use, caching, deploy.',    price: 'Rp 399.000', level: 'Advanced',     comingSoon: true },
+    'jual-produk-ai':     { title: 'Build & Jual Produk AI',                icon: '💰', contentLink: 'coming-soon.html',              salesLink: 'coming-soon.html',       desc: 'Dari ide ke produk AI yang menghasilkan uang: Framer + Midtrans + WhatsApp.',    price: 'Rp 499.000', level: 'Advanced',     comingSoon: true },
   };
 
   async function init() {
@@ -201,13 +205,18 @@
       document.getElementById('exploreSection').style.display = 'block';
       const grid = document.getElementById('exploreGrid');
       unenrolled.forEach(([slug, meta]) => {
+        const levelBadge = meta.level ? `<span style="font-size:10px;font-weight:700;letter-spacing:0.5px;color:#64748B;text-transform:uppercase;">${meta.level}</span>` : '';
+        const ctaBtn = meta.comingSoon
+          ? `<div style="font-size:11px;font-weight:700;color:#94A3B8;background:#F1F5F9;padding:8px 14px;border-radius:8px;text-align:center;margin-top:4px;">🔔 Segera Hadir</div>`
+          : `<a href="${meta.salesLink}" class="explore-btn">Lihat Kursus →</a>`;
         grid.innerHTML += `
           <div class="explore-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;">${levelBadge}</div>
             <div class="explore-icon">${meta.icon}</div>
             <h4>${meta.title}</h4>
             <p>${meta.desc}</p>
             <div style="font-size:13px;font-weight:700;color:#042C53;">${meta.price}</div>
-            <a href="${meta.salesLink}" class="explore-btn">Lihat Kursus →</a>
+            ${ctaBtn}
           </div>`;
       });
     }
