@@ -399,7 +399,7 @@
       <h3>✨ Akses 20 Prompt Gratis</h3>
       <p>Daftar gratis — langsung bisa pakai semua prompt tanpa perlu download.</p>
       <div class="form-group">
-        <button class="btn-download" onclick="window.location.href='login.html'">
+        <button class="btn-download" onclick="accessCourse()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           Akses Gratis Sekarang →
         </button>
@@ -539,7 +539,7 @@ Buat ringkasan eksekutif...
     <p>Gratis selamanya. Tidak perlu kartu kredit. Langsung bisa dipakai.</p>
     <div class="signup-box" style="max-width:480px;margin:0 auto">
       <div class="form-group">
-        <button class="btn-download" onclick="window.location.href='login.html'">
+        <button class="btn-download" onclick="accessCourse()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           Akses Gratis Sekarang →
         </button>
@@ -568,7 +568,22 @@ Buat ringkasan eksekutif...
   <p>© 2025 <a href="index.html">Klaud.id</a> — Platform Belajar Claude AI #1 dalam Bahasa Indonesia</p>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+  // Check session on load — if already logged in, redirect straight to content
+  (async () => {
+    const sb = window.supabase.createClient(
+      'https://bolagqhgagmiewjdjzgz.supabase.co',
+      'sb_publishable_U3DV1nZq3MXdOkfI8oUZdg_EB025f9q'
+    );
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) window.location.href = 'prompt-gratis-content.html';
+  })();
+
+  function accessCourse() {
+    window.location.href = 'login.html';
+  }
+
   function validateForm(name, email) {
     if (!name.trim()) { alert('Mohon masukkan nama Anda.'); return false; }
     if (!email.trim() || !email.includes('@')) { alert('Mohon masukkan email yang valid.'); return false; }
@@ -579,10 +594,7 @@ Buat ringkasan eksekutif...
     document.getElementById('modalOverlay').classList.add('active');
   }
 
-  function triggerDownload() {
-    // Redirect to login — user will be enrolled in the free course automatically
-    window.location.href = 'login.html';
-  }
+  function triggerDownload() { accessCourse(); }
 
   async function submitToBackend(name, email) {
     try {
