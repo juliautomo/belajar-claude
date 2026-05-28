@@ -175,6 +175,7 @@
     const email = session.user.email;
     const name  = session.user.user_metadata?.full_name || email.split('@')[0];
 
+    document.getElementById('navName').textContent = name;
     document.getElementById('navEmail').textContent = email;
     document.getElementById('greetingText').textContent = `Selamat datang, ${name}! 👋`;
     document.getElementById('loading').style.display = 'none';
