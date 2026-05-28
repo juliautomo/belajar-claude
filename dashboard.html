@@ -132,12 +132,12 @@
   const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   const ALL_COURSES = {
-    'prompt-gratis':    { title: '20 Prompt Claude Terbaik',        icon: '🎁', link: 'prompt-gratis-content.html', desc: 'Prompt siap pakai untuk email, laporan, konten sosmed, dan lainnya.',      price: 'Gratis' },
-    'kursus-karyawan':  { title: 'Claude untuk Karyawan Indonesia', icon: '🎬', link: 'kursus-karyawan-content.html', desc: 'Kuasai Claude untuk produktivitas kerja sehari-hari.',                    price: 'Rp 249.000' },
-    'kursus-ukm':       { title: 'Scale Bisnis dengan Claude AI',   icon: '🏪', link: 'kursus-ukm-content.html', desc: 'Strategi AI untuk UKM dan pemilik bisnis Indonesia.',                          price: 'Rp 349.000' },
-    'workshop-zoom':    { title: 'Workshop Bulanan via Zoom',        icon: '🎙', link: 'workshop-zoom-content.html', desc: 'Sesi live interaktif bersama instruktur setiap bulan.',                    price: 'Rp 199.000' },
-    'kursus-mahasiswa': { title: 'Claude untuk Karir & Studi',      icon: '🎓', link: 'kursus-mahasiswa-content.html', desc: 'Percepat studi dan persiapkan karir dengan Claude AI.',                 price: 'Rp 149.000' },
-    'coaching-1on1':    { title: 'Coaching 1-on-1',                 icon: '💬', link: 'coaching-1on1-content.html', desc: 'Sesi privat 60 menit langsung dengan instruktur Klaud.id.',                price: 'Rp 599.000' },
+    'prompt-gratis':    { title: '20 Prompt Claude Terbaik',        icon: '🎁', contentLink: 'prompt-gratis-content.html', salesLink: 'prompt-gratis.html',       desc: 'Prompt siap pakai untuk email, laporan, konten sosmed, dan lainnya.',  price: 'Gratis' },
+    'kursus-karyawan':  { title: 'Claude untuk Karyawan Indonesia', icon: '🎬', contentLink: 'kursus-karyawan-content.html', salesLink: 'kursus-karyawan.html',   desc: 'Kuasai Claude untuk produktivitas kerja sehari-hari.',                 price: 'Rp 249.000' },
+    'kursus-ukm':       { title: 'Scale Bisnis dengan Claude AI',   icon: '🏪', contentLink: 'kursus-ukm-content.html', salesLink: 'kursus-ukm.html',             desc: 'Strategi AI untuk UKM dan pemilik bisnis Indonesia.',                  price: 'Rp 349.000' },
+    'workshop-zoom':    { title: 'Workshop Bulanan via Zoom',        icon: '🎙', contentLink: 'workshop-zoom-content.html', salesLink: 'workshop-zoom.html',       desc: 'Sesi live interaktif bersama instruktur setiap bulan.',                price: 'Rp 199.000' },
+    'kursus-mahasiswa': { title: 'Claude untuk Karir & Studi',      icon: '🎓', contentLink: 'kursus-mahasiswa-content.html', salesLink: 'kursus-mahasiswa.html', desc: 'Percepat studi dan persiapkan karir dengan Claude AI.',                price: 'Rp 149.000' },
+    'coaching-1on1':    { title: 'Coaching 1-on-1',                 icon: '💬', contentLink: 'coaching-1on1-content.html', salesLink: 'coaching-1on1.html',       desc: 'Sesi privat 60 menit langsung dengan instruktur Klaud.id.',            price: 'Rp 599.000' },
   };
 
   async function init() {
@@ -177,7 +177,7 @@
       document.getElementById('enrolledSection').style.display = 'block';
       const list = document.getElementById('enrolledList');
       enrolled.forEach(c => {
-        const meta    = ALL_COURSES[c.course_slug] || { title: c.course_name, icon: '📚', link: '#' };
+        const meta    = ALL_COURSES[c.course_slug] || { title: c.course_name, icon: '📚', contentLink: '#' };
         const dateStr = new Date(c.enrolled_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
         const badge   = c.type === 'free'
           ? `<span class="enrolled-badge badge-free">🎁 Gratis</span>`
@@ -189,7 +189,7 @@
               <h3>${meta.title}</h3>
               <p>${c.type === 'free' ? 'Diikuti' : 'Dibeli'} ${dateStr} &nbsp;${badge}</p>
             </div>
-            <a href="${meta.link}" class="resume-btn">Mulai →</a>
+            <a href="${meta.contentLink}" class="resume-btn">Mulai →</a>
           </div>`;
       });
     }
@@ -206,7 +206,7 @@
             <h4>${meta.title}</h4>
             <p>${meta.desc}</p>
             <div style="font-size:13px;font-weight:700;color:#042C53;">${meta.price}</div>
-            <a href="index.html#kursus" class="explore-btn">Lihat Kursus →</a>
+            <a href="${meta.salesLink}" class="explore-btn">Lihat Kursus →</a>
           </div>`;
       });
     }
