@@ -3,64 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login — Klaud.id</title>
+  <title>Masuk — Klaud.id</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* Faux background — blurred site screenshot feel */
     body {
       font-family: 'Helvetica Neue', Arial, sans-serif;
-      background: #F5F3EE;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
+      background: #E8E6DF;
+      position: relative;
     }
-    .card {
+
+    /* Dim overlay */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: rgba(4, 44, 83, 0.55);
+      backdrop-filter: blur(3px);
+      z-index: 0;
+    }
+
+    /* Modal card */
+    .modal {
+      position: relative; z-index: 1;
       background: #fff;
-      border-radius: 16px;
-      padding: 40px 36px;
-      max-width: 420px;
+      border-radius: 20px;
+      padding: 40px 36px 32px;
+      max-width: 400px;
       width: 100%;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.22);
     }
-    .logo {
-      text-align: center;
-      margin-bottom: 28px;
-    }
-    .logo-text {
-      font-size: 28px;
-      font-weight: 800;
-      color: #042C53;
-    }
-    .logo-text span { color: #378ADD; }
-    .logo-sub {
-      font-size: 12px;
-      color: #94A3B8;
-      margin-top: 4px;
-      letter-spacing: 0.5px;
-    }
-    h1 {
-      font-size: 20px;
-      font-weight: 700;
-      color: #1E293B;
-      margin-bottom: 8px;
-      text-align: center;
-    }
-    p.subtitle {
-      font-size: 14px;
+
+    /* Close button */
+    .close-btn {
+      position: absolute;
+      top: 16px; right: 16px;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: #F1F5F9;
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none;
       color: #64748B;
-      text-align: center;
-      margin-bottom: 28px;
-      line-height: 1.6;
+      font-size: 18px;
+      font-weight: 300;
+      line-height: 1;
+      transition: background 0.15s;
     }
-    label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: #374151;
-      margin-bottom: 6px;
-    }
+    .close-btn:hover { background: #E2E8F0; color: #1E293B; }
+
+    /* Logo */
+    .logo { text-align: center; margin-bottom: 24px; }
+    .logo-text { font-size: 26px; font-weight: 800; color: #042C53; }
+    .logo-text span { color: #378ADD; }
+
+    /* Title */
+    h1 { font-size: 20px; font-weight: 700; color: #1E293B; margin-bottom: 6px; }
+    .subtitle { font-size: 14px; color: #64748B; line-height: 1.6; margin-bottom: 28px; }
+
+    /* Form */
+    label { display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 6px; letter-spacing: 0.3px; }
     input[type="email"] {
       width: 100%;
       padding: 12px 14px;
@@ -70,13 +77,15 @@
       color: #1E293B;
       outline: none;
       transition: border 0.2s;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
+      font-family: inherit;
     }
     input[type="email"]:focus { border-color: #378ADD; }
+
     button {
       width: 100%;
       padding: 13px;
-      background: #378ADD;
+      background: #042C53;
       color: #fff;
       border: none;
       border-radius: 10px;
@@ -84,12 +93,15 @@
       font-weight: 700;
       cursor: pointer;
       transition: background 0.2s;
+      font-family: inherit;
     }
-    button:hover { background: #2b6cb0; }
-    button:disabled { background: #93C5FD; cursor: not-allowed; }
+    button:hover { background: #378ADD; }
+    button:disabled { background: #94A3B8; cursor: not-allowed; }
+
+    /* Message */
     .message {
-      margin-top: 20px;
-      padding: 14px 16px;
+      margin-top: 16px;
+      padding: 13px 14px;
       border-radius: 10px;
       font-size: 13px;
       text-align: center;
@@ -98,44 +110,38 @@
     }
     .message.success { background: #D1FAE5; color: #065F46; display: block; }
     .message.error   { background: #FEE2E2; color: #991B1B; display: block; }
-    .divider {
-      text-align: center;
+
+    /* Footer note */
+    .modal-note {
+      margin-top: 20px;
       font-size: 12px;
       color: #94A3B8;
-      margin: 24px 0 16px;
-    }
-    .back-link {
-      display: block;
       text-align: center;
-      font-size: 13px;
-      color: #378ADD;
-      text-decoration: none;
-      font-weight: 600;
+      line-height: 1.6;
     }
-    .back-link:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
 
-<div class="card">
+<div class="modal">
+  <a href="index.html" class="close-btn">&#x2715;</a>
+
   <div class="logo">
     <div class="logo-text">Klaud<span>.id</span></div>
-    <div class="logo-sub">Platform Belajar Claude AI #1 Indonesia</div>
   </div>
 
   <h1>Masuk atau Daftar</h1>
-  <p class="subtitle">Masukkan email kamu — kami kirimkan link masuk langsung ke inbox. Tidak perlu password, tidak perlu isi form panjang.</p>
+  <p class="subtitle">Masukkan email kamu — kami kirimkan link masuk langsung ke inbox. Tidak perlu password.</p>
 
   <div id="loginForm">
-    <label for="email">Alamat Email</label>
-    <input type="email" id="email" placeholder="nama@email.com" />
-    <button id="loginBtn" onclick="sendMagicLink()">Kirim Link Login →</button>
+    <label for="email">Email</label>
+    <input type="email" id="email" placeholder="nama@email.com" autofocus />
+    <button id="loginBtn" onclick="sendMagicLink()">Lanjutkan →</button>
   </div>
 
   <div class="message" id="message"></div>
 
-  <div class="divider">— atau —</div>
-  <a href="https://juliautomo.github.io/klaud-id/index.html" class="back-link">← Kembali ke Klaud.id</a>
+  <p class="modal-note">Dengan melanjutkan, kamu menyetujui syarat & ketentuan Klaud.id.</p>
 </div>
 
 <script>
@@ -143,7 +149,6 @@
   const SUPABASE_KEY = 'sb_publishable_U3DV1nZq3MXdOkfI8oUZdg_EB025f9q';
   const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // If already logged in, redirect to dashboard
   sbClient.auth.getSession().then(({ data: { session } }) => {
     if (session) window.location.href = 'dashboard.html';
   });
@@ -151,34 +156,26 @@
   async function sendMagicLink() {
     const email = document.getElementById('email').value.trim();
     const btn   = document.getElementById('loginBtn');
-    const msg   = document.getElementById('message');
 
-    if (!email) {
-      showMessage('Masukkan alamat email kamu dulu ya.', 'error');
-      return;
-    }
+    if (!email) { showMessage('Masukkan alamat email kamu dulu ya.', 'error'); return; }
 
     btn.disabled = true;
     btn.textContent = 'Mengirim...';
-    msg.className = 'message';
-    msg.style.display = 'none';
 
     const { error } = await sbClient.auth.signInWithOtp({
       email,
-      options: {
-        emailRedirectTo: 'https://juliautomo.github.io/klaud-id/dashboard.html',
-      },
+      options: { emailRedirectTo: 'https://juliautomo.github.io/klaud-id/dashboard.html' },
     });
 
     if (error) {
-      showMessage('Gagal mengirim email. Coba lagi ya: ' + error.message, 'error');
+      showMessage('Gagal mengirim email: ' + error.message, 'error');
       btn.disabled = false;
-      btn.textContent = 'Kirim Link Login →';
+      btn.textContent = 'Lanjutkan →';
     } else {
       btn.textContent = '✉️ Link terkirim!';
       btn.style.background = '#065F46';
-      showMessage('✉️ Link masuk sudah dikirim ke <strong>' + email + '</strong>!<br><br>Cek inbox kamu dan klik linknya — kamu langsung masuk, tidak perlu password.', 'success');
-      document.getElementById('loginForm').style.opacity = '0.6';
+      showMessage('Link masuk sudah dikirim ke <strong>' + email + '</strong>.<br>Cek inbox dan klik linknya untuk masuk.', 'success');
+      document.getElementById('loginForm').style.opacity = '0.5';
       document.getElementById('loginForm').style.pointerEvents = 'none';
     }
   }
@@ -189,13 +186,11 @@
     msg.className = 'message ' + type;
   }
 
-  // Allow pressing Enter
   document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('email').addEventListener('keypress', (e) => {
       if (e.key === 'Enter') sendMagicLink();
     });
   });
 </script>
-
 </body>
 </html>
