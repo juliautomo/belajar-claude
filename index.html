@@ -60,6 +60,20 @@
   }
   .nav-cta:hover { background: var(--blue) !important; color: #fff !important; }
 
+  /* Nav user pill (shown when logged in) */
+  .nav-user-pill {
+    display: none; align-items: center; gap: 10px;
+  }
+  .nav-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--blue-pale); border: 2px solid rgba(74,114,214,0.25);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .nav-avatar svg { width: 16px; height: 16px; color: var(--blue); }
+  .nav-user-info { display: flex; flex-direction: column; }
+  .nav-uname  { font-size: 12px; font-weight: 700; color: var(--navy); line-height: 1.2; }
+  .nav-uemail { font-size: 10px; color: var(--muted); line-height: 1.2; }
+
   /* ── HERO ───────────────────────────────────────────────── */
   .hero {
     min-height: 100vh;
@@ -460,6 +474,17 @@
     <a href="#paket">Paket</a>
     <a href="#tentang">Tentang</a>
 
+    <div class="nav-user-pill" id="navUserPill">
+      <div class="nav-avatar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+        </svg>
+      </div>
+      <div class="nav-user-info">
+        <span class="nav-uname"  id="navUname"></span>
+        <span class="nav-uemail" id="navUemail"></span>
+      </div>
+    </div>
     <a href="login.html" id="navLoginBtn" style="color:var(--navy);font-weight:600;font-size:13px;margin-right:-16px;">Masuk</a>
     <a href="login.html" id="navCtaBtn" class="nav-cta">Gabung Gratis</a>
   </div>
@@ -988,9 +1013,20 @@
     );
     const { data: { session } } = await sbClient.auth.getSession();
     if (session) {
+      const email = session.user.email;
+      const name  = session.user.user_metadata?.full_name || email.split('@')[0];
+
+      // Show user pill
+      const pill = document.getElementById('navUserPill');
+      pill.style.display = 'flex';
+      document.getElementById('navUname').textContent  = name;
+      document.getElementById('navUemail').textContent = email;
+
+      // Swap login/cta buttons to dashboard link
       const loginBtn = document.getElementById('navLoginBtn');
       loginBtn.textContent = 'Dashboard';
       loginBtn.href = 'dashboard.html';
+      loginBtn.style.marginRight = '0';
       document.getElementById('navCtaBtn').style.display = 'none';
     }
   })();
