@@ -246,6 +246,68 @@
 
   .tag-coming { background: rgba(100,116,139,0.1); color: #64748B; }
 
+  /* ── PACKAGES ───────────────────────────────────────────── */
+  .packages { background: var(--surface); border-top: 1px solid var(--border-2); border-bottom: 1px solid var(--border-2); }
+  .pkg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+  .pkg-card {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 28px 24px;
+    display: flex; flex-direction: column;
+    position: relative; overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .pkg-card:hover { border-color: var(--blue); box-shadow: 0 4px 24px rgba(74,114,214,0.1); }
+  .pkg-card.featured { border-color: var(--blue); }
+  .pkg-card.featured::before {
+    content: '⭐ PALING POPULER';
+    position: absolute; top: 0; right: 0;
+    background: var(--blue); color: #fff;
+    font-size: 9px; font-weight: 800; letter-spacing: 0.5px;
+    padding: 5px 12px; border-bottom-left-radius: 10px;
+  }
+  .pkg-persona {
+    font-size: 11px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--blue);
+    font-family: 'DM Mono', monospace; margin-bottom: 6px;
+  }
+  .pkg-card h3 { font-size: 20px; font-weight: 800; color: var(--navy); letter-spacing: -0.5px; margin-bottom: 16px; }
+  .pkg-courses { display: flex; flex-direction: column; gap: 7px; margin-bottom: 20px; flex: 1; }
+  .pkg-course-item {
+    display: flex; align-items: center; gap: 9px;
+    font-size: 12px; color: var(--muted); line-height: 1.4;
+  }
+  .pkg-course-item .ci { font-size: 15px; flex-shrink: 0; }
+  .pkg-course-item.available { color: var(--navy); }
+  .pkg-course-item .cs-tag {
+    font-size: 9px; font-weight: 700; color: #94A3B8;
+    background: rgba(100,116,139,0.08);
+    padding: 1px 6px; border-radius: 4px; margin-left: 4px; white-space: nowrap;
+  }
+  .pkg-divider { height: 1px; background: var(--border); margin: 16px 0; }
+  .pkg-pricing { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+  .pkg-price { font-size: 26px; font-weight: 800; color: var(--navy); letter-spacing: -1px; }
+  .pkg-original { font-size: 13px; color: #aaa; text-decoration: line-through; }
+  .pkg-save { font-size: 11px; font-weight: 700; color: var(--green); background: rgba(29,158,117,0.1); padding: 2px 8px; border-radius: 6px; white-space: nowrap; }
+  .pkg-note { font-size: 11px; color: var(--muted); margin-bottom: 18px; line-height: 1.6; }
+  .pkg-btn {
+    display: block; text-align: center; padding: 11px;
+    border-radius: 9px; font-size: 13px; font-weight: 700;
+    text-decoration: none; cursor: pointer;
+    border: none; transition: background 0.2s, transform 0.15s;
+  }
+  .pkg-btn.primary { background: var(--navy); color: #fff; }
+  .pkg-btn.primary:hover { background: var(--blue); transform: translateY(-1px); }
+  .pkg-btn.outline { background: transparent; color: var(--navy); border: 1.5px solid var(--border); }
+  .pkg-btn.outline:hover { border-color: var(--blue); background: var(--blue-pale); }
+  .pkg-early {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+    text-transform: uppercase; color: var(--gold);
+    background: rgba(239,159,39,0.1); border-radius: 6px;
+    padding: 3px 8px; margin-bottom: 10px; width: fit-content;
+  }
+
   /* ── ABOUT ──────────────────────────────────────────────── */
   .about { background: var(--surface); border-top: 1px solid var(--border-2); }
   .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
@@ -368,6 +430,7 @@
   <div class="logo">Klaud<span>.id</span></div>
   <div class="nav-links">
     <a href="#kursus">Kursus</a>
+    <a href="#paket">Paket</a>
     <a href="#tentang">Tentang</a>
 
     <a href="login.html" id="navLoginBtn" style="color:var(--navy);font-weight:600;font-size:13px;margin-right:-16px;">Masuk</a>
@@ -580,6 +643,136 @@
       </div>
     </div>
 
+  </div>
+</section>
+
+<!-- PACKAGES -->
+<section class="packages" id="paket">
+  <div class="container">
+    <div class="section-label">Paket Hemat</div>
+    <h2 class="section-title">Beli lebih banyak,<br>hemat lebih besar</h2>
+    <p class="section-sub">Pilih paket yang sesuai dengan tujuan kamu — dapatkan akses ke kursus yang sudah tersedia sekarang, dan kursus berikutnya otomatis terbuka saat diluncurkan.</p>
+
+    <div class="pkg-grid">
+
+      <!-- Paket Profesional -->
+      <div class="pkg-card featured">
+        <div class="pkg-persona">Untuk Karyawan & Profesional</div>
+        <h3>Paket Profesional</h3>
+        <div class="pkg-courses">
+          <div class="pkg-course-item available"><span class="ci">🚀</span> Mulai dengan Claude AI</div>
+          <div class="pkg-course-item available"><span class="ci">💼</span> Claude untuk Pekerjaan Sehari-hari</div>
+          <div class="pkg-course-item"><span class="ci">📊</span> Claude untuk Analisis Data <span class="cs-tag">Segera</span></div>
+        </div>
+        <div class="pkg-divider"></div>
+        <div class="pkg-pricing">
+          <span class="pkg-price">Rp 299K</span>
+          <span class="pkg-original">Rp 398K</span>
+          <span class="pkg-save">Hemat Rp 99K</span>
+        </div>
+        <p class="pkg-note">✅ 2 kursus tersedia langsung · 1 kursus menyusul saat launch</p>
+        <a href="login.html" class="pkg-btn primary">Beli Paket Profesional →</a>
+      </div>
+
+      <!-- Paket Bisnis & UKM -->
+      <div class="pkg-card">
+        <div class="pkg-persona">Untuk Pemilik Bisnis & UKM</div>
+        <h3>Paket Bisnis & UKM</h3>
+        <div class="pkg-courses">
+          <div class="pkg-course-item available"><span class="ci">🚀</span> Mulai dengan Claude AI</div>
+          <div class="pkg-course-item available"><span class="ci">🏪</span> Claude untuk Bisnis & UKM</div>
+          <div class="pkg-course-item"><span class="ci">✍️</span> Claude untuk Konten & Copywriting <span class="cs-tag">Segera</span></div>
+          <div class="pkg-course-item"><span class="ci">⚡</span> Build Automation dengan Claude <span class="cs-tag">Segera</span></div>
+        </div>
+        <div class="pkg-divider"></div>
+        <div class="pkg-pricing">
+          <span class="pkg-price">Rp 499K</span>
+          <span class="pkg-original">Rp 647K</span>
+          <span class="pkg-save">Hemat Rp 148K</span>
+        </div>
+        <p class="pkg-note">✅ 2 kursus tersedia langsung · 2 kursus menyusul saat launch</p>
+        <a href="login.html" class="pkg-btn outline">Beli Paket Bisnis & UKM →</a>
+      </div>
+
+      <!-- Paket Content Creator -->
+      <div class="pkg-card">
+        <div class="pkg-persona">Untuk Content Creator</div>
+        <h3>Paket Content Creator</h3>
+        <div class="pkg-courses">
+          <div class="pkg-course-item available"><span class="ci">🚀</span> Mulai dengan Claude AI</div>
+          <div class="pkg-course-item available"><span class="ci">🏪</span> Claude untuk Bisnis & UKM</div>
+          <div class="pkg-course-item"><span class="ci">✍️</span> Claude untuk Konten & Copywriting <span class="cs-tag">Segera</span></div>
+        </div>
+        <div class="pkg-divider"></div>
+        <div class="pkg-pricing">
+          <span class="pkg-price">Rp 299K</span>
+          <span class="pkg-original">Rp 348K</span>
+          <span class="pkg-save">Hemat Rp 49K</span>
+        </div>
+        <p class="pkg-note">✅ 2 kursus tersedia langsung · 1 kursus menyusul saat launch</p>
+        <a href="login.html" class="pkg-btn outline">Beli Paket Content Creator →</a>
+      </div>
+
+      <!-- Paket Mahasiswa -->
+      <div class="pkg-card">
+        <div class="pkg-persona">Untuk Mahasiswa</div>
+        <h3>Paket Mahasiswa</h3>
+        <div class="pkg-courses">
+          <div class="pkg-course-item available"><span class="ci">🚀</span> Mulai dengan Claude AI</div>
+          <div class="pkg-course-item"><span class="ci">✍️</span> Claude untuk Konten & Copywriting <span class="cs-tag">Segera</span></div>
+          <div class="pkg-course-item"><span class="ci">📊</span> Claude untuk Analisis Data <span class="cs-tag">Segera</span></div>
+        </div>
+        <div class="pkg-divider"></div>
+        <div class="pkg-pricing">
+          <span class="pkg-price">Rp 249K</span>
+          <span class="pkg-original">Rp 348K</span>
+          <span class="pkg-save">Hemat Rp 99K</span>
+        </div>
+        <p class="pkg-note">✅ 1 kursus tersedia langsung · 2 kursus menyusul saat launch</p>
+        <a href="login.html" class="pkg-btn outline">Beli Paket Mahasiswa →</a>
+      </div>
+
+      <!-- Paket Developer -->
+      <div class="pkg-card">
+        <div class="pkg-persona">Untuk Developer & Tech</div>
+        <h3>Paket Developer</h3>
+        <div class="pkg-courses">
+          <div class="pkg-course-item available"><span class="ci">🚀</span> Mulai dengan Claude AI</div>
+          <div class="pkg-course-item"><span class="ci">🛠️</span> Build AI-Powered App Sederhana <span class="cs-tag">Segera</span></div>
+          <div class="pkg-course-item"><span class="ci">👨‍💻</span> Claude API untuk Developer <span class="cs-tag">Segera</span></div>
+          <div class="pkg-course-item"><span class="ci">💰</span> Build & Jual Produk AI <span class="cs-tag">Segera</span></div>
+        </div>
+        <div class="pkg-divider"></div>
+        <div class="pkg-pricing">
+          <span class="pkg-price">Rp 799K</span>
+          <span class="pkg-original">Rp 1.197K</span>
+          <span class="pkg-save">Hemat Rp 398K</span>
+        </div>
+        <p class="pkg-note">✅ 1 kursus tersedia langsung · 3 kursus menyusul saat launch</p>
+        <a href="login.html" class="pkg-btn outline">Beli Paket Developer →</a>
+      </div>
+
+      <!-- All Access -->
+      <div class="pkg-card">
+        <div class="pkg-persona">All Access</div>
+        <h3>Semua 9 Kursus</h3>
+        <div class="pkg-courses">
+          <div class="pkg-course-item available"><span class="ci">🚀</span> Mulai dengan Claude AI</div>
+          <div class="pkg-course-item available"><span class="ci">💼</span> Claude untuk Pekerjaan Sehari-hari</div>
+          <div class="pkg-course-item available"><span class="ci">🏪</span> Claude untuk Bisnis & UKM</div>
+          <div class="pkg-course-item"><span class="ci">✍️</span> + 6 kursus lainnya <span class="cs-tag">Segera</span></div>
+        </div>
+        <div class="pkg-divider"></div>
+        <div class="pkg-pricing">
+          <span class="pkg-price">Rp 999K</span>
+          <span class="pkg-original">Rp 1.694K</span>
+          <span class="pkg-save">Hemat Rp 695K</span>
+        </div>
+        <p class="pkg-note">✅ 3 kursus tersedia langsung · 6 kursus berikutnya otomatis terbuka</p>
+        <a href="login.html" class="pkg-btn primary">Beli All Access →</a>
+      </div>
+
+    </div>
   </div>
 </section>
 
