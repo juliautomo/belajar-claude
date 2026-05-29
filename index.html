@@ -246,6 +246,33 @@
 
   .tag-coming { background: rgba(100,116,139,0.1); color: #64748B; }
 
+  /* ── CAROUSEL ───────────────────────────────────────────── */
+  .carousel-wrap { position: relative; }
+  .carousel {
+    display: flex; gap: 16px;
+    overflow-x: auto; scroll-snap-type: x mandatory;
+    padding-bottom: 12px;
+    scrollbar-width: none;
+  }
+  .carousel::-webkit-scrollbar { display: none; }
+  .carousel .course-card {
+    min-width: 270px; max-width: 270px;
+    scroll-snap-align: start; flex-shrink: 0;
+  }
+  .carousel-nav {
+    display: flex; gap: 10px; margin-top: 20px; justify-content: center;
+  }
+  .carousel-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1.5px solid var(--border);
+    background: var(--surface-2);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: border-color 0.2s, background 0.2s;
+    color: var(--navy);
+  }
+  .carousel-btn:hover { border-color: var(--blue); background: var(--blue-pale); }
+  .carousel-btn svg { width: 14px; height: 14px; }
+
   /* ── PACKAGES ───────────────────────────────────────────── */
   .packages { background: var(--surface); border-top: 1px solid var(--border-2); border-bottom: 1px solid var(--border-2); }
   .pkg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
@@ -499,153 +526,6 @@
   </div>
 </section>
 
-<!-- COURSES -->
-<section id="kursus">
-  <div class="container">
-    <div class="section-label">Kurikulum</div>
-    <h2 class="section-title">9 Kursus · 3 Level · ~14 Jam</h2>
-    <p class="section-sub">Setiap kursus memperkenalkan tools baru yang langsung bisa dipakai — bukan hanya teori, tapi workflow nyata untuk pekerjaan dan bisnis kamu.</p>
-
-    <!-- LEVEL 1: Beginner -->
-    <div class="level-row">
-      <span class="level-pill beginner">Level 1 · Beginner</span>
-      <div class="level-line"></div>
-      <span class="level-price">Gratis – Rp 149K</span>
-    </div>
-    <div class="courses-grid">
-      <div class="course-card">
-        <span class="course-tag tag-green">GRATIS</span>
-        <h3>20 Prompt Claude Terbaik</h3>
-        <p>Prompt siap pakai untuk email, laporan, konten sosmed, dan lainnya — langsung copy-paste.</p>
-        <div class="course-meta">
-          <span>📄 Panduan Prompt</span>
-          <span>⏱ Bisa dipakai hari ini</span>
-        </div>
-        <div class="course-price">Gratis</div>
-        <a href="prompt-gratis.html" class="course-btn">Pelajari →</a>
-      </div>
-      <div class="course-card">
-        <span class="course-tag tag-green">GRATIS</span>
-        <h3>Mulai dengan Claude AI</h3>
-        <p>Dari nol sampai bisa pakai Claude untuk kebutuhan sehari-hari. Claude Projects, Artifacts, Google Docs.</p>
-        <div class="course-meta">
-          <span>🎬 6 modul</span>
-          <span>⏱ 1 jam</span>
-        </div>
-        <div class="course-price">Gratis</div>
-        <a href="mulai-claude.html" class="course-btn">Pelajari →</a>
-      </div>
-      <div class="course-card">
-        <span class="course-tag tag-blue">BEGINNER</span>
-        <h3>Claude untuk Pekerjaan Sehari-hari</h3>
-        <p>Hemat 3–5 jam kerja per minggu. Gmail, Google Sheets, Docs, Claude Projects — workflow kantor nyata.</p>
-        <div class="course-meta">
-          <span>🎬 6 modul</span>
-          <span>⏱ 1.5 jam</span>
-        </div>
-        <div class="course-price">Rp 149K</div>
-        <a href="kerja-sehari-hari.html" class="course-btn">Pelajari →</a>
-      </div>
-      <div class="course-card">
-        <span class="course-tag tag-blue">BEGINNER</span>
-        <h3>Claude untuk Bisnis & UKM</h3>
-        <p>Tokopedia/Shopee, Notion, WhatsApp Business, Instagram, Canva — sistem konten dan CS otomatis.</p>
-        <div class="course-meta">
-          <span>🎬 6 modul</span>
-          <span>⏱ 1.5 jam</span>
-        </div>
-        <div class="course-price">Rp 149K</div>
-        <a href="bisnis-ukm.html" class="course-btn">Pelajari →</a>
-      </div>
-    </div>
-
-    <!-- LEVEL 2: Intermediate -->
-    <div class="level-row">
-      <span class="level-pill intermediate">Level 2 · Intermediate</span>
-      <div class="level-line"></div>
-      <span class="level-price">Rp 199K – Rp 299K</span>
-    </div>
-    <div class="courses-grid">
-      <div class="course-card">
-        <span class="course-tag tag-coming">SEGERA HADIR</span>
-        <h3>Claude untuk Konten & Copywriting</h3>
-        <p>Build mesin konten: artikel SEO, TikTok scripts, email sequence, landing page — semua workflow nyata.</p>
-        <div class="course-meta">
-          <span>🎬 6 modul</span>
-          <span>⏱ 1.5 jam</span>
-        </div>
-        <div class="course-price">Rp 199K</div>
-        <a href="#" class="course-btn disabled">🔔 Segera Hadir</a>
-      </div>
-      <div class="course-card">
-        <span class="course-tag tag-coming">SEGERA HADIR</span>
-        <h3>Claude untuk Analisis Data</h3>
-        <p>Ubah data mentah jadi insight. Google Sheets, Forms, Claude Artifacts Charts — dashboard otomatis.</p>
-        <div class="course-meta">
-          <span>🎬 6 modul</span>
-          <span>⏱ 1.5 jam</span>
-        </div>
-        <div class="course-price">Rp 199K</div>
-        <a href="#" class="course-btn disabled">🔔 Segera Hadir</a>
-      </div>
-      <div class="course-card">
-        <span class="course-tag tag-coming">SEGERA HADIR</span>
-        <h3>Build Automation dengan Claude</h3>
-        <p>3 automation aktif dengan Zapier + Make + n8n. Claude sebagai "otak" yang jalan 24/7.</p>
-        <div class="course-meta">
-          <span>🎬 7 modul</span>
-          <span>⏱ 2 jam</span>
-        </div>
-        <div class="course-price">Rp 299K</div>
-        <a href="#" class="course-btn disabled">🔔 Segera Hadir</a>
-      </div>
-    </div>
-
-    <!-- LEVEL 3: Advanced -->
-    <div class="level-row">
-      <span class="level-pill advanced">Level 3 · Advanced</span>
-      <div class="level-line"></div>
-      <span class="level-price">Rp 299K – Rp 499K</span>
-    </div>
-    <div class="courses-grid">
-      <div class="course-card">
-        <span class="course-tag tag-coming">SEGERA HADIR</span>
-        <h3>Build AI-Powered App Sederhana</h3>
-        <p>Web app AI live di GitHub Pages tanpa backend. Claude API + HTML/JS + Vercel — dari ide ke deploy.</p>
-        <div class="course-meta">
-          <span>🎬 7 modul</span>
-          <span>⏱ 2 jam</span>
-        </div>
-        <div class="course-price">Rp 299K</div>
-        <a href="#" class="course-btn disabled">🔔 Segera Hadir</a>
-      </div>
-      <div class="course-card">
-        <span class="course-tag tag-coming">SEGERA HADIR</span>
-        <h3>Claude API untuk Developer</h3>
-        <p>Streaming, tool use, caching, Railway deploy. Integrasikan Claude ke project nyata — production-ready.</p>
-        <div class="course-meta">
-          <span>🎬 7 modul</span>
-          <span>⏱ 2 jam</span>
-        </div>
-        <div class="course-price">Rp 399K</div>
-        <a href="#" class="course-btn disabled">🔔 Segera Hadir</a>
-      </div>
-      <div class="course-card">
-        <span class="course-tag tag-coming">SEGERA HADIR</span>
-        <h3>Build & Jual Produk AI</h3>
-        <p>Dari ide ke produk AI yang menghasilkan uang. Framer + Midtrans + WhatsApp — first customer hari ini.</p>
-        <div class="course-meta">
-          <span>🎬 7 modul</span>
-          <span>⏱ 2 jam</span>
-        </div>
-        <div class="course-price">Rp 499K</div>
-        <a href="#" class="course-btn disabled">🔔 Segera Hadir</a>
-      </div>
-    </div>
-
-  </div>
-</section>
-
 <!-- PACKAGES -->
 <section class="packages" id="paket">
   <div class="container">
@@ -773,6 +653,151 @@
       </div>
 
     </div>
+  </div>
+</section>
+
+<!-- COURSES CAROUSEL -->
+<section id="kursus">
+  <div class="container">
+    <div class="section-label">Kurikulum</div>
+    <h2 class="section-title">10 Kursus · 3 Level · ~16 Jam</h2>
+    <p class="section-sub">Atau pilih satu kursus saja — semua tersedia secara individu.</p>
+
+    <div class="carousel-wrap">
+      <div class="carousel" id="courseCarousel">
+
+        <div class="course-card">
+          <span class="course-tag tag-green">GRATIS</span>
+          <h3>20 Prompt Claude Terbaik</h3>
+          <p>Prompt siap pakai untuk email, laporan, konten sosmed, dan lainnya — langsung copy-paste.</p>
+          <div class="course-meta">
+            <span>📄 Panduan Prompt</span>
+            <span>⏱ Bisa dipakai hari ini</span>
+          </div>
+          <div class="course-price">Gratis</div>
+          <a href="prompt-gratis.html" class="course-btn">Pelajari →</a>
+        </div>
+
+        <div class="course-card">
+          <span class="course-tag tag-green">GRATIS</span>
+          <h3>Mulai dengan Claude AI</h3>
+          <p>Dari nol sampai bisa pakai Claude untuk kebutuhan sehari-hari. Projects, Artifacts, Docs.</p>
+          <div class="course-meta">
+            <span>🎬 6 modul</span>
+            <span>⏱ 1 jam</span>
+          </div>
+          <div class="course-price">Gratis</div>
+          <a href="mulai-claude.html" class="course-btn">Pelajari →</a>
+        </div>
+
+        <div class="course-card featured">
+          <div class="popular-badge">POPULER</div>
+          <span class="course-tag tag-blue">BEGINNER</span>
+          <h3>Claude untuk Pekerjaan Sehari-hari</h3>
+          <p>Hemat 3–5 jam kerja per minggu. Gmail, Sheets, Docs, Claude Projects.</p>
+          <div class="course-meta">
+            <span>🎬 6 modul</span>
+            <span>⏱ 1.5 jam</span>
+          </div>
+          <div class="course-price">Rp 149K</div>
+          <a href="kerja-sehari-hari.html" class="course-btn">Pelajari →</a>
+        </div>
+
+        <div class="course-card">
+          <span class="course-tag tag-blue">BEGINNER</span>
+          <h3>Claude untuk Bisnis & UKM</h3>
+          <p>Tokopedia/Shopee, Notion, WhatsApp Business, Instagram, Canva — sistem konten otomatis.</p>
+          <div class="course-meta">
+            <span>🎬 6 modul</span>
+            <span>⏱ 1.5 jam</span>
+          </div>
+          <div class="course-price">Rp 149K</div>
+          <a href="bisnis-ukm.html" class="course-btn">Pelajari →</a>
+        </div>
+
+        <div class="course-card">
+          <span class="course-tag tag-coming">SEGERA HADIR</span>
+          <h3>Claude untuk Konten & Copywriting</h3>
+          <p>Artikel SEO, TikTok scripts, email sequence, landing page — mesin konten nyata.</p>
+          <div class="course-meta">
+            <span>🎬 6 modul</span>
+            <span>⏱ 1.5 jam</span>
+          </div>
+          <div class="course-price">Rp 199K</div>
+          <a href="#" class="course-btn disabled">🔔 Segera Hadir</a>
+        </div>
+
+        <div class="course-card">
+          <span class="course-tag tag-coming">SEGERA HADIR</span>
+          <h3>Claude untuk Analisis Data</h3>
+          <p>Data mentah jadi insight. Google Sheets, Forms, Claude Artifacts Charts — dashboard otomatis.</p>
+          <div class="course-meta">
+            <span>🎬 6 modul</span>
+            <span>⏱ 1.5 jam</span>
+          </div>
+          <div class="course-price">Rp 199K</div>
+          <a href="#" class="course-btn disabled">🔔 Segera Hadir</a>
+        </div>
+
+        <div class="course-card">
+          <span class="course-tag tag-coming">SEGERA HADIR</span>
+          <h3>Build Automation dengan Claude</h3>
+          <p>3 automation aktif dengan Zapier + Make + n8n. Claude sebagai "otak" yang jalan 24/7.</p>
+          <div class="course-meta">
+            <span>🎬 7 modul</span>
+            <span>⏱ 2 jam</span>
+          </div>
+          <div class="course-price">Rp 299K</div>
+          <a href="#" class="course-btn disabled">🔔 Segera Hadir</a>
+        </div>
+
+        <div class="course-card">
+          <span class="course-tag tag-coming">SEGERA HADIR</span>
+          <h3>Build AI-Powered App Sederhana</h3>
+          <p>Web app AI live di GitHub Pages. Claude API + HTML/JS + Vercel — dari ide ke deploy.</p>
+          <div class="course-meta">
+            <span>🎬 7 modul</span>
+            <span>⏱ 2 jam</span>
+          </div>
+          <div class="course-price">Rp 299K</div>
+          <a href="#" class="course-btn disabled">🔔 Segera Hadir</a>
+        </div>
+
+        <div class="course-card">
+          <span class="course-tag tag-coming">SEGERA HADIR</span>
+          <h3>Claude API untuk Developer</h3>
+          <p>Streaming, tool use, caching, Railway deploy. Integrasikan Claude ke project nyata.</p>
+          <div class="course-meta">
+            <span>🎬 7 modul</span>
+            <span>⏱ 2 jam</span>
+          </div>
+          <div class="course-price">Rp 399K</div>
+          <a href="#" class="course-btn disabled">🔔 Segera Hadir</a>
+        </div>
+
+        <div class="course-card">
+          <span class="course-tag tag-coming">SEGERA HADIR</span>
+          <h3>Build & Jual Produk AI</h3>
+          <p>Dari ide ke produk AI yang menghasilkan uang. Framer + Midtrans + WhatsApp.</p>
+          <div class="course-meta">
+            <span>🎬 7 modul</span>
+            <span>⏱ 2 jam</span>
+          </div>
+          <div class="course-price">Rp 499K</div>
+          <a href="#" class="course-btn disabled">🔔 Segera Hadir</a>
+        </div>
+
+      </div>
+      <div class="carousel-nav">
+        <button class="carousel-btn" onclick="scrollCarousel(-1)" aria-label="Sebelumnya">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="carousel-btn" onclick="scrollCarousel(1)" aria-label="Berikutnya">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -945,6 +970,13 @@
 
   draw();
 })();
+</script>
+
+<script>
+  function scrollCarousel(dir) {
+    const c = document.getElementById('courseCarousel');
+    c.scrollBy({ left: dir * 290, behavior: 'smooth' });
+  }
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
