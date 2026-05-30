@@ -6,6 +6,7 @@
   <title>Dashboard — Klaud.id</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
   <style>
     :root {
       --bg: #F8F9FC; --sidebar: #FFFFFF; --surface: #FFFFFF;
@@ -343,10 +344,6 @@
 </div>
 
 <script>
-  const SUPABASE_URL = 'https://bolagqhgagmiewjdjzgz.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_U3DV1nZq3MXdOkfI8oUZdg_EB025f9q';
-  const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
   const ALL_COURSES = {
     'prompt-gratis':      { title: '20 Prompt Claude Terbaik',          icon: '🎁', contentLink: 'prompt-gratis-content.html',    salesLink: 'prompt-gratis.html',     desc: 'Prompt siap pakai untuk email, laporan, konten sosmed, dan lainnya.',             price: 'Gratis',     level: 'Beginner',      modules: 5,  color: 'blue' },
     'mulai-claude':       { title: 'Mulai dengan Claude AI',             icon: '🚀', contentLink: 'mulai-claude-content.html',      salesLink: 'mulai-claude.html',      desc: 'Dari nol sampai bisa pakai Claude untuk kebutuhan sehari-hari — dalam 1 jam.',    price: 'Gratis',     level: 'Beginner',      modules: 6,  color: 'blue' },

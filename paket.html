@@ -380,12 +380,9 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
 <script>
   (async () => {
-    const sbClient = window.supabase.createClient(
-      'https://bolagqhgagmiewjdjzgz.supabase.co',
-      'sb_publishable_U3DV1nZq3MXdOkfI8oUZdg_EB025f9q'
-    );
     const { data: { session } } = await sbClient.auth.getSession();
     if (session) {
       const loginBtn = document.getElementById('navLoginBtn');

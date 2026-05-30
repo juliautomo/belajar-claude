@@ -6,6 +6,7 @@
 <title>Claude untuk Bisnis & UKM — Klaud.id</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
 <style>
   :root {
     --bg: #F8F9FC; --sidebar: #FFFFFF; --navy: #13163A;
@@ -374,9 +375,6 @@ Format: Google Docs-ready, siap presentasi.<button class="copy-btn" onclick="cop
 </div>
 
 <script>
-  const SUPABASE_URL = 'https://bolagqhgagmiewjdjzgz.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_U3DV1nZq3MXdOkfI8oUZdg_EB025f9q';
-  const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   const TOTAL = 6;
   let current = 1;
   const done = new Set();

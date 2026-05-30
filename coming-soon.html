@@ -165,6 +165,7 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
 <script>
   // Course data for query param display
   const COURSE_DATA = {
@@ -197,11 +198,7 @@
     btn.textContent = 'Mendaftar...';
 
     try {
-      const sb = window.supabase.createClient(
-        'https://bolagqhgagmiewjdjzgz.supabase.co',
-        'sb_publishable_U3DV1nZq3MXdOkfI8oUZdg_EB025f9q'
-      );
-      await sb.from('waitlist').upsert({
+      await sbClient.from('waitlist').upsert({
         email,
         course_slug: courseSlug || 'general',
       }, { onConflict: 'email,course_slug', ignoreDuplicates: true });
@@ -215,11 +212,7 @@
 
   // Pre-fill email if logged in
   (async () => {
-    const sb = window.supabase.createClient(
-      'https://bolagqhgagmiewjdjzgz.supabase.co',
-      'sb_publishable_U3DV1nZq3MXdOkfI8oUZdg_EB025f9q'
-    );
-    const { data: { session } } = await sb.auth.getSession();
+    const { data: { session } } = await sbClient.auth.getSession();
     if (session) {
       document.getElementById('emailInput').value = session.user.email;
     }
