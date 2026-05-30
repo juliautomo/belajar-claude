@@ -384,8 +384,13 @@ Tone: profesional, konstruktif.<button class="copy-btn" onclick="copyPrompt(this
     } catch (e) {}
   }
 
+  function saveProgress() {
+    localStorage.setItem('klaud_progress_kerja-sehari-hari', done.size);
+  }
+
   function showModule(n) {
     done.add(current);
+    saveProgress();
     document.getElementById(`check${current}`).textContent = '✓';
     document.getElementById(`nav-mod${current}`).classList.add('done');
     document.getElementById(`panel${current}`).classList.remove('active');

@@ -392,8 +392,13 @@ Format: Google Docs-ready, siap presentasi.<button class="copy-btn" onclick="cop
     } catch (e) {}
   }
 
+  function saveProgress() {
+    localStorage.setItem('klaud_progress_bisnis-ukm', done.size);
+  }
+
   function showModule(n) {
     done.add(current);
+    saveProgress();
     document.getElementById(`check${current}`).textContent = '✓';
     document.getElementById(`nav-mod${current}`).classList.add('done');
     document.getElementById(`panel${current}`).classList.remove('active');

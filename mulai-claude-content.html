@@ -530,9 +530,14 @@ Sertakan: [hal spesifik yang harus ada]<button class="copy-btn" onclick="copyPro
     } catch (e) {}
   }
 
+  function saveProgress() {
+    localStorage.setItem('klaud_progress_mulai-claude', done.size);
+  }
+
   function showModule(n) {
     // Mark previous as done
     done.add(current);
+    saveProgress();
     document.getElementById(`check${current}`).textContent = '✓';
     document.getElementById(`nav-mod${current}`).classList.add('done');
 
