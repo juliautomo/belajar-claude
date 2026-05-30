@@ -392,13 +392,21 @@ Format: Google Docs-ready, siap presentasi.<button class="copy-btn" onclick="cop
     } catch (e) {}
   }
 
-  function saveProgress() {
+  async function saveProgress(moduleNum) {
     localStorage.setItem('klaud_progress_bisnis-ukm', done.size);
+    try {
+      const { data: { session } } = await sbClient.auth.getSession();
+      if (session) {
+        await sbClient.from('module_completions').upsert({
+          email: session.user.email, course_slug: 'bisnis-ukm', module_num: moduleNum
+        }, { onConflict: 'email,course_slug,module_num', ignoreDuplicates: true });
+      }
+    } catch (e) {}
   }
 
   function showModule(n) {
     done.add(current);
-    saveProgress();
+    saveProgress(current);
     document.getElementById(`check${current}`).textContent = '✓';
     document.getElementById(`nav-mod${current}`).classList.add('done');
     document.getElementById(`panel${current}`).classList.remove('active');

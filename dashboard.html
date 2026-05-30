@@ -362,11 +362,37 @@
 
   const LEVEL_ORDER = { 'Beginner': 0, 'Intermediate': 1, 'Advanced': 2 };
 
-  // Read progress from localStorage
+  // Progress map loaded from Supabase, keyed by course_slug
+  let progressMap = {};
+
+  async function loadProgress(email) {
+    try {
+      const { data } = await sbClient
+        .from('module_completions')
+        .select('course_slug, module_num, completed_at')
+        .eq('email', email)
+        .order('completed_at', { ascending: false });
+
+      if (data) {
+        data.forEach(row => {
+          if (!progressMap[row.course_slug]) progressMap[row.course_slug] = new Set();
+          progressMap[row.course_slug].add(row.module_num);
+        });
+        // Sync to localStorage as fallback
+        Object.entries(progressMap).forEach(([slug, mods]) => {
+          localStorage.setItem(`klaud_progress_${slug}`, mods.size);
+        });
+      }
+    } catch (e) {
+      // Fall back to localStorage if Supabase fails
+    }
+  }
+
   function getProgress(slug) {
     const total = ALL_COURSES[slug]?.modules || 0;
     if (total === 0) return { done: 0, total: 0, pct: 100 };
-    const done = parseInt(localStorage.getItem(`klaud_progress_${slug}`) || '0');
+    const done = progressMap[slug]?.size
+      ?? parseInt(localStorage.getItem(`klaud_progress_${slug}`) || '0');
     return { done, total, pct: Math.round((done / total) * 100) };
   }
 
@@ -391,6 +417,9 @@
     const hour = new Date().getHours();
     const greet = hour < 12 ? 'Selamat pagi' : hour < 17 ? 'Selamat siang' : 'Selamat malam';
     document.getElementById('greetingText').textContent = `${greet}, ${name}! 👋`;
+
+    // Load progress from Supabase
+    await loadProgress(email);
 
     // Auto-enroll free course
     try {
