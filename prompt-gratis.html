@@ -570,6 +570,7 @@ Buat ringkasan eksekutif...
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
+  <script src="login-modal.js"></script>
 <script>
   // Check session on load — if already logged in, redirect straight to content
   (async () => {
@@ -578,7 +579,7 @@ Buat ringkasan eksekutif...
   })();
 
   function accessCourse() {
-    window.location.href = 'login.html';
+    window.openLoginModal();
   }
 
   function validateForm(name, email) {
