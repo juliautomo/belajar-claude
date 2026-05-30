@@ -8,310 +8,410 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root {
-    --bg: #EDECF5; --surface: #F5F4FB; --surface-2: #FFFFFF;
-    --navy: #13163A; --blue: #4A72D6; --blue-pale: #D4DEFA;
-    --green: #1D9E75; --green-pale: rgba(29,158,117,0.1);
-    --muted: #6B7080; --gold: #EF9F27;
-    --border: rgba(74,114,214,0.15);
+    --bg: #F8F9FC; --sidebar: #FFFFFF; --main: #FFFFFF;
+    --navy: #13163A; --blue: #4A72D6; --blue-pale: #EEF2FF;
+    --green: #1D9E75; --green-pale: #ECFDF5;
+    --muted: #6B7080; --border: #E8EAF0; --gold: #EF9F27;
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--navy); }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--navy); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
+  /* Top nav */
   nav {
-    position: sticky; top: 0; z-index: 100;
-    padding: 0 48px; height: 64px;
+    height: 56px; padding: 0 24px;
     display: flex; align-items: center; justify-content: space-between;
-    background: rgba(237,236,245,0.92); backdrop-filter: blur(14px);
-    border-bottom: 1px solid var(--border);
+    background: #fff; border-bottom: 1px solid var(--border);
+    flex-shrink: 0; z-index: 10;
   }
-  .nav-logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; color: var(--navy); text-decoration: none; }
+  .nav-left { display: flex; align-items: center; gap: 16px; }
+  .nav-logo { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; color: var(--navy); text-decoration: none; }
   .nav-logo span { color: var(--blue); }
-  .nav-right { display: flex; align-items: center; gap: 16px; }
+  .nav-divider { width: 1px; height: 20px; background: var(--border); }
+  .nav-course-title { font-size: 13px; font-weight: 600; color: var(--muted); }
+  .nav-right { display: flex; align-items: center; gap: 14px; }
   .nav-email { font-size: 12px; color: var(--muted); }
-  .nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; font-weight: 500; transition: color 0.2s; }
-  .nav-links a:hover { color: var(--navy); }
-  .logout-btn { background: transparent; border: 1.5px solid var(--border); color: var(--muted); padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: border-color 0.2s, color 0.2s; }
+  .nav-back { font-size: 13px; color: var(--muted); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+  .nav-back:hover { color: var(--navy); }
+  .logout-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 5px 12px; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s; }
   .logout-btn:hover { border-color: var(--blue); color: var(--navy); }
 
-  .container { max-width: 860px; margin: 0 auto; padding: 40px 20px 80px; }
-  .loading { text-align: center; padding: 60px; color: var(--muted); font-size: 14px; }
+  /* Layout */
+  .layout { display: flex; flex: 1; overflow: hidden; }
 
-  /* Course Header */
-  .course-header {
-    background: var(--surface-2); border-radius: 16px; padding: 32px 36px;
-    margin-bottom: 32px; border: 1px solid var(--border);
-    box-shadow: 0 2px 12px rgba(74,114,214,0.06);
+  /* Sidebar */
+  .sidebar {
+    width: 280px; flex-shrink: 0;
+    background: var(--sidebar); border-right: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    overflow-y: auto;
   }
-  .course-level { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--blue); margin-bottom: 10px; font-family: 'DM Mono', monospace; }
-  .course-header h1 { font-size: 26px; font-weight: 800; color: var(--navy); margin-bottom: 8px; letter-spacing: -0.5px; }
-  .course-header p { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
-  .course-meta-row { display: flex; gap: 20px; flex-wrap: wrap; }
-  .course-meta-item { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 5px; }
-  .tools-row { margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap; }
-  .tool-badge { font-size: 11px; font-weight: 600; background: var(--blue-pale); color: var(--blue); padding: 3px 10px; border-radius: 100px; }
+  .sidebar-header { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
+  .sidebar-course-name { font-size: 14px; font-weight: 800; color: var(--navy); line-height: 1.35; margin-bottom: 10px; }
+  .progress-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .progress-bar { flex: 1; height: 5px; background: var(--border); border-radius: 10px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--blue); border-radius: 10px; transition: width 0.3s; }
+  .progress-label { font-size: 11px; color: var(--muted); white-space: nowrap; font-family: 'DM Mono', monospace; }
 
-  /* Progress / Sections */
-  .section-label { font-size: 11px; font-weight: 700; color: var(--blue); margin-bottom: 14px; margin-top: 32px; text-transform: uppercase; letter-spacing: 1.5px; font-family: 'DM Mono', monospace; }
+  .sidebar-section-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); padding: 16px 20px 8px; font-family: 'DM Mono', monospace; }
 
-  /* Module cards */
-  .module-card {
-    background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px;
-    margin-bottom: 12px; overflow: hidden; transition: border-color 0.15s;
+  .mod-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 11px 20px; cursor: pointer;
+    transition: background 0.15s; border-left: 3px solid transparent;
   }
-  .module-card:hover { border-color: var(--blue); }
-  .module-header {
-    padding: 18px 22px; display: flex; align-items: center; gap: 14px;
-    cursor: pointer; user-select: none; transition: background 0.15s;
+  .mod-item:hover { background: var(--bg); }
+  .mod-item.active { background: var(--blue-pale); border-left-color: var(--blue); }
+  .mod-check {
+    width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; margin-top: 1px;
+    border: 2px solid var(--border); display: flex; align-items: center; justify-content: center;
+    font-size: 10px; transition: all 0.2s;
   }
-  .module-header:hover { background: var(--surface); }
-  .module-num { font-size: 18px; font-weight: 800; color: var(--blue); min-width: 32px; font-family: 'DM Mono', monospace; }
-  .module-info { flex: 1; }
-  .module-info h3 { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
-  .module-info p { font-size: 12px; color: var(--muted); }
-  .module-chip { font-size: 10px; font-weight: 700; background: var(--blue-pale); color: var(--blue); padding: 3px 9px; border-radius: 100px; white-space: nowrap; }
-  .module-arrow { font-size: 14px; color: var(--muted); transition: transform 0.2s; }
-  .module-card.open .module-arrow { transform: rotate(90deg); }
+  .mod-item.done .mod-check { background: var(--green); border-color: var(--green); color: #fff; }
+  .mod-item.active .mod-check { border-color: var(--blue); background: var(--blue-pale); }
+  .mod-item-info { flex: 1; }
+  .mod-item-title { font-size: 12px; font-weight: 600; color: var(--navy); line-height: 1.4; margin-bottom: 2px; }
+  .mod-item.active .mod-item-title { color: var(--blue); }
+  .mod-item-sub { font-size: 11px; color: var(--muted); }
 
-  .module-body { display: none; padding: 0 22px 22px 22px; border-top: 1px solid var(--border); }
-  .module-card.open .module-body { display: block; }
+  .sidebar-footer { margin-top: auto; padding: 16px 20px; border-top: 1px solid var(--border); }
+  .sidebar-tools { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tool-chip { font-size: 10px; font-weight: 600; background: var(--blue-pale); color: var(--blue); padding: 2px 8px; border-radius: 100px; }
 
-  .module-desc { font-size: 13px; color: var(--muted); line-height: 1.7; margin: 14px 0 16px; }
+  /* Main content */
+  .main { flex: 1; overflow-y: auto; background: var(--bg); }
+  .main-inner { max-width: 720px; margin: 0 auto; padding: 36px 32px 60px; }
 
-  /* Prompt to try */
-  .prompt-section { margin-bottom: 16px; }
-  .prompt-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-family: 'DM Mono', monospace; }
+  .breadcrumb { font-size: 12px; color: var(--muted); margin-bottom: 24px; display: flex; align-items: center; gap: 6px; }
+  .breadcrumb span { color: var(--muted); }
+  .breadcrumb strong { color: var(--navy); }
+
+  .module-panel { display: none; }
+  .module-panel.active { display: block; }
+
+  .module-title { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; color: var(--navy); margin-bottom: 6px; line-height: 1.3; }
+  .module-subtitle { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+
+  .module-desc-box {
+    background: #fff; border: 1px solid var(--border); border-radius: 12px;
+    padding: 20px 24px; margin-bottom: 24px;
+    font-size: 14px; color: var(--muted); line-height: 1.8;
+  }
+  .module-desc-box strong { color: var(--navy); }
+
+  .prompt-section { margin-bottom: 20px; }
+  .prompt-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
+    color: var(--muted); margin-bottom: 8px; font-family: 'DM Mono', monospace;
+    display: flex; align-items: center; gap: 6px;
+  }
   .prompt-box {
-    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
-    padding: 14px 16px; font-size: 13px; color: var(--navy); line-height: 1.7;
-    font-family: 'DM Mono', monospace; position: relative;
+    background: #fff; border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px 48px 16px 16px; font-size: 13px; color: var(--navy);
+    line-height: 1.75; font-family: 'DM Mono', monospace;
+    white-space: pre-wrap; position: relative;
   }
   .copy-btn {
-    position: absolute; top: 8px; right: 8px;
+    position: absolute; top: 10px; right: 10px;
     background: var(--navy); color: #fff; border: none; border-radius: 6px;
     padding: 4px 10px; font-size: 11px; font-weight: 600; cursor: pointer;
     font-family: 'Plus Jakarta Sans', sans-serif; transition: background 0.2s;
   }
   .copy-btn:hover { background: var(--blue); }
+  .copy-btn.copied { background: var(--green); }
 
-  /* Case study */
   .case-box {
-    background: var(--blue-pale); border-radius: 10px; padding: 14px 16px;
-    margin-top: 12px;
+    background: var(--blue-pale); border-radius: 10px;
+    padding: 14px 18px; margin-top: 14px;
+    border-left: 3px solid var(--blue);
   }
-  .case-box .case-role { font-size: 10px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; font-family: 'DM Mono', monospace; }
-  .case-box p { font-size: 13px; color: var(--navy); line-height: 1.6; }
+  .case-role { font-size: 10px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; font-family: 'DM Mono', monospace; }
+  .case-box p { font-size: 13px; color: var(--navy); line-height: 1.65; }
 
-  /* Output section */
+  /* Output / completion box */
   .output-box {
-    background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px;
-    padding: 28px 32px; display: flex; align-items: flex-start; gap: 16px;
-    margin-top: 32px; box-shadow: 0 2px 12px rgba(74,114,214,0.06);
+    background: var(--green-pale); border: 1px solid rgba(29,158,117,0.2);
+    border-radius: 12px; padding: 20px 24px; margin-top: 24px;
+    display: flex; gap: 14px; align-items: flex-start;
   }
-  .output-icon { font-size: 32px; }
-  .output-box h3 { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+  .output-icon { font-size: 28px; flex-shrink: 0; }
+  .output-box h3 { font-size: 15px; font-weight: 700; color: var(--green); margin-bottom: 4px; }
   .output-box p { font-size: 13px; color: var(--muted); line-height: 1.65; }
 
-  /* Next course */
+  /* Next courses (shown on last panel) */
+  .next-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin: 28px 0 12px; font-family: 'DM Mono', monospace; }
   .next-card {
-    background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px;
-    padding: 24px; display: flex; align-items: center; gap: 20px; margin-top: 14px;
-    text-decoration: none; transition: border-color 0.2s;
+    background: #fff; border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px 20px; display: flex; align-items: center; gap: 14px;
+    text-decoration: none; margin-bottom: 10px; transition: border-color 0.2s, box-shadow 0.2s;
   }
-  .next-card:hover { border-color: var(--blue); }
-  .next-icon { font-size: 32px; }
+  .next-card:hover { border-color: var(--blue); box-shadow: 0 2px 12px rgba(74,114,214,0.08); }
+  .next-icon { font-size: 26px; flex-shrink: 0; }
   .next-info { flex: 1; }
-  .next-info h4 { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
-  .next-info p { font-size: 12px; color: var(--muted); }
-  .next-arrow { font-size: 20px; color: var(--blue); }
-  @media (max-width: 768px) { nav { padding: 0 20px; } }
+  .next-info h4 { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
+  .next-info p  { font-size: 12px; color: var(--muted); }
+  .next-arrow { font-size: 16px; color: var(--blue); }
+
+  /* Bottom navigation */
+  .nav-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--border);
+  }
+  .nav-btn {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 600;
+    cursor: pointer; border: 1px solid var(--border); transition: all 0.2s;
+    background: #fff; color: var(--navy); font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .nav-btn:hover { border-color: var(--blue); color: var(--blue); }
+  .nav-btn:disabled { opacity: 0.35; cursor: default; pointer-events: none; }
+  .nav-btn.primary { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .nav-btn.primary:hover { background: var(--blue); border-color: var(--blue); }
+  .nav-counter { font-size: 12px; color: var(--muted); font-family: 'DM Mono', monospace; }
+
+  /* Loading */
+  .loading { display: flex; align-items: center; justify-content: center; height: 100vh; font-size: 14px; color: var(--muted); }
+
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main-inner { padding: 24px 16px 48px; }
+    .module-title { font-size: 20px; }
+  }
 </style>
 </head>
 <body>
 
 <nav>
-  <a href="index.html" class="nav-logo">Klaud<span>.id</span></a>
+  <div class="nav-left">
+    <a href="index.html" class="nav-logo">Klaud<span>.id</span></a>
+    <div class="nav-divider"></div>
+    <span class="nav-course-title">Mulai dengan Claude AI</span>
+  </div>
   <div class="nav-right">
-      <a href="dashboard.html" style="font-size:13px;color:var(--muted);text-decoration:none;font-weight:500;">← Dashboard</a>
+    <a href="dashboard.html" class="nav-back">← Dashboard</a>
     <span class="nav-email" id="navEmail"></span>
     <button class="logout-btn" onclick="logout()">Keluar</button>
   </div>
 </nav>
 
-<div class="container">
-  <div id="loading" class="loading">Memuat materi kursus...</div>
+<div id="loadingScreen" class="loading">Memuat materi kursus...</div>
 
-  <div id="content" style="display:none;">
+<div class="layout" id="mainLayout" style="display:none;">
 
-    <!-- Course Header -->
-    <div class="course-header">
-      <div class="course-level">Level 1 · Beginner · 1 Jam · 6 Modul</div>
-      <h1>Mulai dengan Claude AI 🚀</h1>
-      <p>Dari nol sampai bisa pakai Claude untuk kebutuhan sehari-hari. Setiap modul praktis dan langsung bisa dicoba.</p>
-      <div class="course-meta-row">
-        <span class="course-meta-item">🎬 6 modul</span>
-        <span class="course-meta-item">⏱ ~1 jam total</span>
-        <span class="course-meta-item">🎁 Gratis</span>
-      </div>
-      <div class="tools-row">
-        <span class="tool-badge">Claude.ai</span>
-        <span class="tool-badge">Claude Projects</span>
-        <span class="tool-badge">Claude Artifacts</span>
-        <span class="tool-badge">Google Docs</span>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-course-name">Mulai dengan Claude AI 🚀</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        <span class="progress-label" id="progressLabel">0/6</span>
       </div>
     </div>
 
-    <!-- Modules -->
-    <div class="section-label">Materi Kursus</div>
+    <div class="sidebar-section-label">Materi Kursus</div>
 
-    <!-- Module 1 -->
-    <div class="module-card" id="mod1">
-      <div class="module-header" onclick="toggleModule('mod1')">
-        <div class="module-num">01</div>
-        <div class="module-info">
-          <h3>Claude.ai — Setup & Interface Tour</h3>
-          <p>Setup akun, kenali interface, dan mulai pakai Claude hari ini</p>
-        </div>
-        <span class="module-chip">Claude.ai</span>
-        <span class="module-arrow">▶</span>
+    <div class="mod-item active" id="nav-mod1" onclick="showModule(1)">
+      <div class="mod-check" id="check1"></div>
+      <div class="mod-item-info">
+        <div class="mod-item-title">Claude.ai — Setup & Interface Tour</div>
+        <div class="mod-item-sub">Modul 1 · Claude.ai</div>
       </div>
-      <div class="module-body">
-        <p class="module-desc">Di modul ini kamu akan setup akun Claude, memahami perbedaan model (Haiku, Sonnet, Opus), dan langsung mencoba conversation pertama. Target: dalam 10 menit pertama kamu sudah punya akun dan bisa mulai chat.</p>
+    </div>
+    <div class="mod-item" id="nav-mod2" onclick="showModule(2)">
+      <div class="mod-check" id="check2"></div>
+      <div class="mod-item-info">
+        <div class="mod-item-title">Prompt Anatomy — Konteks + Instruksi + Format</div>
+        <div class="mod-item-sub">Modul 2 · Prompt</div>
+      </div>
+    </div>
+    <div class="mod-item" id="nav-mod3" onclick="showModule(3)">
+      <div class="mod-check" id="check3"></div>
+      <div class="mod-item-info">
+        <div class="mod-item-title">Role Prompting — Claude sebagai Ahli</div>
+        <div class="mod-item-sub">Modul 3 · Role Prompting</div>
+      </div>
+    </div>
+    <div class="mod-item" id="nav-mod4" onclick="showModule(4)">
+      <div class="mod-check" id="check4"></div>
+      <div class="mod-item-info">
+        <div class="mod-item-title">Claude Artifacts — Generate Dokumen</div>
+        <div class="mod-item-sub">Modul 4 · Artifacts</div>
+      </div>
+    </div>
+    <div class="mod-item" id="nav-mod5" onclick="showModule(5)">
+      <div class="mod-check" id="check5"></div>
+      <div class="mod-item-info">
+        <div class="mod-item-title">Claude Projects — Simpan Konteks Kerja</div>
+        <div class="mod-item-sub">Modul 5 · Projects</div>
+      </div>
+    </div>
+    <div class="mod-item" id="nav-mod6" onclick="showModule(6)">
+      <div class="mod-check" id="check6"></div>
+      <div class="mod-item-info">
+        <div class="mod-item-title">Google Docs Export — Workflow End-to-End</div>
+        <div class="mod-item-sub">Modul 6 · Google Docs</div>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-section-label" style="padding:0 0 8px;">Tools yang dipakai</div>
+      <div class="sidebar-tools">
+        <span class="tool-chip">Claude.ai</span>
+        <span class="tool-chip">Claude Projects</span>
+        <span class="tool-chip">Claude Artifacts</span>
+        <span class="tool-chip">Google Docs</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <div class="main-inner">
+
+      <!-- MODULE 1 -->
+      <div class="module-panel active" id="panel1">
+        <div class="breadcrumb">
+          <span>Mulai dengan Claude AI</span>
+          <span>›</span>
+          <strong>Modul 1</strong>
+        </div>
+        <h1 class="module-title">Claude.ai — Setup & Interface Tour</h1>
+        <p class="module-subtitle">Setup akun, kenali interface, dan mulai pakai Claude hari ini</p>
+
+        <div class="module-desc-box">
+          Di modul ini kamu akan setup akun Claude, memahami perbedaan model (Haiku, Sonnet, Opus), dan langsung mencoba conversation pertama. Target: dalam 10 menit pertama kamu sudah punya akun dan bisa mulai chat.
+        </div>
+
         <div class="prompt-section">
           <div class="prompt-label">📝 Coba Prompt Ini</div>
-          <div class="prompt-box">
-Halo Claude, saya [nama] bekerja sebagai [jabatan] di [industri].
+          <div class="prompt-box">Halo Claude, saya [nama] bekerja sebagai [jabatan] di [industri].
 Saya baru pertama kali pakai Claude.
 
 Bisa bantu saya memahami 3 cara terbaik untuk memanfaatkan Claude
 dalam pekerjaan sehari-hari saya? Berikan contoh spesifik yang
-relevan dengan bidang saya.
-            <button class="copy-btn" onclick="copyPrompt(this)">Salin</button>
+relevan dengan bidang saya.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="case-box">
+            <div class="case-role">🎯 Contoh: HRD Manager</div>
+            <p>"Halo Claude, saya Rina, HRD Manager di perusahaan manufaktur. Saya baru pertama kali pakai Claude. Bisa bantu saya memahami 3 cara terbaik memanfaatkan Claude untuk pekerjaan HR sehari-hari?"</p>
           </div>
         </div>
-        <div class="case-box">
-          <div class="case-role">🎯 Contoh: HRD Manager</div>
-          <p>"Halo Claude, saya Rina, HRD Manager di perusahaan manufaktur. Saya baru pertama kali pakai Claude. Bisa bantu saya memahami 3 cara terbaik memanfaatkan Claude untuk pekerjaan HR sehari-hari?"</p>
-        </div>
-      </div>
-    </div>
 
-    <!-- Module 2 -->
-    <div class="module-card" id="mod2">
-      <div class="module-header" onclick="toggleModule('mod2')">
-        <div class="module-num">02</div>
-        <div class="module-info">
-          <h3>Prompt Anatomy — Konteks + Instruksi + Format</h3>
-          <p>Struktur prompt yang menghasilkan output tepat setiap kali</p>
+        <div class="nav-bottom">
+          <button class="nav-btn" disabled>← Sebelumnya</button>
+          <span class="nav-counter">1 / 6</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
-        <span class="module-chip">Prompt</span>
-        <span class="module-arrow">▶</span>
       </div>
-      <div class="module-body">
-        <p class="module-desc">Formula prompt yang efektif selalu punya 3 bagian: <strong>Konteks</strong> (siapa kamu, apa situasinya), <strong>Instruksi</strong> (apa yang kamu minta), dan <strong>Format</strong> (bagaimana output yang kamu inginkan). Kuasai ini dan 80% output Claude akan langsung tepat.</p>
+
+      <!-- MODULE 2 -->
+      <div class="module-panel" id="panel2">
+        <div class="breadcrumb"><span>Mulai dengan Claude AI</span><span>›</span><strong>Modul 2</strong></div>
+        <h1 class="module-title">Prompt Anatomy — Konteks + Instruksi + Format</h1>
+        <p class="module-subtitle">Struktur prompt yang menghasilkan output tepat setiap kali</p>
+
+        <div class="module-desc-box">
+          Formula prompt yang efektif selalu punya 3 bagian: <strong>Konteks</strong> (siapa kamu, apa situasinya), <strong>Instruksi</strong> (apa yang kamu minta), dan <strong>Format</strong> (bagaimana output yang kamu inginkan). Kuasai ini dan 80% output Claude akan langsung tepat.
+        </div>
+
         <div class="prompt-section">
           <div class="prompt-label">📝 Template Prompt Anatomy</div>
-          <div class="prompt-box">
-[KONTEKS] Saya adalah [jabatan] di [perusahaan/industri].
+          <div class="prompt-box">[KONTEKS] Saya adalah [jabatan] di [perusahaan/industri].
 [SITUASI] Saya sedang mengerjakan [deskripsi pekerjaan/masalah].
 
 [INSTRUKSI] Tolong bantu saya [apa yang diminta dengan spesifik].
 
 [FORMAT] Sajikan dalam format [list/tabel/paragraf/poin]
 dengan panjang sekitar [pendek/sedang/detail].
-[TAMBAHAN] Gunakan Bahasa Indonesia yang [formal/kasual/profesional].
-            <button class="copy-btn" onclick="copyPrompt(this)">Salin</button>
+[TAMBAHAN] Gunakan Bahasa Indonesia yang [formal/kasual/profesional].<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="case-box">
+            <div class="case-role">🎯 Contoh Nyata: Manajer Proyek</div>
+            <p>"[KONTEKS] Saya Manajer Proyek di startup fintech. [SITUASI] Baru selesai meeting 1 jam dan punya 2 halaman catatan berantakan. [INSTRUKSI] Tolong buatkan ringkasan meeting dengan action items, PIC, dan deadline. [FORMAT] Gunakan format tabel, bahasa formal."</p>
           </div>
         </div>
-        <div class="case-box">
-          <div class="case-role">🎯 Contoh Nyata: Manajer Proyek</div>
-          <p>"[KONTEKS] Saya Manajer Proyek di startup fintech. [SITUASI] Baru selesai meeting 1 jam dan punya 2 halaman catatan berantakan. [INSTRUKSI] Tolong buatkan ringkasan meeting dengan action items, PIC, dan deadline. [FORMAT] Gunakan format tabel, bahasa formal."</p>
-        </div>
-      </div>
-    </div>
 
-    <!-- Module 3 -->
-    <div class="module-card" id="mod3">
-      <div class="module-header" onclick="toggleModule('mod3')">
-        <div class="module-num">03</div>
-        <div class="module-info">
-          <h3>Role Prompting — Claude sebagai Ahli</h3>
-          <p>Tingkatkan kualitas output dengan minta Claude berperan sebagai spesialis</p>
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">2 / 6</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
-        <span class="module-chip">Role Prompting</span>
-        <span class="module-arrow">▶</span>
       </div>
-      <div class="module-body">
-        <p class="module-desc">Ketika kamu meminta Claude "berperan sebagai" ahli tertentu, output yang dihasilkan jauh lebih relevan dan tajam. Teknik ini sangat berguna untuk konsultasi, review, atau situasi yang butuh perspektif profesional.</p>
+
+      <!-- MODULE 3 -->
+      <div class="module-panel" id="panel3">
+        <div class="breadcrumb"><span>Mulai dengan Claude AI</span><span>›</span><strong>Modul 3</strong></div>
+        <h1 class="module-title">Role Prompting — Claude sebagai Ahli</h1>
+        <p class="module-subtitle">Tingkatkan kualitas output dengan minta Claude berperan sebagai spesialis</p>
+
+        <div class="module-desc-box">
+          Ketika kamu meminta Claude "berperan sebagai" ahli tertentu, output yang dihasilkan jauh lebih relevan dan tajam. Teknik ini sangat berguna untuk konsultasi, review, atau situasi yang butuh perspektif profesional.
+        </div>
+
         <div class="prompt-section">
           <div class="prompt-label">📝 Template Role Prompting</div>
-          <div class="prompt-box">
-Berperan sebagai [spesialis/ahli] berpengalaman 10+ tahun
+          <div class="prompt-box">Berperan sebagai [spesialis/ahli] berpengalaman 10+ tahun
 di bidang [bidang spesifik] untuk konteks Indonesia.
 
 Saya sedang menghadapi situasi berikut:
 [jelaskan situasi kamu]
 
 Berikan analisis dan rekomendasi konkret yang bisa saya
-jalankan hari ini.
-            <button class="copy-btn" onclick="copyPrompt(this)">Salin</button>
+jalankan hari ini.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="case-box">
+            <div class="case-role">🎯 5 Role yang Paling Berguna</div>
+            <p>Senior HRD Konsultan · Business Strategist · Senior Copywriter · Financial Analyst · Customer Service Expert. Coba satu role yang paling relevan dengan pekerjaan kamu hari ini.</p>
           </div>
         </div>
-        <div class="case-box">
-          <div class="case-role">🎯 5 Role yang Paling Berguna</div>
-          <p>Senior HRD Konsultan · Business Strategist · Senior Copywriter · Financial Analyst · Customer Service Expert. Coba satu role yang paling relevan dengan pekerjaan kamu hari ini.</p>
-        </div>
-      </div>
-    </div>
 
-    <!-- Module 4 -->
-    <div class="module-card" id="mod4">
-      <div class="module-header" onclick="toggleModule('mod4')">
-        <div class="module-num">04</div>
-        <div class="module-info">
-          <h3>Claude Artifacts — Generate Dokumen Langsung</h3>
-          <p>Buat tabel, template, dan dokumen tanpa copy-paste ke tools lain</p>
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">3 / 6</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
-        <span class="module-chip">Claude Artifacts</span>
-        <span class="module-arrow">▶</span>
       </div>
-      <div class="module-body">
-        <p class="module-desc">Claude Artifacts memungkinkan kamu membuat dokumen, tabel interaktif, dan template langsung di dalam Claude — hasilnya bisa di-download atau dibuka di tab terpisah. Tidak perlu buka Google Docs dulu.</p>
+
+      <!-- MODULE 4 -->
+      <div class="module-panel" id="panel4">
+        <div class="breadcrumb"><span>Mulai dengan Claude AI</span><span>›</span><strong>Modul 4</strong></div>
+        <h1 class="module-title">Claude Artifacts — Generate Dokumen Langsung</h1>
+        <p class="module-subtitle">Buat tabel, template, dan dokumen tanpa copy-paste ke tools lain</p>
+
+        <div class="module-desc-box">
+          Claude Artifacts memungkinkan kamu membuat dokumen, tabel interaktif, dan template langsung di dalam Claude — hasilnya bisa di-download atau dibuka di tab terpisah. Tidak perlu buka Google Docs dulu.
+        </div>
+
         <div class="prompt-section">
           <div class="prompt-label">📝 Prompt untuk Artifacts</div>
-          <div class="prompt-box">
-Buatkan [jenis dokumen: tabel/template/checklist] untuk:
+          <div class="prompt-box">Buatkan [jenis dokumen: tabel/template/checklist] untuk:
 [deskripsi apa yang kamu butuhkan]
 
 Gunakan format yang rapi dan langsung bisa dipakai.
 Sertakan semua kolom/bagian yang dibutuhkan untuk
-[tujuan spesifik dokumen].
-            <button class="copy-btn" onclick="copyPrompt(this)">Salin</button>
+[tujuan spesifik dokumen].<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="case-box">
+            <div class="case-role">🎯 Contoh: Guru SMA</div>
+            <p>"Buatkan 20 soal pilihan ganda Matematika kelas 10 topik Fungsi Kuadrat via Artifacts. Sertakan kunci jawaban di bagian bawah. Format: siap cetak."</p>
           </div>
         </div>
-        <div class="case-box">
-          <div class="case-role">🎯 Contoh: Guru SMA</div>
-          <p>"Buatkan 20 soal pilihan ganda Matematika kelas 10 topik Fungsi Kuadrat via Artifacts. Sertakan kunci jawaban di bagian bawah. Format: siap cetak."</p>
-        </div>
-      </div>
-    </div>
 
-    <!-- Module 5 -->
-    <div class="module-card" id="mod5">
-      <div class="module-header" onclick="toggleModule('mod5')">
-        <div class="module-num">05</div>
-        <div class="module-info">
-          <h3>Claude Projects — Simpan Konteks Kerja</h3>
-          <p>Setup project pertama kamu agar tidak perlu jelaskan ulang tiap sesi</p>
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">4 / 6</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
-        <span class="module-chip">Claude Projects</span>
-        <span class="module-arrow">▶</span>
       </div>
-      <div class="module-body">
-        <p class="module-desc">Claude Projects menyimpan konteks pekerjaan kamu — tone, SOP, informasi perusahaan, atau prompt library. Setiap kali kamu buka project, Claude sudah "tahu" siapa kamu dan apa yang kamu butuhkan.</p>
+
+      <!-- MODULE 5 -->
+      <div class="module-panel" id="panel5">
+        <div class="breadcrumb"><span>Mulai dengan Claude AI</span><span>›</span><strong>Modul 5</strong></div>
+        <h1 class="module-title">Claude Projects — Simpan Konteks Kerja</h1>
+        <p class="module-subtitle">Setup project pertama kamu agar tidak perlu jelaskan ulang tiap sesi</p>
+
+        <div class="module-desc-box">
+          Claude Projects menyimpan konteks pekerjaan kamu — tone, SOP, informasi perusahaan, atau prompt library. Setiap kali kamu buka project, Claude sudah "tahu" siapa kamu dan apa yang kamu butuhkan.
+        </div>
+
         <div class="prompt-section">
           <div class="prompt-label">📝 System Prompt untuk Project Pertamamu</div>
-          <div class="prompt-box">
-Kamu adalah asisten profesional saya. Berikut konteks yang perlu kamu tahu:
+          <div class="prompt-box">Kamu adalah asisten profesional saya. Berikut konteks yang perlu kamu tahu:
 
 TENTANG SAYA:
 - Nama: [nama kamu]
@@ -325,34 +425,33 @@ GAYA KOMUNIKASI:
 - Format default: [poin-poin/paragraf]
 
 TUGAS YANG SERING SAYA MINTA:
-- [list 3-5 tugas yang paling sering kamu kerjakan]
-            <button class="copy-btn" onclick="copyPrompt(this)">Salin</button>
+- [list 3-5 tugas yang paling sering kamu kerjakan]<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="case-box">
+            <div class="case-role">🎯 Tips: Buat 3 Project Berbeda</div>
+            <p>Project 1: Pekerjaan Utama · Project 2: Konten & Komunikasi · Project 3: Proyek Sampingan. Setiap project punya konteks dan tone yang berbeda.</p>
           </div>
         </div>
-        <div class="case-box">
-          <div class="case-role">🎯 Tips: Buat 3 Project Berbeda</div>
-          <p>Project 1: Pekerjaan Utama · Project 2: Konten & Komunikasi · Project 3: Proyek Sampingan. Setiap project punya konteks dan tone yang berbeda.</p>
-        </div>
-      </div>
-    </div>
 
-    <!-- Module 6 -->
-    <div class="module-card" id="mod6">
-      <div class="module-header" onclick="toggleModule('mod6')">
-        <div class="module-num">06</div>
-        <div class="module-info">
-          <h3>Google Docs Export — Workflow End-to-End</h3>
-          <p>Dari prompt Claude sampai Google Docs siap dikirim ke atasan</p>
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">5 / 6</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
-        <span class="module-chip">Google Docs</span>
-        <span class="module-arrow">▶</span>
       </div>
-      <div class="module-body">
-        <p class="module-desc">Workflow lengkap: input data/catatan → prompt ke Claude → output terformat → copy ke Google Docs → kirim. Modul ini mempraktikkan semua skill sebelumnya dalam satu workflow nyata yang bisa kamu pakai mulai besok.</p>
+
+      <!-- MODULE 6 -->
+      <div class="module-panel" id="panel6">
+        <div class="breadcrumb"><span>Mulai dengan Claude AI</span><span>›</span><strong>Modul 6</strong></div>
+        <h1 class="module-title">Google Docs Export — Workflow End-to-End</h1>
+        <p class="module-subtitle">Dari prompt Claude sampai Google Docs siap dikirim ke atasan</p>
+
+        <div class="module-desc-box">
+          Workflow lengkap: input data/catatan → prompt ke Claude → output terformat → copy ke Google Docs → kirim. Modul ini mempraktikkan semua skill sebelumnya dalam satu workflow nyata yang bisa kamu pakai mulai besok.
+        </div>
+
         <div class="prompt-section">
           <div class="prompt-label">📝 Prompt Workflow Lengkap</div>
-          <div class="prompt-box">
-Berikut [catatan meeting/data/draft] yang perlu diformat:
+          <div class="prompt-box">Berikut [catatan meeting/data/draft] yang perlu diformat:
 
 [tempel catatan/data kamu di sini]
 
@@ -363,46 +462,48 @@ kirim ke [atasan/klien/tim].
 Format: [struktur yang kamu inginkan]
 Panjang: [pendek/sedang/lengkap]
 Tone: [formal/profesional/kasual]
-Sertakan: [hal spesifik yang harus ada]
-            <button class="copy-btn" onclick="copyPrompt(this)">Salin</button>
+Sertakan: [hal spesifik yang harus ada]<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="case-box">
+            <div class="case-role">🎯 Challenge Akhir Modul</div>
+            <p>Ambil satu pekerjaan nyata dari hari ini — meeting notes, laporan, atau email — dan coba workflow lengkap ini. Output ke Google Docs dan kirim ke diri sendiri.</p>
           </div>
         </div>
-        <div class="case-box">
-          <div class="case-role">🎯 Challenge Akhir Modul</div>
-          <p>Ambil satu pekerjaan nyata dari hari ini — meeting notes, laporan, atau email — dan coba workflow lengkap ini. Output ke Google Docs dan kirim ke diri sendiri.</p>
+
+        <div class="output-box">
+          <div class="output-icon">🎉</div>
+          <div>
+            <h3>Kursus Selesai!</h3>
+            <p>Prompt library personal tersimpan di Claude Projects · Google Docs workflow end-to-end siap dipakai · 6 skill Claude inti yang jadi fondasi semua kursus lanjutan.</p>
+          </div>
+        </div>
+
+        <div class="next-label">Lanjutkan Belajar</div>
+        <a href="kerja-sehari-hari.html" class="next-card">
+          <span class="next-icon">💼</span>
+          <div class="next-info">
+            <h4>Claude untuk Pekerjaan Sehari-hari</h4>
+            <p>Hemat 3–5 jam kerja per minggu · Gmail, Sheets, Docs · Rp 149K</p>
+          </div>
+          <span class="next-arrow">→</span>
+        </a>
+        <a href="bisnis-ukm.html" class="next-card">
+          <span class="next-icon">🏪</span>
+          <div class="next-info">
+            <h4>Claude untuk Bisnis & UKM</h4>
+            <p>Tokopedia, WA Business, Notion, Canva · Rp 149K</p>
+          </div>
+          <span class="next-arrow">→</span>
+        </a>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">6 / 6</span>
+          <a href="dashboard.html" class="nav-btn primary" style="text-decoration:none;">Ke Dashboard →</a>
         </div>
       </div>
+
     </div>
-
-    <!-- Output -->
-    <div class="output-box">
-      <div class="output-icon">🎯</div>
-      <div>
-        <h3>Yang Kamu Bawa Pulang dari Kursus Ini</h3>
-        <p>Prompt library personal tersimpan di Claude Projects · Google Docs workflow end-to-end siap dipakai · 6 skill Claude inti yang jadi fondasi semua kursus lanjutan</p>
-      </div>
-    </div>
-
-    <!-- Next Course -->
-    <div class="section-label" style="margin-top:40px;">Lanjutkan Belajar</div>
-    <a href="kerja-sehari-hari.html" class="next-card">
-      <div class="next-icon">💼</div>
-      <div class="next-info">
-        <h4>Claude untuk Pekerjaan Sehari-hari</h4>
-        <p>Hemat 3–5 jam kerja per minggu · Gmail, Sheets, Docs, Claude Projects · Rp 149K</p>
-      </div>
-      <div class="next-arrow">→</div>
-    </a>
-    <a href="bisnis-ukm.html" class="next-card" style="margin-top:10px;">
-      <div class="next-icon">🏪</div>
-      <div class="next-info">
-        <h4>Claude untuk Bisnis & UKM</h4>
-        <p>Tokopedia, WA Business, Notion, Canva — sistem konten & CS otomatis · Rp 149K</p>
-      </div>
-      <div class="next-arrow">→</div>
-    </a>
-
-  </div>
+  </main>
 </div>
 
 <script>
@@ -410,23 +511,53 @@ Sertakan: [hal spesifik yang harus ada]
   const SUPABASE_KEY = 'sb_publishable_U3DV1nZq3MXdOkfI8oUZdg_EB025f9q';
   const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+  const TOTAL = 6;
+  let current = 1;
+  const done = new Set();
+
   async function init() {
     const { data: { session } } = await sbClient.auth.getSession();
     if (!session) { window.location.href = 'login.html'; return; }
+    document.getElementById('navEmail').textContent = session.user.email;
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('mainLayout').style.display = 'flex';
 
-    const email = session.user.email;
-    const name = session.user.user_metadata?.full_name || email.split('@')[0];
-    document.getElementById('navEmail').textContent = email;
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('content').style.display = 'block';
-
-    // Auto-enroll in this course
     try {
       await sbClient.from('enrollments').upsert({
-        email, course_slug: 'mulai-claude',
+        email: session.user.email, course_slug: 'mulai-claude',
         course_name: 'Mulai dengan Claude AI', type: 'free',
       }, { onConflict: 'email,course_slug', ignoreDuplicates: true });
-    } catch (e) { console.log('Upsert skipped:', e.message); }
+    } catch (e) {}
+  }
+
+  function showModule(n) {
+    // Mark previous as done
+    done.add(current);
+    document.getElementById(`check${current}`).textContent = '✓';
+    document.getElementById(`nav-mod${current}`).classList.add('done');
+
+    // Hide current panel
+    document.getElementById(`panel${current}`).classList.remove('active');
+    document.getElementById(`nav-mod${current}`).classList.remove('active');
+
+    // Show new panel
+    current = n;
+    document.getElementById(`panel${current}`).classList.add('active');
+    document.getElementById(`nav-mod${current}`).classList.add('active');
+
+    // Scroll main to top
+    document.querySelector('.main').scrollTo({ top: 0, behavior: 'smooth' });
+
+    updateProgress();
+  }
+
+  function nextModule() { if (current < TOTAL) showModule(current + 1); }
+  function prevModule() { if (current > 1) showModule(current - 1); }
+
+  function updateProgress() {
+    const pct = Math.round((done.size / TOTAL) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = `${done.size}/${TOTAL}`;
   }
 
   async function logout() {
@@ -434,22 +565,16 @@ Sertakan: [hal spesifik yang harus ada]
     window.location.href = 'index.html';
   }
 
-  function toggleModule(id) {
-    const card = document.getElementById(id);
-    card.classList.toggle('open');
-  }
-
   function copyPrompt(btn) {
     const box = btn.closest('.prompt-box');
-    const text = box.childNodes[0].textContent.trim();
-    navigator.clipboard.writeText(text).then(() => {
+    const clone = box.cloneNode(true);
+    clone.querySelector('button')?.remove();
+    navigator.clipboard.writeText(clone.innerText.trim()).then(() => {
       btn.textContent = '✓ Tersalin';
-      setTimeout(() => btn.textContent = 'Salin', 2000);
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Salin'; btn.classList.remove('copied'); }, 2000);
     });
   }
-
-  // Open first module by default
-  document.getElementById('mod1').classList.add('open');
 
   init();
 </script>
