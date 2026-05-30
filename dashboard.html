@@ -348,7 +348,7 @@
   const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   const ALL_COURSES = {
-    'prompt-gratis':      { title: '20 Prompt Claude Terbaik',          icon: '🎁', contentLink: 'prompt-gratis-content.html',    salesLink: 'prompt-gratis.html',     desc: 'Prompt siap pakai untuk email, laporan, konten sosmed, dan lainnya.',             price: 'Gratis',     level: 'Beginner',      modules: 0,  color: 'blue' },
+    'prompt-gratis':      { title: '20 Prompt Claude Terbaik',          icon: '🎁', contentLink: 'prompt-gratis-content.html',    salesLink: 'prompt-gratis.html',     desc: 'Prompt siap pakai untuk email, laporan, konten sosmed, dan lainnya.',             price: 'Gratis',     level: 'Beginner',      modules: 5,  color: 'blue' },
     'mulai-claude':       { title: 'Mulai dengan Claude AI',             icon: '🚀', contentLink: 'mulai-claude-content.html',      salesLink: 'mulai-claude.html',      desc: 'Dari nol sampai bisa pakai Claude untuk kebutuhan sehari-hari — dalam 1 jam.',    price: 'Gratis',     level: 'Beginner',      modules: 6,  color: 'blue' },
     'kerja-sehari-hari':  { title: 'Claude untuk Pekerjaan Sehari-hari', icon: '💼', contentLink: 'kerja-sehari-hari-content.html', salesLink: 'kerja-sehari-hari.html', desc: 'Hemat 3–5 jam kerja per minggu dengan workflow Claude + tools kantor kamu.',     price: 'Rp 149.000', level: 'Beginner',      modules: 6,  color: 'blue' },
     'bisnis-ukm':         { title: 'Claude untuk Bisnis & UKM',          icon: '🏪', contentLink: 'bisnis-ukm-content.html',        salesLink: 'bisnis-ukm.html',        desc: 'Jalankan bisnis lebih efisien dengan Claude + tools Indonesia sehari-hari.',      price: 'Rp 149.000', level: 'Beginner',      modules: 6,  color: 'gold' },
@@ -465,11 +465,11 @@
         const badge   = c.type === 'free'
           ? `<span class="enrolled-badge badge-free">Gratis</span>`
           : `<span class="enrolled-badge badge-paid">✓ Aktif</span>`;
-        const progressBar = meta.modules > 0 ? `
+        const progressBar = `
           <div class="course-progress">
             <div class="cpb-wrap"><div class="cpb-fill ${meta.color}" style="width:${prog.pct}%"></div></div>
-            <span class="cpb-label">${prog.done}/${prog.total} modul</span>
-          </div>` : `<div class="course-progress"><span class="cpb-label" style="color:var(--green)">✓ Panduan prompt siap pakai</span></div>`;
+            <span class="cpb-label">${prog.done}/${prog.total} bagian</span>
+          </div>`;
         list.innerHTML += `
           <div class="enrolled-card">
             <div class="enrolled-icon">${meta.icon}</div>
