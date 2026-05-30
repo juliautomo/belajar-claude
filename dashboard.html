@@ -170,9 +170,27 @@
     }
     .resume-btn:hover { background: var(--blue); }
 
-    /* Explore grid */
-    .explore-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+    /* Explore carousel */
+    .carousel-wrap { position: relative; }
+    .explore-grid {
+      display: flex; gap: 12px;
+      overflow-x: auto; scroll-snap-type: x mandatory;
+      padding-bottom: 8px; scrollbar-width: none;
+    }
+    .explore-grid::-webkit-scrollbar { display: none; }
+    .carousel-nav { display: flex; gap: 8px; margin-top: 14px; }
+    .carousel-btn {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 1px solid var(--border); background: var(--surface);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: border-color 0.2s, background 0.2s;
+      color: var(--navy); flex-shrink: 0;
+    }
+    .carousel-btn:hover { border-color: var(--blue); background: var(--blue-pale); }
+    .carousel-btn svg { width: 13px; height: 13px; }
     .explore-card {
+      min-width: 210px; max-width: 210px;
+      scroll-snap-align: start; flex-shrink: 0;
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 12px; padding: 16px;
       display: flex; flex-direction: column; gap: 8px;
@@ -312,7 +330,17 @@
 
       <div id="exploreSection" style="display:none;">
         <div class="section-label">Jelajahi Kursus Lainnya</div>
-        <div class="explore-grid" id="exploreGrid"></div>
+        <div class="carousel-wrap">
+          <div class="explore-grid" id="exploreGrid"></div>
+          <div class="carousel-nav">
+            <button class="carousel-btn" onclick="scrollExplore(-1)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <button class="carousel-btn" onclick="scrollExplore(1)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </main>
@@ -479,6 +507,10 @@
     renderLevel(beginnerSlugs,     'journeyBeginner');
     renderLevel(intermediateSlugs, 'journeyIntermediate');
     renderLevel(advancedSlugs,     'journeyAdvanced');
+  }
+
+  function scrollExplore(dir) {
+    document.getElementById('exploreGrid').scrollBy({ left: dir * 234, behavior: 'smooth' });
   }
 
   async function logout() {
