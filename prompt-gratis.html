@@ -7,31 +7,31 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:         #EDECF5;
-    --surface:    #F5F4FB;
-    --surface-2:  #FFFFFF;
-    --navy:       #13163A;
-    --navy-mid:   #1E2456;
+    --bg: #FFFFFF;
+    --surface: #FFFFFF;
+    --surface-2: #FFFFFF;
+    --navy: #0F1628;
+    --navy-mid: #0F1628;
     --blue:       #4A72D6;
     --blue-2:     #7098E6;
     --blue-light: #7098E6;
-    --blue-pale:  #D4DEFA;
+    --blue-pale:  #EEF2FF;
     --green:      #1D9E75;
     --green-light:#5DCAA5;
-    --warm-white: #13163A;
+    --warm-white: #0F1628;
     --warm-white-2:#6B7080;
     --gray-mid:   #6B7080;
     --muted:      #6B7080;
     --gold:       #EF9F27;
-    --border:     rgba(74,114,214,0.15);
-    --border-2:   rgba(74,114,214,0.08);
+    --border:     #E5E7EB;
+    --border-2:   #F3F4F6;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
   body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     background: var(--navy);
-    color: var(--warm-white);
+    color: #0F1628;
     overflow-x: hidden;
   }
 
@@ -44,14 +44,14 @@
     backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(55, 138, 221, 0.12);
   }
-  .logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: var(--warm-white); text-decoration: none; }
+  .logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: #0F1628; text-decoration: none; }
   .logo span { color: var(--blue); }
   .nav-back {
     font-size: 14px; font-weight: 500; color: var(--blue-light);
     text-decoration: none; display: flex; align-items: center; gap: 6px;
     transition: color 0.2s;
   }
-  .nav-back:hover { color: var(--warm-white); }
+  .nav-back:hover { color: #0F1628; }
 
   /* HERO */
   .hero {
@@ -72,7 +72,7 @@
       linear-gradient(rgba(55,138,221,0.06) 1px, transparent 1px),
       linear-gradient(90deg, rgba(55,138,221,0.06) 1px, transparent 1px);
     background-size: 48px 48px;
-    mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 80%);
+    
   }
   .hero-content { position: relative; z-index: 1; max-width: 700px; }
 
@@ -102,7 +102,7 @@
   }
 
   .hero-sub {
-    font-size: 17px; color: var(--blue-light); line-height: 1.7;
+    font-size: 17px; color: #6B7280; line-height: 1.7;
     max-width: 520px; margin: 0 auto 36px;
     animation: fadeUp 0.6s 0.2s ease both;
   }
@@ -119,19 +119,19 @@
     font-size: 18px; font-weight: 700; margin-bottom: 6px;
   }
   .signup-box p {
-    font-size: 13px; color: var(--blue-light); margin-bottom: 20px;
+    font-size: 13px; color: #6B7280; margin-bottom: 20px;
   }
   .form-group { display: flex; flex-direction: column; gap: 10px; }
   .form-row { display: flex; gap: 10px; }
   .form-input {
     flex: 1; background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(55,138,221,0.2);
+    border: 1px solid #E5E7EB;
     border-radius: 10px; padding: 13px 16px;
-    font-size: 14px; color: var(--warm-white);
+    font-size: 14px; color: #0F1628;
     font-family: 'Plus Jakarta Sans', sans-serif;
     outline: none; transition: border-color 0.2s;
   }
-  .form-input::placeholder { color: var(--gray-mid); }
+  .form-input::placeholder { color: #6B7280; }
   .form-input:focus { border-color: var(--blue); }
   .btn-download {
     width: 100%; background: var(--blue); color: #fff;
@@ -143,7 +143,7 @@
   }
   .btn-download:hover { background: #2a72c4; transform: translateY(-1px); }
   .form-note {
-    font-size: 12px; color: var(--gray-mid); text-align: center; margin-top: 10px;
+    font-size: 12px; color: #6B7280; text-align: center; margin-top: 10px;
   }
 
   /* PREVIEW SECTION */
@@ -158,7 +158,7 @@
     font-size: clamp(26px, 4vw, 38px); font-weight: 800;
     letter-spacing: -1px; line-height: 1.15; margin-bottom: 12px;
   }
-  .section-sub { font-size: 15px; color: var(--blue-light); line-height: 1.75; margin-bottom: 48px; }
+  .section-sub { font-size: 15px; color: #6B7280; line-height: 1.75; margin-bottom: 48px; }
 
   /* PROMPT PREVIEW CARDS */
   .prompts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
@@ -182,7 +182,7 @@
     letter-spacing: 0.5px;
   }
   .prompt-preview {
-    font-size: 12px; color: var(--blue-light); line-height: 1.6;
+    font-size: 12px; color: #6B7280; line-height: 1.6;
     font-family: 'DM Mono', monospace;
     background: rgba(12,68,124,0.5);
     border-radius: 8px; padding: 10px 12px;
@@ -211,7 +211,7 @@
   }
   .benefit-icon { font-size: 28px; margin-bottom: 12px; }
   .benefit-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
-  .benefit-card p { font-size: 13px; color: var(--blue-light); line-height: 1.6; }
+  .benefit-card p { font-size: 13px; color: #6B7280; line-height: 1.6; }
 
   /* CTA BOTTOM */
   .cta-bottom {
@@ -220,7 +220,7 @@
     padding: 72px 24px; text-align: center;
   }
   .cta-bottom h2 { font-size: clamp(24px, 4vw, 36px); font-weight: 800; letter-spacing: -1px; margin-bottom: 12px; }
-  .cta-bottom p { font-size: 15px; color: var(--blue-light); margin-bottom: 32px; }
+  .cta-bottom p { font-size: 15px; color: #6B7280; margin-bottom: 32px; }
 
   /* MODAL */
   .modal-overlay {
@@ -240,17 +240,17 @@
   .modal-overlay.active .modal { transform: scale(1); }
   .modal-icon { font-size: 48px; margin-bottom: 16px; }
   .modal h3 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
-  .modal p { font-size: 14px; color: var(--blue-light); margin-bottom: 24px; line-height: 1.6; }
+  .modal p { font-size: 14px; color: #6B7280; margin-bottom: 24px; line-height: 1.6; }
   .modal .btn-download { max-width: 300px; margin: 0 auto 12px; }
-  .modal-sub { font-size: 12px; color: var(--gray-mid); }
+  .modal-sub { font-size: 12px; color: #6B7280; }
 
   /* FOOTER */
   footer {
     background: #021e3a; padding: 32px 24px;
-    border-top: 1px solid rgba(55,138,221,0.1);
+    border: 1px solid #E5E7EB;
     text-align: center;
   }
-  footer p { font-size: 12px; color: var(--gray-mid); }
+  footer p { font-size: 12px; color: #6B7280; }
   footer a { color: var(--blue-light); text-decoration: none; }
 
   @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }

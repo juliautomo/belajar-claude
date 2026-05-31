@@ -4,190 +4,116 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Masuk — Klaud.id</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    /* Faux background — blurred site screenshot feel */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #F8F9FC;
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       padding: 20px;
-      background: #E8E6DF;
-      position: relative;
     }
-
-    /* Dim overlay */
-    body::before {
-      content: '';
-      position: fixed; inset: 0;
-      background: rgba(4, 44, 83, 0.55);
-      backdrop-filter: blur(3px);
-      z-index: 0;
-    }
-
-    /* Modal card */
-    .modal {
-      position: relative; z-index: 1;
+    .card {
       background: #fff;
       border-radius: 20px;
-      padding: 40px 36px 32px;
-      max-width: 400px;
-      width: 100%;
-      box-shadow: 0 24px 64px rgba(0,0,0,0.22);
+      padding: 44px 40px 36px;
+      max-width: 400px; width: 100%;
+      box-shadow: 0 4px 40px rgba(0,0,0,0.08);
+      border: 1px solid #E5E7EB;
     }
-
-    /* Close button */
-    .close-btn {
-      position: absolute;
-      top: 16px; right: 16px;
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      background: #F1F5F9;
-      display: flex; align-items: center; justify-content: center;
-      text-decoration: none;
-      color: #64748B;
-      font-size: 18px;
-      font-weight: 300;
-      line-height: 1;
-      transition: background 0.15s;
+    .logo {
+      text-align: center; margin-bottom: 28px;
+      font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: #0F1628;
     }
-    .close-btn:hover { background: #E2E8F0; color: #1E293B; }
-
-    /* Logo */
-    .logo { text-align: center; margin-bottom: 24px; }
-    .logo-text { font-size: 26px; font-weight: 800; color: #042C53; }
-    .logo-text span { color: #378ADD; }
-
-    /* Title */
-    h1 { font-size: 20px; font-weight: 700; color: #1E293B; margin-bottom: 6px; }
-    .subtitle { font-size: 14px; color: #64748B; line-height: 1.6; margin-bottom: 28px; }
-
-    /* Form */
-    label { display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 6px; letter-spacing: 0.3px; }
+    .logo span { color: #4A72D6; }
+    h2 { font-size: 20px; font-weight: 800; color: #0F1628; margin-bottom: 6px; letter-spacing: -0.3px; }
+    .sub { font-size: 14px; color: #6B7280; line-height: 1.65; margin-bottom: 28px; }
+    label { display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 6px; }
     input[type="email"] {
-      width: 100%;
-      padding: 12px 14px;
-      border: 1.5px solid #E2E8F0;
-      border-radius: 10px;
-      font-size: 14px;
-      color: #1E293B;
-      outline: none;
-      transition: border 0.2s;
-      margin-bottom: 14px;
+      width: 100%; padding: 12px 14px;
+      border: 1.5px solid #E5E7EB; border-radius: 10px;
+      font-size: 14px; color: #0F1628; outline: none;
+      transition: border-color 0.2s; margin-bottom: 14px;
+      font-family: inherit; background: #fff;
+    }
+    input[type="email"]:focus { border-color: #4A72D6; }
+    .btn {
+      width: 100%; padding: 13px;
+      background: #0F1628; color: #fff;
+      border: none; border-radius: 10px;
+      font-size: 15px; font-weight: 700;
+      cursor: pointer; transition: background 0.2s;
       font-family: inherit;
     }
-    input[type="email"]:focus { border-color: #378ADD; }
-
-    button {
-      width: 100%;
-      padding: 13px;
-      background: #042C53;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.2s;
-      font-family: inherit;
+    .btn:hover:not(:disabled) { background: #4A72D6; }
+    .btn:disabled { background: #9CA3AF; cursor: not-allowed; }
+    .msg {
+      margin-top: 14px; padding: 12px 14px;
+      border-radius: 10px; font-size: 13px;
+      text-align: center; line-height: 1.6; display: none;
     }
-    button:hover { background: #378ADD; }
-    button:disabled { background: #94A3B8; cursor: not-allowed; }
-
-    /* Message */
-    .message {
-      margin-top: 16px;
-      padding: 13px 14px;
-      border-radius: 10px;
-      font-size: 13px;
-      text-align: center;
-      line-height: 1.6;
-      display: none;
-    }
-    .message.success { background: #D1FAE5; color: #065F46; display: block; }
-    .message.error   { background: #FEE2E2; color: #991B1B; display: block; }
-
-    /* Footer note */
-    .modal-note {
-      margin-top: 20px;
-      font-size: 12px;
-      color: #94A3B8;
-      text-align: center;
-      line-height: 1.6;
-    }
+    .msg.success { background: #ECFDF5; color: #065F46; display: block; }
+    .msg.error   { background: #FEE2E2; color: #991B1B; display: block; }
+    .note { margin-top: 20px; font-size: 12px; color: #9CA3AF; text-align: center; line-height: 1.6; }
+    .back { display: block; text-align: center; margin-top: 16px; font-size: 13px; color: #6B7280; text-decoration: none; }
+    .back:hover { color: #0F1628; }
   </style>
 </head>
 <body>
-
-<div class="modal">
-  <a href="index.html" class="close-btn">&#x2715;</a>
-
-  <div class="logo">
-    <div class="logo-text">Klaud<span>.id</span></div>
+  <div class="card">
+    <div class="logo">Klaud<span>.id</span></div>
+    <h2>Masuk atau Daftar</h2>
+    <p class="sub">Masukkan email kamu — kami kirimkan link masuk langsung ke inbox. Tidak perlu password.</p>
+    <div id="form">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="nama@email.com" autofocus />
+      <button class="btn" id="btn" onclick="sendLink()">Lanjutkan →</button>
+    </div>
+    <div class="msg" id="msg"></div>
+    <p class="note">Dengan melanjutkan, kamu menyetujui syarat & ketentuan Klaud.id.</p>
+    <a href="index.html" class="back">← Kembali ke beranda</a>
   </div>
 
-  <h1>Masuk atau Daftar</h1>
-  <p class="subtitle">Masukkan email kamu — kami kirimkan link masuk langsung ke inbox. Tidak perlu password.</p>
+  <script>
+    // Redirect if already logged in
+    (async function() {
+      var r = await sbClient.auth.getSession();
+      if (r.data.session) window.location.href = 'dashboard.html';
+    })();
 
-  <div id="loginForm">
-    <label for="email">Email</label>
-    <input type="email" id="email" placeholder="nama@email.com" autofocus />
-    <button id="loginBtn" onclick="sendMagicLink()">Lanjutkan →</button>
-  </div>
-
-  <div class="message" id="message"></div>
-
-  <p class="modal-note">Dengan melanjutkan, kamu menyetujui syarat & ketentuan Klaud.id.</p>
-</div>
-
-<script>
-  sbClient.auth.getSession().then(({ data: { session } }) => {
-    if (session) window.location.href = 'dashboard.html';
-  });
-
-  async function sendMagicLink() {
-    const email = document.getElementById('email').value.trim();
-    const btn   = document.getElementById('loginBtn');
-
-    if (!email) { showMessage('Masukkan alamat email kamu dulu ya.', 'error'); return; }
-
-    btn.disabled = true;
-    btn.textContent = 'Mengirim...';
-
-    const { error } = await sbClient.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: 'https://juliautomo.github.io/klaud-id/dashboard.html' },
-    });
-
-    if (error) {
-      showMessage('Gagal mengirim email: ' + error.message, 'error');
-      btn.disabled = false;
-      btn.textContent = 'Lanjutkan →';
-    } else {
-      btn.textContent = '✉️ Link terkirim!';
-      btn.style.background = '#065F46';
-      showMessage('Link masuk sudah dikirim ke <strong>' + email + '</strong>.<br>Cek inbox dan klik linknya untuk masuk.', 'success');
-      document.getElementById('loginForm').style.opacity = '0.5';
-      document.getElementById('loginForm').style.pointerEvents = 'none';
+    async function sendLink() {
+      var email = document.getElementById('email').value.trim();
+      var btn   = document.getElementById('btn');
+      var msg   = document.getElementById('msg');
+      if (!email || !email.includes('@')) {
+        msg.textContent = 'Masukkan alamat email yang valid ya.';
+        msg.className = 'msg error'; return;
+      }
+      btn.disabled = true; btn.textContent = 'Mengirim...';
+      msg.className = 'msg'; msg.style.display = 'none';
+      var result = await sbClient.auth.signInWithOtp({
+        email: email,
+        options: { emailRedirectTo: 'https://juliautomo.github.io/klaud-id/dashboard.html' }
+      });
+      if (result.error) {
+        msg.textContent = 'Gagal mengirim: ' + result.error.message;
+        msg.className = 'msg error';
+        btn.disabled = false; btn.textContent = 'Lanjutkan →';
+      } else {
+        btn.textContent = '✉️ Link terkirim!';
+        btn.style.background = '#065F46';
+        msg.innerHTML = 'Link masuk sudah dikirim ke <strong>' + email + '</strong>.<br>Cek inbox dan klik linknya untuk masuk.';
+        msg.className = 'msg success';
+        document.getElementById('form').style.opacity = '0.5';
+        document.getElementById('form').style.pointerEvents = 'none';
+      }
     }
-  }
-
-  function showMessage(text, type) {
-    const msg = document.getElementById('message');
-    msg.innerHTML = text;
-    msg.className = 'message ' + type;
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('email').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') sendMagicLink();
+    document.getElementById('email').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') sendLink();
     });
-  });
-</script>
+  </script>
 </body>
 </html>

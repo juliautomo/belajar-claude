@@ -5,219 +5,89 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Segera Hadir — Klaud.id</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
 <style>
-  :root {
-    --bg:#EDECF5; --surface:#F5F4FB; --surface-2:#FFFFFF;
-    --navy:#13163A; --blue:#4A72D6; --blue-pale:#D4DEFA;
-    --muted:#6B7080; --border:rgba(74,114,214,0.15);
-  }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--navy); min-height: 100vh; display: flex; flex-direction: column; }
-  nav { padding: 0 48px; height: 64px; display: flex; align-items: center; justify-content: space-between; background: rgba(237,236,245,0.88); backdrop-filter: blur(14px); border-bottom: 1px solid var(--border); }
-  .logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; color: var(--navy); text-decoration: none; }
-  .logo span { color: var(--blue); }
-  .nav-back { font-size: 13px; font-weight: 500; color: var(--muted); text-decoration: none; display: flex; align-items: center; gap: 6px; }
-  .nav-back:hover { color: var(--navy); }
-
-  main {
-    flex: 1; display: flex; align-items: center; justify-content: center;
-    padding: 60px 24px; position: relative; overflow: hidden;
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: #F8F9FC; color: #0F1628;
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; padding: 24px; text-align: center;
   }
-  .bg-glow {
-    position: absolute; inset: 0; z-index: 0;
-    background: radial-gradient(ellipse 70% 60% at 50% 30%, rgba(74,114,214,0.08) 0%, transparent 70%);
-  }
+  .logo { font-size: 20px; font-weight: 800; color: #0F1628; margin-bottom: 40px; }
+  .logo span { color: #4A72D6; }
   .card {
-    position: relative; z-index: 1;
-    background: var(--surface-2); border: 1px solid var(--border);
-    border-radius: 24px; padding: 56px 48px; max-width: 560px; width: 100%;
-    text-align: center; box-shadow: 0 8px 40px rgba(74,114,214,0.08);
+    background: #fff; border: 1px solid #E5E7EB;
+    border-radius: 20px; padding: 48px 40px;
+    max-width: 480px; width: 100%;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.06);
   }
-
-  .soon-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: var(--blue-pale); color: var(--blue);
-    border-radius: 100px; padding: 6px 18px; margin-bottom: 28px;
-    font-size: 12px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+  .badge { display: inline-block; background: #EEF2FF; color: #4A72D6; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 100px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; }
+  h1 { font-size: 26px; font-weight: 800; color: #0F1628; letter-spacing: -0.5px; margin-bottom: 10px; }
+  .sub { font-size: 15px; color: #6B7280; line-height: 1.7; margin-bottom: 32px; }
+  label { display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 6px; text-align: left; }
+  input[type="email"] {
+    width: 100%; padding: 12px 14px; border: 1.5px solid #E5E7EB; border-radius: 10px;
+    font-size: 14px; color: #0F1628; outline: none; transition: border-color 0.2s;
+    margin-bottom: 10px; font-family: inherit;
   }
-  .soon-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); animation: pulse 2s ease infinite; }
-  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
-
-  .big-icon { font-size: 64px; margin-bottom: 20px; display: block; }
-  h1 { font-size: clamp(22px, 3.5vw, 30px); font-weight: 800; letter-spacing: -1px; margin-bottom: 12px; color: var(--navy); }
-  .course-name { color: var(--blue); }
-  p.sub { font-size: 15px; color: var(--muted); line-height: 1.75; margin-bottom: 36px; max-width: 420px; margin-left: auto; margin-right: auto; }
-
-  .notify-form { display: flex; gap: 10px; max-width: 380px; margin: 0 auto 12px; }
-  .notify-form input {
-    flex: 1; padding: 12px 16px; border: 1.5px solid var(--border);
-    border-radius: 10px; font-size: 14px; color: var(--navy);
-    font-family: 'Plus Jakarta Sans', sans-serif; outline: none;
-    background: var(--surface-2); transition: border-color 0.2s;
-  }
-  .notify-form input:focus { border-color: var(--blue); }
-  .notify-form input::placeholder { color: var(--muted); }
-  .notify-btn {
-    padding: 12px 20px; background: var(--navy); color: #fff;
+  input[type="email"]:focus { border-color: #4A72D6; }
+  .btn {
+    width: 100%; padding: 13px; background: #0F1628; color: #fff;
     border: none; border-radius: 10px; font-size: 14px; font-weight: 700;
-    cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;
-    white-space: nowrap; transition: background 0.2s;
+    cursor: pointer; font-family: inherit; transition: background 0.2s;
   }
-  .notify-btn:hover { background: var(--blue); }
-  .notify-btn:disabled { background: #94A3B8; cursor: not-allowed; }
-  .form-note { font-size: 12px; color: var(--muted); margin-bottom: 32px; }
-  .success-msg { display: none; background: #D1FAE5; color: #065F46; padding: 12px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; margin-bottom: 16px; }
-
-  .divider { width: 40px; height: 2px; background: var(--border); margin: 32px auto; }
-
-  .available-courses { text-align: left; }
-  .available-courses h3 { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; text-align: center; }
-  .course-links { display: flex; flex-direction: column; gap: 8px; }
-  .course-link {
-    display: flex; align-items: center; gap: 12px; padding: 14px 16px;
-    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-    text-decoration: none; color: var(--navy); transition: border-color 0.2s, background 0.2s;
-  }
-  .course-link:hover { border-color: var(--blue); background: var(--surface-2); }
-  .course-link .icon { font-size: 22px; }
-  .course-link .info { flex: 1; }
-  .course-link .info h4 { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 1px; }
-  .course-link .info p { font-size: 11px; color: var(--muted); }
-  .course-link .price-tag { font-size: 12px; font-weight: 700; color: var(--blue); white-space: nowrap; }
-
-  footer { padding: 20px 24px; text-align: center; border-top: 1px solid var(--border); }
-  footer p { font-size: 12px; color: var(--muted); }
-  footer a { color: var(--blue); text-decoration: none; }
-
-  @media (max-width: 600px) { .card { padding: 36px 24px; } .notify-form { flex-direction: column; } nav { padding: 0 20px; } }
+  .btn:hover { background: #4A72D6; }
+  .msg { margin-top: 12px; padding: 11px 14px; border-radius: 10px; font-size: 13px; display: none; }
+  .msg.success { background: #ECFDF5; color: #065F46; display: block; }
+  .msg.error   { background: #FEE2E2; color: #991B1B; display: block; }
+  .back { display: inline-block; margin-top: 24px; font-size: 13px; color: #6B7280; text-decoration: none; }
+  .back:hover { color: #0F1628; }
 </style>
 </head>
 <body>
-
-<nav>
-  <a href="index.html" class="logo">Klaud<span>.id</span></a>
-  <a href="index.html" class="nav-back">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-    Lihat semua kursus
-  </a>
-</nav>
-
-<main>
-  <div class="bg-glow"></div>
+  <div class="logo">Klaud<span>.id</span></div>
   <div class="card">
-    <div class="soon-badge"><span class="dot"></span> Segera Hadir</div>
-    <span class="big-icon" id="courseIcon">🎬</span>
-    <h1>Kursus <span class="course-name" id="courseName">ini</span><br>sedang disiapkan</h1>
-    <p class="sub" id="courseDesc">Materi kursus ini sedang dalam tahap produksi. Daftar notifikasi untuk tahu pertama kali saat kursus ini siap.</p>
-
-    <div class="success-msg" id="successMsg">✅ Email kamu sudah terdaftar! Kami akan kirim notifikasi saat kursus siap.</div>
-
-    <div class="notify-form" id="notifyForm">
-      <input type="email" id="emailInput" placeholder="email@kamu.com" />
-      <button class="notify-btn" id="notifyBtn" onclick="submitNotify()">🔔 Kabari Saya</button>
-    </div>
-    <p class="form-note">Tidak ada spam. Hanya satu email saat kursus live.</p>
-
-    <div class="divider"></div>
-
-    <div class="available-courses">
-      <h3>Kursus yang Sudah Tersedia</h3>
-      <div class="course-links">
-        <a href="mulai-claude.html" class="course-link">
-          <span class="icon">🚀</span>
-          <div class="info">
-            <h4>Mulai dengan Claude AI</h4>
-            <p>Beginner · 1 jam · 6 modul</p>
-          </div>
-          <span class="price-tag">Gratis</span>
-        </a>
-        <a href="kerja-sehari-hari.html" class="course-link">
-          <span class="icon">💼</span>
-          <div class="info">
-            <h4>Claude untuk Pekerjaan Sehari-hari</h4>
-            <p>Beginner · 1.5 jam · Gmail + Sheets + Docs</p>
-          </div>
-          <span class="price-tag">Rp 149K</span>
-        </a>
-        <a href="bisnis-ukm.html" class="course-link">
-          <span class="icon">🏪</span>
-          <div class="info">
-            <h4>Claude untuk Bisnis & UKM</h4>
-            <p>Beginner · 1.5 jam · WA + Tokopedia + Notion</p>
-          </div>
-          <span class="price-tag">Rp 149K</span>
-        </a>
-        <a href="prompt-gratis.html" class="course-link">
-          <span class="icon">🎁</span>
-          <div class="info">
-            <h4>20 Prompt Claude Terbaik</h4>
-            <p>Prompt siap pakai · Bisa dipakai hari ini</p>
-          </div>
-          <span class="price-tag">Gratis</span>
-        </a>
-      </div>
-    </div>
+    <div class="badge">Segera Hadir</div>
+    <h1 id="courseTitle">Kursus Baru</h1>
+    <p class="sub">Kursus ini sedang dalam pengembangan. Daftarkan emailmu untuk mendapat notifikasi saat tersedia — termasuk harga early bird.</p>
+    <label for="email">Email kamu</label>
+    <input type="email" id="email" placeholder="nama@email.com" />
+    <button class="btn" onclick="notify()">Beritahu Saya →</button>
+    <div class="msg" id="msg"></div>
+    <a href="index.html" class="back">← Kembali ke beranda</a>
   </div>
-</main>
 
-<footer>
-  <p>© 2025 <a href="index.html">Klaud.id</a> — Platform Belajar Claude AI #1 dalam Bahasa Indonesia</p>
-</footer>
+  <script>
+    // Get course name from URL param
+    var params = new URLSearchParams(window.location.search);
+    var course = params.get('course');
+    if (course) document.getElementById('courseTitle').textContent = decodeURIComponent(course);
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-config.js"></script>
-  <script src="login-modal.js"></script>
-<script>
-  // Course data for query param display
-  const COURSE_DATA = {
-    'konten-copywriting': { name: 'Konten & Copywriting', icon: '✍️', desc: 'Build mesin konten: artikel SEO, TikTok scripts, email sequence, landing page di Carrd — semua workflow nyata.' },
-    'analisis-data':      { name: 'Analisis Data',         icon: '📊', desc: 'Ubah data mentah jadi insight dengan Google Sheets + Claude Artifacts Charts + Notion Executive Summary.' },
-    'build-automation':   { name: 'Build Automation',      icon: '⚡', desc: 'Buat 3 automation aktif dengan Zapier + Make + n8n — Claude sebagai "otak" yang jalan 24/7.' },
-    'ai-powered-app':     { name: 'AI-Powered App',        icon: '🛠️', desc: 'Web app AI live di GitHub Pages tanpa backend. Claude API + HTML/JS + Vercel — dari ide ke deploy dalam 2 jam.' },
-    'claude-api-dev':     { name: 'Claude API untuk Developer', icon: '👨‍💻', desc: 'Integrasikan Claude ke project nyata: streaming, tool use, caching, dan Railway deploy — production-ready.' },
-    'jual-produk-ai':     { name: 'Build & Jual Produk AI', icon: '💰', desc: 'Dari ide ke produk AI yang menghasilkan uang. Framer + Midtrans + WhatsApp — first customer hari ini.' },
-  };
-
-  const params = new URLSearchParams(window.location.search);
-  const courseSlug = params.get('course');
-  if (courseSlug && COURSE_DATA[courseSlug]) {
-    const course = COURSE_DATA[courseSlug];
-    document.getElementById('courseName').textContent = course.name;
-    document.getElementById('courseIcon').textContent = course.icon;
-    document.getElementById('courseDesc').textContent = course.desc;
-    document.title = `${course.name} — Segera Hadir | Klaud.id`;
-  }
-
-  async function submitNotify() {
-    const email = document.getElementById('emailInput').value.trim();
-    if (!email || !email.includes('@')) {
-      document.getElementById('emailInput').focus();
-      return;
+    async function notify() {
+      var email = document.getElementById('email').value.trim();
+      var msg   = document.getElementById('msg');
+      if (!email || !email.includes('@')) {
+        msg.textContent = 'Masukkan email yang valid ya.';
+        msg.className = 'msg error'; return;
+      }
+      try {
+        await fetch('https://klaud-backend-production.up.railway.app/signup', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: email.split('@')[0], email: email, source: 'coming-soon' })
+        });
+        msg.textContent = 'Berhasil! Kami akan email kamu saat kursus tersedia.';
+        msg.className = 'msg success';
+        document.getElementById('email').disabled = true;
+      } catch(e) {
+        msg.textContent = 'Gagal mendaftar. Silakan coba lagi.';
+        msg.className = 'msg error';
+      }
     }
-    const btn = document.getElementById('notifyBtn');
-    btn.disabled = true;
-    btn.textContent = 'Mendaftar...';
-
-    try {
-      await sbClient.from('waitlist').upsert({
-        email,
-        course_slug: courseSlug || 'general',
-      }, { onConflict: 'email,course_slug', ignoreDuplicates: true });
-    } catch (e) {
-      console.log('Waitlist note:', e.message);
-    }
-
-    document.getElementById('notifyForm').style.display = 'none';
-    document.getElementById('successMsg').style.display = 'block';
-  }
-
-  // Pre-fill email if logged in
-  (async () => {
-    const { data: { session } } = await sbClient.auth.getSession();
-    if (session) {
-      document.getElementById('emailInput').value = session.user.email;
-    }
-  })();
-</script>
+    document.getElementById('email').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') notify();
+    });
+  </script>
 </body>
 </html>
