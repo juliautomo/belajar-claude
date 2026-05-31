@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --cream:  #F5F4EF;
+    --cream:  #FFFFFF;
     --ink:    #1A1A1A;
     --blue:   #4A72D6;
     --muted:  #6B6B6B;
@@ -104,29 +104,19 @@
 
   /* COURSES */
   .carousel-wrap { position: relative; margin-top: 56px; }
-  .carousel { display: flex; gap: 1px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 4px; scrollbar-width: none; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .carousel { display: flex; gap: 1px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 4px; scrollbar-width: none; background: #E5E7EB; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden; }
   .carousel::-webkit-scrollbar { display: none; }
-  .course-card { min-width: 336px; max-width: 336px; scroll-snap-align: start; flex-shrink: 0; background: var(--cream); padding: 28px 24px; display: flex; flex-direction: column; gap: 10px; transition: background 0.15s; }
-  .course-card:hover { background: #fff; }
-  .course-card.featured { background: var(--ink); }
+  .course-card { min-width: 336px; max-width: 336px; scroll-snap-align: start; flex-shrink: 0; background: #fff; padding: 28px 24px; display: flex; flex-direction: column; gap: 10px; }
   .course-tag { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border); color: var(--muted); background: transparent; }
-  .course-card.featured .course-tag { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.5); background: transparent; }
   .tag-green  { color: #1D9E75 !important; border-color: rgba(29,158,117,0.3) !important; }
-  .popular-badge { font-size: 10px; font-weight: 600; letter-spacing: 0.5px; color: var(--blue); text-transform: uppercase; margin-bottom: -4px; }
   .course-card h3 { font-family: 'DM Serif Display', serif; font-size: 18px; font-weight: 400; color: var(--ink); line-height: 1.3; }
-  .course-card.featured h3 { color: #fff; }
   .course-card p  { font-size: 13px; color: var(--muted); line-height: 1.65; flex: 1; }
-  .course-card.featured p { color: rgba(255,255,255,0.55); }
   .course-meta { display: flex; gap: 12px; }
   .course-meta span { font-size: 12px; color: var(--muted); }
-  .course-card.featured .course-meta span { color: rgba(255,255,255,0.4); }
   .course-price { font-family: 'DM Serif Display', serif; font-size: 20px; font-weight: 400; color: var(--ink); }
-  .course-card.featured .course-price { color: #fff; }
   .course-btn { display: block; background: var(--ink); color: #fff; text-decoration: none; font-size: 13px; font-weight: 600; padding: 10px 14px; border-radius: 6px; text-align: center; transition: opacity 0.15s; margin-top: 4px; }
   .course-btn:hover { opacity: 0.8; }
-  .course-card.featured .course-btn { background: #fff; color: var(--ink); }
-  .course-btn.disabled { background: var(--border); color: var(--muted); pointer-events: none; }
-  .course-card.featured .course-btn.disabled { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.4); }
+  .course-btn.disabled { background: #F3F4F6; color: var(--muted); pointer-events: none; }
   .carousel-nav { display: flex; gap: 8px; margin-top: 16px; }
   .carousel-btn { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--cream); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.15s; color: var(--ink); }
   .carousel-btn:hover { border-color: var(--ink); }
@@ -306,7 +296,7 @@
       <div class="carousel" id="courseCarousel">
         <div class="course-card"><span class="course-tag tag-green">Gratis</span><h3>20 Prompt Claude Terbaik</h3><p>Prompt siap pakai untuk email, laporan, konten sosmed — langsung copy-paste.</p><div class="course-meta"><span>Panduan prompt</span><span>Langsung pakai</span></div><div class="course-price">Gratis</div><a href="prompt-gratis.html" class="course-btn">Pelajari</a></div>
         <div class="course-card"><span class="course-tag tag-green">Gratis</span><h3>Mulai dengan Claude AI</h3><p>Dari nol sampai bisa pakai Claude untuk kebutuhan sehari-hari. Projects, Artifacts, Docs.</p><div class="course-meta"><span>6 modul</span><span>1 jam</span></div><div class="course-price">Gratis</div><a href="mulai-claude.html" class="course-btn">Pelajari</a></div>
-        <div class="course-card featured"><div class="popular-badge">Populer</div><span class="course-tag">Beginner</span><h3>Claude untuk Pekerjaan Sehari-hari</h3><p>Hemat 3–5 jam kerja per minggu. Gmail, Sheets, Docs, Claude Projects.</p><div class="course-meta"><span>6 modul</span><span>1.5 jam</span></div><div class="course-price">Rp 149K</div><a href="kerja-sehari-hari.html" class="course-btn">Pelajari</a></div>
+        <div class="course-card"><span class="course-tag">Beginner</span><h3>Claude untuk Pekerjaan Sehari-hari</h3><p>Hemat 3–5 jam kerja per minggu. Gmail, Sheets, Docs, Claude Projects.</p><div class="course-meta"><span>6 modul</span><span>1.5 jam</span></div><div class="course-price">Rp 149K</div><a href="kerja-sehari-hari.html" class="course-btn">Pelajari</a></div>
         <div class="course-card"><span class="course-tag">Beginner</span><h3>Claude untuk Bisnis & UKM</h3><p>Tokopedia, Shopee, WhatsApp Business, Instagram — sistem konten otomatis.</p><div class="course-meta"><span>6 modul</span><span>1.5 jam</span></div><div class="course-price">Rp 149K</div><a href="bisnis-ukm.html" class="course-btn">Pelajari</a></div>
         <div class="course-card"><span class="course-tag">Intermediate</span><h3>Claude untuk Konten & Copywriting</h3><p>Artikel SEO, TikTok scripts, email sequence, landing page.</p><div class="course-meta"><span>6 modul</span><span>1.5 jam</span></div><div class="course-price">Rp 199K</div><a href="#" class="course-btn disabled">Segera Hadir</a></div>
         <div class="course-card"><span class="course-tag">Intermediate</span><h3>Claude untuk Analisis Data</h3><p>Data mentah jadi insight. Google Sheets, Forms, Claude Artifacts — dashboard otomatis.</p><div class="course-meta"><span>6 modul</span><span>1.5 jam</span></div><div class="course-price">Rp 199K</div><a href="#" class="course-btn disabled">Segera Hadir</a></div>
