@@ -4,463 +4,168 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Klaud.id — Belajar Claude AI dalam Bahasa Indonesia</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:         #EDECF5;
-    --surface:    #F5F4FB;
-    --surface-2:  #FFFFFF;
-    --navy:       #13163A;
-    --navy-2:     #1E2456;
-    --blue:       #4A72D6;
-    --blue-2:     #7098E6;
-    --blue-pale:  #D4DEFA;
-    --green:      #1D9E75;
-    --green-light:#5DCAA5;
-    --gold:       #EF9F27;
-    --muted:      #6B7080;
-    --border:     rgba(74,114,214,0.15);
-    --border-2:   rgba(74,114,214,0.08);
+    --bg:        #FFFFFF;
+    --bg-soft:   #F8F9FC;
+    --navy:      #0F1628;
+    --blue:      #4A72D6;
+    --blue-pale: #EEF2FF;
+    --blue-mid:  #3560C8;
+    --green:     #1D9E75;
+    --gold:      #EF9F27;
+    --muted:     #6B7280;
+    --border:    #E5E7EB;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
-  body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background: var(--bg);
-    color: var(--navy);
-    overflow-x: hidden;
-  }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--navy); overflow-x: hidden; }
+  .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
 
-  /* ── NAV ───────────────────────────────────────────────── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    padding: 0 56px;
-    height: 64px;
-    display: flex; align-items: center; justify-content: space-between;
-    background: rgba(237,236,245,0.82);
-    backdrop-filter: blur(14px);
-    border-bottom: 1px solid var(--border);
-  }
-  .logo {
-    font-size: 20px; font-weight: 800; letter-spacing: -0.5px;
-    color: var(--navy);
-  }
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 60px; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.94); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+  .logo { font-size: 18px; font-weight: 800; color: var(--navy); letter-spacing: -0.3px; text-decoration: none; }
   .logo span { color: var(--blue); }
-  .nav-links { display: flex; gap: 36px; align-items: center; }
-  .nav-links a {
-    font-size: 13px; font-weight: 500; letter-spacing: 0.3px;
-    color: var(--muted); text-decoration: none; transition: color 0.2s;
-  }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links a { font-size: 13px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color 0.15s; }
   .nav-links a:hover { color: var(--navy); }
-  .nav-cta {
-    background: var(--navy) !important; color: #fff !important;
-    padding: 8px 18px; border-radius: 8px; font-weight: 600 !important;
-    font-size: 13px !important; letter-spacing: 0 !important;
-    transition: background 0.2s !important;
-  }
-  .nav-cta:hover { background: var(--blue) !important; color: #fff !important; }
+  .nav-cta { background: var(--navy) !important; color: #fff !important; padding: 8px 18px; border-radius: 8px; font-weight: 700 !important; transition: background 0.2s !important; }
+  .nav-cta:hover { background: var(--blue) !important; }
+  .nav-user-pill { display: none; align-items: center; gap: 10px; }
+  .nav-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--blue-pale); display: flex; align-items: center; justify-content: center; }
+  .nav-avatar svg { width: 15px; height: 15px; color: var(--blue); }
+  .nav-uname  { font-size: 12px; font-weight: 700; color: var(--navy); display: block; line-height: 1.2; }
+  .nav-uemail { font-size: 10px; color: var(--muted); display: block; line-height: 1.2; }
 
-  /* Nav user pill (shown when logged in) */
-  .nav-user-pill {
-    display: none; align-items: center; gap: 10px;
-  }
-  .nav-avatar {
-    width: 32px; height: 32px; border-radius: 50%;
-    background: var(--blue-pale); border: 2px solid rgba(74,114,214,0.25);
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  }
-  .nav-avatar svg { width: 16px; height: 16px; color: var(--blue); }
-  .nav-user-info { display: flex; flex-direction: column; }
-  .nav-uname  { font-size: 12px; font-weight: 700; color: var(--navy); line-height: 1.2; }
-  .nav-uemail { font-size: 10px; color: var(--muted); line-height: 1.2; }
-
-  /* ── HERO ───────────────────────────────────────────────── */
-  .hero {
-    min-height: 100vh;
-    display: flex; align-items: center;
-    padding: 64px 56px 80px;
-    position: relative; overflow: hidden;
-  }
-  .hero-inner {
-    max-width: 1160px; margin: 0 auto; width: 100%;
-    display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;
-  }
-  .hero-left { display: flex; flex-direction: column; }
-  .hero-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: var(--blue-pale); border: 1px solid rgba(74,114,214,0.25);
-    border-radius: 100px; padding: 6px 14px; margin-bottom: 32px;
-    width: fit-content;
-    font-size: 12px; font-weight: 600; color: var(--blue);
-    letter-spacing: 0.5px; text-transform: uppercase;
-    animation: fadeUp 0.5s ease both;
-  }
-  .hero-badge .dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--green);
-    animation: pulse 2s ease infinite;
-  }
-  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.4)} }
-  .hero h1 {
-    font-size: clamp(36px, 4.5vw, 62px);
-    line-height: 1.1; letter-spacing: -2px;
-    margin-bottom: 24px;
-    animation: fadeUp 0.5s 0.08s ease both;
-  }
-  .hero h1 .light { font-weight: 300; color: var(--navy-2); }
-  .hero h1 .bold  { font-weight: 800; color: var(--navy); }
-  .hero h1 .accent { font-weight: 800; color: var(--blue); }
-  .hero-sub {
-    font-size: 16px; font-weight: 400; color: var(--muted);
-    line-height: 1.75; max-width: 460px; margin-bottom: 36px;
-    animation: fadeUp 0.5s 0.16s ease both;
-  }
-  .hero-actions {
-    display: flex; gap: 12px; flex-wrap: wrap;
-    animation: fadeUp 0.5s 0.24s ease both;
-  }
-  .btn-primary {
-    background: var(--navy); color: #fff;
-    padding: 13px 26px; border-radius: 9px;
-    font-size: 14px; font-weight: 700; text-decoration: none;
-    border: none; cursor: pointer;
-    transition: background 0.2s, transform 0.15s;
-    display: inline-flex; align-items: center; gap: 8px;
-  }
+  /* HERO */
+  .hero { padding: 128px 24px 80px; text-align: center; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 7px; background: var(--blue-pale); color: var(--blue); font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 100px; margin-bottom: 24px; }
+  .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); flex-shrink: 0; }
+  .hero h1 { font-size: clamp(34px, 5vw, 58px); font-weight: 800; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 20px; }
+  .hero h1 .accent { color: var(--blue); }
+  .hero-sub { font-size: 17px; color: var(--muted); line-height: 1.7; max-width: 560px; margin: 0 auto 36px; }
+  .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 56px; }
+  .btn-primary   { display: inline-flex; align-items: center; gap: 8px; background: var(--navy); color: #fff; font-size: 14px; font-weight: 700; padding: 13px 26px; border-radius: 10px; text-decoration: none; transition: background 0.2s, transform 0.15s; }
   .btn-primary:hover { background: var(--blue); transform: translateY(-1px); }
-  .btn-secondary {
-    background: transparent; color: var(--navy);
-    padding: 13px 26px; border-radius: 9px;
-    font-size: 14px; font-weight: 600; text-decoration: none;
-    border: 1.5px solid var(--border); cursor: pointer;
-    transition: border-color 0.2s, background 0.2s, transform 0.15s;
-  }
-  .btn-secondary:hover {
-    border-color: var(--blue); background: var(--blue-pale);
-    transform: translateY(-1px);
-  }
-  .hero-stats {
-    display: flex; gap: 32px; flex-wrap: wrap;
-    margin-top: 48px; padding-top: 36px;
-    border-top: 1px solid var(--border);
-    animation: fadeUp 0.5s 0.32s ease both;
-  }
-  .stat .num {
-    font-size: 26px; font-weight: 800; color: var(--navy); letter-spacing: -1px;
-  }
-  .stat .num span { color: var(--blue); }
-  .stat .lbl { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: var(--bg); color: var(--navy); font-size: 14px; font-weight: 600; padding: 13px 26px; border-radius: 10px; text-decoration: none; border: 1.5px solid var(--border); transition: border-color 0.2s, background 0.2s; }
+  .btn-secondary:hover { border-color: var(--blue); background: var(--blue-pale); }
+  .hero-stats { display: flex; gap: 48px; justify-content: center; flex-wrap: wrap; }
+  .hero-stat-num { font-size: 26px; font-weight: 800; color: var(--navy); letter-spacing: -0.5px; line-height: 1; margin-bottom: 3px; }
+  .hero-stat-lbl { font-size: 12px; color: var(--muted); }
 
-  /* Particle canvas */
-  .hero-right {
-    display: flex; align-items: center; justify-content: center;
-    animation: fadeIn 0.8s 0.2s ease both;
-  }
-  #particle-canvas {
-    width: 100%; max-width: 520px; aspect-ratio: 1;
-  }
-  @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+  /* SECTIONS */
+  section { padding: 80px 24px; }
+  .section-soft { background: var(--bg-soft); }
+  .section-label { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--blue); background: var(--blue-pale); padding: 4px 12px; border-radius: 100px; margin-bottom: 14px; }
+  .section-title { font-size: clamp(24px, 3vw, 34px); font-weight: 800; letter-spacing: -0.8px; color: var(--navy); margin-bottom: 12px; line-height: 1.2; }
+  .section-sub   { font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 520px; }
 
-  /* ── SHARED SECTION ─────────────────────────────────────── */
-  section { padding: 96px 24px; }
-  .container { max-width: 1100px; margin: 0 auto; }
-  .section-label {
-    font-size: 11px; font-weight: 700; letter-spacing: 2px;
-    color: var(--blue); text-transform: uppercase; margin-bottom: 12px;
-    font-family: 'DM Mono', monospace;
-  }
-  .section-title {
-    font-size: clamp(26px, 3.5vw, 40px); font-weight: 800;
-    letter-spacing: -1px; line-height: 1.15; margin-bottom: 14px;
-    color: var(--navy);
-  }
-  .section-sub {
-    font-size: 15px; color: var(--muted); line-height: 1.8;
-    max-width: 500px; margin-bottom: 52px;
-  }
+  /* FEATURES */
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 48px; }
+  .feat-card { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 28px 24px; transition: box-shadow 0.2s; }
+  .feat-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.06); }
+  .feat-icon  { font-size: 28px; margin-bottom: 14px; }
+  .feat-title { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 7px; }
+  .feat-desc  { font-size: 13px; color: var(--muted); line-height: 1.7; }
 
-  /* ── WHY ────────────────────────────────────────────────── */
-  .why { background: var(--surface); border-top: 1px solid var(--border-2); border-bottom: 1px solid var(--border-2); }
-  .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
-  .why-card {
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    border-radius: 16px; padding: 28px 24px;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  .why-card:hover {
-    border-color: var(--blue);
-    box-shadow: 0 4px 20px rgba(74,114,214,0.1);
-  }
-  .why-icon {
-    width: 44px; height: 44px; border-radius: 12px;
-    background: var(--blue-pale);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px; margin-bottom: 16px;
-  }
-  .why-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--navy); }
-  .why-card p  { font-size: 13px; color: var(--muted); line-height: 1.75; }
-
-  /* ── COURSES ────────────────────────────────────────────── */
-  .courses-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
-  .course-card {
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    border-radius: 14px; padding: 24px;
-    position: relative; overflow: hidden;
-    display: flex; flex-direction: column;
-    transition: border-color 0.2s;
-  }
-  .course-card:hover { border-color: var(--blue); }
-  .course-card.featured { border-color: var(--blue); }
-  .course-tag {
-    display: inline-block; font-size: 10px; font-weight: 700;
-    padding: 3px 9px; border-radius: 100px; margin-bottom: 14px;
-    letter-spacing: 0.5px; width: fit-content;
-  }
-  .tag-blue  { background: var(--blue-pale); color: var(--blue); }
-  .tag-green { background: rgba(29,158,117,0.12); color: #117A57; }
-  .tag-gold  { background: rgba(239,159,39,0.12); color: #A0650A; }
-  .popular-badge {
-    position: absolute; top: 18px; right: 18px;
-    background: var(--blue); color: #fff;
-    font-size: 9px; font-weight: 700; letter-spacing: 0.5px;
-    padding: 3px 9px; border-radius: 100px;
-  }
-  .course-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; line-height: 1.35; color: var(--navy); }
-  .course-card p  { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 16px; flex: 1; }
-  .course-meta { display: flex; gap: 12px; margin-bottom: 16px; }
-  .course-meta span { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
-  .course-price { font-size: 20px; font-weight: 800; color: var(--navy); margin-bottom: 16px; }
-  .course-price .old { font-size: 13px; color: #aaa; text-decoration: line-through; margin-right: 6px; font-weight: 400; }
-  .course-btn {
-    display: block; text-align: center; padding: 10px;
-    border-radius: 8px; font-size: 13px; font-weight: 600;
-    text-decoration: none; color: var(--navy);
-    border: 1.5px solid var(--border);
-    background: transparent;
-    transition: background 0.2s, border-color 0.2s, color 0.2s;
-    margin-top: auto;
-  }
-  .course-btn:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
-  .course-btn.disabled { background: var(--surface); color: var(--muted); border-color: var(--border); cursor: default; pointer-events: none; }
-
-  .level-row { display: flex; align-items: center; gap: 14px; margin: 36px 0 16px; }
-  .level-row:first-child { margin-top: 0; }
-  .level-pill {
-    font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
-    padding: 4px 12px; border-radius: 100px; white-space: nowrap;
-  }
-  .level-pill.beginner  { background: rgba(29,158,117,0.12); color: #117A57; }
-  .level-pill.intermediate { background: rgba(239,159,39,0.12); color: #A0650A; }
-  .level-pill.advanced  { background: rgba(74,114,214,0.12); color: var(--blue); }
-  .level-line { flex: 1; height: 1px; background: var(--border); }
-  .level-price { font-size: 11px; color: var(--muted); white-space: nowrap; }
-
-  .tag-coming { background: rgba(100,116,139,0.1); color: #64748B; }
-
-  /* ── CAROUSEL ───────────────────────────────────────────── */
+  /* COURSES */
+  .courses-header { margin-bottom: 32px; }
   .carousel-wrap { position: relative; }
-  .carousel {
-    display: flex; gap: 16px;
-    overflow-x: auto; scroll-snap-type: x mandatory;
-    padding-bottom: 12px;
-    scrollbar-width: none;
-  }
+  .carousel { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; scrollbar-width: none; }
   .carousel::-webkit-scrollbar { display: none; }
-  .carousel .course-card {
-    min-width: 270px; max-width: 270px;
-    scroll-snap-align: start; flex-shrink: 0;
-  }
-  .carousel-nav {
-    display: flex; gap: 10px; margin-top: 20px; justify-content: center;
-  }
-  .carousel-btn {
-    width: 36px; height: 36px; border-radius: 50%;
-    border: 1.5px solid var(--border);
-    background: var(--surface-2);
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; transition: border-color 0.2s, background 0.2s;
-    color: var(--navy);
-  }
+  .course-card { min-width: 248px; scroll-snap-align: start; flex-shrink: 0; background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 22px 20px; display: flex; flex-direction: column; gap: 10px; transition: box-shadow 0.2s, border-color 0.2s; }
+  .course-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.07); border-color: #D1D5DB; }
+  .course-card.featured { border-color: var(--blue); background: var(--blue-pale); }
+  .course-tag    { display: inline-block; font-size: 9px; font-weight: 700; letter-spacing: 1px; padding: 3px 9px; border-radius: 100px; }
+  .tag-green     { background: #D1FAE5; color: #065F46; }
+  .tag-blue      { background: var(--blue-pale); color: var(--blue); }
+  .tag-coming    { background: #F3F4F6; color: var(--muted); }
+  .popular-badge { font-size: 9px; font-weight: 700; letter-spacing: 1px; color: var(--gold); text-transform: uppercase; margin-bottom: -4px; }
+  .course-card h3  { font-size: 14px; font-weight: 700; color: var(--navy); line-height: 1.4; }
+  .course-card p   { font-size: 12px; color: var(--muted); line-height: 1.6; flex: 1; }
+  .course-meta     { display: flex; flex-wrap: wrap; gap: 8px; }
+  .course-meta span { font-size: 11px; color: var(--muted); }
+  .course-price    { font-size: 16px; font-weight: 800; color: var(--navy); }
+  .course-btn      { display: block; background: var(--navy); color: #fff; text-decoration: none; font-size: 12px; font-weight: 700; padding: 9px 14px; border-radius: 8px; text-align: center; transition: background 0.2s; margin-top: 4px; }
+  .course-btn:hover { background: var(--blue); }
+  .course-btn.disabled { background: var(--border); color: var(--muted); pointer-events: none; }
+  .carousel-nav { display: flex; gap: 8px; margin-top: 16px; }
+  .carousel-btn { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--bg); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.2s, background 0.2s; color: var(--navy); }
   .carousel-btn:hover { border-color: var(--blue); background: var(--blue-pale); }
   .carousel-btn svg { width: 14px; height: 14px; }
 
-  /* ── PACKAGES ───────────────────────────────────────────── */
-  .packages { background: var(--surface); border-top: 1px solid var(--border-2); border-bottom: 1px solid var(--border-2); }
-  .pkg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
-  .pkg-card {
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    border-radius: 16px; padding: 28px 24px;
-    display: flex; flex-direction: column;
-    position: relative; overflow: hidden;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  .pkg-card:hover { border-color: var(--blue); box-shadow: 0 4px 24px rgba(74,114,214,0.1); }
-  .pkg-card.featured { border-color: var(--blue); }
-  .pkg-card.featured::before {
-    content: '⭐ PALING POPULER';
-    position: absolute; top: 0; right: 0;
-    background: var(--blue); color: #fff;
-    font-size: 9px; font-weight: 800; letter-spacing: 0.5px;
-    padding: 5px 12px; border-bottom-left-radius: 10px;
-  }
-  .pkg-persona {
-    font-size: 11px; font-weight: 700; letter-spacing: 1px;
-    text-transform: uppercase; color: var(--blue);
-    font-family: 'DM Mono', monospace; margin-bottom: 6px;
-  }
-  .pkg-card h3 { font-size: 20px; font-weight: 800; color: var(--navy); letter-spacing: -0.5px; margin-bottom: 16px; }
-  .pkg-courses { display: flex; flex-direction: column; gap: 7px; margin-bottom: 20px; flex: 1; }
-  .pkg-course-item {
-    display: flex; align-items: center; gap: 9px;
-    font-size: 12px; color: var(--muted); line-height: 1.4;
-  }
-  .pkg-course-item .ci { font-size: 15px; flex-shrink: 0; }
-  .pkg-course-item.available { color: var(--navy); }
-  .pkg-course-item .cs-tag {
-    font-size: 9px; font-weight: 700; color: #94A3B8;
-    background: rgba(100,116,139,0.08);
-    padding: 1px 6px; border-radius: 4px; margin-left: 4px; white-space: nowrap;
-  }
-  .pkg-divider { height: 1px; background: var(--border); margin: 16px 0; }
-  .pkg-pricing { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
-  .pkg-price { font-size: 26px; font-weight: 800; color: var(--navy); letter-spacing: -1px; }
-  .pkg-original { font-size: 13px; color: #aaa; text-decoration: line-through; }
-  .pkg-save { font-size: 11px; font-weight: 700; color: var(--green); background: rgba(29,158,117,0.1); padding: 2px 8px; border-radius: 6px; white-space: nowrap; }
-  .pkg-note { font-size: 11px; color: var(--muted); margin-bottom: 18px; line-height: 1.6; }
-  .pkg-btn {
-    display: block; text-align: center; padding: 11px;
-    border-radius: 9px; font-size: 13px; font-weight: 700;
-    text-decoration: none; cursor: pointer;
-    border: none; transition: background 0.2s, transform 0.15s;
-  }
+  /* PACKAGES */
+  .pkg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 48px; }
+  .pkg-card { background: var(--bg); border: 1.5px solid var(--border); border-radius: 16px; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px; transition: box-shadow 0.2s; }
+  .pkg-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.06); }
+  .pkg-card.featured { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(74,114,214,0.08); }
+  .pkg-persona { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; color: var(--blue); text-transform: uppercase; }
+  .pkg-card h3 { font-size: 18px; font-weight: 800; color: var(--navy); letter-spacing: -0.3px; }
+  .pkg-courses { display: flex; flex-direction: column; gap: 7px; }
+  .pkg-course-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+  .pkg-course-item.available { color: var(--navy); font-weight: 500; }
+  .ci { font-size: 14px; }
+  .cs-tag { font-size: 9px; font-weight: 700; background: #F3F4F6; color: var(--muted); padding: 2px 7px; border-radius: 100px; margin-left: 4px; }
+  .pkg-divider { height: 1px; background: var(--border); }
+  .pkg-pricing { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .pkg-price    { font-size: 26px; font-weight: 800; color: var(--navy); letter-spacing: -0.5px; }
+  .pkg-original { font-size: 13px; color: var(--muted); text-decoration: line-through; }
+  .pkg-save     { font-size: 11px; font-weight: 700; background: #D1FAE5; color: #065F46; padding: 2px 9px; border-radius: 100px; }
+  .pkg-note     { font-size: 11px; color: var(--muted); line-height: 1.6; }
+  .pkg-btn { display: block; text-align: center; font-size: 13px; font-weight: 700; padding: 11px 16px; border-radius: 10px; text-decoration: none; transition: all 0.2s; margin-top: auto; }
   .pkg-btn.primary { background: var(--navy); color: #fff; }
-  .pkg-btn.primary:hover { background: var(--blue); transform: translateY(-1px); }
+  .pkg-btn.primary:hover { background: var(--blue); }
   .pkg-btn.outline { background: transparent; color: var(--navy); border: 1.5px solid var(--border); }
   .pkg-btn.outline:hover { border-color: var(--blue); background: var(--blue-pale); }
-  .pkg-early {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
-    text-transform: uppercase; color: var(--gold);
-    background: rgba(239,159,39,0.1); border-radius: 6px;
-    padding: 3px 8px; margin-bottom: 10px; width: fit-content;
-  }
 
-  /* ── ABOUT ──────────────────────────────────────────────── */
-  .about { background: var(--surface); border-top: 1px solid var(--border-2); }
-  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
-  .about-text p {
-    font-size: 15px; color: var(--muted); line-height: 1.9;
-    margin-bottom: 18px;
-  }
-  .about-text p strong { color: var(--navy); font-weight: 700; }
-  .about-visual {
-    background: var(--navy);
-    border-radius: 20px; padding: 36px 32px;
-    display: flex; flex-direction: column; gap: 0;
-  }
-  .about-visual-label {
-    font-size: 11px; font-weight: 700; color: var(--blue-2);
-    letter-spacing: 1.5px; text-transform: uppercase;
-    font-family: 'DM Mono', monospace; margin-bottom: 20px;
-  }
-  .stat-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 0;
-    border-bottom: 1px solid rgba(74,114,214,0.12);
-  }
-  .stat-row:last-child { border-bottom: none; }
-  .stat-row .label { font-size: 13px; color: var(--blue-2); }
-  .stat-row .value { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
-
-  /* ── TESTIMONIALS ───────────────────────────────────────── */
-  .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; }
-  .testi-card {
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    border-radius: 16px; padding: 24px;
-    transition: box-shadow 0.2s;
-  }
-  .testi-card:hover { box-shadow: 0 4px 20px rgba(74,114,214,0.08); }
-  .stars { color: var(--gold); font-size: 13px; margin-bottom: 14px; letter-spacing: 2px; }
-  .testi-card blockquote {
-    font-size: 14px; color: var(--muted); line-height: 1.8;
-    margin-bottom: 20px; font-style: italic;
-  }
-  .testi-author { display: flex; align-items: center; gap: 12px; }
-  .avatar {
-    width: 38px; height: 38px; border-radius: 50%;
-    background: var(--blue-pale);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 700; color: var(--blue);
-    flex-shrink: 0;
-  }
+  /* TESTIMONIALS */
+  .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 48px; }
+  .testi-card { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+  .stars { color: var(--gold); font-size: 13px; margin-bottom: 12px; }
+  blockquote { font-size: 13px; color: #374151; line-height: 1.7; }
+  .testi-author { display: flex; align-items: center; gap: 10px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--blue-pale); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--blue); flex-shrink: 0; }
   .testi-author .name { font-size: 13px; font-weight: 700; color: var(--navy); }
-  .testi-author .role { font-size: 12px; color: var(--muted); }
+  .testi-author .role { font-size: 11px; color: var(--muted); }
 
-  /* ── CTA ────────────────────────────────────────────────── */
-  .cta-section {
-    background: var(--navy);
-    text-align: center; padding: 80px 24px;
-  }
-  .cta-section h2 {
-    font-size: clamp(26px, 4vw, 42px); font-weight: 800;
-    color: #fff; letter-spacing: -1px; margin-bottom: 14px;
-  }
-  .cta-section p { font-size: 15px; color: var(--blue-2); margin-bottom: 36px; line-height: 1.7; }
-  .cta-btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: var(--blue); color: #fff;
-    padding: 14px 30px; border-radius: 10px;
-    font-size: 15px; font-weight: 700; text-decoration: none;
-    transition: background 0.2s, transform 0.15s;
-  }
-  .cta-btn:hover { background: #3a5ec0; transform: translateY(-2px); }
-  .cta-sub { font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 16px; }
+  /* CTA */
+  .cta-section { background: var(--navy); text-align: center; padding: 80px 24px; }
+  .cta-section h2 { font-size: 36px; font-weight: 800; color: #fff; letter-spacing: -0.8px; margin-bottom: 14px; }
+  .cta-section p  { font-size: 15px; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 36px; }
+  .cta-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--blue); color: #fff; font-size: 15px; font-weight: 700; padding: 14px 32px; border-radius: 10px; text-decoration: none; transition: background 0.2s, transform 0.15s; }
+  .cta-btn:hover { background: var(--blue-mid); transform: translateY(-1px); }
+  .cta-sub { font-size: 12px; color: rgba(255,255,255,0.3); margin-top: 16px; }
 
-  /* ── FOOTER ─────────────────────────────────────────────── */
-  footer {
-    background: #0D1030; padding: 52px 24px 32px;
-    border-top: 1px solid rgba(74,114,214,0.1);
-  }
-  .footer-inner { max-width: 1100px; margin: 0 auto; }
-  .footer-top {
-    display: flex; justify-content: space-between; align-items: flex-start;
-    flex-wrap: wrap; gap: 32px; margin-bottom: 40px;
-  }
-  .footer-brand .logo { font-size: 20px; margin-bottom: 10px; color: #fff; }
-  .footer-brand .logo span { color: var(--blue-2); }
-  .footer-brand p { font-size: 13px; color: rgba(255,255,255,0.4); max-width: 240px; line-height: 1.7; }
-  .footer-links h4 {
-    font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
-    text-transform: uppercase; color: rgba(255,255,255,0.35);
-    margin-bottom: 14px; font-family: 'DM Mono', monospace;
-  }
-  .footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  /* FOOTER */
+  footer { background: var(--navy); border-top: 1px solid rgba(255,255,255,0.06); padding: 56px 24px 32px; }
+  .footer-inner { max-width: 1120px; margin: 0 auto; }
+  .footer-top { display: flex; gap: 56px; flex-wrap: wrap; margin-bottom: 40px; }
+  .footer-brand { flex: 1; min-width: 200px; }
+  .footer-brand .logo { color: #fff; }
+  .footer-brand p { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.7; margin-top: 10px; max-width: 240px; }
+  .footer-links h4 { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 14px; }
+  .footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
   .footer-links ul a { font-size: 13px; color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s; }
   .footer-links ul a:hover { color: #fff; }
-  .footer-bottom {
-    border-top: 1px solid rgba(255,255,255,0.06);
-    padding-top: 24px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
-  }
-  .footer-bottom p { font-size: 12px; color: rgba(255,255,255,0.3); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.06); padding-top: 24px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  .footer-bottom p { font-size: 12px; color: rgba(255,255,255,0.25); }
 
-  /* ── RESPONSIVE ─────────────────────────────────────────── */
+  /* RESPONSIVE */
   @media (max-width: 900px) {
-    .hero-inner { grid-template-columns: 1fr; }
-    .hero-right { order: -1; max-width: 320px; margin: 0 auto; }
-    .about-grid { grid-template-columns: 1fr; }
+    .features-grid { grid-template-columns: 1fr 1fr; }
+    .pkg-grid { grid-template-columns: 1fr 1fr; }
+    .testi-grid { grid-template-columns: 1fr 1fr; }
   }
-  @media (max-width: 768px) {
-    nav { padding: 0 20px; }
+  @media (max-width: 640px) {
+    nav { padding: 0 16px; }
     .nav-links { display: none; }
-    .hero { padding: 88px 20px 60px; }
-    .hero-stats { gap: 20px; }
-    section { padding: 64px 20px; }
-    .footer-top { flex-direction: column; }
+    .hero { padding: 100px 16px 56px; }
+    section { padding: 56px 16px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .pkg-grid { grid-template-columns: 1fr; }
+    .testi-grid { grid-template-columns: 1fr; }
+    .footer-top { gap: 32px; }
   }
 </style>
 </head>
@@ -468,344 +173,160 @@
 
 <!-- NAV -->
 <nav>
-  <div class="logo">Klaud<span>.id</span></div>
+  <a href="index.html" class="logo">Klaud<span>.id</span></a>
   <div class="nav-links">
     <a href="#kursus">Kursus</a>
     <a href="#paket">Paket</a>
-
-    <a href="login.html" id="navLoginBtn" style="color:var(--navy);font-weight:600;font-size:13px;">Masuk</a>
+    <a href="login.html" id="navLoginBtn" style="color:var(--navy);font-weight:600;">Masuk</a>
     <a href="login.html" id="navCtaBtn" class="nav-cta">Gabung Gratis</a>
     <div class="nav-user-pill" id="navUserPill">
-      <div class="nav-avatar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-          <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
-        </svg>
-      </div>
-      <div class="nav-user-info">
-        <span class="nav-uname"  id="navUname"></span>
-        <span class="nav-uemail" id="navUemail"></span>
-      </div>
+      <div class="nav-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+      <div><span class="nav-uname" id="navUname"></span><span class="nav-uemail" id="navUemail"></span></div>
     </div>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-inner">
-    <div class="hero-left">
-      <div class="hero-badge">
-        <span class="dot"></span>
-        Platform Claude AI #1 Bahasa Indonesia
-      </div>
-      <h1>
-        <span class="light">Kuasai Claude AI,</span><br>
-        <span class="light">hemat waktu,</span><br>
-        <span class="bold accent">tingkatkan karir</span>
-      </h1>
-      <p class="hero-sub">
-        Kursus, workshop, dan panduan Claude AI yang praktis — sepenuhnya dalam Bahasa Indonesia, dengan contoh kasus nyata untuk profesional, UKM, dan mahasiswa.
-      </p>
-      <div class="hero-actions">
-        <a href="#kursus" class="btn-primary">
-          Lihat Kursus
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-        <a href="login.html" class="btn-secondary">Gabung Komunitas Gratis</a>
-      </div>
-    </div>
-    <div class="hero-right">
-      <canvas id="particle-canvas"></canvas>
-    </div>
+  <div class="hero-badge"><span class="dot"></span>Platform Claude AI #1 Bahasa Indonesia</div>
+  <h1>Kuasai Claude AI,<br>hemat waktu, <span class="accent">tingkatkan karir</span></h1>
+  <p class="hero-sub">Kursus dan panduan Claude AI yang praktis — sepenuhnya dalam Bahasa Indonesia, dengan contoh kasus nyata untuk profesional, UKM, dan mahasiswa.</p>
+  <div class="hero-actions">
+    <a href="#kursus" class="btn-primary">Lihat Kursus <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    <a href="login.html" class="btn-secondary">Gabung Gratis</a>
+  </div>
+  <div class="hero-stats">
+    <div><div class="hero-stat-num">10.000+</div><div class="hero-stat-lbl">Pelajar aktif</div></div>
+    <div><div class="hero-stat-num">10</div><div class="hero-stat-lbl">Kursus tersedia</div></div>
+    <div><div class="hero-stat-num">~16 jam</div><div class="hero-stat-lbl">Total konten</div></div>
+    <div><div class="hero-stat-num">100%</div><div class="hero-stat-lbl">Bahasa Indonesia</div></div>
   </div>
 </section>
 
-
-<!-- PACKAGES -->
-<section class="packages" id="paket">
+<!-- FEATURES -->
+<section class="section-soft">
   <div class="container">
-    <div class="section-label">Paket Hemat</div>
-    <h2 class="section-title">Beli lebih banyak,<br>hemat lebih besar</h2>
-    <p class="section-sub">Pilih paket yang sesuai dengan tujuan kamu — dapatkan akses ke kursus yang sudah tersedia sekarang, dan kursus berikutnya otomatis terbuka saat diluncurkan.</p>
-
-    <div class="pkg-grid">
-
-      <!-- Paket Profesional -->
-      <div class="pkg-card featured">
-        <div class="pkg-persona">Untuk Karyawan & Profesional</div>
-        <h3>Paket Profesional</h3>
-        <div class="pkg-courses">
-          <div class="pkg-course-item available"><span class="ci">🚀</span> Mulai dengan Claude AI</div>
-          <div class="pkg-course-item available"><span class="ci">💼</span> Claude untuk Pekerjaan Sehari-hari</div>
-          <div class="pkg-course-item"><span class="ci">📊</span> Claude untuk Analisis Data <span class="cs-tag">Segera</span></div>
-        </div>
-        <div class="pkg-divider"></div>
-        <div class="pkg-pricing">
-          <span class="pkg-price">Rp 299K</span>
-          <span class="pkg-original">Rp 398K</span>
-          <span class="pkg-save">Hemat Rp 99K</span>
-        </div>
-        <p class="pkg-note">✅ 2 kursus tersedia langsung · 1 kursus menyusul saat launch</p>
-        <a href="login.html" class="pkg-btn primary">Beli Paket Profesional →</a>
-      </div>
-
-      <!-- Paket Bisnis & UKM -->
-      <div class="pkg-card">
-        <div class="pkg-persona">Untuk Pemilik Bisnis & UKM</div>
-        <h3>Paket Bisnis & UKM</h3>
-        <div class="pkg-courses">
-          <div class="pkg-course-item available"><span class="ci">🚀</span> Mulai dengan Claude AI</div>
-          <div class="pkg-course-item available"><span class="ci">🏪</span> Claude untuk Bisnis & UKM</div>
-          <div class="pkg-course-item"><span class="ci">✍️</span> Claude untuk Konten & Copywriting <span class="cs-tag">Segera</span></div>
-          <div class="pkg-course-item"><span class="ci">⚡</span> Build Automation dengan Claude <span class="cs-tag">Segera</span></div>
-        </div>
-        <div class="pkg-divider"></div>
-        <div class="pkg-pricing">
-          <span class="pkg-price">Rp 499K</span>
-          <span class="pkg-original">Rp 647K</span>
-          <span class="pkg-save">Hemat Rp 148K</span>
-        </div>
-        <p class="pkg-note">✅ 2 kursus tersedia langsung · 2 kursus menyusul saat launch</p>
-        <a href="login.html" class="pkg-btn outline">Beli Paket Bisnis & UKM →</a>
-      </div>
-
-      <!-- Paket Content Creator -->
-      <div class="pkg-card">
-        <div class="pkg-persona">Untuk Content Creator</div>
-        <h3>Paket Content Creator</h3>
-        <div class="pkg-courses">
-          <div class="pkg-course-item available"><span class="ci">🚀</span> Mulai dengan Claude AI</div>
-          <div class="pkg-course-item available"><span class="ci">🏪</span> Claude untuk Bisnis & UKM</div>
-          <div class="pkg-course-item"><span class="ci">✍️</span> Claude untuk Konten & Copywriting <span class="cs-tag">Segera</span></div>
-        </div>
-        <div class="pkg-divider"></div>
-        <div class="pkg-pricing">
-          <span class="pkg-price">Rp 299K</span>
-          <span class="pkg-original">Rp 348K</span>
-          <span class="pkg-save">Hemat Rp 49K</span>
-        </div>
-        <p class="pkg-note">✅ 2 kursus tersedia langsung · 1 kursus menyusul saat launch</p>
-        <a href="login.html" class="pkg-btn outline">Beli Paket Content Creator →</a>
-      </div>
-
-      <!-- Paket Mahasiswa -->
-      <div class="pkg-card">
-        <div class="pkg-persona">Untuk Mahasiswa</div>
-        <h3>Paket Mahasiswa</h3>
-        <div class="pkg-courses">
-          <div class="pkg-course-item available"><span class="ci">🚀</span> Mulai dengan Claude AI</div>
-          <div class="pkg-course-item"><span class="ci">✍️</span> Claude untuk Konten & Copywriting <span class="cs-tag">Segera</span></div>
-          <div class="pkg-course-item"><span class="ci">📊</span> Claude untuk Analisis Data <span class="cs-tag">Segera</span></div>
-        </div>
-        <div class="pkg-divider"></div>
-        <div class="pkg-pricing">
-          <span class="pkg-price">Rp 249K</span>
-          <span class="pkg-original">Rp 348K</span>
-          <span class="pkg-save">Hemat Rp 99K</span>
-        </div>
-        <p class="pkg-note">✅ 1 kursus tersedia langsung · 2 kursus menyusul saat launch</p>
-        <a href="login.html" class="pkg-btn outline">Beli Paket Mahasiswa →</a>
-      </div>
-
-      <!-- Paket Developer -->
-      <div class="pkg-card">
-        <div class="pkg-persona">Untuk Developer & Tech</div>
-        <h3>Paket Developer</h3>
-        <div class="pkg-courses">
-          <div class="pkg-course-item available"><span class="ci">🚀</span> Mulai dengan Claude AI</div>
-          <div class="pkg-course-item"><span class="ci">🛠️</span> Build AI-Powered App Sederhana <span class="cs-tag">Segera</span></div>
-          <div class="pkg-course-item"><span class="ci">👨‍💻</span> Claude API untuk Developer <span class="cs-tag">Segera</span></div>
-          <div class="pkg-course-item"><span class="ci">💰</span> Build & Jual Produk AI <span class="cs-tag">Segera</span></div>
-        </div>
-        <div class="pkg-divider"></div>
-        <div class="pkg-pricing">
-          <span class="pkg-price">Rp 799K</span>
-          <span class="pkg-original">Rp 1.197K</span>
-          <span class="pkg-save">Hemat Rp 398K</span>
-        </div>
-        <p class="pkg-note">✅ 1 kursus tersedia langsung · 3 kursus menyusul saat launch</p>
-        <a href="login.html" class="pkg-btn outline">Beli Paket Developer →</a>
-      </div>
-
-      <!-- All Access -->
-      <div class="pkg-card">
-        <div class="pkg-persona">All Access</div>
-        <h3>Semua 9 Kursus</h3>
-        <div class="pkg-courses">
-          <div class="pkg-course-item available"><span class="ci">🚀</span> Mulai dengan Claude AI</div>
-          <div class="pkg-course-item available"><span class="ci">💼</span> Claude untuk Pekerjaan Sehari-hari</div>
-          <div class="pkg-course-item available"><span class="ci">🏪</span> Claude untuk Bisnis & UKM</div>
-          <div class="pkg-course-item"><span class="ci">✍️</span> + 6 kursus lainnya <span class="cs-tag">Segera</span></div>
-        </div>
-        <div class="pkg-divider"></div>
-        <div class="pkg-pricing">
-          <span class="pkg-price">Rp 999K</span>
-          <span class="pkg-original">Rp 1.694K</span>
-          <span class="pkg-save">Hemat Rp 695K</span>
-        </div>
-        <p class="pkg-note">✅ 3 kursus tersedia langsung · 6 kursus berikutnya otomatis terbuka</p>
-        <a href="login.html" class="pkg-btn primary">Beli All Access →</a>
-      </div>
-
+    <div class="section-label">Kenapa Klaud.id?</div>
+    <h2 class="section-title">Belajar Claude AI yang benar-benar praktis</h2>
+    <p class="section-sub">Bukan teori — tapi workflow nyata yang langsung bisa kamu terapkan hari ini.</p>
+    <div class="features-grid">
+      <div class="feat-card"><div class="feat-icon">🇮🇩</div><div class="feat-title">100% Bahasa Indonesia</div><div class="feat-desc">Semua materi, contoh, dan diskusi dalam Bahasa Indonesia. Tidak ada barrier bahasa.</div></div>
+      <div class="feat-card"><div class="feat-icon">⚡</div><div class="feat-title">Langsung bisa diterapkan</div><div class="feat-desc">Setiap modul punya workflow siap pakai. Selesai kursus, langsung produktif.</div></div>
+      <div class="feat-card"><div class="feat-icon">🏪</div><div class="feat-title">Konteks lokal Indonesia</div><div class="feat-desc">Contoh kasus: Tokopedia, Shopee, WhatsApp Business, Canva — tools yang kamu sudah pakai.</div></div>
+      <div class="feat-card"><div class="feat-icon">🗺️</div><div class="feat-title">Learning Journey personal</div><div class="feat-desc">Dashboard dengan rekomendasi kursus berdasarkan profil dan tujuan belajar kamu.</div></div>
+      <div class="feat-card"><div class="feat-icon">💰</div><div class="feat-title">Harga terjangkau</div><div class="feat-desc">Mulai dari gratis. Kursus berbayar mulai Rp 149K — jauh lebih murah dari kursus AI luar negeri.</div></div>
+      <div class="feat-card"><div class="feat-icon">🔄</div><div class="feat-title">Selalu update</div><div class="feat-desc">Materi diperbarui setiap kali Claude release fitur baru. Beli sekali, akses selamanya.</div></div>
     </div>
   </div>
 </section>
 
-<!-- COURSES CAROUSEL -->
+<!-- COURSES -->
 <section id="kursus">
   <div class="container">
-    <div class="section-label">Kurikulum</div>
-    <h2 class="section-title">10 Kursus · 3 Level · ~16 Jam</h2>
-    <p class="section-sub">Atau pilih satu kursus saja — semua tersedia secara individu.</p>
-
+    <div class="courses-header">
+      <div class="section-label">Kurikulum</div>
+      <h2 class="section-title">10 Kursus · 3 Level · ~16 Jam</h2>
+      <p class="section-sub">Pilih satu kursus, atau ambil paket untuk hemat lebih besar.</p>
+    </div>
     <div class="carousel-wrap">
       <div class="carousel" id="courseCarousel">
-
-        <div class="course-card">
-          <span class="course-tag tag-green">GRATIS</span>
-          <h3>20 Prompt Claude Terbaik</h3>
-          <p>Prompt siap pakai untuk email, laporan, konten sosmed, dan lainnya — langsung copy-paste.</p>
-          <div class="course-meta">
-            <span>📄 Panduan Prompt</span>
-            <span>⏱ Bisa dipakai hari ini</span>
-          </div>
-          <div class="course-price">Gratis</div>
-          <a href="prompt-gratis.html" class="course-btn">Pelajari →</a>
-        </div>
-
-        <div class="course-card">
-          <span class="course-tag tag-green">GRATIS</span>
-          <h3>Mulai dengan Claude AI</h3>
-          <p>Dari nol sampai bisa pakai Claude untuk kebutuhan sehari-hari. Projects, Artifacts, Docs.</p>
-          <div class="course-meta">
-            <span>🎬 6 modul</span>
-            <span>⏱ 1 jam</span>
-          </div>
-          <div class="course-price">Gratis</div>
-          <a href="mulai-claude.html" class="course-btn">Pelajari →</a>
-        </div>
-
-        <div class="course-card featured">
-          <div class="popular-badge">POPULER</div>
-          <span class="course-tag tag-blue">BEGINNER</span>
-          <h3>Claude untuk Pekerjaan Sehari-hari</h3>
-          <p>Hemat 3–5 jam kerja per minggu. Gmail, Sheets, Docs, Claude Projects.</p>
-          <div class="course-meta">
-            <span>🎬 6 modul</span>
-            <span>⏱ 1.5 jam</span>
-          </div>
-          <div class="course-price">Rp 149K</div>
-          <a href="kerja-sehari-hari.html" class="course-btn">Pelajari →</a>
-        </div>
-
-        <div class="course-card">
-          <span class="course-tag tag-blue">BEGINNER</span>
-          <h3>Claude untuk Bisnis & UKM</h3>
-          <p>Tokopedia/Shopee, Notion, WhatsApp Business, Instagram, Canva — sistem konten otomatis.</p>
-          <div class="course-meta">
-            <span>🎬 6 modul</span>
-            <span>⏱ 1.5 jam</span>
-          </div>
-          <div class="course-price">Rp 149K</div>
-          <a href="bisnis-ukm.html" class="course-btn">Pelajari →</a>
-        </div>
-
-        <div class="course-card">
-          <span class="course-tag tag-coming">SEGERA HADIR</span>
-          <h3>Claude untuk Konten & Copywriting</h3>
-          <p>Artikel SEO, TikTok scripts, email sequence, landing page — mesin konten nyata.</p>
-          <div class="course-meta">
-            <span>🎬 6 modul</span>
-            <span>⏱ 1.5 jam</span>
-          </div>
-          <div class="course-price">Rp 199K</div>
-          <a href="#" class="course-btn disabled">🔔 Segera Hadir</a>
-        </div>
-
-        <div class="course-card">
-          <span class="course-tag tag-coming">SEGERA HADIR</span>
-          <h3>Claude untuk Analisis Data</h3>
-          <p>Data mentah jadi insight. Google Sheets, Forms, Claude Artifacts Charts — dashboard otomatis.</p>
-          <div class="course-meta">
-            <span>🎬 6 modul</span>
-            <span>⏱ 1.5 jam</span>
-          </div>
-          <div class="course-price">Rp 199K</div>
-          <a href="#" class="course-btn disabled">🔔 Segera Hadir</a>
-        </div>
-
-        <div class="course-card">
-          <span class="course-tag tag-coming">SEGERA HADIR</span>
-          <h3>Build Automation dengan Claude</h3>
-          <p>3 automation aktif dengan Zapier + Make + n8n. Claude sebagai "otak" yang jalan 24/7.</p>
-          <div class="course-meta">
-            <span>🎬 7 modul</span>
-            <span>⏱ 2 jam</span>
-          </div>
-          <div class="course-price">Rp 299K</div>
-          <a href="#" class="course-btn disabled">🔔 Segera Hadir</a>
-        </div>
-
-        <div class="course-card">
-          <span class="course-tag tag-coming">SEGERA HADIR</span>
-          <h3>Build AI-Powered App Sederhana</h3>
-          <p>Web app AI live di GitHub Pages. Claude API + HTML/JS + Vercel — dari ide ke deploy.</p>
-          <div class="course-meta">
-            <span>🎬 7 modul</span>
-            <span>⏱ 2 jam</span>
-          </div>
-          <div class="course-price">Rp 299K</div>
-          <a href="#" class="course-btn disabled">🔔 Segera Hadir</a>
-        </div>
-
-        <div class="course-card">
-          <span class="course-tag tag-coming">SEGERA HADIR</span>
-          <h3>Claude API untuk Developer</h3>
-          <p>Streaming, tool use, caching, Railway deploy. Integrasikan Claude ke project nyata.</p>
-          <div class="course-meta">
-            <span>🎬 7 modul</span>
-            <span>⏱ 2 jam</span>
-          </div>
-          <div class="course-price">Rp 399K</div>
-          <a href="#" class="course-btn disabled">🔔 Segera Hadir</a>
-        </div>
-
-        <div class="course-card">
-          <span class="course-tag tag-coming">SEGERA HADIR</span>
-          <h3>Build & Jual Produk AI</h3>
-          <p>Dari ide ke produk AI yang menghasilkan uang. Framer + Midtrans + WhatsApp.</p>
-          <div class="course-meta">
-            <span>🎬 7 modul</span>
-            <span>⏱ 2 jam</span>
-          </div>
-          <div class="course-price">Rp 499K</div>
-          <a href="#" class="course-btn disabled">🔔 Segera Hadir</a>
-        </div>
-
+        <div class="course-card"><span class="course-tag tag-green">GRATIS</span><h3>20 Prompt Claude Terbaik</h3><p>Prompt siap pakai untuk email, laporan, konten sosmed — langsung copy-paste.</p><div class="course-meta"><span>📄 Panduan</span><span>⏱ Langsung pakai</span></div><div class="course-price">Gratis</div><a href="prompt-gratis.html" class="course-btn">Pelajari →</a></div>
+        <div class="course-card"><span class="course-tag tag-green">GRATIS</span><h3>Mulai dengan Claude AI</h3><p>Dari nol sampai bisa pakai Claude untuk kebutuhan sehari-hari. Projects, Artifacts, Docs.</p><div class="course-meta"><span>🎬 6 modul</span><span>⏱ 1 jam</span></div><div class="course-price">Gratis</div><a href="mulai-claude.html" class="course-btn">Pelajari →</a></div>
+        <div class="course-card featured"><div class="popular-badge">POPULER</div><span class="course-tag tag-blue">BEGINNER</span><h3>Claude untuk Pekerjaan Sehari-hari</h3><p>Hemat 3–5 jam kerja per minggu. Gmail, Sheets, Docs, Claude Projects.</p><div class="course-meta"><span>🎬 6 modul</span><span>⏱ 1.5 jam</span></div><div class="course-price">Rp 149K</div><a href="kerja-sehari-hari.html" class="course-btn">Pelajari →</a></div>
+        <div class="course-card"><span class="course-tag tag-blue">BEGINNER</span><h3>Claude untuk Bisnis & UKM</h3><p>Tokopedia, Shopee, WhatsApp Business, Instagram — sistem konten otomatis.</p><div class="course-meta"><span>🎬 6 modul</span><span>⏱ 1.5 jam</span></div><div class="course-price">Rp 149K</div><a href="bisnis-ukm.html" class="course-btn">Pelajari →</a></div>
+        <div class="course-card"><span class="course-tag tag-coming">SEGERA HADIR</span><h3>Claude untuk Konten & Copywriting</h3><p>Artikel SEO, TikTok scripts, email sequence, landing page — mesin konten nyata.</p><div class="course-meta"><span>🎬 6 modul</span><span>⏱ 1.5 jam</span></div><div class="course-price">Rp 199K</div><a href="#" class="course-btn disabled">🔔 Segera Hadir</a></div>
+        <div class="course-card"><span class="course-tag tag-coming">SEGERA HADIR</span><h3>Claude untuk Analisis Data</h3><p>Data mentah jadi insight. Google Sheets, Forms, Claude Artifacts — dashboard otomatis.</p><div class="course-meta"><span>🎬 6 modul</span><span>⏱ 1.5 jam</span></div><div class="course-price">Rp 199K</div><a href="#" class="course-btn disabled">🔔 Segera Hadir</a></div>
+        <div class="course-card"><span class="course-tag tag-coming">SEGERA HADIR</span><h3>Build Automation dengan Claude</h3><p>3 automation aktif dengan Zapier, Make, n8n. Claude sebagai otak yang jalan 24/7.</p><div class="course-meta"><span>🎬 7 modul</span><span>⏱ 2 jam</span></div><div class="course-price">Rp 299K</div><a href="#" class="course-btn disabled">🔔 Segera Hadir</a></div>
+        <div class="course-card"><span class="course-tag tag-coming">SEGERA HADIR</span><h3>Build AI-Powered App Sederhana</h3><p>Web app AI live di GitHub Pages. Claude API + HTML/JS — dari ide ke deploy.</p><div class="course-meta"><span>🎬 7 modul</span><span>⏱ 2 jam</span></div><div class="course-price">Rp 299K</div><a href="#" class="course-btn disabled">🔔 Segera Hadir</a></div>
+        <div class="course-card"><span class="course-tag tag-coming">SEGERA HADIR</span><h3>Claude API untuk Developer</h3><p>Streaming, tool use, caching, Railway deploy. Integrasikan Claude ke project nyata.</p><div class="course-meta"><span>🎬 7 modul</span><span>⏱ 2 jam</span></div><div class="course-price">Rp 399K</div><a href="#" class="course-btn disabled">🔔 Segera Hadir</a></div>
+        <div class="course-card"><span class="course-tag tag-coming">SEGERA HADIR</span><h3>Build & Jual Produk AI</h3><p>Dari ide ke produk AI yang menghasilkan uang. Framer, Midtrans, WhatsApp.</p><div class="course-meta"><span>🎬 7 modul</span><span>⏱ 2 jam</span></div><div class="course-price">Rp 499K</div><a href="#" class="course-btn disabled">🔔 Segera Hadir</a></div>
       </div>
       <div class="carousel-nav">
-        <button class="carousel-btn" onclick="scrollCarousel(-1)" aria-label="Sebelumnya">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
-        </button>
-        <button class="carousel-btn" onclick="scrollCarousel(1)" aria-label="Berikutnya">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
-        </button>
+        <button class="carousel-btn" onclick="scrollCarousel(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <button class="carousel-btn" onclick="scrollCarousel(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
       </div>
     </div>
-
   </div>
 </section>
 
+<!-- PACKAGES -->
+<section class="section-soft" id="paket">
+  <div class="container">
+    <div class="section-label">Paket Hemat</div>
+    <h2 class="section-title">Beli lebih banyak, hemat lebih besar</h2>
+    <p class="section-sub">Akses kursus yang sudah tersedia sekarang — kursus berikutnya otomatis terbuka saat diluncurkan.</p>
+    <div class="pkg-grid">
+      <div class="pkg-card featured">
+        <div class="pkg-persona">Untuk Karyawan & Profesional</div><h3>Paket Profesional</h3>
+        <div class="pkg-courses"><div class="pkg-course-item available"><span class="ci">🚀</span> Mulai dengan Claude AI</div><div class="pkg-course-item available"><span class="ci">💼</span> Claude untuk Pekerjaan Sehari-hari</div><div class="pkg-course-item"><span class="ci">📊</span> Claude untuk Analisis Data <span class="cs-tag">Segera</span></div></div>
+        <div class="pkg-divider"></div>
+        <div class="pkg-pricing"><span class="pkg-price">Rp 299K</span><span class="pkg-original">Rp 398K</span><span class="pkg-save">Hemat Rp 99K</span></div>
+        <p class="pkg-note">2 kursus tersedia langsung · 1 menyusul saat launch</p>
+        <a href="login.html" class="pkg-btn primary">Beli Paket Profesional →</a>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-persona">Untuk Pemilik Bisnis & UKM</div><h3>Paket Bisnis & UKM</h3>
+        <div class="pkg-courses"><div class="pkg-course-item available"><span class="ci">🚀</span> Mulai dengan Claude AI</div><div class="pkg-course-item available"><span class="ci">🏪</span> Claude untuk Bisnis & UKM</div><div class="pkg-course-item"><span class="ci">✍️</span> Claude untuk Konten & Copywriting <span class="cs-tag">Segera</span></div><div class="pkg-course-item"><span class="ci">⚡</span> Build Automation dengan Claude <span class="cs-tag">Segera</span></div></div>
+        <div class="pkg-divider"></div>
+        <div class="pkg-pricing"><span class="pkg-price">Rp 499K</span><span class="pkg-original">Rp 647K</span><span class="pkg-save">Hemat Rp 148K</span></div>
+        <p class="pkg-note">2 kursus tersedia langsung · 2 menyusul saat launch</p>
+        <a href="login.html" class="pkg-btn outline">Beli Paket Bisnis & UKM →</a>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-persona">Untuk Content Creator</div><h3>Paket Content Creator</h3>
+        <div class="pkg-courses"><div class="pkg-course-item available"><span class="ci">🚀</span> Mulai dengan Claude AI</div><div class="pkg-course-item available"><span class="ci">🏪</span> Claude untuk Bisnis & UKM</div><div class="pkg-course-item"><span class="ci">✍️</span> Claude untuk Konten & Copywriting <span class="cs-tag">Segera</span></div></div>
+        <div class="pkg-divider"></div>
+        <div class="pkg-pricing"><span class="pkg-price">Rp 299K</span><span class="pkg-original">Rp 348K</span><span class="pkg-save">Hemat Rp 49K</span></div>
+        <p class="pkg-note">2 kursus tersedia langsung · 1 menyusul saat launch</p>
+        <a href="login.html" class="pkg-btn outline">Beli Paket Content Creator →</a>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-persona">Untuk Mahasiswa</div><h3>Paket Mahasiswa</h3>
+        <div class="pkg-courses"><div class="pkg-course-item available"><span class="ci">🚀</span> Mulai dengan Claude AI</div><div class="pkg-course-item"><span class="ci">✍️</span> Claude untuk Konten & Copywriting <span class="cs-tag">Segera</span></div><div class="pkg-course-item"><span class="ci">📊</span> Claude untuk Analisis Data <span class="cs-tag">Segera</span></div></div>
+        <div class="pkg-divider"></div>
+        <div class="pkg-pricing"><span class="pkg-price">Rp 249K</span><span class="pkg-original">Rp 348K</span><span class="pkg-save">Hemat Rp 99K</span></div>
+        <p class="pkg-note">1 kursus tersedia langsung · 2 menyusul saat launch</p>
+        <a href="login.html" class="pkg-btn outline">Beli Paket Mahasiswa →</a>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-persona">Untuk Developer & Tech</div><h3>Paket Developer</h3>
+        <div class="pkg-courses"><div class="pkg-course-item available"><span class="ci">🚀</span> Mulai dengan Claude AI</div><div class="pkg-course-item"><span class="ci">🛠️</span> Build AI-Powered App Sederhana <span class="cs-tag">Segera</span></div><div class="pkg-course-item"><span class="ci">👨‍💻</span> Claude API untuk Developer <span class="cs-tag">Segera</span></div><div class="pkg-course-item"><span class="ci">💰</span> Build & Jual Produk AI <span class="cs-tag">Segera</span></div></div>
+        <div class="pkg-divider"></div>
+        <div class="pkg-pricing"><span class="pkg-price">Rp 799K</span><span class="pkg-original">Rp 1.197K</span><span class="pkg-save">Hemat Rp 398K</span></div>
+        <p class="pkg-note">1 kursus tersedia langsung · 3 menyusul saat launch</p>
+        <a href="login.html" class="pkg-btn outline">Beli Paket Developer →</a>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-persona">All Access</div><h3>Semua 9 Kursus</h3>
+        <div class="pkg-courses"><div class="pkg-course-item available"><span class="ci">🚀</span> Mulai dengan Claude AI</div><div class="pkg-course-item available"><span class="ci">💼</span> Claude untuk Pekerjaan Sehari-hari</div><div class="pkg-course-item available"><span class="ci">🏪</span> Claude untuk Bisnis & UKM</div><div class="pkg-course-item"><span class="ci">✍️</span> + 6 kursus lainnya <span class="cs-tag">Segera</span></div></div>
+        <div class="pkg-divider"></div>
+        <div class="pkg-pricing"><span class="pkg-price">Rp 999K</span><span class="pkg-original">Rp 1.694K</span><span class="pkg-save">Hemat Rp 695K</span></div>
+        <p class="pkg-note">3 kursus tersedia langsung · 6 kursus berikutnya otomatis terbuka</p>
+        <a href="login.html" class="pkg-btn primary">Beli All Access →</a>
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- TESTIMONIALS -->
+<section>
+  <div class="container">
+    <div class="section-label">Testimoni</div>
+    <h2 class="section-title">Kata mereka yang sudah belajar</h2>
+    <div class="testi-grid">
+      <div class="testi-card"><div class="stars">★★★★★</div><blockquote>"Setelah ikut kursus ini, saya bisa selesaikan laporan mingguan dalam 20 menit yang biasanya 2 jam. Claude benar-benar game changer untuk kerjaan kantoran."</blockquote><div class="testi-author"><div class="avatar">AR</div><div><div class="name">Arif R.</div><div class="role">Staff Marketing, Jakarta</div></div></div></div>
+      <div class="testi-card"><div class="stars">★★★★★</div><blockquote>"Saya pemilik toko online. Dengan kursus UKM ini, konten produk dan caption Instagram saya sudah otomatis. Omzet naik 40% dalam 2 bulan."</blockquote><div class="testi-author"><div class="avatar">SS</div><div><div class="name">Siti S.</div><div class="role">Pemilik Toko Online, Surabaya</div></div></div></div>
+      <div class="testi-card"><div class="stars">★★★★★</div><blockquote>"Skripsi saya selesai 2 bulan lebih cepat dari target. Claude jadi asisten riset yang tidak pernah capek. Nilai sidang saya juga memuaskan!"</blockquote><div class="testi-author"><div class="avatar">BW</div><div><div class="name">Bintang W.</div><div class="role">Mahasiswa S1 Ekonomi, Bandung</div></div></div></div>
+    </div>
+  </div>
+</section>
 
 <!-- CTA -->
 <section class="cta-section" id="komunitas">
   <div class="container">
     <h2>Mulai gratis hari ini</h2>
-    <p>Gabung komunitas WhatsApp dan dapatkan 20 prompt Claude gratis —<br>langsung bisa dipakai sekarang.</p>
-    <a href="login.html" class="cta-btn">
-      Gabung Komunitas Gratis
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-    </a>
+    <p>Gabung komunitas dan dapatkan 20 prompt Claude gratis —<br>langsung bisa dipakai sekarang.</p>
+    <a href="login.html" class="cta-btn">Gabung Komunitas Gratis <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
     <p class="cta-sub">Gratis selamanya · Tanpa kartu kredit · 10.000+ anggota aktif</p>
   </div>
 </section>
@@ -815,36 +336,12 @@
   <div class="footer-inner">
     <div class="footer-top">
       <div class="footer-brand">
-        <div class="logo">Klaud<span>.id</span></div>
+        <div class="logo">Klaud<span style="color:var(--blue)">.id</span></div>
         <p>Platform belajar Claude AI #1 dalam Bahasa Indonesia — untuk profesional, UKM, dan mahasiswa.</p>
       </div>
-      <div class="footer-links">
-        <h4>Produk</h4>
-        <ul>
-          <a href="#">Kursus Video</a>
-          <a href="#">Workshop Live</a>
-          <a href="#">Coaching 1-on-1</a>
-          <a href="#">Prompt Templates</a>
-        </ul>
-      </div>
-      <div class="footer-links">
-        <h4>Perusahaan</h4>
-        <ul>
-          <a href="#">Tentang Kami</a>
-          <a href="#">Blog</a>
-          <a href="#">Training Korporat</a>
-          <a href="#">Afiliasi</a>
-        </ul>
-      </div>
-      <div class="footer-links">
-        <h4>Ikuti Kami</h4>
-        <ul>
-          <a href="#">TikTok</a>
-          <a href="#">YouTube</a>
-          <a href="#">Instagram</a>
-          <a href="#">WhatsApp Community</a>
-        </ul>
-      </div>
+      <div class="footer-links"><h4>Produk</h4><ul><a href="#">Kursus Video</a><a href="#">Workshop Live</a><a href="#">Coaching 1-on-1</a><a href="#">Prompt Templates</a></ul></div>
+      <div class="footer-links"><h4>Perusahaan</h4><ul><a href="#">Tentang Kami</a><a href="#">Blog</a><a href="#">Training Korporat</a><a href="#">Afiliasi</a></ul></div>
+      <div class="footer-links"><h4>Ikuti Kami</h4><ul><a href="#">TikTok</a><a href="#">YouTube</a><a href="#">Instagram</a><a href="#">WhatsApp Community</a></ul></div>
     </div>
     <div class="footer-bottom">
       <p>© 2025 Klaud.id — Semua hak dilindungi</p>
@@ -853,115 +350,26 @@
   </div>
 </footer>
 
-<script>
-/* ── Particle sphere ──────────────────────────────────────── */
-(function () {
-  const canvas = document.getElementById('particle-canvas');
-  const ctx    = canvas.getContext('2d');
-  const DPR    = window.devicePixelRatio || 1;
-  const SIZE   = 500;
-
-  canvas.width  = SIZE * DPR;
-  canvas.height = SIZE * DPR;
-  ctx.scale(DPR, DPR);
-
-  const CX = SIZE / 2, CY = SIZE / 2;
-  const R  = 178;   // sphere radius
-  const N  = 2000;  // point count
-
-  // Generate random points on sphere surface (uniform distribution)
-  const pts = Array.from({ length: N }, () => {
-    const u     = Math.random();
-    const v     = Math.random();
-    const theta = 2 * Math.PI * u;
-    const phi   = Math.acos(2 * v - 1);
-    return {
-      ox: Math.sin(phi) * Math.cos(theta),
-      oy: Math.sin(phi) * Math.sin(theta),
-      oz: Math.cos(phi),
-    };
-  });
-
-  let angle = 0;
-
-  function draw() {
-    ctx.clearRect(0, 0, SIZE, SIZE);
-    angle += 0.004;
-
-    const cosA = Math.cos(angle);
-    const sinA = Math.sin(angle);
-
-    // Project and sort by depth
-    const projected = pts.map(({ ox, oy, oz }) => {
-      // Rotate around Y axis
-      const x = ox * cosA - oz * sinA;
-      const z = ox * sinA + oz * cosA;
-      const y = oy;
-
-      const depth = (z + 1) / 2; // 0 (back) → 1 (front)
-      return {
-        sx:    CX + x * R,
-        sy:    CY - y * R,
-        depth,
-        size:  0.8 + depth * 1.8,
-        alpha: 0.12 + depth * 0.72,
-      };
-    });
-
-    // Paint back-to-front
-    projected.sort((a, b) => a.depth - b.depth);
-
-    projected.forEach(({ sx, sy, size, alpha, depth }) => {
-      // Color gradient: indigo-blue (back) → lighter sky-blue (front)
-      const rC = Math.round(80  + depth * 60);
-      const gC = Math.round(110 + depth * 70);
-      const bC = Math.round(210 + depth * 30);
-      ctx.beginPath();
-      ctx.arc(sx, sy, size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${rC},${gC},${bC},${alpha})`;
-      ctx.fill();
-    });
-
-    requestAnimationFrame(draw);
-  }
-
-  draw();
-})();
-</script>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="login-modal.js"></script>
 <script>
   function scrollCarousel(dir) {
-    const c = document.getElementById('courseCarousel');
-    c.scrollBy({ left: dir * 290, behavior: 'smooth' });
+    document.getElementById('courseCarousel').scrollBy({ left: dir * 264, behavior: 'smooth' });
   }
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-config.js"></script>
-  <script src="login-modal.js"></script>
-<script>
-  (async () => {
-    const { data: { session } } = await sbClient.auth.getSession();
-    if (session) {
-      const email = session.user.email;
-      const name  = session.user.user_metadata?.full_name || email.split('@')[0];
-
-      // Show user pill
-      const pill = document.getElementById('navUserPill');
-      pill.style.display = 'flex';
+  (async function() {
+    var r = await sbClient.auth.getSession();
+    var s = r.data.session;
+    if (s) {
+      var name = (s.user.user_metadata && s.user.user_metadata.full_name) || s.user.email.split('@')[0];
+      document.getElementById('navUserPill').style.display = 'flex';
       document.getElementById('navUname').textContent  = name;
-      document.getElementById('navUemail').textContent = email;
-
-      // Swap login/cta buttons to dashboard link
-      const loginBtn = document.getElementById('navLoginBtn');
-      loginBtn.textContent = 'Dashboard';
-      loginBtn.href = 'dashboard.html';
-      loginBtn.style.marginRight = '';
-      loginBtn.style.marginLeft = '-8px';
+      document.getElementById('navUemail').textContent = s.user.email;
+      var lb = document.getElementById('navLoginBtn');
+      lb.textContent = 'Dashboard'; lb.href = 'dashboard.html';
       document.getElementById('navCtaBtn').style.display = 'none';
     }
   })();
 </script>
-
 </body>
 </html>
