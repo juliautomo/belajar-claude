@@ -461,6 +461,14 @@
 
   // ── Init ──────────────────────────────────────────────
   async function init() {
+    try { await _init(); } catch(err) {
+      console.error('Dashboard init error:', err);
+      document.getElementById('loadingScreen').style.display = 'none';
+      document.getElementById('mainLayout').style.display    = 'flex';
+    }
+  }
+
+  async function _init() {
     var sessionResult = await sbClient.auth.getSession();
     var session = sessionResult.data.session;
     if (!session) { window.location.href = 'login.html'; return; }
