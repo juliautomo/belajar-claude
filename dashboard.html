@@ -9,7 +9,7 @@
   <script src="supabase-config.js"></script>
   <style>
     :root {
-      --bg: #F8F9FC; --sidebar: #FFFFFF; --surface: #FFFFFF;
+      --bg: #F8F9FC; --surface: #FFFFFF;
       --navy: #13163A; --blue: #4A72D6; --blue-pale: #EEF2FF;
       --green: #1D9E75; --green-pale: #ECFDF5;
       --gold: #EF9F27; --gold-pale: rgba(239,159,39,0.08);
@@ -19,23 +19,13 @@
     body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--navy); min-height: 100vh; display: flex; flex-direction: column; }
 
     /* Nav */
-    nav {
-      height: 56px; padding: 0 24px;
-      display: flex; align-items: center; justify-content: space-between;
-      background: #fff; border-bottom: 1px solid var(--border);
-      position: sticky; top: 0; z-index: 100;
-    }
+    nav { height: 56px; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; background: #fff; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
     .nav-logo { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; color: var(--navy); text-decoration: none; }
     .nav-logo span { color: var(--blue); }
     .nav-right { display: flex; align-items: center; gap: 20px; }
-    .nav-link { font-size: 13px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color 0.2s; }
-    .nav-link:hover { color: var(--navy); }
+    .nav-link { font-size: 13px; font-weight: 500; color: var(--muted); text-decoration: none; }
     .nav-user { display: flex; align-items: center; gap: 10px; }
-    .nav-avatar {
-      width: 32px; height: 32px; border-radius: 50%;
-      background: var(--blue-pale); border: 2px solid rgba(74,114,214,0.2);
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    }
+    .nav-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--blue-pale); border: 2px solid rgba(74,114,214,0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .nav-avatar svg { width: 16px; height: 16px; color: var(--blue); }
     .nav-uinfo { display: flex; flex-direction: column; }
     .nav-uname  { font-size: 12px; font-weight: 700; color: var(--navy); line-height: 1.2; }
@@ -44,108 +34,68 @@
     .logout-btn:hover { border-color: var(--blue); color: var(--navy); }
 
     /* Layout */
-    .layout { display: flex; flex: 1; max-width: 1200px; margin: 0 auto; width: 100%; padding: 0; }
+    .layout { display: flex; flex: 1; max-width: 1200px; margin: 0 auto; width: 100%; }
 
     /* Sidebar */
-    .sidebar {
-      width: 260px; flex-shrink: 0;
-      padding: 24px 16px;
-      border-right: 1px solid var(--border);
-      display: flex; flex-direction: column; gap: 20px;
-    }
+    .sidebar { width: 260px; flex-shrink: 0; padding: 24px 16px; border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: 20px; }
 
     /* Profile card */
-    .profile-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 14px; padding: 20px 16px; text-align: center;
-    }
-    .profile-avatar {
-      width: 56px; height: 56px; border-radius: 50%; margin: 0 auto 12px;
-      background: var(--blue-pale); border: 3px solid rgba(74,114,214,0.15);
-      display: flex; align-items: center; justify-content: center; font-size: 22px;
-    }
+    .profile-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px 16px; text-align: center; }
+    .profile-avatar { width: 56px; height: 56px; border-radius: 50%; margin: 0 auto 12px; background: var(--blue-pale); border: 3px solid rgba(74,114,214,0.15); display: flex; align-items: center; justify-content: center; font-size: 22px; }
     .profile-name  { font-size: 15px; font-weight: 800; color: var(--navy); margin-bottom: 2px; }
-    .profile-email { font-size: 11px; color: var(--muted); margin-bottom: 14px; word-break: break-all; }
+    .profile-email { font-size: 11px; color: var(--muted); margin-bottom: 8px; word-break: break-all; }
+    .profile-tags  { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-bottom: 8px; }
+    .profile-tag   { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 100px; background: var(--blue-pale); color: var(--blue); }
+    .profile-tag.goal { background: var(--gold-pale); color: var(--gold); }
+    .profile-tag.exp  { background: var(--green-pale); color: var(--green); }
     .profile-since { font-size: 10px; color: var(--muted); font-family: 'DM Mono', monospace; background: var(--bg); padding: 4px 10px; border-radius: 100px; display: inline-block; }
+    .profile-edit-btn { display: block; width: 100%; margin-top: 10px; background: transparent; border: 1px solid var(--border); color: var(--muted); font-size: 11px; font-weight: 600; padding: 6px 0; border-radius: 8px; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s; }
+    .profile-edit-btn:hover { border-color: var(--blue); color: var(--blue); }
 
-    /* Stats row */
-    .stats-row {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-    .stat-box {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 10px; padding: 12px 8px; text-align: center;
-    }
+    /* Stats */
+    .stat-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 8px; text-align: center; }
     .stat-num  { font-size: 20px; font-weight: 800; color: var(--navy); letter-spacing: -0.5px; line-height: 1; margin-bottom: 3px; }
     .stat-lbl  { font-size: 10px; color: var(--muted); line-height: 1.3; }
 
-    /* Quick nav */
-    .sidebar-section-label {
-      font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
-      text-transform: uppercase; color: var(--muted);
-      font-family: 'DM Mono', monospace; padding: 0 4px; margin-bottom: 4px;
-    }
+    /* Sidebar nav */
+    .sidebar-section-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); font-family: 'DM Mono', monospace; padding: 0 4px; margin-bottom: 4px; }
     .sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
-    .sidebar-nav-item {
-      display: flex; align-items: center; gap: 10px;
-      padding: 9px 12px; border-radius: 8px; text-decoration: none;
-      font-size: 13px; font-weight: 500; color: var(--muted);
-      transition: background 0.15s, color 0.15s;
-    }
+    .sidebar-nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 500; color: var(--muted); transition: background 0.15s, color 0.15s; }
     .sidebar-nav-item:hover { background: var(--bg); color: var(--navy); }
     .sidebar-nav-item.active { background: var(--blue-pale); color: var(--blue); font-weight: 600; }
     .sidebar-nav-item svg { width: 15px; height: 15px; flex-shrink: 0; }
 
     /* Learning Journey */
-    .journey-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 14px; padding: 16px;
-    }
-    .journey-title { font-size: 12px; font-weight: 700; color: var(--navy); margin-bottom: 14px; }
-    .journey-level { margin-bottom: 14px; }
+    .journey-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+    .journey-title { font-size: 12px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .journey-sub   { font-size: 10px; color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
+    .journey-level { margin-bottom: 12px; }
     .journey-level:last-child { margin-bottom: 0; }
-    .journey-level-label {
-      font-size: 10px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 1px; margin-bottom: 6px; font-family: 'DM Mono', monospace;
-    }
-    .journey-level-label.beginner  { color: var(--green); }
+    .journey-level-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; font-family: 'DM Mono', monospace; }
+    .journey-level-label.beginner     { color: var(--green); }
     .journey-level-label.intermediate { color: var(--gold); }
-    .journey-level-label.advanced  { color: var(--blue); }
-    .journey-courses { display: flex; flex-direction: column; gap: 4px; }
-    .journey-item {
-      display: flex; align-items: center; gap: 8px;
-      padding: 5px 8px; border-radius: 6px;
-      font-size: 11px; color: var(--muted);
-    }
-    .journey-item.enrolled { color: var(--navy); font-weight: 600; background: var(--bg); }
-    .journey-item.completed { color: var(--green); background: var(--green-pale); }
-    .journey-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
-    .journey-item.enrolled .journey-dot { background: var(--blue); }
-    .journey-item.completed .journey-dot { background: var(--green); }
-    .journey-item.coming .journey-dot { background: var(--border); }
+    .journey-level-label.advanced     { color: var(--blue); }
+    .journey-courses { display: flex; flex-direction: column; gap: 3px; }
+    .journey-item { display: flex; align-items: center; gap: 7px; padding: 4px 7px; border-radius: 6px; font-size: 11px; color: var(--muted); }
+    .journey-item.enrolled     { color: var(--navy); font-weight: 600; background: var(--bg); }
+    .journey-item.completed    { color: var(--green); background: var(--green-pale); }
+    .journey-item.recommended  { color: var(--navy); font-weight: 600; background: var(--gold-pale); }
+    .journey-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; background: var(--border); }
+    .journey-item.enrolled    .journey-dot { background: var(--blue); }
+    .journey-item.completed   .journey-dot { background: var(--green); }
+    .journey-item.recommended .journey-dot { background: var(--gold); }
 
-    /* Main content */
+    /* Main */
     .main { flex: 1; padding: 28px 32px; min-width: 0; }
-
-    .loading { text-align: center; padding: 80px 20px; color: var(--muted); font-size: 14px; }
-
-    /* Greeting */
+    .loading-screen { text-align: center; padding: 80px 20px; color: var(--muted); font-size: 14px; flex: 1; display: flex; align-items: center; justify-content: center; }
     .greeting { margin-bottom: 28px; }
     .greeting h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: var(--navy); margin-bottom: 3px; }
     .greeting p  { font-size: 13px; color: var(--muted); }
-
-    /* Section */
     .section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); font-family: 'DM Mono', monospace; margin-bottom: 12px; }
 
     /* Enrolled cards */
     .enrolled-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
-    .enrolled-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 14px; padding: 18px 20px;
-      display: flex; align-items: center; gap: 16px;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
+    .enrolled-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; display: flex; align-items: center; gap: 16px; transition: border-color 0.2s, box-shadow 0.2s; }
     .enrolled-card:hover { border-color: var(--blue); box-shadow: 0 2px 16px rgba(74,114,214,0.08); }
     .enrolled-icon { font-size: 28px; flex-shrink: 0; }
     .enrolled-info { flex: 1; min-width: 0; }
@@ -154,117 +104,51 @@
     .enrolled-badge { font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 100px; }
     .badge-free { background: var(--blue-pale); color: var(--blue); }
     .badge-paid { background: var(--green-pale); color: var(--green); }
-
-    /* Progress bar */
     .course-progress { display: flex; align-items: center; gap: 8px; }
-    .cpb-wrap { flex: 1; height: 5px; background: var(--border); border-radius: 10px; overflow: hidden; }
-    .cpb-fill { height: 100%; border-radius: 10px; transition: width 0.4s; }
+    .cpb-wrap  { flex: 1; height: 5px; background: var(--border); border-radius: 10px; overflow: hidden; }
+    .cpb-fill  { height: 100%; border-radius: 10px; transition: width 0.4s; }
     .cpb-fill.blue { background: var(--blue); }
     .cpb-fill.gold { background: var(--gold); }
     .cpb-label { font-size: 10px; color: var(--muted); white-space: nowrap; font-family: 'DM Mono', monospace; }
-
-    .resume-btn {
-      display: inline-block; background: var(--navy); color: #fff;
-      text-decoration: none; font-size: 12px; font-weight: 700;
-      padding: 8px 18px; border-radius: 8px; white-space: nowrap; flex-shrink: 0;
-      transition: background 0.2s;
-    }
+    .resume-btn { display: inline-block; background: var(--navy); color: #fff; text-decoration: none; font-size: 12px; font-weight: 700; padding: 8px 18px; border-radius: 8px; white-space: nowrap; flex-shrink: 0; transition: background 0.2s; }
     .resume-btn:hover { background: var(--blue); }
 
-    /* Explore carousel */
+    /* Explore */
     .carousel-wrap { position: relative; }
-    .explore-grid {
-      display: flex; gap: 12px;
-      overflow-x: auto; scroll-snap-type: x mandatory;
-      padding-bottom: 8px; scrollbar-width: none;
-    }
+    .explore-grid { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; scrollbar-width: none; }
     .explore-grid::-webkit-scrollbar { display: none; }
     .carousel-nav { display: flex; gap: 8px; margin-top: 14px; }
-    .carousel-btn {
-      width: 32px; height: 32px; border-radius: 50%;
-      border: 1px solid var(--border); background: var(--surface);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; transition: border-color 0.2s, background 0.2s;
-      color: var(--navy); flex-shrink: 0;
-    }
+    .carousel-btn { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.2s; color: var(--navy); flex-shrink: 0; }
     .carousel-btn:hover { border-color: var(--blue); background: var(--blue-pale); }
     .carousel-btn svg { width: 13px; height: 13px; }
-    .explore-card {
-      min-width: 210px; max-width: 210px;
-      scroll-snap-align: start; flex-shrink: 0;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; padding: 16px;
-      display: flex; flex-direction: column; gap: 8px;
-      transition: border-color 0.2s;
-    }
+    .explore-card { min-width: 210px; max-width: 210px; scroll-snap-align: start; flex-shrink: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 8px; transition: border-color 0.2s; }
     .explore-card:hover { border-color: var(--blue); }
     .explore-level { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); font-family: 'DM Mono', monospace; }
-    .explore-icon { font-size: 22px; }
+    .explore-icon  { font-size: 22px; }
     .explore-card h4 { font-size: 13px; font-weight: 700; color: var(--navy); line-height: 1.4; }
     .explore-card p  { font-size: 11px; color: var(--muted); line-height: 1.6; flex: 1; }
     .explore-price   { font-size: 13px; font-weight: 800; color: var(--navy); }
-    .explore-btn {
-      display: block; background: var(--bg); color: var(--navy);
-      text-decoration: none; font-size: 11px; font-weight: 700;
-      padding: 7px 12px; border-radius: 7px; text-align: center;
-      border: 1px solid var(--border); transition: all 0.2s; margin-top: 2px;
-    }
+    .explore-btn { display: block; background: var(--bg); color: var(--navy); text-decoration: none; font-size: 11px; font-weight: 700; padding: 7px 12px; border-radius: 7px; text-align: center; border: 1px solid var(--border); transition: all 0.2s; margin-top: 2px; }
     .explore-btn:hover { background: var(--blue-pale); border-color: var(--blue); }
     .explore-btn.disabled { color: var(--muted); pointer-events: none; }
 
-    /* Profile tags */
-    .profile-tags { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin: 10px 0 6px; }
-    .profile-tag {
-      font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 100px;
-      background: var(--blue-pale); color: var(--blue);
-    }
-    .profile-tag.goal { background: var(--gold-pale); color: var(--gold); }
-    .profile-tag.exp  { background: var(--green-pale); color: var(--green); }
-    .profile-edit-btn {
-      display: block; width: 100%; margin-top: 10px;
-      background: transparent; border: 1px solid var(--border);
-      color: var(--muted); font-size: 11px; font-weight: 600;
-      padding: 6px 0; border-radius: 8px; cursor: pointer;
-      font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s;
-    }
-    .profile-edit-btn:hover { border-color: var(--blue); color: var(--blue); }
-
-    /* Profile setup modal */
-    .pmodal-overlay {
-      position: fixed; inset: 0; background: rgba(19,22,58,0.6);
-      backdrop-filter: blur(4px); z-index: 200;
-      display: flex; align-items: center; justify-content: center; padding: 20px;
-    }
-    .pmodal {
-      background: #fff; border-radius: 20px; padding: 36px 32px;
-      max-width: 460px; width: 100%; box-shadow: 0 24px 64px rgba(0,0,0,0.18);
-    }
+    /* Profile Modal */
+    .pmodal-overlay { position: fixed; inset: 0; background: rgba(19,22,58,0.6); backdrop-filter: blur(4px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .pmodal { background: #fff; border-radius: 20px; padding: 36px 32px; max-width: 460px; width: 100%; box-shadow: 0 24px 64px rgba(0,0,0,0.18); }
     .pmodal h2 { font-size: 20px; font-weight: 800; color: var(--navy); margin-bottom: 6px; }
-    .pmodal .pmodal-sub { font-size: 13px; color: var(--muted); margin-bottom: 28px; line-height: 1.6; }
+    .pmodal-sub { font-size: 13px; color: var(--muted); margin-bottom: 28px; line-height: 1.6; }
     .pmodal-step { display: none; }
     .pmodal-step.active { display: block; }
     .pmodal-q { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 14px; }
     .pmodal-opts { display: flex; flex-wrap: wrap; gap: 8px; }
-    .popt {
-      padding: 9px 16px; border-radius: 10px; border: 1.5px solid var(--border);
-      font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer;
-      transition: all 0.15s; background: #fff;
-    }
+    .popt { padding: 9px 16px; border-radius: 10px; border: 1.5px solid var(--border); font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; background: #fff; transition: all 0.15s; }
     .popt:hover { border-color: var(--blue); color: var(--navy); }
     .popt.selected { border-color: var(--blue); background: var(--blue-pale); color: var(--blue); }
     .pmodal-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; }
     .pmodal-step-ind { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; }
-    .pmodal-next {
-      background: var(--navy); color: #fff; border: none;
-      padding: 10px 24px; border-radius: 10px; font-size: 13px; font-weight: 700;
-      cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: background 0.2s;
-    }
+    .pmodal-next { background: var(--navy); color: #fff; border: none; padding: 10px 24px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: background 0.2s; }
     .pmodal-next:hover { background: var(--blue); }
     .pmodal-next:disabled { opacity: 0.4; cursor: default; }
-
-    /* Journey recommended tag */
-    .journey-item.recommended { background: var(--gold-pale); color: var(--navy); font-weight: 600; }
-    .journey-item.recommended .journey-dot { background: var(--gold); }
 
     @media (max-width: 900px) { .sidebar { display: none; } }
     @media (max-width: 768px) { .main { padding: 20px 16px; } }
@@ -278,9 +162,7 @@
     <a href="index.html#kursus" class="nav-link">Kursus</a>
     <div class="nav-user">
       <div class="nav-avatar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-          <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
       </div>
       <div class="nav-uinfo">
         <span class="nav-uname"  id="navUname"></span>
@@ -291,14 +173,13 @@
   </div>
 </nav>
 
-<div id="loadingScreen" class="loading" style="flex:1;display:flex;align-items:center;justify-content:center;">Memuat dashboard kamu...</div>
+<div id="loadingScreen" class="loading-screen">Memuat dashboard kamu...</div>
 
 <div class="layout" id="mainLayout" style="display:none;">
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
 
-    <!-- Profile -->
     <div class="profile-card">
       <div class="profile-avatar" id="sideAvatar">🧑‍💻</div>
       <div class="profile-name"  id="sideName"></div>
@@ -308,18 +189,14 @@
       <button class="profile-edit-btn" onclick="openProfileModal(true)">✏️ Edit Profil</button>
     </div>
 
-    <!-- Stats -->
     <div>
       <div class="sidebar-section-label">Statistik Belajar</div>
-      <div class="stats-row" style="grid-template-columns:1fr;">
-        <div class="stat-box">
-          <div class="stat-num" id="statEnrolled">0</div>
-          <div class="stat-lbl">Kursus Diikuti</div>
-        </div>
+      <div class="stat-box">
+        <div class="stat-num" id="statEnrolled">0</div>
+        <div class="stat-lbl">Kursus Diikuti</div>
       </div>
     </div>
 
-    <!-- Quick Nav -->
     <div>
       <div class="sidebar-section-label">Navigasi</div>
       <div class="sidebar-nav">
@@ -334,80 +211,65 @@
       </div>
     </div>
 
-    <!-- Learning Journey -->
     <div class="journey-card">
       <div class="journey-title">🗺️ Learning Journey</div>
-      <div id="journeySubtitle" style="font-size:10px;color:var(--muted);margin-bottom:12px;line-height:1.5;"></div>
-
+      <div class="journey-sub" id="journeySubtitle">Lengkapi profilmu untuk rekomendasi personal.</div>
       <div class="journey-level">
         <div class="journey-level-label beginner">Beginner</div>
-        <div class="journey-courses" id="journeyBeginner">
-          <!-- populated by JS -->
-        </div>
+        <div class="journey-courses" id="journeyBeginner"></div>
       </div>
       <div class="journey-level">
         <div class="journey-level-label intermediate">Intermediate</div>
-        <div class="journey-courses" id="journeyIntermediate">
-        </div>
+        <div class="journey-courses" id="journeyIntermediate"></div>
       </div>
       <div class="journey-level">
         <div class="journey-level-label advanced">Advanced</div>
-        <div class="journey-courses" id="journeyAdvanced">
-        </div>
+        <div class="journey-courses" id="journeyAdvanced"></div>
       </div>
     </div>
 
   </aside>
 
   <!-- MAIN -->
-  <main class="main" id="mainContent">
-    <div id="loading" class="loading" style="display:none;"></div>
+  <main class="main">
+    <div class="greeting">
+      <h1 id="greetingText">Hei! 👋</h1>
+      <p>Selamat datang kembali di Klaud.id</p>
+    </div>
 
-    <div id="content">
-      <div class="greeting">
-        <h1 id="greetingText">Hei! 👋</h1>
-        <p id="greetingSub">Selamat datang kembali di Klaud.id</p>
-      </div>
+    <div id="enrolledSection" style="display:none;">
+      <div class="section-label">Kursus Kamu</div>
+      <div class="enrolled-list" id="enrolledList"></div>
+    </div>
 
-      <div id="enrolledSection" style="display:none;">
-        <div class="section-label">Kursus Kamu</div>
-        <div class="enrolled-list" id="enrolledList"></div>
-      </div>
-
-      <div id="exploreSection" style="display:none;">
-        <div class="section-label">Jelajahi Kursus Lainnya</div>
-        <div class="carousel-wrap">
-          <div class="explore-grid" id="exploreGrid"></div>
-          <div class="carousel-nav">
-            <button class="carousel-btn" onclick="scrollExplore(-1)">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
-            </button>
-            <button class="carousel-btn" onclick="scrollExplore(1)">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
-            </button>
-          </div>
+    <div id="exploreSection" style="display:none;">
+      <div class="section-label">Jelajahi Kursus Lainnya</div>
+      <div class="carousel-wrap">
+        <div class="explore-grid" id="exploreGrid"></div>
+        <div class="carousel-nav">
+          <button class="carousel-btn" onclick="scrollExplore(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <button class="carousel-btn" onclick="scrollExplore(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
         </div>
       </div>
     </div>
   </main>
 </div>
 
-<!-- Profile Setup Modal -->
+<!-- Profile Modal -->
 <div class="pmodal-overlay" id="profileModal" style="display:none;">
   <div class="pmodal">
     <h2 id="pmodalTitle">Hai! Ceritain sedikit tentang kamu 👋</h2>
     <p class="pmodal-sub" id="pmodalSub">Biar Klaud.id bisa kasih rekomendasi kursus yang paling relevan buatmu.</p>
 
-    <!-- Step 1: Role -->
     <div class="pmodal-step active" id="pstep1">
       <div class="pmodal-q">Kamu saat ini sebagai apa?</div>
       <div class="pmodal-opts">
-        <button class="popt" data-val="karyawan">💼 Karyawan</button>
-        <button class="popt" data-val="mahasiswa">🎓 Mahasiswa</button>
-        <button class="popt" data-val="pemilik-bisnis">🏪 Pemilik Bisnis / UKM</button>
-        <button class="popt" data-val="freelancer">🧑‍💻 Freelancer</button>
-        <button class="popt" data-val="developer">⚡ Developer</button>
-        <button class="popt" data-val="kreator">✍️ Kreator Konten</button>
+        <button class="popt" data-step="1" data-val="karyawan">💼 Karyawan</button>
+        <button class="popt" data-step="1" data-val="mahasiswa">🎓 Mahasiswa</button>
+        <button class="popt" data-step="1" data-val="pemilik-bisnis">🏪 Pemilik Bisnis / UKM</button>
+        <button class="popt" data-step="1" data-val="freelancer">🧑‍💻 Freelancer</button>
+        <button class="popt" data-step="1" data-val="developer">⚡ Developer</button>
+        <button class="popt" data-step="1" data-val="kreator">✍️ Kreator Konten</button>
       </div>
       <div class="pmodal-nav">
         <span class="pmodal-step-ind">1 / 3</span>
@@ -415,16 +277,15 @@
       </div>
     </div>
 
-    <!-- Step 2: Goal -->
     <div class="pmodal-step" id="pstep2">
       <div class="pmodal-q">Apa tujuan utama kamu belajar Claude?</div>
       <div class="pmodal-opts">
-        <button class="popt" data-val="efisiensi-kerja">⏱️ Hemat waktu kerja</button>
-        <button class="popt" data-val="bisnis">📈 Kembangkan bisnis</button>
-        <button class="popt" data-val="karir">🚀 Tingkatkan karir</button>
-        <button class="popt" data-val="konten">🎨 Buat konten lebih cepat</button>
-        <button class="popt" data-val="coding">💻 Build produk / app</button>
-        <button class="popt" data-val="lainnya">🌟 Eksplorasi & penasaran</button>
+        <button class="popt" data-step="2" data-val="efisiensi-kerja">⏱️ Hemat waktu kerja</button>
+        <button class="popt" data-step="2" data-val="bisnis">📈 Kembangkan bisnis</button>
+        <button class="popt" data-step="2" data-val="karir">🚀 Tingkatkan karir</button>
+        <button class="popt" data-step="2" data-val="konten">🎨 Buat konten lebih cepat</button>
+        <button class="popt" data-step="2" data-val="coding">💻 Build produk / app</button>
+        <button class="popt" data-step="2" data-val="lainnya">🌟 Eksplorasi</button>
       </div>
       <div class="pmodal-nav">
         <span class="pmodal-step-ind">2 / 3</span>
@@ -432,13 +293,12 @@
       </div>
     </div>
 
-    <!-- Step 3: Experience -->
     <div class="pmodal-step" id="pstep3">
       <div class="pmodal-q">Seberapa sering kamu pakai Claude atau AI sekarang?</div>
       <div class="pmodal-opts">
-        <button class="popt" data-val="belum-pernah">🌱 Belum pernah sama sekali</button>
-        <button class="popt" data-val="pernah-pakai">🌿 Pernah coba, tapi jarang</button>
-        <button class="popt" data-val="sudah-mahir">🌳 Sudah pakai rutin</button>
+        <button class="popt" data-step="3" data-val="belum-pernah">🌱 Belum pernah sama sekali</button>
+        <button class="popt" data-step="3" data-val="pernah-pakai">🌿 Pernah coba, tapi jarang</button>
+        <button class="popt" data-step="3" data-val="sudah-mahir">🌳 Sudah pakai rutin</button>
       </div>
       <div class="pmodal-nav">
         <span class="pmodal-step-ind">3 / 3</span>
@@ -450,112 +310,77 @@
 
 <script>
   const ALL_COURSES = {
-    'prompt-gratis':      { title: '20 Prompt Claude Terbaik',          icon: '🎁', contentLink: 'prompt-gratis-content.html',    salesLink: 'prompt-gratis.html',     desc: 'Prompt siap pakai untuk email, laporan, konten sosmed, dan lainnya.',             price: 'Gratis',     level: 'Beginner',      modules: 5,  color: 'blue' },
-    'mulai-claude':       { title: 'Mulai dengan Claude AI',             icon: '🚀', contentLink: 'mulai-claude-content.html',      salesLink: 'mulai-claude.html',      desc: 'Dari nol sampai bisa pakai Claude untuk kebutuhan sehari-hari — dalam 1 jam.',    price: 'Gratis',     level: 'Beginner',      modules: 6,  color: 'blue' },
-    'kerja-sehari-hari':  { title: 'Claude untuk Pekerjaan Sehari-hari', icon: '💼', contentLink: 'kerja-sehari-hari-content.html', salesLink: 'kerja-sehari-hari.html', desc: 'Hemat 3–5 jam kerja per minggu dengan workflow Claude + tools kantor kamu.',     price: 'Rp 149.000', level: 'Beginner',      modules: 6,  color: 'blue' },
-    'bisnis-ukm':         { title: 'Claude untuk Bisnis & UKM',          icon: '🏪', contentLink: 'bisnis-ukm-content.html',        salesLink: 'bisnis-ukm.html',        desc: 'Jalankan bisnis lebih efisien dengan Claude + tools Indonesia sehari-hari.',      price: 'Rp 149.000', level: 'Beginner',      modules: 6,  color: 'gold' },
-    'konten-copywriting': { title: 'Claude untuk Konten & Copywriting',  icon: '✍️', contentLink: 'coming-soon.html',              salesLink: 'coming-soon.html',       desc: 'Build mesin konten: artikel, script, newsletter, landing page — workflow nyata.', price: 'Rp 199.000', level: 'Intermediate',  modules: 6,  color: 'blue', comingSoon: true },
-    'analisis-data':      { title: 'Claude untuk Analisis Data',         icon: '📊', contentLink: 'coming-soon.html',              salesLink: 'coming-soon.html',       desc: 'Ubah data mentah jadi insight dengan Google Sheets + Claude Artifacts.',          price: 'Rp 199.000', level: 'Intermediate',  modules: 6,  color: 'blue', comingSoon: true },
-    'build-automation':   { title: 'Build Automation dengan Claude',     icon: '⚡', contentLink: 'coming-soon.html',              salesLink: 'coming-soon.html',       desc: 'Buat 3 automation aktif dengan Zapier + Make + n8n yang jalan 24/7.',            price: 'Rp 299.000', level: 'Intermediate',  modules: 7,  color: 'blue', comingSoon: true },
-    'ai-powered-app':     { title: 'Build AI-Powered App Sederhana',     icon: '🛠️', contentLink: 'coming-soon.html',             salesLink: 'coming-soon.html',       desc: 'Buat web app AI live di GitHub Pages dengan landing page monetisasi.',            price: 'Rp 299.000', level: 'Advanced',      modules: 7,  color: 'blue', comingSoon: true },
-    'claude-api-dev':     { title: 'Claude API untuk Developer',         icon: '👨‍💻', contentLink: 'coming-soon.html',            salesLink: 'coming-soon.html',       desc: 'Integrasikan Claude ke project nyata: streaming, tool use, caching, deploy.',    price: 'Rp 399.000', level: 'Advanced',      modules: 7,  color: 'blue', comingSoon: true },
-    'jual-produk-ai':     { title: 'Build & Jual Produk AI',             icon: '💰', contentLink: 'coming-soon.html',              salesLink: 'coming-soon.html',       desc: 'Dari ide ke produk AI yang menghasilkan uang: Framer + Midtrans + WhatsApp.',    price: 'Rp 499.000', level: 'Advanced',      modules: 7,  color: 'blue', comingSoon: true },
+    'prompt-gratis':      { title: '20 Prompt Claude Terbaik',          icon: '🎁', contentLink: 'prompt-gratis-content.html',    salesLink: 'prompt-gratis.html',     desc: 'Prompt siap pakai untuk email, laporan, konten sosmed, dan lainnya.',             price: 'Gratis',     level: 'Beginner',     modules: 5, color: 'blue' },
+    'mulai-claude':       { title: 'Mulai dengan Claude AI',             icon: '🚀', contentLink: 'mulai-claude-content.html',      salesLink: 'mulai-claude.html',      desc: 'Dari nol sampai bisa pakai Claude untuk kebutuhan sehari-hari dalam 1 jam.',      price: 'Gratis',     level: 'Beginner',     modules: 6, color: 'blue' },
+    'kerja-sehari-hari':  { title: 'Claude untuk Pekerjaan Sehari-hari', icon: '💼', contentLink: 'kerja-sehari-hari-content.html', salesLink: 'kerja-sehari-hari.html', desc: 'Hemat 3-5 jam kerja per minggu dengan workflow Claude dan tools kantor kamu.',    price: 'Rp 149.000', level: 'Beginner',     modules: 6, color: 'blue' },
+    'bisnis-ukm':         { title: 'Claude untuk Bisnis dan UKM',        icon: '🏪', contentLink: 'bisnis-ukm-content.html',        salesLink: 'bisnis-ukm.html',        desc: 'Jalankan bisnis lebih efisien dengan Claude dan tools Indonesia sehari-hari.',    price: 'Rp 149.000', level: 'Beginner',     modules: 6, color: 'gold' },
+    'konten-copywriting': { title: 'Claude untuk Konten dan Copywriting', icon: '✍️', contentLink: 'coming-soon.html',             salesLink: 'coming-soon.html',       desc: 'Build mesin konten: artikel, script, newsletter, landing page.',                 price: 'Rp 199.000', level: 'Intermediate', modules: 6, color: 'blue', comingSoon: true },
+    'analisis-data':      { title: 'Claude untuk Analisis Data',         icon: '📊', contentLink: 'coming-soon.html',              salesLink: 'coming-soon.html',       desc: 'Ubah data mentah jadi insight dengan Google Sheets dan Claude Artifacts.',        price: 'Rp 199.000', level: 'Intermediate', modules: 6, color: 'blue', comingSoon: true },
+    'build-automation':   { title: 'Build Automation dengan Claude',     icon: '⚡', contentLink: 'coming-soon.html',              salesLink: 'coming-soon.html',       desc: 'Buat 3 automation aktif dengan Zapier, Make, dan n8n yang jalan 24/7.',          price: 'Rp 299.000', level: 'Intermediate', modules: 7, color: 'blue', comingSoon: true },
+    'ai-powered-app':     { title: 'Build AI-Powered App Sederhana',     icon: '🛠️', contentLink: 'coming-soon.html',            salesLink: 'coming-soon.html',       desc: 'Buat web app AI live di GitHub Pages dengan landing page monetisasi.',            price: 'Rp 299.000', level: 'Advanced',     modules: 7, color: 'blue', comingSoon: true },
+    'claude-api-dev':     { title: 'Claude API untuk Developer',         icon: '👨‍💻', contentLink: 'coming-soon.html',           salesLink: 'coming-soon.html',       desc: 'Integrasikan Claude ke project nyata: streaming, tool use, caching, deploy.',    price: 'Rp 399.000', level: 'Advanced',     modules: 7, color: 'blue', comingSoon: true },
+    'jual-produk-ai':     { title: 'Build dan Jual Produk AI',           icon: '💰', contentLink: 'coming-soon.html',              salesLink: 'coming-soon.html',       desc: 'Dari ide ke produk AI yang menghasilkan uang: Framer, Midtrans, WhatsApp.',      price: 'Rp 499.000', level: 'Advanced',     modules: 7, color: 'blue', comingSoon: true },
   };
 
-  const LEVEL_ORDER = { 'Beginner': 0, 'Intermediate': 1, 'Advanced': 2 };
-
-  // Role/goal → recommended course slugs (shown first in journey)
   const ROLE_RECS = {
-    'karyawan':      ['kerja-sehari-hari', 'mulai-claude', 'analisis-data'],
-    'mahasiswa':     ['prompt-gratis', 'mulai-claude', 'kerja-sehari-hari'],
-    'pemilik-bisnis':['bisnis-ukm', 'konten-copywriting', 'build-automation'],
-    'freelancer':    ['konten-copywriting', 'kerja-sehari-hari', 'build-automation'],
-    'developer':     ['claude-api-dev', 'build-automation', 'ai-powered-app'],
-    'kreator':       ['konten-copywriting', 'bisnis-ukm', 'build-automation'],
+    'karyawan':       ['kerja-sehari-hari', 'mulai-claude', 'analisis-data'],
+    'mahasiswa':      ['prompt-gratis', 'mulai-claude', 'kerja-sehari-hari'],
+    'pemilik-bisnis': ['bisnis-ukm', 'konten-copywriting', 'build-automation'],
+    'freelancer':     ['konten-copywriting', 'kerja-sehari-hari', 'build-automation'],
+    'developer':      ['claude-api-dev', 'build-automation', 'ai-powered-app'],
+    'kreator':        ['konten-copywriting', 'bisnis-ukm', 'build-automation'],
   };
   const GOAL_RECS = {
-    'efisiensi-kerja':['kerja-sehari-hari', 'analisis-data'],
-    'bisnis':         ['bisnis-ukm', 'konten-copywriting'],
-    'karir':          ['mulai-claude', 'kerja-sehari-hari'],
-    'konten':         ['konten-copywriting', 'bisnis-ukm'],
-    'coding':         ['claude-api-dev', 'ai-powered-app'],
-    'lainnya':        ['prompt-gratis', 'mulai-claude'],
+    'efisiensi-kerja': ['kerja-sehari-hari', 'analisis-data'],
+    'bisnis':          ['bisnis-ukm', 'konten-copywriting'],
+    'karir':           ['mulai-claude', 'kerja-sehari-hari'],
+    'konten':          ['konten-copywriting', 'bisnis-ukm'],
+    'coding':          ['claude-api-dev', 'ai-powered-app'],
+    'lainnya':         ['prompt-gratis', 'mulai-claude'],
   };
+  const ROLE_LABELS   = { 'karyawan': '💼 Karyawan', 'mahasiswa': '🎓 Mahasiswa', 'pemilik-bisnis': '🏪 Pemilik Bisnis', 'freelancer': '🧑 Freelancer', 'developer': '⚡ Developer', 'kreator': '✍️ Kreator' };
+  const GOAL_LABELS   = { 'efisiensi-kerja': '⏱️ Hemat waktu', 'bisnis': '📈 Bisnis', 'karir': '🚀 Karir', 'konten': '🎨 Konten', 'coding': '💻 Coding', 'lainnya': '🌟 Eksplorasi' };
+  const EXP_LABELS    = { 'belum-pernah': '🌱 Pemula', 'pernah-pakai': '🌿 Jarang pakai', 'sudah-mahir': '🌳 Rutin pakai' };
+  const ROLE_AVATARS  = { 'karyawan': '💼', 'mahasiswa': '🎓', 'pemilik-bisnis': '🏪', 'freelancer': '🧑', 'developer': '⚡', 'kreator': '✍️' };
 
-  const ROLE_LABELS = {
-    'karyawan':'💼 Karyawan','mahasiswa':'🎓 Mahasiswa','pemilik-bisnis':'🏪 Pemilik Bisnis',
-    'freelancer':'🧑‍💻 Freelancer','developer':'⚡ Developer','kreator':'✍️ Kreator',
-  };
-  const GOAL_LABELS = {
-    'efisiensi-kerja':'⏱️ Hemat waktu','bisnis':'📈 Bisnis','karir':'🚀 Karir',
-    'konten':'🎨 Konten','coding':'💻 Coding','lainnya':'🌟 Eksplorasi',
-  };
-  const EXP_LABELS = {
-    'belum-pernah':'🌱 Pemula','pernah-pakai':'🌿 Jarang pakai','sudah-mahir':'🌳 Rutin pakai',
-  };
-  const ROLE_AVATARS = {
-    'karyawan':'💼','mahasiswa':'🎓','pemilik-bisnis':'🏪',
-    'freelancer':'🧑‍💻','developer':'⚡','kreator':'✍️',
-  };
-
-  // Progress map loaded from Supabase, keyed by course_slug
-  let progressMap = {};
+  let progressMap  = {};
   let userProfile  = null;
   let currentEmail = null;
+  let pAnswers     = { role: null, goal: null, experience: null };
 
-  // ── Profile Modal ─────────────────────────────────────
-  let pAnswers = { role: null, goal: null, experience: null };
-  let isEditMode = false;
+  // ── Option clicks ──────────────────────────────────────
+  document.querySelectorAll('.popt').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var step = btn.getAttribute('data-step');
+      var val  = btn.getAttribute('data-val');
+      document.querySelectorAll('[data-step="' + step + '"]').forEach(function(b) { b.classList.remove('selected'); });
+      btn.classList.add('selected');
+      if (step === '1') { pAnswers.role       = val; document.getElementById('pnext1').disabled = false; }
+      if (step === '2') { pAnswers.goal       = val; document.getElementById('pnext2').disabled = false; }
+      if (step === '3') { pAnswers.experience = val; document.getElementById('pnext3').disabled = false; }
+    });
+  });
 
-  function openProfileModal(editMode = false) {
-    isEditMode = editMode;
-    pAnswers = { role: userProfile?.role || null, goal: userProfile?.goal || null, experience: userProfile?.experience || null };
-    document.getElementById('pmodalTitle').textContent = editMode ? 'Edit Profil Kamu ✏️' : 'Hai! Ceritain sedikit tentang kamu 👋';
+  function openProfileModal(editMode) {
+    pAnswers = { role: (userProfile && userProfile.role) || null, goal: (userProfile && userProfile.goal) || null, experience: (userProfile && userProfile.experience) || null };
+    document.getElementById('pmodalTitle').textContent = editMode ? 'Edit Profil Kamu' : 'Hai! Ceritain sedikit tentang kamu';
     document.getElementById('pmodalSub').textContent   = editMode ? 'Update info kamu di bawah ini.' : 'Biar Klaud.id bisa kasih rekomendasi kursus yang paling relevan buatmu.';
-
-    // Reset all steps
-    ['pstep1','pstep2','pstep3'].forEach((id,i) => {
-      document.getElementById(id).classList.toggle('active', i === 0);
-    });
-
-    // Pre-select existing answers
-    document.querySelectorAll('#pstep1 .popt').forEach(b => {
-      b.classList.toggle('selected', b.dataset.val === pAnswers.role);
-    });
-    document.querySelectorAll('#pstep2 .popt').forEach(b => {
-      b.classList.toggle('selected', b.dataset.val === pAnswers.goal);
-    });
-    document.querySelectorAll('#pstep3 .popt').forEach(b => {
-      b.classList.toggle('selected', b.dataset.val === pAnswers.experience);
-    });
-
+    document.getElementById('pstep1').classList.add('active');
+    document.getElementById('pstep2').classList.remove('active');
+    document.getElementById('pstep3').classList.remove('active');
+    document.querySelectorAll('[data-step="1"]').forEach(function(b) { b.classList.toggle('selected', b.getAttribute('data-val') === pAnswers.role); });
+    document.querySelectorAll('[data-step="2"]').forEach(function(b) { b.classList.toggle('selected', b.getAttribute('data-val') === pAnswers.goal); });
+    document.querySelectorAll('[data-step="3"]').forEach(function(b) { b.classList.toggle('selected', b.getAttribute('data-val') === pAnswers.experience); });
     document.getElementById('pnext1').disabled = !pAnswers.role;
     document.getElementById('pnext2').disabled = !pAnswers.goal;
     document.getElementById('pnext3').disabled = !pAnswers.experience;
-
     document.getElementById('profileModal').style.display = 'flex';
   }
 
   function nextStep(current) {
-    document.getElementById(`pstep${current}`).classList.remove('active');
-    document.getElementById(`pstep${current + 1}`).classList.add('active');
+    document.getElementById('pstep' + current).classList.remove('active');
+    document.getElementById('pstep' + (current + 1)).classList.add('active');
   }
-
-  // Wire option clicks
-  document.querySelectorAll('.pmodal-opts').forEach(opts => {
-    opts.querySelectorAll('.popt').forEach(btn => {
-      btn.addEventListener('click', () => {
-        opts.querySelectorAll('.popt').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        const step = opts.closest('.pmodal-step');
-        const stepId = step.id; // pstep1, pstep2, pstep3
-        const val = btn.dataset.val;
-        if (stepId === 'pstep1') { pAnswers.role = val; document.getElementById('pnext1').disabled = false; }
-        if (stepId === 'pstep2') { pAnswers.goal = val; document.getElementById('pnext2').disabled = false; }
-        if (stepId === 'pstep3') { pAnswers.experience = val; document.getElementById('pnext3').disabled = false; }
-      });
-    });
-  });
 
   async function saveProfile() {
     document.getElementById('pnext3').textContent = 'Menyimpan...';
@@ -569,484 +394,81 @@
         experience: pAnswers.experience,
         updated_at: new Date().toISOString(),
       }, { onConflict: 'email' });
-
-      userProfile = { ...userProfile, ...pAnswers };
+      userProfile = Object.assign({}, userProfile, pAnswers);
       renderProfileTags();
-      buildJourney(new Set(
-        (await sbClient.from('enrollments').select('course_slug').eq('email', currentEmail)).data?.map(e => e.course_slug) || []
-      ));
-    } catch(e) {}
-    document.getElementById('profileModal').style.display = 'none';
-  }
-
-  function renderProfileTags() {
-    const tags = document.getElementById('profileTags');
-    if (!userProfile?.role) { tags.innerHTML = ''; return; }
-    tags.innerHTML = `
-      ${userProfile.role ? `<span class="profile-tag">${ROLE_LABELS[userProfile.role] || userProfile.role}</span>` : ''}
-      ${userProfile.goal ? `<span class="profile-tag goal">${GOAL_LABELS[userProfile.goal] || userProfile.goal}</span>` : ''}
-      ${userProfile.experience ? `<span class="profile-tag exp">${EXP_LABELS[userProfile.experience] || userProfile.experience}</span>` : ''}
-    `;
-    if (ROLE_AVATARS[userProfile.role]) {
-      document.getElementById('sideAvatar').textContent = ROLE_AVATARS[userProfile.role];
-    }
-  }
-
-  async function loadProgress(email) {
-    try {
-      const { data } = await sbClient
-        .from('module_completions')
-        .select('course_slug, module_num, completed_at')
-        .eq('email', email)
-        .order('completed_at', { ascending: false });
-
-      if (data) {
-        data.forEach(row => {
-          if (!progressMap[row.course_slug]) progressMap[row.course_slug] = new Set();
-          progressMap[row.course_slug].add(row.module_num);
-        });
-        // Sync to localStorage as fallback
-        Object.entries(progressMap).forEach(([slug, mods]) => {
-          localStorage.setItem(`klaud_progress_${slug}`, mods.size);
-        });
-      }
-    } catch (e) {
-      // Fall back to localStorage if Supabase fails
-    }
-  }
-
-  function getProgress(slug) {
-    const total = ALL_COURSES[slug]?.modules || 0;
-    if (total === 0) return { done: 0, total: 0, pct: 100 };
-    const done = progressMap[slug]?.size
-      ?? parseInt(localStorage.getItem(`klaud_progress_${slug}`) || '0');
-    return { done, total, pct: Math.round((done / total) * 100) };
-  }
-
-  async function init() {
-    const { data: { session } } = await sbClient.auth.getSession();
-    if (!session) { window.location.href = 'login.html'; return; }
-
-    const email = session.user.email;
-    currentEmail = email;
-    const name  = session.user.user_metadata?.full_name || email.split('@')[0];
-    const joinDate = new Date(session.user.created_at).toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
-
-    // Nav
-    document.getElementById('navUname').textContent  = name;
-    document.getElementById('navUemail').textContent = email;
-
-    // Sidebar profile
-    document.getElementById('sideName').textContent  = name;
-    document.getElementById('sideEmail').textContent = email;
-    document.getElementById('sideSince').textContent = `Bergabung ${joinDate}`;
-
-    // Load profile from Supabase
-    try {
-      const { data: prof } = await sbClient.from('profiles').select('*').eq('email', email).single();
-      userProfile = prof;
-    } catch(e) { userProfile = null; }
-    renderProfileTags();
-
-    // Greeting
-    const hour = new Date().getHours();
-    const greet = hour < 12 ? 'Selamat pagi' : hour < 17 ? 'Selamat siang' : 'Selamat malam';
-    document.getElementById('greetingText').textContent = `${greet}, ${name}! 👋`;
-
-    // Load progress from Supabase
-    await loadProgress(email);
-
-    // Auto-enroll free course
-    try {
-      await sbClient.from('enrollments').upsert({
-        email, course_slug: 'prompt-gratis',
-        course_name: '20 Prompt Claude Terbaik', type: 'free',
-      }, { onConflict: 'email,course_slug', ignoreDuplicates: true });
-    } catch (e) {}
-
-    // Fetch enrollments
-    const { data: enrollments } = await sbClient
-      .from('enrollments')
-      .select('course_slug, course_name, type, enrolled_at')
-      .eq('email', email)
-      .order('enrolled_at', { ascending: false });
-
-    const enrolled = (enrollments || []).filter(e => ALL_COURSES[e.course_slug]);
-    const enrolledSlugs = new Set(enrolled.map(e => e.course_slug));
-
-    // Stats
-    let totalModulesDone = 0;
-    let totalModules = 0;
-    enrolled.forEach(c => {
-      const p = getProgress(c.course_slug);
-      totalModulesDone += p.done;
-      totalModules += p.total;
-    });
-    document.getElementById('statEnrolled').textContent = enrolled.length;
-    document.getElementById('statModules').textContent  = totalModulesDone;
-    document.getElementById('statPct').textContent      = totalModules > 0 ? Math.round((totalModulesDone / totalModules) * 100) + '%' : '—';
-
-    // Learning Journey
-    buildJourney(enrolledSlugs);
-
-    // Show profile setup modal for new users (no profile yet)
-    if (!userProfile?.role) {
-      setTimeout(() => openProfileModal(false), 800);
-    }
-
-    // Enrolled section
-    if (enrolled.length > 0) {
-      document.getElementById('enrolledSection').style.display = 'block';
-      const list = document.getElementById('enrolledList');
-      enrolled.forEach(c => {
-        const meta = ALL_COURSES[c.course_slug];
-        const prog = getProgress(c.course_slug);
-        const dateStr = new Date(c.enrolled_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
-        const badge   = c.type === 'free'
-          ? `<span class="enrolled-badge badge-free">Gratis</span>`
-          : `<span class="enrolled-badge badge-paid">✓ Aktif</span>`;
-        const progressBar = `
-          <div class="course-progress">
-            <div class="cpb-wrap"><div class="cpb-fill ${meta.color}" style="width:${prog.pct}%"></div></div>
-            <span class="cpb-label">${prog.done}/${prog.total} bagian</span>
-          </div>`;
-        list.innerHTML += `
-          <div class="enrolled-card">
-            <div class="enrolled-icon">${meta.icon}</div>
-            <div class="enrolled-info">
-              <h3>${meta.title}</h3>
-              <div class="enrolled-meta">${c.type === 'free' ? 'Diikuti' : 'Dibeli'} ${dateStr} &nbsp;${badge}</div>
-              ${progressBar}
-            </div>
-            <a href="${meta.contentLink}" class="resume-btn">${prog.done > 0 ? 'Lanjutkan →' : 'Mulai →'}</a>
-          </div>`;
-      });
-    }
-
-    // Explore section
-    const unenrolled = Object.entries(ALL_COURSES).filter(([slug]) => !enrolledSlugs.has(slug));
-    if (unenrolled.length > 0) {
-      document.getElementById('exploreSection').style.display = 'block';
-      const grid = document.getElementById('exploreGrid');
-      unenrolled.forEach(([slug, meta]) => {
-        const ctaBtn = meta.comingSoon
-          ? `<div class="explore-btn disabled">🔔 Segera Hadir</div>`
-          : `<a href="${meta.salesLink}" class="explore-btn">Lihat Kursus →</a>`;
-        grid.innerHTML += `
-          <div class="explore-card">
-            <div class="explore-level">${meta.level}</div>
-            <div class="explore-icon">${meta.icon}</div>
-            <h4>${meta.title}</h4>
-            <p>${meta.desc}</p>
-            <div class="explore-price">${meta.price}</div>
-            ${ctaBtn}
-          </div>`;
-      });
-    }
-
-    document.getElementById('loadingScreen').style.display = 'none';
-    document.getElementById('mainLayout').style.display    = 'flex';
-  }
-
-  function buildJourney(enrolledSlugs) {
-    const beginnerSlugs     = ['prompt-gratis', 'mulai-claude', 'kerja-sehari-hari', 'bisnis-ukm'];
-    const intermediateSlugs = ['konten-copywriting', 'analisis-data', 'build-automation'];
-    const advancedSlugs     = ['ai-powered-app', 'claude-api-dev', 'jual-produk-ai'];
-
-    // Build recommended set from profile
-    const recSlugs = new Set([
-      ...(ROLE_RECS[userProfile?.role] || []),
-      ...(GOAL_RECS[userProfile?.goal] || []),
-    ]);
-
-    // Update subtitle
-    const sub = document.getElementById('journeySubtitle');
-    if (userProfile?.role) {
-      sub.textContent = `Direkomendasikan untuk ${ROLE_LABELS[userProfile.role] || 'kamu'} — ${GOAL_LABELS[userProfile.goal] || ''}.`;
-    } else {
-      sub.textContent = 'Lengkapi profilmu untuk rekomendasi personal.';
-    }
-
-    // Clear containers
-    ['journeyBeginner','journeyIntermediate','journeyAdvanced'].forEach(id => {
-      document.getElementById(id).innerHTML = '';
-    });
-
-    function renderLevel(slugs, containerId) {
-      const el = document.getElementById(containerId);
-      slugs.forEach(slug => {
-        const meta = ALL_COURSES[slug];
-        const isEnrolled  = enrolledSlugs.has(slug);
-        const prog = getProgress(slug);
-        const isCompleted = isEnrolled && prog.pct === 100;
-        const isRec       = recSlugs.has(slug) && !isEnrolled && !isCompleted;
-        const cls = isCompleted ? 'completed' : isEnrolled ? 'enrolled' : isRec ? 'recommended' : 'coming';
-        const recBadge = isRec ? ' <span style="font-size:9px;font-weight:700;color:var(--gold);">★ Untukmu</span>' : '';
-        el.innerHTML += `
-          <div class="journey-item ${cls}">
-            <span class="journey-dot"></span>
-            ${meta.icon} ${meta.title.replace('Claude untuk ', '').replace(' dengan Claude', '')}${recBadge}
-          </div>`;
-      });
-    }
-
-    renderLevel(beginnerSlugs,     'journeyBeginner');
-    renderLevel(intermediateSlugs, 'journeyIntermediate');
-    renderLevel(advancedSlugs,     'journeyAdvanced');
-  }
-
-  function scrollExplore(dir) {
-    document.getElementById('exploreGrid').scrollBy({ left: dir * 234, behavior: 'smooth' });
-  }
-
-  async function logout() {
-    await sbClient.auth.signOut();
-    window.location.href = 'index.html';
-  }
-
-  init();
-</script>
-</body>
-</html>
-    'belum-pernah':'🌱 Pemula','pernah-pakai':'🌿 Jarang pakai','sudah-mahir':'🌳 Rutin pakai',
-  };
-  const ROLE_AVATARS = {
-    'karyawan':'💼','mahasiswa':'🎓','pemilik-bisnis':'🏪',
-    'freelancer':'🧑‍💻','developer':'⚡','kreator':'✍️',
-  };
-
-  let progressMap = {};
-  let userProfile  = null;
-  let currentEmail = null;
-
-  // ── Profile Modal ─────────────────────────────────────
-  let pAnswers = { role: null, goal: null, experience: null };
-
-  function openProfileModal(editMode = false) {
-    pAnswers = { role: userProfile?.role || null, goal: userProfile?.goal || null, experience: userProfile?.experience || null };
-    document.getElementById('pmodalTitle').textContent = editMode ? 'Edit Profil Kamu ✏️' : 'Hai! Ceritain sedikit tentang kamu 👋';
-    document.getElementById('pmodalSub').textContent   = editMode ? 'Update info kamu di bawah ini.' : 'Biar Klaud.id bisa kasih rekomendasi kursus yang paling relevan buatmu.';
-    ['pstep1','pstep2','pstep3'].forEach((id,i) => {
-      document.getElementById(id).classList.toggle('active', i === 0);
-    });
-    document.querySelectorAll('#pstep1 .popt').forEach(b => b.classList.toggle('selected', b.dataset.val === pAnswers.role));
-    document.querySelectorAll('#pstep2 .popt').forEach(b => b.classList.toggle('selected', b.dataset.val === pAnswers.goal));
-    document.querySelectorAll('#pstep3 .popt').forEach(b => b.classList.toggle('selected', b.dataset.val === pAnswers.experience));
-    document.getElementById('pnext1').disabled = !pAnswers.role;
-    document.getElementById('pnext2').disabled = !pAnswers.goal;
-    document.getElementById('pnext3').disabled = !pAnswers.experience;
-    document.getElementById('profileModal').style.display = 'flex';
-  }
-
-  function nextStep(current) {
-    document.getElementById(`pstep${current}`).classList.remove('active');
-    document.getElementById(`pstep${current + 1}`).classList.add('active');
-  }
-
-  document.querySelectorAll('.pmodal-opts').forEach(opts => {
-    opts.querySelectorAll('.popt').forEach(btn => {
-      btn.addEventListener('click', () => {
-        opts.querySelectorAll('.popt').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        const stepId = btn.closest('.pmodal-step').id;
-        const val = btn.dataset.val;
-        if (stepId === 'pstep1') { pAnswers.role = val;       document.getElementById('pnext1').disabled = false; }
-        if (stepId === 'pstep2') { pAnswers.goal = val;       document.getElementById('pnext2').disabled = false; }
-        if (stepId === 'pstep3') { pAnswers.experience = val; document.getElementById('pnext3').disabled = false; }
-      });
-    });
-  });
-
-  async function saveProfile() {
-    document.getElementById('pnext3').textContent = 'Menyimpan...';
-    document.getElementById('pnext3').disabled = true;
-    try {
-      await sbClient.from('profiles').upsert({
-        email: currentEmail,
-        full_name: document.getElementById('sideName').textContent,
-        role: pAnswers.role, goal: pAnswers.goal, experience: pAnswers.experience,
-        updated_at: new Date().toISOString(),
-      }, { onConflict: 'email' });
-      userProfile = { ...userProfile, ...pAnswers };
-      renderProfileTags();
-      const { data: enrData } = await sbClient.from('enrollments').select('course_slug').eq('email', currentEmail);
-      buildJourney(new Set((enrData || []).map(e => e.course_slug)));
+      var enrResult = await sbClient.from('enrollments').select('course_slug').eq('email', currentEmail);
+      buildJourney(new Set((enrResult.data || []).map(function(e) { return e.course_slug; })));
     } catch(e) { console.error(e); }
     document.getElementById('profileModal').style.display = 'none';
   }
 
   function renderProfileTags() {
-    const tags = document.getElementById('profileTags');
-    if (!userProfile?.role) { tags.innerHTML = ''; return; }
-    tags.innerHTML = `
-      ${userProfile.role ? `<span class="profile-tag">${ROLE_LABELS[userProfile.role] || userProfile.role}</span>` : ''}
-      ${userProfile.goal ? `<span class="profile-tag goal">${GOAL_LABELS[userProfile.goal] || userProfile.goal}</span>` : ''}
-      ${userProfile.experience ? `<span class="profile-tag exp">${EXP_LABELS[userProfile.experience] || userProfile.experience}</span>` : ''}
-    `;
+    var tags = document.getElementById('profileTags');
+    if (!userProfile || !userProfile.role) { tags.innerHTML = ''; return; }
+    var html = '';
+    if (userProfile.role)       html += '<span class="profile-tag">'      + (ROLE_LABELS[userProfile.role] || userProfile.role) + '</span>';
+    if (userProfile.goal)       html += '<span class="profile-tag goal">'  + (GOAL_LABELS[userProfile.goal] || userProfile.goal) + '</span>';
+    if (userProfile.experience) html += '<span class="profile-tag exp">'   + (EXP_LABELS[userProfile.experience] || userProfile.experience) + '</span>';
+    tags.innerHTML = html;
     if (ROLE_AVATARS[userProfile.role]) document.getElementById('sideAvatar').textContent = ROLE_AVATARS[userProfile.role];
   }
 
   // ── Progress ──────────────────────────────────────────
   async function loadProgress(email) {
     try {
-      const { data } = await sbClient.from('module_completions')
-        .select('course_slug, module_num').eq('email', email);
-      if (data) {
-        data.forEach(row => {
+      var result = await sbClient.from('module_completions').select('course_slug, module_num').eq('email', email);
+      if (result.data) {
+        result.data.forEach(function(row) {
           if (!progressMap[row.course_slug]) progressMap[row.course_slug] = new Set();
           progressMap[row.course_slug].add(row.module_num);
         });
-        Object.entries(progressMap).forEach(([slug, mods]) => {
-          localStorage.setItem(`klaud_progress_${slug}`, mods.size);
+        Object.keys(progressMap).forEach(function(slug) {
+          localStorage.setItem('klaud_progress_' + slug, progressMap[slug].size);
         });
       }
     } catch(e) {}
   }
 
   function getProgress(slug) {
-    const total = ALL_COURSES[slug]?.modules || 0;
+    var total = (ALL_COURSES[slug] && ALL_COURSES[slug].modules) || 0;
     if (total === 0) return { done: 0, total: 0, pct: 100 };
-    const done = progressMap[slug]?.size ?? parseInt(localStorage.getItem(`klaud_progress_${slug}`) || '0');
-    return { done, total, pct: Math.round((done / total) * 100) };
+    var done = (progressMap[slug] && progressMap[slug].size) || parseInt(localStorage.getItem('klaud_progress_' + slug) || '0');
+    return { done: done, total: total, pct: Math.round((done / total) * 100) };
   }
 
-  // ── Init ──────────────────────────────────────────────
-  async function init() {
-    const { data: { session } } = await sbClient.auth.getSession();
-    if (!session) { window.location.href = 'login.html'; return; }
-
-    const email    = session.user.email;
-    currentEmail   = email;
-    const name     = session.user.user_metadata?.full_name || email.split('@')[0];
-    const joinDate = new Date(session.user.created_at).toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
-
-    document.getElementById('navUname').textContent  = name;
-    document.getElementById('navUemail').textContent = email;
-    document.getElementById('sideName').textContent  = name;
-    document.getElementById('sideEmail').textContent = email;
-    document.getElementById('sideSince').textContent = `Bergabung ${joinDate}`;
-
-    // Load profile
-    try {
-      const { data: prof } = await sbClient.from('profiles').select('*').eq('email', email).maybeSingle();
-      userProfile = prof;
-    } catch(e) { userProfile = null; }
-    renderProfileTags();
-
-    const hour  = new Date().getHours();
-    const greet = hour < 12 ? 'Selamat pagi' : hour < 17 ? 'Selamat siang' : 'Selamat malam';
-    document.getElementById('greetingText').textContent = `${greet}, ${name}! 👋`;
-
-    await loadProgress(email);
-
-    // Auto-enroll free course
-    try {
-      await sbClient.from('enrollments').upsert({
-        email, course_slug: 'prompt-gratis', course_name: '20 Prompt Claude Terbaik', type: 'free',
-      }, { onConflict: 'email,course_slug', ignoreDuplicates: true });
-    } catch(e) {}
-
-    const { data: enrollments } = await sbClient.from('enrollments')
-      .select('course_slug, course_name, type, enrolled_at')
-      .eq('email', email).order('enrolled_at', { ascending: false });
-
-    const enrolled     = (enrollments || []).filter(e => ALL_COURSES[e.course_slug]);
-    const enrolledSlugs = new Set(enrolled.map(e => e.course_slug));
-
-    document.getElementById('statEnrolled').textContent = enrolled.length;
-
-    buildJourney(enrolledSlugs);
-
-    // Show profile setup for new users
-    if (!userProfile?.role) setTimeout(() => openProfileModal(false), 800);
-
-    if (enrolled.length > 0) {
-      document.getElementById('enrolledSection').style.display = 'block';
-      const list = document.getElementById('enrolledList');
-      enrolled.forEach(c => {
-        const meta    = ALL_COURSES[c.course_slug];
-        const prog    = getProgress(c.course_slug);
-        const dateStr = new Date(c.enrolled_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
-        const badge   = c.type === 'free'
-          ? `<span class="enrolled-badge badge-free">Gratis</span>`
-          : `<span class="enrolled-badge badge-paid">✓ Aktif</span>`;
-        list.innerHTML += `
-          <div class="enrolled-card">
-            <div class="enrolled-icon">${meta.icon}</div>
-            <div class="enrolled-info">
-              <h3>${meta.title}</h3>
-              <div class="enrolled-meta">${c.type === 'free' ? 'Diikuti' : 'Dibeli'} ${dateStr} &nbsp;${badge}</div>
-              <div class="course-progress">
-                <div class="cpb-wrap"><div class="cpb-fill ${meta.color}" style="width:${prog.pct}%"></div></div>
-                <span class="cpb-label">${prog.done}/${prog.total} bagian</span>
-              </div>
-            </div>
-            <a href="${meta.contentLink}" class="resume-btn">${prog.done > 0 ? 'Lanjutkan →' : 'Mulai →'}</a>
-          </div>`;
-      });
-    }
-
-    const unenrolled = Object.entries(ALL_COURSES).filter(([slug]) => !enrolledSlugs.has(slug));
-    if (unenrolled.length > 0) {
-      document.getElementById('exploreSection').style.display = 'block';
-      const grid = document.getElementById('exploreGrid');
-      unenrolled.forEach(([slug, meta]) => {
-        const ctaBtn = meta.comingSoon
-          ? `<div class="explore-btn disabled">🔔 Segera Hadir</div>`
-          : `<a href="${meta.salesLink}" class="explore-btn">Lihat Kursus →</a>`;
-        grid.innerHTML += `
-          <div class="explore-card">
-            <div class="explore-level">${meta.level}</div>
-            <div class="explore-icon">${meta.icon}</div>
-            <h4>${meta.title}</h4>
-            <p>${meta.desc}</p>
-            <div class="explore-price">${meta.price}</div>
-            ${ctaBtn}
-          </div>`;
-      });
-    }
-
-    document.getElementById('loadingScreen').style.display = 'none';
-    document.getElementById('mainLayout').style.display    = 'flex';
-  }
-
-  // ── Learning Journey ──────────────────────────────────
+  // ── Journey ───────────────────────────────────────────
   function buildJourney(enrolledSlugs) {
-    const beginnerSlugs     = ['prompt-gratis', 'mulai-claude', 'kerja-sehari-hari', 'bisnis-ukm'];
-    const intermediateSlugs = ['konten-copywriting', 'analisis-data', 'build-automation'];
-    const advancedSlugs     = ['ai-powered-app', 'claude-api-dev', 'jual-produk-ai'];
+    var beginnerSlugs     = ['prompt-gratis', 'mulai-claude', 'kerja-sehari-hari', 'bisnis-ukm'];
+    var intermediateSlugs = ['konten-copywriting', 'analisis-data', 'build-automation'];
+    var advancedSlugs     = ['ai-powered-app', 'claude-api-dev', 'jual-produk-ai'];
 
-    const recSlugs = new Set([
-      ...(ROLE_RECS[userProfile?.role] || []),
-      ...(GOAL_RECS[userProfile?.goal] || []),
-    ]);
+    var recSlugs = new Set(
+      ((userProfile && ROLE_RECS[userProfile.role]) || []).concat((userProfile && GOAL_RECS[userProfile.goal]) || [])
+    );
 
-    const sub = document.getElementById('journeySubtitle');
-    if (userProfile?.role) {
-      sub.textContent = `Direkomendasikan untuk ${ROLE_LABELS[userProfile.role]} — ${GOAL_LABELS[userProfile.goal] || ''}.`;
+    var sub = document.getElementById('journeySubtitle');
+    if (userProfile && userProfile.role) {
+      sub.textContent = 'Untuk ' + (ROLE_LABELS[userProfile.role] || userProfile.role) + (userProfile.goal ? ' — ' + (GOAL_LABELS[userProfile.goal] || '') : '') + '.';
     } else {
       sub.textContent = 'Lengkapi profilmu untuk rekomendasi personal.';
     }
 
-    ['journeyBeginner','journeyIntermediate','journeyAdvanced'].forEach(id => {
+    ['journeyBeginner','journeyIntermediate','journeyAdvanced'].forEach(function(id) {
       document.getElementById(id).innerHTML = '';
     });
 
     function renderLevel(slugs, containerId) {
-      const el = document.getElementById(containerId);
-      slugs.forEach(slug => {
-        const meta        = ALL_COURSES[slug];
-        const isEnrolled  = enrolledSlugs.has(slug);
-        const prog        = getProgress(slug);
-        const isCompleted = isEnrolled && prog.pct === 100;
-        const isRec       = recSlugs.has(slug) && !isEnrolled && !isCompleted;
-        const cls         = isCompleted ? 'completed' : isEnrolled ? 'enrolled' : isRec ? 'recommended' : 'coming';
-        const recBadge    = isRec ? ' <span style="font-size:9px;font-weight:700;color:var(--gold);">★ Untukmu</span>' : '';
-        el.innerHTML += `
-          <div class="journey-item ${cls}">
-            <span class="journey-dot"></span>
-            ${meta.icon} ${meta.title.replace('Claude untuk ', '').replace(' dengan Claude', '')}${recBadge}
-          </div>`;
+      var el = document.getElementById(containerId);
+      slugs.forEach(function(slug) {
+        var meta        = ALL_COURSES[slug];
+        var isEnrolled  = enrolledSlugs.has(slug);
+        var prog        = getProgress(slug);
+        var isCompleted = isEnrolled && prog.pct === 100;
+        var isRec       = recSlugs.has(slug) && !isEnrolled && !isCompleted;
+        var cls         = isCompleted ? 'completed' : isEnrolled ? 'enrolled' : isRec ? 'recommended' : 'coming';
+        var recBadge    = isRec ? ' <span style="font-size:9px;font-weight:700;color:var(--gold);">★ Untukmu</span>' : '';
+        var shortTitle  = meta.title.replace('Claude untuk ', '').replace(' dengan Claude', '').replace(' dan Claude', '');
+        el.innerHTML += '<div class="journey-item ' + cls + '"><span class="journey-dot"></span>' + meta.icon + ' ' + shortTitle + recBadge + '</div>';
       });
     }
 
@@ -1055,22 +477,100 @@
     renderLevel(advancedSlugs,     'journeyAdvanced');
   }
 
-  function scrollExplore(dir) {
-    document.getElementById('exploreGrid').scrollBy({ left: dir * 234, behavior: 'smooth' });
-  }
+  // ── Init ──────────────────────────────────────────────
+  async function init() {
+    var sessionResult = await sbClient.auth.getSession();
+    var session = sessionResult.data.session;
+    if (!session) { window.location.href = 'login.html'; return; }
 
-  async function logout() {
-    await sbClient.auth.signOut();
-    window.location.href = 'index.html';
-  }
+    currentEmail = session.user.email;
+    var name     = (session.user.user_metadata && session.user.user_metadata.full_name) || currentEmail.split('@')[0];
+    var joinDate = new Date(session.user.created_at).toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
 
-  init();
-</script>
-</body>
-</html>
-journeyBeginner');
-    renderLevel(intermediateSlugs, 'journeyIntermediate');
-    renderLevel(advancedSlugs,     'journeyAdvanced');
+    document.getElementById('navUname').textContent  = name;
+    document.getElementById('navUemail').textContent = currentEmail;
+    document.getElementById('sideName').textContent  = name;
+    document.getElementById('sideEmail').textContent = currentEmail;
+    document.getElementById('sideSince').textContent = 'Bergabung ' + joinDate;
+
+    var hour  = new Date().getHours();
+    var greet = hour < 12 ? 'Selamat pagi' : hour < 17 ? 'Selamat siang' : 'Selamat malam';
+    document.getElementById('greetingText').textContent = greet + ', ' + name + '!';
+
+    // Load profile
+    try {
+      var profResult = await sbClient.from('profiles').select('*').eq('email', currentEmail).maybeSingle();
+      userProfile = profResult.data;
+    } catch(e) { userProfile = null; }
+    renderProfileTags();
+
+    await loadProgress(currentEmail);
+
+    // Auto-enroll free course
+    try {
+      await sbClient.from('enrollments').upsert(
+        { email: currentEmail, course_slug: 'prompt-gratis', course_name: '20 Prompt Claude Terbaik', type: 'free' },
+        { onConflict: 'email,course_slug', ignoreDuplicates: true }
+      );
+    } catch(e) {}
+
+    // Fetch enrollments
+    var enrResult  = await sbClient.from('enrollments').select('course_slug, course_name, type, enrolled_at').eq('email', currentEmail).order('enrolled_at', { ascending: false });
+    var enrollments = (enrResult.data || []).filter(function(e) { return ALL_COURSES[e.course_slug]; });
+    var enrolledSlugs = new Set(enrollments.map(function(e) { return e.course_slug; }));
+
+    document.getElementById('statEnrolled').textContent = enrollments.length;
+
+    buildJourney(enrolledSlugs);
+
+    // Show profile setup for new users
+    if (!userProfile || !userProfile.role) setTimeout(function() { openProfileModal(false); }, 800);
+
+    // Enrolled cards
+    if (enrollments.length > 0) {
+      document.getElementById('enrolledSection').style.display = 'block';
+      var list = document.getElementById('enrolledList');
+      enrollments.forEach(function(c) {
+        var meta    = ALL_COURSES[c.course_slug];
+        var prog    = getProgress(c.course_slug);
+        var dateStr = new Date(c.enrolled_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+        var badge   = c.type === 'free' ? '<span class="enrolled-badge badge-free">Gratis</span>' : '<span class="enrolled-badge badge-paid">✓ Aktif</span>';
+        var btnLabel = prog.done > 0 ? 'Lanjutkan →' : 'Mulai →';
+        list.innerHTML += '<div class="enrolled-card">'
+          + '<div class="enrolled-icon">' + meta.icon + '</div>'
+          + '<div class="enrolled-info">'
+          + '<h3>' + meta.title + '</h3>'
+          + '<div class="enrolled-meta">' + (c.type === 'free' ? 'Diikuti' : 'Dibeli') + ' ' + dateStr + ' &nbsp;' + badge + '</div>'
+          + '<div class="course-progress"><div class="cpb-wrap"><div class="cpb-fill ' + meta.color + '" style="width:' + prog.pct + '%"></div></div>'
+          + '<span class="cpb-label">' + prog.done + '/' + prog.total + ' bagian</span></div>'
+          + '</div>'
+          + '<a href="' + meta.contentLink + '" class="resume-btn">' + btnLabel + '</a>'
+          + '</div>';
+      });
+    }
+
+    // Explore cards
+    var unenrolled = Object.keys(ALL_COURSES).filter(function(slug) { return !enrolledSlugs.has(slug); });
+    if (unenrolled.length > 0) {
+      document.getElementById('exploreSection').style.display = 'block';
+      var grid = document.getElementById('exploreGrid');
+      unenrolled.forEach(function(slug) {
+        var meta   = ALL_COURSES[slug];
+        var ctaBtn = meta.comingSoon
+          ? '<div class="explore-btn disabled">🔔 Segera Hadir</div>'
+          : '<a href="' + meta.salesLink + '" class="explore-btn">Lihat Kursus →</a>';
+        grid.innerHTML += '<div class="explore-card">'
+          + '<div class="explore-level">' + meta.level + '</div>'
+          + '<div class="explore-icon">' + meta.icon + '</div>'
+          + '<h4>' + meta.title + '</h4>'
+          + '<p>' + meta.desc + '</p>'
+          + '<div class="explore-price">' + meta.price + '</div>'
+          + ctaBtn + '</div>';
+      });
+    }
+
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('mainLayout').style.display    = 'flex';
   }
 
   function scrollExplore(dir) {
