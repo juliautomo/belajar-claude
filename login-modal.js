@@ -193,10 +193,18 @@
   };
 
   // ── Intercept all login.html links ──────────────────────────────────────────
-  document.addEventListener('click', (e) => {
+  document.addEventListener('click', async (e) => {
     const link = e.target.closest('a[href="login.html"]');
-    if (link) {
-      e.preventDefault();
+    if (!link) return;
+    e.preventDefault();
+
+    // Check if already logged in
+    const { data: { session } } = await sbClient.auth.getSession();
+    if (session) {
+      // Already logged in — go to dashboard or the course/package destination
+      const dest = link.getAttribute('data-dest') || 'dashboard.html';
+      window.location.href = dest;
+    } else {
       window.openLoginModal();
     }
   });
