@@ -11,7 +11,7 @@
     :root {
       --bg: #F8F9FC; --surface: #FFFFFF; --navy: #0F1628;
       --blue: #4A72D6; --blue-pale: #EEF2FF; --green: #1D9E75;
-      --green-pale: #ECFDF5; --muted: #6B7080; --border: #E8EAF0;
+      --green-pale: #ECFDF5; --muted: #6B7280; --border: #E5E7EB;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--navy); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
@@ -59,7 +59,7 @@
 
     .breadcrumb { font-size: 12px; color: var(--muted); margin-bottom: 24px; display: flex; align-items: center; gap: 6px; }
     .breadcrumb strong { color: var(--navy); }
-    .module-title { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; color: var(--navy); margin-bottom: 6px; }
+    .module-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: var(--navy); margin-bottom: 6px; }
     .module-subtitle { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
 
     /* Prompt cards */
@@ -129,7 +129,7 @@
 
   <aside class="sidebar">
     <div class="sidebar-header">
-      <div class="sidebar-course-name">20 Prompt Claude Terbaik 🎁</div>
+      <div class="sidebar-course-name">20 Prompt Claude Terbaik</div>
       <div class="progress-bar-wrap">
         <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
         <span class="progress-label" id="progressLabel">0/5</span>
@@ -138,23 +138,23 @@
     <div class="sidebar-section-label">Kategori Prompt</div>
     <div class="mod-item active" id="nav-mod1" onclick="showModule(1)">
       <div class="mod-check" id="check1"></div>
-      <div><div class="mod-item-title">💼 Produktivitas Kerja</div><div class="mod-item-sub">4 prompt · Rangkum, jadwal, proyek</div></div>
+      <div><div class="mod-item-title">Produktivitas Kerja</div><div class="mod-item-sub">4 prompt · Rangkum, jadwal, proyek</div></div>
     </div>
     <div class="mod-item" id="nav-mod2" onclick="showModule(2)">
       <div class="mod-check" id="check2"></div>
-      <div><div class="mod-item-title">🏪 Bisnis & Marketing</div><div class="mod-item-sub">5 prompt · Konten, kompetitor, produk</div></div>
+      <div><div class="mod-item-title">Bisnis & Marketing</div><div class="mod-item-sub">5 prompt · Konten, kompetitor, produk</div></div>
     </div>
     <div class="mod-item" id="nav-mod3" onclick="showModule(3)">
       <div class="mod-check" id="check3"></div>
-      <div><div class="mod-item-title">🎯 Karir & CV</div><div class="mod-item-sub">4 prompt · CV, interview, LinkedIn</div></div>
+      <div><div class="mod-item-title">Karir & CV</div><div class="mod-item-sub">4 prompt · CV, interview, LinkedIn</div></div>
     </div>
     <div class="mod-item" id="nav-mod4" onclick="showModule(4)">
       <div class="mod-check" id="check4"></div>
-      <div><div class="mod-item-title">✉️ Komunikasi Profesional</div><div class="mod-item-sub">4 prompt · Email, presentasi, pesan sulit</div></div>
+      <div><div class="mod-item-title">Komunikasi Profesional</div><div class="mod-item-sub">4 prompt · Email, presentasi, pesan sulit</div></div>
     </div>
     <div class="mod-item" id="nav-mod5" onclick="showModule(5)">
       <div class="mod-check" id="check5"></div>
-      <div><div class="mod-item-title">📚 Belajar & Riset</div><div class="mod-item-sub">3 prompt · Topik kompleks, rencana belajar</div></div>
+      <div><div class="mod-item-title">Belajar & Riset</div><div class="mod-item-sub">3 prompt · Topik kompleks, rencana belajar</div></div>
     </div>
   </aside>
 
@@ -164,7 +164,7 @@
       <!-- PANEL 1: Produktivitas -->
       <div class="module-panel active" id="panel1">
         <div class="breadcrumb"><span>20 Prompt Terbaik</span><span>›</span><strong>Produktivitas Kerja</strong></div>
-        <h1 class="module-title">💼 Produktivitas Kerja</h1>
+        <h1 class="module-title">Produktivitas Kerja</h1>
         <p class="module-subtitle">4 prompt untuk merangkum, merencanakan, dan mengelola pekerjaan lebih efisien</p>
         <div class="prompt-list">
 
@@ -235,7 +235,7 @@ Tolong ubah ini menjadi notulen meeting yang rapi dengan format:
       <!-- PANEL 2: Bisnis -->
       <div class="module-panel" id="panel2">
         <div class="breadcrumb"><span>20 Prompt Terbaik</span><span>›</span><strong>Bisnis & Marketing</strong></div>
-        <h1 class="module-title">🏪 Bisnis & Marketing</h1>
+        <h1 class="module-title">Bisnis & Marketing</h1>
         <p class="module-subtitle">5 prompt untuk konten, riset pasar, dan deskripsi produk yang menjual</p>
         <div class="prompt-list">
 
@@ -327,7 +327,7 @@ Berikan 10 pilihan nama yang mudah diingat, unik, dan relevan — beserta taglin
       <!-- PANEL 3: Karir -->
       <div class="module-panel" id="panel3">
         <div class="breadcrumb"><span>20 Prompt Terbaik</span><span>›</span><strong>Karir & CV</strong></div>
-        <h1 class="module-title">🎯 Karir & CV</h1>
+        <h1 class="module-title">Karir & CV</h1>
         <p class="module-subtitle">4 prompt untuk memperkuat CV, persiapan interview, dan negosiasi gaji</p>
         <div class="prompt-list">
 
@@ -400,7 +400,7 @@ Tolong: tulis ulang headline LinkedIn saya agar lebih menarik, buat draf "About"
       <!-- PANEL 4: Komunikasi -->
       <div class="module-panel" id="panel4">
         <div class="breadcrumb"><span>20 Prompt Terbaik</span><span>›</span><strong>Komunikasi Profesional</strong></div>
-        <h1 class="module-title">✉️ Komunikasi Profesional</h1>
+        <h1 class="module-title">Komunikasi Profesional</h1>
         <p class="module-subtitle">4 prompt untuk email, presentasi, dan pesan-pesan sulit di tempat kerja</p>
         <div class="prompt-list">
 
@@ -477,7 +477,7 @@ Tolong bantu saya menemukan cara terbaik untuk menyampaikan ini — kapan waktu 
       <!-- PANEL 5: Belajar -->
       <div class="module-panel" id="panel5">
         <div class="breadcrumb"><span>20 Prompt Terbaik</span><span>›</span><strong>Belajar & Riset</strong></div>
-        <h1 class="module-title">📚 Belajar & Riset</h1>
+        <h1 class="module-title">Belajar & Riset</h1>
         <p class="module-subtitle">3 prompt untuk belajar topik baru, membuat rencana belajar, dan riset cepat</p>
         <div class="prompt-list">
 
