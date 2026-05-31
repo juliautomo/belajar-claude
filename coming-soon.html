@@ -4,46 +4,46 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Segera Hadir — Klaud.id</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    background: #F8F9FC; color: #0F1628;
+    background: #F2F2F2; color: #1A1A1A;
     min-height: 100vh; display: flex; flex-direction: column;
     align-items: center; justify-content: center; padding: 24px; text-align: center;
   }
-  .logo { font-size: 20px; font-weight: 800; color: #0F1628; margin-bottom: 40px; }
+  .logo { font-family: 'DM Serif Display', serif; font-size: 20px; font-weight: 400; color: #1A1A1A; margin-bottom: 40px; }
   .logo span { color: #4A72D6; }
   .card {
-    background: #fff; border: 1px solid #E5E7EB;
+    background: #fff; border: 1px solid #E0DFDA;
     border-radius: 20px; padding: 48px 40px;
     max-width: 480px; width: 100%;
     box-shadow: 0 4px 32px rgba(0,0,0,0.06);
   }
   .badge { display: inline-block; background: #EEF2FF; color: #4A72D6; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 100px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; }
-  h1 { font-size: 26px; font-weight: 800; color: #0F1628; letter-spacing: -0.5px; margin-bottom: 10px; }
-  .sub { font-size: 15px; color: #6B7280; line-height: 1.7; margin-bottom: 32px; }
+  h1 { font-size: 26px; font-weight: 800; color: #1A1A1A; letter-spacing: -0.5px; margin-bottom: 10px; }
+  .sub { font-size: 15px; color: #6B6B6B; line-height: 1.7; margin-bottom: 32px; }
   label { display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 6px; text-align: left; }
   input[type="email"] {
-    width: 100%; padding: 12px 14px; border: 1.5px solid #E5E7EB; border-radius: 10px;
-    font-size: 14px; color: #0F1628; outline: none; transition: border-color 0.2s;
+    width: 100%; padding: 12px 14px; border: 1.5px solid #E0DFDA; border-radius: 10px;
+    font-size: 14px; color: #1A1A1A; outline: none; transition: border-color 0.2s;
     margin-bottom: 10px; font-family: inherit;
   }
   input[type="email"]:focus { border-color: #4A72D6; }
   .btn {
-    width: 100%; padding: 13px; background: #0F1628; color: #fff;
+    width: 100%; padding: 13px; background: #1A1A1A; color: #fff;
     border: none; border-radius: 10px; font-size: 14px; font-weight: 700;
     cursor: pointer; font-family: inherit; transition: background 0.2s;
   }
-  .btn:hover { background: #4A72D6; }
+  .btn:hover { background: #333; }
   .msg { margin-top: 12px; padding: 11px 14px; border-radius: 10px; font-size: 13px; display: none; }
   .msg.success { background: #ECFDF5; color: #065F46; display: block; }
   .msg.error   { background: #FEE2E2; color: #991B1B; display: block; }
-  .back { display: inline-block; margin-top: 24px; font-size: 13px; color: #6B7280; text-decoration: none; }
-  .back:hover { color: #0F1628; }
+  .back { display: inline-block; margin-top: 24px; font-size: 13px; color: #6B6B6B; text-decoration: none; }
+  .back:hover { color: #1A1A1A; }
 </style>
 </head>
 <body>

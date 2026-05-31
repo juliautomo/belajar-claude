@@ -4,17 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Paket Hemat — Klaud.id</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #FFFFFF; --surface: #FFFFFF; --surface-2: #FFFFFF;
-    --navy: #0F1628; --navy-2:#1E2456;
+    --bg: #F2F2F2; --surface: #FFFFFF; --surface-2: #FFFFFF;
+    --ink: #1A1A1A; --navy-2:#1E2456;
     --blue:#4A72D6; --blue-2:#7098E6; --blue-pale:#D4DEFA;
     --green:#1D9E75; --gold:#EF9F27;
     --muted:#6B7080; --border:rgba(74,114,214,0.15);
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--navy); min-height: 100vh; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; }
   nav {
     position: sticky; top: 0; z-index: 100;
     padding: 0 48px; height: 64px;
@@ -22,13 +22,13 @@
     background: rgba(237,236,245,0.88); backdrop-filter: blur(14px);
     border-bottom: 1px solid var(--border);
   }
-  .logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; color: var(--navy); text-decoration: none; }
+  .logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; color: var(--ink); text-decoration: none; }
   .logo span { color: var(--blue); }
   .nav-right { display: flex; align-items: center; gap: 20px; }
   .nav-link { font-size: 13px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color 0.2s; }
-  .nav-link:hover { color: var(--navy); }
+  .nav-link:hover { color: var(--ink); }
   .nav-cta {
-    background: var(--navy); color: #fff;
+    background: var(--ink); color: #fff;
     padding: 8px 18px; border-radius: 8px;
     font-size: 13px; font-weight: 600; text-decoration: none;
     transition: background 0.2s;
@@ -68,7 +68,7 @@
     color: var(--blue); text-transform: uppercase; margin-bottom: 8px;
     font-family: 'DM Mono', monospace;
   }
-  .section-title { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 40px; color: var(--navy); }
+  .section-title { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 40px; color: var(--ink); }
 
   /* Package grid */
   .pkg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
@@ -94,14 +94,14 @@
     text-transform: uppercase; color: var(--blue);
     font-family: 'DM Mono', monospace; margin-bottom: 8px;
   }
-  .pkg-card h3 { font-size: 22px; font-weight: 800; color: var(--navy); letter-spacing: -0.5px; margin-bottom: 20px; }
+  .pkg-card h3 { font-size: 22px; font-weight: 800; color: var(--ink); letter-spacing: -0.5px; margin-bottom: 20px; }
   .pkg-courses { display: flex; flex-direction: column; gap: 9px; margin-bottom: 22px; flex: 1; }
   .pkg-course-item {
     display: flex; align-items: flex-start; gap: 10px;
     font-size: 13px; line-height: 1.45;
   }
   .pkg-course-item .ci { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
-  .pkg-course-item .cname { color: var(--navy); font-weight: 500; }
+  .pkg-course-item .cname { color: var(--ink); font-weight: 500; }
   .pkg-course-item .cname.soon { color: var(--muted); }
   .cs-tag {
     display: inline-block;
@@ -112,7 +112,7 @@
   }
   .pkg-divider { height: 1px; background: var(--border); margin: 18px 0; }
   .pkg-pricing { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
-  .pkg-price { font-size: 30px; font-weight: 800; color: var(--navy); letter-spacing: -1px; }
+  .pkg-price { font-size: 30px; font-weight: 800; color: var(--ink); letter-spacing: -1px; }
   .pkg-original { font-size: 14px; color: #aaa; text-decoration: line-through; }
   .pkg-save { font-size: 11px; font-weight: 700; color: var(--green); background: rgba(29,158,117,0.1); padding: 3px 9px; border-radius: 6px; white-space: nowrap; }
   .pkg-note { font-size: 12px; color: var(--muted); margin-bottom: 20px; line-height: 1.65; }
@@ -122,9 +122,9 @@
     text-decoration: none; cursor: pointer; border: none;
     transition: background 0.2s, transform 0.15s;
   }
-  .pkg-btn.primary { background: var(--navy); color: #fff; }
+  .pkg-btn.primary { background: var(--ink); color: #fff; }
   .pkg-btn.primary:hover { background: var(--blue); transform: translateY(-1px); }
-  .pkg-btn.outline { background: transparent; color: var(--navy); border: 1.5px solid var(--border); }
+  .pkg-btn.outline { background: transparent; color: var(--ink); border: 1.5px solid var(--border); }
   .pkg-btn.outline:hover { border-color: var(--blue); background: var(--blue-pale); }
 
   /* FAQ */
@@ -132,7 +132,7 @@
   .faq-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 28px; }
   .faq-item { border-top: 1px solid var(--border); padding: 18px 0; }
   .faq-item:last-child { border-bottom: 1px solid var(--border); }
-  .faq-q { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+  .faq-q { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
   .faq-a { font-size: 14px; color: var(--muted); line-height: 1.75; }
 
   footer { padding: 32px 24px; text-align: center; border-top: 1px solid var(--border); }

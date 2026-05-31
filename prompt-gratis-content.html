@@ -4,37 +4,37 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>20 Prompt Claude Terbaik — Klaud.id</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
   <style>
     :root {
-      --bg: #F8F9FC; --surface: #FFFFFF; --navy: #0F1628;
+      --bg: #F8F9FC; --surface: #FFFFFF; --ink: #1A1A1A;
       --blue: #4A72D6; --blue-pale: #EEF2FF; --green: #1D9E75;
-      --green-pale: #ECFDF5; --muted: #6B7280; --border: #E5E7EB;
+      --green-pale: #ECFDF5; --muted: #6B6B6B; --border: #E0DFDA;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--navy); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--ink); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
     nav { height: 56px; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; background: #fff; border-bottom: 1px solid var(--border); flex-shrink: 0; }
     .nav-left { display: flex; align-items: center; gap: 16px; }
-    .nav-logo { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; color: var(--navy); text-decoration: none; }
+    .nav-logo { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; color: var(--ink); text-decoration: none; }
     .nav-logo span { color: var(--blue); }
     .nav-divider { width: 1px; height: 20px; background: var(--border); }
     .nav-course-title { font-size: 13px; font-weight: 600; color: var(--muted); }
     .nav-right { display: flex; align-items: center; gap: 14px; }
     .nav-email { font-size: 12px; color: var(--muted); }
     .nav-back { font-size: 13px; color: var(--muted); text-decoration: none; font-weight: 500; transition: color 0.2s; }
-    .nav-back:hover { color: var(--navy); }
+    .nav-back:hover { color: var(--ink); }
     .logout-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 5px 12px; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s; }
-    .logout-btn:hover { border-color: var(--blue); color: var(--navy); }
+    .logout-btn:hover { border-color: var(--blue); color: var(--ink); }
 
     .layout { display: flex; flex: 1; overflow: hidden; }
 
     /* Sidebar */
     .sidebar { width: 260px; flex-shrink: 0; background: #fff; border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; }
     .sidebar-header { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
-    .sidebar-course-name { font-size: 14px; font-weight: 800; color: var(--navy); line-height: 1.35; margin-bottom: 10px; }
+    .sidebar-course-name { font-size: 14px; font-weight: 800; color: var(--ink); line-height: 1.35; margin-bottom: 10px; }
     .progress-bar-wrap { display: flex; align-items: center; gap: 8px; }
     .progress-bar { flex: 1; height: 5px; background: var(--border); border-radius: 10px; overflow: hidden; }
     .progress-fill { height: 100%; background: var(--blue); border-radius: 10px; transition: width 0.3s; }
@@ -46,7 +46,7 @@
     .mod-check { width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; margin-top: 1px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; transition: all 0.2s; }
     .mod-item.done .mod-check { background: var(--green); border-color: var(--green); color: #fff; }
     .mod-item.active .mod-check { border-color: var(--blue); background: var(--blue-pale); }
-    .mod-item-title { font-size: 12px; font-weight: 600; color: var(--navy); line-height: 1.4; margin-bottom: 2px; }
+    .mod-item-title { font-size: 12px; font-weight: 600; color: var(--ink); line-height: 1.4; margin-bottom: 2px; }
     .mod-item.active .mod-item-title { color: var(--blue); }
     .mod-item-sub { font-size: 11px; color: var(--muted); }
 
@@ -58,8 +58,8 @@
     .module-panel.active { display: block; }
 
     .breadcrumb { font-size: 12px; color: var(--muted); margin-bottom: 24px; display: flex; align-items: center; gap: 6px; }
-    .breadcrumb strong { color: var(--navy); }
-    .module-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: var(--navy); margin-bottom: 6px; }
+    .breadcrumb strong { color: var(--ink); }
+    .module-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: var(--ink); margin-bottom: 6px; }
     .module-subtitle { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
 
     /* Prompt cards */
@@ -68,7 +68,7 @@
     .prompt-card:hover { border-color: var(--blue); }
     .prompt-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; gap: 12px; }
     .prompt-num   { font-size: 10px; font-weight: 700; color: var(--muted); margin-bottom: 3px; font-family: 'DM Mono', monospace; }
-    .prompt-title { font-size: 14px; font-weight: 700; color: var(--navy); }
+    .prompt-title { font-size: 14px; font-weight: 700; color: var(--ink); }
     .copy-btn {
       background: var(--bg); border: 1px solid var(--border); color: var(--muted);
       font-size: 11px; font-weight: 600; padding: 5px 11px; border-radius: 6px;
@@ -77,9 +77,9 @@
     }
     .copy-btn:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
     .copy-btn.copied { background: var(--green-pale); color: var(--green); border-color: rgba(29,158,117,0.2); }
-    .prompt-text { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; font-size: 12px; color: var(--navy); line-height: 1.75; font-family: 'DM Mono', monospace; white-space: pre-wrap; margin-bottom: 10px; }
+    .prompt-text { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; font-size: 12px; color: var(--ink); line-height: 1.75; font-family: 'DM Mono', monospace; white-space: pre-wrap; margin-bottom: 10px; }
     .prompt-tip { font-size: 12px; color: var(--muted); line-height: 1.6; }
-    .prompt-tip strong { color: var(--navy); }
+    .prompt-tip strong { color: var(--ink); }
 
     /* Completion box */
     .output-box { background: var(--green-pale); border: 1px solid rgba(29,158,117,0.2); border-radius: 12px; padding: 20px 24px; margin-top: 24px; display: flex; gap: 14px; align-items: flex-start; }
@@ -92,15 +92,15 @@
     .next-card:hover { border-color: var(--blue); }
     .next-icon { font-size: 24px; }
     .next-info { flex: 1; }
-    .next-info h4 { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
+    .next-info h4 { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
     .next-info p  { font-size: 12px; color: var(--muted); }
     .next-arrow { font-size: 16px; color: var(--blue); }
 
     .nav-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--border); }
-    .nav-btn { display: flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); transition: all 0.2s; background: #fff; color: var(--navy); font-family: 'Plus Jakarta Sans', sans-serif; }
+    .nav-btn { display: flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); transition: all 0.2s; background: #fff; color: var(--ink); font-family: 'Plus Jakarta Sans', sans-serif; }
     .nav-btn:hover { border-color: var(--blue); color: var(--blue); }
     .nav-btn:disabled { opacity: 0.35; cursor: default; pointer-events: none; }
-    .nav-btn.primary { background: var(--navy); color: #fff; border-color: var(--navy); }
+    .nav-btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
     .nav-btn.primary:hover { background: var(--blue); border-color: var(--blue); }
     .nav-counter { font-size: 12px; color: var(--muted); font-family: 'DM Mono', monospace; }
 

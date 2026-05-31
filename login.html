@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Masuk — Klaud.id</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background: #F8F9FC;
+      background: #F2F2F2;
       min-height: 100vh;
       display: flex; align-items: center; justify-content: center;
       padding: 20px;
@@ -22,33 +22,33 @@
       padding: 44px 40px 36px;
       max-width: 400px; width: 100%;
       box-shadow: 0 4px 40px rgba(0,0,0,0.08);
-      border: 1px solid #E5E7EB;
+      border: 1px solid #E0DFDA;
     }
     .logo {
       text-align: center; margin-bottom: 28px;
-      font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: #0F1628;
+      font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; color: #1A1A1A;
     }
     .logo span { color: #4A72D6; }
-    h2 { font-size: 20px; font-weight: 800; color: #0F1628; margin-bottom: 6px; letter-spacing: -0.3px; }
-    .sub { font-size: 14px; color: #6B7280; line-height: 1.65; margin-bottom: 28px; }
+    h2 { font-family: 'DM Serif Display', serif; font-size: 20px; font-weight: 400; color: #1A1A1A; margin-bottom: 6px; letter-spacing: -0.3px; }
+    .sub { font-size: 14px; color: #6B6B6B; line-height: 1.65; margin-bottom: 28px; }
     label { display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 6px; }
     input[type="email"] {
       width: 100%; padding: 12px 14px;
-      border: 1.5px solid #E5E7EB; border-radius: 10px;
-      font-size: 14px; color: #0F1628; outline: none;
+      border: 1.5px solid #E0DFDA; border-radius: 10px;
+      font-size: 14px; color: #1A1A1A; outline: none;
       transition: border-color 0.2s; margin-bottom: 14px;
       font-family: inherit; background: #fff;
     }
     input[type="email"]:focus { border-color: #4A72D6; }
     .btn {
       width: 100%; padding: 13px;
-      background: #0F1628; color: #fff;
+      background: #1A1A1A; color: #fff;
       border: none; border-radius: 10px;
       font-size: 15px; font-weight: 700;
       cursor: pointer; transition: background 0.2s;
       font-family: inherit;
     }
-    .btn:hover:not(:disabled) { background: #4A72D6; }
+    .btn:hover:not(:disabled) { background: #333; }
     .btn:disabled { background: #9CA3AF; cursor: not-allowed; }
     .msg {
       margin-top: 14px; padding: 12px 14px;
@@ -58,8 +58,8 @@
     .msg.success { background: #ECFDF5; color: #065F46; display: block; }
     .msg.error   { background: #FEE2E2; color: #991B1B; display: block; }
     .note { margin-top: 20px; font-size: 12px; color: #9CA3AF; text-align: center; line-height: 1.6; }
-    .back { display: block; text-align: center; margin-top: 16px; font-size: 13px; color: #6B7280; text-decoration: none; }
-    .back:hover { color: #0F1628; }
+    .back { display: block; text-align: center; margin-top: 16px; font-size: 13px; color: #6B6B6B; text-decoration: none; }
+    .back:hover { color: #1A1A1A; }
   </style>
 </head>
 <body>
