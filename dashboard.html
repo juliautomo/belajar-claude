@@ -311,18 +311,10 @@
     <!-- Stats -->
     <div>
       <div class="sidebar-section-label">Statistik Belajar</div>
-      <div class="stats-row">
+      <div class="stats-row" style="grid-template-columns:1fr;">
         <div class="stat-box">
           <div class="stat-num" id="statEnrolled">0</div>
           <div class="stat-lbl">Kursus Diikuti</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-num" id="statModules">0</div>
-          <div class="stat-lbl">Modul Selesai</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-num" id="statPct">0%</div>
-          <div class="stat-lbl">Progress</div>
         </div>
       </div>
     </div>
@@ -961,14 +953,7 @@
     const enrolled     = (enrollments || []).filter(e => ALL_COURSES[e.course_slug]);
     const enrolledSlugs = new Set(enrolled.map(e => e.course_slug));
 
-    let totalModulesDone = 0, totalModules = 0;
-    enrolled.forEach(c => {
-      const p = getProgress(c.course_slug);
-      totalModulesDone += p.done; totalModules += p.total;
-    });
     document.getElementById('statEnrolled').textContent = enrolled.length;
-    document.getElementById('statModules').textContent  = totalModulesDone;
-    document.getElementById('statPct').textContent      = totalModules > 0 ? Math.round((totalModulesDone / totalModules) * 100) + '%' : '—';
 
     buildJourney(enrolledSlugs);
 
