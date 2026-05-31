@@ -74,7 +74,7 @@
   .carousel-wrap { position: relative; }
   .carousel { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; scrollbar-width: none; }
   .carousel::-webkit-scrollbar { display: none; }
-  .course-card { min-width: 248px; scroll-snap-align: start; flex-shrink: 0; background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 22px 20px; display: flex; flex-direction: column; gap: 10px; transition: box-shadow 0.2s, border-color 0.2s; }
+  .course-card { min-width: calc(33.33% - 11px); scroll-snap-align: start; flex-shrink: 0; background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 22px 20px; display: flex; flex-direction: column; gap: 10px; transition: box-shadow 0.2s, border-color 0.2s; }
   .course-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.07); border-color: #D1D5DB; }
   .course-card.featured { border-color: var(--blue); background: var(--blue-pale); }
   .course-tag    { display: inline-block; font-size: 9px; font-weight: 700; letter-spacing: 1px; padding: 3px 9px; border-radius: 100px; }
@@ -176,7 +176,7 @@
   <a href="index.html" class="logo">Klaud<span>.id</span></a>
   <div class="nav-links">
     <a href="#kursus">Kursus</a>
-    <a href="#paket">Paket</a>
+    <a href="#jalur">Jalur Belajar</a>
     <a href="login.html" id="navLoginBtn" style="color:var(--navy);font-weight:600;">Masuk</a>
     <a href="login.html" id="navCtaBtn" class="nav-cta">Gabung Gratis</a>
     <div class="nav-user-pill" id="navUserPill">
@@ -188,18 +188,11 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-badge"><span class="dot"></span>Platform Claude AI #1 Bahasa Indonesia</div>
   <h1>Kuasai Claude AI,<br>hemat waktu, <span class="accent">tingkatkan karir</span></h1>
   <p class="hero-sub">Kursus dan panduan Claude AI yang praktis — sepenuhnya dalam Bahasa Indonesia, dengan contoh kasus nyata untuk profesional, UKM, dan mahasiswa.</p>
   <div class="hero-actions">
-    <a href="#kursus" class="btn-primary">Lihat Kursus <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    <a href="#jalur" class="btn-primary">Pilih Jalur Belajar <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
     <a href="login.html" class="btn-secondary">Gabung Gratis</a>
-  </div>
-  <div class="hero-stats">
-    <div><div class="hero-stat-num">10.000+</div><div class="hero-stat-lbl">Pelajar aktif</div></div>
-    <div><div class="hero-stat-num">10</div><div class="hero-stat-lbl">Kursus tersedia</div></div>
-    <div><div class="hero-stat-num">~16 jam</div><div class="hero-stat-lbl">Total konten</div></div>
-    <div><div class="hero-stat-num">100%</div><div class="hero-stat-lbl">Bahasa Indonesia</div></div>
   </div>
 </section>
 
@@ -220,8 +213,67 @@
   </div>
 </section>
 
+<!-- PACKAGES (before courses) -->
+<section id="jalur">
+  <div class="container">
+    <div class="section-label">Jalur Belajar</div>
+    <h2 class="section-title">Pilih jalur sesuai karirmu</h2>
+    <p class="section-sub">Setiap jalur dirancang untuk kebutuhan spesifik — dapatkan kursus yang relevan, bukan semua kursus.</p>
+    <div class="pkg-grid">
+      <div class="pkg-card featured">
+        <div class="pkg-persona">Karyawan & Profesional</div><h3>Jalur Profesional</h3>
+        <div class="pkg-courses"><div class="pkg-course-item available"><span class="ci">🚀</span> Mulai dengan Claude AI</div><div class="pkg-course-item available"><span class="ci">💼</span> Claude untuk Pekerjaan Sehari-hari</div><div class="pkg-course-item"><span class="ci">📊</span> Claude untuk Analisis Data <span class="cs-tag">Segera</span></div></div>
+        <div class="pkg-divider"></div>
+        <div class="pkg-pricing"><span class="pkg-price">Rp 299K</span><span class="pkg-original">Rp 398K</span><span class="pkg-save">Hemat Rp 99K</span></div>
+        <p class="pkg-note">2 kursus tersedia langsung · 1 menyusul saat launch</p>
+        <a href="login.html" class="pkg-btn primary">Mulai Jalur Profesional →</a>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-persona">Pemilik Bisnis & UKM</div><h3>Jalur Bisnis & UKM</h3>
+        <div class="pkg-courses"><div class="pkg-course-item available"><span class="ci">🚀</span> Mulai dengan Claude AI</div><div class="pkg-course-item available"><span class="ci">🏪</span> Claude untuk Bisnis & UKM</div><div class="pkg-course-item"><span class="ci">✍️</span> Claude untuk Konten & Copywriting <span class="cs-tag">Segera</span></div><div class="pkg-course-item"><span class="ci">⚡</span> Build Automation dengan Claude <span class="cs-tag">Segera</span></div></div>
+        <div class="pkg-divider"></div>
+        <div class="pkg-pricing"><span class="pkg-price">Rp 499K</span><span class="pkg-original">Rp 647K</span><span class="pkg-save">Hemat Rp 148K</span></div>
+        <p class="pkg-note">2 kursus tersedia langsung · 2 menyusul saat launch</p>
+        <a href="login.html" class="pkg-btn outline">Mulai Jalur Bisnis & UKM →</a>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-persona">Content Creator</div><h3>Jalur Content Creator</h3>
+        <div class="pkg-courses"><div class="pkg-course-item available"><span class="ci">🚀</span> Mulai dengan Claude AI</div><div class="pkg-course-item available"><span class="ci">🏪</span> Claude untuk Bisnis & UKM</div><div class="pkg-course-item"><span class="ci">✍️</span> Claude untuk Konten & Copywriting <span class="cs-tag">Segera</span></div></div>
+        <div class="pkg-divider"></div>
+        <div class="pkg-pricing"><span class="pkg-price">Rp 299K</span><span class="pkg-original">Rp 348K</span><span class="pkg-save">Hemat Rp 49K</span></div>
+        <p class="pkg-note">2 kursus tersedia langsung · 1 menyusul saat launch</p>
+        <a href="login.html" class="pkg-btn outline">Mulai Jalur Content Creator →</a>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-persona">Mahasiswa</div><h3>Jalur Mahasiswa</h3>
+        <div class="pkg-courses"><div class="pkg-course-item available"><span class="ci">🚀</span> Mulai dengan Claude AI</div><div class="pkg-course-item"><span class="ci">✍️</span> Claude untuk Konten & Copywriting <span class="cs-tag">Segera</span></div><div class="pkg-course-item"><span class="ci">📊</span> Claude untuk Analisis Data <span class="cs-tag">Segera</span></div></div>
+        <div class="pkg-divider"></div>
+        <div class="pkg-pricing"><span class="pkg-price">Rp 249K</span><span class="pkg-original">Rp 348K</span><span class="pkg-save">Hemat Rp 99K</span></div>
+        <p class="pkg-note">1 kursus tersedia langsung · 2 menyusul saat launch</p>
+        <a href="login.html" class="pkg-btn outline">Mulai Jalur Mahasiswa →</a>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-persona">Developer & Tech</div><h3>Jalur Developer</h3>
+        <div class="pkg-courses"><div class="pkg-course-item available"><span class="ci">🚀</span> Mulai dengan Claude AI</div><div class="pkg-course-item"><span class="ci">🛠️</span> Build AI-Powered App Sederhana <span class="cs-tag">Segera</span></div><div class="pkg-course-item"><span class="ci">👨‍💻</span> Claude API untuk Developer <span class="cs-tag">Segera</span></div><div class="pkg-course-item"><span class="ci">💰</span> Build & Jual Produk AI <span class="cs-tag">Segera</span></div></div>
+        <div class="pkg-divider"></div>
+        <div class="pkg-pricing"><span class="pkg-price">Rp 799K</span><span class="pkg-original">Rp 1.197K</span><span class="pkg-save">Hemat Rp 398K</span></div>
+        <p class="pkg-note">1 kursus tersedia langsung · 3 menyusul saat launch</p>
+        <a href="login.html" class="pkg-btn outline">Mulai Jalur Developer →</a>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-persona">All Access</div><h3>Semua 9 Kursus</h3>
+        <div class="pkg-courses"><div class="pkg-course-item available"><span class="ci">🚀</span> Mulai dengan Claude AI</div><div class="pkg-course-item available"><span class="ci">💼</span> Claude untuk Pekerjaan Sehari-hari</div><div class="pkg-course-item available"><span class="ci">🏪</span> Claude untuk Bisnis & UKM</div><div class="pkg-course-item"><span class="ci">✍️</span> + 6 kursus lainnya <span class="cs-tag">Segera</span></div></div>
+        <div class="pkg-divider"></div>
+        <div class="pkg-pricing"><span class="pkg-price">Rp 999K</span><span class="pkg-original">Rp 1.694K</span><span class="pkg-save">Hemat Rp 695K</span></div>
+        <p class="pkg-note">3 kursus tersedia langsung · 6 kursus berikutnya otomatis terbuka</p>
+        <a href="login.html" class="pkg-btn primary">Mulai All Access →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- COURSES -->
-<section id="kursus">
+<section class="section-soft" id="kursus">
   <div class="container">
     <div class="courses-header">
       <div class="section-label">Kurikulum</div>
@@ -249,8 +301,8 @@
   </div>
 </section>
 
-<!-- PACKAGES -->
-<section class="section-soft" id="paket">
+<!-- PACKAGES_REMOVED -->
+<section class="section-soft" id="paket" style="display:none">
   <div class="container">
     <div class="section-label">Paket Hemat</div>
     <h2 class="section-title">Beli lebih banyak, hemat lebih besar</h2>
@@ -308,18 +360,6 @@
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section>
-  <div class="container">
-    <div class="section-label">Testimoni</div>
-    <h2 class="section-title">Kata mereka yang sudah belajar</h2>
-    <div class="testi-grid">
-      <div class="testi-card"><div class="stars">★★★★★</div><blockquote>"Setelah ikut kursus ini, saya bisa selesaikan laporan mingguan dalam 20 menit yang biasanya 2 jam. Claude benar-benar game changer untuk kerjaan kantoran."</blockquote><div class="testi-author"><div class="avatar">AR</div><div><div class="name">Arif R.</div><div class="role">Staff Marketing, Jakarta</div></div></div></div>
-      <div class="testi-card"><div class="stars">★★★★★</div><blockquote>"Saya pemilik toko online. Dengan kursus UKM ini, konten produk dan caption Instagram saya sudah otomatis. Omzet naik 40% dalam 2 bulan."</blockquote><div class="testi-author"><div class="avatar">SS</div><div><div class="name">Siti S.</div><div class="role">Pemilik Toko Online, Surabaya</div></div></div></div>
-      <div class="testi-card"><div class="stars">★★★★★</div><blockquote>"Skripsi saya selesai 2 bulan lebih cepat dari target. Claude jadi asisten riset yang tidak pernah capek. Nilai sidang saya juga memuaskan!"</blockquote><div class="testi-author"><div class="avatar">BW</div><div><div class="name">Bintang W.</div><div class="role">Mahasiswa S1 Ekonomi, Bandung</div></div></div></div>
-    </div>
-  </div>
-</section>
 
 <!-- CTA -->
 <section class="cta-section" id="komunitas">
