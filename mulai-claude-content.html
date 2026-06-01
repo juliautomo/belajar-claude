@@ -180,7 +180,32 @@
     .main-inner { padding: 24px 16px 48px; }
     .module-title { font-size: 20px; }
   }
-</style>
+
+    /* Feedback panel */
+    .feedback-panel { max-width: 600px; }
+    .completion-badge { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 24px; background: var(--green-pale); border: 1px solid rgba(29,158,117,0.2); border-radius: 16px; margin-bottom: 32px; }
+    .completion-badge .badge-check { width: 56px; height: 56px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+    .completion-badge .badge-check svg { width: 26px; height: 26px; color: #fff; }
+    .completion-badge h2 { font-family: 'DM Serif Display', serif; font-size: 26px; font-weight: 400; color: var(--ink); margin-bottom: 8px; letter-spacing: -0.3px; }
+    .completion-badge p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+    .feedback-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 28px; box-shadow: var(--shadow-sm); }
+    .feedback-card h3 { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+    .feedback-card .feedback-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+    .star-row { display: flex; gap: 8px; margin-bottom: 24px; }
+    .star-btn { background: none; border: none; cursor: pointer; padding: 4px; font-size: 28px; color: var(--border); transition: color 0.15s, transform 0.1s; line-height: 1; }
+    .star-btn:hover, .star-btn.active { color: var(--gold); transform: scale(1.1); }
+    .feedback-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 8px; }
+    .feedback-textarea { width: 100%; border: 1.5px solid var(--border); border-radius: 10px; padding: 12px 14px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: var(--ink); resize: vertical; min-height: 90px; background: var(--bg); transition: border-color 0.15s; outline: none; }
+    .feedback-textarea:focus { border-color: var(--ink); background: #fff; }
+    .feedback-submit { display: block; width: 100%; margin-top: 20px; background: var(--ink); color: #fff; border: none; padding: 14px; border-radius: 10px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+    .feedback-submit:hover { background: var(--blue); }
+    .feedback-submit:disabled { opacity: 0.5; cursor: default; }
+    .feedback-done { display: none; text-align: center; padding: 24px; }
+    .feedback-done p { font-size: 14px; color: var(--muted); margin-bottom: 16px; }
+    .feedback-done a { display: inline-block; background: var(--ink); color: #fff; text-decoration: none; font-size: 14px; font-weight: 700; padding: 12px 28px; border-radius: 10px; transition: background 0.2s; }
+    .feedback-done a:hover { background: var(--blue); }
+
+  </style>
 </head>
 <body>
 
@@ -502,6 +527,45 @@ Sertakan: [hal spesifik yang harus ada]<button class="copy-btn" onclick="copyPro
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
           <span class="nav-counter">6 / 6</span>
+          <button class="nav-btn primary" onclick="showModule(7)">Lanjut →</button>
+        </div>
+      </div>
+
+      
+      <div class="module-panel" id="panel7">
+        <div class="feedback-panel">
+          <div class="completion-badge">
+            <div class="badge-check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h2>Kursus Selesai!</h2>
+            <p>Kamu telah menyelesaikan <strong>Mulai dengan Claude AI</strong>.<br>Badge pencapaian sudah tersimpan di dashboard kamu.</p>
+          </div>
+
+          <div class="feedback-card" id="feedbackForm">
+            <h3>Bagaimana kursus ini menurut kamu?</h3>
+            <p class="feedback-sub">Feedback kamu membantu kami bikin kursus yang lebih baik.</p>
+            <div class="star-row" id="starRow">
+              <button class="star-btn" data-val="1" onclick="setRating(1)">★</button>
+              <button class="star-btn" data-val="2" onclick="setRating(2)">★</button>
+              <button class="star-btn" data-val="3" onclick="setRating(3)">★</button>
+              <button class="star-btn" data-val="4" onclick="setRating(4)">★</button>
+              <button class="star-btn" data-val="5" onclick="setRating(5)">★</button>
+            </div>
+            <div class="feedback-label">Komentar (opsional)</div>
+            <textarea class="feedback-textarea" id="feedbackComment" placeholder="Apa yang paling berguna? Ada yang bisa diperbaiki?"></textarea>
+            <button class="feedback-submit" id="feedbackSubmit" onclick="submitFeedback()">Kirim & Ke Dashboard →</button>
+          </div>
+
+          <div class="feedback-done" id="feedbackDone">
+            <p>Terima kasih atas feedbacknya!</p>
+            <a href="dashboard.html">Ke Dashboard →</a>
+          </div>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">7 / 7</span>
           <a href="dashboard.html" class="nav-btn primary" style="text-decoration:none;">Ke Dashboard →</a>
         </div>
       </div>
@@ -511,7 +575,7 @@ Sertakan: [hal spesifik yang harus ada]<button class="copy-btn" onclick="copyPro
 </div>
 
 <script>
-  const TOTAL = 6;
+  const TOTAL = 7;
   let current = 1;
   const done = new Set();
 
