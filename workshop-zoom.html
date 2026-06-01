@@ -6,9 +6,9 @@
 <title>Workshop Bulanan via Zoom — Klaud.id</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
+    :root {
     --bg: #F7F7F5; --surface: #FFFFFF;
-    --ink: var(--ink); --blue: #4A72D6; --blue-pale: #EEF2FF;
+    --ink: #111111; --blue: #4A72D6; --blue-pale: #EEF2FF;
     --green: #1D9E75; --green-pale: #ECFDF5;
     --muted: #6B7280; --border: #E5E5E3;
     --gold: #EF9F27; --gold-pale: rgba(239,159,39,0.08);
@@ -27,7 +27,7 @@
   .hero-bg { position: absolute; inset: 0; z-index: 0; background: radial-gradient(ellipse 80% 60% at 60% 0%, rgba(155,109,255,0.12) 0%, transparent 70%); }
   .hero-grid { position: absolute; inset: 0; z-index: 0;   }
   .hero-inner { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: 1fr 380px; gap: 64px; align-items: start; }
-  .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(155,109,255,0.15); border: 1px solid rgba(155,109,255,0.3); border-radius: 100px; padding: 6px 16px; margin-bottom: 24px; font-size: 12px; font-weight: 700; color: var(--purple-light); letter-spacing: 1px; text-transform: uppercase; font-family: 'DM Mono', monospace; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(155,109,255,0.15); border: 1px solid rgba(155,109,255,0.3); border-radius: 100px; padding: 6px 16px; margin-bottom: 24px; font-size: 12px; font-weight: 700; color: var(--purple-light); letter-spacing: 1px; text-transform: uppercase; font-family: monospace; }
   .hero h1 { font-size: clamp(32px, 5vw, 52px); font-weight: 800; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 20px; }
   .hero h1 .accent { color: var(--purple-light); }
   .hero-sub { font-size: 16px; color: var(--muted); line-height: 1.75; margin-bottom: 32px; max-width: 520px; }
@@ -54,18 +54,18 @@
   .notify-btn { width: 100%; background: var(--purple); color: #fff; border: none; border-radius: 12px; padding: 14px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s, transform 0.15s; margin-bottom: 16px; }
   .notify-btn:hover { background: #8255ee; transform: translateY(-1px); }
   .card-includes { border-top: 1px solid rgba(55,138,221,0.15); padding-top: 16px; }
-  .card-includes h4 { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; font-family: 'DM Mono', monospace; margin-bottom: 12px; }
+  .card-includes h4 { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; font-family: monospace; margin-bottom: 12px; }
   .include-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
   .guarantee-mini { display: flex; align-items: center; gap: 8px; background: rgba(29,158,117,0.1); border: 1px solid rgba(29,158,117,0.2); border-radius: 10px; padding: 10px 12px; margin-top: 16px; font-size: 12px; color: var(--green-light); }
   section { padding: 80px 24px; }
   .container { max-width: 1080px; margin: 0 auto; }
-  .section-label { font-size: 12px; font-weight: 700; letter-spacing: 2px; color: var(--purple); text-transform: uppercase; margin-bottom: 12px; font-family: 'DM Mono', monospace; }
+  .section-label { font-size: 12px; font-weight: 700; letter-spacing: 2px; color: var(--purple); text-transform: uppercase; margin-bottom: 12px; font-family: monospace; }
   .section-title { font-size: clamp(24px, 3.5vw, 36px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 12px; }
   .section-sub { font-size: 15px; color: var(--muted); line-height: 1.75; margin-bottom: 48px; }
   .topics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
   .topic-card { background: rgba(155,109,255,0.06); border: 1px solid rgba(155,109,255,0.15); border-radius: 14px; padding: 22px 20px; transition: border-color 0.2s; }
   .topic-card:hover { border-color: rgba(155,109,255,0.35); }
-  .topic-num { font-size: 11px; font-weight: 700; color: var(--purple-light); font-family: 'DM Mono', monospace; margin-bottom: 8px; letter-spacing: 1px; }
+  .topic-num { font-size: 11px; font-weight: 700; color: var(--purple-light); font-family: monospace; margin-bottom: 8px; letter-spacing: 1px; }
   .topic-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
   .topic-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
   .how-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }

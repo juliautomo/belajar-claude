@@ -8,9 +8,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
 <style>
-  :root {
+    :root {
     --bg: #F7F7F5; --surface: #FFFFFF;
-    --ink: var(--ink); --blue: #4A72D6; --blue-pale: #EEF2FF;
+    --ink: #111111; --blue: #4A72D6; --blue-pale: #EEF2FF;
     --green: #1D9E75; --green-pale: #ECFDF5;
     --muted: #6B7280; --border: #E5E5E3;
     --gold: #EF9F27; --gold-pale: rgba(239,159,39,0.08);
@@ -54,9 +54,9 @@
   .progress-bar-wrap { display: flex; align-items: center; gap: 8px; }
   .progress-bar { flex: 1; height: 5px; background: var(--border); border-radius: 10px; overflow: hidden; }
   .progress-fill { height: 100%; background: var(--blue); border-radius: 10px; transition: width 0.3s; }
-  .progress-label { font-size: 11px; color: var(--muted); white-space: nowrap; font-family: 'DM Mono', monospace; }
+  .progress-label { font-size: 11px; color: var(--muted); white-space: nowrap; font-family: monospace; }
 
-  .sidebar-section-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); padding: 16px 20px 8px; font-family: 'DM Mono', monospace; }
+  .sidebar-section-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); padding: 16px 20px 8px; font-family: monospace; }
 
   .mod-item {
     display: flex; align-items: flex-start; gap: 12px;
@@ -105,13 +105,13 @@
   .prompt-section { margin-bottom: 20px; }
   .prompt-label {
     font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
-    color: var(--muted); margin-bottom: 8px; font-family: 'DM Mono', monospace;
+    color: var(--muted); margin-bottom: 8px; font-family: monospace;
     display: flex; align-items: center; gap: 6px;
   }
   .prompt-box {
     background: #fff; border: 1px solid var(--border); border-radius: 10px;
     padding: 16px 48px 16px 16px; font-size: 13px; color: var(--ink);
-    line-height: 1.75; font-family: 'DM Mono', monospace;
+    line-height: 1.75; font-family: monospace;
     white-space: pre-wrap; position: relative;
   }
   .copy-btn {
@@ -128,7 +128,7 @@
     padding: 14px 18px; margin-top: 14px;
     border-left: 3px solid var(--blue);
   }
-  .case-role { font-size: 10px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; font-family: 'DM Mono', monospace; }
+  .case-role { font-size: 10px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; font-family: monospace; }
   .case-box p { font-size: 13px; color: var(--ink); line-height: 1.65; }
 
   /* Output / completion box */
@@ -142,7 +142,7 @@
   .output-box p { font-size: 13px; color: var(--muted); line-height: 1.65; }
 
   /* Next courses (shown on last panel) */
-  .next-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin: 28px 0 12px; font-family: 'DM Mono', monospace; }
+  .next-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin: 28px 0 12px; font-family: monospace; }
   .next-card {
     background: #fff; border: 1px solid var(--border); border-radius: 12px;
     padding: 16px 20px; display: flex; align-items: center; gap: 14px;
@@ -170,7 +170,7 @@
   .nav-btn:disabled { opacity: 0.35; cursor: default; pointer-events: none; }
   .nav-btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
   .nav-btn.primary:hover { background: var(--blue); border-color: var(--blue); }
-  .nav-counter { font-size: 12px; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .nav-counter { font-size: 12px; color: var(--muted); font-family: monospace; }
 
   /* Loading */
   .loading { display: flex; align-items: center; justify-content: center; height: 100vh; font-size: 14px; color: var(--muted); }
