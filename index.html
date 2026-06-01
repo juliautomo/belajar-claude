@@ -7,158 +7,143 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --cream:  #F2F2F2;
-    --ink:    #1A1A1A;
+    --bg:     #F7F7F5;
+    --surface:#FFFFFF;
+    --ink:    #111111;
     --blue:   #4A72D6;
-    --muted:  #6B6B6B;
-    --border: #E0DFDA;
+    --blue-pale: #EEF2FF;
+    --green:  #1D9E75;
+    --green-pale: #ECFDF5;
+    --muted:  #6B7280;
+    --border: #E5E5E3;
+    --shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.05);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 2px 8px rgba(0,0,0,0.04);
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
-  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--cream); color: var(--ink); overflow-x: hidden; }
-  .container { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--ink); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 1120px; margin: 0 auto; padding: 0 48px; }
 
-  /* NAV */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    height: 60px; padding: 0 40px;
+    height: 64px; padding: 0 48px;
     display: flex; align-items: center; justify-content: space-between;
-    background: rgba(242,242,242,0.92); backdrop-filter: blur(12px);
+    background: rgba(255,255,255,0.88); backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--border);
   }
   .logo { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--ink); text-decoration: none; letter-spacing: -0.3px; }
   .logo span { color: var(--blue); }
-  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links { display: flex; align-items: center; gap: 36px; }
   .nav-links a { font-size: 14px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color 0.15s; }
   .nav-links a:hover { color: var(--ink); }
-  .nav-cta { background: var(--ink) !important; color: #fff !important; padding: 8px 20px; border-radius: 6px; font-weight: 600 !important; font-size: 14px !important; }
-  .nav-cta:hover { opacity: 0.85; }
+  .nav-cta { background: var(--ink) !important; color: #fff !important; padding: 9px 22px; border-radius: 8px; font-weight: 600 !important; font-size: 14px !important; transition: opacity 0.15s !important; }
+  .nav-cta:hover { opacity: 0.82 !important; color: #fff !important; }
   .nav-user-pill { display: none; align-items: center; gap: 10px; }
-  .nav-uname  { font-size: 13px; font-weight: 600; color: var(--ink); display: block; }
-  .nav-uemail { font-size: 11px; color: var(--muted); display: block; }
+  .nav-uname  { font-size: 14px; font-weight: 600; color: var(--ink); display: block; }
+  .nav-uemail { font-size: 12px; color: var(--muted); display: block; }
 
-  /* HERO */
-  .hero { padding: 140px 40px 100px; max-width: 1100px; margin: 0 auto; }
-  .hero-eyebrow { font-size: 13px; font-weight: 600; color: var(--muted); letter-spacing: 0.5px; margin-bottom: 20px; }
-  .hero h1 {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(48px, 6vw, 80px);
-    font-weight: 400; line-height: 1.05;
-    letter-spacing: -2px; color: var(--ink);
-    margin-bottom: 24px; max-width: 700px;
-  }
+  .hero { padding: 148px 48px 112px; max-width: 1120px; margin: 0 auto; }
+  .hero-eyebrow { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 24px; }
+  .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(52px, 6.5vw, 86px); font-weight: 400; line-height: 1.04; letter-spacing: -2.5px; color: var(--ink); margin-bottom: 28px; max-width: 740px; }
   .hero h1 em { font-style: italic; color: var(--blue); }
-  .hero-sub { font-size: 17px; color: var(--muted); line-height: 1.7; max-width: 500px; margin-bottom: 40px; }
+  .hero-sub { font-size: 18px; color: var(--muted); line-height: 1.75; max-width: 500px; margin-bottom: 44px; }
   .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
-  .btn-dark { display: inline-flex; align-items: center; gap: 8px; background: var(--ink); color: #fff; font-size: 14px; font-weight: 600; padding: 12px 24px; border-radius: 6px; text-decoration: none; transition: opacity 0.15s; }
-  .btn-dark:hover { opacity: 0.85; }
-  .btn-outline { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--ink); font-size: 14px; font-weight: 600; padding: 12px 24px; border-radius: 6px; text-decoration: none; border: 1.5px solid var(--border); transition: border-color 0.15s, background 0.15s; }
-  .btn-outline:hover { border-color: var(--ink); background: rgba(26,26,26,0.04); }
+  .btn-dark { display: inline-flex; align-items: center; gap: 8px; background: var(--ink); color: #fff; font-size: 14px; font-weight: 600; padding: 13px 26px; border-radius: 10px; text-decoration: none; transition: opacity 0.15s; }
+  .btn-dark:hover { opacity: 0.82; }
+  .btn-outline { display: inline-flex; align-items: center; gap: 8px; background: var(--surface); color: var(--ink); font-size: 14px; font-weight: 600; padding: 13px 26px; border-radius: 10px; text-decoration: none; border: 1.5px solid var(--border); transition: border-color 0.15s; box-shadow: var(--shadow-sm); }
+  .btn-outline:hover { border-color: var(--ink); }
 
-  /* DIVIDER */
-  .divider { height: 1px; background: var(--border); margin: 0 40px; }
+  .divider { height: 1px; background: var(--border); margin: 0 48px; }
 
-  /* SECTION */
-  section { padding: 80px 0; }
-  .section-eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
-  .section-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(28px, 3.5vw, 44px);
-    font-weight: 400; letter-spacing: -1px;
-    color: var(--ink); margin-bottom: 14px; line-height: 1.1;
-  }
-  .section-sub { font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 480px; }
+  section { padding: 96px 0; }
+  .section-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+  .section-title { font-family: 'DM Serif Display', serif; font-size: clamp(30px, 3.5vw, 46px); font-weight: 400; letter-spacing: -1px; color: var(--ink); margin-bottom: 16px; line-height: 1.1; }
+  .section-sub { font-size: 16px; color: var(--muted); line-height: 1.75; max-width: 480px; }
 
-  /* JALUR GRID */
-  .jalur-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); margin-top: 56px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-  .jalur-card { background: var(--cream); padding: 32px 28px; display: flex; flex-direction: column; gap: 16px; transition: background 0.15s; }
-  .jalur-card:hover { background: #fff; }
-  .jalur-card.featured { background: var(--ink); color: #fff; }
-  .jalur-card.featured:hover { background: #2a2a2a; }
-  .jalur-persona { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
-  .jalur-card.featured .jalur-persona { color: rgba(255,255,255,0.5); }
+  .jalur-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 56px; }
+  .jalur-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px 24px; display: flex; flex-direction: column; gap: 16px; box-shadow: var(--shadow-sm); transition: box-shadow 0.2s, border-color 0.2s; }
+  .jalur-card:hover { box-shadow: var(--shadow); border-color: rgba(0,0,0,0.12); }
+  .jalur-card.featured { background: var(--ink); border-color: var(--ink); }
+  .jalur-persona { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+  .jalur-card.featured .jalur-persona { color: rgba(255,255,255,0.45); }
   .jalur-card h3 { font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; letter-spacing: -0.5px; color: var(--ink); line-height: 1.2; }
   .jalur-card.featured h3 { color: #fff; }
-  .jalur-courses { display: flex; flex-direction: column; gap: 6px; }
-  .jalur-course-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
-  .jalur-card.featured .jalur-course-item { color: rgba(255,255,255,0.6); }
+  .jalur-courses { display: flex; flex-direction: column; gap: 7px; }
+  .jalur-course-item { display: flex; align-items: center; gap: 9px; font-size: 13px; color: var(--muted); }
+  .jalur-card.featured .jalur-course-item { color: rgba(255,255,255,0.5); }
   .jalur-course-item.available { color: var(--ink); font-weight: 500; }
   .jalur-card.featured .jalur-course-item.available { color: #fff; }
   .jalur-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
   .jalur-course-item.available .jalur-dot { background: var(--blue); }
-  .jalur-card.featured .jalur-course-item.available .jalur-dot { background: rgba(255,255,255,0.7); }
-  .cs-tag { font-size: 10px; color: var(--muted); background: rgba(0,0,0,0.06); padding: 1px 7px; border-radius: 4px; }
-  .jalur-card.featured .cs-tag { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
+  .jalur-card.featured .jalur-course-item.available .jalur-dot { background: rgba(255,255,255,0.6); }
+  .cs-tag { font-size: 10px; color: var(--muted); background: rgba(0,0,0,0.05); padding: 1px 7px; border-radius: 4px; white-space: nowrap; }
+  .jalur-card.featured .cs-tag { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.4); }
   .jalur-divider { height: 1px; background: var(--border); }
-  .jalur-card.featured .jalur-divider { background: rgba(255,255,255,0.12); }
+  .jalur-card.featured .jalur-divider { background: rgba(255,255,255,0.1); }
   .jalur-price { font-family: 'DM Serif Display', serif; font-size: 28px; font-weight: 400; color: var(--ink); display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
   .jalur-card.featured .jalur-price { color: #fff; }
   .jalur-original { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; color: var(--muted); text-decoration: line-through; }
-  .jalur-save { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; color: #1D9E75; background: #ECFDF5; padding: 2px 8px; border-radius: 4px; }
+  .jalur-save { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; color: var(--green); background: var(--green-pale); padding: 2px 8px; border-radius: 4px; }
   .jalur-note { font-size: 12px; color: var(--muted); line-height: 1.6; }
-  .jalur-card.featured .jalur-note { color: rgba(255,255,255,0.45); }
-  .jalur-btn { display: block; text-align: center; font-size: 13px; font-weight: 600; padding: 11px 16px; border-radius: 6px; text-decoration: none; transition: all 0.15s; margin-top: auto; border: 1.5px solid var(--border); color: var(--ink); background: transparent; }
-  .jalur-btn:hover { border-color: var(--ink); background: rgba(26,26,26,0.04); }
-  .jalur-btn.primary { background: #fff; border-color: #fff; color: var(--ink); }
+  .jalur-card.featured .jalur-note { color: rgba(255,255,255,0.35); }
+  .jalur-btn { display: block; text-align: center; font-size: 13px; font-weight: 600; padding: 11px 16px; border-radius: 9px; text-decoration: none; transition: all 0.15s; margin-top: auto; border: 1.5px solid var(--border); color: var(--ink); background: transparent; }
+  .jalur-btn:hover { border-color: var(--ink); background: rgba(0,0,0,0.03); }
+  .jalur-btn.primary { background: #fff; border-color: rgba(255,255,255,0.2); color: var(--ink); }
   .jalur-btn.primary:hover { background: rgba(255,255,255,0.9); }
 
-  /* COURSES */
   .carousel-wrap { position: relative; margin-top: 56px; }
-  .carousel { display: flex; gap: 1px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; background: #E0DFDA; border: 1px solid #E0DFDA; border-radius: 12px; overflow: hidden; }
+  .carousel { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding-bottom: 4px; }
   .carousel::-webkit-scrollbar { display: none; }
-  .course-card { min-width: 336px; max-width: 336px; scroll-snap-align: start; flex-shrink: 0; background: var(--cream); padding: 28px 24px; display: flex; flex-direction: column; gap: 10px; transition: background 0.15s; }
-  .course-card:hover { background: #fff; }
-  .course-tag { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border); color: var(--muted); background: transparent; }
-  .tag-green  { color: #1D9E75 !important; border-color: rgba(29,158,117,0.3) !important; }
-  .course-card h3 { font-family: 'DM Serif Display', serif; font-size: 18px; font-weight: 400; color: var(--ink); line-height: 1.3; }
-  .course-card p  { font-size: 13px; color: var(--muted); line-height: 1.65; flex: 1; }
+  .course-card { min-width: 300px; max-width: 300px; scroll-snap-align: start; flex-shrink: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 10px; box-shadow: var(--shadow-sm); transition: box-shadow 0.2s, border-color 0.2s; }
+  .course-card:hover { box-shadow: var(--shadow); border-color: rgba(74,114,214,0.25); }
+  .course-tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; padding: 3px 9px; border-radius: 5px; border: 1px solid var(--border); color: var(--muted); background: transparent; }
+  .tag-green { color: var(--green) !important; border-color: rgba(29,158,117,0.3) !important; background: var(--green-pale) !important; }
+  .course-card h3 { font-family: 'DM Serif Display', serif; font-size: 18px; font-weight: 400; color: var(--ink); line-height: 1.3; letter-spacing: -0.3px; }
+  .course-card p  { font-size: 13px; color: var(--muted); line-height: 1.7; flex: 1; }
   .course-meta { display: flex; gap: 12px; }
   .course-meta span { font-size: 12px; color: var(--muted); }
   .course-price { font-family: 'DM Serif Display', serif; font-size: 20px; font-weight: 400; color: var(--ink); }
-  .course-btn { display: block; background: var(--ink); color: #fff; text-decoration: none; font-size: 13px; font-weight: 600; padding: 10px 14px; border-radius: 6px; text-align: center; transition: opacity 0.15s; margin-top: 4px; }
-  .course-btn:hover { opacity: 0.8; }
-  .course-btn.disabled { background: #F3F4F6; color: var(--muted); pointer-events: none; }
-  .carousel-nav { display: flex; gap: 8px; margin-top: 16px; }
-  .carousel-btn { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--cream); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.15s; color: var(--ink); }
+  .course-btn { display: block; background: var(--ink); color: #fff; text-decoration: none; font-size: 13px; font-weight: 600; padding: 11px 14px; border-radius: 9px; text-align: center; transition: opacity 0.15s; margin-top: 4px; }
+  .course-btn:hover { opacity: 0.82; }
+  .course-btn.disabled { background: var(--bg); color: var(--muted); pointer-events: none; border: 1px solid var(--border); }
+  .carousel-nav { display: flex; gap: 8px; margin-top: 18px; }
+  .carousel-btn { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--surface); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.15s; color: var(--ink); box-shadow: var(--shadow-sm); }
   .carousel-btn:hover { border-color: var(--ink); }
   .carousel-btn svg { width: 14px; height: 14px; }
 
-  /* CTA */
-  .cta-section { background: var(--ink); padding: 80px 40px; text-align: center; }
-  .cta-section h2 { font-family: 'DM Serif Display', serif; font-size: clamp(28px, 4vw, 48px); font-weight: 400; color: #fff; letter-spacing: -1px; margin-bottom: 14px; }
-  .cta-section p  { font-size: 15px; color: rgba(255,255,255,0.45); line-height: 1.7; margin-bottom: 36px; }
-  .cta-btn { display: inline-flex; align-items: center; gap: 8px; background: #fff; color: var(--ink); font-size: 14px; font-weight: 700; padding: 13px 28px; border-radius: 6px; text-decoration: none; transition: opacity 0.15s; }
+  .cta-section { background: var(--ink); padding: 96px 48px; text-align: center; }
+  .cta-section h2 { font-family: 'DM Serif Display', serif; font-size: clamp(32px, 4vw, 52px); font-weight: 400; color: #fff; letter-spacing: -1px; margin-bottom: 16px; }
+  .cta-section p  { font-size: 16px; color: rgba(255,255,255,0.4); line-height: 1.75; margin-bottom: 40px; }
+  .cta-btn { display: inline-flex; align-items: center; gap: 8px; background: #fff; color: var(--ink); font-size: 15px; font-weight: 700; padding: 15px 32px; border-radius: 10px; text-decoration: none; transition: opacity 0.15s; }
   .cta-btn:hover { opacity: 0.9; }
-  .cta-sub { font-size: 12px; color: rgba(255,255,255,0.25); margin-top: 14px; }
+  .cta-sub { font-size: 12px; color: rgba(255,255,255,0.22); margin-top: 16px; }
 
-  /* FOOTER */
-  footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); padding: 48px 40px 32px; }
-  .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 32px; }
+  footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); padding: 56px 48px 36px; }
+  .footer-inner { max-width: 1120px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 32px; }
   .footer-brand .logo { color: #fff; font-size: 18px; }
-  .footer-brand p { font-size: 13px; color: rgba(255,255,255,0.35); margin-top: 10px; max-width: 220px; line-height: 1.7; }
-  .footer-links h4 { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 12px; }
-  .footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-  .footer-links ul a { font-size: 13px; color: rgba(255,255,255,0.45); text-decoration: none; transition: color 0.15s; }
+  .footer-brand p { font-size: 13px; color: rgba(255,255,255,0.3); margin-top: 12px; max-width: 240px; line-height: 1.75; }
+  .footer-links h4 { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 14px; }
+  .footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-links ul a { font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.15s; }
   .footer-links ul a:hover { color: #fff; }
-  .footer-bottom { max-width: 1100px; margin: 32px auto 0; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
-  .footer-bottom p { font-size: 12px; color: rgba(255,255,255,0.2); }
+  .footer-bottom { max-width: 1120px; margin: 36px auto 0; padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  .footer-bottom p { font-size: 12px; color: rgba(255,255,255,0.18); }
 
   @media (max-width: 960px) { .jalur-grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 640px) {
-    nav { padding: 0 20px; } .nav-links { display: none; }
-    .hero { padding: 100px 20px 64px; } .divider { margin: 0 20px; }
-    section { padding: 60px 0; } .container { padding: 0 20px; }
-    .jalur-grid { grid-template-columns: 1fr; }
-    .course-card { min-width: 280px; max-width: 280px; }
-    .cta-section { padding: 60px 20px; }
-    footer { padding: 40px 20px 24px; }
-    .footer-inner { flex-direction: column; gap: 24px; }
+    nav { padding: 0 24px; } .nav-links { display: none; }
+    .hero { padding: 108px 24px 72px; } .divider { margin: 0 24px; }
+    section { padding: 72px 0; } .container { padding: 0 24px; }
+    .jalur-grid { grid-template-columns: 1fr; gap: 12px; }
+    .course-card { min-width: 260px; max-width: 260px; }
+    .cta-section { padding: 72px 24px; }
+    footer { padding: 48px 24px 28px; }
+    .footer-inner { flex-direction: column; gap: 28px; }
   }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <a href="index.html" class="logo">Klaud<span>.id</span></a>
   <div class="nav-links">
@@ -172,7 +157,6 @@
   </div>
 </nav>
 
-<!-- HERO -->
 <div class="hero">
   <div class="hero-eyebrow">Platform Claude AI · Bahasa Indonesia</div>
   <h1>Kuasai Claude AI,<br><em>tingkatkan karir</em></h1>
@@ -185,15 +169,12 @@
 
 <div class="divider"></div>
 
-<!-- JALUR BELAJAR -->
 <section id="jalur">
   <div class="container">
     <div class="section-eyebrow">Jalur Belajar</div>
     <h2 class="section-title">Pilih jalur<br>sesuai karirmu</h2>
     <p class="section-sub">Setiap jalur dirancang untuk kebutuhan spesifik — kursus yang relevan, bukan semua kursus.</p>
-
     <div class="jalur-grid">
-
       <div class="jalur-card">
         <div class="jalur-persona">Karyawan & Profesional</div>
         <h3>Jalur Profesional</h3>
@@ -207,7 +188,6 @@
         <p class="jalur-note">2 kursus tersedia · 1 menyusul saat launch</p>
         <a href="login.html" data-dest="kerja-sehari-hari.html" class="jalur-btn">Mulai Jalur Profesional →</a>
       </div>
-
       <div class="jalur-card">
         <div class="jalur-persona">Pemilik Bisnis & UKM</div>
         <h3>Jalur Bisnis & UKM</h3>
@@ -222,7 +202,6 @@
         <p class="jalur-note">2 kursus tersedia · 2 menyusul saat launch</p>
         <a href="login.html" data-dest="bisnis-ukm.html" class="jalur-btn">Mulai Jalur Bisnis →</a>
       </div>
-
       <div class="jalur-card">
         <div class="jalur-persona">Content Creator</div>
         <h3>Jalur Content Creator</h3>
@@ -236,7 +215,6 @@
         <p class="jalur-note">2 kursus tersedia · 1 menyusul saat launch</p>
         <a href="login.html" data-dest="bisnis-ukm.html" class="jalur-btn">Mulai Jalur Creator →</a>
       </div>
-
       <div class="jalur-card">
         <div class="jalur-persona">Mahasiswa</div>
         <h3>Jalur Mahasiswa</h3>
@@ -250,7 +228,6 @@
         <p class="jalur-note">1 kursus tersedia · 2 menyusul saat launch</p>
         <a href="login.html" data-dest="mulai-claude.html" class="jalur-btn">Mulai Jalur Mahasiswa →</a>
       </div>
-
       <div class="jalur-card">
         <div class="jalur-persona">Developer & Tech</div>
         <h3>Jalur Developer</h3>
@@ -265,8 +242,7 @@
         <p class="jalur-note">1 kursus tersedia · 3 menyusul saat launch</p>
         <a href="login.html" data-dest="mulai-claude.html" class="jalur-btn">Mulai Jalur Developer →</a>
       </div>
-
-      <div class="jalur-card">
+      <div class="jalur-card featured">
         <div class="jalur-persona">All Access</div>
         <h3>Semua 9 Kursus</h3>
         <div class="jalur-courses">
@@ -278,16 +254,14 @@
         <div class="jalur-divider"></div>
         <div class="jalur-price">Rp 999K <span class="jalur-original">Rp 1.694K</span><span class="jalur-save">Hemat 41%</span></div>
         <p class="jalur-note">3 kursus tersedia · 6 kursus berikutnya otomatis terbuka</p>
-        <a href="login.html" data-dest="dashboard.html" class="jalur-btn">Mulai All Access →</a>
+        <a href="login.html" data-dest="dashboard.html" class="jalur-btn primary">Mulai All Access →</a>
       </div>
-
     </div>
   </div>
 </section>
 
 <div class="divider"></div>
 
-<!-- COURSES -->
 <section id="kursus">
   <div class="container">
     <div class="section-eyebrow">Kurikulum</div>
@@ -314,7 +288,6 @@
   </div>
 </section>
 
-<!-- CTA -->
 <section class="cta-section" id="komunitas">
   <h2>Mulai gratis hari ini</h2>
   <p>Gabung dan dapatkan 20 prompt Claude gratis — langsung bisa dipakai sekarang.</p>
@@ -322,14 +295,21 @@
   <p class="cta-sub">Gratis selamanya · Tanpa kartu kredit</p>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">
       <a href="index.html" class="logo" style="color:#fff;">Klaud<span style="color:var(--blue)">.id</span></a>
       <p>Platform belajar Claude AI dalam Bahasa Indonesia — untuk profesional, UKM, dan mahasiswa.</p>
     </div>
-    <div class="footer-links"><h4>Ikuti Kami</h4><ul><a href="#">TikTok</a><a href="#">YouTube</a><a href="#">Instagram</a><a href="#">WhatsApp Community</a></ul></div>
+    <div class="footer-links">
+      <h4>Ikuti Kami</h4>
+      <ul>
+        <li><a href="#">TikTok</a></li>
+        <li><a href="#">YouTube</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">WhatsApp Community</a></li>
+      </ul>
+    </div>
   </div>
   <div class="footer-bottom">
     <p>© 2025 Klaud.id</p>
@@ -342,7 +322,7 @@
 <script src="login-modal.js"></script>
 <script>
   function scrollCarousel(dir) {
-    document.getElementById('courseCarousel').scrollBy({ left: dir * 337, behavior: 'smooth' });
+    document.getElementById('courseCarousel').scrollBy({ left: dir * 312, behavior: 'smooth' });
   }
   (async function() {
     var r = await sbClient.auth.getSession();
