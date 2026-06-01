@@ -16,15 +16,15 @@
     --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 2px 8px rgba(0,0,0,0.04);
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh -webkit-font-smoothing: antialiased;; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; -webkit-font-smoothing: antialiased; }
   nav {
     position: sticky; top: 0; z-index: 100;
     padding: 0 48px; height: 64px;
     display: flex; align-items: center; justify-content: space-between;
-    background: rgba(237,236,245,0.88); backdrop-filter: blur(14px);
+    background: rgba(255,255,255,0.88); backdrop-filter: blur(14px);
     border-bottom: 1px solid var(--border);
   }
-  .logo { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--ink); text-decoration: none; }
+  .logo { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--ink); text-decoration: none; letter-spacing: -0.3px; }
   .logo span { color: var(--blue); }
   .nav-right { display: flex; align-items: center; gap: 20px; }
   .nav-link { font-size: 13px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color 0.2s; }

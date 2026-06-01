@@ -17,7 +17,7 @@
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
-  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--ink); overflow-x: hidden -webkit-font-smoothing: antialiased;; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--ink); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 
   /* NAV */
   nav {
@@ -27,7 +27,7 @@
     background: rgba(255,255,255,0.88); backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
   }
-  .logo { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--ink); text-decoration: none; }
+  .logo { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--ink); text-decoration: none; letter-spacing: -0.3px; }
   .logo span { color: var(--blue); }
   .nav-back { font-size: 14px; font-weight: 500; color: var(--muted); text-decoration: none; display: flex; align-items: center; gap: 6px; transition: color 0.2s; }
   .nav-back:hover { color: var(--ink); }
@@ -184,7 +184,7 @@
   /* ── LIGHT THEME OVERRIDES ──────────────────────────────── */
   body { background: var(--bg) !important; color: var(--ink) !important; }
   nav {
-    background: rgba(237,236,245,0.88) !important;
+    background: rgba(255,255,255,0.88) !important;
     border-bottom: 1px solid var(--border) !important;
   }
   .logo { color: var(--ink) !important; }
