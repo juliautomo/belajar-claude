@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard — Klaud.id</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
   <style>
@@ -35,7 +35,7 @@
     .layout { display: flex; flex: 1; max-width: 1200px; margin: 0 auto; width: 100%; }
 
     /* Sidebar */
-    .sidebar { width: 256px; flex-shrink: 0; padding: 28px 20px; border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: 24px; }
+    .sidebar { width: 240px; flex-shrink: 0; padding: 28px 20px; border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: 16px; }
 
     /* Profile card */
     .profile-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 16px; text-align: center; }
@@ -43,112 +43,83 @@
     .profile-avatar svg { width: 18px; height: 18px; color: var(--muted); }
     .profile-name  { font-family: 'DM Serif Display', serif; font-size: 16px; font-weight: 400; color: var(--ink); margin-bottom: 3px; }
     .profile-email { font-size: 11px; color: var(--muted); margin-bottom: 10px; word-break: break-all; }
-    .profile-since { font-size: 10px; color: var(--muted); font-family: 'DM Mono', monospace; background: var(--bg); padding: 4px 10px; border-radius: 100px; display: inline-block; }
-    .profile-edit-btn { display: block; width: 100%; margin-top: 10px; background: transparent; border: 1px solid var(--border); color: var(--muted); font-size: 11px; font-weight: 600; padding: 6px 0; border-radius: 8px; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s; }
+    .profile-since { font-size: 10px; color: var(--muted); background: var(--bg); padding: 4px 10px; border-radius: 100px; display: inline-block; }
+    .profile-edit-btn { display: block; width: 100%; margin-top: 12px; background: transparent; border: 1px solid var(--border); color: var(--muted); font-size: 11px; font-weight: 600; padding: 6px 0; border-radius: 8px; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s; }
     .profile-edit-btn:hover { border-color: var(--ink); color: var(--ink); }
 
     /* Stats */
-    .stat-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 8px; text-align: center; }
+    .stats-row { display: flex; gap: 8px; }
+    .stat-box { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 8px; text-align: center; }
     .stat-num  { font-size: 20px; font-weight: 800; color: var(--ink); letter-spacing: -0.5px; line-height: 1; margin-bottom: 3px; }
     .stat-lbl  { font-size: 10px; color: var(--muted); line-height: 1.3; }
-
-    /* Sidebar nav */
-    .sidebar-section-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); font-family: 'DM Mono', monospace; padding: 0 4px; margin-bottom: 4px; }
-    .sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
-    .sidebar-nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 500; color: var(--muted); transition: background 0.15s, color 0.15s; }
-    .sidebar-nav-item:hover { background: var(--bg); color: var(--ink); }
-    .sidebar-nav-item.active { background: #E5E7EB; color: var(--ink); font-weight: 600; }
-    .sidebar-nav-item svg { width: 15px; height: 15px; flex-shrink: 0; }
-
-    /* Learning Journey */
-    .journey-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
-    .journey-title { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
-    .journey-sub   { font-size: 10px; color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
-    .journey-level { margin-bottom: 12px; }
-    .journey-level:last-child { margin-bottom: 0; }
-    .journey-level-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; font-family: 'DM Mono', monospace; }
-    .journey-level-label.beginner     { color: var(--green); }
-    .journey-level-label.intermediate { color: var(--gold); }
-    .journey-level-label.advanced     { color: var(--blue); }
-    .journey-courses { display: flex; flex-direction: column; gap: 3px; }
-    .journey-item { display: flex; align-items: center; gap: 7px; padding: 4px 7px; border-radius: 6px; font-size: 11px; color: var(--muted); }
-    .journey-item.enrolled     { color: var(--ink); font-weight: 600; background: var(--bg); }
-    .journey-item.completed    { color: var(--green); background: var(--green-pale); }
-    .journey-item.recommended  { color: var(--ink); font-weight: 600; background: var(--gold-pale); }
-    .journey-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; background: var(--border); }
-    .journey-item.enrolled    .journey-dot { background: var(--blue); }
-    .journey-item.completed   .journey-dot { background: var(--green); }
-    .journey-item.recommended .journey-dot { background: var(--gold); }
+    .stat-lbl.green { color: var(--green); }
 
     /* Main */
     .main { flex: 1; padding: 28px 32px; min-width: 0; }
     .loading-screen { text-align: center; padding: 80px 20px; color: var(--muted); font-size: 14px; flex: 1; display: flex; align-items: center; justify-content: center; }
     .greeting { margin-bottom: 28px; }
     .greeting h1 { font-family: 'DM Serif Display', serif; font-size: 32px; font-weight: 400; color: var(--ink); }
-    .greeting p  { font-size: 13px; color: var(--muted); }
-    .section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); font-family: 'DM Mono', monospace; margin-bottom: 12px; }
+    .greeting p  { font-size: 13px; color: var(--muted); margin-top: 4px; }
+    .section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 12px; }
 
     /* Enrolled cards */
-    .enrolled-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
-    .enrolled-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; display: flex; align-items: center; gap: 16px; transition: border-color 0.2s, box-shadow 0.2s; }
+    .enrolled-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 36px; }
+    .enrolled-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 16px; transition: border-color 0.2s, box-shadow 0.2s; }
     .enrolled-card:hover { border-color: var(--blue); box-shadow: 0 2px 16px rgba(74,114,214,0.08); }
-    .enrolled-icon-wrap { width: 40px; height: 40px; border-radius: 10px; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .enrolled-icon-wrap svg { width: 18px; height: 18px; color: var(--muted); }
+    .enrolled-icon-wrap { width: 38px; height: 38px; border-radius: 9px; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .enrolled-icon-wrap svg { width: 16px; height: 16px; color: var(--muted); }
     .enrolled-info { flex: 1; min-width: 0; }
-    .enrolled-info h3 { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .enrolled-info h3 { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .course-progress { display: flex; align-items: center; gap: 8px; }
-
-    /* Completed courses */
-    .completed-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 36px; }
-    .completed-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
-    .completed-check { width: 28px; height: 28px; border-radius: 50%; background: var(--green-pale); display: flex; align-items: center; justify-content: center; }
-    .completed-check svg { width: 14px; height: 14px; color: var(--green); }
-    .completed-card h4 { font-size: 13px; font-weight: 700; color: var(--ink); line-height: 1.4; }
-    .completed-label { font-size: 10px; font-weight: 700; color: var(--green); font-family: 'DM Mono', monospace; letter-spacing: 0.5px; }
-    .cpb-wrap  { flex: 1; height: 5px; background: var(--border); border-radius: 10px; overflow: hidden; }
-    .cpb-fill  { height: 100%; border-radius: 10px; transition: width 0.4s; }
-    .cpb-fill.blue { background: var(--blue); }
-    .cpb-fill.gold { background: var(--gold); }
-    .cpb-label { font-size: 10px; color: var(--muted); white-space: nowrap; font-family: 'DM Mono', monospace; }
-    .resume-btn { display: inline-block; background: var(--ink); color: #fff; text-decoration: none; font-size: 12px; font-weight: 700; padding: 8px 18px; border-radius: 8px; white-space: nowrap; flex-shrink: 0; transition: background 0.2s; }
+    .cpb-wrap  { flex: 1; height: 4px; background: var(--border); border-radius: 10px; overflow: hidden; }
+    .cpb-fill  { height: 100%; border-radius: 10px; transition: width 0.4s; background: var(--blue); }
+    .cpb-label { font-size: 10px; color: var(--muted); white-space: nowrap; }
+    .resume-btn { display: inline-block; background: var(--ink); color: #fff; text-decoration: none; font-size: 12px; font-weight: 600; padding: 8px 16px; border-radius: 8px; white-space: nowrap; flex-shrink: 0; transition: background 0.2s; }
     .resume-btn:hover { background: var(--blue); }
+
+    /* Badge / completed section */
+    .badge-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-bottom: 36px; }
+    .badge-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+    .badge-icon { width: 36px; height: 36px; border-radius: 50%; background: var(--green-pale); border: 1.5px solid rgba(29,158,117,0.2); display: flex; align-items: center; justify-content: center; }
+    .badge-icon svg { width: 16px; height: 16px; color: var(--green); }
+    .badge-title { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.4; }
+    .badge-pill { font-size: 10px; font-weight: 600; color: var(--green); background: var(--green-pale); padding: 2px 8px; border-radius: 100px; display: inline-block; }
 
     /* Explore */
     .carousel-wrap { position: relative; }
-    .explore-grid { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; scrollbar-width: none; }
+    .explore-grid { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; scrollbar-width: none; }
     .explore-grid::-webkit-scrollbar { display: none; }
-    .carousel-nav { display: flex; gap: 8px; margin-top: 14px; }
-    .carousel-btn { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.2s; color: var(--ink); flex-shrink: 0; }
+    .carousel-nav { display: flex; gap: 8px; margin-top: 12px; }
+    .carousel-btn { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.2s; color: var(--ink); flex-shrink: 0; }
     .carousel-btn:hover { border-color: var(--ink); }
-    .carousel-btn svg { width: 13px; height: 13px; }
-    .explore-card { min-width: 210px; max-width: 210px; scroll-snap-align: start; flex-shrink: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 8px; transition: border-color 0.2s; }
+    .carousel-btn svg { width: 12px; height: 12px; }
+    .explore-card { min-width: 200px; max-width: 200px; scroll-snap-align: start; flex-shrink: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 6px; transition: border-color 0.2s; }
     .explore-card:hover { border-color: var(--blue); }
-    .explore-level { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); font-family: 'DM Mono', monospace; }
-    .explore-icon  { font-size: 22px; }
-    .explore-card h4 { font-size: 13px; font-weight: 700; color: var(--ink); line-height: 1.4; }
+    .explore-level { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+    .explore-card h4 { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.4; }
     .explore-card p  { font-size: 11px; color: var(--muted); line-height: 1.6; flex: 1; }
-    .explore-price   { font-size: 13px; font-weight: 800; color: var(--ink); }
-    .explore-btn { display: block; background: var(--bg); color: var(--ink); text-decoration: none; font-size: 11px; font-weight: 700; padding: 7px 12px; border-radius: 7px; text-align: center; border: 1px solid var(--border); transition: all 0.2s; margin-top: 2px; }
+    .explore-price   { font-size: 13px; font-weight: 700; color: var(--ink); }
+    .explore-btn { display: block; background: var(--bg); color: var(--ink); text-decoration: none; font-size: 11px; font-weight: 600; padding: 7px 12px; border-radius: 7px; text-align: center; border: 1px solid var(--border); transition: all 0.2s; margin-top: 4px; }
     .explore-btn:hover { background: var(--blue-pale); border-color: var(--blue); }
     .explore-btn.disabled { color: var(--muted); pointer-events: none; }
 
     /* Profile Modal */
     .pmodal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px; }
-    .pmodal { background: #fff; border-radius: 16px; padding: 36px 32px; max-width: 460px; width: 100%; box-shadow: 0 24px 64px rgba(0,0,0,0.18); }
-    .pmodal h2 { font-size: 20px; font-weight: 800; color: var(--ink); margin-bottom: 6px; }
+    .pmodal { background: #fff; border-radius: 16px; padding: 36px 32px; max-width: 440px; width: 100%; box-shadow: 0 24px 64px rgba(0,0,0,0.18); }
+    .pmodal h2 { font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; color: var(--ink); margin-bottom: 6px; }
     .pmodal-sub { font-size: 13px; color: var(--muted); margin-bottom: 28px; line-height: 1.6; }
     .pmodal-step { display: none; }
     .pmodal-step.active { display: block; }
-    .pmodal-q { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 14px; }
+    .pmodal-q { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
     .pmodal-opts { display: flex; flex-wrap: wrap; gap: 8px; }
-    .popt { padding: 9px 16px; border-radius: 10px; border: 1.5px solid var(--border); font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; background: #fff; transition: all 0.15s; }
+    .popt { padding: 8px 16px; border-radius: 8px; border: 1.5px solid var(--border); font-size: 13px; font-weight: 500; color: var(--muted); cursor: pointer; background: #fff; transition: all 0.15s; }
     .popt:hover { border-color: var(--blue); color: var(--ink); }
-    .popt.selected { border-color: var(--ink); color: var(--blue); }
+    .popt.selected { border-color: var(--ink); color: var(--ink); background: var(--bg); }
     .pmodal-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; }
-    .pmodal-step-ind { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; }
-    .pmodal-next { background: var(--ink); color: #fff; border: none; padding: 10px 24px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: background 0.2s; }
+    .pmodal-step-ind { font-size: 11px; color: var(--muted); }
+    .pmodal-next { background: var(--ink); color: #fff; border: none; padding: 10px 24px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: background 0.2s; }
     .pmodal-next:hover { background: var(--blue); }
-    .pmodal-next:disabled { opacity: 0.4; cursor: default; }
+    .pmodal-next:disabled { opacity: 0.35; cursor: default; }
 
     @media (max-width: 900px) { .sidebar { display: none; } }
     @media (max-width: 768px) { .main { padding: 20px 16px; } }
@@ -172,7 +143,7 @@
   </div>
 </nav>
 
-<div id="loadingScreen" class="loading-screen">Memuat dashboard kamu...</div>
+<div id="loadingScreen" class="loading-screen">Memuat dashboard...</div>
 
 <div class="layout" id="mainLayout" style="display:none;">
 
@@ -180,7 +151,7 @@
   <aside class="sidebar">
 
     <div class="profile-card">
-      <div class="profile-avatar" id="sideAvatar">
+      <div class="profile-avatar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
       </div>
       <div class="profile-name"  id="sideName"></div>
@@ -189,28 +160,16 @@
       <button class="profile-edit-btn" onclick="openProfileModal(true)">Edit Profil</button>
     </div>
 
-    <div>
-      <div class="sidebar-section-label">Statistik Belajar</div>
+    <div class="stats-row">
       <div class="stat-box">
         <div class="stat-num" id="statEnrolled">0</div>
-        <div class="stat-lbl">Kursus Diikuti</div>
+        <div class="stat-lbl">Kursus</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="statCompleted">0</div>
+        <div class="stat-lbl green">Selesai</div>
       </div>
     </div>
-
-    <div>
-      <div class="sidebar-section-label">Navigasi</div>
-      <div class="sidebar-nav">
-        <a href="dashboard.html" class="sidebar-nav-item active">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-          Dashboard
-        </a>
-        <a href="index.html#kursus" class="sidebar-nav-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-          Semua Kursus
-        </a>
-      </div>
-    </div>
-
 
   </aside>
 
@@ -218,6 +177,7 @@
   <main class="main">
     <div class="greeting">
       <h1 id="greetingText">Hei!</h1>
+      <p id="greetingSub"></p>
     </div>
 
     <div id="enrolledSection" style="display:none;">
@@ -226,8 +186,8 @@
     </div>
 
     <div id="completedSection" style="display:none;">
-      <div class="section-label">Kursus Selesai</div>
-      <div class="completed-grid" id="completedGrid"></div>
+      <div class="section-label">Pencapaian</div>
+      <div class="badge-grid" id="badgeGrid"></div>
     </div>
 
     <div id="exploreSection" style="display:none;">
@@ -255,13 +215,12 @@
         <button class="popt" data-step="1" data-val="karyawan">Karyawan</button>
         <button class="popt" data-step="1" data-val="mahasiswa">Mahasiswa</button>
         <button class="popt" data-step="1" data-val="pemilik-bisnis">Pemilik Bisnis / UKM</button>
-        <button class="popt" data-step="1" data-val="freelancer">Freelancer</button>
         <button class="popt" data-step="1" data-val="developer">Developer</button>
         <button class="popt" data-step="1" data-val="kreator">Kreator Konten</button>
       </div>
       <div class="pmodal-nav">
         <span class="pmodal-step-ind">1 / 3</span>
-        <button class="pmodal-next" id="pnext1" onclick="nextStep(1)" disabled>Lanjut →</button>
+        <button class="pmodal-next" id="pnext1" onclick="nextStep(1)" disabled>Lanjut</button>
       </div>
     </div>
 
@@ -270,14 +229,13 @@
       <div class="pmodal-opts">
         <button class="popt" data-step="2" data-val="efisiensi-kerja">Hemat waktu kerja</button>
         <button class="popt" data-step="2" data-val="bisnis">Kembangkan bisnis</button>
-        <button class="popt" data-step="2" data-val="karir">Tingkatkan karir</button>
         <button class="popt" data-step="2" data-val="konten">Buat konten lebih cepat</button>
         <button class="popt" data-step="2" data-val="coding">Build produk / app</button>
         <button class="popt" data-step="2" data-val="lainnya">Eksplorasi</button>
       </div>
       <div class="pmodal-nav">
         <span class="pmodal-step-ind">2 / 3</span>
-        <button class="pmodal-next" id="pnext2" onclick="nextStep(2)" disabled>Lanjut →</button>
+        <button class="pmodal-next" id="pnext2" onclick="nextStep(2)" disabled>Lanjut</button>
       </div>
     </div>
 
@@ -285,7 +243,6 @@
       <div class="pmodal-q">Seberapa sering kamu pakai Claude atau AI sekarang?</div>
       <div class="pmodal-opts">
         <button class="popt" data-step="3" data-val="belum-pernah">Belum pernah sama sekali</button>
-        <button class="popt" data-step="3" data-val="pernah-pakai">Pernah coba, tapi jarang</button>
         <button class="popt" data-step="3" data-val="sudah-mahir">Sudah pakai rutin</button>
       </div>
       <div class="pmodal-nav">
@@ -298,45 +255,39 @@
 
 <script>
   const ALL_COURSES = {
-    'prompt-gratis':      { title: '20 Prompt Claude Terbaik',          icon: '🎁', contentLink: 'prompt-gratis-content.html',    salesLink: 'prompt-gratis.html',     desc: 'Prompt siap pakai untuk email, laporan, konten sosmed, dan lainnya.',             price: 'Gratis',     level: 'Beginner',     modules: 5, color: 'blue' },
-    'mulai-claude':       { title: 'Mulai dengan Claude AI',             icon: '🚀', contentLink: 'mulai-claude-content.html',      salesLink: 'mulai-claude.html',      desc: 'Dari nol sampai bisa pakai Claude untuk kebutuhan sehari-hari dalam 1 jam.',      price: 'Gratis',     level: 'Beginner',     modules: 6, color: 'blue' },
-    'kerja-sehari-hari':  { title: 'Claude untuk Pekerjaan Sehari-hari', icon: '💼', contentLink: 'kerja-sehari-hari-content.html', salesLink: 'kerja-sehari-hari.html', desc: 'Hemat 3-5 jam kerja per minggu dengan workflow Claude dan tools kantor kamu.',    price: 'Rp 149.000', level: 'Beginner',     modules: 6, color: 'blue' },
-    'bisnis-ukm':         { title: 'Claude untuk Bisnis dan UKM',        icon: '🏪', contentLink: 'bisnis-ukm-content.html',        salesLink: 'bisnis-ukm.html',        desc: 'Jalankan bisnis lebih efisien dengan Claude dan tools Indonesia sehari-hari.',    price: 'Rp 149.000', level: 'Beginner',     modules: 6, color: 'gold' },
-    'konten-copywriting': { title: 'Claude untuk Konten dan Copywriting', icon: '✍️', contentLink: 'coming-soon.html',             salesLink: 'coming-soon.html',       desc: 'Build mesin konten: artikel, script, newsletter, landing page.',                 price: 'Rp 199.000', level: 'Intermediate', modules: 6, color: 'blue', comingSoon: true },
-    'analisis-data':      { title: 'Claude untuk Analisis Data',         icon: '📊', contentLink: 'coming-soon.html',              salesLink: 'coming-soon.html',       desc: 'Ubah data mentah jadi insight dengan Google Sheets dan Claude Artifacts.',        price: 'Rp 199.000', level: 'Intermediate', modules: 6, color: 'blue', comingSoon: true },
-    'build-automation':   { title: 'Build Automation dengan Claude',     icon: '⚡', contentLink: 'coming-soon.html',              salesLink: 'coming-soon.html',       desc: 'Buat 3 automation aktif dengan Zapier, Make, dan n8n yang jalan 24/7.',          price: 'Rp 299.000', level: 'Intermediate', modules: 7, color: 'blue', comingSoon: true },
-    'ai-powered-app':     { title: 'Build AI-Powered App Sederhana',     icon: '🛠️', contentLink: 'coming-soon.html',            salesLink: 'coming-soon.html',       desc: 'Buat web app AI live di GitHub Pages dengan landing page monetisasi.',            price: 'Rp 299.000', level: 'Advanced',     modules: 7, color: 'blue', comingSoon: true },
-    'claude-api-dev':     { title: 'Claude API untuk Developer',         icon: '👨‍💻', contentLink: 'coming-soon.html',           salesLink: 'coming-soon.html',       desc: 'Integrasikan Claude ke project nyata: streaming, tool use, caching, deploy.',    price: 'Rp 399.000', level: 'Advanced',     modules: 7, color: 'blue', comingSoon: true },
-    'jual-produk-ai':     { title: 'Build dan Jual Produk AI',           icon: '💰', contentLink: 'coming-soon.html',              salesLink: 'coming-soon.html',       desc: 'Dari ide ke produk AI yang menghasilkan uang: Framer, Midtrans, WhatsApp.',      price: 'Rp 499.000', level: 'Advanced',     modules: 7, color: 'blue', comingSoon: true },
+    'prompt-gratis':      { title: '20 Prompt Claude Terbaik',           contentLink: 'prompt-gratis-content.html',    salesLink: 'prompt-gratis.html',     desc: 'Prompt siap pakai untuk email, laporan, konten sosmed, dan lainnya.',          price: 'Gratis',     level: 'Beginner',     modules: 5 },
+    'mulai-claude':       { title: 'Mulai dengan Claude AI',              contentLink: 'mulai-claude-content.html',      salesLink: 'mulai-claude.html',      desc: 'Dari nol sampai bisa pakai Claude untuk kebutuhan sehari-hari dalam 1 jam.',   price: 'Gratis',     level: 'Beginner',     modules: 6 },
+    'kerja-sehari-hari':  { title: 'Claude untuk Pekerjaan Sehari-hari',  contentLink: 'kerja-sehari-hari-content.html', salesLink: 'kerja-sehari-hari.html', desc: 'Hemat 3-5 jam kerja per minggu dengan workflow Claude dan tools kantor kamu.', price: 'Rp 149.000', level: 'Beginner',     modules: 6 },
+    'bisnis-ukm':         { title: 'Claude untuk Bisnis dan UKM',         contentLink: 'bisnis-ukm-content.html',        salesLink: 'bisnis-ukm.html',        desc: 'Jalankan bisnis lebih efisien dengan Claude dan tools Indonesia sehari-hari.', price: 'Rp 149.000', level: 'Beginner',     modules: 6 },
+    'konten-copywriting': { title: 'Claude untuk Konten dan Copywriting',  contentLink: 'coming-soon.html',              salesLink: 'coming-soon.html',       desc: 'Build mesin konten: artikel, script, newsletter, landing page.',              price: 'Rp 199.000', level: 'Intermediate', modules: 6, comingSoon: true },
+    'analisis-data':      { title: 'Claude untuk Analisis Data',          contentLink: 'coming-soon.html',               salesLink: 'coming-soon.html',       desc: 'Ubah data mentah jadi insight dengan Google Sheets dan Claude Artifacts.',     price: 'Rp 199.000', level: 'Intermediate', modules: 6, comingSoon: true },
+    'build-automation':   { title: 'Build Automation dengan Claude',      contentLink: 'coming-soon.html',               salesLink: 'coming-soon.html',       desc: 'Buat 3 automation aktif dengan Zapier, Make, dan n8n yang jalan 24/7.',       price: 'Rp 299.000', level: 'Intermediate', modules: 7, comingSoon: true },
+    'ai-powered-app':     { title: 'Build AI-Powered App Sederhana',      contentLink: 'coming-soon.html',               salesLink: 'coming-soon.html',       desc: 'Buat web app AI live di GitHub Pages dengan landing page monetisasi.',         price: 'Rp 299.000', level: 'Advanced',     modules: 7, comingSoon: true },
+    'claude-api-dev':     { title: 'Claude API untuk Developer',          contentLink: 'coming-soon.html',               salesLink: 'coming-soon.html',       desc: 'Integrasikan Claude ke project nyata: streaming, tool use, caching, deploy.', price: 'Rp 399.000', level: 'Advanced',     modules: 7, comingSoon: true },
+    'jual-produk-ai':     { title: 'Build dan Jual Produk AI',            contentLink: 'coming-soon.html',               salesLink: 'coming-soon.html',       desc: 'Dari ide ke produk AI yang menghasilkan uang: Framer, Midtrans, WhatsApp.',   price: 'Rp 499.000', level: 'Advanced',     modules: 7, comingSoon: true },
   };
 
   const ROLE_RECS = {
     'karyawan':       ['kerja-sehari-hari', 'mulai-claude', 'analisis-data'],
     'mahasiswa':      ['prompt-gratis', 'mulai-claude', 'kerja-sehari-hari'],
     'pemilik-bisnis': ['bisnis-ukm', 'konten-copywriting', 'build-automation'],
-    'freelancer':     ['konten-copywriting', 'kerja-sehari-hari', 'build-automation'],
     'developer':      ['claude-api-dev', 'build-automation', 'ai-powered-app'],
     'kreator':        ['konten-copywriting', 'bisnis-ukm', 'build-automation'],
   };
   const GOAL_RECS = {
     'efisiensi-kerja': ['kerja-sehari-hari', 'analisis-data'],
     'bisnis':          ['bisnis-ukm', 'konten-copywriting'],
-    'karir':           ['mulai-claude', 'kerja-sehari-hari'],
     'konten':          ['konten-copywriting', 'bisnis-ukm'],
     'coding':          ['claude-api-dev', 'ai-powered-app'],
     'lainnya':         ['prompt-gratis', 'mulai-claude'],
   };
-  const ROLE_LABELS   = { 'karyawan': '💼 Karyawan', 'mahasiswa': '🎓 Mahasiswa', 'pemilik-bisnis': '🏪 Pemilik Bisnis', 'freelancer': '🧑 Freelancer', 'developer': '⚡ Developer', 'kreator': '✍️ Kreator' };
-  const GOAL_LABELS   = { 'efisiensi-kerja': '⏱️ Hemat waktu', 'bisnis': '📈 Bisnis', 'karir': '🚀 Karir', 'konten': '🎨 Konten', 'coding': '💻 Coding', 'lainnya': '🌟 Eksplorasi' };
-  const EXP_LABELS    = { 'belum-pernah': '🌱 Pemula', 'pernah-pakai': '🌿 Jarang pakai', 'sudah-mahir': '🌳 Rutin pakai' };
-  const ROLE_AVATARS  = { 'karyawan': '💼', 'mahasiswa': '🎓', 'pemilik-bisnis': '🏪', 'freelancer': '🧑', 'developer': '⚡', 'kreator': '✍️' };
 
   let progressMap  = {};
   let userProfile  = null;
   let currentEmail = null;
   let pAnswers     = { role: null, goal: null, experience: null };
 
-  // ── Option clicks ──────────────────────────────────────
+  // Option clicks
   document.querySelectorAll('.popt').forEach(function(btn) {
     btn.addEventListener('click', function() {
       var step = btn.getAttribute('data-step');
@@ -383,16 +334,11 @@
         updated_at: new Date().toISOString(),
       }, { onConflict: 'email' });
       userProfile = Object.assign({}, userProfile, pAnswers);
-      renderProfileTags();
-      var enrResult = await sbClient.from('enrollments').select('course_slug').eq('email', currentEmail);
-      buildJourney(new Set((enrResult.data || []).map(function(e) { return e.course_slug; })));
     } catch(e) { console.error(e); }
     document.getElementById('profileModal').style.display = 'none';
   }
 
-  function renderProfileTags() { /* tags removed */ }
-
-  // ── Progress ──────────────────────────────────────────
+  // Progress
   async function loadProgress(email) {
     try {
       var result = await sbClient.from('module_completions').select('course_slug, module_num').eq('email', email);
@@ -415,48 +361,7 @@
     return { done: done, total: total, pct: Math.round((done / total) * 100) };
   }
 
-  // ── Journey ───────────────────────────────────────────
-  function buildJourney(enrolledSlugs) { return; // journey section removed
-    var beginnerSlugs     = ['prompt-gratis', 'mulai-claude', 'kerja-sehari-hari', 'bisnis-ukm'];
-    var intermediateSlugs = ['konten-copywriting', 'analisis-data', 'build-automation'];
-    var advancedSlugs     = ['ai-powered-app', 'claude-api-dev', 'jual-produk-ai'];
-
-    var recSlugs = new Set(
-      ((userProfile && ROLE_RECS[userProfile.role]) || []).concat((userProfile && GOAL_RECS[userProfile.goal]) || [])
-    );
-
-    var sub = document.getElementById('journeySubtitle');
-    if (userProfile && userProfile.role) {
-      sub.textContent = 'Untuk ' + (ROLE_LABELS[userProfile.role] || userProfile.role) + (userProfile.goal ? ' — ' + (GOAL_LABELS[userProfile.goal] || '') : '') + '.';
-    } else {
-      sub.textContent = 'Lengkapi profilmu untuk rekomendasi personal.';
-    }
-
-    ['journeyBeginner','journeyIntermediate','journeyAdvanced'].forEach(function(id) {
-      document.getElementById(id).innerHTML = '';
-    });
-
-    function renderLevel(slugs, containerId) {
-      var el = document.getElementById(containerId);
-      slugs.forEach(function(slug) {
-        var meta        = ALL_COURSES[slug];
-        var isEnrolled  = enrolledSlugs.has(slug);
-        var prog        = getProgress(slug);
-        var isCompleted = isEnrolled && prog.pct === 100;
-        var isRec       = recSlugs.has(slug) && !isEnrolled && !isCompleted;
-        var cls         = isCompleted ? 'completed' : isEnrolled ? 'enrolled' : isRec ? 'recommended' : 'coming';
-        var recBadge    = isRec ? ' <span style="font-size:9px;font-weight:700;color:var(--gold);">★ Untukmu</span>' : '';
-        var shortTitle  = meta.title.replace('Claude untuk ', '').replace(' dengan Claude', '').replace(' dan Claude', '');
-        el.innerHTML += '<div class="journey-item ' + cls + '"><span class="journey-dot"></span>' + meta.icon + ' ' + shortTitle + recBadge + '</div>';
-      });
-    }
-
-    renderLevel(beginnerSlugs,     'journeyBeginner');
-    renderLevel(intermediateSlugs, 'journeyIntermediate');
-    renderLevel(advancedSlugs,     'journeyAdvanced');
-  }
-
-  // ── Init ──────────────────────────────────────────────
+  // Init
   async function init() {
     try { await _init(); } catch(err) {
       console.error('Dashboard init error:', err);
@@ -489,7 +394,6 @@
       var profResult = await sbClient.from('profiles').select('*').eq('email', currentEmail).maybeSingle();
       userProfile = profResult.data;
     } catch(e) { userProfile = null; }
-    renderProfileTags();
 
     await loadProgress(currentEmail);
 
@@ -506,50 +410,63 @@
     var enrollments = (enrResult.data || []).filter(function(e) { return ALL_COURSES[e.course_slug]; });
     var enrolledSlugs = new Set(enrollments.map(function(e) { return e.course_slug; }));
 
-    document.getElementById('statEnrolled').textContent = enrollments.length;
-
-    buildJourney(enrolledSlugs);
-
     // Show profile setup for new users
     if (!userProfile || !userProfile.role) setTimeout(function() { openProfileModal(false); }, 800);
 
-    // Enrolled cards
-    if (enrollments.length > 0) {
+    // Split into active vs completed
+    var activeCourses    = [];
+    var completedCourses = [];
+    enrollments.forEach(function(c) {
+      var prog = getProgress(c.course_slug);
+      if (prog.pct === 100) completedCourses.push(c.course_slug);
+      else activeCourses.push(c);
+    });
+
+    document.getElementById('statEnrolled').textContent  = enrollments.length;
+    document.getElementById('statCompleted').textContent = completedCourses.length;
+
+    // Sub-greeting
+    if (completedCourses.length > 0) {
+      document.getElementById('greetingSub').textContent = completedCourses.length + ' kursus selesai. Luar biasa!';
+    } else if (enrollments.length > 0) {
+      document.getElementById('greetingSub').textContent = 'Lanjutkan perjalanan belajarmu.';
+    }
+
+    // Active enrolled cards
+    if (activeCourses.length > 0) {
       document.getElementById('enrolledSection').style.display = 'block';
       var list = document.getElementById('enrolledList');
-      var completedSlugs = [];
-      enrollments.forEach(function(c) {
-        var meta    = ALL_COURSES[c.course_slug];
-        var prog    = getProgress(c.course_slug);
-        if (prog.pct === 100) { completedSlugs.push(c.course_slug); return; }
+      activeCourses.forEach(function(c) {
+        var meta     = ALL_COURSES[c.course_slug];
+        var prog     = getProgress(c.course_slug);
         var btnLabel = prog.done > 0 ? 'Lanjutkan' : 'Mulai';
         list.innerHTML += '<div class="enrolled-card">'
           + '<div class="enrolled-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>'
           + '<div class="enrolled-info">'
           + '<h3>' + meta.title + '</h3>'
-          + '<div class="course-progress"><div class="cpb-wrap"><div class="cpb-fill ' + meta.color + '" style="width:' + prog.pct + '%"></div></div>'
+          + '<div class="course-progress"><div class="cpb-wrap"><div class="cpb-fill" style="width:' + prog.pct + '%"></div></div>'
           + '<span class="cpb-label">' + prog.done + '/' + prog.total + ' bagian</span></div>'
           + '</div>'
           + '<a href="' + meta.contentLink + '" class="resume-btn">' + btnLabel + ' &rarr;</a>'
           + '</div>';
       });
-
-      // Completed courses
-      if (completedSlugs.length > 0) {
-        document.getElementById('completedSection').style.display = 'block';
-        var cgrid = document.getElementById('completedGrid');
-        completedSlugs.forEach(function(slug) {
-          var meta = ALL_COURSES[slug];
-          cgrid.innerHTML += '<div class="completed-card">'
-            + '<div class="completed-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>'
-            + '<h4>' + meta.title + '</h4>'
-            + '<div class="completed-label">Selesai</div>'
-            + '</div>';
-        });
-      }
     }
 
-    // Explore cards
+    // Earned badges (completed courses)
+    if (completedCourses.length > 0) {
+      document.getElementById('completedSection').style.display = 'block';
+      var bgrid = document.getElementById('badgeGrid');
+      completedCourses.forEach(function(slug) {
+        var meta = ALL_COURSES[slug];
+        bgrid.innerHTML += '<div class="badge-card">'
+          + '<div class="badge-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg></div>'
+          + '<div class="badge-title">' + meta.title + '</div>'
+          + '<div class="badge-pill">Selesai</div>'
+          + '</div>';
+      });
+    }
+
+    // Explore cards (unenrolled)
     var unenrolled = Object.keys(ALL_COURSES).filter(function(slug) { return !enrolledSlugs.has(slug); });
     if (unenrolled.length > 0) {
       document.getElementById('exploreSection').style.display = 'block';
@@ -558,7 +475,7 @@
         var meta   = ALL_COURSES[slug];
         var ctaBtn = meta.comingSoon
           ? '<div class="explore-btn disabled">Segera Hadir</div>'
-          : '<a href="' + meta.salesLink + '" class="explore-btn">Lihat Kursus →</a>';
+          : '<a href="' + meta.salesLink + '" class="explore-btn">Lihat Kursus &rarr;</a>';
         grid.innerHTML += '<div class="explore-card">'
           + '<div class="explore-level">' + meta.level + '</div>'
           + '<h4>' + meta.title + '</h4>'
@@ -573,7 +490,7 @@
   }
 
   function scrollExplore(dir) {
-    document.getElementById('exploreGrid').scrollBy({ left: dir * 234, behavior: 'smooth' });
+    document.getElementById('exploreGrid').scrollBy({ left: dir * 222, behavior: 'smooth' });
   }
 
   async function logout() {
