@@ -4,21 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Claude untuk Bisnis & UKM — Klaud.id</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
 <style>
   :root {
-    --bg: #F8F9FC; --sidebar: #FFFFFF; --ink: #1A1A1A;
-    --blue: #4A72D6; --blue-pale: #EEF2FF; --green: #1D9E75;
-    --green-pale: #ECFDF5; --muted: #6B6B6B; --border: #E0DFDA;
+    --bg: #F7F7F5; --surface: #FFFFFF;
+    --ink: var(--ink); --blue: #4A72D6; --blue-pale: #EEF2FF;
+    --green: #1D9E75; --green-pale: #ECFDF5;
+    --muted: #6B7280; --border: #E5E5E3;
     --gold: #EF9F27; --gold-pale: rgba(239,159,39,0.08);
+    --shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.05);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 2px 8px rgba(0,0,0,0.04);
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--ink); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--ink); height: 100vh -webkit-font-smoothing: antialiased;; display: flex; flex-direction: column; overflow: hidden; }
   nav { height: 56px; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; background: #fff; border-bottom: 1px solid var(--border); flex-shrink: 0; z-index: 10; }
   .nav-left { display: flex; align-items: center; gap: 16px; }
-  .nav-logo { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; color: var(--ink); text-decoration: none; }
+  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--ink); text-decoration: none; }
   .nav-logo span { color: var(--blue); }
   .nav-divider { width: 1px; height: 20px; background: var(--border); }
   .nav-course-title { font-size: 13px; font-weight: 600; color: var(--muted); }
@@ -75,7 +78,7 @@
   .output-box p { font-size: 13px; color: var(--muted); line-height: 1.65; }
   .next-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin: 28px 0 12px; font-family: 'DM Mono', monospace; }
   .next-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; text-decoration: none; margin-bottom: 10px; transition: border-color 0.2s, box-shadow 0.2s; }
-  .next-card:hover { border-color: var(--blue); box-shadow: 0 2px 12px rgba(74,114,214,0.08); }
+  .next-card:hover { border-color: var(--blue); box-shadow: 0 2px 12px var(--border); }
   .next-icon { font-size: 26px; flex-shrink: 0; }
   .next-info { flex: 1; }
   .next-info h4 { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
