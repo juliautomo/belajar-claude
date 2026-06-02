@@ -54,6 +54,12 @@
     .mod-item.active .mod-item-title { color: var(--blue); }
     .mod-item-sub { font-size: 11px; color: var(--muted); }
 
+
+    .mod-feedback { border-top: 1px solid var(--border); margin-top: 8px; }
+    .mod-feedback .mod-item-title { color: var(--muted); }
+    .mod-feedback.active .mod-item-title { color: var(--blue); }
+    .mod-feedback .mod-check { border-color: var(--border); }
+
     /* Main */
     .main { flex: 1; overflow-y: auto; background: var(--bg); }
     .main-inner { max-width: 720px; margin: 0 auto; padding: 36px 32px 60px; }
@@ -184,6 +190,12 @@
     <div class="mod-item" id="nav-mod5" onclick="showModule(5)">
       <div class="mod-check" id="check5"></div>
       <div><div class="mod-item-title">Belajar & Riset</div><div class="mod-item-sub">3 prompt · Topik kompleks, rencana belajar</div></div>
+    </div>
+    <div class="mod-feedback">
+      <div class="mod-item" id="nav-mod6" onclick="showModule(6)">
+        <div class="mod-check" id="check6">★</div>
+        <div><div class="mod-item-title">Feedback</div><div class="mod-item-sub">Nilai kursus ini</div></div>
+      </div>
     </div>
   </aside>
 
