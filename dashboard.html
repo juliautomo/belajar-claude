@@ -79,17 +79,28 @@
 
     /* ── Badges ──────────────────────────────────────────── */
     .badge-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 48px; }
-    .badge-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow-sm); transition: box-shadow 0.2s; }
+    .badge-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 10px; box-shadow: var(--shadow-sm); transition: box-shadow 0.2s; }
     .badge-card:hover { box-shadow: var(--shadow); }
-    .badge-icon-wrap { width: 40px; height: 40px; border-radius: 12px; background: var(--green-pale); display: flex; align-items: center; justify-content: center; }
-    .badge-icon-wrap svg { width: 18px; height: 18px; color: var(--green); }
+    .badge-card-header { display: flex; align-items: center; justify-content: space-between; }
+    .badge-icon-wrap { width: 36px; height: 36px; border-radius: 10px; background: var(--green-pale); display: flex; align-items: center; justify-content: center; }
+    .badge-icon-wrap svg { width: 16px; height: 16px; color: var(--green); }
+    .badge-pill { font-size: 11px; font-weight: 600; color: var(--green); background: var(--green-pale); padding: 3px 10px; border-radius: 100px; }
     .badge-card h4 { font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.4; }
-    .badge-pill { font-size: 11px; font-weight: 600; color: var(--green); background: var(--green-pale); padding: 3px 10px; border-radius: 100px; display: inline-block; }
+    .badge-meta { font-size: 12px; color: var(--muted); }
 
     /* ── Explore ─────────────────────────────────────────── */
-    .explore-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-bottom: 48px; }
-    .explore-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 8px; box-shadow: var(--shadow-sm); transition: box-shadow 0.2s, border-color 0.2s; }
+    .explore-wrap { overflow-x: auto; scrollbar-width: none; margin-bottom: 48px; }
+    .explore-wrap::-webkit-scrollbar { display: none; }
+    .explore-grid { display: flex; gap: 12px; scroll-snap-type: x mandatory; padding-bottom: 4px; }
+    .explore-carousel-nav { display: flex; gap: 8px; margin-top: -36px; margin-bottom: 48px; }
+    .explore-carousel-btn { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--ink); box-shadow: var(--shadow-sm); transition: border-color 0.15s; }
+    .explore-carousel-btn:hover { border-color: var(--ink); }
+    .explore-carousel-btn svg { width: 12px; height: 12px; }
+    .explore-card { min-width: 210px; max-width: 210px; scroll-snap-align: start; flex-shrink: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 8px; box-shadow: var(--shadow-sm); transition: box-shadow 0.2s, border-color 0.2s; }
     .explore-card:hover { box-shadow: var(--shadow); border-color: rgba(74,114,214,0.3); }
+    .btn-notify { display: flex; align-items: center; justify-content: center; gap: 6px; background: var(--bg); color: var(--ink); border: 1px solid var(--border); font-size: 12px; font-weight: 600; padding: 8px 12px; border-radius: 8px; cursor: pointer; margin-top: 4px; transition: all 0.2s; font-family: 'Plus Jakarta Sans', sans-serif; width: 100%; }
+    .btn-notify:hover { border-color: var(--ink); }
+    .btn-notify.notified { background: var(--green-pale); color: var(--green); border-color: transparent; }
     .explore-level { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
     .explore-card h4 { font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.4; }
     .explore-card p  { font-size: 12px; color: var(--muted); line-height: 1.7; flex: 1; }
@@ -190,8 +201,12 @@
     <div id="exploreSection" style="display:none;">
       <div class="section-header">
         <span class="section-title">Jelajahi Kursus</span>
+        <div class="explore-carousel-nav">
+          <button class="explore-carousel-btn" onclick="scrollExplore(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <button class="explore-carousel-btn" onclick="scrollExplore(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
+        </div>
       </div>
-      <div class="explore-grid" id="exploreGrid"></div>
+      <div class="explore-wrap"><div class="explore-grid" id="exploreGrid"></div></div>
     </div>
 
   </main>
@@ -358,7 +373,22 @@
     return name.split(' ').map(function(w) { return w[0]; }).slice(0, 2).join('').toUpperCase();
   }
 
-  async function init() {
+  async function notifyMe(btn, slug) {
+    btn.disabled = true;
+    try {
+      var s = await sbClient.auth.getSession();
+      if (s.data.session) {
+        await sbClient.from('waitlist').upsert(
+          { email: s.data.session.user.email, course_slug: slug },
+          { onConflict: 'email,course_slug', ignoreDuplicates: true }
+        );
+      }
+    } catch(e) {}
+    btn.classList.add('notified');
+    btn.textContent = 'Terdaftar';
+  }
+
+    async function init() {
     try { await _init(); } catch(err) {
       console.error('Dashboard init error:', err);
       document.getElementById('loadingScreen').style.display = 'none';
@@ -469,7 +499,7 @@
       unenrolled.forEach(function(slug) {
         var meta   = ALL_COURSES[slug];
         var ctaBtn = meta.comingSoon
-          ? '<div class="explore-btn disabled">Segera Hadir</div>'
+          ? '<button class="btn-notify" onclick="notifyMe(this,\''+slug+'\')">Beritahu saya</button>'
           : '<a href="' + meta.salesLink + '" class="explore-btn">Lihat Kursus &rarr;</a>';
         grid.innerHTML += '<div class="explore-card">'
           + '<div class="explore-level">' + meta.level + '</div>'

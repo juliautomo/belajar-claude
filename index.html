@@ -17,7 +17,7 @@
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
-  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--cream); color: var(--ink); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--ink); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
   .container { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
 
   /* NAV */
@@ -72,11 +72,11 @@
   .section-sub { font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 480px; }
 
   /* JALUR GRID */
-  .jalur-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); margin-top: 56px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-  .jalur-card { background: var(--cream); padding: 32px 28px; display: flex; flex-direction: column; gap: 16px; transition: background 0.15s; }
-  .jalur-card:hover { background: #fff; }
-  .jalur-card.featured { background: var(--ink); color: #fff; }
-  .jalur-card.featured:hover { background: #2a2a2a; }
+  .jalur-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 56px; }
+  .jalur-card { background: var(--surface); border: 1.5px solid #D5D5D2; border-radius: 16px; padding: 28px 24px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04); transition: box-shadow 0.2s, border-color 0.2s; }
+  .jalur-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1), 0 1px 4px rgba(0,0,0,0.06); border-color: #BBBBBA; }
+  .jalur-card.featured { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .jalur-card.featured:hover { border-color: #333; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
   .jalur-persona { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
   .jalur-card.featured .jalur-persona { color: rgba(255,255,255,0.5); }
   .jalur-card h3 { font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; letter-spacing: -0.5px; color: var(--ink); line-height: 1.2; }
@@ -108,8 +108,8 @@
   .carousel-wrap { position: relative; margin-top: 56px; }
   .carousel { display: flex; gap: 1px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
   .carousel::-webkit-scrollbar { display: none; }
-  .course-card { min-width: 336px; max-width: 336px; scroll-snap-align: start; flex-shrink: 0; background: var(--cream); padding: 28px 24px; display: flex; flex-direction: column; gap: 10px; transition: background 0.15s; }
-  .course-card:hover { background: #fff; }
+  .course-card { min-width: 300px; max-width: 300px; scroll-snap-align: start; flex-shrink: 0; background: var(--surface); border: 1.5px solid #D5D5D2; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); transition: box-shadow 0.2s, border-color 0.2s; }
+  .course-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); border-color: rgba(74,114,214,0.3); }
   .course-tag { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border); color: var(--muted); background: transparent; }
   .tag-green  { color: #1D9E75 !important; border-color: rgba(29,158,117,0.3) !important; }
   .course-card h3 { font-family: 'DM Serif Display', serif; font-size: 18px; font-weight: 400; color: var(--ink); line-height: 1.3; }
@@ -121,7 +121,7 @@
   .course-btn:hover { opacity: 0.8; }
   .course-btn.disabled { background: #F3F4F6; color: var(--muted); pointer-events: none; }
   .carousel-nav { display: flex; gap: 8px; margin-top: 16px; }
-  .carousel-btn { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--cream); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.15s; color: var(--ink); }
+  .carousel-btn { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--bg); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.15s; color: var(--ink); }
   .carousel-btn:hover { border-color: var(--ink); }
   .carousel-btn svg { width: 14px; height: 14px; }
 
