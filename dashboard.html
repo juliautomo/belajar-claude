@@ -1,214 +1,276 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard — Klaud.id</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-config.js"></script>
-  <style>
-      :root {
-    --bg: #F7F7F5; --surface: #FFFFFF;
-    --ink: #111111; --blue: #4A72D6; --blue-pale: #EEF2FF;
-    --green: #1D9E75; --green-pale: #ECFDF5;
-    --muted: #6B7280; --border: #E5E5E3;
-    --gold: #EF9F27; --gold-pale: rgba(239,159,39,0.08);
-    --shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.05);
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 2px 8px rgba(0,0,0,0.04);
-  }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; font-size: 15px; -webkit-font-smoothing: antialiased; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Klaud.id</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#FAFAFA;--surface:#FFFFFF;--surface-2:#F5F5F7;
+  --border:#EBEBEB;--border-strong:#D8D8D8;
+  --ink:#111111;--ink-2:#888888;--ink-3:#BBBBBB;
+  --accent:#6C47FF;--accent-2:#8B6DFF;--accent-dim:rgba(108,71,255,0.08);--accent-glow:rgba(108,71,255,0.18);
+  --green:#16A34A;--green-dim:rgba(22,163,74,0.08);--green-border:rgba(22,163,74,0.2);
+  --amber:#D97706;--amber-dim:rgba(217,119,6,0.08);
+  --font:'Geist',sans-serif;--serif:'Instrument Serif',Georgia,serif;
+  --nav-h:58px;--sidebar-w:230px;--r:14px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(circle,#DDDDE0 1px,transparent 1px);background-size:28px 28px;opacity:0.5;mask-image:radial-gradient(ellipse 80% 80% at 50% 0%,black 30%,transparent 100%);}
+body::after{content:'';position:fixed;top:-200px;right:-100px;z-index:0;pointer-events:none;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(108,71,255,0.07) 0%,transparent 65%);}
 
-    /* ── Nav ───────────────────────────────────────────── */
-    nav { height: 64px; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.85); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
-    .nav-logo { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--ink); text-decoration: none; letter-spacing: -0.3px; }
-    .nav-logo span { color: var(--blue); }
-    .nav-right { display: flex; align-items: center; gap: 16px; }
-    .nav-user { display: flex; align-items: center; gap: 10px; }
-    .nav-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--ink); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; letter-spacing: 0.5px; }
-    .nav-uname  { font-size: 14px; font-weight: 600; color: var(--ink); }
-    .logout-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.15s; }
-    .logout-btn:hover { border-color: var(--ink); color: var(--ink); }
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(250,250,250,0.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+.brand{font-family:var(--font);font-size:17px;font-weight:700;color:var(--ink);text-decoration:none;letter-spacing:-0.4px;}
+.brand span{color:var(--accent);}
+.nav-right{display:flex;align-items:center;gap:12px;}
+.nav-avatar{width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.nav-uname{font-size:13px;font-weight:500;color:var(--ink-2);}
+.btn-nav{font-family:var(--font);font-size:13px;font-weight:500;color:var(--ink-2);background:transparent;border:1px solid var(--border);border-radius:8px;padding:6px 14px;cursor:pointer;transition:all 0.18s;}
+.btn-nav:hover{color:var(--ink);border-color:var(--border-strong);background:var(--surface);}
+.btn-accent{font-family:var(--font);font-size:13px;font-weight:600;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent-2));border:none;border-radius:9px;padding:8px 18px;cursor:pointer;box-shadow:0 2px 12px var(--accent-glow);transition:all 0.18s;}
+.btn-accent:hover{transform:translateY(-1px);box-shadow:0 4px 20px var(--accent-glow);}
 
-    /* ── Layout ─────────────────────────────────────────── */
-    .layout { display: flex; flex: 1; max-width: 1280px; margin: 0 auto; width: 100%; padding: 0 40px; gap: 48px; }
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:var(--sidebar-w) 1fr;min-height:100vh;padding-top:var(--nav-h);position:relative;z-index:1;}
 
-    /* ── Sidebar ─────────────────────────────────────────── */
-    .sidebar { width: 220px; flex-shrink: 0; padding: 36px 0; display: flex; flex-direction: column; gap: 32px; }
+/* SIDEBAR */
+.sidebar{position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));border-right:1px solid var(--border);background:rgba(255,255,255,0.7);backdrop-filter:blur(12px);padding:28px 16px;display:flex;flex-direction:column;gap:24px;overflow-y:auto;}
+.profile-block{padding:0 6px;}
+.profile-sec-label{font-size:10px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;}
+.profile-name{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;}
+.profile-email{font-size:11px;color:var(--ink-3);margin-bottom:10px;word-break:break-all;}
+.profile-chip{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:500;color:var(--green);background:var(--green-dim);border:1px solid var(--green-border);padding:3px 9px;border-radius:100px;}
+.chip-dot{width:5px;height:5px;border-radius:50%;background:var(--green);}
+.nav-menu{display:flex;flex-direction:column;gap:1px;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:9px;font-size:13px;font-weight:500;color:var(--ink-2);cursor:pointer;transition:all 0.15s;}
+.nav-item:hover{background:var(--surface-2);color:var(--ink);}
+.nav-item.active{background:var(--accent-dim);color:var(--accent);font-weight:600;}
+.ni-icon svg{width:15px;height:15px;flex-shrink:0;}
+.sidebar-stats{display:flex;flex-direction:column;gap:6px;margin-top:auto;}
+.ss-label{font-size:10px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:0.1em;padding:0 4px;margin-bottom:2px;}
+.ss-row{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;}
+.ss-name{font-size:12px;color:var(--ink-2);}
+.ss-val{font-size:15px;font-weight:700;}
+.ss-val.g{color:var(--green);}
+.ss-val.p{color:var(--accent);}
 
-    .profile-block { display: flex; flex-direction: column; gap: 4px; }
-    .profile-initials { width: 44px; height: 44px; border-radius: 12px; background: var(--ink); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; margin-bottom: 12px; letter-spacing: 0.5px; }
-    .profile-name  { font-size: 16px; font-weight: 700; color: var(--ink); }
-    .profile-email { font-size: 12px; color: var(--muted); margin-top: 2px; word-break: break-all; }
-    .profile-since { font-size: 11px; color: var(--muted); margin-top: 8px; }
-    .profile-edit-btn { margin-top: 12px; background: transparent; border: 1px solid var(--border); color: var(--muted); font-size: 12px; font-weight: 500; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s; display: inline-block; }
-    .profile-edit-btn:hover { border-color: var(--ink); color: var(--ink); }
+/* MAIN */
+.main{padding:40px 44px;display:flex;flex-direction:column;gap:36px;}
+.loading-screen{text-align:center;padding:80px 20px;color:var(--ink-2);font-size:14px;}
 
-    .stat-block { display: flex; flex-direction: column; gap: 16px; }
-    .stat-item { display: flex; flex-direction: column; gap: 2px; }
-    .stat-num  { font-size: 28px; font-weight: 800; color: var(--ink); letter-spacing: -1px; line-height: 1; }
-    .stat-lbl  { font-size: 12px; color: var(--muted); font-weight: 500; }
-    .stat-divider { height: 1px; background: var(--border); }
+/* GREETING */
+.greeting{display:flex;align-items:flex-end;justify-content:space-between;animation:up 0.5s ease both;}
+.g-eyebrow{font-size:11px;font-weight:500;color:var(--ink-3);letter-spacing:0.04em;margin-bottom:8px;}
+.g-h1{font-family:var(--serif);font-size:clamp(28px,3.5vw,46px);letter-spacing:-0.5px;line-height:1.1;color:var(--ink);}
+.g-h1 em{font-style:italic;color:var(--accent);}
+.g-sub{font-size:13px;color:var(--ink-3);margin-top:8px;}
+.g-pill{display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--accent-dim),rgba(139,109,255,0.08));border:1px solid rgba(108,71,255,0.15);padding:10px 18px;border-radius:12px;font-size:12px;font-weight:600;color:var(--accent);white-space:nowrap;align-self:flex-start;}
 
-    /* ── Main ───────────────────────────────────────────── */
-    .main { flex: 1; padding: 36px 0; min-width: 0; }
-    .loading-screen { text-align: center; padding: 80px 20px; color: var(--muted); font-size: 15px; flex: 1; display: flex; align-items: center; justify-content: center; }
+/* STAT GRID */
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;animation:up 0.5s 0.07s ease both;}
+.s-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px 20px;position:relative;overflow:hidden;transition:all 0.2s;}
+.s-card:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(0,0,0,0.06);border-color:var(--border-strong);}
+.s-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity 0.2s;}
+.s-card.sp::before{background:linear-gradient(90deg,var(--accent),var(--accent-2));}
+.s-card.sg::before{background:linear-gradient(90deg,#16A34A,#4ADE80);}
+.s-card.sa::before{background:linear-gradient(90deg,#D97706,#FCD34D);}
+.s-card:hover::before{opacity:1;}
+.s-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;}
+.s-badge{font-size:10px;font-weight:600;padding:3px 9px;border-radius:100px;}
+.s-badge.p{background:var(--accent-dim);color:var(--accent);}
+.s-badge.g{background:var(--green-dim);color:var(--green);}
+.s-badge.a{background:var(--amber-dim);color:var(--amber);}
+.s-num{font-family:var(--serif);font-size:46px;letter-spacing:-2px;line-height:1;margin-bottom:4px;}
+.s-num.p{color:var(--accent);}
+.s-num.g{color:var(--green);}
+.s-num.a{color:var(--amber);}
+.s-lbl{font-size:12px;color:var(--ink-3);}
 
-    .greeting { margin-bottom: 40px; }
-    .greeting h1 { font-family: 'DM Serif Display', serif; font-size: 38px; font-weight: 400; color: var(--ink); letter-spacing: -0.5px; line-height: 1.15; }
-    .greeting p  { font-size: 15px; color: var(--muted); margin-top: 8px; }
+/* SEC HEAD */
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.sec-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--ink-3);display:flex;align-items:center;gap:10px;}
+.sec-title::after{content:'';width:40px;height:1px;background:var(--border);display:inline-block;}
 
-    .section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px; }
-    .section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+/* ENROLLED */
+.enrolled-list{display:flex;flex-direction:column;gap:2px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.enrolled-card{padding:16px 20px;display:flex;align-items:center;gap:16px;border-bottom:1px solid var(--border);transition:background 0.15s;cursor:pointer;}
+.enrolled-card:last-child{border-bottom:none;}
+.enrolled-card:hover{background:var(--surface-2);}
+.enrolled-idx{font-size:11px;font-weight:700;color:var(--ink-3);width:20px;flex-shrink:0;}
+.enrolled-thumb{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.et1{background:linear-gradient(135deg,#EEF0FF,#DDE0FF);}
+.et2{background:linear-gradient(135deg,#F0F9FF,#D9EFFE);}
+.et3{background:linear-gradient(135deg,#F0FDF4,#DCFCE7);}
+.et4{background:linear-gradient(135deg,#FFF7ED,#FDE8C8);}
+.enrolled-info{flex:1;min-width:0;}
+.enrolled-info h3{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.prog-row{display:flex;align-items:center;gap:8px;}
+.prog-bar{flex:1;height:3px;background:var(--border);border-radius:10px;overflow:hidden;max-width:180px;}
+.prog-fill{height:100%;border-radius:10px;background:var(--accent);transition:width 0.5s;}
+.prog-lbl{font-size:11px;color:var(--ink-3);white-space:nowrap;}
+.resume-btn{background:var(--ink);color:#fff;text-decoration:none;font-family:var(--font);font-size:12px;font-weight:600;padding:8px 16px;border-radius:9px;white-space:nowrap;flex-shrink:0;transition:all 0.2s;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.12);}
+.resume-btn:hover{opacity:0.85;transform:translateY(-1px);}
 
-    /* ── Enrolled cards ──────────────────────────────────── */
-    .enrolled-list { display: flex; flex-direction: column; gap: 2px; margin-bottom: 48px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; box-shadow: var(--shadow-sm); }
-    .enrolled-card { padding: 20px 24px; display: flex; align-items: center; gap: 20px; border-bottom: 1px solid var(--border); transition: background 0.15s; cursor: pointer; }
-    .enrolled-card:last-child { border-bottom: none; }
-    .enrolled-card:hover { background: #FAFAFA; }
-    .enrolled-index { font-size: 12px; font-weight: 700; color: var(--muted); width: 20px; flex-shrink: 0; }
-    .enrolled-info { flex: 1; min-width: 0; }
-    .enrolled-info h3 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .enrolled-progress-row { display: flex; align-items: center; gap: 10px; }
-    .cpb-wrap  { flex: 1; height: 3px; background: var(--border); border-radius: 10px; overflow: hidden; max-width: 200px; }
-    .cpb-fill  { height: 100%; border-radius: 10px; transition: width 0.5s; background: var(--ink); }
-    .cpb-label { font-size: 12px; color: var(--muted); white-space: nowrap; }
-    .resume-btn { background: var(--ink); color: #fff; text-decoration: none; font-size: 13px; font-weight: 600; padding: 9px 20px; border-radius: 10px; white-space: nowrap; flex-shrink: 0; transition: all 0.2s; border: none; cursor: pointer; }
-    .resume-btn:hover { background: var(--blue); }
+/* BADGE */
+.badge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;}
+.badge-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;display:flex;align-items:center;gap:12px;transition:all 0.18s;}
+.badge-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(22,163,74,0.1);border-color:var(--green-border);}
+.badge-ico{width:40px;height:40px;border-radius:10px;background:var(--green-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.badge-ico svg{width:18px;height:18px;color:var(--green);}
+.badge-title{font-size:13px;font-weight:600;color:var(--ink);line-height:1.3;margin-bottom:4px;}
+.badge-pill{display:inline-block;font-size:10px;font-weight:600;color:var(--green);background:var(--green-dim);border:1px solid var(--green-border);padding:2px 8px;border-radius:100px;}
+.badge-meta{font-size:11px;color:var(--ink-3);margin-top:2px;}
 
-    /* ── Badges ──────────────────────────────────────────── */
-    .badge-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 48px; }
-    .badge-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 10px; box-shadow: var(--shadow-sm); transition: box-shadow 0.2s; }
-    .badge-card:hover { box-shadow: var(--shadow); }
-    .badge-card-header { display: flex; align-items: center; justify-content: space-between; }
-    .badge-icon-wrap { width: 36px; height: 36px; border-radius: 10px; background: var(--green-pale); display: flex; align-items: center; justify-content: center; }
-    .badge-icon-wrap svg { width: 16px; height: 16px; color: var(--green); }
-    .badge-pill { font-size: 11px; font-weight: 600; color: var(--green); background: var(--green-pale); padding: 3px 10px; border-radius: 100px; }
-    .badge-card h4 { font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.4; }
-    .badge-meta { font-size: 12px; color: var(--muted); }
+/* EXPLORE */
+.explore-carousel{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:4px;}
+.explore-carousel::-webkit-scrollbar{display:none;}
+.explore-card{min-width:200px;max-width:200px;scroll-snap-align:start;flex-shrink:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:all 0.2s;}
+.explore-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,0.08);border-color:rgba(108,71,255,0.2);}
+.ex-thumb{height:72px;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.ex-t1{background:linear-gradient(135deg,#EEF0FF,#DDE0FF);}
+.ex-t2{background:linear-gradient(135deg,#FFF7ED,#FDE8C8);}
+.ex-t3{background:linear-gradient(135deg,#FDF4FF,#F5D0FE);}
+.ex-body{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1;}
+.ex-lv{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-3);}
+.ex-title{font-size:13px;font-weight:600;color:var(--ink);line-height:1.3;flex:1;}
+.ex-desc{font-size:11px;color:var(--ink-3);line-height:1.6;}
+.ex-price{font-family:var(--serif);font-size:16px;color:var(--ink);}
+.btn-view{display:block;background:var(--ink);color:#fff;text-decoration:none;font-family:var(--font);font-size:11px;font-weight:600;padding:8px;border-radius:8px;text-align:center;transition:all 0.18s;margin-top:4px;box-shadow:0 2px 6px rgba(0,0,0,0.1);}
+.btn-view:hover{opacity:0.85;}
+.btn-notify{display:flex;align-items:center;justify-content:center;gap:5px;background:var(--surface-2);color:var(--ink-2);border:1px solid var(--border);font-family:var(--font);font-size:11px;font-weight:600;padding:8px;border-radius:8px;cursor:pointer;transition:all 0.18s;margin-top:4px;width:100%;}
+.btn-notify:hover{border-color:var(--border-strong);color:var(--ink);}
+.btn-notify.notified{background:var(--green-dim);color:var(--green);border-color:var(--green-border);}
+.carousel-nav-row{display:flex;gap:8px;margin-top:12px;}
+.cnav-btn{width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink);transition:all 0.15s;}
+.cnav-btn:hover{border-color:var(--border-strong);}
+.cnav-btn svg{width:12px;height:12px;}
 
-    /* ── Explore ─────────────────────────────────────────── */
-    .explore-wrap { overflow-x: auto; scrollbar-width: none; margin-bottom: 48px; }
-    .explore-wrap::-webkit-scrollbar { display: none; }
-    .explore-grid { display: flex; gap: 12px; scroll-snap-type: x mandatory; padding-bottom: 4px; }
-    .explore-carousel-nav { display: flex; gap: 8px; margin-top: -36px; margin-bottom: 48px; }
-    .explore-carousel-btn { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--ink); box-shadow: var(--shadow-sm); transition: border-color 0.15s; }
-    .explore-carousel-btn:hover { border-color: var(--ink); }
-    .explore-carousel-btn svg { width: 12px; height: 12px; }
-    .explore-card { min-width: 210px; max-width: 210px; scroll-snap-align: start; flex-shrink: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 8px; box-shadow: var(--shadow-sm); transition: box-shadow 0.2s, border-color 0.2s; }
-    .explore-card:hover { box-shadow: var(--shadow); border-color: rgba(74,114,214,0.3); }
-    .btn-notify { display: flex; align-items: center; justify-content: center; gap: 6px; background: var(--bg); color: var(--ink); border: 1px solid var(--border); font-size: 12px; font-weight: 600; padding: 8px 12px; border-radius: 8px; cursor: pointer; margin-top: 4px; transition: all 0.2s; font-family: 'Plus Jakarta Sans', sans-serif; width: 100%; }
-    .btn-notify:hover { border-color: var(--ink); }
-    .btn-notify.notified { background: var(--green-pale); color: var(--green); border-color: transparent; }
-    .explore-level { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
-    .explore-card h4 { font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.4; }
-    .explore-card p  { font-size: 12px; color: var(--muted); line-height: 1.7; flex: 1; }
-    .explore-price   { font-size: 14px; font-weight: 700; color: var(--ink); }
-    .explore-btn { display: block; background: var(--bg); color: var(--ink); text-decoration: none; font-size: 12px; font-weight: 600; padding: 9px 14px; border-radius: 9px; text-align: center; border: 1px solid var(--border); transition: all 0.2s; margin-top: 4px; }
-    .explore-btn:hover { background: var(--blue-pale); border-color: var(--blue); color: var(--blue); }
-    .explore-btn.disabled { color: var(--muted); pointer-events: none; background: var(--bg); }
+/* PROFILE MODAL */
+.pmodal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);backdrop-filter:blur(6px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;}
+.pmodal{background:#fff;border-radius:20px;padding:40px 36px;max-width:440px;width:100%;box-shadow:0 32px 80px rgba(0,0,0,0.16);position:relative;}
+.pmodal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;border:none;background:var(--surface-2);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink-2);transition:all 0.15s;}
+.pmodal-close:hover{background:var(--border);color:var(--ink);}
+.pmodal-close svg{width:14px;height:14px;}
+.pmodal h2{font-family:var(--serif);font-size:24px;font-weight:400;color:var(--ink);margin-bottom:6px;letter-spacing:-0.3px;}
+.pmodal-sub{font-size:13px;color:var(--ink-2);margin-bottom:28px;line-height:1.6;}
+.pmodal-step{display:none;}
+.pmodal-step.active{display:block;}
+.pmodal-q{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:14px;}
+.pmodal-opts{display:flex;flex-wrap:wrap;gap:8px;}
+.popt{padding:9px 18px;border-radius:10px;border:1.5px solid var(--border);font-size:13px;font-weight:500;color:var(--ink-2);cursor:pointer;background:#fff;transition:all 0.15s;font-family:var(--font);}
+.popt:hover{border-color:var(--accent);color:var(--ink);}
+.popt.selected{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);font-weight:600;}
+.pmodal-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;}
+.pmodal-ind{font-size:12px;color:var(--ink-3);}
+.pmodal-next{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border:none;padding:11px 28px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all 0.18s;box-shadow:0 2px 12px var(--accent-glow);}
+.pmodal-next:hover{transform:translateY(-1px);box-shadow:0 4px 20px var(--accent-glow);}
+.pmodal-next:disabled{opacity:0.3;cursor:default;transform:none;}
 
-    /* ── Profile Modal ────────────────────────────────────── */
-    .pmodal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); backdrop-filter: blur(6px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px; }
-    .pmodal { background: #fff; border-radius: 20px; padding: 40px 36px; max-width: 440px; width: 100%; box-shadow: 0 32px 80px rgba(0,0,0,0.16); position: relative; }
-    .pmodal-close { position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--bg); cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); transition: background 0.15s, color 0.15s; }
-    .pmodal-close:hover { background: var(--border); color: var(--ink); }
-    .pmodal-close svg { width: 14px; height: 14px; }
-    .pmodal h2 { font-family: 'DM Serif Display', serif; font-size: 24px; font-weight: 400; color: var(--ink); margin-bottom: 6px; letter-spacing: -0.3px; }
-    .pmodal-sub { font-size: 14px; color: var(--muted); margin-bottom: 28px; line-height: 1.6; }
-    .pmodal-step { display: none; }
-    .pmodal-step.active { display: block; }
-    .pmodal-q { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
-    .pmodal-opts { display: flex; flex-wrap: wrap; gap: 8px; }
-    .popt { padding: 9px 18px; border-radius: 10px; border: 1.5px solid var(--border); font-size: 13px; font-weight: 500; color: var(--muted); cursor: pointer; background: #fff; transition: all 0.15s; }
-    .popt:hover { border-color: var(--ink); color: var(--ink); }
-    .popt.selected { border-color: var(--ink); color: var(--ink); background: var(--bg); font-weight: 600; }
-    .pmodal-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 28px; }
-    .pmodal-step-ind { font-size: 12px; color: var(--muted); }
-    .pmodal-next { background: var(--ink); color: #fff; border: none; padding: 11px 28px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: background 0.2s; }
-    .pmodal-next:hover { background: var(--blue); }
-    .pmodal-next:disabled { opacity: 0.3; cursor: default; }
-
-    @media (max-width: 960px) { .sidebar { display: none; } .layout { padding: 0 24px; } }
-    @media (max-width: 640px) { .main { padding: 24px 0; } .greeting h1 { font-size: 28px; } nav { padding: 0 24px; } }
-  </style>
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:900px){.sidebar{display:none;}.main{padding:24px 20px;}}
+</style>
 </head>
 <body>
 
 <nav>
-  <a href="index.html" class="nav-logo">Klaud<span>.id</span></a>
+  <a class="brand" href="index.html">Klaud<span>.id</span></a>
   <div class="nav-right">
-    <div class="nav-user">
-      <div class="nav-avatar" id="navAvatar">—</div>
-      <span class="nav-uname" id="navUname"></span>
-    </div>
-    <button class="logout-btn" onclick="logout()">Keluar</button>
+    <div class="nav-avatar" id="navAvatar">—</div>
+    <span class="nav-uname" id="navUname"></span>
+    <button class="btn-nav" onclick="logout()">Keluar</button>
+    <button class="btn-accent" onclick="openProfileModal(true)">Edit Profil</button>
   </div>
 </nav>
 
-<div id="loadingScreen" class="loading-screen">Memuat dashboard...</div>
+<div id="loadingScreen" class="loading-screen" style="padding-top:120px;">Memuat dashboard...</div>
 
 <div class="layout" id="mainLayout" style="display:none;">
-
-  <!-- SIDEBAR -->
   <aside class="sidebar">
-
     <div class="profile-block">
-      <div class="profile-initials" id="sideInitials">—</div>
-      <div class="profile-name"  id="sideName"></div>
+      <div class="profile-sec-label">Akun</div>
+      <div class="profile-name" id="sideName"></div>
       <div class="profile-email" id="sideEmail"></div>
-      <div class="profile-since" id="sideSince"></div>
-      <button class="profile-edit-btn" onclick="openProfileModal(true)">Edit profil</button>
+      <div class="profile-chip"><span class="chip-dot"></span><span id="sideSince"></span></div>
     </div>
-
-    <div class="stat-block">
-      <div class="stat-item">
-        <div class="stat-num" id="statEnrolled">0</div>
-        <div class="stat-lbl">Kursus diikuti</div>
+    <div class="nav-menu">
+      <div class="nav-item active">
+        <span class="ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>Dashboard
       </div>
-      <div class="stat-divider"></div>
-      <div class="stat-item">
-        <div class="stat-num" id="statCompleted">0</div>
-        <div class="stat-lbl" style="color: var(--green);">Selesai</div>
+      <a href="index.html#kursus" class="nav-item" style="text-decoration:none;">
+        <span class="ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>Semua Kursus
+      </a>
+    </div>
+    <div class="sidebar-stats">
+      <div class="ss-label">Statistik</div>
+      <div class="ss-row">
+        <span class="ss-name">Kursus selesai</span>
+        <span class="ss-val g" id="statCompleted">0</span>
+      </div>
+      <div class="ss-row">
+        <span class="ss-name">Kursus diikuti</span>
+        <span class="ss-val p" id="statEnrolled">0</span>
+      </div>
+      <div class="ss-row">
+        <span class="ss-name">Modul selesai</span>
+        <span class="ss-val" id="statModules">0</span>
       </div>
     </div>
-
   </aside>
 
-  <!-- MAIN -->
   <main class="main">
-
     <div class="greeting">
-      <h1 id="greetingText">Hei!</h1>
-      <p id="greetingSub"></p>
+      <div>
+        <div class="g-eyebrow" id="greetEyebrow"></div>
+        <h1 class="g-h1" id="greetH1">Hei!</h1>
+        <p class="g-sub" id="greetSub"></p>
+      </div>
+      <div class="g-pill" id="greetPill" style="display:none;"></div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="s-card sg">
+        <div class="s-top"><span style="font-size:18px">🎓</span><span class="s-badge g">Selesai</span></div>
+        <div class="s-num g" id="statCompletedBig">0</div>
+        <div class="s-lbl">Kursus selesai</div>
+      </div>
+      <div class="s-card sp">
+        <div class="s-top"><span style="font-size:18px">📚</span><span class="s-badge p">Aktif</span></div>
+        <div class="s-num p" id="statEnrolledBig">0</div>
+        <div class="s-lbl">Kursus diikuti</div>
+      </div>
+      <div class="s-card sa">
+        <div class="s-top"><span style="font-size:18px">✅</span><span class="s-badge a">Total</span></div>
+        <div class="s-num a" id="statModulesBig">0</div>
+        <div class="s-lbl">Modul diselesaikan</div>
+      </div>
     </div>
 
     <div id="enrolledSection" style="display:none;">
-      <div class="section-header">
-        <span class="section-title">Kursus Kamu</span>
-      </div>
+      <div class="sec-head"><span class="sec-title">Kursus Kamu</span></div>
       <div class="enrolled-list" id="enrolledList"></div>
     </div>
 
     <div id="completedSection" style="display:none;">
-      <div class="section-header">
-        <span class="section-title">Pencapaian</span>
-      </div>
+      <div class="sec-head"><span class="sec-title">Pencapaian</span></div>
       <div class="badge-grid" id="badgeGrid"></div>
     </div>
 
     <div id="exploreSection" style="display:none;">
-      <div class="section-header">
-        <span class="section-title">Jelajahi Kursus</span>
-        <div class="explore-carousel-nav">
-          <button class="explore-carousel-btn" onclick="scrollExplore(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></button>
-          <button class="explore-carousel-btn" onclick="scrollExplore(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
+      <div class="sec-head">
+        <span class="sec-title">Jelajahi Kursus</span>
+        <div class="carousel-nav-row">
+          <button class="cnav-btn" onclick="scrollExplore(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <button class="cnav-btn" onclick="scrollExplore(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
         </div>
       </div>
-      <div class="explore-wrap"><div class="explore-grid" id="exploreGrid"></div></div>
+      <div class="explore-carousel" id="exploreGrid"></div>
     </div>
-
   </main>
 </div>
 
@@ -220,7 +282,6 @@
     </button>
     <h2 id="pmodalTitle">Ceritain sedikit tentang kamu</h2>
     <p class="pmodal-sub" id="pmodalSub">Biar Klaud.id bisa kasih rekomendasi kursus yang paling relevan buatmu.</p>
-
     <div class="pmodal-step active" id="pstep1">
       <div class="pmodal-q">Kamu saat ini sebagai apa?</div>
       <div class="pmodal-opts">
@@ -230,12 +291,8 @@
         <button class="popt" data-step="1" data-val="developer">Developer</button>
         <button class="popt" data-step="1" data-val="kreator">Kreator Konten</button>
       </div>
-      <div class="pmodal-nav">
-        <span class="pmodal-step-ind">1 / 3</span>
-        <button class="pmodal-next" id="pnext1" onclick="nextStep(1)" disabled>Lanjut</button>
-      </div>
+      <div class="pmodal-nav"><span class="pmodal-ind">1 / 3</span><button class="pmodal-next" id="pnext1" onclick="nextStep(1)" disabled>Lanjut</button></div>
     </div>
-
     <div class="pmodal-step" id="pstep2">
       <div class="pmodal-q">Apa tujuan utama kamu belajar Claude?</div>
       <div class="pmodal-opts">
@@ -245,281 +302,220 @@
         <button class="popt" data-step="2" data-val="coding">Build produk / app</button>
         <button class="popt" data-step="2" data-val="lainnya">Eksplorasi</button>
       </div>
-      <div class="pmodal-nav">
-        <span class="pmodal-step-ind">2 / 3</span>
-        <button class="pmodal-next" id="pnext2" onclick="nextStep(2)" disabled>Lanjut</button>
-      </div>
+      <div class="pmodal-nav"><span class="pmodal-ind">2 / 3</span><button class="pmodal-next" id="pnext2" onclick="nextStep(2)" disabled>Lanjut</button></div>
     </div>
-
     <div class="pmodal-step" id="pstep3">
       <div class="pmodal-q">Seberapa sering kamu pakai Claude atau AI sekarang?</div>
       <div class="pmodal-opts">
         <button class="popt" data-step="3" data-val="belum-pernah">Belum pernah</button>
         <button class="popt" data-step="3" data-val="sudah-mahir">Sudah pakai rutin</button>
       </div>
-      <div class="pmodal-nav">
-        <span class="pmodal-step-ind">3 / 3</span>
-        <button class="pmodal-next" id="pnext3" onclick="saveProfile()" disabled>Simpan</button>
-      </div>
+      <div class="pmodal-nav"><span class="pmodal-ind">3 / 3</span><button class="pmodal-next" id="pnext3" onclick="saveProfile()" disabled>Simpan</button></div>
     </div>
   </div>
 </div>
 
 <script>
-  const ALL_COURSES = {
-    'prompt-gratis':      { title: '20 Prompt Claude Terbaik',           contentLink: 'prompt-gratis-content.html',    salesLink: 'prompt-gratis.html',     desc: 'Prompt siap pakai untuk email, laporan, konten sosmed, dan lainnya.',          price: 'Gratis',     level: 'Beginner',     modules: 5 },
-    'mulai-claude':       { title: 'Mulai dengan Claude AI',              contentLink: 'mulai-claude-content.html',      salesLink: 'mulai-claude.html',      desc: 'Dari nol sampai bisa pakai Claude untuk kebutuhan sehari-hari dalam 1 jam.',   price: 'Gratis',     level: 'Beginner',     modules: 6 },
-    'kerja-sehari-hari':  { title: 'Claude untuk Pekerjaan Sehari-hari',  contentLink: 'kerja-sehari-hari-content.html', salesLink: 'kerja-sehari-hari.html', desc: 'Hemat 3-5 jam kerja per minggu dengan workflow Claude dan tools kantor kamu.', price: 'Rp 149.000', level: 'Beginner',     modules: 6 },
-    'bisnis-ukm':         { title: 'Claude untuk Bisnis dan UKM',         contentLink: 'bisnis-ukm-content.html',        salesLink: 'bisnis-ukm.html',        desc: 'Jalankan bisnis lebih efisien dengan Claude dan tools Indonesia sehari-hari.', price: 'Rp 149.000', level: 'Beginner',     modules: 6 },
-    'konten-copywriting': { title: 'Claude untuk Konten dan Copywriting',  contentLink: 'coming-soon.html',              salesLink: 'coming-soon.html',       desc: 'Build mesin konten: artikel, script, newsletter, landing page.',              price: 'Rp 199.000', level: 'Intermediate', modules: 6, comingSoon: true },
-    'analisis-data':      { title: 'Claude untuk Analisis Data',          contentLink: 'coming-soon.html',               salesLink: 'coming-soon.html',       desc: 'Ubah data mentah jadi insight dengan Google Sheets dan Claude Artifacts.',     price: 'Rp 199.000', level: 'Intermediate', modules: 6, comingSoon: true },
-    'build-automation':   { title: 'Build Automation dengan Claude',      contentLink: 'coming-soon.html',               salesLink: 'coming-soon.html',       desc: 'Buat 3 automation aktif dengan Zapier, Make, dan n8n yang jalan 24/7.',       price: 'Rp 299.000', level: 'Intermediate', modules: 7, comingSoon: true },
-    'ai-powered-app':     { title: 'Build AI-Powered App Sederhana',      contentLink: 'coming-soon.html',               salesLink: 'coming-soon.html',       desc: 'Buat web app AI live di GitHub Pages dengan landing page monetisasi.',         price: 'Rp 299.000', level: 'Advanced',     modules: 7, comingSoon: true },
-    'claude-api-dev':     { title: 'Claude API untuk Developer',          contentLink: 'coming-soon.html',               salesLink: 'coming-soon.html',       desc: 'Integrasikan Claude ke project nyata: streaming, tool use, caching, deploy.', price: 'Rp 399.000', level: 'Advanced',     modules: 7, comingSoon: true },
-    'jual-produk-ai':     { title: 'Build dan Jual Produk AI',            contentLink: 'coming-soon.html',               salesLink: 'coming-soon.html',       desc: 'Dari ide ke produk AI yang menghasilkan uang: Framer, Midtrans, WhatsApp.',   price: 'Rp 499.000', level: 'Advanced',     modules: 7, comingSoon: true },
-  };
+const ALL_COURSES = {
+  'prompt-gratis':      { title:'20 Prompt Claude Terbaik',          icon:'📋', thumb:'et1', contentLink:'prompt-gratis-content.html',    salesLink:'prompt-gratis.html',     desc:'Prompt siap pakai untuk email, laporan, konten sosmed.',          price:'Gratis',     level:'Beginner',     exThumb:'ex-t1', modules:5 },
+  'mulai-claude':       { title:'Mulai dengan Claude AI',             icon:'🤖', thumb:'et1', contentLink:'mulai-claude-content.html',      salesLink:'mulai-claude.html',      desc:'Dari nol sampai pakai Claude sehari-hari dalam 1 jam.',           price:'Gratis',     level:'Beginner',     exThumb:'ex-t1', modules:6 },
+  'kerja-sehari-hari':  { title:'Claude untuk Pekerjaan Sehari-hari', icon:'💼', thumb:'et2', contentLink:'kerja-sehari-hari-content.html', salesLink:'kerja-sehari-hari.html', desc:'Hemat 3-5 jam kerja per minggu dengan workflow Claude.',          price:'Rp 149.000', level:'Beginner',     exThumb:'ex-t1', modules:6 },
+  'bisnis-ukm':         { title:'Claude untuk Bisnis dan UKM',        icon:'🏪', thumb:'et3', contentLink:'bisnis-ukm-content.html',        salesLink:'bisnis-ukm.html',        desc:'Jalankan bisnis lebih efisien dengan Claude.',                   price:'Rp 149.000', level:'Beginner',     exThumb:'ex-t1', modules:6 },
+  'konten-copywriting': { title:'Claude untuk Konten & Copywriting',  icon:'✍️', thumb:'et4', contentLink:'coming-soon.html',              salesLink:'coming-soon.html',       desc:'Build mesin konten: artikel, script, newsletter, landing page.', price:'Rp 199.000', level:'Intermediate', exThumb:'ex-t2', modules:6, comingSoon:true },
+  'analisis-data':      { title:'Claude untuk Analisis Data',         icon:'📊', thumb:'et4', contentLink:'coming-soon.html',               salesLink:'coming-soon.html',       desc:'Ubah data mentah jadi insight dengan Google Sheets.',            price:'Rp 199.000', level:'Intermediate', exThumb:'ex-t2', modules:6, comingSoon:true },
+  'build-automation':   { title:'Build Automation dengan Claude',     icon:'⚡', thumb:'et4', contentLink:'coming-soon.html',               salesLink:'coming-soon.html',       desc:'Buat 3 automation aktif dengan Zapier, Make, dan n8n.',          price:'Rp 299.000', level:'Intermediate', exThumb:'ex-t2', modules:7, comingSoon:true },
+  'ai-powered-app':     { title:'Build AI-Powered App Sederhana',     icon:'🚀', thumb:'et4', contentLink:'coming-soon.html',               salesLink:'coming-soon.html',       desc:'Buat web app AI live di GitHub Pages.',                          price:'Rp 299.000', level:'Advanced',     exThumb:'ex-t3', modules:7, comingSoon:true },
+  'claude-api-dev':     { title:'Claude API untuk Developer',         icon:'🔌', thumb:'et4', contentLink:'coming-soon.html',               salesLink:'coming-soon.html',       desc:'Integrasikan Claude ke project nyata: streaming, tool use.',     price:'Rp 399.000', level:'Advanced',     exThumb:'ex-t3', modules:7, comingSoon:true },
+  'jual-produk-ai':     { title:'Build dan Jual Produk AI',           icon:'💰', thumb:'et4', contentLink:'coming-soon.html',               salesLink:'coming-soon.html',       desc:'Dari ide ke produk AI yang menghasilkan uang.',                  price:'Rp 499.000', level:'Advanced',     exThumb:'ex-t3', modules:7, comingSoon:true },
+};
 
-  const ROLE_RECS = {
-    'karyawan':       ['kerja-sehari-hari', 'mulai-claude', 'analisis-data'],
-    'mahasiswa':      ['prompt-gratis', 'mulai-claude', 'kerja-sehari-hari'],
-    'pemilik-bisnis': ['bisnis-ukm', 'konten-copywriting', 'build-automation'],
-    'developer':      ['claude-api-dev', 'build-automation', 'ai-powered-app'],
-    'kreator':        ['konten-copywriting', 'bisnis-ukm', 'build-automation'],
-  };
-  const GOAL_RECS = {
-    'efisiensi-kerja': ['kerja-sehari-hari', 'analisis-data'],
-    'bisnis':          ['bisnis-ukm', 'konten-copywriting'],
-    'konten':          ['konten-copywriting', 'bisnis-ukm'],
-    'coding':          ['claude-api-dev', 'ai-powered-app'],
-    'lainnya':         ['prompt-gratis', 'mulai-claude'],
-  };
+let progressMap = {}, userProfile = null, currentEmail = null;
+let pAnswers = { role:null, goal:null, experience:null };
 
-  let progressMap  = {};
-  let userProfile  = null;
-  let currentEmail = null;
-  let pAnswers     = { role: null, goal: null, experience: null };
+document.querySelectorAll('.popt').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var step = btn.getAttribute('data-step'), val = btn.getAttribute('data-val');
+    document.querySelectorAll('[data-step="'+step+'"]').forEach(function(b){b.classList.remove('selected');});
+    btn.classList.add('selected');
+    if(step==='1'){pAnswers.role=val;document.getElementById('pnext1').disabled=false;}
+    if(step==='2'){pAnswers.goal=val;document.getElementById('pnext2').disabled=false;}
+    if(step==='3'){pAnswers.experience=val;document.getElementById('pnext3').disabled=false;}
+  });
+});
 
-  document.querySelectorAll('.popt').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var step = btn.getAttribute('data-step');
-      var val  = btn.getAttribute('data-val');
-      document.querySelectorAll('[data-step="' + step + '"]').forEach(function(b) { b.classList.remove('selected'); });
-      btn.classList.add('selected');
-      if (step === '1') { pAnswers.role       = val; document.getElementById('pnext1').disabled = false; }
-      if (step === '2') { pAnswers.goal       = val; document.getElementById('pnext2').disabled = false; }
-      if (step === '3') { pAnswers.experience = val; document.getElementById('pnext3').disabled = false; }
-    });
+function openProfileModal(editMode) {
+  pAnswers={role:(userProfile&&userProfile.role)||null,goal:(userProfile&&userProfile.goal)||null,experience:(userProfile&&userProfile.experience)||null};
+  document.getElementById('pmodalTitle').textContent=editMode?'Edit Profil Kamu':'Ceritain sedikit tentang kamu';
+  document.getElementById('pmodalSub').textContent=editMode?'Update info kamu di bawah ini.':'Biar Klaud.id bisa kasih rekomendasi kursus yang paling relevan buatmu.';
+  ['pstep1','pstep2','pstep3'].forEach(function(id,i){document.getElementById(id).classList.toggle('active',i===0);});
+  document.querySelectorAll('[data-step="1"]').forEach(function(b){b.classList.toggle('selected',b.getAttribute('data-val')===pAnswers.role);});
+  document.querySelectorAll('[data-step="2"]').forEach(function(b){b.classList.toggle('selected',b.getAttribute('data-val')===pAnswers.goal);});
+  document.querySelectorAll('[data-step="3"]').forEach(function(b){b.classList.toggle('selected',b.getAttribute('data-val')===pAnswers.experience);});
+  document.getElementById('pnext1').disabled=!pAnswers.role;
+  document.getElementById('pnext2').disabled=!pAnswers.goal;
+  document.getElementById('pnext3').disabled=!pAnswers.experience;
+  document.getElementById('profileModal').style.display='flex';
+}
+function nextStep(n){document.getElementById('pstep'+n).classList.remove('active');document.getElementById('pstep'+(n+1)).classList.add('active');}
+async function saveProfile(){
+  document.getElementById('pnext3').textContent='Menyimpan...';document.getElementById('pnext3').disabled=true;
+  try{
+    await sbClient.from('profiles').upsert({email:currentEmail,full_name:document.getElementById('sideName').textContent,role:pAnswers.role,goal:pAnswers.goal,experience:pAnswers.experience,updated_at:new Date().toISOString()},{onConflict:'email'});
+    userProfile=Object.assign({},userProfile,pAnswers);
+  }catch(e){console.error(e);}
+  document.getElementById('profileModal').style.display='none';
+}
+
+async function loadProgress(email){
+  try{
+    var r=await sbClient.from('module_completions').select('course_slug,module_num').eq('email',email);
+    if(r.data){
+      r.data.forEach(function(row){
+        if(!progressMap[row.course_slug])progressMap[row.course_slug]=new Set();
+        progressMap[row.course_slug].add(row.module_num);
+      });
+      Object.keys(progressMap).forEach(function(slug){localStorage.setItem('klaud_progress_'+slug,progressMap[slug].size);});
+    }
+  }catch(e){}
+}
+function getProgress(slug){
+  var total=(ALL_COURSES[slug]&&ALL_COURSES[slug].modules)||0;
+  if(total===0)return{done:0,total:0,pct:100};
+  var done=(progressMap[slug]&&progressMap[slug].size)||parseInt(localStorage.getItem('klaud_progress_'+slug)||'0');
+  return{done:done,total:total,pct:Math.round((done/total)*100)};
+}
+function getInitials(name){return name.split(' ').map(function(w){return w[0];}).slice(0,2).join('').toUpperCase();}
+
+async function notifyMe(btn,slug){
+  btn.disabled=true;
+  try{
+    var s=await sbClient.auth.getSession();
+    if(s.data.session){await sbClient.from('waitlist').upsert({email:s.data.session.user.email,course_slug:slug},{onConflict:'email,course_slug',ignoreDuplicates:true});}
+  }catch(e){}
+  btn.classList.add('notified');btn.textContent='Terdaftar ✓';
+}
+function scrollExplore(dir){document.getElementById('exploreGrid').scrollBy({left:dir*224,behavior:'smooth'});}
+async function logout(){await sbClient.auth.signOut();window.location.href='index.html';}
+
+async function init(){
+  try{await _init();}catch(err){
+    console.error(err);
+    document.getElementById('loadingScreen').style.display='none';
+    document.getElementById('mainLayout').style.display='grid';
+  }
+}
+async function _init(){
+  var sr=await sbClient.auth.getSession();
+  var session=sr.data.session;
+  if(!session){window.location.href='login.html';return;}
+  currentEmail=session.user.email;
+  var name=(session.user.user_metadata&&session.user.user_metadata.full_name)||currentEmail.split('@')[0];
+  var joinDate=new Date(session.user.created_at).toLocaleDateString('id-ID',{month:'long',year:'numeric'});
+  var initials=getInitials(name);
+  document.getElementById('navAvatar').textContent=initials;
+  document.getElementById('navUname').textContent=name;
+  document.getElementById('sideName').textContent=name;
+  document.getElementById('sideEmail').textContent=currentEmail;
+  document.getElementById('sideSince').textContent='Bergabung '+joinDate;
+  var hour=new Date().getHours();
+  var greet=hour<12?'Selamat pagi':hour<17?'Selamat siang':'Selamat malam';
+  var firstName=name.split(' ')[0];
+  document.getElementById('greetEyebrow').textContent=greet+' ·';
+  document.getElementById('greetH1').innerHTML='Selamat datang kembali,<br><em>'+firstName+'</em>';
+
+  try{var pr=await sbClient.from('profiles').select('*').eq('email',currentEmail).maybeSingle();userProfile=pr.data;}catch(e){userProfile=null;}
+  await loadProgress(currentEmail);
+  try{
+    await sbClient.from('enrollments').upsert(
+      {email:currentEmail,course_slug:'prompt-gratis',course_name:'20 Prompt Claude Terbaik',type:'free'},
+      {onConflict:'email,course_slug',ignoreDuplicates:true}
+    );
+  }catch(e){}
+
+  var er=await sbClient.from('enrollments').select('course_slug,course_name,type,enrolled_at').eq('email',currentEmail).order('enrolled_at',{ascending:false});
+  var enrollments=(er.data||[]).filter(function(e){return ALL_COURSES[e.course_slug];});
+  var enrolledSlugs=new Set(enrollments.map(function(e){return e.course_slug;}));
+
+  if(!userProfile||!userProfile.role)setTimeout(function(){openProfileModal(false);},800);
+
+  var activeCourses=[],completedCourses=[],totalModules=0;
+  Object.keys(progressMap).forEach(function(slug){totalModules+=(progressMap[slug]&&progressMap[slug].size)||0;});
+  enrollments.forEach(function(c){
+    var prog=getProgress(c.course_slug);
+    if(prog.pct===100)completedCourses.push(c.course_slug);
+    else activeCourses.push(c);
   });
 
-  function openProfileModal(editMode) {
-    pAnswers = { role: (userProfile && userProfile.role) || null, goal: (userProfile && userProfile.goal) || null, experience: (userProfile && userProfile.experience) || null };
-    document.getElementById('pmodalTitle').textContent = editMode ? 'Edit Profil Kamu' : 'Ceritain sedikit tentang kamu';
-    document.getElementById('pmodalSub').textContent   = editMode ? 'Update info kamu di bawah ini.' : 'Biar Klaud.id bisa kasih rekomendasi kursus yang paling relevan buatmu.';
-    ['pstep1','pstep2','pstep3'].forEach(function(id, i) {
-      document.getElementById(id).classList.toggle('active', i === 0);
+  var statC=completedCourses.length,statE=enrollments.length;
+  document.getElementById('statCompleted').textContent=statC;
+  document.getElementById('statEnrolled').textContent=statE;
+  document.getElementById('statModules').textContent=totalModules;
+  document.getElementById('statCompletedBig').textContent=statC;
+  document.getElementById('statEnrolledBig').textContent=statE;
+  document.getElementById('statModulesBig').textContent=totalModules;
+
+  if(statC>0){
+    var pill=document.getElementById('greetPill');
+    pill.textContent='✦  '+statC+' kursus diselesaikan';
+    pill.style.display='flex';
+  }
+  document.getElementById('greetSub').textContent=statC>0?statC+' kursus selesai — luar biasa!':activeCourses.length>0?'Lanjutkan perjalanan belajarmu.':'Mulai kursus pertamamu hari ini.';
+
+  var thumbs=['et1','et2','et3','et4'];
+  if(activeCourses.length>0){
+    document.getElementById('enrolledSection').style.display='block';
+    var list=document.getElementById('enrolledList');
+    activeCourses.forEach(function(c,i){
+      var meta=ALL_COURSES[c.course_slug],prog=getProgress(c.course_slug);
+      var btnLabel=prog.done>0?'Lanjutkan':'Mulai';
+      list.innerHTML+='<div class="enrolled-card" onclick="location.href=\''+meta.contentLink+'\'">'
+        +'<span class="enrolled-idx">'+String(i+1).padStart(2,'0')+'</span>'
+        +'<div class="enrolled-thumb '+thumbs[i%4]+'">'+meta.icon+'</div>'
+        +'<div class="enrolled-info"><h3>'+meta.title+'</h3>'
+        +'<div class="prog-row"><div class="prog-bar"><div class="prog-fill" style="width:'+prog.pct+'%"></div></div>'
+        +'<span class="prog-lbl">'+prog.done+' / '+prog.total+' bagian</span></div></div>'
+        +'<a href="'+meta.contentLink+'" class="resume-btn" onclick="event.stopPropagation()">'+btnLabel+' &rarr;</a>'
+        +'</div>';
     });
-    document.querySelectorAll('[data-step="1"]').forEach(function(b) { b.classList.toggle('selected', b.getAttribute('data-val') === pAnswers.role); });
-    document.querySelectorAll('[data-step="2"]').forEach(function(b) { b.classList.toggle('selected', b.getAttribute('data-val') === pAnswers.goal); });
-    document.querySelectorAll('[data-step="3"]').forEach(function(b) { b.classList.toggle('selected', b.getAttribute('data-val') === pAnswers.experience); });
-    document.getElementById('pnext1').disabled = !pAnswers.role;
-    document.getElementById('pnext2').disabled = !pAnswers.goal;
-    document.getElementById('pnext3').disabled = !pAnswers.experience;
-    document.getElementById('profileModal').style.display = 'flex';
   }
 
-  function nextStep(current) {
-    document.getElementById('pstep' + current).classList.remove('active');
-    document.getElementById('pstep' + (current + 1)).classList.add('active');
-  }
-
-  async function saveProfile() {
-    document.getElementById('pnext3').textContent = 'Menyimpan...';
-    document.getElementById('pnext3').disabled = true;
-    try {
-      await sbClient.from('profiles').upsert({
-        email: currentEmail,
-        full_name: document.getElementById('sideName').textContent,
-        role: pAnswers.role, goal: pAnswers.goal, experience: pAnswers.experience,
-        updated_at: new Date().toISOString(),
-      }, { onConflict: 'email' });
-      userProfile = Object.assign({}, userProfile, pAnswers);
-    } catch(e) { console.error(e); }
-    document.getElementById('profileModal').style.display = 'none';
-  }
-
-  async function loadProgress(email) {
-    try {
-      var result = await sbClient.from('module_completions').select('course_slug, module_num').eq('email', email);
-      if (result.data) {
-        result.data.forEach(function(row) {
-          if (!progressMap[row.course_slug]) progressMap[row.course_slug] = new Set();
-          progressMap[row.course_slug].add(row.module_num);
-        });
-        Object.keys(progressMap).forEach(function(slug) {
-          localStorage.setItem('klaud_progress_' + slug, progressMap[slug].size);
-        });
-      }
-    } catch(e) {}
-  }
-
-  function getProgress(slug) {
-    var total = (ALL_COURSES[slug] && ALL_COURSES[slug].modules) || 0;
-    if (total === 0) return { done: 0, total: 0, pct: 100 };
-    var done = (progressMap[slug] && progressMap[slug].size) || parseInt(localStorage.getItem('klaud_progress_' + slug) || '0');
-    return { done: done, total: total, pct: Math.round((done / total) * 100) };
-  }
-
-  function getInitials(name) {
-    return name.split(' ').map(function(w) { return w[0]; }).slice(0, 2).join('').toUpperCase();
-  }
-
-  async function notifyMe(btn, slug) {
-    btn.disabled = true;
-    try {
-      var s = await sbClient.auth.getSession();
-      if (s.data.session) {
-        await sbClient.from('waitlist').upsert(
-          { email: s.data.session.user.email, course_slug: slug },
-          { onConflict: 'email,course_slug', ignoreDuplicates: true }
-        );
-      }
-    } catch(e) {}
-    btn.classList.add('notified');
-    btn.textContent = 'Terdaftar';
-  }
-
-    async function init() {
-    try { await _init(); } catch(err) {
-      console.error('Dashboard init error:', err);
-      document.getElementById('loadingScreen').style.display = 'none';
-      document.getElementById('mainLayout').style.display    = 'flex';
-    }
-  }
-
-  async function _init() {
-    var sessionResult = await sbClient.auth.getSession();
-    var session = sessionResult.data.session;
-    if (!session) { window.location.href = 'login.html'; return; }
-
-    currentEmail = session.user.email;
-    var name     = (session.user.user_metadata && session.user.user_metadata.full_name) || currentEmail.split('@')[0];
-    var joinDate = new Date(session.user.created_at).toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
-    var initials = getInitials(name);
-
-    document.getElementById('navAvatar').textContent  = initials;
-    document.getElementById('navUname').textContent   = name;
-    document.getElementById('sideInitials').textContent = initials;
-    document.getElementById('sideName').textContent   = name;
-    document.getElementById('sideEmail').textContent  = currentEmail;
-    document.getElementById('sideSince').textContent  = 'Bergabung ' + joinDate;
-
-    var hour  = new Date().getHours();
-    var greet = hour < 12 ? 'Selamat pagi' : hour < 17 ? 'Selamat siang' : 'Selamat malam';
-    document.getElementById('greetingText').textContent = greet + ', ' + name.split(' ')[0] + '.';
-
-    try {
-      var profResult = await sbClient.from('profiles').select('*').eq('email', currentEmail).maybeSingle();
-      userProfile = profResult.data;
-    } catch(e) { userProfile = null; }
-
-    await loadProgress(currentEmail);
-
-    try {
-      await sbClient.from('enrollments').upsert(
-        { email: currentEmail, course_slug: 'prompt-gratis', course_name: '20 Prompt Claude Terbaik', type: 'free' },
-        { onConflict: 'email,course_slug', ignoreDuplicates: true }
-      );
-    } catch(e) {}
-
-    var enrResult  = await sbClient.from('enrollments').select('course_slug, course_name, type, enrolled_at').eq('email', currentEmail).order('enrolled_at', { ascending: false });
-    var enrollments = (enrResult.data || []).filter(function(e) { return ALL_COURSES[e.course_slug]; });
-    var enrolledSlugs = new Set(enrollments.map(function(e) { return e.course_slug; }));
-
-    if (!userProfile || !userProfile.role) setTimeout(function() { openProfileModal(false); }, 800);
-
-    var activeCourses    = [];
-    var completedCourses = [];
-    enrollments.forEach(function(c) {
-      var prog = getProgress(c.course_slug);
-      if (prog.pct === 100) completedCourses.push(c.course_slug);
-      else activeCourses.push(c);
+  if(completedCourses.length>0){
+    document.getElementById('completedSection').style.display='block';
+    var bg=document.getElementById('badgeGrid');
+    completedCourses.forEach(function(slug){
+      var meta=ALL_COURSES[slug];
+      var today=new Date().toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
+      bg.innerHTML+='<div class="badge-card">'
+        +'<div class="badge-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg></div>'
+        +'<div><div class="badge-title">'+meta.title+'</div><span class="badge-pill">Selesai</span><div class="badge-meta">'+today+'</div></div>'
+        +'</div>';
     });
-
-    document.getElementById('statEnrolled').textContent  = enrollments.length;
-    document.getElementById('statCompleted').textContent = completedCourses.length;
-
-    if (completedCourses.length > 0) {
-      document.getElementById('greetingSub').textContent = completedCourses.length + ' kursus selesai — luar biasa!';
-    } else if (activeCourses.length > 0) {
-      document.getElementById('greetingSub').textContent = 'Lanjutkan perjalanan belajarmu.';
-    } else {
-      document.getElementById('greetingSub').textContent = 'Mulai kursus pertamamu hari ini.';
-    }
-
-    // Active enrolled
-    if (activeCourses.length > 0) {
-      document.getElementById('enrolledSection').style.display = 'block';
-      var list = document.getElementById('enrolledList');
-      activeCourses.forEach(function(c, i) {
-        var meta     = ALL_COURSES[c.course_slug];
-        var prog     = getProgress(c.course_slug);
-        var btnLabel = prog.done > 0 ? 'Lanjutkan' : 'Mulai';
-        list.innerHTML += '<div class="enrolled-card" onclick="location.href=\'' + meta.contentLink + '\'">'
-          + '<span class="enrolled-index">' + String(i + 1).padStart(2, '0') + '</span>'
-          + '<div class="enrolled-info">'
-          + '<h3>' + meta.title + '</h3>'
-          + '<div class="enrolled-progress-row">'
-          + '<div class="cpb-wrap"><div class="cpb-fill" style="width:' + prog.pct + '%"></div></div>'
-          + '<span class="cpb-label">' + prog.done + ' / ' + prog.total + ' bagian</span>'
-          + '</div></div>'
-          + '<a href="' + meta.contentLink + '" class="resume-btn" onclick="event.stopPropagation()">' + btnLabel + ' &rarr;</a>'
-          + '</div>';
-      });
-    }
-
-    // Earned badges
-    if (completedCourses.length > 0) {
-      document.getElementById('completedSection').style.display = 'block';
-      var bgrid = document.getElementById('badgeGrid');
-      completedCourses.forEach(function(slug) {
-        var meta = ALL_COURSES[slug];
-        bgrid.innerHTML += '<div class="badge-card">'
-          + '<div class="badge-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg></div>'
-          + '<h4>' + meta.title + '</h4>'
-          + '<div class="badge-pill">Selesai</div>'
-          + '</div>';
-      });
-    }
-
-    // Explore
-    var unenrolled = Object.keys(ALL_COURSES).filter(function(slug) { return !enrolledSlugs.has(slug); });
-    if (unenrolled.length > 0) {
-      document.getElementById('exploreSection').style.display = 'block';
-      var grid = document.getElementById('exploreGrid');
-      unenrolled.forEach(function(slug) {
-        var meta   = ALL_COURSES[slug];
-        var ctaBtn = meta.comingSoon
-          ? '<button class="btn-notify" onclick="notifyMe(this,\''+slug+'\')">Beritahu saya</button>'
-          : '<a href="' + meta.salesLink + '" class="explore-btn">Lihat Kursus &rarr;</a>';
-        grid.innerHTML += '<div class="explore-card">'
-          + '<div class="explore-level">' + meta.level + '</div>'
-          + '<h4>' + meta.title + '</h4>'
-          + '<p>' + meta.desc + '</p>'
-          + '<div class="explore-price">' + meta.price + '</div>'
-          + ctaBtn + '</div>';
-      });
-    }
-
-    document.getElementById('loadingScreen').style.display = 'none';
-    document.getElementById('mainLayout').style.display    = 'flex';
   }
 
-  async function logout() {
-    await sbClient.auth.signOut();
-    window.location.href = 'index.html';
+  var unenrolled=Object.keys(ALL_COURSES).filter(function(slug){return!enrolledSlugs.has(slug);});
+  if(unenrolled.length>0){
+    document.getElementById('exploreSection').style.display='block';
+    var grid=document.getElementById('exploreGrid');
+    unenrolled.forEach(function(slug){
+      var meta=ALL_COURSES[slug];
+      var cta=meta.comingSoon
+        ?'<button class="btn-notify" onclick="notifyMe(this,\''+slug+'\')">Beritahu saya</button>'
+        :'<a href="'+meta.salesLink+'" class="btn-view">Lihat Kursus &rarr;</a>';
+      grid.innerHTML+='<div class="explore-card">'
+        +'<div class="ex-thumb '+meta.exThumb+'">'+meta.icon+'</div>'
+        +'<div class="ex-body">'
+        +'<div class="ex-lv">'+meta.level+'</div>'
+        +'<div class="ex-title">'+meta.title+'</div>'
+        +'<div class="ex-desc">'+meta.desc+'</div>'
+        +'<div class="ex-price">'+meta.price+'</div>'
+        +cta+'</div></div>';
+    });
   }
 
-  init();
+  document.getElementById('loadingScreen').style.display='none';
+  document.getElementById('mainLayout').style.display='grid';
+}
+init();
 </script>
 </body>
 </html>
