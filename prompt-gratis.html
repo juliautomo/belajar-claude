@@ -4,24 +4,35 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>20 Prompt Claude Terbaik — Gratis | Klaud.id</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-    :root {
-    --bg: #F7F7F5; --surface: #FFFFFF;
-    --ink: #111111; --blue: #4A72D6; --blue-pale: #EEF2FF;
-    --green: #1D9E75; --green-pale: #ECFDF5;
-    --muted: #6B7280; --border: #E5E5E3;
+      :root {
+    --bg: #FAFAFA; --surface: #FFFFFF; --surface-2: #F5F5F7;
+    --border: #E8E8E8; --border-strong: #D0D0D0;
+    --ink: var(--ink); --ink-2: #777777; --ink-3: #BBBBBB;
+    --accent: #6C47FF; --accent-2: #9B7DFF;
+    --accent-dim: rgba(108,71,255,0.08); --accent-glow: rgba(108,71,255,0.18);
+    --green: #16A34A; --green-dim: rgba(22,163,74,0.08); --green-border: rgba(22,163,74,0.2);
     --gold: #EF9F27; --gold-pale: rgba(239,159,39,0.08);
     --shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.05);
     --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 2px 8px rgba(0,0,0,0.04);
+    --serif: 'Instrument Serif', Georgia, serif;
+    --font: 'Geist', sans-serif;
+    --r: 14px;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
   body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: var(--font);
     background: var(--ink);
     color: var(--ink);
     overflow-x: hidden; -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image: radial-gradient(circle, #D8D8DC 1px, transparent 1px);
+    background-size: 26px 26px; opacity: 0.5;
+    mask-image: radial-gradient(ellipse 90% 60% at 50% 0%, black 20%, transparent 80%);
   }
 
   /* NAV */
@@ -33,8 +44,8 @@
     backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(55, 138, 221, 0.12);
   }
-  .logo { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--ink); text-decoration: none; letter-spacing: -0.3px; }
-  .logo span { color: var(--blue); }
+  .logo { font-family: var(--serif); font-size: 22px; color: var(--ink); text-decoration: none; letter-spacing: -0.3px; }
+  .logo span { color: var(--accent); }
   .nav-back {
     font-size: 14px; font-weight: 500; color: var(--blue-light);
     text-decoration: none; display: flex; align-items: center; gap: 6px;
@@ -84,14 +95,14 @@
     line-height: 1.08; letter-spacing: -2px; margin-bottom: 20px;
     animation: fadeUp 0.6s 0.1s ease both;
   }
-  .hero h1 .accent { color: var(--blue); }
+  .hero h1 .accent { color: var(--accent); }
   .hero h1 .num {
     font-size: clamp(52px, 9vw, 90px); color: var(--gold);
     display: block; line-height: 1;
   }
 
   .hero-sub {
-    font-size: 17px; color: var(--muted); line-height: 1.7;
+    font-size: 17px; color: var(--ink-2); line-height: 1.7;
     max-width: 520px; margin: 0 auto 36px;
     animation: fadeUp 0.6s 0.2s ease both;
   }
@@ -108,7 +119,7 @@
     font-size: 18px; font-weight: 700; margin-bottom: 6px;
   }
   .signup-box p {
-    font-size: 13px; color: var(--muted); margin-bottom: 20px;
+    font-size: 13px; color: var(--ink-2); margin-bottom: 20px;
   }
   .form-group { display: flex; flex-direction: column; gap: 10px; }
   .form-row { display: flex; gap: 10px; }
@@ -120,10 +131,10 @@
     font-family: 'Plus Jakarta Sans', sans-serif;
     outline: none; transition: border-color 0.2s;
   }
-  .form-input::placeholder { color: var(--muted); }
-  .form-input:focus { border-color: var(--blue); }
+  .form-input::placeholder { color: var(--ink-2); }
+  .form-input:focus { border-color: var(--accent); }
   .btn-download {
-    width: 100%; background: var(--blue); color: #fff;
+    width: 100%; background: var(--accent); color: #fff;
     border: none; border-radius: 10px; padding: 14px;
     font-size: 15px; font-weight: 700; cursor: pointer;
     font-family: 'Plus Jakarta Sans', sans-serif;
@@ -132,7 +143,7 @@
   }
   .btn-download:hover { background: #2a72c4; transform: translateY(-1px); }
   .form-note {
-    font-size: 12px; color: var(--muted); text-align: center; margin-top: 10px;
+    font-size: 12px; color: var(--ink-2); text-align: center; margin-top: 10px;
   }
 
   /* PREVIEW SECTION */
@@ -140,14 +151,14 @@
   .container { max-width: 1000px; margin: 0 auto; }
   .section-label {
     font-size: 12px; font-weight: 700; letter-spacing: 2px;
-    color: var(--blue); text-transform: uppercase; margin-bottom: 12px;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 12px;
     font-family: monospace;
   }
   .section-title {
     font-size: clamp(26px, 4vw, 38px); font-weight: 800;
     letter-spacing: -1px; line-height: 1.15; margin-bottom: 12px;
   }
-  .section-sub { font-size: 15px; color: var(--muted); line-height: 1.75; margin-bottom: 48px; }
+  .section-sub { font-size: 15px; color: var(--ink-2); line-height: 1.75; margin-bottom: 48px; }
 
   /* PROMPT PREVIEW CARDS */
   .prompts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
@@ -160,7 +171,7 @@
   }
   .prompt-card:hover { border-color: rgba(55,138,221,0.35); background: rgba(55,138,221,0.06); }
   .prompt-num {
-    font-size: 28px; font-weight: 800; color: var(--blue);
+    font-size: 28px; font-weight: 800; color: var(--accent);
     font-family: monospace; line-height: 1;
     margin-bottom: 4px;
   }
@@ -171,7 +182,7 @@
     letter-spacing: 0.5px;
   }
   .prompt-preview {
-    font-size: 12px; color: var(--muted); line-height: 1.6;
+    font-size: 12px; color: var(--ink-2); line-height: 1.6;
     font-family: monospace;
     background: rgba(12,68,124,0.5);
     border-radius: 8px; padding: 10px 12px;
@@ -200,7 +211,7 @@
   }
   .benefit-icon { font-size: 28px; margin-bottom: 12px; }
   .benefit-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
-  .benefit-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .benefit-card p { font-size: 13px; color: var(--ink-2); line-height: 1.6; }
 
   /* CTA BOTTOM */
   .cta-bottom {
@@ -209,7 +220,7 @@
     padding: 72px 24px; text-align: center;
   }
   .cta-bottom h2 { font-size: clamp(24px, 4vw, 36px); font-weight: 800; letter-spacing: -1px; margin-bottom: 12px; }
-  .cta-bottom p { font-size: 15px; color: var(--muted); margin-bottom: 32px; }
+  .cta-bottom p { font-size: 15px; color: var(--ink-2); margin-bottom: 32px; }
 
   /* MODAL */
   .modal-overlay {
@@ -229,9 +240,9 @@
   .modal-overlay.active .modal { transform: scale(1); }
   .modal-icon { font-size: 48px; margin-bottom: 16px; }
   .modal h3 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
-  .modal p { font-size: 14px; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
+  .modal p { font-size: 14px; color: var(--ink-2); margin-bottom: 24px; line-height: 1.6; }
   .modal .btn-download { max-width: 300px; margin: 0 auto 12px; }
-  .modal-sub { font-size: 12px; color: var(--muted); }
+  .modal-sub { font-size: 12px; color: var(--ink-2); }
 
   /* FOOTER */
   footer {
@@ -239,7 +250,7 @@
     border: 1px solid var(--border);
     text-align: center;
   }
-  footer p { font-size: 12px; color: var(--muted); }
+  footer p { font-size: 12px; color: var(--ink-2); }
   footer a { color: var(--blue-light); text-decoration: none; }
 
   @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
@@ -252,12 +263,12 @@
   /* ── LIGHT THEME OVERRIDES ──────────────────────────────── */
   body { background: var(--bg) !important; color: var(--ink) !important; }
   nav {
-    background: rgba(255,255,255,0.88) !important;
+    background: rgba(250,250,250,0.88) !important;
     border-bottom: 1px solid var(--border) !important;
   }
   .logo { color: var(--ink) !important; }
-  .logo span { color: var(--blue) !important; }
-  .nav-back { color: var(--muted) !important; }
+  .logo span { color: var(--accent) !important; }
+  .nav-back { color: var(--ink-2) !important; }
   .nav-back:hover { color: var(--ink) !important; }
   .hero-bg { background: radial-gradient(ellipse 80% 60% at 60% 0%, rgba(74,114,214,0.1) 0%, transparent 70%) !important; }
   .hero-grid {
@@ -266,8 +277,8 @@
       linear-gradient(90deg, rgba(74,114,214,0.05) 1px, transparent 1px) !important;
   }
   .hero h1, .hero h2, h1, h2 { color: var(--ink) !important; }
-  .hero-sub, .hero p, .section-sub { color: var(--muted) !important; }
-  .section-label { color: var(--blue) !important; }
+  .hero-sub, .hero p, .section-sub { color: var(--ink-2) !important; }
+  .section-label { color: var(--accent) !important; }
   .section-title { color: var(--ink) !important; }
 
   /* Cards & surfaces */
@@ -286,7 +297,7 @@
   .module-card p, .feature-card p, .why-card p,
   .course-card p, .detail-card p, .faq-item p,
   .pricing-card p, .bonus-card p {
-    color: var(--muted) !important;
+    color: var(--ink-2) !important;
   }
 
   /* Section backgrounds */
@@ -299,10 +310,10 @@
   .pricing .section-sub { color: var(--blue-light) !important; }
   .pricing-card { background: rgba(255,255,255,0.06) !important; border-color: rgba(255,255,255,0.12) !important; }
   .pricing-card h3, .pricing-card p, .pricing-card li { color: rgba(255,255,255,0.85) !important; }
-  .pricing-card.featured { background: var(--blue) !important; border-color: var(--blue) !important; }
+  .pricing-card.featured { background: var(--accent) !important; border-color: var(--accent) !important; }
 
   /* Testimonials */
-  .testi-card blockquote { color: var(--muted) !important; }
+  .testi-card blockquote { color: var(--ink-2) !important; }
   .testi-author .name { color: var(--ink) !important; }
 
   /* Form / email inputs */
@@ -311,7 +322,7 @@
     border: 1.5px solid var(--border) !important;
     color: var(--ink) !important;
   }
-  .email-form input::placeholder { color: var(--muted) !important; }
+  .email-form input::placeholder { color: var(--ink-2) !important; }
 
   /* Instructor / about-visual */
   .about-visual, .instructor-card { background: var(--ink) !important; }
@@ -327,11 +338,11 @@
 
   /* Breadcrumb / tags */
   .hero-badge {
-    background: var(--blue-pale) !important;
+    background: var(--accent-dim) !important;
     border-color: rgba(74,114,214,0.25) !important;
-    color: var(--blue) !important;
+    color: var(--accent) !important;
   }
-  .tag-blue  { background: var(--blue-pale) !important; color: var(--blue) !important; }
+  .tag-blue  { background: var(--accent-dim) !important; color: var(--accent) !important; }
   .tag-green { background: rgba(29,158,117,0.12) !important; color: #117A57 !important; }
   .tag-gold  { background: rgba(239,159,39,0.12) !important; color: #A0650A !important; }
   .course-tag { border-radius: 100px !important; }
@@ -339,16 +350,16 @@
   /* Dividers */
   .hero-stats { border-top-color: var(--border) !important; }
   .stat .num { color: var(--ink) !important; }
-  .stat .lbl { color: var(--muted) !important; }
+  .stat .lbl { color: var(--ink-2) !important; }
 
   /* Buttons */
   .btn-primary { background: var(--ink) !important; color: #fff !important; }
-  .btn-primary:hover { background: var(--blue) !important; }
+  .btn-primary:hover { background: var(--accent) !important; }
   .btn-secondary {
     background: transparent !important; color: var(--ink) !important;
     border: 1.5px solid var(--border) !important;
   }
-  .btn-secondary:hover { background: var(--blue-pale) !important; border-color: var(--blue) !important; }
+  .btn-secondary:hover { background: var(--accent-dim) !important; border-color: var(--accent) !important; }
 
   /* Google Fonts: add light weight */
 
@@ -471,7 +482,7 @@ Buat ringkasan eksekutif...
         <div style="font-size:32px;margin-bottom:12px">🔒</div>
         <h4>+ 15 Prompt Lainnya</h4>
         <p style="font-size:13px;color:var(--blue-light);margin-top:8px;line-height:1.6">Presentasi, Analisis Riset, Keuangan, Produktivitas, Akademik, dan lainnya</p>
-        <button onclick="scrollToForm()" style="margin-top:16px;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;">
+        <button onclick="scrollToForm()" style="margin-top:16px;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;">
           Download Gratis →
         </button>
       </div>

@@ -4,44 +4,55 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Segera Hadir — Klaud.id</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <style>
-  :root {
-    --bg: #F7F7F5; --surface: #FFFFFF;
-    --ink: #111111; --blue: #4A72D6; --blue-pale: #EEF2FF;
-    --green: #1D9E75; --green-pale: #ECFDF5;
-    --muted: #6B7280; --border: #E5E5E3;
+    :root {
+    --bg: #FAFAFA; --surface: #FFFFFF; --surface-2: #F5F5F7;
+    --border: #E8E8E8; --border-strong: #D0D0D0;
+    --ink: var(--ink); --ink-2: #777777; --ink-3: #BBBBBB;
+    --accent: #6C47FF; --accent-2: #9B7DFF;
+    --accent-dim: rgba(108,71,255,0.08); --accent-glow: rgba(108,71,255,0.18);
+    --green: #16A34A; --green-dim: rgba(22,163,74,0.08); --green-border: rgba(22,163,74,0.2);
     --gold: #EF9F27; --gold-pale: rgba(239,159,39,0.08);
     --shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.05);
     --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 2px 8px rgba(0,0,0,0.04);
+    --serif: 'Instrument Serif', Georgia, serif;
+    --font: 'Geist', sans-serif;
+    --r: 14px;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: var(--font);
     background: var(--bg); color: var(--ink);
     min-height: 100vh; -webkit-font-smoothing: antialiased; display: flex; flex-direction: column;
     align-items: center; justify-content: center; padding: 24px; text-align: center;
   }
-  .logo { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--ink); margin-bottom: 40px; }
-  .logo span { color: #4A72D6; }
+  body::before {
+    content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image: radial-gradient(circle, #D8D8DC 1px, transparent 1px);
+    background-size: 26px 26px; opacity: 0.5;
+    mask-image: radial-gradient(ellipse 90% 60% at 50% 0%, black 20%, transparent 80%);
+  }
+  .logo { font-family: var(--serif); font-size: 20px; color: var(--ink); margin-bottom: 40px; }
+  .logo span { color: var(--accent); }
   .card {
     background: #fff; border: 1px solid var(--border);
     border-radius: 20px; padding: 48px 40px;
     max-width: 480px; width: 100%;
     box-shadow: 0 4px 32px rgba(0,0,0,0.06);
   }
-  .badge { display: inline-block; background: #EEF2FF; color: #4A72D6; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 100px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; }
+  .badge { display: inline-block; background: var(--accent-dim); color: var(--accent); font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 100px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; }
   h1 { font-size: 26px; font-weight: 800; color: var(--ink); letter-spacing: -0.5px; margin-bottom: 10px; }
-  .sub { font-size: 15px; color: var(--muted); line-height: 1.7; margin-bottom: 32px; }
+  .sub { font-size: 15px; color: var(--ink-2); line-height: 1.7; margin-bottom: 32px; }
   label { display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 6px; text-align: left; }
   input[type="email"] {
     width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 10px;
     font-size: 14px; color: var(--ink); outline: none; transition: border-color 0.2s;
     margin-bottom: 10px; font-family: inherit;
   }
-  input[type="email"]:focus { border-color: #4A72D6; }
+  input[type="email"]:focus { border-color: var(--accent); }
   .btn {
     width: 100%; padding: 13px; background: var(--ink); color: #fff;
     border: none; border-radius: 10px; font-size: 14px; font-weight: 700;
@@ -51,7 +62,7 @@
   .msg { margin-top: 12px; padding: 11px 14px; border-radius: 10px; font-size: 13px; display: none; }
   .msg.success { background: #ECFDF5; color: #065F46; display: block; }
   .msg.error   { background: #FEE2E2; color: #991B1B; display: block; }
-  .back { display: inline-block; margin-top: 24px; font-size: 13px; color: var(--muted); text-decoration: none; }
+  .back { display: inline-block; margin-top: 24px; font-size: 13px; color: var(--ink-2); text-decoration: none; }
   .back:hover { color: var(--ink); }
 </style>
 </head>
