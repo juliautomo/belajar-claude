@@ -699,6 +699,7 @@
 </script>
 
 <!-- Duitku POP -->
+<script src="payment-success-modal.js"></script>
 <script src="https://app-sandbox.duitku.com/lib/js/duitku.js"></script>
 <script>
   async function beliSekarang() {
@@ -750,9 +751,7 @@
       closePaymentModal();
 
       checkout.process(data.reference, {
-        successEvent: function(result) {
-          window.location.href = 'payment-success.html?course=kursus-karyawan';
-        },
+        successEvent: function(result) { window.showPaymentSuccess(); },
         pendingEvent: function(result) {
           alert('Pembayaran pending — selesaikan pembayaran Anda ya!');
         },

@@ -274,6 +274,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
   <script src="login-modal.js"></script>
+  <script src="payment-success-modal.js"></script>
 <script>
   (async () => {
     const { data: { session } } = await sb.auth.getSession();
@@ -325,7 +326,7 @@
       if (!data.success) throw new Error(data.message);
       closePaymentModal();
       checkout.process(data.reference, {
-        successEvent: () => { window.location.href = 'payment-success.html?course=bisnis-ukm'; },
+        successEvent: () => { window.showPaymentSuccess(); },
         pendingEvent: () => { alert('Pembayaran pending — selesaikan pembayaran Anda ya!'); },
         errorEvent:   () => { alert('Terjadi kesalahan. Silakan coba lagi.'); btn.disabled = false; btn.textContent = 'Lanjutkan Pembayaran →'; },
         closeEvent:   () => { btn.disabled = false; btn.textContent = 'Lanjutkan Pembayaran →'; }
