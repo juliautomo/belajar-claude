@@ -360,8 +360,17 @@
   <script src="login-modal.js"></script>
 <script>
   (async () => {
-    const { data: { session } } = await sb.auth.getSession();
-    if (session) window.location.href = 'mulai-claude-content.html';
+    const { data: { session } } = await sbClient.auth.getSession();
+    if (!session) return;
+    const { data: enrollments } = await sbClient.from('enrollments').select('course_slug').eq('email', session.user.email);
+    if (enrollments && enrollments.some(e => e.course_slug === 'mulai-claude')) {
+      document.querySelectorAll('.btn-primary').forEach(btn => {
+        btn.textContent = 'Buka Kursus →';
+        btn.removeAttribute('onclick');
+        btn.setAttribute('href', 'mulai-claude-content.html');
+        btn.style.background = 'var(--accent)';
+      });
+    }
   })();
 
   async function accessCourse() {

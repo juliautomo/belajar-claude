@@ -277,12 +277,16 @@
   <script src="payment-success-modal.js"></script>
 <script>
   (async () => {
-    const { data: { session } } = await sb.auth.getSession();
-    if (session) {
-      const { data: enrollments } = await sb.from('enrollments').select('course_slug').eq('email', session.user.email);
-      if (enrollments && enrollments.some(e => e.course_slug === 'bisnis-ukm')) {
-        window.location.href = 'bisnis-ukm-content.html';
-      }
+    const { data: { session } } = await sbClient.auth.getSession();
+    if (!session) return;
+    const { data: enrollments } = await sbClient.from('enrollments').select('course_slug').eq('email', session.user.email);
+    if (enrollments && enrollments.some(e => e.course_slug === 'bisnis-ukm')) {
+      document.querySelectorAll('.btn-primary').forEach(btn => {
+        btn.textContent = 'Buka Kursus →';
+        btn.removeAttribute('onclick');
+        btn.setAttribute('href', 'bisnis-ukm-content.html');
+        btn.style.background = 'var(--accent)';
+      });
     }
   })();
 

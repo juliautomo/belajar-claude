@@ -574,8 +574,17 @@ Buat ringkasan eksekutif...
 <script>
   // Check session on load — if already logged in, redirect straight to content
   (async () => {
-    const { data: { session } } = await sb.auth.getSession();
-    if (session) window.location.href = 'prompt-gratis-content.html';
+    const { data: { session } } = await sbClient.auth.getSession();
+    if (!session) return;
+    const { data: enrollments } = await sbClient.from('enrollments').select('course_slug').eq('email', session.user.email);
+    if (enrollments && enrollments.some(e => e.course_slug === 'prompt-gratis')) {
+      document.querySelectorAll('.btn-primary').forEach(btn => {
+        btn.textContent = 'Buka Kursus →';
+        btn.removeAttribute('onclick');
+        btn.setAttribute('href', 'prompt-gratis-content.html');
+        btn.style.background = 'var(--accent)';
+      });
+    }
   })();
 
   async function accessCourse() {

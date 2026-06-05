@@ -506,7 +506,7 @@ async function _init(){
       var total = track.slugs.length;
       var doneCount = enrolled.filter(function(s){var p=getProgress(s);return p.pct===100;}).length;
       var pct = Math.round((doneCount/total)*100);
-      paketItems.innerHTML += '<div class="paket-nav-item">'
+      paketItems.innerHTML += '<div class="paket-nav-item" onclick="document.getElementById(\'enrolledSection\').scrollIntoView({behavior:\'smooth\',block:\'start\'})" style="cursor:pointer;">'
         +'<span style="font-size:13px">📦</span>'
         +'<span style="flex:1;font-size:12px;">'+track.name+'</span>'
         +'<div class="paket-nav-prog"><div class="paket-nav-fill" style="width:'+pct+'%"></div></div>'
@@ -536,10 +536,4 @@ async function _init(){
     });
   }
 
-  document.getElementById('loadingScreen').style.display='none';
-  document.getElementById('mainLayout').style.display='grid';
-}
-init();
-</script>
-</body>
-</html>
+  document.getElementById('loa
