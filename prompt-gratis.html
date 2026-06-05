@@ -578,8 +578,10 @@ Buat ringkasan eksekutif...
     if (session) window.location.href = 'prompt-gratis-content.html';
   })();
 
-  function accessCourse() {
-    window.openLoginModal();
+  async function accessCourse() {
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) { window.location.href = 'prompt-gratis-content.html'; }
+    else { window.openLoginModal(); }
   }
 
   function validateForm(name, email) {
@@ -641,10 +643,4 @@ Buat ringkasan eksekutif...
   }
 
   // Close modal on overlay click
-  document.getElementById('modalOverlay').addEventListener('click', function(e) {
-    if (e.target === this) this.classList.remove('active');
-  });
-</script>
-
-</body>
-</html>
+  document.getElementByI

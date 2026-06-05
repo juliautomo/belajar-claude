@@ -364,9 +364,5 @@
     if (session) window.location.href = 'mulai-claude-content.html';
   })();
 
-  function accessCourse() {
-    window.openLoginModal();
-  }
-</script>
-</body>
-</html>
+  async function accessCourse() {
+    const { data: { session } } = await sb.auth.getSe

@@ -285,9 +285,5 @@
     }
   })();
 
-  function buyCourse() {
-    window.openLoginModal();
-  }
-</script>
-</body>
-</html>
+  async function buyCourse() {
+    const { data: { session } } = await sb.auth.getSe

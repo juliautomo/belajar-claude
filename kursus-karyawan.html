@@ -701,9 +701,12 @@
 <!-- Duitku POP -->
 <script src="https://app-sandbox.duitku.com/lib/js/duitku.js"></script>
 <script>
-  function beliSekarang() {
-    document.getElementById('paymentName').value = '';
-    document.getElementById('paymentEmail').value = '';
+  async function beliSekarang() {
+    const { data: { session } } = await sb.auth.getSession();
+    const name  = session?.user?.user_metadata?.full_name || session?.user?.email?.split('@')[0] || '';
+    const email = session?.user?.email || '';
+    document.getElementById('paymentName').value = name;
+    document.getElementById('paymentEmail').value = email;
     document.getElementById('paymentSubmitBtn').disabled = false;
     document.getElementById('paymentSubmitBtn').textContent = 'Lanjutkan Pembayaran →';
     document.getElementById('paymentModal').classList.add('active');
