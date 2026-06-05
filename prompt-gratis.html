@@ -574,7 +574,7 @@ Buat ringkasan eksekutif...
 <script>
   // Check session on load — if already logged in, redirect straight to content
   (async () => {
-    const { data: { session } } = await sbClient.auth.getSession();
+    const { data: { session } } = await sb.auth.getSession();
     if (session) window.location.href = 'prompt-gratis-content.html';
   })();
 
@@ -643,4 +643,10 @@ Buat ringkasan eksekutif...
   }
 
   // Close modal on overlay click
-  document.getElementByI
+  document.getElementById('modalOverlay').addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('active');
+  });
+</script>
+
+</body>
+</html>

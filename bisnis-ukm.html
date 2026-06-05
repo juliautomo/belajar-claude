@@ -276,9 +276,9 @@
   <script src="login-modal.js"></script>
 <script>
   (async () => {
-    const { data: { session } } = await sbClient.auth.getSession();
+    const { data: { session } } = await sb.auth.getSession();
     if (session) {
-      const { data: enrollments } = await sbClient.from('enrollments').select('course_slug').eq('email', session.user.email);
+      const { data: enrollments } = await sb.from('enrollments').select('course_slug').eq('email', session.user.email);
       if (enrollments && enrollments.some(e => e.course_slug === 'bisnis-ukm')) {
         window.location.href = 'bisnis-ukm-content.html';
       }
@@ -286,4 +286,74 @@
   })();
 
   async function buyCourse() {
-    const { data: { session } } = await sbClient.auth.getSe
+    const { data: { session } } = await sbClient.auth.getSession();
+    if (session) {
+      const name = session.user.user_metadata?.full_name || session.user.email.split('@')[0];
+      document.getElementById('paymentName').value = name;
+      document.getElementById('paymentEmail').value = session.user.email;
+      document.getElementById('paymentSubmitBtn').disabled = false;
+      document.getElementById('paymentSubmitBtn').textContent = 'Lanjutkan Pembayaran →';
+      document.getElementById('paymentModal').style.display = 'flex';
+    } else {
+      window.openLoginModal();
+    }
+  }
+
+  function closePaymentModal() {
+    document.getElementById('paymentModal').style.display = 'none';
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('paymentModal').addEventListener('click', function (e) {
+      if (e.target === this) closePaymentModal();
+    });
+  });
+
+  async function submitPayment() {
+    const name  = document.getElementById('paymentName').value.trim();
+    const email = document.getElementById('paymentEmail').value.trim();
+    const btn   = document.getElementById('paymentSubmitBtn');
+    if (!name) { alert('Mohon masukkan nama Anda.'); return; }
+    if (!email || !email.includes('@')) { alert('Mohon masukkan email yang valid.'); return; }
+    btn.disabled = true; btn.textContent = 'Memproses...';
+    try {
+      const res  = await fetch('https://klaud-backend-production.up.railway.app/create-payment', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ courseSlug: 'bisnis-ukm', customerName: name, customerEmail: email })
+      });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.message);
+      closePaymentModal();
+      checkout.process(data.reference, {
+        successEvent: () => { window.location.href = 'payment-success.html?course=bisnis-ukm'; },
+        pendingEvent: () => { alert('Pembayaran pending — selesaikan pembayaran Anda ya!'); },
+        errorEvent:   () => { alert('Terjadi kesalahan. Silakan coba lagi.'); btn.disabled = false; btn.textContent = 'Lanjutkan Pembayaran →'; },
+        closeEvent:   () => { btn.disabled = false; btn.textContent = 'Lanjutkan Pembayaran →'; }
+      });
+    } catch (err) {
+      console.error(err);
+      alert('Gagal memproses pembayaran. Silakan coba lagi.');
+      btn.disabled = false; btn.textContent = 'Lanjutkan Pembayaran →';
+    }
+  }
+</script>
+
+<!-- Payment Modal -->
+<div id="paymentModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.5);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#fff;border-radius:20px;padding:36px;max-width:400px;width:100%;box-shadow:0 24px 64px rgba(0,0,0,0.18);position:relative;font-family:var(--font);">
+    <button onclick="closePaymentModal()" style="position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;background:#F5F5F7;border:none;cursor:pointer;font-size:16px;color:#777;">✕</button>
+    <div style="font-size:11px;font-weight:700;color:var(--accent);letter-spacing:1px;margin-bottom:14px;">BELI SEKARANG</div>
+    <div style="font-family:var(--serif);font-size:20px;color:var(--ink);margin-bottom:4px;letter-spacing:-0.3px;">Claude untuk Bisnis UKM</div>
+    <div style="font-size:13px;color:var(--ink-2);margin-bottom:24px;">Rp 149.000 · Akses seumur hidup</div>
+    <label style="display:block;font-size:12px;font-weight:600;color:var(--ink-2);margin-bottom:6px;">Nama lengkap</label>
+    <input type="text" id="paymentName" placeholder="Nama lengkap Anda" style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;color:var(--ink);margin-bottom:12px;outline:none;font-family:var(--font);box-sizing:border-box;">
+    <label style="display:block;font-size:12px;font-weight:600;color:var(--ink-2);margin-bottom:6px;">Email</label>
+    <input type="email" id="paymentEmail" placeholder="nama@email.com" style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;color:var(--ink);margin-bottom:20px;outline:none;font-family:var(--font);box-sizing:border-box;">
+    <button id="paymentSubmitBtn" onclick="submitPayment()" style="width:100%;padding:13px;background:var(--ink);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:background 0.2s;">Lanjutkan Pembayaran →</button>
+  </div>
+</div>
+
+<!-- Duitku POP -->
+<script src="https://app-sandbox.duitku.com/lib/js/duitku.js"></script>
+</body>
+</html>
