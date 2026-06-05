@@ -91,8 +91,9 @@ All pages use these CSS variables:
 ---
 
 ## Dashboard Features (dashboard.html)
+- **Nav**: Uses `.brand` class (not `.logo`) — same Geist 700 styling. Has avatar + name on right, "Keluar" button.
 - **Sidebar**: Initials avatar (dark square), name/email, join date, "Edit profil" button, stats (kursus diikuti / selesai)
-- **Greeting**: DM Serif Display, uses first name + time-of-day
+- **Greeting**: `font-family: var(--serif)` (Instrument Serif), uses first name + time-of-day
 - **Kursus Kamu**: Grouped list with numbered index, progress bar, Mulai/Lanjutkan button. Completed courses move to Pencapaian.
 - **Pencapaian**: Badge cards — checkmark icon top-left, "Selesai" pill top-right, completion date
 - **Jelajahi Kursus**: Horizontal carousel. Available courses → "Lihat Kursus". Coming soon → "Beritahu saya" (saves to `waitlist` table, turns green on click)
@@ -113,25 +114,25 @@ All pages use these CSS variables:
 
 ---
 
-## Known Decisions
-- No emoji in UI (removed throughout)
-- No DM Mono font anywhere; no Plus Jakarta Sans (replaced by Geist)
-- No "Freelancer", "Tingkatkan karir", "Pernah coba/jarang" options in profile modal
-- No "Navigasi" sidebar section on dashboard
-- No "Diikuti/date" meta on enrolled cards
-- Courses marked 100% complete are moved OUT of "Kursus Kamu" into "Pencapaian"
-- `buildJourney()` function exists but is disabled (returns immediately)
-- Git push workaround: clone to `/tmp/klaud-id-fresh`, copy files, commit, push (lock files on mounted folder prevent direct push)
-- `--ink` must always be set as `--ink: #111111` (literal value). Never `--ink: var(--ink)` — that's a self-referential bug that was fixed across all pages June 2026.
+## Backend (klaud-backend — Node.js/Express)
+Hosted separately (not on GitHub Pages). Handles payments and signups.
 
----
+### API Endpoints
+| Method | Path | Purpose |
+|--------|------|---------|
+| `GET` | `/` | Health check |
+| `POST` | `/signup` | Free signup — adds to ConvertKit, Google Sheets, creates Supabase user, enrolls in `prompt-gratis`, sends welcome email |
+| `POST` | `/create-payment` | Creates Duitku invoice, returns `reference` + `orderId` |
+| `POST` | `/webhook/duitku` | Payment confirmation — saves enrollment to Supabase, logs to Google Sheets, adds ConvertKit tag, sends access email |
 
-## How to Push in a New Session
-```bash
-cd /tmp && git clone https://<GH_TOKEN>@github.com/juliautomo/klaud-id.git klaud-id-fresh
-# Token is stored in the git remote URL of the mounted repo:
-# git -C /sessions/.../mnt/klaud-id remote get-url origin
-cp /sessions/.../mnt/klaud-id/*.html /tmp/klaud-id-fresh/
-cd /tmp/klaud-id-fresh
-git config user.email "julia.utomo@gmail.com" && git config user.name "Julia"
-git add -A && git commit -m "..." && git push origin main
+### Course Catalog (in backend)
+| Slug | Course Name | Price |
+|------|-------------|-------|
+| `kursus-karyawan` | Claude untuk Karyawan Indonesia | Rp 299,000 |
+| `kursus-ukm` | Scale Bisnis dengan Claude AI | Rp 499,000 |
+| `workshop-zoom` | Workshop Bulanan via Zoom | Rp 149,000 |
+| `kursus-mahasiswa` | Claude untuk Karir & Studi | Rp 149,000 |
+| `coaching-1on1` | Coaching 1-on-1 | Rp 1,500,000 |
+
+### Backend Integrations
+- **Duitku**: Payment gateway. Ord
