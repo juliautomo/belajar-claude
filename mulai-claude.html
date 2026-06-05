@@ -360,9 +360,9 @@
   <script src="login-modal.js"></script>
 <script>
   (async () => {
-    const { data: { session } } = await sb.auth.getSession();
+    const { data: { session } } = await sbClient.auth.getSession();
     if (session) window.location.href = 'mulai-claude-content.html';
   })();
 
   async function accessCourse() {
-    const { data: { session } } = await sb.auth.getSe
+    const { data: { session } } = await sbClient.auth.getSe

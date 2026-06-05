@@ -574,12 +574,12 @@ Buat ringkasan eksekutif...
 <script>
   // Check session on load — if already logged in, redirect straight to content
   (async () => {
-    const { data: { session } } = await sb.auth.getSession();
+    const { data: { session } } = await sbClient.auth.getSession();
     if (session) window.location.href = 'prompt-gratis-content.html';
   })();
 
   async function accessCourse() {
-    const { data: { session } } = await sb.auth.getSession();
+    const { data: { session } } = await sbClient.auth.getSession();
     if (session) { window.location.href = 'prompt-gratis-content.html'; }
     else { window.openLoginModal(); }
   }

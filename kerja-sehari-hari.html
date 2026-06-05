@@ -301,9 +301,9 @@
   <script src="login-modal.js"></script>
 <script>
   (async () => {
-    const { data: { session } } = await sb.auth.getSession();
+    const { data: { session } } = await sbClient.auth.getSession();
     if (session) {
-      const { data: enrollments } = await sb.from('enrollments').select('course_slug').eq('email', session.user.email);
+      const { data: enrollments } = await sbClient.from('enrollments').select('course_slug').eq('email', session.user.email);
       if (enrollments && enrollments.some(e => e.course_slug === 'kerja-sehari-hari')) {
         window.location.href = 'kerja-sehari-hari-content.html';
       }
@@ -311,4 +311,4 @@
   })();
 
   async function buyCourse() {
-    const { data: { session } } = await sb.auth.getSe
+    const { data: { session } } = await sbClient.auth.getSe

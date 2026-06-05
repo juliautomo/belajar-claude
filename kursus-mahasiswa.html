@@ -403,7 +403,7 @@
 <script src="https://app-sandbox.duitku.com/lib/js/duitku.js"></script>
 <script>
   async function beliSekarang() {
-    const { data: { session } } = await sb.auth.getSession();
+    const { data: { session } } = await sbClient.auth.getSession();
     const name  = session?.user?.user_metadata?.full_name || session?.user?.email?.split('@')[0] || '';
     const email = session?.user?.email || '';
     document.getElementById('paymentName').value = name;
