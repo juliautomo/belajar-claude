@@ -319,15 +319,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 
 <script>
 const ALL_COURSES = {
-  // ── LEVEL 1 · Beginner ──────────────────────────────────
   'mulai-claude':       { title:'K1 · Dasar Claude AI',               icon:'🤖', thumb:'et1', contentLink:'mulai-claude-content.html',      salesLink:'mulai-claude.html',      desc:'Dari nol sampai pakai Claude sehari-hari — dalam 1 jam.',         price:'Gratis',     level:'Beginner',     exThumb:'ex-t1', modules:6 },
   'kerja-sehari-hari':  { title:'K2 · Produktivitas Kantor',          icon:'💼', thumb:'et2', contentLink:'kerja-sehari-hari-content.html', salesLink:'kerja-sehari-hari.html', desc:'Hemat 3–5 jam kerja per minggu dengan Claude + tools kantor.',    price:'Rp 149.000', level:'Beginner',     exThumb:'ex-t1', modules:6 },
-  'bisnis-ukm':         { title:'K3 · Konten & Pemasaran Bisnis',     icon:'🏪', thumb:'et3', contentLink:'bisnis-ukm-content.html',        salesLink:'bisnis-ukm.html',        desc:'Jalankan bisnis lebih efisien dengan Claude + tools Indonesia.',  price:'Rp 149.000', level:'Beginner',     exThumb:'ex-t1', modules:6 },
-  // ── LEVEL 2 · Intermediate ──────────────────────────────
+  'bisnis-ukm':         { title:'K3 · Konten & Pemasaran Bisnis',     icon:'🏷', thumb:'et3', contentLink:'bisnis-ukm-content.html',        salesLink:'bisnis-ukm.html',        desc:'Jalankan bisnis lebih efisien dengan Claude + tools Indonesia.',  price:'Rp 149.000', level:'Beginner',     exThumb:'ex-t1', modules:6 },
   'konten-copywriting': { title:'K4 · Copywriting & Konten Digital',  icon:'✍️', thumb:'et4', contentLink:'coming-soon.html',              salesLink:'coming-soon.html',       desc:'Jadilah mesin konten: artikel, script, newsletter, landing page.',price:'Rp 199.000', level:'Intermediate', exThumb:'ex-t2', modules:6, comingSoon:true },
   'analisis-data':      { title:'K5 · Analisis Data & Laporan',       icon:'📊', thumb:'et4', contentLink:'coming-soon.html',              salesLink:'coming-soon.html',       desc:'Ubah data mentah jadi insight bisnis yang bisa dijadikan keputusan.',price:'Rp 199.000', level:'Intermediate', exThumb:'ex-t2', modules:6, comingSoon:true },
   'build-automation':   { title:'K6 · Automasi Workflow',             icon:'⚡', thumb:'et4', contentLink:'coming-soon.html',              salesLink:'coming-soon.html',       desc:'Buat 3 automation aktif dengan Zapier, Make.com & n8n.',          price:'Rp 299.000', level:'Intermediate', exThumb:'ex-t2', modules:7, comingSoon:true },
-  // ── LEVEL 3 · Advanced ──────────────────────────────────
   'ai-powered-app':     { title:'K7 · Build AI App Sederhana',        icon:'🚀', thumb:'et4', contentLink:'coming-soon.html',              salesLink:'coming-soon.html',       desc:'Buat web app AI live di GitHub Pages — tanpa backend.',           price:'Rp 299.000', level:'Advanced',     exThumb:'ex-t3', modules:7, comingSoon:true },
   'claude-api-dev':     { title:'K8 · Claude API untuk Developer',    icon:'🔌', thumb:'et4', contentLink:'coming-soon.html',              salesLink:'coming-soon.html',       desc:'Integrasikan Claude ke project nyata: streaming, tool use, caching.',price:'Rp 399.000', level:'Advanced',     exThumb:'ex-t3', modules:7, comingSoon:true },
   'jual-produk-ai':     { title:'K9 · Build & Monetisasi Produk AI',  icon:'💰', thumb:'et4', contentLink:'coming-soon.html',              salesLink:'coming-soon.html',       desc:'Dari ide ke produk AI yang menghasilkan uang: Framer + Midtrans.', price:'Rp 499.000', level:'Advanced',     exThumb:'ex-t3', modules:7, comingSoon:true },
@@ -496,10 +493,10 @@ async function _init(){
 
   // Paket nav: show jalur track if enrolled in 2+ courses from same jalur
   var PAKET_TRACKS = [
-    { name:'Claude untuk Mahasiswa',           slugs:['mulai-claude','konten-copywriting','analisis-data'],                        link:'kursus-mahasiswa.html' },
-    { name:'Claude untuk Karyawan',            slugs:['mulai-claude','kerja-sehari-hari','analisis-data'],                         link:'kursus-karyawan.html' },
-    { name:'Claude untuk Pengusaha',           slugs:['mulai-claude','bisnis-ukm','konten-copywriting','build-automation'],        link:'kursus-ukm.html' },
-    { name:'Claude untuk Content Creator',     slugs:['mulai-claude','bisnis-ukm','konten-copywriting'],                           link:'paket-content-creator.html' },
+    { name:'Claude untuk Mahasiswa',       slugs:['mulai-claude','konten-copywriting','analisis-data'],                 link:'kursus-mahasiswa.html' },
+    { name:'Claude untuk Karyawan',        slugs:['mulai-claude','kerja-sehari-hari','analisis-data'],                  link:'kursus-karyawan.html' },
+    { name:'Claude untuk Pengusaha',       slugs:['mulai-claude','bisnis-ukm','konten-copywriting','build-automation'], link:'kursus-ukm.html' },
+    { name:'Claude untuk Content Creator', slugs:['mulai-claude','bisnis-ukm','konten-copywriting'],                    link:'paket-content-creator.html' },
   ];
   var paketItems = document.getElementById('paketNavItems');
   var paketVisible = false;
@@ -509,7 +506,7 @@ async function _init(){
       var total = track.slugs.length;
       var doneCount = enrolled.filter(function(s){var p=getProgress(s);return p.pct===100;}).length;
       var pct = Math.round((doneCount/total)*100);
-      paketItems.innerHTML += '<div class="paket-nav-item" onclick="window.location.href=\''+track.link+'\'" style="cursor:pointer;">'
+      paketItems.innerHTML += '<div class="paket-nav-item" onclick="window.location.href=\''+track.link+'\';" style="cursor:pointer;">'
         +'<span style="font-size:13px">📦</span>'
         +'<span style="flex:1;font-size:12px;">'+track.name+'</span>'
         +'<div class="paket-nav-prog"><div class="paket-nav-fill" style="width:'+pct+'%"></div></div>'
@@ -529,4 +526,20 @@ async function _init(){
         ?'<button class="btn-notify" onclick="notifyMe(this,\''+slug+'\')">Beritahu saya</button>'
         :'<a href="'+meta.salesLink+'" class="btn-view">Lihat Kursus &rarr;</a>';
       grid.innerHTML+='<div class="explore-card">'
-       
+        +'<div class="ex-thumb '+meta.exThumb+'">'+meta.icon+'</div>'
+        +'<div class="ex-body">'
+        +'<div class="ex-lv">'+meta.level+'</div>'
+        +'<div class="ex-title">'+meta.title+'</div>'
+        +'<div class="ex-desc">'+meta.desc+'</div>'
+        +'<div class="ex-price">'+meta.price+'</div>'
+        +cta+'</div></div>';
+    });
+  }
+
+  document.getElementById('loadingScreen').style.display='none';
+  document.getElementById('mainLayout').style.display='grid';
+}
+init();
+</script>
+</body>
+</html>
