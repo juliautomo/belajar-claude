@@ -161,9 +161,11 @@
     const { data: { session } } = await sbClient.auth.getSession();
     if (!session) return;
     const { data: enrollments } = await sbClient.from('enrollments').select('course_slug').eq('email', session.user.email);
-    if (enrollments && enrollments.some(e => e.course_slug === 'paket-mahasiswa')) {
+    const enrolledSlugs = new Set((enrollments || []).map(e => e.course_slug));
+    const hasAccess = ['paket-mahasiswa', 'konten-copywriting', 'analisis-data'].some(s => enrolledSlugs.has(s));
+    if (hasAccess) {
       document.querySelectorAll('.btn-buy').forEach(btn => {
-        btn.textContent = 'Buka Dashboard →';
+        btn.textContent = 'Ke Dashboard →';
         btn.onclick = () => window.location.href = 'dashboard.html';
         btn.style.background = 'var(--accent)';
       });
