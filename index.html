@@ -182,7 +182,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
   <p class="hero-sub">Kursus dan panduan Claude AI yang praktis — sepenuhnya dalam Bahasa Indonesia, untuk profesional, UKM, dan mahasiswa.</p>
   <div class="hero-actions">
     <a href="#jalur" class="btn-dark">Pilih Jalur Belajar →</a>
-    <a href="login.html" class="btn-outline">Gabung Gratis</a>
+    <a href="login.html" class="btn-outline" id="heroGabungBtn">Gabung Gratis</a>
   </div>
   <div class="hero-proof" style="display:none;">
     <div class="proof-avatars">
@@ -333,6 +333,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         var lb = document.getElementById('navLoginBtn');
         lb.textContent = 'Dashboard'; lb.href = 'dashboard.html';
         document.getElementById('navCtaBtn').style.display = 'none';
+        var hgb = document.getElementById('heroGabungBtn'); if (hgb) hgb.style.display = 'none';
         // Personalize bottom CTA
         var headline = document.getElementById('ctaHeadline');
         var subtext  = document.getElementById('ctaSubtext');
@@ -347,11 +348,4 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
             ? 'Kamu terdaftar di ' + paid.length + ' kursus — lanjutkan belajarmu sekarang.'
             : 'Kamu sudah di K1 — lihat paket untuk lanjut ke kursus berikutnya.';
         } catch(e) {}
-        if (btn) { btn.textContent = 'Buka Dashboard →'; btn.href = 'dashboard.html'; btn.style.background = '#6C47FF'; btn.style.color = '#fff'; }
-        if (note) note.style.display = 'none';
-      }
-    } catch(e) {}
-  })();
-</script>
-</body>
-</html>
+        if (btn) { btn.textContent = 'Buka Dashboard →'; btn.href = 'dashboard.html'; btn.style.background = '#6C47FF'; btn.style.color = '
