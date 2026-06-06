@@ -697,4 +697,24 @@ Sertakan: [hal spesifik yang harus ada]<button class="copy-btn" onclick="copyPro
     const btn = document.getElementById('feedbackSubmit');
     btn.disabled = true;
     btn.textContent = 'Menyimpan...';
-    const comment = document.g
+    const comment = document.getElementById('feedbackComment').value.trim();
+    try {
+      const r = await sbClient.auth.getSession();
+      const session = r.data.session;
+      if (session) {
+        await sbClient.from('course_feedback').upsert({
+          email: session.user.email,
+          course_slug: 'mulai-claude',
+          rating: currentRating || null,
+          comment: comment || null,
+          submitted_at: new Date().toISOString()
+        }, { onConflict: 'email,course_slug' });
+      }
+    } catch(e) { console.error(e); }
+    document.getElementById('feedbackForm').style.display = 'none';
+    document.getElementById('feedbackDone').style.display = 'block';
+  }
+
+</script>
+</body>
+</html>
