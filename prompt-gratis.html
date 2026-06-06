@@ -306,19 +306,18 @@ Buat ringkasan eksekutif...
 </script>
   <script src="login-modal.js"></script>
 <script>
-  // If already logged in, replace signup box with direct access button
+  // If already logged in, swap button to "Buka Kursus →" (same as mulai-claude pattern)
   (async () => {
     const { data: { session } } = await sbClient.auth.getSession();
     if (!session) return;
-    var box = document.querySelector('.signup-box');
-    if (box) {
-      box.innerHTML = '<h3>✅ Kamu sudah punya akses!</h3>'
-        + '<p style="margin-bottom:20px;">Langsung buka 20 Prompt Claude Terbaik kamu di bawah ini.</p>'
-        + '<a href="prompt-gratis-content.html" class="btn-download" style="display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;">'
-        + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>'
-        + 'Buka 20 Prompt →</a>'
-        + '<p class="form-note" style="margin-top:10px;">Atau <a href="dashboard.html" style="color:var(--accent);">kembali ke dashboard</a></p>';
-    }
+    document.querySelectorAll('.btn-download').forEach(function(btn) {
+      btn.textContent = 'Buka Kursus →';
+      btn.removeAttribute('onclick');
+      btn.tagName === 'A'
+        ? btn.href = 'prompt-gratis-content.html'
+        : (function(b){ var a=document.createElement('a'); a.href='prompt-gratis-content.html'; a.className=b.className; a.textContent=b.textContent; a.style.cssText=b.style.cssText; b.parentNode.replaceChild(a,b); })(btn);
+      btn.style.background = 'var(--accent)';
+    });
   })();
 
   function accessCourse() {
