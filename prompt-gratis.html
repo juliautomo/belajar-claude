@@ -321,10 +321,8 @@ Buat ringkasan eksekutif...
     }
   })();
 
-  async function accessCourse() {
-    const { data: { session } } = await sbClient.auth.getSession();
-    if (session) { window.location.href = 'prompt-gratis-content.html'; }
-    else { window.openLoginModal(); }
+  function accessCourse() {
+    window.openLoginModal();
   }
 
   function validateForm(name, email) {
