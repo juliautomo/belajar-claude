@@ -61,7 +61,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 .ss-val.p{color:var(--accent);}
 
 /* MAIN */
-.main{padding:40px 44px;display:flex;flex-direction:column;gap:36px;max-width:900px;}
+.main{padding:40px 44px;display:flex;flex-direction:column;gap:36px;}
+.main>*{max-width:860px;width:100%;}
 .loading-screen{text-align:center;padding:80px 20px;color:var(--ink-2);font-size:14px;}
 
 /* GREETING */
@@ -98,7 +99,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 .sec-title::after{content:'';width:40px;height:1px;background:var(--border);display:inline-block;}
 
 /* ENROLLED */
-.enrolled-list{display:flex;flex-direction:column;gap:2px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.enrolled-list{display:flex;flex-direction:column;gap:2px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
 .enrolled-card{padding:22px 28px;display:flex;align-items:center;gap:20px;border-bottom:1px solid var(--border);transition:background 0.15s;cursor:pointer;}
 .enrolled-card:last-child{border-bottom:none;}
 .enrolled-card:hover{background:var(--surface-2);}
