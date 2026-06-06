@@ -45,7 +45,7 @@
   .hero-sub{font-size:16px;color:var(--ink-2);line-height:1.7;max-width:520px;margin:0 auto 36px;}
 
   /* SIGNUP BOX */
-  .signup-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px;max-width:460px;margin:0 auto;box-shadow:var(--shadow);}
+  .signup-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px 32px;max-width:460px;margin:0 auto;box-shadow:0 4px 24px rgba(0,0,0,0.06);text-align:center;}
   .signup-box h3{font-size:17px;font-weight:700;margin-bottom:6px;color:var(--ink);}
   .signup-box p{font-size:13px;color:var(--ink-2);margin-bottom:20px;}
   .btn-download{width:100%;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.18s;}
@@ -131,14 +131,11 @@
 
     <!-- SIGNUP CTA -->
     <div class="signup-box">
-      <h3>✨ Akses 20 Prompt Gratis</h3>
-      <p>Daftar gratis — langsung bisa pakai semua prompt tanpa perlu download.</p>
-      <div class="form-group">
-        <button class="btn-download" onclick="accessCourse()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          Akses Gratis Sekarang →
-        </button>
-      </div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:2px;color:var(--accent);text-transform:uppercase;margin-bottom:8px;font-family:monospace;">Prompt Gratis</div>
+      <div style="font-family:var(--serif);font-size:24px;font-weight:400;letter-spacing:-0.5px;color:var(--ink);line-height:1.15;margin-bottom:16px;">20 Prompt Claude Terbaik</div>
+      <div style="font-size:40px;font-weight:800;color:var(--ink);letter-spacing:-1.5px;margin-bottom:4px;">Gratis</div>
+      <div style="font-size:13px;color:var(--ink-2);margin-bottom:18px;display:block;">Akses seumur hidup · Tidak perlu kartu kredit</div>
+      <button class="btn-download" onclick="accessCourse()" style="margin-top:0;">Akses Gratis Sekarang →</button>
       <p class="form-note">🔒 Gratis selamanya. Tidak perlu kartu kredit.</p>
     </div>
   </div>
