@@ -286,10 +286,10 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
   </div>
 </section>
 <section class="cta-section" id="komunitas">
-  <h2>Mulai gratis <em>hari ini</em></h2>
-  <p>Gabung dan dapatkan 20 prompt Claude gratis — langsung bisa dipakai sekarang.</p>
-  <a href="login.html" class="cta-btn">Gabung Komunitas Gratis →</a>
-  <p class="cta-sub">Gratis selamanya · Tanpa kartu kredit</p>
+  <h2 id="ctaHeadline">Mulai gratis <em>hari ini</em></h2>
+  <p id="ctaSubtext">Gabung dan dapatkan 20 prompt Claude gratis — langsung bisa dipakai sekarang.</p>
+  <a href="login.html" class="cta-btn" id="ctaBtn">Gabung Komunitas Gratis →</a>
+  <p class="cta-sub" id="ctaNote">Gratis selamanya · Tanpa kartu kredit</p>
 </section>
 <footer>
   <div class="footer-inner">
@@ -333,6 +333,22 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         var lb = document.getElementById('navLoginBtn');
         lb.textContent = 'Dashboard'; lb.href = 'dashboard.html';
         document.getElementById('navCtaBtn').style.display = 'none';
+        // Personalize bottom CTA
+        var headline = document.getElementById('ctaHeadline');
+        var subtext  = document.getElementById('ctaSubtext');
+        var btn      = document.getElementById('ctaBtn');
+        var note     = document.getElementById('ctaNote');
+        if (headline) headline.innerHTML = 'Selamat datang kembali, <em>' + name + '</em>';
+        // Check enrollment for subtext
+        try {
+          var enr = await sbClient.from('enrollments').select('course_slug,course_name').eq('email', s.user.email);
+          var paid = (enr.data || []).filter(function(e){ return e.course_slug !== 'prompt-gratis'; });
+          if (subtext) subtext.textContent = paid.length > 0
+            ? 'Kamu terdaftar di ' + paid.length + ' kursus — lanjutkan belajarmu sekarang.'
+            : 'Kamu sudah di K1 — lihat paket untuk lanjut ke kursus berikutnya.';
+        } catch(e) {}
+        if (btn) { btn.textContent = 'Buka Dashboard →'; btn.href = 'dashboard.html'; btn.style.background = '#6C47FF'; btn.style.color = '#fff'; }
+        if (note) note.style.display = 'none';
       }
     } catch(e) {}
   })();

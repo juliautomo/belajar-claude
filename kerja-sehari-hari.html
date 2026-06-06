@@ -308,7 +308,8 @@
     if (pill) pill.style.display = 'flex';
     const un = document.getElementById('navUname'); if (un) un.textContent = name;
     const ue = document.getElementById('navUemail'); if (ue) ue.textContent = session.user.email;
-    const lb = document.getElementById('navLoginBtn'); if (lb) lb.style.display = 'none';
+    const lb = document.getElementById('navLoginBtn');
+    if (lb) { lb.textContent = 'Dashboard'; lb.href = 'dashboard.html'; }
     const cb = document.getElementById('navCtaBtn'); if (cb) cb.style.display = 'none';
   })();
 </script>
