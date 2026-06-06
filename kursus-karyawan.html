@@ -3,722 +3,191 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Claude untuk Karyawan Indonesia — Klaud.id</title>
+<title>Claude untuk Karyawan & Profesional — Rp 299K | Klaud.id</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-      :root {
+  :root {
     --bg: #FAFAFA; --surface: #FFFFFF; --surface-2: #F5F5F7;
     --border: #E8E8E8; --border-strong: #D0D0D0;
     --ink: #111111; --ink-2: #777777; --ink-3: #BBBBBB;
     --accent: #6C47FF; --accent-2: #9B7DFF;
     --accent-dim: rgba(108,71,255,0.08); --accent-glow: rgba(108,71,255,0.18);
     --green: #16A34A; --green-dim: rgba(22,163,74,0.08); --green-border: rgba(22,163,74,0.2);
-    --gold: #EF9F27; --gold-pale: rgba(239,159,39,0.08);
-    --shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.05);
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 2px 8px rgba(0,0,0,0.04);
-    --serif: 'Instrument Serif', Georgia, serif;
-    --font: 'Geist', sans-serif;
-    --r: 14px;
+    --serif: 'Instrument Serif', Georgia, serif; --font: 'Geist', sans-serif; --r: 14px;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
   body { font-family: var(--font); background: var(--bg); color: var(--ink); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
-  body::before {
-    content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    background-image: radial-gradient(circle, #D8D8DC 1px, transparent 1px);
-    background-size: 26px 26px; opacity: 0.5;
-    mask-image: radial-gradient(ellipse 90% 60% at 50% 0%, black 20%, transparent 80%);
-  }
-
-  /* NAV */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    height: 58px; padding: 0 40px;
-    display: flex; align-items: center; justify-content: space-between;
-    background: rgba(250,250,250,0.88); backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border);
-  }
+  body::before { content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none; background-image: radial-gradient(circle, #D8D8DC 1px, transparent 1px); background-size: 26px 26px; opacity: 0.5; mask-image: radial-gradient(ellipse 90% 60% at 50% 0%, black 20%, transparent 80%); }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 40px; height: 58px; display: flex; align-items: center; justify-content: space-between; background: rgba(250,250,250,0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
   .logo { font-family: var(--font); font-size: 17px; font-weight: 700; color: var(--ink); text-decoration: none; letter-spacing: -0.4px; }
   .logo span { color: var(--accent); }
-  .nav-back { font-size: 14px; font-weight: 500; color: var(--ink-2); text-decoration: none; display: flex; align-items: center; gap: 6px; transition: color 0.2s; }
+  .nav-back { font-size: 13px; font-weight: 500; color: var(--ink-2); text-decoration: none; display: flex; align-items: center; gap: 6px; transition: color 0.2s; }
   .nav-back:hover { color: var(--ink); }
-
-  /* HERO */
-  .hero {
-    padding: 140px 24px 80px;
-    position: relative; overflow: hidden;
-  }
-  .hero-bg {
-    position: absolute; inset: 0; z-index: 0;
-    
-  }
-  .hero-grid {
-    position: absolute; inset: 0; z-index: 0;
-    background-image: linear-gradient(rgba(55,138,221,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(55,138,221,0.05) 1px, transparent 1px);
-    background-size: 48px 48px;
-    
-  }
-  .hero-inner { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: 1fr 380px; gap: 64px; align-items: start; }
-
-  .hero-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: var(--accent-dim); border: 1px solid rgba(55,138,221,0.3);
-    border-radius: 100px; padding: 6px 16px; margin-bottom: 24px;
-    font-size: 12px; font-weight: 700; color: var(--blue-light); letter-spacing: 1px; text-transform: uppercase;
-    font-family: monospace;
-  }
-  .hero h1 { font-size: clamp(32px, 5vw, 52px); font-weight: 800; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 20px; }
-  .hero h1 .accent { color: var(--accent); }
-  .hero-sub { font-size: 16px; color: var(--ink-2); line-height: 1.75; margin-bottom: 32px; max-width: 520px; }
-
-  .hero-bullets { display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
-  .bullet { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--ink-2); }
-  .bullet-icon { width: 22px; height: 22px; border-radius: 50%; background: rgba(29,158,117,0.2); display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; }
-
-  .hero-meta { display: flex; gap: 24px; flex-wrap: wrap; }
-  .meta-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-2); }
-
-  /* STICKY CARD */
-  .sticky-card {
-    background: #ffffff;
-    border: 1px solid rgba(74,114,214,0.2);
-    border-radius: 20px; padding: 32px;
-    position: sticky; top: 100px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-  }
-  .sticky-card .price-new { color: var(--ink); }
-  .sticky-card .price-old { color: var(--ink-2); }
-  .sticky-card .price-note { color: var(--accent); }
-  .sticky-card .card-includes h4 { color: var(--ink-2); }
-  .sticky-card .include-item { color: #1E2456; }
-  .price-box { margin-bottom: 20px; }
-  .price-old { font-size: 14px; color: var(--ink-2); text-decoration: line-through; margin-bottom: 4px; }
-  .price-new { font-size: 38px; font-weight: 800; letter-spacing: -1px; color: var(--ink); }
-  .price-note { font-size: 12px; color: var(--blue-light); margin-top: 4px; }
-
-  .coming-soon-btn {
-    width: 100%; background: var(--accent-dim);
-    border: 2px dashed rgba(55,138,221,0.4);
-    border-radius: 12px; padding: 16px;
-    font-size: 15px; font-weight: 700; color: var(--blue-light);
-    cursor: default; font-family: 'Plus Jakarta Sans', sans-serif;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    margin-bottom: 16px;
-  }
-  .notify-btn {
-    width: 100%; background: var(--accent); color: #fff;
-    border: none; border-radius: 12px; padding: 14px;
-    font-size: 14px; font-weight: 700; cursor: pointer;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    transition: background 0.2s, transform 0.15s; margin-bottom: 16px;
-  }
-  .notify-btn:hover { background: #2a72c4; transform: translateY(-1px); }
-
-  .card-includes { border-top: 1px solid rgba(55,138,221,0.15); padding-top: 16px; }
-  .card-includes h4 { font-size: 12px; font-weight: 700; color: var(--ink-2); letter-spacing: 1px; text-transform: uppercase; font-family: monospace; margin-bottom: 12px; }
-  .include-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-2); margin-bottom: 8px; }
-  .include-item span:first-child { font-size: 14px; }
-
-  .guarantee-mini {
-    display: flex; align-items: center; gap: 8px;
-    background: rgba(29,158,117,0.1); border: 1px solid rgba(29,158,117,0.2);
-    border-radius: 10px; padding: 10px 12px; margin-top: 16px;
-    font-size: 12px; color: var(--green-light);
-  }
-
-  /* SECTIONS */
-  section { padding: 80px 24px; }
-  .container { max-width: 1080px; margin: 0 auto; }
-  .section-label { font-size: 12px; font-weight: 700; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; font-family: monospace; }
-  .section-title { font-size: clamp(24px, 3.5vw, 36px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 12px; }
-  .section-sub { font-size: 15px; color: var(--ink-2); line-height: 1.75; margin-bottom: 48px; }
-
-  /* CURRICULUM */
-  .curriculum { background: var(--bg); border: 1px solid var(--border); }
-  .modules-grid { display: flex; flex-direction: column; gap: 0; }
-  .module-item {
-    display: flex; align-items: flex-start; gap: 20px;
-    padding: 20px 0; border-bottom: 1px solid rgba(55,138,221,0.08);
-    cursor: pointer; transition: background 0.15s;
-  }
-  .module-item:last-child { border-bottom: none; }
-  .module-num { font-size: 12px; font-weight: 700; color: var(--accent); font-family: monospace; min-width: 32px; padding-top: 2px; }
-  .module-info { flex: 1; }
-  .module-info h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-  .module-info p { font-size: 13px; color: var(--ink-2); line-height: 1.6; }
-  .module-dur { font-size: 12px; color: var(--ink-2); white-space: nowrap; padding-top: 2px; }
-
-  /* TESTIMONIALS */
-  .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-  .testi-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; }
-  .stars { color: var(--gold); font-size: 14px; margin-bottom: 14px; letter-spacing: 2px; }
-  .testi-card blockquote { font-size: 14px; color: var(--ink-2); line-height: 1.75; margin-bottom: 20px; font-style: italic; }
-  .testi-author { display: flex; align-items: center; gap: 12px; }
-  .avatar { width: 38px; height: 38px; border-radius: 50%; background: rgba(55,138,221,0.2); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: var(--blue-light); flex-shrink: 0; }
-  .testi-author .name { font-size: 13px; font-weight: 700; }
-  .testi-author .role { font-size: 12px; color: var(--blue-light); }
-
-  /* GUARANTEE */
-  .guarantee { background: rgba(29,158,117,0.06); border-top: 1px solid rgba(29,158,117,0.15); border-bottom: 1px solid rgba(29,158,117,0.15); }
-  .guarantee-box { max-width: 640px; margin: 0 auto; text-align: center; }
-  .guarantee-icon { font-size: 56px; margin-bottom: 20px; }
-  .guarantee-box h2 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 16px; }
-  .guarantee-box p { font-size: 15px; color: var(--blue-light); line-height: 1.8; }
-  .guarantee-box strong { color: var(--green-light); }
-
-  /* FAQ */
-  .faq-list { max-width: 700px; display: flex; flex-direction: column; gap: 0; }
-  .faq-item { border-bottom: 1px solid var(--border); }
-  .faq-q {
-    width: 100%; background: none; border: none; text-align: left;
-    padding: 20px 0; display: flex; justify-content: space-between; align-items: center;
-    font-size: 15px; font-weight: 700; color: var(--ink);
-    cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; gap: 16px;
-  }
-  .faq-q .arrow { font-size: 18px; color: var(--accent); transition: transform 0.3s; flex-shrink: 0; }
-  .faq-q.open .arrow { transform: rotate(45deg); }
-  .faq-a { font-size: 14px; color: var(--blue-light); line-height: 1.8; padding-bottom: 20px; display: none; }
-  .faq-a.open { display: block; }
-
-  /* NOTIFY MODAL */
-  .modal-overlay { position: fixed; inset: 0; z-index: 200; background: rgba(4,44,83,0.95); display: flex; align-items: center; justify-content: center; padding: 24px; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-  .modal-overlay.active { opacity: 1; pointer-events: all; }
-  .modal { background: var(--navy-mid); border: 1px solid rgba(55,138,221,0.3); border-radius: 20px; padding: 40px; max-width: 440px; width: 100%; text-align: center; transform: scale(0.95); transition: transform 0.3s; }
-  .modal-overlay.active .modal { transform: scale(1); }
-  .modal h3 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
-  .modal p { font-size: 14px; color: var(--ink-2); margin-bottom: 24px; line-height: 1.6; }
-  .modal-input { width: 100%; background: rgba(255,255,255,0.06); border: 1px solid var(--border); border-radius: 10px; padding: 13px 16px; font-size: 14px; color: var(--ink); font-family: 'Plus Jakarta Sans', sans-serif; outline: none; margin-bottom: 10px; transition: border-color 0.2s; }
-  .modal-input:focus { border-color: var(--accent); }
-  .modal-submit { width: 100%; background: var(--accent); color: #fff; border: none; border-radius: 10px; padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: background 0.2s; }
-  .modal-submit:hover { background: #2a72c4; }
-  .modal-close { position: absolute; top: 16px; right: 20px; background: none; border: none; color: var(--ink-2); font-size: 20px; cursor: pointer; }
-
-  /* FOOTER */
-  footer { background: #021e3a; padding: 32px 24px; border: 1px solid var(--border); text-align: center; }
-  footer p { font-size: 12px; color: var(--ink-2); }
-  footer a { color: var(--blue-light); text-decoration: none; }
-
-  @media (max-width: 768px) {
-    nav { padding: 16px 20px; }
-    .hero-inner { grid-template-columns: 1fr; }
-    .sticky-card { position: static; }
-    section { padding: 60px 20px; }
-  }
-
-  /* ── LIGHT THEME OVERRIDES ──────────────────────────────── */
-  body { background: var(--bg) !important; color: var(--ink) !important; }
-  nav {
-    background: rgba(250,250,250,0.88) !important;
-    border-bottom: 1px solid var(--border) !important;
-  }
-  .logo { color: var(--ink) !important;  letter-spacing: -0.4px; }
-  .logo span { color: var(--accent); }
-  .nav-back { color: var(--ink-2) !important; }
-  .nav-back:hover { color: var(--ink) !important; }
-  .hero-bg { background: radial-gradient(ellipse 80% 60% at 60% 0%, rgba(74,114,214,0.1) 0%, transparent 70%) !important; }
-  .hero-grid {
-    background-image:
-      linear-gradient(rgba(74,114,214,0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(74,114,214,0.05) 1px, transparent 1px) !important;
-  }
-  .hero h1, .hero h2, h1, h2 { color: var(--ink) !important; }
-  .hero-sub, .hero p, .section-sub { color: var(--ink-2) !important; }
-  .section-label { color: var(--accent) !important; }
-  .section-title { color: var(--ink) !important; }
-
-  /* Cards & surfaces */
-  .module-card, .feature-card, .why-card, .testi-card,
-  .course-card, .detail-card, .faq-item, .pricing-card,
-  .agenda-item, .bonus-card, .stat-card {
-    background: var(--surface-2) !important;
-    border-color: var(--border) !important;
-    color: var(--ink) !important;
-  }
-  .module-card h3, .feature-card h3, .why-card h3,
-  .course-card h3, .detail-card h3, .faq-item h3,
-  .pricing-card h3, .bonus-card h3, .stat-card .num {
-    color: var(--ink) !important;
-  }
-  .module-card p, .feature-card p, .why-card p,
-  .course-card p, .detail-card p, .faq-item p,
-  .pricing-card p, .bonus-card p {
-    color: var(--ink-2) !important;
-  }
-
-  /* Section backgrounds */
-  .why, .modules, .features, .audience, .faq-section,
-  .about, .bonuses, .agenda { background: var(--surface) !important; }
-
-  /* Pricing / CTA sections keep dark */
-  .pricing, .cta-section { background: var(--ink) !important; }
-  .pricing h2, .pricing p, .cta-section h2 { color: #fff !important; }
-  .pricing .section-sub { color: var(--blue-light) !important; }
-  .pricing-card { background: rgba(255,255,255,0.06) !important; border-color: rgba(255,255,255,0.12) !important; }
-  .pricing-card h3, .pricing-card p, .pricing-card li { color: rgba(255,255,255,0.85) !important; }
-  .pricing-card.featured { background: var(--accent) !important; border-color: var(--accent) !important; }
-
-  /* Testimonials */
-  .testi-card blockquote { color: var(--ink-2) !important; }
-  .testi-author .name { color: var(--ink) !important; }
-
-  /* Form / email inputs */
-  .email-form input {
-    background: var(--surface-2) !important;
-    border: 1.5px solid var(--border) !important;
-    color: var(--ink) !important;
-  }
-  .email-form input::placeholder { color: var(--ink-2) !important; }
-
-  /* Instructor / about-visual */
-  .about-visual, .instructor-card { background: var(--ink) !important; }
-
-  /* Footer stays dark */
-  footer { background: #0D1030 !important; border-top: 1px solid rgba(74,114,214,0.1) !important; }
-  footer .logo { color: #fff !important;  letter-spacing: -0.4px; }
-  footer .logo span { color: var(--accent); }
-  footer p, footer a { color: rgba(255,255,255,0.45) !important; }
-  footer a:hover { color: #fff !important; }
-  footer h4 { color: rgba(255,255,255,0.35) !important; }
-  .footer-bottom { border-top-color: rgba(255,255,255,0.06) !important; }
-
-  /* Breadcrumb / tags */
-  .hero-badge {
-    background: var(--accent-dim) !important;
-    border-color: rgba(74,114,214,0.25) !important;
-    color: var(--accent) !important;
-  }
-  .tag-blue  { background: var(--accent-dim) !important; color: var(--accent) !important; }
-  .tag-green { background: rgba(29,158,117,0.12) !important; color: #117A57 !important; }
-  .tag-gold  { background: rgba(239,159,39,0.12) !important; color: #A0650A !important; }
-  .course-tag { border-radius: 100px !important; }
-
-  /* Dividers */
-  .hero-stats { border-top-color: var(--border) !important; }
-  .stat .num { color: var(--ink) !important; }
-  .stat .lbl { color: var(--ink-2) !important; }
-
-  /* Buttons */
-  .btn-primary { background: var(--ink) !important; color: #fff !important; }
-  .btn-primary:hover { background: var(--accent) !important; }
-  .btn-secondary {
-    background: transparent !important; color: var(--ink) !important;
-    border: 1.5px solid var(--border) !important;
-  }
-  .btn-secondary:hover { background: var(--accent-dim) !important; border-color: var(--accent) !important; }
-
-  /* Google Fonts: add light weight */
-
-
-  /* ── STICKY CARD LIGHT OVERRIDE ─────────────────────────── */
-  .sticky-card {
-    background: #ffffff !important;
-    border-color: rgba(74,114,214,0.2) !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.08) !important;
-  }
-  .sticky-card .price-new { color: var(--ink) !important; }
-  .sticky-card .price-old { color: var(--ink-2) !important; }
-  .sticky-card .price-note { color: var(--accent) !important; }
-  .sticky-card .card-includes h4 { color: var(--ink-2) !important; }
-  .sticky-card .include-item { color: var(--ink) !important; }
-  .sticky-card .guarantee-mini { background: rgba(29,158,117,0.08) !important; }
-
+  .hero { min-height: 100vh; padding: 120px 24px 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; z-index: 0; background: radial-gradient(ellipse 80% 60% at 60% 0%, rgba(108,71,255,0.08) 0%, transparent 70%); }
+  .hero-grid { position: absolute; inset: 0; z-index: 0; background-image: linear-gradient(rgba(108,71,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(108,71,255,0.04) 1px, transparent 1px); background-size: 48px 48px; }
+  .hero-content { position: relative; z-index: 1; max-width: 700px; }
+  .persona-tag { display: inline-flex; align-items: center; gap: 6px; background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(108,71,255,0.2); border-radius: 100px; padding: 5px 14px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 24px; }
+  .hero h1 { font-size: clamp(32px, 5.5vw, 56px); font-weight: 800; line-height: 1.08; letter-spacing: -2px; margin-bottom: 16px; color: var(--ink); }
+  .hero h1 .accent { color: var(--accent); font-style: italic; font-family: var(--serif); font-weight: 400; }
+  .hero-sub { font-size: 16px; color: var(--ink-2); line-height: 1.7; max-width: 540px; margin: 0 auto 32px; }
+  .price-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px 32px; max-width: 420px; margin: 0 auto; box-shadow: 0 4px 24px rgba(0,0,0,0.06); }
+  .price-main { font-size: 40px; font-weight: 800; color: var(--ink); letter-spacing: -1.5px; }
+  .price-orig { font-size: 14px; color: var(--ink-3); text-decoration: line-through; margin-left: 8px; }
+  .price-hemat { font-size: 12px; font-weight: 700; color: var(--green); background: var(--green-dim); border: 1px solid var(--green-border); border-radius: 100px; padding: 2px 10px; margin-top: 6px; display: inline-block; }
+  .btn-buy { width: 100%; padding: 15px; background: var(--ink); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: var(--font); margin-top: 18px; transition: background 0.2s, transform 0.15s; }
+  .btn-buy:hover { background: var(--accent); transform: translateY(-1px); }
+  .btn-note { font-size: 12px; color: var(--ink-3); text-align: center; margin-top: 10px; }
+  .container { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+  .section { padding: 64px 0; }
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; font-family: monospace; }
+  .section-title { font-family: var(--serif); font-size: clamp(26px, 3.5vw, 38px); font-weight: 400; letter-spacing: -1px; line-height: 1.15; margin-bottom: 20px; color: var(--ink); }
+  .courses-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+  footer { background: #111; padding: 28px 24px; text-align: center; }
+  footer p { font-size: 12px; color: rgba(255,255,255,0.3); }
+  footer a { color: rgba(255,255,255,0.4); text-decoration: none; }
+  footer a:hover { color: #fff; }
+  @media (max-width: 768px) { nav { padding: 0 20px; } }
 </style>
 </head>
 <body>
 
 <nav>
   <a href="index.html" class="logo">Klaud<span>.id</span></a>
-  <a href="index.html" class="nav-back">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-    Kembali ke beranda
-  </a>
+  <a href="index.html" class="nav-back"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Kembali ke beranda</a>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
-  <div class="hero-inner">
-    <div class="hero-left">
-      <div class="hero-badge">🎬 Kursus Video</div>
-      <h1>Claude untuk<br><span class="accent">Karyawan Indonesia</span></h1>
-      <p class="hero-sub">15 modul video praktis — email, laporan, presentasi, analisis data, dan lebih banyak lagi. Semua dalam Bahasa Indonesia, dengan contoh kasus nyata dari dunia kerja lokal.</p>
-      <div class="hero-bullets">
-        <div class="bullet"><div class="bullet-icon">✓</div>Hemat 3–8 jam kerja setiap minggu</div>
-        <div class="bullet"><div class="bullet-icon">✓</div>Langsung bisa diterapkan hari yang sama</div>
-        <div class="bullet"><div class="bullet-icon">✓</div>Cocok untuk semua bidang pekerjaan</div>
-        <div class="bullet"><div class="bullet-icon">✓</div>Akses seumur hidup + update gratis</div>
+  <div class="hero-content">
+    <div class="persona-tag">Paket Persona · Karyawan & Profesional</div>
+    <h1>Hemat 3–5 jam kerja<br>per minggu dengan <span class="accent">Claude</span></h1>
+    <p class="hero-sub">Semua kursus yang kamu butuhkan dalam satu paket — akses seumur hidup, harga lebih hemat.</p>
+    <div class="price-card">
+      <div style="margin-bottom:4px;">
+        <span class="price-main">Rp 299K</span>
+        <span class="price-orig">Rp 398K</span>
       </div>
-      <div class="hero-meta">
-        <div class="meta-item">🎬 <span>15 modul video</span></div>
-        <div class="meta-item">⏱ <span>6 jam total</span></div>
-        <div class="meta-item">⭐ <span>4.9/5 rating</span></div>
-        <div class="meta-item">👥 <span>2.400+ pelajar</span></div>
-      </div>
-    </div>
-
-    <!-- STICKY CARD -->
-    <div class="sticky-card">
-      <div class="price-box">
-        <div class="price-old">Rp 499.000</div>
-        <div class="price-new">Rp 299.000</div>
-        <div class="price-note">Harga early bird — terbatas</div>
-      </div>
-      <button id="beliBtn" onclick="beliSekarang()"
-  style="width:100%;background:#378ADD;color:#fff;border:none;border-radius:12px;
-         padding:16px;font-size:15px;font-weight:700;cursor:pointer;
-         font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:16px;
-         transition:background 0.2s,transform 0.15s;"
-  onmouseover="this.style.background='#2a72c4';this.style.transform='translateY(-1px)'"
-  onmouseout="this.style.background='#378ADD';this.style.transform='translateY(0)'">
-  Beli Sekarang — Rp 299.000
-</button>
-      <div class="card-includes">
-        <h4>Termasuk</h4>
-        <div class="include-item"><span>🎬</span><span>15 video HD berkualitas tinggi</span></div>
-        <div class="include-item"><span>📄</span><span>Template prompt siap pakai</span></div>
-        <div class="include-item"><span>♾️</span><span>Akses seumur hidup</span></div>
-        <div class="include-item"><span>🔄</span><span>Update konten gratis</span></div>
-        <div class="include-item"><span>👥</span><span>Akses komunitas eksklusif</span></div>
-        <div class="include-item"><span>📱</span><span>Bisa ditonton di HP & laptop</span></div>
-      </div>
-      <div class="guarantee-mini">
-        🛡️ Garansi uang kembali 14 hari — tanpa pertanyaan
-      </div>
+      <div class="price-hemat">Hemat Rp 99K dari harga satuan</div>
+      <button class="btn-buy" onclick="beliPaket()">Beli Paket — Rp 299K</button>
+      <p class="btn-note">Lifetime access · Materi terus diperbarui</p>
     </div>
   </div>
 </section>
 
-<!-- CURRICULUM -->
-<section class="curriculum">
-  <div class="container">
-    <div class="section-label">Kurikulum</div>
-    <h2 class="section-title">15 Modul yang akan<br>mengubah cara Anda bekerja</h2>
-    <p class="section-sub">Dari dasar hingga mahir — setiap modul dirancang untuk langsung bisa dipraktikkan.</p>
-    <div class="modules-grid">
-      <div class="module-item">
-        <div class="module-num">01</div>
-        <div class="module-info">
-          <h4>Kenalan dengan Claude — Lebih dari Sekedar Chatbot</h4>
-          <p>Pahami cara kerja Claude, perbedaannya dengan AI lain, dan mengapa ini mengubah cara kerja profesional modern.</p>
+<div class="container">
+  <section class="section">
+    <div class="section-label">Yang kamu dapat</div>
+    <h2 class="section-title">Kursus yang termasuk<br>dalam paket ini</h2>
+    <div class="courses-list">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;display:flex;align-items:flex-start;gap:16px;">
+        <div style="font-size:11px;font-weight:800;color:var(--accent);font-family:monospace;background:var(--accent-dim);padding:4px 8px;border-radius:6px;white-space:nowrap;margin-top:2px;">K1</div>
+        <div style="flex:1;">
+          <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px;">Dasar Claude AI</div>
+          <div style="font-size:12px;color:var(--ink-2);">Claude.ai · Claude Projects · Claude Artifacts</div>
         </div>
-        <div class="module-dur">⏱ 20 mnt</div>
+        <div style="font-size:13px;font-weight:700;color:var(--ink);white-space:nowrap;">Gratis</div>
       </div>
-      <div class="module-item">
-        <div class="module-num">02</div>
-        <div class="module-info">
-          <h4>Seni Membuat Prompt yang Efektif</h4>
-          <p>Formula prompt yang selalu menghasilkan output berkualitas tinggi — dengan contoh nyata dari dunia kerja Indonesia.</p>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;display:flex;align-items:flex-start;gap:16px;">
+        <div style="font-size:11px;font-weight:800;color:var(--accent);font-family:monospace;background:var(--accent-dim);padding:4px 8px;border-radius:6px;white-space:nowrap;margin-top:2px;">K2</div>
+        <div style="flex:1;">
+          <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px;">Produktivitas Kantor</div>
+          <div style="font-size:12px;color:var(--ink-2);">Gmail · Google Sheets · Google Docs</div>
         </div>
-        <div class="module-dur">⏱ 28 mnt</div>
+        <div style="font-size:13px;font-weight:700;color:var(--ink);white-space:nowrap;">Rp 149K</div>
       </div>
-      <div class="module-item">
-        <div class="module-num">03</div>
-        <div class="module-info">
-          <h4>Email Profesional dalam 2 Menit</h4>
-          <p>Tulis email formal, follow-up, komplain, dan negosiasi yang sempurna — tanpa pusing pilih kata-kata.</p>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;display:flex;align-items:flex-start;gap:16px;">
+        <div style="font-size:11px;font-weight:800;color:var(--accent);font-family:monospace;background:var(--accent-dim);padding:4px 8px;border-radius:6px;white-space:nowrap;margin-top:2px;">K5</div>
+        <div style="flex:1;">
+          <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px;">Analisis Data & Laporan<span style="font-size:10px;font-weight:700;background:var(--accent-dim);color:var(--accent);padding:2px 8px;border-radius:100px;margin-left:8px;">Segera Hadir</span></div>
+          <div style="font-size:12px;color:var(--ink-2);">Google Sheets · Google Forms · Claude Artifacts</div>
         </div>
-        <div class="module-dur">⏱ 32 mnt</div>
-      </div>
-      <div class="module-item">
-        <div class="module-num">04</div>
-        <div class="module-info">
-          <h4>Laporan Mingguan & Bulanan Otomatis</h4>
-          <p>Ubah catatan acak menjadi laporan rapi yang siap presentasi ke atasan — dalam hitungan menit.</p>
-        </div>
-        <div class="module-dur">⏱ 35 mnt</div>
-      </div>
-      <div class="module-item">
-        <div class="module-num">05</div>
-        <div class="module-info">
-          <h4>Presentasi yang Memukau Audiens</h4>
-          <p>Dari outline hingga narasi slide — buat presentasi profesional yang meyakinkan atasan dan klien.</p>
-        </div>
-        <div class="module-dur">⏱ 40 mnt</div>
-      </div>
-      <div class="module-item">
-        <div class="module-num">06</div>
-        <div class="module-info">
-          <h4>Analisis Data Tanpa Rumus Excel yang Rumit</h4>
-          <p>Minta Claude menganalisis data Anda, menemukan tren, dan membuat insight yang mudah dipahami siapapun.</p>
-        </div>
-        <div class="module-dur">⏱ 38 mnt</div>
-      </div>
-      <div class="module-item">
-        <div class="module-num">07</div>
-        <div class="module-info">
-          <h4>Riset & Kompilasi Informasi Cepat</h4>
-          <p>Kumpulkan, rangkum, dan analisis informasi dari berbagai sumber 10x lebih cepat dari biasanya.</p>
-        </div>
-        <div class="module-dur">⏱ 30 mnt</div>
-      </div>
-      <div class="module-item">
-        <div class="module-num">08</div>
-        <div class="module-info">
-          <h4>Meeting yang Produktif dengan Bantuan AI</h4>
-          <p>Buat agenda, notulensi, dan action items meeting secara otomatis — tidak ada lagi rapat yang mubazir.</p>
-        </div>
-        <div class="module-dur">⏱ 25 mnt</div>
-      </div>
-      <div class="module-item">
-        <div class="module-num">09</div>
-        <div class="module-info">
-          <h4>Proposal & Dokumen Bisnis Profesional</h4>
-          <p>Tulis proposal, MoU, SOP, dan dokumen bisnis lainnya dengan struktur dan bahasa yang tepat.</p>
-        </div>
-        <div class="module-dur">⏱ 42 mnt</div>
-      </div>
-      <div class="module-item">
-        <div class="module-num">10</div>
-        <div class="module-info">
-          <h4>Customer Service yang Responsif & Konsisten</h4>
-          <p>Buat template balasan untuk pertanyaan umum, komplain, dan situasi sulit yang selalu on-brand.</p>
-        </div>
-        <div class="module-dur">⏱ 28 mnt</div>
-      </div>
-      <div class="module-item">
-        <div class="module-num">11</div>
-        <div class="module-info">
-          <h4>Manajemen Proyek dengan AI sebagai Asisten</h4>
-          <p>Buat timeline, breakdown tugas, dan laporan progres proyek yang terstruktur dan mudah diikuti tim.</p>
-        </div>
-        <div class="module-dur">⏱ 33 mnt</div>
-      </div>
-      <div class="module-item">
-        <div class="module-num">12</div>
-        <div class="module-info">
-          <h4>Komunikasi Internal Tim yang Efektif</h4>
-          <p>Dari memo internal hingga pengumuman perusahaan — tulis komunikasi yang jelas, singkat, dan tepat sasaran.</p>
-        </div>
-        <div class="module-dur">⏱ 22 mnt</div>
-      </div>
-      <div class="module-item">
-        <div class="module-num">13</div>
-        <div class="module-info">
-          <h4>Belajar Skill Baru 3x Lebih Cepat</h4>
-          <p>Gunakan Claude sebagai tutor pribadi untuk mempelajari skill baru yang dibutuhkan karir Anda.</p>
-        </div>
-        <div class="module-dur">⏱ 27 mnt</div>
-      </div>
-      <div class="module-item">
-        <div class="module-num">14</div>
-        <div class="module-info">
-          <h4>Otomasi Tugas Repetitif Sehari-hari</h4>
-          <p>Identifikasi dan otomasi pekerjaan yang membosankan — fokus pada hal yang benar-benar membutuhkan otak Anda.</p>
-        </div>
-        <div class="module-dur">⏱ 36 mnt</div>
-      </div>
-      <div class="module-item">
-        <div class="module-num">15</div>
-        <div class="module-info">
-          <h4>Bangun Sistem Kerja AI Pribadi Anda</h4>
-          <p>Gabungkan semua yang dipelajari menjadi sistem kerja personal yang konsisten dan terus berkembang.</p>
-        </div>
-        <div class="module-dur">⏱ 45 mnt</div>
+        <div style="font-size:13px;font-weight:700;color:var(--ink);white-space:nowrap;">Rp 199K</div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section id="testimoni">
-  <div class="container">
-    <div class="section-label">Testimoni</div>
-    <h2 class="section-title">Kata mereka yang<br>sudah merasakan manfaatnya</h2>
-    <p class="section-sub" style="margin-bottom:40px">Hasil nyata dari karyawan Indonesia di berbagai industri.</p>
-    <div class="testi-grid">
-      <div class="testi-card">
-        <div class="stars">★★★★★</div>
-        <blockquote>"Laporan bulanan yang biasanya makan waktu 3 jam sekarang selesai dalam 20 menit. Atasan saya sampai tanya, 'kamu pakai jasa siapa?' Haha. Worth every penny!"</blockquote>
-        <div class="testi-author">
-          <div class="avatar">AR</div>
-          <div>
-            <div class="name">Andika R.</div>
-            <div class="role">Finance Manager, Jakarta</div>
-          </div>
-        </div>
-      </div>
-      <div class="testi-card">
-        <div class="stars">★★★★★</div>
-        <blockquote>"Saya HRD dan pekerjaan saya penuh dengan email dan dokumen. Setelah kursus ini, produktivitas saya naik drastis. Bisa pulang lebih awal setiap hari!"</blockquote>
-        <div class="testi-author">
-          <div class="avatar">DS</div>
-          <div>
-            <div class="name">Dewi S.</div>
-            <div class="role">HR Manager, Surabaya</div>
-          </div>
-        </div>
-      </div>
-      <div class="testi-card">
-        <div class="stars">★★★★★</div>
-        <blockquote>"Presentasi ke direksi yang biasanya butuh 2 hari persiapan sekarang bisa saya siapkan dalam 3 jam. Kualitasnya justru lebih baik dari sebelumnya."</blockquote>
-        <div class="testi-author">
-          <div class="avatar">BW</div>
-          <div>
-            <div class="name">Budi W.</div>
-            <div class="role">Project Manager, Bandung</div>
-          </div>
-        </div>
-      </div>
+    <div style="background:var(--accent-dim);border:1px solid rgba(108,71,255,0.15);border-radius:12px;padding:16px 20px;font-size:13px;color:var(--accent);font-weight:600;text-align:center;">
+      Akses semua kursus di atas sekaligus — lifetime access, materi diperbarui gratis
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- GUARANTEE -->
-<section class="guarantee">
-  <div class="container">
-    <div class="guarantee-box">
-      <div class="guarantee-icon">🛡️</div>
-      <h2>Garansi Uang Kembali 14 Hari</h2>
-      <p>Kami yakin kursus ini akan mengubah cara Anda bekerja. Tapi jika dalam <strong>14 hari</strong> setelah pembelian Anda merasa tidak puas — apapun alasannya — kami akan <strong>kembalikan 100% uang Anda</strong>. Tanpa pertanyaan, tanpa ribet.</p>
+  <section class="section" style="border-top:1px solid var(--border);padding-top:64px;">
+    <div class="section-label">Setelah belajar</div>
+    <h2 class="section-title">Yang bisa kamu lakukan</h2>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px 32px;">
+<div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;"><span style="color:var(--accent);font-weight:700;flex-shrink:0;">✓</span><span style="font-size:14px;color:var(--ink-2);">Email dan laporan profesional dalam hitungan menit</span></div><div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;"><span style="color:var(--accent);font-weight:700;flex-shrink:0;">✓</span><span style="font-size:14px;color:var(--ink-2);">Analisis data KPI dan rekap penjualan dari Google Sheets</span></div><div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;"><span style="color:var(--accent);font-weight:700;flex-shrink:0;">✓</span><span style="font-size:14px;color:var(--ink-2);">Notulensi rapat otomatis + action items + follow-up</span></div><div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;"><span style="color:var(--accent);font-weight:700;flex-shrink:0;">✓</span><span style="font-size:14px;color:var(--ink-2);">SOP dan dokumentasi kantor yang rapi dan terstandar</span></div><div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;"><span style="color:var(--accent);font-weight:700;flex-shrink:0;">✓</span><span style="font-size:14px;color:var(--ink-2);">Dashboard data bisnis mingguan di Google Sheets</span></div>    </div>
+  </section>
+
+  <section class="section" style="border-top:1px solid var(--border);padding-top:64px;text-align:center;">
+    <div class="price-card" style="max-width:100%;">
+      <div style="font-family:var(--serif);font-size:22px;margin-bottom:8px;color:var(--ink);">Siap mulai belajar?</div>
+      <div style="font-size:13px;color:var(--ink-2);margin-bottom:16px;">Beli sekarang dan langsung akses semua kursus dalam paket ini.</div>
+      <div style="margin-bottom:4px;"><span class="price-main" style="font-size:32px;">Rp 299K</span><span class="price-orig">Rp 398K</span></div>
+      <div class="price-hemat">Hemat Rp 99K</div>
+      <button class="btn-buy" onclick="beliPaket()">Beli Paket Sekarang</button>
+      <p class="btn-note">Lifetime access · Materi terus diperbarui</p>
     </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section id="faq">
-  <div class="container">
-    <div class="section-label">FAQ</div>
-    <h2 class="section-title" style="margin-bottom:12px">Pertanyaan yang<br>sering ditanyakan</h2>
-    <p class="section-sub">Masih ada pertanyaan? Hubungi kami di WhatsApp.</p>
-    <div class="faq-list">
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          Apakah saya perlu berlangganan Claude berbayar?
-          <span class="arrow">+</span>
-        </button>
-        <div class="faq-a">Tidak wajib! Anda bisa mulai dengan Claude versi gratis di claude.ai. Namun untuk hasil maksimal dan tanpa batasan, kami rekomendasikan Claude Pro (sekitar Rp 300K/bulan). Kursus ini mengajarkan cara memaksimalkan keduanya.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          Apakah konten dalam Bahasa Indonesia sepenuhnya?
-          <span class="arrow">+</span>
-        </button>
-        <div class="faq-a">Ya, 100% Bahasa Indonesia — mulai dari video, materi, hingga template prompt. Semua contoh kasus juga diambil dari dunia kerja Indonesia, bukan terjemahan dari konten asing.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          Berapa lama akses saya berlaku?
-          <span class="arrow">+</span>
-        </button>
-        <div class="faq-a">Akses seumur hidup! Setelah membeli, Anda bisa menonton kapan saja dan sebanyak apapun. Kami juga memberikan update konten secara gratis ketika ada fitur Claude terbaru.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          Apakah cocok untuk pemula yang belum pernah pakai AI?
-          <span class="arrow">+</span>
-        </button>
-        <div class="faq-a">Sangat cocok! Modul 1 dan 2 dirancang khusus untuk pemula. Tidak ada pengetahuan teknis yang dibutuhkan — jika Anda bisa mengetik chat WhatsApp, Anda bisa belajar kursus ini.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          Bagaimana cara mengakses kursus setelah membeli?
-          <span class="arrow">+</span>
-        </button>
-        <div class="faq-a">Setelah pembayaran dikonfirmasi, Anda akan mendapatkan email dengan link akses ke platform kursus. Konten bisa ditonton di browser laptop maupun HP Anda kapan saja.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          Apakah ada sesi tanya jawab langsung?
-          <span class="arrow">+</span>
-        </button>
-        <div class="faq-a">Anda mendapatkan akses ke komunitas eksklusif di WhatsApp/Discord tempat Anda bisa bertanya kapan saja. Tim kami aktif menjawab setiap hari kerja.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- NOTIFY MODAL -->
-<div class="modal-overlay" id="notifyModal">
-  <div class="modal" style="position:relative">
-    <button class="modal-close" onclick="document.getElementById('notifyModal').classList.remove('active')">✕</button>
-    <div style="font-size:40px;margin-bottom:16px">🔔</div>
-    <h3>Beritahu Saya!</h3>
-    <p>Masukkan email Anda dan kami akan langsung notifikasi begitu kursus ini tersedia — plus dapatkan harga early bird eksklusif.</p>
-    <input type="text" class="modal-input" placeholder="Nama Anda" id="notifyName">
-    <input type="email" class="modal-input" placeholder="Email aktif Anda" id="notifyEmail">
-    <button class="modal-submit" onclick="submitNotify()">Daftarkan Saya →</button>
-  </div>
-</div>
-
-
-<div class="modal-overlay" id="paymentModal" style="background:rgba(0,0,0,0.6)">
-  <div class="modal" style="position:relative;background:#ffffff;color:#1a1a2e">
-    <button class="modal-close" onclick="closePaymentModal()" style="color:#64748b">✕</button>
-    <div style="font-size:40px;margin-bottom:16px">🛒</div>
-    <h3 style="color:#1a1a2e">Beli Sekarang</h3>
-    <p style="color:#475569">Masukkan data Anda untuk melanjutkan pembayaran.</p>
-    <input type="text" class="modal-input" placeholder="Nama lengkap Anda" id="paymentName" style="background:#f1f5f9;color:#1a1a2e;border:1.5px solid #cbd5e1">
-    <input type="email" class="modal-input" placeholder="Email aktif Anda" id="paymentEmail" style="background:#f1f5f9;color:#1a1a2e;border:1.5px solid #cbd5e1">
-    <button class="modal-submit" id="paymentSubmitBtn" onclick="submitPayment()" style="background:#378ADD;color:#fff;">Lanjutkan Pembayaran →</button>
-  </div>
+  </section>
 </div>
 
 <footer>
   <p>© 2025 <a href="index.html">Klaud.id</a> — Platform Belajar Claude AI #1 dalam Bahasa Indonesia</p>
 </footer>
 
-<script>
-  function toggleFaq(btn) {
-    const answer = btn.nextElementSibling;
-    const isOpen = answer.classList.contains('open');
-    document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
-    document.querySelectorAll('.faq-q').forEach(q => q.classList.remove('open'));
-    if (!isOpen) { answer.classList.add('open'); btn.classList.add('open'); }
-  }
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="login-modal.js"></script>
+<script src="payment-success-modal.js"></script>
 
-  async function submitNotify() {
-    const name = document.getElementById('notifyName').value;
-    const email = document.getElementById('notifyEmail').value;
-    if (!name.trim()) { alert('Mohon masukkan nama Anda.'); return; }
-    if (!email.trim() || !email.includes('@')) { alert('Mohon masukkan email yang valid.'); return; }
-    await fetch('https://klaud-backend-production.up.railway.app/signup', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
-      body: JSON.stringify({name, email, source: 'kursus-karyawan'})
-    });
-        // Clear fields
-    if (document.getElementById('notifyName')) document.getElementById('notifyName').value = '';
-    if (document.getElementById('notifyEmail')) document.getElementById('notifyEmail').value = '';
-    if (document.getElementById('notifyTopic')) document.getElementById('notifyTopic').value = '';
-    document.getElementById('notifyModal').innerHTML = `
-      <div style="text-align:center;padding:20px">
-        <div style="font-size:48px;margin-bottom:16px">🎉</div>
-        <h3 style="font-size:22px;font-weight:800;margin-bottom:8px">Berhasil didaftarkan!</h3>
-        <p style="font-size:14px;color:var(--blue-light);line-height:1.6">Kami akan email <strong style="color:var(--warm-white)">${email}</strong> begitu kursus tersedia. Nantikan harga early bird eksklusif untuk Anda!</p>
-        <button onclick="document.getElementById('notifyModal').classList.remove('active')" style="margin-top:24px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;">Tutup</button>
-      </div>`;
-  }
-
-  document.getElementById('notifyModal').addEventListener('click', function(e) {
-    if (e.target === this) this.classList.remove('active');
-  });
-</script>
+<div id="paymentModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.5);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#fff;border-radius:20px;padding:36px;max-width:400px;width:100%;box-shadow:0 24px 64px rgba(0,0,0,0.18);position:relative;font-family:var(--font);">
+    <button onclick="document.getElementById('paymentModal').style.display='none'" style="position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;background:#F5F5F7;border:none;cursor:pointer;font-size:16px;color:#777;">✕</button>
+    <div style="font-size:11px;font-weight:700;color:var(--accent);letter-spacing:1px;margin-bottom:14px;">BELI PAKET</div>
+    <div style="font-family:var(--serif);font-size:20px;color:var(--ink);margin-bottom:4px;">Claude untuk Karyawan & Profesional</div>
+    <div style="font-size:13px;color:var(--ink-2);margin-bottom:24px;">Rp 299,000 · Lifetime access · 3 kursus</div>
+    <label style="display:block;font-size:12px;font-weight:600;color:var(--ink-2);margin-bottom:6px;">Nama lengkap</label>
+    <input type="text" id="paymentName" placeholder="Nama lengkap Anda" style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;color:var(--ink);margin-bottom:12px;outline:none;font-family:var(--font);box-sizing:border-box;">
+    <label style="display:block;font-size:12px;font-weight:600;color:var(--ink-2);margin-bottom:6px;">Email</label>
+    <input type="email" id="paymentEmail" placeholder="nama@email.com" style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;color:var(--ink);margin-bottom:20px;outline:none;font-family:var(--font);box-sizing:border-box;">
+    <button id="paymentSubmitBtn" onclick="submitPayment()" style="width:100%;padding:13px;background:var(--ink);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:background 0.2s;">Lanjutkan Pembayaran →</button>
+  </div>
+</div>
 
 <!-- Duitku POP -->
-<script src="payment-success-modal.js"></script>
 <script src="https://app-sandbox.duitku.com/lib/js/duitku.js"></script>
 <script>
-  async function beliSekarang() {
+  (async () => {
     const { data: { session } } = await sbClient.auth.getSession();
-    const name  = session?.user?.user_metadata?.full_name || session?.user?.email?.split('@')[0] || '';
-    const email = session?.user?.email || '';
-    document.getElementById('paymentName').value = name;
-    document.getElementById('paymentEmail').value = email;
-    document.getElementById('paymentSubmitBtn').disabled = false;
-    document.getElementById('paymentSubmitBtn').textContent = 'Lanjutkan Pembayaran →';
-    document.getElementById('paymentModal').classList.add('active');
+    if (!session) return;
+    const { data: enrollments } = await sbClient.from('enrollments').select('course_slug').eq('email', session.user.email);
+    if (enrollments && enrollments.some(e => e.course_slug === 'paket-karyawan')) {
+      document.querySelectorAll('.btn-buy').forEach(btn => {
+        btn.textContent = 'Buka Dashboard →';
+        btn.onclick = () => window.location.href = 'dashboard.html';
+        btn.style.background = 'var(--accent)';
+      });
+    }
+  })();
+
+  async function beliPaket() {
+    const { data: { session } } = await sbClient.auth.getSession();
+    if (session) {
+      const name = session.user.user_metadata?.full_name || session.user.email.split('@')[0];
+      document.getElementById('paymentName').value = name;
+      document.getElementById('paymentEmail').value = session.user.email;
+      document.getElementById('paymentSubmitBtn').disabled = false;
+      document.getElementById('paymentSubmitBtn').textContent = 'Lanjutkan Pembayaran →';
+      document.getElementById('paymentModal').style.display = 'flex';
+    } else {
+      window.openLoginModal();
+    }
   }
 
-  function closePaymentModal() {
-    document.getElementById('paymentModal').classList.remove('active');
-  }
+  function closePaymentModal() { document.getElementById('paymentModal').style.display = 'none'; }
 
-  document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('paymentModal').addEventListener('click', function(e) {
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('paymentModal').addEventListener('click', function (e) {
       if (e.target === this) closePaymentModal();
     });
   });
@@ -726,54 +195,30 @@
   async function submitPayment() {
     const name  = document.getElementById('paymentName').value.trim();
     const email = document.getElementById('paymentEmail').value.trim();
-    const submitBtn = document.getElementById('paymentSubmitBtn');
-
+    const btn   = document.getElementById('paymentSubmitBtn');
     if (!name) { alert('Mohon masukkan nama Anda.'); return; }
     if (!email || !email.includes('@')) { alert('Mohon masukkan email yang valid.'); return; }
-
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Memproses...';
-
+    btn.disabled = true; btn.textContent = 'Memproses...';
     try {
       const res = await fetch('https://klaud-backend-production.up.railway.app/create-payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          courseSlug:    'kursus-karyawan',
-          customerName:  name,
-          customerEmail: email,
-        })
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ courseSlug: 'paket-karyawan', customerName: name, customerEmail: email })
       });
-
       const data = await res.json();
       if (!data.success) throw new Error(data.message);
-
       closePaymentModal();
-
       checkout.process(data.reference, {
-        successEvent: function(result) { window.showPaymentSuccess(); },
-        pendingEvent: function(result) {
-          alert('Pembayaran pending — selesaikan pembayaran Anda ya!');
-        },
-        errorEvent: function(result) {
-          alert('Terjadi kesalahan. Silakan coba lagi.');
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Lanjutkan Pembayaran →';
-        },
-        closeEvent: function() {
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Lanjutkan Pembayaran →';
-        }
+        successEvent: () => { window.showPaymentSuccess(); },
+        pendingEvent: () => { alert('Pembayaran pending — selesaikan pembayaran Anda ya!'); },
+        errorEvent:   () => { alert('Terjadi kesalahan. Silakan coba lagi.'); btn.disabled = false; btn.textContent = 'Lanjutkan Pembayaran →'; },
+        closeEvent:   () => { btn.disabled = false; btn.textContent = 'Lanjutkan Pembayaran →'; }
       });
-
     } catch (err) {
       console.error(err);
       alert('Gagal memproses pembayaran. Silakan coba lagi.');
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Lanjutkan Pembayaran →';
+      btn.disabled = false; btn.textContent = 'Lanjutkan Pembayaran →';
     }
   }
 </script>
-
 </body>
 </html>

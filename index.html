@@ -70,7 +70,7 @@ section { padding: 88px 0; position: relative; z-index: 1; }
 .section-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 14px; }
 .section-title { font-family: var(--serif); font-size: clamp(30px, 3.5vw, 46px); font-weight: 400; letter-spacing: -1.5px; color: var(--ink); margin-bottom: 12px; line-height: 1.1; }
 .section-sub { font-size: 14px; color: var(--ink-2); line-height: 1.75; max-width: 440px; }
-.jalur-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 52px; }
+.jalur-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 52px; }
 .jalur-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 26px 22px; display: flex; flex-direction: column; gap: 14px; transition: all 0.2s; }
 .jalur-card:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,0.07); border-color: var(--border-strong); }
 .jalur-card.featured { background: var(--ink); border-color: var(--ink); position: relative; overflow: hidden; }
@@ -149,7 +149,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
 .footer-links ul a:hover { color: #fff; }
 .footer-bottom { max-width: 1100px; margin: 28px auto 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
 .footer-bottom p { font-size: 11px; color: rgba(255,255,255,0.18); }
-@media (max-width: 960px) { .jalur-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px) { .jalur-grid { grid-template-columns: 1fr; } }
 @media (max-width: 640px) {
   nav { padding: 0 20px; } .nav-links { display: none; }
   .hero { padding: 100px 20px 64px; } .divider { margin: 0 20px; }
@@ -196,91 +196,63 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
 <section id="jalur">
   <div class="container">
     <div class="reveal">
-      <div class="section-eyebrow">Jalur Belajar</div>
-      <h2 class="section-title">Pilih jalur<br>sesuai karirmu</h2>
-      <p class="section-sub">Setiap jalur dirancang untuk kebutuhan spesifik — kursus yang relevan, bukan semua kursus.</p>
+      <div class="section-eyebrow">Paket Belajar</div>
+      <h2 class="section-title">4 Paket Persona —<br>sesuai tujuanmu</h2>
+      <p class="section-sub">Setiap paket berisi kursus yang paling relevan untuk tujuanmu. Beli paket atau pilih kursus satuan.</p>
     </div>
     <div class="jalur-grid reveal">
       <div class="jalur-card">
+        <div class="jalur-persona">Mahasiswa & Fresh Graduate</div>
+        <h3>Claude untuk Mahasiswa</h3>
+        <div class="jalur-courses">
+          <div class="jalur-course-item available"><span class="jalur-dot"></span>K1 · Dasar Claude AI</div>
+          <div class="jalur-course-item"><span class="jalur-dot"></span>K4 · Copywriting & Konten Digital <span class="cs-tag">Segera</span></div>
+          <div class="jalur-course-item"><span class="jalur-dot"></span>K5 · Analisis Data & Laporan <span class="cs-tag">Segera</span></div>
+        </div>
+        <div class="jalur-divider"></div>
+        <div class="jalur-price">Rp 249K <span class="jalur-original">Rp 398K</span><span class="jalur-save">Hemat Rp 149K</span></div>
+        <p class="jalur-note">3 kursus · Lifetime access</p>
+        <a href="kursus-mahasiswa.html" class="jalur-btn">Lihat Paket Mahasiswa →</a>
+      </div>
+      <div class="jalur-card">
         <div class="jalur-persona">Karyawan & Profesional</div>
-        <h3>Jalur Profesional</h3>
+        <h3>Claude untuk Karyawan</h3>
         <div class="jalur-courses">
-          <div class="jalur-course-item available"><span class="jalur-dot"></span>Mulai dengan Claude AI</div>
-          <div class="jalur-course-item available"><span class="jalur-dot"></span>Claude untuk Pekerjaan Sehari-hari</div>
-          <div class="jalur-course-item"><span class="jalur-dot"></span>Claude untuk Analisis Data <span class="cs-tag">Segera</span></div>
+          <div class="jalur-course-item available"><span class="jalur-dot"></span>K1 · Dasar Claude AI</div>
+          <div class="jalur-course-item available"><span class="jalur-dot"></span>K2 · Produktivitas Kantor</div>
+          <div class="jalur-course-item"><span class="jalur-dot"></span>K5 · Analisis Data & Laporan <span class="cs-tag">Segera</span></div>
         </div>
         <div class="jalur-divider"></div>
-        <div class="jalur-price">Rp 299K <span class="jalur-original">Rp 398K</span><span class="jalur-save">Hemat 25%</span></div>
-        <p class="jalur-note">2 kursus tersedia · 1 menyusul saat launch</p>
-        <a href="login.html" data-dest="kerja-sehari-hari.html" class="jalur-btn">Mulai Jalur Profesional →</a>
-      </div>
-      <div class="jalur-card">
-        <div class="jalur-persona">Pemilik Bisnis & UKM</div>
-        <h3>Jalur Bisnis & UKM</h3>
-        <div class="jalur-courses">
-          <div class="jalur-course-item available"><span class="jalur-dot"></span>Mulai dengan Claude AI</div>
-          <div class="jalur-course-item available"><span class="jalur-dot"></span>Claude untuk Bisnis & UKM</div>
-          <div class="jalur-course-item"><span class="jalur-dot"></span>Claude untuk Konten & Copywriting <span class="cs-tag">Segera</span></div>
-          <div class="jalur-course-item"><span class="jalur-dot"></span>Build Automation dengan Claude <span class="cs-tag">Segera</span></div>
-        </div>
-        <div class="jalur-divider"></div>
-        <div class="jalur-price">Rp 499K <span class="jalur-original">Rp 647K</span><span class="jalur-save">Hemat 23%</span></div>
-        <p class="jalur-note">2 kursus tersedia · 2 menyusul saat launch</p>
-        <a href="login.html" data-dest="bisnis-ukm.html" class="jalur-btn">Mulai Jalur Bisnis →</a>
-      </div>
-      <div class="jalur-card">
-        <div class="jalur-persona">Content Creator</div>
-        <h3>Jalur Content Creator</h3>
-        <div class="jalur-courses">
-          <div class="jalur-course-item available"><span class="jalur-dot"></span>Mulai dengan Claude AI</div>
-          <div class="jalur-course-item available"><span class="jalur-dot"></span>Claude untuk Bisnis & UKM</div>
-          <div class="jalur-course-item"><span class="jalur-dot"></span>Claude untuk Konten & Copywriting <span class="cs-tag">Segera</span></div>
-        </div>
-        <div class="jalur-divider"></div>
-        <div class="jalur-price">Rp 299K <span class="jalur-original">Rp 348K</span><span class="jalur-save">Hemat 14%</span></div>
-        <p class="jalur-note">2 kursus tersedia · 1 menyusul saat launch</p>
-        <a href="login.html" data-dest="bisnis-ukm.html" class="jalur-btn">Mulai Jalur Creator →</a>
-      </div>
-      <div class="jalur-card">
-        <div class="jalur-persona">Mahasiswa</div>
-        <h3>Jalur Mahasiswa</h3>
-        <div class="jalur-courses">
-          <div class="jalur-course-item available"><span class="jalur-dot"></span>Mulai dengan Claude AI</div>
-          <div class="jalur-course-item"><span class="jalur-dot"></span>Claude untuk Konten & Copywriting <span class="cs-tag">Segera</span></div>
-          <div class="jalur-course-item"><span class="jalur-dot"></span>Claude untuk Analisis Data <span class="cs-tag">Segera</span></div>
-        </div>
-        <div class="jalur-divider"></div>
-        <div class="jalur-price">Rp 249K <span class="jalur-original">Rp 348K</span><span class="jalur-save">Hemat 28%</span></div>
-        <p class="jalur-note">1 kursus tersedia · 2 menyusul saat launch</p>
-        <a href="login.html" data-dest="kursus-mahasiswa.html" class="jalur-btn">Mulai Jalur Mahasiswa →</a>
-      </div>
-      <div class="jalur-card">
-        <div class="jalur-persona">Developer & Tech</div>
-        <h3>Jalur Developer</h3>
-        <div class="jalur-courses">
-          <div class="jalur-course-item available"><span class="jalur-dot"></span>Mulai dengan Claude AI</div>
-          <div class="jalur-course-item"><span class="jalur-dot"></span>Build AI-Powered App Sederhana <span class="cs-tag">Segera</span></div>
-          <div class="jalur-course-item"><span class="jalur-dot"></span>Claude API untuk Developer <span class="cs-tag">Segera</span></div>
-          <div class="jalur-course-item"><span class="jalur-dot"></span>Build & Jual Produk AI <span class="cs-tag">Segera</span></div>
-        </div>
-        <div class="jalur-divider"></div>
-        <div class="jalur-price">Rp 799K <span class="jalur-original">Rp 1.197K</span><span class="jalur-save">Hemat 33%</span></div>
-        <p class="jalur-note">1 kursus tersedia · 3 menyusul saat launch</p>
-        <a href="login.html" data-dest="coming-soon.html" class="jalur-btn">Mulai Jalur Developer →</a>
+        <div class="jalur-price">Rp 299K <span class="jalur-original">Rp 398K</span><span class="jalur-save">Hemat Rp 99K</span></div>
+        <p class="jalur-note">3 kursus · Lifetime access</p>
+        <a href="kursus-karyawan.html" class="jalur-btn">Lihat Paket Karyawan →</a>
       </div>
       <div class="jalur-card featured">
-        <div class="jalur-persona">All Access</div>
-        <h3>Semua 9 Kursus</h3>
+        <div class="jalur-persona">Pengusaha & UMKM</div>
+        <h3>Claude untuk Pengusaha</h3>
         <div class="jalur-courses">
-          <div class="jalur-course-item available"><span class="jalur-dot"></span>Mulai dengan Claude AI</div>
-          <div class="jalur-course-item available"><span class="jalur-dot"></span>Claude untuk Pekerjaan Sehari-hari</div>
-          <div class="jalur-course-item available"><span class="jalur-dot"></span>Claude untuk Bisnis & UKM</div>
-          <div class="jalur-course-item"><span class="jalur-dot"></span>+ 6 kursus lainnya <span class="cs-tag">Segera</span></div>
+          <div class="jalur-course-item available"><span class="jalur-dot"></span>K1 · Dasar Claude AI</div>
+          <div class="jalur-course-item available"><span class="jalur-dot"></span>K3 · Konten & Pemasaran Bisnis</div>
+          <div class="jalur-course-item"><span class="jalur-dot"></span>K4 · Copywriting & Konten Digital <span class="cs-tag">Segera</span></div>
+          <div class="jalur-course-item"><span class="jalur-dot"></span>K6 · Automasi Workflow <span class="cs-tag">Segera</span></div>
         </div>
         <div class="jalur-divider"></div>
-        <div class="jalur-price">Rp 999K <span class="jalur-original">Rp 1.694K</span><span class="jalur-save">Hemat 41%</span></div>
-        <p class="jalur-note">3 kursus tersedia · 6 kursus berikutnya otomatis terbuka</p>
-        <a href="login.html" data-dest="dashboard.html" class="jalur-btn primary">Mulai All Access →</a>
+        <div class="jalur-price">Rp 499K <span class="jalur-original">Rp 647K</span><span class="jalur-save">Hemat Rp 148K</span></div>
+        <p class="jalur-note">4 kursus · Lifetime access</p>
+        <a href="kursus-ukm.html" class="jalur-btn primary">Lihat Paket Pengusaha →</a>
+      </div>
+      <div class="jalur-card">
+        <div class="jalur-persona">Content Creator & Digital Marketer</div>
+        <h3>Claude untuk Content Creator</h3>
+        <div class="jalur-courses">
+          <div class="jalur-course-item available"><span class="jalur-dot"></span>K1 · Dasar Claude AI</div>
+          <div class="jalur-course-item available"><span class="jalur-dot"></span>K3 · Konten & Pemasaran Bisnis</div>
+          <div class="jalur-course-item"><span class="jalur-dot"></span>K4 · Copywriting & Konten Digital <span class="cs-tag">Segera</span></div>
+        </div>
+        <div class="jalur-divider"></div>
+        <div class="jalur-price">Rp 299K <span class="jalur-original">Rp 348K</span><span class="jalur-save">Hemat Rp 49K</span></div>
+        <p class="jalur-note">3 kursus · Lifetime access</p>
+        <a href="paket-content-creator.html" class="jalur-btn">Lihat Paket Creator →</a>
       </div>
     </div>
   </div>
@@ -290,21 +262,21 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
   <div class="container">
     <div class="reveal">
       <div class="section-eyebrow">Kurikulum</div>
-      <h2 class="section-title">10 Kursus · 3 Level · ~16 Jam</h2>
-      <p class="section-sub">Atau pilih satu kursus saja — semua tersedia secara individu.</p>
+      <h2 class="section-title">9 Kursus · 3 Level · ~16 Jam</h2>
+      <p class="section-sub">Atau pilih kursus satuan — beli satu, akses selamanya.</p>
     </div>
     <div class="carousel-wrap reveal">
       <div class="carousel" id="courseCarousel">
-        <div class="course-card"><div class="course-card-thumb th-free">📋</div><span class="course-tag tag-green">Gratis</span><h3>20 Prompt Claude Terbaik</h3><p>Prompt siap pakai untuk email, laporan, konten sosmed — langsung copy-paste.</p><div class="course-meta"><span>Panduan prompt</span><span>Langsung pakai</span></div><div class="course-price free-price">Gratis</div><a href="prompt-gratis.html" class="course-btn">Pelajari</a></div>
-        <div class="course-card"><div class="course-card-thumb th-free">🤖</div><span class="course-tag tag-green">Gratis</span><h3>Mulai dengan Claude AI</h3><p>Dari nol sampai bisa pakai Claude untuk kebutuhan sehari-hari. Projects, Artifacts, Docs.</p><div class="course-meta"><span>6 modul</span><span>1 jam</span></div><div class="course-price free-price">Gratis</div><a href="mulai-claude.html" class="course-btn">Pelajari</a></div>
-        <div class="course-card"><div class="course-card-thumb th-b">💼</div><span class="course-tag tag-b">Beginner</span><h3>Claude untuk Pekerjaan Sehari-hari</h3><p>Hemat 3–5 jam kerja per minggu. Gmail, Sheets, Docs, Claude Projects.</p><div class="course-meta"><span>6 modul</span><span>1.5 jam</span></div><div class="course-price">Rp 149K</div><a href="kerja-sehari-hari.html" class="course-btn">Pelajari</a></div>
-        <div class="course-card"><div class="course-card-thumb th-b">🏪</div><span class="course-tag tag-b">Beginner</span><h3>Claude untuk Bisnis & UKM</h3><p>Tokopedia, Shopee, WhatsApp Business, Instagram — sistem konten otomatis.</p><div class="course-meta"><span>6 modul</span><span>1.5 jam</span></div><div class="course-price">Rp 149K</div><a href="bisnis-ukm.html" class="course-btn">Pelajari</a></div>
-        <div class="course-card"><div class="course-card-thumb th-i">✍️</div><span class="course-tag tag-i">Intermediate</span><h3>Claude untuk Konten & Copywriting</h3><p>Artikel SEO, TikTok scripts, email sequence, landing page.</p><div class="course-meta"><span>6 modul</span><span>1.5 jam</span></div><div class="course-price">Rp 199K</div><a href="#" class="course-btn disabled">Segera Hadir</a></div>
-        <div class="course-card"><div class="course-card-thumb th-i">📊</div><span class="course-tag tag-i">Intermediate</span><h3>Claude untuk Analisis Data</h3><p>Data mentah jadi insight. Google Sheets, Forms, Claude Artifacts.</p><div class="course-meta"><span>6 modul</span><span>1.5 jam</span></div><div class="course-price">Rp 199K</div><a href="#" class="course-btn disabled">Segera Hadir</a></div>
-        <div class="course-card"><div class="course-card-thumb th-i">⚡</div><span class="course-tag tag-i">Intermediate</span><h3>Build Automation dengan Claude</h3><p>3 automation aktif dengan Zapier, Make, n8n yang jalan 24/7.</p><div class="course-meta"><span>7 modul</span><span>2 jam</span></div><div class="course-price">Rp 299K</div><a href="#" class="course-btn disabled">Segera Hadir</a></div>
-        <div class="course-card"><div class="course-card-thumb th-a">🚀</div><span class="course-tag tag-adv">Advanced</span><h3>Build AI-Powered App Sederhana</h3><p>Web app AI live di GitHub Pages. Claude API + HTML/JS — dari ide ke deploy.</p><div class="course-meta"><span>7 modul</span><span>2 jam</span></div><div class="course-price">Rp 299K</div><a href="#" class="course-btn disabled">Segera Hadir</a></div>
-        <div class="course-card"><div class="course-card-thumb th-a">🔌</div><span class="course-tag tag-adv">Advanced</span><h3>Claude API untuk Developer</h3><p>Streaming, tool use, caching, Railway deploy. Integrasikan Claude ke project nyata.</p><div class="course-meta"><span>7 modul</span><span>2 jam</span></div><div class="course-price">Rp 399K</div><a href="#" class="course-btn disabled">Segera Hadir</a></div>
-        <div class="course-card"><div class="course-card-thumb th-a">💰</div><span class="course-tag tag-adv">Advanced</span><h3>Build & Jual Produk AI</h3><p>Dari ide ke produk AI yang menghasilkan uang. Framer, Midtrans, WhatsApp.</p><div class="course-meta"><span>7 modul</span><span>2 jam</span></div><div class="course-price">Rp 499K</div><a href="#" class="course-btn disabled">Segera Hadir</a></div>
+        <div class="course-card"><div class="course-card-thumb th-free">📋</div><span class="course-tag tag-green">Gratis</span><h3>Panduan: 20 Prompt Terbaik</h3><p>Prompt siap pakai untuk email, laporan, konten sosmed — langsung copy-paste.</p><div class="course-meta"><span>Panduan prompt</span><span>Langsung pakai</span></div><div class="course-price free-price">Gratis</div><a href="prompt-gratis.html" class="course-btn">Pelajari</a></div>
+        <div class="course-card"><div class="course-card-thumb th-free">🤖</div><span class="course-tag tag-green">Gratis</span><h3>K1 · Dasar Claude AI</h3><p>Dari nol sampai bisa pakai Claude untuk kebutuhan sehari-hari — dalam 1 jam.</p><div class="course-meta"><span>6 modul</span><span>1 jam</span></div><div class="course-price free-price">Gratis</div><a href="mulai-claude.html" class="course-btn">Pelajari</a></div>
+        <div class="course-card"><div class="course-card-thumb th-b">💼</div><span class="course-tag tag-b">Beginner</span><h3>K2 · Produktivitas Kantor</h3><p>Hemat 3–5 jam kerja per minggu. Gmail, Sheets, Docs, Claude Projects.</p><div class="course-meta"><span>6 modul</span><span>1.5 jam</span></div><div class="course-price">Rp 149K</div><a href="kerja-sehari-hari.html" class="course-btn">Pelajari</a></div>
+        <div class="course-card"><div class="course-card-thumb th-b">🏪</div><span class="course-tag tag-b">Beginner</span><h3>K3 · Konten & Pemasaran Bisnis</h3><p>Tokopedia, Shopee, WhatsApp Business, Notion — sistem konten otomatis.</p><div class="course-meta"><span>6 modul</span><span>1.5 jam</span></div><div class="course-price">Rp 149K</div><a href="bisnis-ukm.html" class="course-btn">Pelajari</a></div>
+        <div class="course-card"><div class="course-card-thumb th-i">✍️</div><span class="course-tag tag-i">Intermediate</span><h3>K4 · Copywriting & Konten Digital</h3><p>Artikel SEO, TikTok scripts, email sequence, landing page.</p><div class="course-meta"><span>6 modul</span><span>1.5 jam</span></div><div class="course-price">Rp 199K</div><a href="#" class="course-btn disabled">Segera Hadir</a></div>
+        <div class="course-card"><div class="course-card-thumb th-i">📊</div><span class="course-tag tag-i">Intermediate</span><h3>K5 · Analisis Data & Laporan</h3><p>Data mentah jadi insight. Google Sheets, Forms, Claude Artifacts.</p><div class="course-meta"><span>6 modul</span><span>1.5 jam</span></div><div class="course-price">Rp 199K</div><a href="#" class="course-btn disabled">Segera Hadir</a></div>
+        <div class="course-card"><div class="course-card-thumb th-i">⚡</div><span class="course-tag tag-i">Intermediate</span><h3>K6 · Automasi Workflow</h3><p>3 automation aktif dengan Zapier, Make, n8n yang jalan 24/7.</p><div class="course-meta"><span>7 modul</span><span>2 jam</span></div><div class="course-price">Rp 299K</div><a href="#" class="course-btn disabled">Segera Hadir</a></div>
+        <div class="course-card"><div class="course-card-thumb th-a">🚀</div><span class="course-tag tag-adv">Advanced</span><h3>K7 · Build AI App Sederhana</h3><p>Web app AI live di GitHub Pages. Claude API + HTML/JS — dari ide ke deploy.</p><div class="course-meta"><span>7 modul</span><span>2 jam</span></div><div class="course-price">Rp 299K</div><a href="#" class="course-btn disabled">Segera Hadir</a></div>
+        <div class="course-card"><div class="course-card-thumb th-a">🔌</div><span class="course-tag tag-adv">Advanced</span><h3>K8 · Claude API untuk Developer</h3><p>Streaming, tool use, caching, Railway deploy. Integrasikan Claude ke project nyata.</p><div class="course-meta"><span>7 modul</span><span>2 jam</span></div><div class="course-price">Rp 399K</div><a href="#" class="course-btn disabled">Segera Hadir</a></div>
+        <div class="course-card"><div class="course-card-thumb th-a">💰</div><span class="course-tag tag-adv">Advanced</span><h3>K9 · Build & Monetisasi Produk AI</h3><p>Dari ide ke produk AI yang menghasilkan uang. Framer, Midtrans, WhatsApp.</p><div class="course-meta"><span>7 modul</span><span>2 jam</span></div><div class="course-price">Rp 499K</div><a href="#" class="course-btn disabled">Segera Hadir</a></div>
       </div>
       <div class="carousel-nav">
         <button class="carousel-btn" onclick="scrollCarousel(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></button>
