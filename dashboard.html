@@ -425,8 +425,8 @@ async function _init(){
   });
 
   var statC=completedCourses.length,statE=enrollments.length;
-  document.getElementById('statCompleted').textContent=statC;
-  document.getElementById('statEnrolled').textContent=statE;
+  var sc=document.getElementById('statCompleted'); if(sc) sc.textContent=statC;
+  var se=document.getElementById('statEnrolled'); if(se) se.textContent=statE;
   var scb=document.getElementById('statCompletedBig'); if(scb) scb.textContent=statC;
   var seb=document.getElementById('statEnrolledBig'); if(seb) seb.textContent=statE;
 
