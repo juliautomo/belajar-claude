@@ -439,16 +439,19 @@ async function _init(){
   document.getElementById('greetSub').textContent=statC>0?statC+' kursus selesai — luar biasa!':activeCourses.length>0?'Lanjutkan perjalanan belajarmu.':'Mulai kursus pertamamu hari ini.';
 
   var thumbs=['et1','et2','et3','et4'];
-  if(activeCourses.length>0){
+  var allEnrolled=activeCourses.concat(completedCourses.map(function(s){return{course_slug:s};}));
+  if(allEnrolled.length>0){
     document.getElementById('enrolledSection').style.display='block';
     var list=document.getElementById('enrolledList');
-    activeCourses.forEach(function(c,i){
+    allEnrolled.forEach(function(c,i){
       var meta=ALL_COURSES[c.course_slug],prog=getProgress(c.course_slug);
-      var btnLabel=prog.done>0?'Lanjutkan':'Mulai';
+      var isDone=prog.pct===100;
+      var btnLabel=isDone?'Ulangi':prog.done>0?'Lanjutkan':'Mulai';
+      var doneTag=isDone?'<span style="font-size:11px;font-weight:700;background:#DCFCE7;color:#16A34A;padding:2px 10px;border-radius:100px;margin-left:10px;">Selesai ✓</span>':'';
       list.innerHTML+='<div class="enrolled-card" onclick="location.href=\''+meta.contentLink+'\'">'
         +'<span class="enrolled-idx">'+String(i+1).padStart(2,'0')+'</span>'
         +'<div class="enrolled-thumb '+thumbs[i%4]+'">'+meta.icon+'</div>'
-        +'<div class="enrolled-info"><h3>'+meta.title+'</h3>'
+        +'<div class="enrolled-info"><h3>'+meta.title+doneTag+'</h3>'
         +'<div class="prog-row"><span class="prog-pct">'+prog.pct+'%</span><div class="prog-bar"><div class="prog-fill" style="width:'+prog.pct+'%"></div></div>'
         +'<span class="prog-lbl">'+prog.done+'/'+prog.total+'</span></div></div>'
         +'<a href="'+meta.contentLink+'" class="resume-btn" onclick="event.stopPropagation()">'+btnLabel+' &rarr;</a>'
