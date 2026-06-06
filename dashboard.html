@@ -412,7 +412,28 @@ async function _init(){
   }catch(e){}
 
   var er=await sbClient.from('enrollments').select('course_slug,course_name,type,enrolled_at').eq('email',currentEmail).order('enrolled_at',{ascending:false});
-  var enrollments=(er.data||[]).filter(function(e){return ALL_COURSES[e.course_slug];});
+  var rawEnrollments=(er.data||[]);
+
+  // Expand paket slugs → add virtual enrollments for each constituent course
+  var PAKET_COURSES = {
+    'paket-karyawan':  ['mulai-claude','kerja-sehari-hari','analisis-data'],
+    'paket-mahasiswa': ['mulai-claude','konten-copywriting','analisis-data'],
+    'paket-pengusaha': ['mulai-claude','bisnis-ukm','konten-copywriting','build-automation'],
+    'paket-creator':   ['mulai-claude','bisnis-ukm','konten-copywriting'],
+  };
+  var existingSlugs=new Set(rawEnrollments.map(function(e){return e.course_slug;}));
+  rawEnrollments.forEach(function(e){
+    if(PAKET_COURSES[e.course_slug]){
+      PAKET_COURSES[e.course_slug].forEach(function(slug){
+        if(!existingSlugs.has(slug)){
+          existingSlugs.add(slug);
+          rawEnrollments.push({course_slug:slug,course_name:(ALL_COURSES[slug]&&ALL_COURSES[slug].title)||slug,type:'paid',enrolled_at:e.enrolled_at});
+        }
+      });
+    }
+  });
+
+  var enrollments=rawEnrollments.filter(function(e){return ALL_COURSES[e.course_slug];});
   var enrolledSlugs=new Set(enrollments.map(function(e){return e.course_slug;}));
 
   if(!userProfile||!userProfile.role)setTimeout(function(){openProfileModal(false);},800);
@@ -499,28 +520,4 @@ async function _init(){
 
   var unenrolled=Object.keys(ALL_COURSES).filter(function(slug){return!enrolledSlugs.has(slug);});
   if(unenrolled.length>0){
-    document.getElementById('exploreSection').style.display='block';
-    var grid=document.getElementById('exploreGrid');
-    unenrolled.forEach(function(slug){
-      var meta=ALL_COURSES[slug];
-      var cta=meta.comingSoon
-        ?'<button class="btn-notify" onclick="notifyMe(this,\''+slug+'\')">Beritahu saya</button>'
-        :'<a href="'+meta.salesLink+'" class="btn-view">Lihat Kursus &rarr;</a>';
-      grid.innerHTML+='<div class="explore-card">'
-        +'<div class="ex-thumb '+meta.exThumb+'">'+meta.icon+'</div>'
-        +'<div class="ex-body">'
-        +'<div class="ex-lv">'+meta.level+'</div>'
-        +'<div class="ex-title">'+meta.title+'</div>'
-        +'<div class="ex-desc">'+meta.desc+'</div>'
-        +'<div class="ex-price">'+meta.price+'</div>'
-        +cta+'</div></div>';
-    });
-  }
-
-  document.getElementById('loadingScreen').style.display='none';
-  document.getElementById('mainLayout').style.display='grid';
-}
-init();
-</script>
-</body>
-</html>
+    document.getElementById
