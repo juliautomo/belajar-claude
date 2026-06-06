@@ -374,7 +374,7 @@
     <a href="index.html#jalur">Jalur Belajar</a>
     <a href="index.html#kursus">Kursus</a>
     <a href="login.html" id="navLoginBtn">Masuk</a>
-    <a href="login.html" id="navCtaBtn" class="nav-cta">Gabung Gratis</a>
+    <a href="login.html" id="navCtaBtn" class="nav-cta" style="display:none">Gabung Gratis</a>
     <div class="nav-user-pill" id="navUserPill">
       <div><span class="nav-uname" id="navUname"></span><span class="nav-uemail" id="navUemail"></span></div>
     </div>
@@ -563,7 +563,7 @@ Buat ringkasan eksekutif...
 <script>
 (async () => {
   const { data: { session } } = await sbClient.auth.getSession();
-  if (!session) return;
+  if (!session) { var cb2=document.getElementById('navCtaBtn'); if(cb2) cb2.style.display=''; return; }
   const name = session.user.user_metadata?.full_name || session.user.email.split('@')[0];
   const pill = document.getElementById('navUserPill');
   if (pill) pill.style.display = 'flex';
