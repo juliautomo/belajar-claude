@@ -99,20 +99,20 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 
 /* ENROLLED */
 .enrolled-list{display:flex;flex-direction:column;gap:2px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
-.enrolled-card{padding:16px 20px;display:flex;align-items:center;gap:16px;border-bottom:1px solid var(--border);transition:background 0.15s;cursor:pointer;}
+.enrolled-card{padding:22px 28px;display:flex;align-items:center;gap:20px;border-bottom:1px solid var(--border);transition:background 0.15s;cursor:pointer;}
 .enrolled-card:last-child{border-bottom:none;}
 .enrolled-card:hover{background:var(--surface-2);}
 .enrolled-idx{font-size:11px;font-weight:700;color:var(--ink-3);width:20px;flex-shrink:0;}
-.enrolled-thumb{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.enrolled-thumb{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
 .et1{background:linear-gradient(135deg,#EEF0FF,#DDE0FF);}
 .et2{background:linear-gradient(135deg,#F0F9FF,#D9EFFE);}
 .et3{background:linear-gradient(135deg,#F0FDF4,#DCFCE7);}
 .et4{background:linear-gradient(135deg,#FFF7ED,#FDE8C8);}
 .enrolled-info{flex:1;min-width:0;}
-.enrolled-info h3{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.enrolled-info h3{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .prog-row{display:flex;align-items:center;gap:10px;}
-.prog-pct{font-size:13px;font-weight:700;color:var(--accent);white-space:nowrap;min-width:36px;}
-.prog-bar{flex:1;height:3px;background:var(--border);border-radius:10px;overflow:hidden;}
+.prog-pct{font-size:14px;font-weight:700;color:var(--accent);white-space:nowrap;min-width:36px;}
+.prog-bar{flex:1;height:5px;background:var(--border);border-radius:10px;overflow:hidden;}
 .prog-fill{height:100%;border-radius:10px;background:var(--accent);transition:width 0.5s;}
 .prog-lbl{font-size:11px;color:var(--ink-3);white-space:nowrap;}
 /* Paket nav */
@@ -216,15 +216,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 
     </div>
     <div class="sidebar-stats">
-      <div class="ss-label">Statistik</div>
-      <div class="ss-row">
-        <span class="ss-name">Kursus selesai</span>
-        <span class="ss-val g" id="statCompleted">0</span>
-      </div>
-      <div class="ss-row">
-        <span class="ss-name">Kursus diikuti</span>
-        <span class="ss-val p" id="statEnrolled">0</span>
-      </div>
 
     </div>
   </aside>
@@ -237,20 +228,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
         <p class="g-sub" id="greetSub"></p>
       </div>
       <div class="g-pill" id="greetPill" style="display:none;"></div>
-    </div>
-
-    <div class="stat-grid">
-      <div class="s-card sg">
-        <div class="s-top"><span style="font-size:18px">🎓</span><span class="s-badge g">Selesai</span></div>
-        <div class="s-num g" id="statCompletedBig">0</div>
-        <div class="s-lbl">Kursus selesai</div>
-      </div>
-      <div class="s-card sp">
-        <div class="s-top"><span style="font-size:18px">📚</span><span class="s-badge p">Aktif</span></div>
-        <div class="s-num p" id="statEnrolledBig">0</div>
-        <div class="s-lbl">Kursus diikuti</div>
-      </div>
-
     </div>
 
     <div id="enrolledSection" style="display:none;">
@@ -450,8 +427,8 @@ async function _init(){
   var statC=completedCourses.length,statE=enrollments.length;
   document.getElementById('statCompleted').textContent=statC;
   document.getElementById('statEnrolled').textContent=statE;
-  document.getElementById('statCompletedBig').textContent=statC;
-  document.getElementById('statEnrolledBig').textContent=statE;
+  var scb=document.getElementById('statCompletedBig'); if(scb) scb.textContent=statC;
+  var seb=document.getElementById('statEnrolledBig'); if(seb) seb.textContent=statE;
 
   if(statC>0){
     var pill=document.getElementById('greetPill');
