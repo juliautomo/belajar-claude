@@ -84,6 +84,15 @@
   footer a{color:rgba(255,255,255,0.5);text-decoration:none;}
 
   @media(max-width:768px){nav{padding:0 20px;}.nav-links{display:none;}.hero{padding:90px 20px 56px;}}
+
+  /* MODAL */
+  .modal-overlay{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.45);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px;}
+  .modal-overlay.active{display:flex;}
+  .modal{background:var(--surface);border-radius:20px;padding:40px 36px;max-width:420px;width:100%;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,0.18);}
+  .modal-icon{font-size:40px;margin-bottom:16px;}
+  .modal h3{font-size:20px;font-weight:700;color:var(--ink);margin-bottom:10px;}
+  .modal p{font-size:14px;color:var(--ink-2);line-height:1.65;margin-bottom:20px;}
+  .modal-sub{font-size:12px;color:var(--ink-3);margin-top:10px!important;margin-bottom:0!important;}
 </style>
 </head>
 <body>
@@ -146,7 +155,7 @@
 
       <div class="prompt-card">
         <div class="prompt-num">01</div>
-        <span class="cat-badge" style="background:rgba(55,138,221,0.2);color:#85B7EB">Email & Komunikasi</span>
+        <span class="cat-badge" >Email & Komunikasi</span>
         <h4>Tulis Email Profesional</h4>
         <div class="prompt-preview">
           Tulis email profesional dalam Bahasa Indonesia dengan konteks berikut:
@@ -158,7 +167,7 @@
 
       <div class="prompt-card">
         <div class="prompt-num">03</div>
-        <span class="cat-badge" style="background:rgba(29,158,117,0.2);color:#5DCAA5">Laporan & Dokumen</span>
+        <span class="cat-badge" style="background:var(--green-dim);color:var(--green);">Laporan & Dokumen</span>
         <h4>Buat Ringkasan Laporan</h4>
         <div class="prompt-preview">
           Berikut adalah laporan lengkap yang perlu diringkas:
@@ -170,7 +179,7 @@ Buat ringkasan eksekutif...
 
       <div class="prompt-card">
         <div class="prompt-num">07</div>
-        <span class="cat-badge" style="background:rgba(255,107,157,0.2);color:#FF9CC5">Konten Media Sosial</span>
+        <span class="cat-badge" style="background:rgba(255,107,157,0.12);color:#D4547A;">Konten Media Sosial</span>
         <h4>Caption Instagram Bisnis</h4>
         <div class="prompt-preview">
           Buatkan 3 variasi caption Instagram untuk produk berikut:
@@ -182,7 +191,7 @@ Buat ringkasan eksekutif...
 
       <div class="prompt-card">
         <div class="prompt-num">11</div>
-        <span class="cat-badge" style="background:rgba(255,140,66,0.2);color:#FFB07A">SDM & HRD</span>
+        <span class="cat-badge" style="background:rgba(255,140,66,0.12);color:#C96B1A;">SDM & HRD</span>
         <h4>Buat Job Description</h4>
         <div class="prompt-preview">
           Buatkan job description profesional untuk:
@@ -194,7 +203,7 @@ Buat ringkasan eksekutif...
 
       <div class="prompt-card">
         <div class="prompt-num">15</div>
-        <span class="cat-badge" style="background:rgba(255,107,107,0.2);color:#FF9999">Copywriting</span>
+        <span class="cat-badge" style="background:rgba(255,107,107,0.12);color:#C94B4B;">Copywriting</span>
         <h4>Headline Iklan yang Menarik</h4>
         <div class="prompt-preview">
           Buatkan 10 variasi headline iklan untuk:
@@ -204,11 +213,11 @@ Buat ringkasan eksekutif...
         </div>
       </div>
 
-      <div class="prompt-card" style="border-color:rgba(55,138,221,0.3);background:rgba(55,138,221,0.06);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:200px;">
+      <div class="prompt-card" style="background:var(--accent-dim);border-color:rgba(108,71,255,0.2);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:200px;">
         <div style="font-size:32px;margin-bottom:12px">🔒</div>
         <h4>+ 15 Prompt Lainnya</h4>
-        <p style="font-size:13px;color:var(--blue-light);margin-top:8px;line-height:1.6">Presentasi, Analisis Riset, Keuangan, Produktivitas, Akademik, dan lainnya</p>
-        <button onclick="scrollToForm()" style="margin-top:16px;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;">
+        <p style="font-size:13px;color:var(--ink-2);margin-top:8px;line-height:1.6">Presentasi, Analisis Riset, Keuangan, Produktivitas, Akademik, dan lainnya</p>
+        <button onclick="scrollToForm()" style="margin-top:16px;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);">
           Download Gratis →
         </button>
       </div>
