@@ -12,7 +12,14 @@ Indonesian-language Claude AI learning platform. Users sign up, enroll in course
 - **Config**: `supabase-config.js` — shared across all pages
 - **Hosting**: GitHub Pages (`juliautomo/klaud-id`)
 - **Backend repo**: `juliautomo/klaud-backend` (Node.js — `index.js`, `mailer.js`, `sheets.js`)
-- **Git push**: Token embedded in remote URL, push via `/tmp/klaud-id-fresh` clone (lock files on mounted folder prevent direct push)
+
+---
+
+## Git / Claude Workflow
+- **klaud-id push**: PAT token embedded in remote URL (`https://ghp_TOKEN@github.com/juliautomo/klaud-id.git`). Claude clones to `/tmp/klaud-id-fresh`, edits there, and pushes. Windows-mounted `.git/` folder blocks lock file writes so direct git from mount doesn't work.
+- **klaud-backend push**: No token in remote URL — Claude cannot push. To fix: `git remote set-url origin https://YOUR_PAT@github.com/juliautomo/klaud-backend.git`
+- **Local file sync**: Claude edits files directly on the Windows mount via file tools AND in `/tmp` clone before pushing. Both stay in sync.
+- **Pulling latest**: Claude can't `git pull` on Windows mounts. Workaround: `git clone --depth=1` to `/tmp`, then `rsync` to mounted folder.
 
 ---
 
@@ -24,7 +31,7 @@ All pages use these CSS variables:
 --surface-2: #F5F5F7;
 --border: #E8E8E8;
 --border-strong: #D0D0D0;
---ink: #111111;        /* primary text — NOT var(--ink), must be literal #111111 */
+--ink: #111111;        /* primary text */
 --ink-2: #777777;
 --ink-3: #BBBBBB;
 --accent: #6C47FF;     /* purple */
@@ -73,6 +80,7 @@ All pages use these CSS variables:
 | `kursus-mahasiswa.html` | Jalur Mahasiswa page |
 | `kursus-ukm.html` | Jalur UKM page |
 | `paket.html` | Pricing/packages page |
+| `paket-content-creator.html` | Paket Content Creator page |
 | `coaching-1on1.html` | 1-on-1 coaching page |
 | `workshop-zoom.html` | Workshop page |
 | `coming-soon.html` | Placeholder for unreleased courses |
@@ -87,6 +95,14 @@ All pages use these CSS variables:
 | `kerja-sehari-hari-content.html` | Course reader — 6 modules + feedback panel |
 | `bisnis-ukm-content.html` | Course reader — 6 modules + feedback panel |
 | `payment-success.html` | Post-payment confirmation |
+
+### Assets
+| File | Purpose |
+|------|---------|
+| `login-modal.js` | Shared login modal logic |
+| `payment-success-modal.js` | Post-payment modal logic |
+| `supabase-config.js` | Shared Supabase client config |
+| `20-prompt-claude-terbaik.pdf` | Free PDF download |
 
 ---
 
@@ -108,6 +124,7 @@ All pages use these CSS variables:
 ---
 
 ## Index.html Key Details
+- **Hero section title**: "Pilih jalur sesuai tujuanmu" — single line (no `<br>`)
 - **Jalur grid**: Individual white cards with `1.5px solid #D5D5D2` border + drop shadow. 3-column grid, `gap: 16px`. Featured (All Access) card = dark background.
 - **Course carousel**: Horizontal scroll, individual cards with border+shadow. Tags use `align-items: flex-start` on card to prevent stretching.
 - **"Segera Hadir"** on jalur links: Developer → `coming-soon.html`, Mahasiswa → `kursus-mahasiswa.html`
@@ -115,7 +132,7 @@ All pages use these CSS variables:
 ---
 
 ## Backend (klaud-backend — Node.js/Express)
-Hosted separately (not on GitHub Pages). Handles payments and signups.
+Hosted on Railway (`https://klaud-backend-production.up.railway.app`). Handles payments and signups.
 
 ### API Endpoints
 | Method | Path | Purpose |
@@ -123,16 +140,40 @@ Hosted separately (not on GitHub Pages). Handles payments and signups.
 | `GET` | `/` | Health check |
 | `POST` | `/signup` | Free signup — adds to ConvertKit, Google Sheets, creates Supabase user, enrolls in `prompt-gratis`, sends welcome email |
 | `POST` | `/create-payment` | Creates Duitku invoice, returns `reference` + `orderId` |
-| `POST` | `/webhook/duitku` | Payment confirmation — saves enrollment to Supabase, logs to Google Sheets, adds ConvertKit tag, sends access email |
+| `POST` | `/webhook/duitku` | Payment confirmation — saves enrollment to Supabase + Google Sheets, adds ConvertKit tag, sends access email |
 
-### Course Catalog (in backend)
-| Slug | Course Name | Price |
-|------|-------------|-------|
-| `kursus-karyawan` | Claude untuk Karyawan Indonesia | Rp 299,000 |
-| `kursus-ukm` | Scale Bisnis dengan Claude AI | Rp 499,000 |
+### Course Catalog (COURSES in index.js)
+| Slug | Name | Price |
+|------|------|-------|
+| `kerja-sehari-hari` | K2: Produktivitas Kantor | Rp 149,000 |
+| `bisnis-ukm` | K3: Konten & Pemasaran Bisnis | Rp 149,000 |
+| `konten-copywriting` | K4: Copywriting & Konten Digital | Rp 199,000 |
+| `analisis-data` | K5: Analisis Data & Laporan | Rp 199,000 |
+| `build-automation` | K6: Automasi Workflow | Rp 299,000 |
+| `ai-powered-app` | K7: Build AI App Sederhana | Rp 299,000 |
+| `claude-api-dev` | K8: Claude API untuk Developer | Rp 399,000 |
+| `jual-produk-ai` | K9: Build & Monetisasi Produk AI | Rp 499,000 |
+| `paket-mahasiswa` | Claude untuk Mahasiswa | Rp 249,000 |
+| `paket-karyawan` | Claude untuk Karyawan & Profesional | Rp 299,000 |
+| `paket-pengusaha` | Claude untuk Pengusaha | Rp 499,000 |
+| `paket-creator` | Claude untuk Content Creator | Rp 299,000 |
 | `workshop-zoom` | Workshop Bulanan via Zoom | Rp 149,000 |
-| `kursus-mahasiswa` | Claude untuk Karir & Studi | Rp 149,000 |
 | `coaching-1on1` | Coaching 1-on-1 | Rp 1,500,000 |
 
+### Package → Course Enrollment Map (PAKET_COURSES)
+| Package | Constituent Courses |
+|---------|-------------------|
+| `paket-karyawan` | mulai-claude, kerja-sehari-hari, analisis-data |
+| `paket-mahasiswa` | mulai-claude, konten-copywriting, analisis-data |
+| `paket-pengusaha` | mulai-claude, bisnis-ukm, konten-copywriting, build-automation |
+| `paket-creator` | mulai-claude, bisnis-ukm, konten-copywriting |
+
 ### Backend Integrations
-- **Duitku**: Payment gateway. Ord
+- **Duitku**: Payment gateway (sandbox: `api-sandbox.duitku.com`). Signature: SHA256 for invoice creation, MD5 for webhook verification.
+- **ConvertKit**: Email marketing. Free signups go to form `CONVERTKIT_FORM_ID`. Paid buyers get course-specific tag.
+- **Google Sheets**: Backup log for signups and purchases (`saveLeadToSheets`, `saveToSheets`).
+- **Supabase**: Primary database. Creates auth user on free signup, writes to `enrollments` table on paid purchase.
+- **Nodemailer**: Sends welcome email (free) and access email (paid) via `mailer.js`.
+
+### Environment Variables (Railway)
+`SUPABASE_URL`, `SUPABASE_SECRET_KEY`, `DUITKU_MERCHANT_CODE`, `DUITKU_API_KEY`, `CONVERTKIT_API_KEY`, `CONVERTKIT_FORM_ID`, `GOOGLE_SHEETS_*`, `SMTP_*`
