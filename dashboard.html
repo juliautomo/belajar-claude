@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard — Klaud.id</title>
+<title>Dashboard — Belajar Claude</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
@@ -186,7 +186,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 <body>
 
 <nav>
-  <a class="brand" href="index.html">Klaud<span>.id</span></a>
+  <a class="brand" href="index.html">belajar<span>claude</span></a>
   <div class="nav-right">
     <div class="nav-avatar" id="navAvatar">—</div>
     <span class="nav-uname" id="navUname"></span>
@@ -260,7 +260,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
     </button>
     <h2 id="pmodalTitle">Ceritain sedikit tentang kamu</h2>
-    <p class="pmodal-sub" id="pmodalSub">Biar Klaud.id bisa kasih rekomendasi kursus yang paling relevan buatmu.</p>
+    <p class="pmodal-sub" id="pmodalSub">Biar Belajar Claude bisa kasih rekomendasi kursus yang paling relevan buatmu.</p>
     <div class="pmodal-step active" id="pstep1">
       <div class="pmodal-q">Kamu saat ini sebagai apa?</div>
       <div class="pmodal-opts">
@@ -325,7 +325,7 @@ document.querySelectorAll('.popt').forEach(function(btn) {
 function openProfileModal(editMode) {
   pAnswers={role:(userProfile&&userProfile.role)||null,goal:(userProfile&&userProfile.goal)||null,experience:(userProfile&&userProfile.experience)||null};
   document.getElementById('pmodalTitle').textContent=editMode?'Edit Profil Kamu':'Ceritain sedikit tentang kamu';
-  document.getElementById('pmodalSub').textContent=editMode?'Update info kamu di bawah ini.':'Biar Klaud.id bisa kasih rekomendasi kursus yang paling relevan buatmu.';
+  document.getElementById('pmodalSub').textContent=editMode?'Update info kamu di bawah ini.':'Biar Belajar Claude bisa kasih rekomendasi kursus yang paling relevan buatmu.';
   ['pstep1','pstep2','pstep3'].forEach(function(id,i){document.getElementById(id).classList.toggle('active',i===0);});
   document.querySelectorAll('[data-step="1"]').forEach(function(b){b.classList.toggle('selected',b.getAttribute('data-val')===pAnswers.role);});
   document.querySelectorAll('[data-step="2"]').forEach(function(b){b.classList.toggle('selected',b.getAttribute('data-val')===pAnswers.goal);});

@@ -1,4 +1,4 @@
-// ─── Klaud.id Login Modal ────────────────────────────────────────────────────
+// ─── Belajar Claude Login Modal ────────────────────────────────────────────────────
 // Drop <script src="login-modal.js"></script> on any page (after supabase-config.js).
 // All <a href="login.html"> clicks will open this modal instead of navigating.
 // Call window.openLoginModal() programmatically from any button/function.
@@ -106,7 +106,7 @@
   overlay.innerHTML = `
     <div id="klaud-modal">
       <button id="klaud-modal-close" onclick="window.closeLoginModal()" aria-label="Tutup">✕</button>
-      <div class="m-logo">Klaud<span>.id</span></div>
+      <div class="m-logo">belajar<span>claude</span></div>
       <h2>Masuk atau Daftar</h2>
       <p class="m-sub">Masukkan email kamu — kami kirimkan link masuk langsung ke inbox. Tidak perlu password.</p>
       <div id="klaud-modal-form">
@@ -115,7 +115,7 @@
         <button id="klaud-modal-btn" onclick="window.sendModalMagicLink()">Lanjutkan →</button>
       </div>
       <div id="klaud-modal-msg"></div>
-      <p class="m-note">Dengan melanjutkan, kamu menyetujui syarat & ketentuan Klaud.id.</p>
+      <p class="m-note">Dengan melanjutkan, kamu menyetujui syarat & ketentuan Belajar Claude.</p>
     </div>
   `;
   document.body.appendChild(overlay);

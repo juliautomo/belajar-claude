@@ -1,4 +1,4 @@
-// ─── Klaud.id Payment Success Modal ──────────────────────────────────────────
+// ─── Belajar Claude Payment Success Modal ──────────────────────────────────────────
 // Call window.showPaymentSuccess(courseName) after a successful Duitku payment.
 // Shows a modal, then auto-redirects to dashboard after 5 seconds.
 
