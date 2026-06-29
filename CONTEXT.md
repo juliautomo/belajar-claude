@@ -18,7 +18,7 @@ Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign 
 
 ## Git / Claude Workflow
 - **belajar-claude push**: PAT token embedded in remote URL (`https://ghp_TOKEN@github.com/juliautomo/belajar-claude.git`). Claude clones to `/tmp/klaud-fresh`, edits there, and pushes. Windows-mounted `.git/` folder blocks lock file writes so direct git from mount doesn't work.
-- **klaud-backend push**: No token in remote URL — Claude cannot push. To fix: `git remote set-url origin https://YOUR_PAT@github.com/juliautomo/klaud-backend.git`
+- **klaud-backend push**: PAT token embedded in remote URL (`https://ghp_TOKEN@github.com/juliautomo/klaud-backend.git`). Claude clones to `/tmp/klaud-backend-fresh`, edits there, and pushes.
 - **Local file sync**: Claude edits files directly on the Windows mount via file tools AND in `/tmp` clone before pushing. Both stay in sync.
 - **Pulling latest**: Claude can't `git pull` on Windows mounts. Workaround: `git clone --depth=1` to `/tmp`, then `rsync` to mounted folder.
 
@@ -176,4 +176,4 @@ Hosted on Railway (`https://klaud-backend-production.up.railway.app`). Handles p
 | `paket-creator` | mulai-claude, bisnis-ukm, konten-copywriting |
 
 ### Backend Integrations
-- **Duitku**: Payment gateway (sandbox: `api-sandbox.duitku.com`). Signature: SHA256 for invoice creation, MD5 for webhook verificatio
+- **Duitku**: Payment gateway (sandbox: `api-sandbox.duitku.com`). Signature: SHA256 for invoice creation, M
