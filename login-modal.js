@@ -172,7 +172,7 @@
 
     const { error } = await sbClient.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: 'https://juliautomo.github.io/klaud-id/dashboard.html' },
+      options: { emailRedirectTo: 'https://belajar-claude.vercel.app/dashboard.html' },
     });
 
     if (error) {
