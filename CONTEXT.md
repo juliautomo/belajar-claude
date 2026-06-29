@@ -1,8 +1,8 @@
-# Klaud.id — Project Context & Checkpoint
+# Belajar Claude — Project Context & Checkpoint
 _Last updated: June 2026_
 
-## What is Klaud.id
-Indonesian-language Claude AI learning platform. Users sign up, enroll in courses, complete modules, and earn badges. Hosted on GitHub Pages (`juliautomo.github.io/klaud-id`).
+## What is Belajar Claude
+Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
 
 ---
 
@@ -10,16 +10,23 @@ Indonesian-language Claude AI learning platform. Users sign up, enroll in course
 - **Frontend**: Plain HTML/CSS/JS (no framework)
 - **Backend**: Supabase (auth, database, RLS)
 - **Config**: `supabase-config.js` — shared across all pages
-- **Hosting**: GitHub Pages (`juliautomo/klaud-id`)
+- **Hosting**: Vercel (migrating to `belajarclaude.id`; previously GitHub Pages)
+- **GitHub repo**: `juliautomo/belajar-claude` (renamed from `klaud-id`)
 - **Backend repo**: `juliautomo/klaud-backend` (Node.js — `index.js`, `mailer.js`, `sheets.js`)
 
 ---
 
 ## Git / Claude Workflow
-- **klaud-id push**: PAT token embedded in remote URL (`https://ghp_TOKEN@github.com/juliautomo/klaud-id.git`). Claude clones to `/tmp/klaud-id-fresh`, edits there, and pushes. Windows-mounted `.git/` folder blocks lock file writes so direct git from mount doesn't work.
+- **belajar-claude push**: PAT token embedded in remote URL (`https://ghp_TOKEN@github.com/juliautomo/belajar-claude.git`). Claude clones to `/tmp/klaud-fresh`, edits there, and pushes. Windows-mounted `.git/` folder blocks lock file writes so direct git from mount doesn't work.
 - **klaud-backend push**: No token in remote URL — Claude cannot push. To fix: `git remote set-url origin https://YOUR_PAT@github.com/juliautomo/klaud-backend.git`
 - **Local file sync**: Claude edits files directly on the Windows mount via file tools AND in `/tmp` clone before pushing. Both stay in sync.
 - **Pulling latest**: Claude can't `git pull` on Windows mounts. Workaround: `git clone --depth=1` to `/tmp`, then `rsync` to mounted folder.
+
+## Local Folder Structure (as of June 2026)
+- `C:\Users\julia\GitHub\belajar-claude\` — parent folder (rename `klaud-id` → `belajar-claude` after closing Cowork session)
+  - `belajar-claude\` — the actual project files (renamed from `Klaud Id`)
+  - `klaud-backend\` — Node.js backend (separate)
+- **Remount note**: After renaming parent folder, remount both `belajar-claude` and `klaud-backend` in Cowork.
 
 ---
 
@@ -45,14 +52,14 @@ All pages use these CSS variables:
 ```
 - **Fonts**: `Geist` (body/UI, `--font`) + `Instrument Serif` (headings, `--serif`). Loaded from Google Fonts with weights 300–700.
 - **Nav**: `rgba(250,250,250,0.88)` frosted glass, `height: 58px`, `padding: 0 40px`, `backdrop-filter: blur(16px)`, `border-bottom: 1px solid var(--border)`. Fixed position on all pages.
-- **Logo**: `<a class="logo">Klaud<span>.id</span></a>` — `font-family: var(--font)` (Geist), `font-size: 17px`, `font-weight: 700`, `letter-spacing: -0.4px`. Span `.id` uses `color: var(--accent)` (purple).
+- **Logo**: `<a class="logo">belajar<span>claude</span></a>` — `font-family: var(--font)` (Geist), `font-size: 17px`, `font-weight: 700`, `letter-spacing: -0.4px`. Span `claude` uses `color: var(--accent)` (purple).
 - **Cards**: White surface, `1px solid var(--border)`, `border-radius: 14-16px`, subtle shadow
 - **Body**: `-webkit-font-smoothing: antialiased`
 
 ---
 
 ## Supabase Project
-- **Project**: "Klaud Id" — `ctqtdqbsucbhikwnagvl`
+- **Project**: "Klaud Id" — `ctqtdqbsucbhikwnagvl` (Supabase project name unchanged)
 - **Region**: ap-southeast-2
 
 ### Tables
@@ -169,11 +176,4 @@ Hosted on Railway (`https://klaud-backend-production.up.railway.app`). Handles p
 | `paket-creator` | mulai-claude, bisnis-ukm, konten-copywriting |
 
 ### Backend Integrations
-- **Duitku**: Payment gateway (sandbox: `api-sandbox.duitku.com`). Signature: SHA256 for invoice creation, MD5 for webhook verification.
-- **ConvertKit**: Email marketing. Free signups go to form `CONVERTKIT_FORM_ID`. Paid buyers get course-specific tag.
-- **Google Sheets**: Backup log for signups and purchases (`saveLeadToSheets`, `saveToSheets`).
-- **Supabase**: Primary database. Creates auth user on free signup, writes to `enrollments` table on paid purchase.
-- **Nodemailer**: Sends welcome email (free) and access email (paid) via `mailer.js`.
-
-### Environment Variables (Railway)
-`SUPABASE_URL`, `SUPABASE_SECRET_KEY`, `DUITKU_MERCHANT_CODE`, `DUITKU_API_KEY`, `CONVERTKIT_API_KEY`, `CONVERTKIT_FORM_ID`, `GOOGLE_SHEETS_*`, `SMTP_*`
+- **Duitku**: Payment gateway (sandbox: `api-sandbox.duitku.com`). Signature: SHA256 for invoice creation, MD5 for webhook verificatio
