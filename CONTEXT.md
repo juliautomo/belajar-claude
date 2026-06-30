@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: June 2026_
+_Last updated: June 30, 2026_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -12,21 +12,20 @@ Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign 
 - **Config**: `supabase-config.js` — shared across all pages
 - **Hosting**: Vercel (migrating to `belajarclaude.id`; previously GitHub Pages)
 - **GitHub repo**: `juliautomo/belajar-claude` (renamed from `klaud-id`)
-- **Backend repo**: `juliautomo/klaud-backend` (Node.js — `index.js`, `mailer.js`, `sheets.js`)
+- **Backend repo**: `juliautomo/belajar-claude-backend** (Node.js — `index.js`, `mailer.js`, `sheets.js`)
 
 ---
 
 ## Git / Claude Workflow
-- **belajar-claude push**: PAT token embedded in remote URL (`https://ghp_TOKEN@github.com/juliautomo/belajar-claude.git`). Claude clones to `/tmp/klaud-fresh`, edits there, and pushes. Windows-mounted `.git/` folder blocks lock file writes so direct git from mount doesn't work.
-- **klaud-backend push**: PAT token embedded in remote URL (`https://ghp_TOKEN@github.com/juliautomo/klaud-backend.git`). Claude clones to `/tmp/klaud-backend-fresh`, edits there, and pushes.
+- **belajar-claude push**: PAT `ghp_YOUR_PAT_HERE` embedded in remote URL. Claude clones to `/tmp/bc-push`, edits there, and pushes. Windows-mounted `.git/` folder blocks lock file writes so direct git from mount doesn't work.
+- **belajar-claude-backend push**: Same PAT, clones to `/tmp/belajar-claude-backend`. Local folder at `C:\Users\julia\GitHub\belajar-claude-backend\`.
 - **Local file sync**: Claude edits files directly on the Windows mount via file tools AND in `/tmp` clone before pushing. Both stay in sync.
-- **Pulling latest**: Claude can't `git pull` on Windows mounts. Workaround: `git clone --depth=1` to `/tmp`, then `rsync` to mounted folder.
+- **Pulling latest**: Claude can't `git pull` on Windows mounts. Workaround: `git clone --depth=1` to `/tmp`, then copy files as needed.
 
 ## Local Folder Structure (as of June 2026)
-- `C:\Users\julia\GitHub\belajar-claude\` — parent folder (rename `klaud-id` → `belajar-claude` after closing Cowork session)
-  - `belajar-claude\` — the actual project files (renamed from `Klaud Id`)
-  - `klaud-backend\` — Node.js backend (separate)
-- **Remount note**: After renaming parent folder, remount both `belajar-claude` and `klaud-backend` in Cowork.
+- `C:\Users\julia\GitHub\belajar-claude\` — frontend project files
+- `C:\Users\julia\GitHub\belajar-claude-backend\` — Node.js backend
+- **Cowork**: Mount `belajar-claude` and `belajar-claude-backend` separately in each session.
 
 ---
 
@@ -59,8 +58,11 @@ All pages use these CSS variables:
 ---
 
 ## Supabase Project
-- **Project**: "Klaud Id" — `ctqtdqbsucbhikwnagvl` (Supabase project name unchanged)
+- **Project**: "Belajar-Claude" — `ctqtdqbsucbhikwnagvl`
 - **Region**: ap-southeast-2
+- **Site URL**: `https://belajar-claude.vercel.app`
+- **Redirect URLs**: `https://belajar-claude.vercel.app/**`, `https://juliautomo.github.io/belajar-claude/**`
+- **Magic link template**: Updated to Belajar Claude branding (confirm signup also updated)
 
 ### Tables
 | Table | Key Columns | Notes |
@@ -140,6 +142,8 @@ All pages use these CSS variables:
 
 ## Backend (klaud-backend — Node.js/Express)
 Hosted on Railway (`https://klaud-backend-production.up.railway.app`). Handles payments and signups.
+- **GitHub repo**: `juliautomo/belajar-claude-backend` (renamed from `klaud-backend`)
+- **Railway service name**: still shows `klaud-backend` (cosmetic only, URL unchanged)
 
 ### API Endpoints
 | Method | Path | Purpose |
