@@ -94,3 +94,59 @@ drop policy if exists "Admin update course-videos" on storage.objects;
 create policy "Admin update course-videos"
   on storage.objects for update
   using (bucket_id = 'course-videos' and auth.jwt() ->> 'email' in ('julia.utomo@gmail.com', 'tiffany.utomo@gmail.com'));
+
+-- ─────────────────────────────────────────────────────────────────────────
+-- 4) Table: module_documents — practice-session documents shown at the end
+--    of a module. Multiple documents per module allowed (not a single slot).
+-- ─────────────────────────────────────────────────────────────────────────
+create table if not exists module_documents (
+  id bigint generated always as identity primary key,
+  course_slug text not null,
+  module_num int not null,
+  doc_url text not null,
+  doc_path text not null,
+  doc_label text,
+  created_at timestamptz default now(),
+  updated_by text
+);
+
+create index if not exists idx_module_documents_course_module
+  on module_documents (course_slug, module_num);
+
+alter table module_documents enable row level security;
+
+drop policy if exists "public read module_documents" on module_documents;
+create policy "public read module_documents"
+  on module_documents for select
+  using (true);
+
+drop policy if exists "admin insert module_documents" on module_documents;
+create policy "admin insert module_documents"
+  on module_documents for insert
+  with check (auth.jwt() ->> 'email' in ('julia.utomo@gmail.com', 'tiffany.utomo@gmail.com'));
+
+drop policy if exists "admin delete module_documents" on module_documents;
+create policy "admin delete module_documents"
+  on module_documents for delete
+  using (auth.jwt() ->> 'email' in ('julia.utomo@gmail.com', 'tiffany.utomo@gmail.com'));
+
+-- ─────────────────────────────────────────────────────────────────────────
+-- 5) Storage bucket — create manually first, THEN run the policies below.
+--    Dashboard → Storage → New bucket:
+--      - name: course-documents  | Public bucket: ON
+-- ─────────────────────────────────────────────────────────────────────────
+
+drop policy if exists "Public read course-documents" on storage.objects;
+create policy "Public read course-documents"
+  on storage.objects for select
+  using (bucket_id = 'course-documents');
+
+drop policy if exists "Admin upload course-documents" on storage.objects;
+create policy "Admin upload course-documents"
+  on storage.objects for insert
+  with check (bucket_id = 'course-documents' and auth.jwt() ->> 'email' in ('julia.utomo@gmail.com', 'tiffany.utomo@gmail.com'));
+
+drop policy if exists "Admin delete course-documents" on storage.objects;
+create policy "Admin delete course-documents"
+  on storage.objects for delete
+  using (bucket_id = 'course-documents' and auth.jwt() ->> 'email' in ('julia.utomo@gmail.com', 'tiffany.utomo@gmail.com'));

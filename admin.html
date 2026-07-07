@@ -55,6 +55,8 @@ th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--bord
 th { color: var(--ink-2); font-weight: 600; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.4px; }
 td a { color: var(--accent); text-decoration: none; }
 td a:hover { text-decoration: underline; }
+.del-btn { margin-left: 8px; border: none; background: none; color: var(--red); font-size: 11.5px; font-weight: 600; cursor: pointer; font-family: inherit; padding: 0; }
+.del-btn:hover { text-decoration: underline; }
 .gate { max-width: 400px; margin: 140px auto; text-align: center; }
 .gate .card { text-align: left; }
 .gate h2 { font-family: var(--serif); font-size: 20px; font-weight: 400; margin-bottom: 8px; }
@@ -120,6 +122,19 @@ td a:hover { text-decoration: underline; }
   </div>
 
   <div class="card">
+    <h2>Dokumen Praktik per Modul</h2>
+    <p class="hint">Dokumen pendukung untuk sesi praktik di akhir modul (PDF, DOC, atau DOCX). Bisa unggah lebih dari satu dokumen per modul — tidak menggantikan yang sudah ada.</p>
+    <label for="docCourseSelect">Kursus</label>
+    <select id="docCourseSelect" onchange="populateDocModuleSelect()"></select>
+    <label for="docModuleSelect">Modul</label>
+    <select id="docModuleSelect"></select>
+    <label for="docFileInput">File Dokumen</label>
+    <input type="file" id="docFileInput" accept=".pdf,.doc,.docx">
+    <button class="btn" id="docUploadBtn" onclick="uploadDoc()">Unggah Dokumen</button>
+    <div class="status" id="docStatus"></div>
+  </div>
+
+  <div class="card">
     <h2>Ringkasan Konten Saat Ini</h2>
     <p class="hint">Semua PDF dan video yang sedang aktif di situs.</p>
     <table id="overviewTable">
@@ -139,6 +154,7 @@ const COURSES = [
 ];
 
 let currentSession = null;
+let lastDocs = [];
 
 function showState(state) {
   document.getElementById('stateLoggedOut').style.display = state === 'loggedOut' ? 'block' : 'none';
@@ -155,17 +171,22 @@ function populateCourseSelects() {
   var opts = COURSES.map(function (c) { return '<option value="' + c.slug + '">' + c.name + '</option>'; }).join('');
   document.getElementById('pdfCourseSelect').innerHTML = opts;
   document.getElementById('videoCourseSelect').innerHTML = opts;
+  document.getElementById('docCourseSelect').innerHTML = opts;
   populateModuleSelect();
+  populateDocModuleSelect();
 }
 
-function populateModuleSelect() {
-  var slug = document.getElementById('videoCourseSelect').value;
+function populateModuleSelectFor(courseSelectId, moduleSelectId) {
+  var slug = document.getElementById(courseSelectId).value;
   var course = COURSES.find(function (c) { return c.slug === slug; });
-  var sel = document.getElementById('videoModuleSelect');
+  var sel = document.getElementById(moduleSelectId);
   var opts = '';
   for (var i = 1; i <= (course ? course.modules : 1); i++) opts += '<option value="' + i + '">Modul ' + i + '</option>';
   sel.innerHTML = opts;
 }
+
+function populateModuleSelect() { populateModuleSelectFor('videoCourseSelect', 'videoModuleSelect'); }
+function populateDocModuleSelect() { populateModuleSelectFor('docCourseSelect', 'docModuleSelect'); }
 
 function setStatus(id, text, kind) {
   var el = document.getElementById(id);
@@ -238,12 +259,58 @@ async function uploadVideo() {
   refreshOverview();
 }
 
+async function uploadDoc() {
+  var slug = document.getElementById('docCourseSelect').value;
+  var moduleNum = parseInt(document.getElementById('docModuleSelect').value, 10);
+  var fileInput = document.getElementById('docFileInput');
+  var file = fileInput.files[0];
+  var btn = document.getElementById('docUploadBtn');
+  if (!file) { setStatus('docStatus', 'Pilih file dokumen dulu.', 'error'); return; }
+  var ext = file.name.split('.').pop().toLowerCase();
+  if (['pdf', 'doc', 'docx'].indexOf(ext) === -1) { setStatus('docStatus', 'File harus PDF, DOC, atau DOCX.', 'error'); return; }
+
+  btn.disabled = true;
+  setStatus('docStatus', 'Mengunggah...', 'pending');
+
+  var path = slug + '/module-' + moduleNum + '-' + Date.now() + '-' + file.name;
+  var up = await sbClient.storage.from('course-documents').upload(path, file);
+  if (up.error) { setStatus('docStatus', 'Gagal unggah: ' + up.error.message, 'error'); btn.disabled = false; return; }
+
+  var pub = sbClient.storage.from('course-documents').getPublicUrl(path);
+  var db = await sbClient.from('module_documents').insert({
+    course_slug: slug,
+    module_num: moduleNum,
+    doc_url: pub.data.publicUrl,
+    doc_path: path,
+    doc_label: file.name,
+    updated_by: currentSession.user.email
+  });
+
+  btn.disabled = false;
+  if (db.error) { setStatus('docStatus', 'Gagal simpan ke database: ' + db.error.message, 'error'); return; }
+
+  setStatus('docStatus', 'Dokumen berhasil diunggah untuk ' + courseName(slug) + ' — Modul ' + moduleNum + ' ✓', 'success');
+  fileInput.value = '';
+  refreshOverview();
+}
+
+async function deleteDoc(idx) {
+  var d = lastDocs[idx];
+  if (!d) return;
+  if (!confirm('Hapus dokumen "' + (d.doc_label || 'dokumen ini') + '"?')) return;
+  await sbClient.storage.from('course-documents').remove([d.doc_path]);
+  await sbClient.from('module_documents').delete().eq('id', d.id);
+  refreshOverview();
+}
+
 async function refreshOverview() {
   var list = document.getElementById('overviewList');
   var resourcesRes = await sbClient.from('course_resources').select('*');
   var videosRes = await sbClient.from('module_videos').select('*').order('course_slug').order('module_num');
+  var docsRes = await sbClient.from('module_documents').select('*').order('course_slug').order('module_num').order('created_at');
   var resources = resourcesRes.data || [];
   var videos = videosRes.data || [];
+  lastDocs = docsRes.data || [];
   var rows = '';
 
   COURSES.forEach(function (c) {
@@ -257,6 +324,12 @@ async function refreshOverview() {
     if (!v.video_url) return;
     rows += '<tr><td>' + courseName(v.course_slug) + '</td><td>Video Modul ' + v.module_num + '</td><td>' +
       '<a href="' + v.video_url + '" target="_blank">Lihat</a></td></tr>';
+  });
+
+  lastDocs.forEach(function (d, idx) {
+    rows += '<tr><td>' + courseName(d.course_slug) + '</td><td>Dokumen Modul ' + d.module_num + '</td><td>' +
+      '<a href="' + d.doc_url + '" target="_blank">' + (d.doc_label || 'Lihat') + '</a>' +
+      '<button class="del-btn" onclick="deleteDoc(' + idx + ')">Hapus</button></td></tr>';
   });
 
   list.innerHTML = rows || '<tr><td colspan="3">Belum ada file diunggah.</td></tr>';

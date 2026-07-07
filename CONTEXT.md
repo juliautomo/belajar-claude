@@ -74,6 +74,7 @@ All pages use these CSS variables:
 | `waitlist` | email, course_slug | "Beritahu saya" signups for coming-soon courses |
 | `course_resources` | course_slug (PK), pdf_url, pdf_label, updated_by | Admin-managed PDF resource per course |
 | `module_videos` | course_slug, module_num (PK), video_url, updated_by | Admin-managed video per course module |
+| `module_documents` | id (PK), course_slug, module_num, doc_url, doc_path, doc_label | Admin-managed practice-session document(s) per module — multiple allowed |
 
 ---
 
@@ -115,7 +116,7 @@ All pages use these CSS variables:
 | `payment-success-modal.js` | Post-payment modal logic |
 | `supabase-config.js` | Shared Supabase client config |
 | `20-prompt-claude-terbaik.pdf` | Free PDF download |
-| `course-video.js` | Shared script on all 4 course content pages — fetches `module_videos`/`course_resources` for `COURSE_SLUG` and injects `<video>` players into `#video-slot-N` + a PDF link into `#pdf-download-slot` |
+| `course-video.js` | Shared script on all 4 course content pages — fetches `module_videos`/`course_resources`/`module_documents` for `COURSE_SLUG` and injects `<video>` players into `#video-slot-N`, a PDF link into `#pdf-download-slot`, and a practice-document list into `#doc-slot-N` |
 | `sql/admin-content-setup.sql` | One-time Supabase SQL migration for `course_resources` + `module_videos` tables, RLS, and `course-pdfs`/`course-videos` storage bucket policies |
 
 ---
@@ -142,9 +143,11 @@ All pages use these CSS variables:
 - **Entry point**: hidden "Admin" link in `prompt-gratis.html` nav, shown only when the logged-in session email matches an admin email.
 - **PDF upload**: pick a course → upload a PDF → stored in the `course-pdfs` Supabase Storage bucket, public URL saved to `course_resources` (one row per `course_slug`, upsert). Content pages show a "📄 Unduh [filename]" link in the sidebar (`#pdf-download-slot`) via `course-video.js` if a resource exists for that course.
 - **Video upload**: pick a course + module number → upload a video file → stored in the `course-videos` bucket, public URL saved to `module_videos` (`course_slug` + `module_num` upsert). Content pages render a `<video>` player at the top of the matching module panel (`#video-slot-N`) via `course-video.js`.
-- **Overview table**: shows current PDF + all module videos across all 4 courses with links.
-- **Setup status**: `sql/admin-content-setup.sql` has been run in the Supabase SQL editor (tables + RLS confirmed in Table Editor), and the `course-pdfs` / `course-videos` public storage buckets have been created. Admin login + nav link confirmed working on `prompt-gratis.html` as of July 7, 2026.
-- **Known limitation**: videos are uploaded as raw files to Supabase Storage (not YouTube/Vimeo embeds) — subject to Supabase's per-file upload size limit and total storage/bandwidth quota on the current plan. Large course videos may need plan upgrades or external hosting later.
+- **Practice document upload**: pick a course + module number → upload a PDF/DOC/DOCX → stored in the `course-documents` bucket, row inserted (not upserted — multiple docs per module allowed) into `module_documents`. Rendered as a "Materi Praktik" download list at the *end* of the matching module (right before the Sebelumnya/Selanjutnya nav, `#doc-slot-N`), via `course-video.js`. Each doc has a "Hapus" delete button in the admin overview table (removes both the storage object and the DB row).
+- **Overview table**: shows current PDF, all module videos, and all practice documents (with delete) across all 4 courses.
+- **Course/module mapping guarantee**: `COURSES` slug+module-count config is identical across `admin.html` and all 4 content pages' `COURSE_SLUG`/slot IDs (traced July 2026) — upload dropdowns can't produce a course_slug/module_num combination that doesn't map to a real slot, and `onConflict` keys (`course_slug` for PDFs, `course_slug,module_num` for videos) match each table's actual primary key.
+- **Setup status**: `sql/admin-content-setup.sql` has been run in the Supabase SQL editor (tables + RLS confirmed in Table Editor), and the `course-pdfs` / `course-videos` public storage buckets have been created. Admin login + nav link confirmed working on `prompt-gratis.html` as of July 7, 2026. `course-documents` bucket still needs to be created the same way for the practice-document feature to work.
+- **Known limitation**: videos and documents are uploaded as raw files to Supabase Storage (not YouTube/Vimeo embeds or Google Drive links) — subject to Supabase's per-file upload size limit and total storage/bandwidth quota on the current plan. Large course videos may need plan upgrades or external hosting later.
 
 ---
 

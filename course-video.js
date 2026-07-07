@@ -1,7 +1,8 @@
-// course-video.js — Injects admin-uploaded module videos + course PDF into content pages.
-// Requires: sbClient (from supabase-config.js) and a global COURSE_SLUG constant
-// defined before this script tag loads. Looks for elements with id
-// "video-slot-<moduleNum>" and "pdf-download-slot" to populate.
+// course-video.js — Injects admin-uploaded module videos, PDF, and practice
+// documents into content pages.
+// Requires: sbClient (from supabase-config.js) and a global COURSE_SLUG
+// constant defined before this script tag loads. Looks for elements with id
+// "video-slot-<moduleNum>", "doc-slot-<moduleNum>", and "pdf-download-slot".
 (function () {
   function run() {
     if (typeof COURSE_SLUG === 'undefined' || !COURSE_SLUG) return;
@@ -40,6 +41,35 @@
         }
       })
       .catch(function (e) { console.log('course-video: gagal memuat PDF', e); });
+
+    sbClient
+      .from('module_documents')
+      .select('module_num, doc_url, doc_label')
+      .eq('course_slug', COURSE_SLUG)
+      .order('created_at')
+      .then(function (res) {
+        var byModule = {};
+        (res.data || []).forEach(function (row) {
+          if (!row.doc_url) return;
+          (byModule[row.module_num] = byModule[row.module_num] || []).push(row);
+        });
+        Object.keys(byModule).forEach(function (moduleNum) {
+          var slot = document.getElementById('doc-slot-' + moduleNum);
+          if (!slot) return;
+          var items = byModule[moduleNum].map(function (d) {
+            return '<a href="' + d.doc_url + '" target="_blank" rel="noopener" ' +
+              'style="display:flex;align-items:center;gap:8px;padding:10px 12px;' +
+              'background:var(--surface-2, #F5F5F7);border:1px solid var(--border);border-radius:10px;' +
+              'font-size:13px;font-weight:600;color:var(--ink);text-decoration:none;margin-bottom:8px;">' +
+              '📎 ' + (d.doc_label || 'Dokumen Praktik') + '</a>';
+          }).join('');
+          slot.innerHTML =
+            '<div style="margin-top:8px;">' +
+            '<div style="font-size:11px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;color:var(--ink-2);margin-bottom:10px;">Materi Praktik</div>' +
+            items + '</div>';
+        });
+      })
+      .catch(function (e) { console.log('course-video: gagal memuat dokumen praktik', e); });
   }
 
   if (document.readyState === 'loading') {
