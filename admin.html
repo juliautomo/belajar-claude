@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Belajar Claude</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<style>
+:root {
+  --bg: #FAFAFA; --surface: #FFFFFF; --surface-2: #F5F5F7;
+  --border: #E8E8E8; --border-strong: #D0D0D0;
+  --ink: #111111; --ink-2: #777777; --ink-3: #BBBBBB;
+  --accent: #6C47FF; --accent-2: #9B7DFF;
+  --accent-dim: rgba(108,71,255,0.08); --accent-glow: rgba(108,71,255,0.18);
+  --green: #16A34A; --green-dim: rgba(22,163,74,0.08); --green-border: rgba(22,163,74,0.2);
+  --red: #DC2626; --red-dim: rgba(220,38,38,0.08); --red-border: rgba(220,38,38,0.2);
+  --shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.05);
+  --serif: 'Instrument Serif', Georgia, serif;
+  --font: 'Geist', sans-serif;
+  --r: 14px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font); background: var(--bg); color: var(--ink); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 58px; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; background: rgba(250,250,250,0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+.logo { font-family: var(--font); font-size: 17px; font-weight: 700; color: var(--ink); text-decoration: none; letter-spacing: -0.4px; }
+.logo span { color: var(--accent); }
+.nav-right { display: flex; align-items: center; gap: 16px; font-size: 13px; color: var(--ink-2); }
+.nav-right a { color: var(--ink-2); text-decoration: none; }
+.nav-right a:hover { color: var(--ink); }
+.wrap { max-width: 760px; margin: 0 auto; padding: 96px 24px 64px; }
+h1.page-title { font-family: var(--serif); font-size: 30px; font-weight: 400; letter-spacing: -0.5px; margin-bottom: 6px; }
+.page-sub { font-size: 14px; color: var(--ink-2); margin-bottom: 32px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 24px; margin-bottom: 20px; box-shadow: var(--shadow); }
+.card h2 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.card .hint { font-size: 12.5px; color: var(--ink-2); margin-bottom: 18px; line-height: 1.5; }
+label { display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 6px; margin-top: 14px; }
+label:first-of-type { margin-top: 0; }
+select, input[type="file"] {
+  width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 10px;
+  font-size: 13.5px; color: var(--ink); font-family: inherit; background: #fff;
+}
+select:focus { outline: none; border-color: var(--accent); }
+.btn { margin-top: 16px; padding: 11px 20px; background: var(--ink); color: #fff; border: none; border-radius: 10px; font-size: 13.5px; font-weight: 700; cursor: pointer; font-family: inherit; transition: background 0.15s; }
+.btn:hover:not(:disabled) { background: #333; }
+.btn:disabled { background: #9CA3AF; cursor: not-allowed; }
+.status { margin-top: 12px; font-size: 12.5px; padding: 10px 12px; border-radius: 8px; display: none; }
+.status.show { display: block; }
+.status.success { background: var(--green-dim); color: #14532D; border: 1px solid var(--green-border); }
+.status.error { background: var(--red-dim); color: #7F1D1D; border: 1px solid var(--red-border); }
+.status.pending { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-glow); }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--border); }
+th { color: var(--ink-2); font-weight: 600; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.4px; }
+td a { color: var(--accent); text-decoration: none; }
+td a:hover { text-decoration: underline; }
+.gate { max-width: 400px; margin: 140px auto; text-align: center; }
+.gate .card { text-align: left; }
+.gate h2 { font-family: var(--serif); font-size: 20px; font-weight: 400; margin-bottom: 8px; }
+.gate p { font-size: 13.5px; color: var(--ink-2); line-height: 1.6; margin-bottom: 18px; }
+.gate a.btn { display: inline-block; text-decoration: none; text-align: center; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">belajar<span>claude</span></a>
+  <div class="nav-right">
+    <span id="navEmail"></span>
+    <a href="#" id="logoutLink" onclick="logout(); return false;" style="display:none;">Keluar</a>
+  </div>
+</nav>
+
+<!-- State: not logged in -->
+<div class="gate" id="stateLoggedOut" style="display:none;">
+  <div class="card">
+    <h2>Silakan masuk dulu</h2>
+    <p>Halaman ini hanya untuk admin. Masuk dengan email admin kamu untuk melanjutkan.</p>
+    <a href="login.html" class="btn">Masuk →</a>
+  </div>
+</div>
+
+<!-- State: logged in but not admin -->
+<div class="gate" id="stateDenied" style="display:none;">
+  <div class="card">
+    <h2>Akses ditolak</h2>
+    <p>Akun ini tidak punya akses ke halaman admin.</p>
+    <a href="dashboard.html" class="btn">← Kembali ke Dashboard</a>
+  </div>
+</div>
+
+<!-- State: admin -->
+<div class="wrap" id="stateAdmin" style="display:none;">
+  <h1 class="page-title">Kelola Konten Kursus</h1>
+  <p class="page-sub">Unggah PDF dan video yang akan langsung tampil di halaman kursus — tidak perlu deploy ulang.</p>
+
+  <div class="card">
+    <h2>PDF per Kursus</h2>
+    <p class="hint">Satu PDF per kursus (mis. panduan/lembar prompt). Mengunggah file baru akan menggantikan yang lama.</p>
+    <label for="pdfCourseSelect">Kursus</label>
+    <select id="pdfCourseSelect"></select>
+    <label for="pdfFileInput">File PDF</label>
+    <input type="file" id="pdfFileInput" accept="application/pdf">
+    <button class="btn" id="pdfUploadBtn" onclick="uploadPdf()">Unggah PDF</button>
+    <div class="status" id="pdfStatus"></div>
+  </div>
+
+  <div class="card">
+    <h2>Video per Modul</h2>
+    <p class="hint">Pilih kursus dan modul, lalu unggah video untuk modul tersebut. File besar bisa memakan waktu beberapa menit untuk diunggah — jangan tutup halaman ini sampai selesai.</p>
+    <label for="videoCourseSelect">Kursus</label>
+    <select id="videoCourseSelect" onchange="populateModuleSelect()"></select>
+    <label for="videoModuleSelect">Modul</label>
+    <select id="videoModuleSelect"></select>
+    <label for="videoFileInput">File Video</label>
+    <input type="file" id="videoFileInput" accept="video/*">
+    <button class="btn" id="videoUploadBtn" onclick="uploadVideo()">Unggah Video</button>
+    <div class="status" id="videoStatus"></div>
+  </div>
+
+  <div class="card">
+    <h2>Ringkasan Konten Saat Ini</h2>
+    <p class="hint">Semua PDF dan video yang sedang aktif di situs.</p>
+    <table id="overviewTable">
+      <thead><tr><th>Kursus</th><th>Item</th><th>File</th></tr></thead>
+      <tbody id="overviewList"><tr><td colspan="3">Memuat...</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const ADMIN_EMAILS = ['julia.utomo@gmail.com', 'tiffany.utomo@gmail.com'];
+const COURSES = [
+  { slug: 'prompt-gratis',      name: '20 Prompt Claude Terbaik',        modules: 5 },
+  { slug: 'mulai-claude',       name: 'Mulai dengan Claude AI',          modules: 6 },
+  { slug: 'kerja-sehari-hari',  name: 'Produktivitas Kantor',            modules: 6 },
+  { slug: 'bisnis-ukm',         name: 'Konten & Pemasaran Bisnis',       modules: 6 },
+];
+
+let currentSession = null;
+
+function showState(state) {
+  document.getElementById('stateLoggedOut').style.display = state === 'loggedOut' ? 'block' : 'none';
+  document.getElementById('stateDenied').style.display = state === 'denied' ? 'block' : 'none';
+  document.getElementById('stateAdmin').style.display = state === 'admin' ? 'block' : 'none';
+}
+
+function courseName(slug) {
+  var c = COURSES.find(function (x) { return x.slug === slug; });
+  return c ? c.name : slug;
+}
+
+function populateCourseSelects() {
+  var opts = COURSES.map(function (c) { return '<option value="' + c.slug + '">' + c.name + '</option>'; }).join('');
+  document.getElementById('pdfCourseSelect').innerHTML = opts;
+  document.getElementById('videoCourseSelect').innerHTML = opts;
+  populateModuleSelect();
+}
+
+function populateModuleSelect() {
+  var slug = document.getElementById('videoCourseSelect').value;
+  var course = COURSES.find(function (c) { return c.slug === slug; });
+  var sel = document.getElementById('videoModuleSelect');
+  var opts = '';
+  for (var i = 1; i <= (course ? course.modules : 1); i++) opts += '<option value="' + i + '">Modul ' + i + '</option>';
+  sel.innerHTML = opts;
+}
+
+function setStatus(id, text, kind) {
+  var el = document.getElementById(id);
+  el.textContent = text;
+  el.className = 'status show' + (kind ? ' ' + kind : '');
+}
+
+async function uploadPdf() {
+  var slug = document.getElementById('pdfCourseSelect').value;
+  var fileInput = document.getElementById('pdfFileInput');
+  var file = fileInput.files[0];
+  var btn = document.getElementById('pdfUploadBtn');
+  if (!file) { setStatus('pdfStatus', 'Pilih file PDF dulu.', 'error'); return; }
+  if (file.type !== 'application/pdf') { setStatus('pdfStatus', 'File harus berformat PDF.', 'error'); return; }
+
+  btn.disabled = true;
+  setStatus('pdfStatus', 'Mengunggah...', 'pending');
+
+  var path = slug + '/' + Date.now() + '-' + file.name;
+  var up = await sbClient.storage.from('course-pdfs').upload(path, file, { upsert: true });
+  if (up.error) { setStatus('pdfStatus', 'Gagal unggah: ' + up.error.message, 'error'); btn.disabled = false; return; }
+
+  var pub = sbClient.storage.from('course-pdfs').getPublicUrl(path);
+  var db = await sbClient.from('course_resources').upsert({
+    course_slug: slug,
+    pdf_url: pub.data.publicUrl,
+    pdf_label: file.name,
+    updated_at: new Date().toISOString(),
+    updated_by: currentSession.user.email
+  }, { onConflict: 'course_slug' });
+
+  btn.disabled = false;
+  if (db.error) { setStatus('pdfStatus', 'Gagal simpan ke database: ' + db.error.message, 'error'); return; }
+
+  setStatus('pdfStatus', 'PDF berhasil diunggah untuk ' + courseName(slug) + ' ✓', 'success');
+  fileInput.value = '';
+  refreshOverview();
+}
+
+async function uploadVideo() {
+  var slug = document.getElementById('videoCourseSelect').value;
+  var moduleNum = parseInt(document.getElementById('videoModuleSelect').value, 10);
+  var fileInput = document.getElementById('videoFileInput');
+  var file = fileInput.files[0];
+  var btn = document.getElementById('videoUploadBtn');
+  if (!file) { setStatus('videoStatus', 'Pilih file video dulu.', 'error'); return; }
+  if (file.type.indexOf('video/') !== 0) { setStatus('videoStatus', 'File harus berupa video.', 'error'); return; }
+
+  btn.disabled = true;
+  setStatus('videoStatus', 'Mengunggah... (bisa beberapa menit untuk file besar, jangan tutup halaman)', 'pending');
+
+  var path = slug + '/module-' + moduleNum + '-' + Date.now() + '-' + file.name;
+  var up = await sbClient.storage.from('course-videos').upload(path, file, { upsert: true });
+  if (up.error) { setStatus('videoStatus', 'Gagal unggah: ' + up.error.message, 'error'); btn.disabled = false; return; }
+
+  var pub = sbClient.storage.from('course-videos').getPublicUrl(path);
+  var db = await sbClient.from('module_videos').upsert({
+    course_slug: slug,
+    module_num: moduleNum,
+    video_url: pub.data.publicUrl,
+    updated_at: new Date().toISOString(),
+    updated_by: currentSession.user.email
+  }, { onConflict: 'course_slug,module_num' });
+
+  btn.disabled = false;
+  if (db.error) { setStatus('videoStatus', 'Gagal simpan ke database: ' + db.error.message, 'error'); return; }
+
+  setStatus('videoStatus', 'Video berhasil diunggah untuk ' + courseName(slug) + ' — Modul ' + moduleNum + ' ✓', 'success');
+  fileInput.value = '';
+  refreshOverview();
+}
+
+async function refreshOverview() {
+  var list = document.getElementById('overviewList');
+  var resourcesRes = await sbClient.from('course_resources').select('*');
+  var videosRes = await sbClient.from('module_videos').select('*').order('course_slug').order('module_num');
+  var resources = resourcesRes.data || [];
+  var videos = videosRes.data || [];
+  var rows = '';
+
+  COURSES.forEach(function (c) {
+    var r = resources.find(function (x) { return x.course_slug === c.slug; });
+    rows += '<tr><td>' + c.name + '</td><td>PDF</td><td>' +
+      (r && r.pdf_url ? '<a href="' + r.pdf_url + '" target="_blank">' + (r.pdf_label || 'Lihat') + '</a>' : '—') +
+      '</td></tr>';
+  });
+
+  videos.forEach(function (v) {
+    if (!v.video_url) return;
+    rows += '<tr><td>' + courseName(v.course_slug) + '</td><td>Video Modul ' + v.module_num + '</td><td>' +
+      '<a href="' + v.video_url + '" target="_blank">Lihat</a></td></tr>';
+  });
+
+  list.innerHTML = rows || '<tr><td colspan="3">Belum ada file diunggah.</td></tr>';
+}
+
+async function logout() {
+  await sbClient.auth.signOut();
+  window.location.href = 'login.html';
+}
+
+(async function init() {
+  var sessionRes = await sbClient.auth.getSession();
+  var session = sessionRes.data.session;
+  if (!session) { showState('loggedOut'); return; }
+  if (ADMIN_EMAILS.indexOf(session.user.email.toLowerCase()) === -1) { showState('denied'); return; }
+
+  currentSession = session;
+  document.getElementById('navEmail').textContent = session.user.email;
+  document.getElementById('logoutLink').style.display = 'inline';
+  showState('admin');
+  populateCourseSelects();
+  refreshOverview();
+})();
+</script>
+
+</body>
+</html>

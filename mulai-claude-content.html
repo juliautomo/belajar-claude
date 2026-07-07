@@ -7,6 +7,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
+  <script>const COURSE_SLUG = 'mulai-claude';</script>
+  <script src="course-video.js"></script>
 <style>
       :root {
     --bg: #FAFAFA; --surface: #FFFFFF; --surface-2: #F5F5F7;
@@ -240,6 +242,7 @@
         <span class="progress-label" id="progressLabel">0/6</span>
       </div>
     </div>
+    <div id="pdf-download-slot"></div>
 
     <div class="sidebar-section-label">Materi Kursus</div>
 
@@ -316,6 +319,7 @@
         </div>
         <h1 class="module-title">Claude.ai — Setup & Interface Tour</h1>
         <p class="module-subtitle">Setup akun, kenali interface, dan mulai pakai Claude hari ini</p>
+        <div class="video-slot" id="video-slot-1"></div>
 
         <div class="module-desc-box">
           Di modul ini kamu akan setup akun Claude, memahami perbedaan model (Haiku, Sonnet, Opus), dan langsung mencoba conversation pertama. Target: dalam 10 menit pertama kamu sudah punya akun dan bisa mulai chat.
@@ -347,6 +351,7 @@ relevan dengan bidang saya.<button class="copy-btn" onclick="copyPrompt(this)">S
         <div class="breadcrumb"><span>Mulai dengan Claude AI</span><span>›</span><strong>Modul 2</strong></div>
         <h1 class="module-title">Prompt Anatomy — Konteks + Instruksi + Format</h1>
         <p class="module-subtitle">Struktur prompt yang menghasilkan output tepat setiap kali</p>
+        <div class="video-slot" id="video-slot-2"></div>
 
         <div class="module-desc-box">
           Formula prompt yang efektif selalu punya 3 bagian: <strong>Konteks</strong> (siapa kamu, apa situasinya), <strong>Instruksi</strong> (apa yang kamu minta), dan <strong>Format</strong> (bagaimana output yang kamu inginkan). Kuasai ini dan 80% output Claude akan langsung tepat.
@@ -380,6 +385,7 @@ dengan panjang sekitar [pendek/sedang/detail].
         <div class="breadcrumb"><span>Mulai dengan Claude AI</span><span>›</span><strong>Modul 3</strong></div>
         <h1 class="module-title">Role Prompting — Claude sebagai Ahli</h1>
         <p class="module-subtitle">Tingkatkan kualitas output dengan minta Claude berperan sebagai spesialis</p>
+        <div class="video-slot" id="video-slot-3"></div>
 
         <div class="module-desc-box">
           Ketika kamu meminta Claude "berperan sebagai" ahli tertentu, output yang dihasilkan jauh lebih relevan dan tajam. Teknik ini sangat berguna untuk konsultasi, review, atau situasi yang butuh perspektif profesional.
@@ -413,6 +419,7 @@ jalankan hari ini.<button class="copy-btn" onclick="copyPrompt(this)">Salin</but
         <div class="breadcrumb"><span>Mulai dengan Claude AI</span><span>›</span><strong>Modul 4</strong></div>
         <h1 class="module-title">Claude Artifacts — Generate Dokumen Langsung</h1>
         <p class="module-subtitle">Buat tabel, template, dan dokumen tanpa copy-paste ke tools lain</p>
+        <div class="video-slot" id="video-slot-4"></div>
 
         <div class="module-desc-box">
           Claude Artifacts memungkinkan kamu membuat dokumen, tabel interaktif, dan template langsung di dalam Claude — hasilnya bisa di-download atau dibuka di tab terpisah. Tidak perlu buka Google Docs dulu.
@@ -444,6 +451,7 @@ Sertakan semua kolom/bagian yang dibutuhkan untuk
         <div class="breadcrumb"><span>Mulai dengan Claude AI</span><span>›</span><strong>Modul 5</strong></div>
         <h1 class="module-title">Claude Projects — Simpan Konteks Kerja</h1>
         <p class="module-subtitle">Setup project pertama kamu agar tidak perlu jelaskan ulang tiap sesi</p>
+        <div class="video-slot" id="video-slot-5"></div>
 
         <div class="module-desc-box">
           Claude Projects menyimpan konteks pekerjaan kamu — tone, SOP, informasi perusahaan, atau prompt library. Setiap kali kamu buka project, Claude sudah "tahu" siapa kamu dan apa yang kamu butuhkan.
@@ -484,6 +492,7 @@ TUGAS YANG SERING SAYA MINTA:
         <div class="breadcrumb"><span>Mulai dengan Claude AI</span><span>›</span><strong>Modul 6</strong></div>
         <h1 class="module-title">Google Docs Export — Workflow End-to-End</h1>
         <p class="module-subtitle">Dari prompt Claude sampai Google Docs siap dikirim ke atasan</p>
+        <div class="video-slot" id="video-slot-6"></div>
 
         <div class="module-desc-box">
           Workflow lengkap: input data/catatan → prompt ke Claude → output terformat → copy ke Google Docs → kirim. Modul ini mempraktikkan semua skill sebelumnya dalam satu workflow nyata yang bisa kamu pakai mulai besok.

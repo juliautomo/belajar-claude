@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: June 30, 2026_
+_Last updated: July 7, 2026_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -72,6 +72,8 @@ All pages use these CSS variables:
 | `module_completions` | email, course_slug, module_num | Tracks per-module progress |
 | `course_feedback` | email, course_slug, rating (1-5), comment | Unique per email+course |
 | `waitlist` | email, course_slug | "Beritahu saya" signups for coming-soon courses |
+| `course_resources` | course_slug (PK), pdf_url, pdf_label, updated_by | Admin-managed PDF resource per course |
+| `module_videos` | course_slug, module_num (PK), video_url, updated_by | Admin-managed video per course module |
 
 ---
 
@@ -104,6 +106,7 @@ All pages use these CSS variables:
 | `kerja-sehari-hari-content.html` | Course reader — 6 modules + feedback panel |
 | `bisnis-ukm-content.html` | Course reader — 6 modules + feedback panel |
 | `payment-success.html` | Post-payment confirmation |
+| `admin.html` | Admin-only content manager — upload course PDFs + per-module videos to Supabase Storage. Gated to `julia.utomo@gmail.com` / `tiffany.utomo@gmail.com` via session email check. Linked from a hidden "Admin" nav item on `prompt-gratis.html` (shown only to those emails). |
 
 ### Assets
 | File | Purpose |
@@ -112,6 +115,8 @@ All pages use these CSS variables:
 | `payment-success-modal.js` | Post-payment modal logic |
 | `supabase-config.js` | Shared Supabase client config |
 | `20-prompt-claude-terbaik.pdf` | Free PDF download |
+| `course-video.js` | Shared script on all 4 course content pages — fetches `module_videos`/`course_resources` for `COURSE_SLUG` and injects `<video>` players into `#video-slot-N` + a PDF link into `#pdf-download-slot` |
+| `sql/admin-content-setup.sql` | One-time Supabase SQL migration for `course_resources` + `module_videos` tables, RLS, and `course-pdfs`/`course-videos` storage bucket policies |
 
 ---
 
@@ -129,6 +134,17 @@ All pages use these CSS variables:
 - Progress bar + completion tracking per module → saved to `module_completions`
 - Last panel = feedback panel: star rating (1-5) + optional comment → saved to `course_feedback`
 - "Ke Dashboard" on last content module → navigates to feedback panel first
+
+---
+
+## Admin Content Manager (admin.html) — added July 2026
+- **Access**: gated to `julia.utomo@gmail.com` and `tiffany.utomo@gmail.com` only, checked client-side against the Supabase session email (`ADMIN_EMAILS` array in `admin.html` and in the nav script of `prompt-gratis.html`). Not logged in → prompt to log in. Logged in but not an admin email → "Akses ditolak".
+- **Entry point**: hidden "Admin" link in `prompt-gratis.html` nav, shown only when the logged-in session email matches an admin email.
+- **PDF upload**: pick a course → upload a PDF → stored in the `course-pdfs` Supabase Storage bucket, public URL saved to `course_resources` (one row per `course_slug`, upsert). Content pages show a "📄 Unduh [filename]" link in the sidebar (`#pdf-download-slot`) via `course-video.js` if a resource exists for that course.
+- **Video upload**: pick a course + module number → upload a video file → stored in the `course-videos` bucket, public URL saved to `module_videos` (`course_slug` + `module_num` upsert). Content pages render a `<video>` player at the top of the matching module panel (`#video-slot-N`) via `course-video.js`.
+- **Overview table**: shows current PDF + all module videos across all 4 courses with links.
+- **Setup dependency**: requires `sql/admin-content-setup.sql` to have been run once in the Supabase SQL editor (creates tables + RLS) AND the `course-pdfs` / `course-videos` storage buckets to exist (created manually as public buckets in the Supabase dashboard — anon key can't create buckets).
+- **Known limitation**: videos are uploaded as raw files to Supabase Storage (not YouTube/Vimeo embeds) — subject to Supabase's per-file upload size limit and total storage/bandwidth quota on the current plan. Large course videos may need plan upgrades or external hosting later.
 
 ---
 

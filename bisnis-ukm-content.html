@@ -7,6 +7,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
+  <script>const COURSE_SLUG = 'bisnis-ukm';</script>
+  <script src="course-video.js"></script>
 <style>
       :root {
     --bg: #FAFAFA; --surface: #FFFFFF; --surface-2: #F5F5F7;
@@ -151,6 +153,7 @@
         <span class="progress-label" id="progressLabel">0/6</span>
       </div>
     </div>
+    <div id="pdf-download-slot"></div>
     <div class="sidebar-section-label">Materi Kursus</div>
     <div class="mod-item active" id="nav-mod1" onclick="showModule(1)">
       <div class="mod-check" id="check1"></div>
@@ -198,6 +201,7 @@
         <div class="breadcrumb"><span>Bisnis & UKM</span><span>›</span><strong>Modul 1</strong></div>
         <h1 class="module-title">Tokopedia/Shopee — 50 Deskripsi Produk SEO-Ready</h1>
         <p class="module-subtitle">Generate dan upload massal dalam 45 menit</p>
+        <div class="video-slot" id="video-slot-1"></div>
         <div class="module-desc-box">Deskripsi produk yang bagus di Shopee/Tokopedia harus mengandung keyword pencarian, benefit yang jelas, dan CTA yang mendorong beli. Claude bisa generate 50 deskripsi dalam waktu yang sama kamu biasa buat 5.</div>
         <div class="prompt-section">
           <div class="prompt-label">📝 Template Deskripsi Produk SEO</div>
@@ -232,6 +236,7 @@ Format output:
         <div class="breadcrumb"><span>Bisnis & UKM</span><span>›</span><strong>Modul 2</strong></div>
         <h1 class="module-title">Instagram System — 30 Caption + Hashtag + Jadwal</h1>
         <p class="module-subtitle">Kalender konten 1 bulan selesai dalam 1 sesi</p>
+        <div class="video-slot" id="video-slot-2"></div>
         <div class="module-desc-box">Kita akan buat sistem konten IG yang lengkap: caption untuk feed, story ideas, hashtag yang relevan, dan jadwal posting — semuanya tersimpan di Notion dan siap dijadwalkan.</div>
         <div class="prompt-section">
           <div class="prompt-label">📝 Template 30 Caption IG</div>
@@ -263,6 +268,7 @@ Tanggal | Tipe | Caption | Hashtag | Ide Visual<button class="copy-btn" onclick=
         <div class="breadcrumb"><span>Bisnis & UKM</span><span>›</span><strong>Modul 3</strong></div>
         <h1 class="module-title">WhatsApp Business — 10 Template Quick Reply</h1>
         <p class="module-subtitle">CS yang on-brand untuk semua situasi umum bisnis kamu</p>
+        <div class="video-slot" id="video-slot-3"></div>
         <div class="module-desc-box">Template WA yang bagus harus terdengar personal, tidak robotic, dan sesuai brand tone bisnis kamu. Kita buat 10 template untuk situasi yang paling sering terjadi.</div>
         <div class="prompt-section">
           <div class="prompt-label">📝 Template WA Business System</div>
@@ -299,6 +305,7 @@ Catatan: [kapan digunakan]<button class="copy-btn" onclick="copyPrompt(this)">Sa
         <div class="breadcrumb"><span>Bisnis & UKM</span><span>›</span><strong>Modul 4</strong></div>
         <h1 class="module-title">Notion Content OS — Build Sistem Konten Bisnis</h1>
         <p class="module-subtitle">Satu database Notion untuk semua konten dan kampanye</p>
+        <div class="video-slot" id="video-slot-4"></div>
         <div class="module-desc-box">Kita bangun Notion database yang bisa menyimpan semua konten — IG, WA broadcast, email newsletter, dan ide konten. Claude jadi "content engine" yang isi database ini setiap minggu.</div>
         <div class="prompt-section">
           <div class="prompt-label">📝 Prompt Isi Notion Database</div>
@@ -329,6 +336,7 @@ Output dalam format tabel yang bisa langsung di-copy ke Notion.<button class="co
         <div class="breadcrumb"><span>Bisnis & UKM</span><span>›</span><strong>Modul 5</strong></div>
         <h1 class="module-title">Canva Copy Workflow — Iklan Profesional dalam 20 Menit</h1>
         <p class="module-subtitle">Claude tulis copy → kamu tinggal design di Canva</p>
+        <div class="video-slot" id="video-slot-5"></div>
         <div class="module-desc-box">Workflow paling cepat untuk buat iklan: Claude generate headline, subheadline, body copy, dan CTA — kamu tinggal copy ke Canva dan pilih template yang cocok. Dari ide ke iklan jadi dalam 20 menit.</div>
         <div class="prompt-section">
           <div class="prompt-label">📝 Template Copy untuk Iklan</div>
@@ -362,6 +370,7 @@ Format output (siap copy ke Canva):
         <div class="breadcrumb"><span>Bisnis & UKM</span><span>›</span><strong>Modul 6</strong></div>
         <h1 class="module-title">Competitive Analysis — Audit 3 Kompetitor</h1>
         <p class="module-subtitle">SWOT + rekomendasi siap presentasi dalam 30 menit</p>
+        <div class="video-slot" id="video-slot-6"></div>
         <div class="module-desc-box">Kita akan membuat template analisis kompetitor yang bisa dipakai berulang. Copy profil kompetitor dari website/media sosial mereka → paste ke Claude → dapat laporan SWOT + gap analysis + rekomendasi.</div>
         <div class="prompt-section">
           <div class="prompt-label">📝 Template Analisis Kompetitor</div>

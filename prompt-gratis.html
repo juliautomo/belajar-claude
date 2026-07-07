@@ -105,6 +105,7 @@
     <a href="index.html#kursus">Kursus</a>
     <a href="login.html" id="navLoginBtn">Masuk</a>
     <a href="login.html" id="navCtaBtn" class="nav-cta" style="display:none">Gabung Gratis</a>
+    <a href="admin.html" id="navAdminBtn" style="display:none">Admin</a>
     <div class="nav-user-pill" id="navUserPill">
       <div><span class="nav-uname" id="navUname"></span><span class="nav-uemail" id="navUemail"></span></div>
     </div>
@@ -299,6 +300,10 @@ Buat ringkasan eksekutif...
   const lb = document.getElementById('navLoginBtn');
   if (lb) { lb.textContent = 'Dashboard'; lb.href = 'dashboard.html'; }
   const cb = document.getElementById('navCtaBtn'); if (cb) cb.style.display = 'none';
+  const ADMIN_EMAILS = ['julia.utomo@gmail.com', 'tiffany.utomo@gmail.com'];
+  if (ADMIN_EMAILS.indexOf(session.user.email.toLowerCase()) !== -1) {
+    const ab = document.getElementById('navAdminBtn'); if (ab) ab.style.display = '';
+  }
 })();
 </script>
   <script src="login-modal.js"></script>

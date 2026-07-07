@@ -7,6 +7,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
+  <script>const COURSE_SLUG = 'kerja-sehari-hari';</script>
+  <script src="course-video.js"></script>
 <style>
       :root {
     --bg: #FAFAFA; --surface: #FFFFFF; --surface-2: #F5F5F7;
@@ -151,6 +153,7 @@
         <span class="progress-label" id="progressLabel">0/6</span>
       </div>
     </div>
+    <div id="pdf-download-slot"></div>
     <div class="sidebar-section-label">Materi Kursus</div>
     <div class="mod-item active" id="nav-mod1" onclick="showModule(1)">
       <div class="mod-check" id="check1"></div>
@@ -198,6 +201,7 @@
         <div class="breadcrumb"><span>Pekerjaan Sehari-hari</span><span>›</span><strong>Modul 1</strong></div>
         <h1 class="module-title">Gmail + Claude — 10 Template Email Profesional</h1>
         <p class="module-subtitle">Draft, reply, follow-up email siap kirim dalam hitungan detik</p>
+        <div class="video-slot" id="video-slot-1"></div>
         <div class="module-desc-box">Kita akan membuat 10 template email profesional untuk situasi paling umum di kantor: follow-up, konfirmasi meeting, eskalasi masalah, proposal, dan balasan komplain. Setiap template tersimpan di Claude Projects dan bisa langsung di-copy ke Gmail.</div>
         <div class="prompt-section">
           <div class="prompt-label">📝 Template Email Profesional</div>
@@ -229,6 +233,7 @@ Format: subject line + body email siap kirim.<button class="copy-btn" onclick="c
         <div class="breadcrumb"><span>Pekerjaan Sehari-hari</span><span>›</span><strong>Modul 2</strong></div>
         <h1 class="module-title">Google Sheets — Analisis Data dengan Claude</h1>
         <p class="module-subtitle">Paste data → analisis → formula → insight dalam satu workflow</p>
+        <div class="video-slot" id="video-slot-2"></div>
         <div class="module-desc-box">Claude bisa membaca data yang kamu paste, mengidentifikasi anomali, menyarankan formula, dan memberikan insight yang actionable. Tidak perlu jago Excel — Claude yang bantu analisis.</div>
         <div class="prompt-section">
           <div class="prompt-label">📝 Template Analisis Data</div>
@@ -259,6 +264,7 @@ Format output: poin-poin dengan sub-heading yang jelas.<button class="copy-btn" 
         <div class="breadcrumb"><span>Pekerjaan Sehari-hari</span><span>›</span><strong>Modul 3</strong></div>
         <h1 class="module-title">Claude Projects Advanced — Project per Klien/Divisi</h1>
         <p class="module-subtitle">Simpan SOP, tone, dan konteks khusus untuk setiap klien atau divisi</p>
+        <div class="video-slot" id="video-slot-3"></div>
         <div class="module-desc-box">Di modul ini kamu akan setup minimal 3 project berbeda: satu untuk pekerjaan utama, satu untuk komunikasi eksternal, dan satu untuk divisi atau klien spesifik. Masing-masing project punya system prompt yang berbeda.</div>
         <div class="prompt-section">
           <div class="prompt-label">📝 System Prompt untuk Project Klien</div>
@@ -290,6 +296,7 @@ HISTORY PENTING:
         <div class="breadcrumb"><span>Pekerjaan Sehari-hari</span><span>›</span><strong>Modul 4</strong></div>
         <h1 class="module-title">Batch Prompting — 10 Dokumen dalam 1 Sesi</h1>
         <p class="module-subtitle">Proses job description, laporan, dan summary sekaligus</p>
+        <div class="video-slot" id="video-slot-4"></div>
         <div class="module-desc-box">Batch prompting adalah teknik memproses banyak item dalam satu prompt terstruktur. Alih-alih membuat 10 prompt terpisah untuk 10 JD, kamu bisa kirim satu prompt dengan semua konteks dan dapat 10 hasil sekaligus.</div>
         <div class="prompt-section">
           <div class="prompt-label">📝 Template Batch Processing</div>
@@ -326,6 +333,7 @@ Buat semua [jumlah] item dengan kualitas yang konsisten.<button class="copy-btn"
         <div class="breadcrumb"><span>Pekerjaan Sehari-hari</span><span>›</span><strong>Modul 5</strong></div>
         <h1 class="module-title">Google Docs Templates — Laporan Mingguan Otomatis</h1>
         <p class="module-subtitle">Template siap isi yang menghemat 2 jam setiap Senin pagi</p>
+        <div class="video-slot" id="video-slot-5"></div>
         <div class="module-desc-box">Kita akan membuat template laporan mingguan yang tinggal diisi data — Claude yang format, analisis, dan buat narasi. Kamu cukup paste angka dan bullet point kasar, Claude yang ubah jadi laporan profesional.</div>
         <div class="prompt-section">
           <div class="prompt-label">📝 Template Laporan Mingguan</div>
@@ -358,6 +366,7 @@ Tone: profesional, ringkas, action-oriented.<button class="copy-btn" onclick="co
         <div class="breadcrumb"><span>Pekerjaan Sehari-hari</span><span>›</span><strong>Modul 6</strong></div>
         <h1 class="module-title">Prompt Chaining — Meeting Notes ke Action Items ke Email</h1>
         <p class="module-subtitle">Satu chain yang menghemat 2 jam setiap minggu</p>
+        <div class="video-slot" id="video-slot-6"></div>
         <div class="module-desc-box">Prompt chaining berarti output dari satu prompt langsung menjadi input untuk prompt berikutnya. Chain yang paling berguna: Meeting Notes → Ringkasan Action Items → Draft Email Follow-up ke semua peserta.</div>
         <div class="prompt-section">
           <div class="prompt-label">📝 Chain Step 1 — Meeting Notes → Action Items</div>

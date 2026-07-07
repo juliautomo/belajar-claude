@@ -7,6 +7,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
+  <script>const COURSE_SLUG = 'prompt-gratis';</script>
+  <script src="course-video.js"></script>
   <style>
         :root {
     --bg: #FAFAFA; --surface: #FFFFFF; --surface-2: #F5F5F7;
@@ -175,6 +177,7 @@
         <span class="progress-label" id="progressLabel">0/5</span>
       </div>
     </div>
+    <div id="pdf-download-slot"></div>
     <div class="sidebar-section-label">Kategori Prompt</div>
     <div class="mod-item active" id="nav-mod1" onclick="showModule(1)">
       <div class="mod-check" id="check1"></div>
@@ -212,6 +215,7 @@
         <div class="breadcrumb"><span>20 Prompt Terbaik</span><span>›</span><strong>Produktivitas Kerja</strong></div>
         <h1 class="module-title">Produktivitas Kerja</h1>
         <p class="module-subtitle">4 prompt untuk merangkum, merencanakan, dan mengelola pekerjaan lebih efisien</p>
+        <div class="video-slot" id="video-slot-1"></div>
         <div class="prompt-list">
 
           <div class="prompt-card">
@@ -283,6 +287,7 @@ Tolong ubah ini menjadi notulen meeting yang rapi dengan format:
         <div class="breadcrumb"><span>20 Prompt Terbaik</span><span>›</span><strong>Bisnis & Marketing</strong></div>
         <h1 class="module-title">Bisnis & Marketing</h1>
         <p class="module-subtitle">5 prompt untuk konten, riset pasar, dan deskripsi produk yang menjual</p>
+        <div class="video-slot" id="video-slot-2"></div>
         <div class="prompt-list">
 
           <div class="prompt-card">
@@ -375,6 +380,7 @@ Berikan 10 pilihan nama yang mudah diingat, unik, dan relevan — beserta taglin
         <div class="breadcrumb"><span>20 Prompt Terbaik</span><span>›</span><strong>Karir & CV</strong></div>
         <h1 class="module-title">Karir & CV</h1>
         <p class="module-subtitle">4 prompt untuk memperkuat CV, persiapan interview, dan negosiasi gaji</p>
+        <div class="video-slot" id="video-slot-3"></div>
         <div class="prompt-list">
 
           <div class="prompt-card">
@@ -448,6 +454,7 @@ Tolong: tulis ulang headline LinkedIn saya agar lebih menarik, buat draf "About"
         <div class="breadcrumb"><span>20 Prompt Terbaik</span><span>›</span><strong>Komunikasi Profesional</strong></div>
         <h1 class="module-title">Komunikasi Profesional</h1>
         <p class="module-subtitle">4 prompt untuk email, presentasi, dan pesan-pesan sulit di tempat kerja</p>
+        <div class="video-slot" id="video-slot-4"></div>
         <div class="prompt-list">
 
           <div class="prompt-card">
@@ -525,6 +532,7 @@ Tolong bantu saya menemukan cara terbaik untuk menyampaikan ini — kapan waktu 
         <div class="breadcrumb"><span>20 Prompt Terbaik</span><span>›</span><strong>Belajar & Riset</strong></div>
         <h1 class="module-title">Belajar & Riset</h1>
         <p class="module-subtitle">3 prompt untuk belajar topik baru, membuat rencana belajar, dan riset cepat</p>
+        <div class="video-slot" id="video-slot-5"></div>
         <div class="prompt-list">
 
           <div class="prompt-card">
