@@ -137,13 +137,13 @@ All pages use these CSS variables:
 
 ---
 
-## Admin Content Manager (admin.html) — added July 2026
+## Admin Content Manager (admin.html) — added July 2026 (live, verified working)
 - **Access**: gated to `julia.utomo@gmail.com` and `tiffany.utomo@gmail.com` only, checked client-side against the Supabase session email (`ADMIN_EMAILS` array in `admin.html` and in the nav script of `prompt-gratis.html`). Not logged in → prompt to log in. Logged in but not an admin email → "Akses ditolak".
 - **Entry point**: hidden "Admin" link in `prompt-gratis.html` nav, shown only when the logged-in session email matches an admin email.
 - **PDF upload**: pick a course → upload a PDF → stored in the `course-pdfs` Supabase Storage bucket, public URL saved to `course_resources` (one row per `course_slug`, upsert). Content pages show a "📄 Unduh [filename]" link in the sidebar (`#pdf-download-slot`) via `course-video.js` if a resource exists for that course.
 - **Video upload**: pick a course + module number → upload a video file → stored in the `course-videos` bucket, public URL saved to `module_videos` (`course_slug` + `module_num` upsert). Content pages render a `<video>` player at the top of the matching module panel (`#video-slot-N`) via `course-video.js`.
 - **Overview table**: shows current PDF + all module videos across all 4 courses with links.
-- **Setup dependency**: requires `sql/admin-content-setup.sql` to have been run once in the Supabase SQL editor (creates tables + RLS) AND the `course-pdfs` / `course-videos` storage buckets to exist (created manually as public buckets in the Supabase dashboard — anon key can't create buckets).
+- **Setup status**: `sql/admin-content-setup.sql` has been run in the Supabase SQL editor (tables + RLS confirmed in Table Editor), and the `course-pdfs` / `course-videos` public storage buckets have been created. Admin login + nav link confirmed working on `prompt-gratis.html` as of July 7, 2026.
 - **Known limitation**: videos are uploaded as raw files to Supabase Storage (not YouTube/Vimeo embeds) — subject to Supabase's per-file upload size limit and total storage/bandwidth quota on the current plan. Large course videos may need plan upgrades or external hosting later.
 
 ---
