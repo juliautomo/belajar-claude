@@ -148,6 +148,54 @@
   .output-box h3 { font-size: 15px; font-weight: 700; color: var(--green); margin-bottom: 4px; }
   .output-box p { font-size: 13px; color: var(--ink-2); line-height: 1.65; }
 
+  /* Tip / analogy / warning box */
+  .tip-box { background: var(--gold-pale); border: 1px solid rgba(239,159,39,0.25); border-left: 3px solid var(--gold); border-radius: 10px; padding: 14px 18px; margin: 14px 0; }
+  .tip-box .tip-label { font-size: 10px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; font-family: monospace; }
+  .tip-box p { font-size: 13px; color: var(--ink); line-height: 1.65; }
+
+  /* Ringkasan modul */
+  .summary-box { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; margin: 20px 0; }
+  .summary-box .summary-label { font-size: 10px; font-weight: 700; color: var(--ink-2); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; font-family: monospace; }
+  .summary-box ul { list-style: none; }
+  .summary-box li { font-size: 13px; color: var(--ink); line-height: 1.7; padding-left: 18px; position: relative; margin-bottom: 4px; }
+  .summary-box li::before { content: "•"; color: var(--accent); position: absolute; left: 2px; }
+
+  /* Comparison table */
+  .compare-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 12.5px; }
+  .compare-table th { background: var(--ink); color: #fff; text-align: left; padding: 9px 10px; font-size: 11px; font-weight: 600; }
+  .compare-table td { padding: 10px; border-bottom: 1px solid var(--border); color: var(--ink); vertical-align: top; line-height: 1.55; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table-wrap { overflow-x: auto; margin: 14px 0; }
+
+  /* Step-by-step row */
+  .step-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+  .step-card { flex: 1; min-width: 100px; background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 12px; text-align: center; }
+  .step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; }
+  .step-card p { font-size: 11.5px; color: var(--ink-2); line-height: 1.4; }
+
+  /* Two-column compare cards */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .two-col .col-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .two-col .col-card.highlight { border-color: var(--accent); background: var(--accent-dim); }
+  .two-col .col-card h4 { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+  .two-col .col-card ul { list-style: none; }
+  .two-col .col-card li { font-size: 12px; color: var(--ink-2); line-height: 1.6; padding-left: 14px; position: relative; margin-bottom: 2px; }
+  .two-col .col-card li::before { content: "\2013"; position: absolute; left: 0; }
+  .two-col .col-card p { font-size: 12px; color: var(--ink-2); line-height: 1.6; }
+
+  /* Grid of small info cards (roles, interface areas, etc.) */
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 14px 0; }
+  .info-card { background: var(--accent-dim); border-radius: 10px; padding: 12px 14px; }
+  .info-card strong { font-size: 12.5px; color: var(--ink); display: block; margin-bottom: 3px; }
+  .info-card span { font-size: 11.5px; color: var(--ink-2); }
+
+  .section-heading { font-size: 14px; font-weight: 700; color: var(--ink); margin: 22px 0 10px; }
+  .body-text { font-size: 13.5px; color: var(--ink-2); line-height: 1.75; margin-bottom: 10px; }
+
+  @media (max-width: 600px) {
+    .two-col, .info-grid { grid-template-columns: 1fr; }
+  }
+
   /* Next courses (shown on last panel) */
   .next-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--ink-2); margin: 28px 0 12px; font-family: monospace; }
   .next-card {
@@ -309,6 +357,7 @@
   <!-- MAIN CONTENT -->
   <main class="main">
     <div class="main-inner">
+      <div id="pdf-banner-slot"></div>
 
       <!-- MODULE 1 -->
       <div class="module-panel active" id="panel1">
@@ -317,29 +366,86 @@
           <span>›</span>
           <strong>Modul 1</strong>
         </div>
-        <h1 class="module-title">Claude.ai — Setup & Interface Tour</h1>
-        <p class="module-subtitle">Setup akun, kenali interface, dan mulai pakai Claude hari ini</p>
+        <h1 class="module-title">Apa itu Claude & Setup Akun</h1>
+        <p class="module-subtitle">Kenalan dengan Claude, buat akun, dan orientasi interface — 8 menit</p>
         <div class="video-slot" id="video-slot-1"></div>
 
         <div class="module-desc-box">
-          Di modul ini kamu akan setup akun Claude, memahami perbedaan model (Haiku, Sonnet, Opus), dan langsung mencoba conversation pertama. Target: dalam 10 menit pertama kamu sudah punya akun dan bisa mulai chat.
+          Claude adalah AI assistant buatan Anthropic yang bisa diajak "ngobrol" lewat teks — kamu ketik pertanyaan atau permintaan, Claude membalas dengan jawaban, tulisan, analisis, atau bahkan dokumen lengkap. Bedanya dengan software biasa: Claude tidak punya menu atau tombol tetap, kamu tinggal jelaskan apa yang kamu mau dengan bahasa sehari-hari.
         </div>
 
-        <div class="prompt-section">
-          <div class="prompt-label">📝 Coba Prompt Ini</div>
-          <div class="prompt-box">Halo Claude, saya [nama] bekerja sebagai [jabatan] di [industri].
-Saya baru pertama kali pakai Claude.
+        <div class="tip-box">
+          <div class="tip-label">💡 Analogi — Claude vs Google Search</div>
+          <p>Google Search itu seperti bertanya ke pustakawan — dia kasih kamu tumpukan buku yang relevan, tapi kamu yang harus baca dan menyimpulkan sendiri. Claude itu seperti bertanya ke rekan kerja yang sudah baca semua buku itu — dia langsung kasih kesimpulan, draft, atau jawaban yang siap pakai, sesuai konteks yang kamu kasih. Google bagus untuk mencari fakta atau link. Claude bagus untuk <strong>membuatkan sesuatu</strong> — balasan chat, ringkasan, analisis — berdasarkan situasi spesifik kamu.</p>
+        </div>
 
-Bisa bantu saya memahami 3 cara terbaik untuk memanfaatkan Claude
-dalam pekerjaan sehari-hari saya? Berikan contoh spesifik yang
-relevan dengan bidang saya.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-          <div class="case-box">
-            <div class="case-role">🎯 Contoh: HRD Manager</div>
-            <p>"Halo Claude, saya Rina, HRD Manager di perusahaan manufaktur. Saya baru pertama kali pakai Claude. Bisa bantu saya memahami 3 cara terbaik memanfaatkan Claude untuk pekerjaan HR sehari-hari?"</p>
+        <p class="body-text"><strong>Claude vs ChatGPT:</strong> keduanya sama-sama AI chatbot, tapi Claude dikenal lebih hati-hati soal akurasi, gaya tulisannya lebih natural dan tidak kaku, dan punya fitur Projects & Artifacts yang cocok untuk kerja jangka panjang — bukan cuma tanya-jawab sekali lalu selesai.</p>
+
+        <div class="section-heading">Setup Akun Claude.ai Gratis — Langkah per Langkah</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Buka claude.ai di browser</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Klik "Sign up" di kanan atas</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Daftar pakai email / akun Google</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Cek email, klik link verifikasi</p></div>
+          <div class="step-card"><div class="step-num">5</div><p>Selesai — masuk ke halaman chat</p></div>
+        </div>
+
+        <div class="two-col">
+          <div class="col-card">
+            <h4>Gratis</h4>
+            <ul><li>Limit pesan harian</li><li>Cocok untuk belajar & pemakaian ringan-menengah</li><li>Akses model dasar</li></ul>
+          </div>
+          <div class="col-card highlight">
+            <h4>Pro (Berbayar)</h4>
+            <ul><li>Limit pesan jauh lebih banyak</li><li>Akses model paling canggih</li><li>Cocok untuk yang pakai Claude tiap hari untuk kerja</li></ul>
           </div>
         </div>
 
-        
+        <div class="tip-box">
+          <div class="tip-label">📌 Catatan</div>
+          <p>Untuk belajar di kursus ini dan pemakaian ringan-menengah sehari-hari, versi gratis sudah lebih dari cukup. Pertimbangkan upgrade ke Pro kalau kamu sudah pakai Claude setiap hari untuk kerja dan sering kehabisan limit pesan sebelum jam kerja selesai.</p>
+        </div>
+
+        <div class="section-heading">Orientasi Interface: Chat, Projects, Memory, Artifacts</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Chat</strong><span>Layar utama tempat kamu ngobrol dengan Claude. Setiap "New Chat" adalah percakapan baru, terpisah dari sebelumnya.</span></div>
+          <div class="info-card"><strong>Projects</strong><span>Folder untuk kerjaan yang berulang, misalnya "Customer Service Toko" — lengkap dengan instruksi standar yang Claude ingat setiap dibuka.</span></div>
+          <div class="info-card"><strong>Memory</strong><span>Claude bisa mengingat konteks dari percakapan sebelumnya (kalau fitur ini aktif), jadi tidak perlu menjelaskan ulang setiap chat baru.</span></div>
+          <div class="info-card"><strong>Artifacts</strong><span>Ketika Claude membuatkan dokumen/kode/tabel panjang, itu muncul di panel terpisah yang bisa diedit, copy, atau download.</span></div>
+        </div>
+
+        <div class="summary-box">
+          <div class="summary-label">Ringkasan Modul 1</div>
+          <ul>
+            <li>Claude adalah AI assistant yang membantu kamu <em>membuat sesuatu</em>, bukan sekadar mencari informasi</li>
+            <li>Setup akun gratis hanya butuh email, 5 langkah selesai</li>
+            <li>Ada tier gratis dan Pro — mulai dari gratis dulu, upgrade kalau kebutuhan makin sering</li>
+            <li>Interface Claude punya 4 area utama: Chat, Projects, Memory, Artifacts</li>
+          </ul>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Exercise</div>
+          <div class="prompt-box">Saya punya usaha kecil dan sering harus membalas chat pelanggan.
+Bisa bantu jelaskan bagaimana kamu bisa membantu saya?<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="case-box">
+            <p>Buat akun Claude gratis, lalu kirim prompt di atas. Baca jawaban Claude sampai selesai — perhatikan gaya bahasanya dan bagaimana ia menyusun jawaban.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>Akun Claude aktif + kamu sudah dapat 1 balasan dari Claude dan paham dasar bagaimana ia "berbicara" dan membantu.</p>
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">💡 Tips</div>
+          <p>Jangan langsung berharap hasil sempurna di prompt pertama — Modul 2 akan mengajarkan cara menyusun prompt yang menghasilkan output jauh lebih baik.</p>
+        </div>
+
         <div class="doc-slot" id="doc-slot-1"></div>
         <div class="nav-bottom">
           <button class="nav-btn" disabled>← Sebelumnya</button>
@@ -351,31 +457,101 @@ relevan dengan bidang saya.<button class="copy-btn" onclick="copyPrompt(this)">S
       <!-- MODULE 2 -->
       <div class="module-panel" id="panel2">
         <div class="breadcrumb"><span>Mulai dengan Claude AI</span><span>›</span><strong>Modul 2</strong></div>
-        <h1 class="module-title">Prompt Anatomy — Konteks + Instruksi + Format</h1>
-        <p class="module-subtitle">Struktur prompt yang menghasilkan output tepat setiap kali</p>
+        <h1 class="module-title">Anatomi Prompt yang Menghasilkan Output Bagus</h1>
+        <p class="module-subtitle">Cara menyusun instruksi yang jelas (framework K-I-F) — 12 menit</p>
         <div class="video-slot" id="video-slot-2"></div>
 
         <div class="module-desc-box">
-          Formula prompt yang efektif selalu punya 3 bagian: <strong>Konteks</strong> (siapa kamu, apa situasinya), <strong>Instruksi</strong> (apa yang kamu minta), dan <strong>Format</strong> (bagaimana output yang kamu inginkan). Kuasai ini dan 80% output Claude akan langsung tepat.
+          Prompt adalah pesan atau instruksi yang kamu ketik ke Claude — bisa berupa pertanyaan, permintaan, atau tugas. Prompt adalah satu-satunya cara kamu "mengendalikan" Claude — semakin jelas prompt-mu, semakin sesuai hasilnya dengan yang kamu butuhkan.
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">💡 Analogi</div>
+          <p>Anggap prompt sebagai instruksi kerja yang kamu kasih ke karyawan baru — karyawan baru tidak tahu bisnismu, kebiasaanmu, atau standar yang kamu mau. Kalau instruksinya jelas, hasil kerjanya jauh lebih tepat dan kamu tidak perlu revisi berkali-kali.</p>
+        </div>
+
+        <div class="section-heading">4 Elemen Prompt: Konteks + Peran + Tugas + Format</div>
+        <p class="body-text">Contoh nyata untuk kasus membalas chat pelanggan (studi kasus toko sepatu online):</p>
+        <div class="info-grid">
+          <div class="info-card"><strong>Konteks</strong><span>"Saya jualan sepatu online, pelanggan bernama Rina baru saja komplain sepatunya sobek setelah dipakai 3 hari."</span></div>
+          <div class="info-card"><strong>Peran</strong><span>"Bertindaklah sebagai customer service yang ramah dan solutif."</span></div>
+          <div class="info-card"><strong>Tugas</strong><span>"Balas komplain Rina, tawarkan penggantian sepatu baru gratis, minta dia kirim foto kerusakan dulu."</span></div>
+          <div class="info-card"><strong>Format</strong><span>"Tulis sebagai pesan chat WhatsApp, 3-4 kalimat, nada minta maaf tapi tetap profesional."</span></div>
         </div>
 
         <div class="prompt-section">
-          <div class="prompt-label">📝 Template Prompt Anatomy</div>
-          <div class="prompt-box">[KONTEKS] Saya adalah [jabatan] di [perusahaan/industri].
-[SITUASI] Saya sedang mengerjakan [deskripsi pekerjaan/masalah].
+          <div class="prompt-label">📝 Digabung Jadi Satu Prompt</div>
+          <div class="prompt-box">Saya jualan sepatu online, pelanggan bernama Rina baru saja komplain
+sepatunya sobek setelah dipakai 3 hari. Bertindaklah sebagai customer
+service yang ramah dan solutif. Balas komplain Rina, tawarkan
+penggantian sepatu baru gratis, minta dia kirim foto kerusakan dulu.
+Tulis sebagai pesan chat WhatsApp, 3-4 kalimat, nada minta maaf
+tapi tetap profesional.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
 
-[INSTRUKSI] Tolong bantu saya [apa yang diminta dengan spesifik].
+        <p class="body-text"><strong>Mengapa "Tolong Buatkan Email" Gagal:</strong> prompt seperti ini terlalu umum — Claude tidak tahu email tentang apa, ke siapa, nada bicaranya seperti apa. Hasilnya jadi generik dan sering harus diedit ulang total. Claude tidak bisa membaca pikiran kamu — semakin lengkap detail yang kamu kasih (nama produk, harga, situasi pelanggan), semakin dekat hasilnya dengan yang kamu butuhkan, dan semakin sedikit revisi.</p>
 
-[FORMAT] Sajikan dalam format [list/tabel/paragraf/poin]
-dengan panjang sekitar [pendek/sedang/detail].
-[TAMBAHAN] Gunakan Bahasa Indonesia yang [formal/kasual/profesional].<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        <div class="section-heading">Contoh Prompt Buruk vs Prompt Baik untuk 3 Situasi Kerja Nyata</div>
+        <div class="compare-table-wrap">
+          <table class="compare-table">
+            <tr><th>Situasi</th><th>Prompt Buruk</th><th>Prompt Baik</th><th>Kenapa Berhasil</th></tr>
+            <tr>
+              <td>Pelanggan tanya stok</td>
+              <td>"Balesin chat ini"</td>
+              <td>"Saya jualan baju online. Pelanggan tanya apakah size M warna hitam masih ada. Stok masih ada 3. Balas dengan ramah dan singkat, ajak dia checkout."</td>
+              <td>Ada konteks jelas (produk, stok), tugas spesifik (ajak checkout), dan format (ramah, singkat)</td>
+            </tr>
+            <tr>
+              <td>Pelanggan komplain</td>
+              <td>"Buatkan balasan komplain"</td>
+              <td>"Pelanggan komplain baju yang diterima ukurannya kekecilan. Saya mau tawarkan tukar size gratis. Tulis balasan yang empatik, minta maaf, dan jelaskan cara tukarnya."</td>
+              <td>Menyebutkan solusi konkret yang mau ditawarkan dan nada yang diinginkan</td>
+            </tr>
+            <tr>
+              <td>Follow-up pelanggan</td>
+              <td>"Bikin pesan follow up"</td>
+              <td>"Pelanggan sudah checkout 3 hari lalu tapi belum bayar. Tulis pesan follow-up yang sopan, tidak memaksa, ingatkan batas waktu pembayaran 24 jam lagi."</td>
+              <td>Ada detail waktu (3 hari, 24 jam) dan batasan nada (tidak memaksa)</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">🧭 Framework K-I-F</div>
+          <p>Susun promptmu dengan urutan ini setiap kali: mulai dari <strong>Konteks</strong> situasi, lalu <strong>Instruksi</strong> spesifik, tutup dengan <strong>Format</strong> output yang kamu mau.</p>
+        </div>
+
+        <div class="summary-box">
+          <div class="summary-label">Ringkasan Modul 2</div>
+          <ul>
+            <li>Prompt adalah instruksi kamu ke Claude — kualitas prompt menentukan kualitas hasil</li>
+            <li>Prompt yang baik punya 4 elemen: Konteks, Peran, Tugas, Format</li>
+            <li>Prompt yang terlalu umum menghasilkan output generik yang perlu banyak revisi</li>
+            <li>Semakin spesifik detail yang kamu berikan, semakin dekat hasilnya dengan kebutuhan aslimu</li>
+            <li>Gunakan urutan K-I-F (Konteks → Instruksi → Format) setiap menulis prompt</li>
+          </ul>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Exercise</div>
           <div class="case-box">
-            <div class="case-role">🎯 Contoh Nyata: Manajer Proyek</div>
-            <p>"[KONTEKS] Saya Manajer Proyek di startup fintech. [SITUASI] Baru selesai meeting 1 jam dan punya 2 halaman catatan berantakan. [INSTRUKSI] Tolong buatkan ringkasan meeting dengan action items, PIC, dan deadline. [FORMAT] Gunakan format tabel, bahasa formal."</p>
+            <p>Ambil prompt buruk ini: <em>"Balesin chat pelanggan komplain barang rusak"</em>. Tulis ulang jadi prompt yang baik menggunakan framework K-I-F. Sertakan: jenis usahamu, apa yang rusak, solusi yang mau kamu tawarkan (ganti barang/refund), dan minta Claude membalas dengan nada empatik.</p>
           </div>
         </div>
 
-        
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>1 prompt lengkap (Konteks-Instruksi-Format) yang menghasilkan balasan chat siap kirim ke pelanggan — bukan draft generik yang masih perlu diedit banyak.</p>
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">⚠️ Kesalahan Umum</div>
+          <p>Menulis prompt sepanjang paragraf tapi tanpa struktur jelas. Lebih baik prompt pendek tapi punya konteks-instruksi-format yang jelas, daripada prompt panjang tapi berantakan.</p>
+        </div>
+
         <div class="doc-slot" id="doc-slot-2"></div>
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
@@ -388,30 +564,90 @@ dengan panjang sekitar [pendek/sedang/detail].
       <div class="module-panel" id="panel3">
         <div class="breadcrumb"><span>Mulai dengan Claude AI</span><span>›</span><strong>Modul 3</strong></div>
         <h1 class="module-title">Role Prompting — Claude sebagai Ahli</h1>
-        <p class="module-subtitle">Tingkatkan kualitas output dengan minta Claude berperan sebagai spesialis</p>
+        <p class="module-subtitle">Membuat Claude berpikir dari sudut pandang seorang ahli — 10 menit</p>
         <div class="video-slot" id="video-slot-3"></div>
 
         <div class="module-desc-box">
-          Ketika kamu meminta Claude "berperan sebagai" ahli tertentu, output yang dihasilkan jauh lebih relevan dan tajam. Teknik ini sangat berguna untuk konsultasi, review, atau situasi yang butuh perspektif profesional.
+          Role prompting adalah cara kamu "memanggil" versi Claude yang berpikir seperti ahli tertentu — cukup dengan bilang "Bertindaklah sebagai [Ahli]" di awal prompt.
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">💡 Analogi</div>
+          <p>Bayangkan kamu bertanya soal kesehatan kulit ke teman biasa vs ke dokter kulit. Pertanyaannya sama, tapi jawaban dokter kulit akan jauh lebih terstruktur dan mempertimbangkan hal-hal yang tidak kepikiran teman biasa.</p>
+        </div>
+
+        <p class="body-text">Ketika Claude diminta "bertindaklah sebagai konsultan penjualan berpengalaman", ia otomatis menerapkan standar dan sudut pandang bidang itu — pertanyaan apa yang biasanya ditanyakan, hal apa yang perlu dipertimbangkan, bagaimana cara meyakinkan tanpa terkesan memaksa — tanpa kamu harus menjelaskan semua itu secara manual.</p>
+
+        <div class="section-heading">5 Role yang Paling Berguna</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Copywriter</strong><span>Caption, promo, deskripsi produk yang menjual</span></div>
+          <div class="info-card"><strong>Analis</strong><span>Membaca data penjualan, spreadsheet, atau tren</span></div>
+          <div class="info-card"><strong>Konsultan</strong><span>Saran strategi atau meyakinkan pelanggan</span></div>
+          <div class="info-card"><strong>Editor</strong><span>Memperbaiki tulisan/pesan yang sudah dibuat</span></div>
+          <div class="info-card"><strong>Guru</strong><span>Penjelasan konsep dengan bahasa sederhana</span></div>
         </div>
 
         <div class="prompt-section">
-          <div class="prompt-label">📝 Template Role Prompting</div>
-          <div class="prompt-box">Berperan sebagai [spesialis/ahli] berpengalaman 10+ tahun
-di bidang [bidang spesifik] untuk konteks Indonesia.
-
-Saya sedang menghadapi situasi berikut:
-[jelaskan situasi kamu]
-
-Berikan analisis dan rekomendasi konkret yang bisa saya
-jalankan hari ini.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="prompt-label">📝 Cara Chain Role + Tugas + Format</div>
+          <div class="prompt-box">Bertindaklah sebagai konsultan penjualan yang persuasif tapi jujur.
+Tugas kamu: [tugas].
+Format: [format].<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
           <div class="case-box">
-            <div class="case-role">🎯 5 Role yang Paling Berguna</div>
-            <p>Senior HRD Konsultan · Business Strategist · Senior Copywriter · Financial Analyst · Customer Service Expert. Coba satu role yang paling relevan dengan pekerjaan kamu hari ini.</p>
+            <p>Role selalu ditaruh di awal, sebelum tugas dan format, supaya Claude "masuk peran" dulu sebelum mengerjakan.</p>
           </div>
         </div>
 
-        
+        <div class="tip-box">
+          <div class="tip-label">🛡️ Batasan Role Prompting</div>
+          <p>Meski diberi peran tertentu, Claude tidak akan memberi info yang salah, menyesatkan, atau melanggar prinsip dasarnya hanya karena "diperankan" sebagai sesuatu — role prompting mengubah gaya dan sudut pandang, bukan nilai dasarnya.</p>
+        </div>
+
+        <div class="section-heading">Lihat Bedanya: Tanpa Role vs Dengan Role</div>
+        <p class="body-text">Situasi: Pelanggan bingung pilih antara dua tas — mereka tanya, "Mendingan saya beli yang model A atau B ya?"</p>
+        <div class="two-col">
+          <div class="col-card">
+            <h4>Tanpa Role</h4>
+            <p>"Pelanggan tanya mendingan beli tas model A atau B. Model A lebih murah, model B lebih tahan lama. Bantu jawab pelanggan ini."</p>
+            <p style="margin-top:8px;"><strong>Hasil:</strong> jawaban netral yang sekadar membandingkan dua produk, terasa seperti daftar spesifikasi.</p>
+          </div>
+          <div class="col-card highlight">
+            <h4>Dengan Role</h4>
+            <p>"Bertindaklah sebagai konsultan penjualan berpengalaman. [...] Tugas: bantu pelanggan memutuskan dengan menanyakan kebutuhan mereka dulu. Format: balasan chat, ramah, maks 4 kalimat."</p>
+            <p style="margin-top:8px;"><strong>Hasil:</strong> Claude lebih dulu menggali kebutuhan pelanggan sebelum merekomendasikan — persis cara sales berpengalaman menjual.</p>
+          </div>
+        </div>
+
+        <div class="summary-box">
+          <div class="summary-label">Ringkasan Modul 3</div>
+          <ul>
+            <li>Role prompting = memberi Claude "topi" ahli tertentu di awal prompt</li>
+            <li>Role mengubah sudut pandang dan pendekatan Claude, bukan cuma gaya bahasanya</li>
+            <li>5 role paling berguna: copywriter, analis, konsultan, editor, guru</li>
+            <li>Role selalu ditulis di awal prompt, sebelum tugas dan format</li>
+            <li>Role prompting tidak mengubah prinsip dasar Claude — tetap jujur dan akurat</li>
+          </ul>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Exercise</div>
+          <div class="case-box">
+            <p>Buat 1 prompt yang menggabungkan role + tugas + format untuk situasi ini: pelanggan bertanya kenapa harga produkmu lebih mahal dari kompetitor. Gunakan role "konsultan penjualan yang persuasif tapi jujur", minta Claude menjelaskan value produkmu tanpa menjelekkan kompetitor, format: balasan chat singkat.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>1 prompt lengkap dengan role yang jelas + 1 balasan chat dari Claude yang terasa lebih meyakinkan dan strategis dibanding kalau kamu tanya tanpa role.</p>
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">💡 Tips</div>
+          <p>Simpan role-role yang sering kamu pakai di satu dokumen (Notion/Notepad) supaya tidak perlu mengetik ulang setiap kali — tinggal copy-paste dan sesuaikan situasinya.</p>
+        </div>
+
         <div class="doc-slot" id="doc-slot-3"></div>
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>

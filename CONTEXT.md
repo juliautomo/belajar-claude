@@ -116,7 +116,7 @@ All pages use these CSS variables:
 | `payment-success-modal.js` | Post-payment modal logic |
 | `supabase-config.js` | Shared Supabase client config |
 | `20-prompt-claude-terbaik.pdf` | Free PDF download |
-| `course-video.js` | Shared script on all 4 course content pages — fetches `module_videos`/`course_resources`/`module_documents` for `COURSE_SLUG` and injects `<video>` players into `#video-slot-N`, a PDF link into `#pdf-download-slot`, and a practice-document list into `#doc-slot-N` |
+| `course-video.js` | Shared script on all 4 course content pages — fetches `module_videos`/`course_resources`/`module_documents` for `COURSE_SLUG` and injects `<video>` players into `#video-slot-N`, a bold sidebar PDF link into `#pdf-download-slot`, a prominent always-visible PDF banner into `#pdf-banner-slot` (top of main content, above module panels), and a practice-document list into `#doc-slot-N` |
 | `sql/admin-content-setup.sql` | One-time Supabase SQL migration for `course_resources` + `module_videos` tables, RLS, and `course-pdfs`/`course-videos` storage bucket policies |
 
 ---
@@ -135,6 +135,9 @@ All pages use these CSS variables:
 - Progress bar + completion tracking per module → saved to `module_completions`
 - Last panel = feedback panel: star rating (1-5) + optional comment → saved to `course_feedback`
 - "Ke Dashboard" on last content module → navigates to feedback panel first
+
+### mulai-claude-content.html — Modul 1-3 rewritten July 2026
+Modules 1, 2, and 3 (Apa itu Claude & Setup Akun / Anatomi Prompt K-I-F / Role Prompting) were rewritten to follow the source PDF "Mulai dengan Claude AI (Modul 1-3)" uploaded via admin.html — same case study throughout (usaha kecil membalas chat pelanggan), same analogies, comparison tables, and exercises as the PDF. New reusable CSS box classes added for this: `.tip-box` (gold, analogies/tips/catatan/kesalahan), `.summary-box` (Ringkasan Modul bullets), `.compare-table`/`.compare-table-wrap` (prompt buruk vs baik tables), `.step-row`/`.step-card` (numbered setup steps), `.two-col`/`.col-card` (Gratis vs Pro, Tanpa Role vs Dengan Role), `.info-grid`/`.info-card` (interface areas, 4 prompt elements, 5 roles), `.section-heading`, `.body-text`. Modules 4-7 (Artifacts, Projects, Google Docs, Feedback) were left untouched — only 1-3 matched the uploaded PDF's scope.
 
 ---
 

@@ -2,7 +2,8 @@
 // documents into content pages.
 // Requires: sbClient (from supabase-config.js) and a global COURSE_SLUG
 // constant defined before this script tag loads. Looks for elements with id
-// "video-slot-<moduleNum>", "doc-slot-<moduleNum>", and "pdf-download-slot".
+// "video-slot-<moduleNum>", "doc-slot-<moduleNum>", "pdf-download-slot"
+// (sidebar) and "pdf-banner-slot" (top of main content, always visible).
 (function () {
   function run() {
     if (typeof COURSE_SLUG === 'undefined' || !COURSE_SLUG) return;
@@ -30,14 +31,35 @@
       .maybeSingle()
       .then(function (res) {
         var resource = res.data;
+        if (!resource || !resource.pdf_url) return;
+        var label = resource.pdf_label || 'PDF';
+
+        // Sidebar link — bigger, bolder, hard to miss among the module list.
         var pdfSlot = document.getElementById('pdf-download-slot');
-        if (pdfSlot && resource && resource.pdf_url) {
+        if (pdfSlot) {
           pdfSlot.innerHTML =
             '<a href="' + resource.pdf_url + '" target="_blank" rel="noopener" ' +
-            'style="display:flex;align-items:center;gap:8px;margin:12px 16px 0;padding:10px 12px;' +
-            'background:var(--accent-dim);color:var(--accent);border-radius:10px;font-size:12px;' +
-            'font-weight:600;text-decoration:none;">' +
-            '📄 Unduh ' + (resource.pdf_label || 'PDF') + '</a>';
+            'style="display:flex;align-items:center;gap:10px;margin:12px 16px;padding:12px 14px;' +
+            'background:var(--accent);color:#fff;border-radius:12px;font-size:12.5px;' +
+            'font-weight:700;text-decoration:none;box-shadow:0 2px 10px var(--accent-glow);">' +
+            '<span style="font-size:18px;line-height:1;">📄</span>' +
+            '<span>Unduh ' + label + '</span></a>';
+        }
+
+        // Main content banner — full-width, always visible above the module content.
+        var bannerSlot = document.getElementById('pdf-banner-slot');
+        if (bannerSlot) {
+          bannerSlot.innerHTML =
+            '<a href="' + resource.pdf_url + '" target="_blank" rel="noopener" ' +
+            'style="display:flex;align-items:center;gap:14px;margin-bottom:24px;padding:16px 20px;' +
+            'background:var(--accent);color:#fff;border-radius:14px;text-decoration:none;' +
+            'box-shadow:0 4px 20px var(--accent-glow);">' +
+            '<span style="font-size:26px;line-height:1;">📄</span>' +
+            '<div style="flex:1;">' +
+            '<div style="font-size:14px;font-weight:700;">Unduh ' + label + '</div>' +
+            '<div style="font-size:12px;opacity:0.85;">Materi lengkap kursus ini, siap disimpan atau dicetak</div>' +
+            '</div>' +
+            '<span style="font-size:18px;">→</span></a>';
         }
       })
       .catch(function (e) { console.log('course-video: gagal memuat PDF', e); });
