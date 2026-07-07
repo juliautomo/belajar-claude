@@ -287,7 +287,7 @@
       <div class="sidebar-course-name">Mulai dengan Claude AI</div>
       <div class="progress-bar-wrap">
         <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-        <span class="progress-label" id="progressLabel">0/6</span>
+        <span class="progress-label" id="progressLabel">0/4</span>
       </div>
     </div>
     <div id="pdf-download-slot"></div>
@@ -315,40 +315,16 @@
         <div class="mod-item-sub">Modul 3 · Role Prompting</div>
       </div>
     </div>
-    <div class="mod-item" id="nav-mod4" onclick="showModule(4)">
-      <div class="mod-check" id="check4"></div>
-      <div class="mod-item-info">
-        <div class="mod-item-title">Claude Artifacts — Generate Dokumen</div>
-        <div class="mod-item-sub">Modul 4 · Artifacts</div>
-      </div>
-    </div>
-    <div class="mod-item" id="nav-mod5" onclick="showModule(5)">
-      <div class="mod-check" id="check5"></div>
-      <div class="mod-item-info">
-        <div class="mod-item-title">Claude Projects — Simpan Konteks Kerja</div>
-        <div class="mod-item-sub">Modul 5 · Projects</div>
-      </div>
-    </div>
-    <div class="mod-item" id="nav-mod6" onclick="showModule(6)">
-      <div class="mod-check" id="check6"></div>
-      <div class="mod-item-info">
-        <div class="mod-item-title">Google Docs Export — Workflow End-to-End</div>
-        <div class="mod-item-sub">Modul 6 · Google Docs</div>
-      </div>
-    </div>
 
     <div class="sidebar-footer">
       <div class="sidebar-section-label" style="padding:0 0 8px;">Tools yang dipakai</div>
       <div class="sidebar-tools">
         <span class="tool-chip">Claude.ai</span>
-        <span class="tool-chip">Claude Projects</span>
-        <span class="tool-chip">Claude Artifacts</span>
-        <span class="tool-chip">Google Docs</span>
       </div>
     </div>
     <div class="mod-feedback">
-      <div class="mod-item" id="nav-mod7" onclick="showModule(7)">
-        <div class="mod-check" id="check7">★</div>
+      <div class="mod-item" id="nav-mod4" onclick="showModule(4)">
+        <div class="mod-check" id="check4">★</div>
         <div><div class="mod-item-title">Feedback</div><div class="mod-item-sub">Nilai kursus ini</div></div>
       </div>
     </div>
@@ -449,7 +425,7 @@ Bisa bantu jelaskan bagaimana kamu bisa membantu saya?<button class="copy-btn" o
         <div class="doc-slot" id="doc-slot-1"></div>
         <div class="nav-bottom">
           <button class="nav-btn" disabled>← Sebelumnya</button>
-          <span class="nav-counter">1 / 6</span>
+          <span class="nav-counter">1 / 3</span>
           <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
       </div>
@@ -555,7 +531,7 @@ tapi tetap profesional.<button class="copy-btn" onclick="copyPrompt(this)">Salin
         <div class="doc-slot" id="doc-slot-2"></div>
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">2 / 6</span>
+          <span class="nav-counter">2 / 3</span>
           <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
       </div>
@@ -648,127 +624,11 @@ Format: [format].<button class="copy-btn" onclick="copyPrompt(this)">Salin</butt
           <p>Simpan role-role yang sering kamu pakai di satu dokumen (Notion/Notepad) supaya tidak perlu mengetik ulang setiap kali — tinggal copy-paste dan sesuaikan situasinya.</p>
         </div>
 
-        <div class="doc-slot" id="doc-slot-3"></div>
-        <div class="nav-bottom">
-          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">3 / 6</span>
-          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
-        </div>
-      </div>
-
-      <!-- MODULE 4 -->
-      <div class="module-panel" id="panel4">
-        <div class="breadcrumb"><span>Mulai dengan Claude AI</span><span>›</span><strong>Modul 4</strong></div>
-        <h1 class="module-title">Claude Artifacts — Generate Dokumen Langsung</h1>
-        <p class="module-subtitle">Buat tabel, template, dan dokumen tanpa copy-paste ke tools lain</p>
-        <div class="video-slot" id="video-slot-4"></div>
-
-        <div class="module-desc-box">
-          Claude Artifacts memungkinkan kamu membuat dokumen, tabel interaktif, dan template langsung di dalam Claude — hasilnya bisa di-download atau dibuka di tab terpisah. Tidak perlu buka Google Docs dulu.
-        </div>
-
-        <div class="prompt-section">
-          <div class="prompt-label">📝 Prompt untuk Artifacts</div>
-          <div class="prompt-box">Buatkan [jenis dokumen: tabel/template/checklist] untuk:
-[deskripsi apa yang kamu butuhkan]
-
-Gunakan format yang rapi dan langsung bisa dipakai.
-Sertakan semua kolom/bagian yang dibutuhkan untuk
-[tujuan spesifik dokumen].<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-          <div class="case-box">
-            <div class="case-role">🎯 Contoh: Guru SMA</div>
-            <p>"Buatkan 20 soal pilihan ganda Matematika kelas 10 topik Fungsi Kuadrat via Artifacts. Sertakan kunci jawaban di bagian bawah. Format: siap cetak."</p>
-          </div>
-        </div>
-
-        
-        <div class="doc-slot" id="doc-slot-4"></div>
-        <div class="nav-bottom">
-          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">4 / 6</span>
-          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
-        </div>
-      </div>
-
-      <!-- MODULE 5 -->
-      <div class="module-panel" id="panel5">
-        <div class="breadcrumb"><span>Mulai dengan Claude AI</span><span>›</span><strong>Modul 5</strong></div>
-        <h1 class="module-title">Claude Projects — Simpan Konteks Kerja</h1>
-        <p class="module-subtitle">Setup project pertama kamu agar tidak perlu jelaskan ulang tiap sesi</p>
-        <div class="video-slot" id="video-slot-5"></div>
-
-        <div class="module-desc-box">
-          Claude Projects menyimpan konteks pekerjaan kamu — tone, SOP, informasi perusahaan, atau prompt library. Setiap kali kamu buka project, Claude sudah "tahu" siapa kamu dan apa yang kamu butuhkan.
-        </div>
-
-        <div class="prompt-section">
-          <div class="prompt-label">📝 System Prompt untuk Project Pertamamu</div>
-          <div class="prompt-box">Kamu adalah asisten profesional saya. Berikut konteks yang perlu kamu tahu:
-
-TENTANG SAYA:
-- Nama: [nama kamu]
-- Jabatan: [jabatan]
-- Perusahaan: [nama/industri]
-- Tim: [ukuran/struktur tim]
-
-GAYA KOMUNIKASI:
-- Selalu gunakan Bahasa Indonesia
-- Tone: [formal/semi-formal/casual]
-- Format default: [poin-poin/paragraf]
-
-TUGAS YANG SERING SAYA MINTA:
-- [list 3-5 tugas yang paling sering kamu kerjakan]<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-          <div class="case-box">
-            <div class="case-role">🎯 Tips: Buat 3 Project Berbeda</div>
-            <p>Project 1: Pekerjaan Utama · Project 2: Konten & Komunikasi · Project 3: Proyek Sampingan. Setiap project punya konteks dan tone yang berbeda.</p>
-          </div>
-        </div>
-
-        
-        <div class="doc-slot" id="doc-slot-5"></div>
-        <div class="nav-bottom">
-          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">5 / 6</span>
-          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
-        </div>
-      </div>
-
-      <!-- MODULE 6 -->
-      <div class="module-panel" id="panel6">
-        <div class="breadcrumb"><span>Mulai dengan Claude AI</span><span>›</span><strong>Modul 6</strong></div>
-        <h1 class="module-title">Google Docs Export — Workflow End-to-End</h1>
-        <p class="module-subtitle">Dari prompt Claude sampai Google Docs siap dikirim ke atasan</p>
-        <div class="video-slot" id="video-slot-6"></div>
-
-        <div class="module-desc-box">
-          Workflow lengkap: input data/catatan → prompt ke Claude → output terformat → copy ke Google Docs → kirim. Modul ini mempraktikkan semua skill sebelumnya dalam satu workflow nyata yang bisa kamu pakai mulai besok.
-        </div>
-
-        <div class="prompt-section">
-          <div class="prompt-label">📝 Prompt Workflow Lengkap</div>
-          <div class="prompt-box">Berikut [catatan meeting/data/draft] yang perlu diformat:
-
-[tempel catatan/data kamu di sini]
-
----
-Tolong ubah menjadi [jenis dokumen] yang siap saya
-kirim ke [atasan/klien/tim].
-
-Format: [struktur yang kamu inginkan]
-Panjang: [pendek/sedang/lengkap]
-Tone: [formal/profesional/kasual]
-Sertakan: [hal spesifik yang harus ada]<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-          <div class="case-box">
-            <div class="case-role">🎯 Challenge Akhir Modul</div>
-            <p>Ambil satu pekerjaan nyata dari hari ini — meeting notes, laporan, atau email — dan coba workflow lengkap ini. Output ke Google Docs dan kirim ke diri sendiri.</p>
-          </div>
-        </div>
-
-        <div class="output-box">
+        <div class="output-box" style="background:var(--accent-dim);border-color:var(--accent-glow);">
           <div class="output-icon">🎉</div>
           <div>
-            <h3>Kursus Selesai!</h3>
-            <p>Prompt library personal tersimpan di Claude Projects · Google Docs workflow end-to-end siap dipakai · 6 skill Claude inti yang jadi fondasi semua kursus lanjutan.</p>
+            <h3 style="color:var(--accent);">Kursus Selesai!</h3>
+            <p>Kamu sudah paham dasar Claude, tahu cara menyusun prompt yang jelas (K-I-F), dan bisa memanfaatkan role prompting untuk output yang lebih tajam — fondasi yang cukup untuk mulai pakai Claude rutin di pekerjaan sehari-hari.</p>
           </div>
         </div>
 
@@ -790,17 +650,16 @@ Sertakan: [hal spesifik yang harus ada]<button class="copy-btn" onclick="copyPro
           <span class="next-arrow">→</span>
         </a>
 
-        
-        <div class="doc-slot" id="doc-slot-6"></div>
+        <div class="doc-slot" id="doc-slot-3"></div>
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">6 / 6</span>
-          <button class="nav-btn primary" onclick="showModule(7)">Lanjut →</button>
+          <span class="nav-counter">3 / 3</span>
+          <button class="nav-btn primary" onclick="showModule(4)">Lanjut →</button>
         </div>
       </div>
 
       
-      <div class="module-panel" id="panel7">
+      <div class="module-panel" id="panel4">
         <div class="feedback-panel">
           <div class="completion-badge">
             <div class="badge-check">
@@ -833,7 +692,7 @@ Sertakan: [hal spesifik yang harus ada]<button class="copy-btn" onclick="copyPro
 
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">7 / 7</span>
+          <span class="nav-counter">4 / 4</span>
           <a href="dashboard.html" class="nav-btn primary" style="text-decoration:none;">Ke Dashboard →</a>
         </div>
       </div>
@@ -843,7 +702,7 @@ Sertakan: [hal spesifik yang harus ada]<button class="copy-btn" onclick="copyPro
 </div>
 
 <script>
-  const TOTAL = 7;
+  const TOTAL = 4;
   let current = 1;
   const done = new Set();
 

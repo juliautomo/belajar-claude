@@ -136,8 +136,13 @@ All pages use these CSS variables:
 - Last panel = feedback panel: star rating (1-5) + optional comment → saved to `course_feedback`
 - "Ke Dashboard" on last content module → navigates to feedback panel first
 
-### mulai-claude-content.html — Modul 1-3 rewritten July 2026
-Modules 1, 2, and 3 (Apa itu Claude & Setup Akun / Anatomi Prompt K-I-F / Role Prompting) were rewritten to follow the source PDF "Mulai dengan Claude AI (Modul 1-3)" uploaded via admin.html — same case study throughout (usaha kecil membalas chat pelanggan), same analogies, comparison tables, and exercises as the PDF. New reusable CSS box classes added for this: `.tip-box` (gold, analogies/tips/catatan/kesalahan), `.summary-box` (Ringkasan Modul bullets), `.compare-table`/`.compare-table-wrap` (prompt buruk vs baik tables), `.step-row`/`.step-card` (numbered setup steps), `.two-col`/`.col-card` (Gratis vs Pro, Tanpa Role vs Dengan Role), `.info-grid`/`.info-card` (interface areas, 4 prompt elements, 5 roles), `.section-heading`, `.body-text`. Modules 4-7 (Artifacts, Projects, Google Docs, Feedback) were left untouched — only 1-3 matched the uploaded PDF's scope.
+### mulai-claude-content.html — Modul 1-3 rewritten + trimmed to 3 modules, July 2026
+Course cut down from 7 panels (6 content + feedback) to 4 panels (3 content + feedback) to match the source PDF "Mulai dengan Claude AI (Modul 1-3)" exactly — the PDF only covers 3 modules, so Artifacts/Projects/Google Docs (old modules 4-6) were removed entirely, not just left unedited.
+- Modules 1-3 (Apa itu Claude & Setup Akun / Anatomi Prompt K-I-F / Role Prompting) rewritten to follow the PDF — same case study throughout (usaha kecil membalas chat pelanggan), same analogies, comparison tables, and exercises. New reusable CSS box classes: `.tip-box` (gold, analogies/tips/catatan/kesalahan), `.summary-box` (Ringkasan Modul bullets), `.compare-table`/`.compare-table-wrap`, `.step-row`/`.step-card`, `.two-col`/`.col-card`, `.info-grid`/`.info-card`, `.section-heading`, `.body-text`.
+- Feedback panel renumbered from `panel7`/`nav-mod7`/`check7` to `panel4`/`nav-mod4`/`check4`. `TOTAL` constant changed from 7 to 4. Sidebar tool chips trimmed to just "Claude.ai" (Projects/Artifacts/Google Docs no longer taught in this course).
+- Module 3 (now the last content module) gained the course-completion treatment previously on module 6: a "Kursus Selesai!" box + "Lanjutkan Belajar" next-course cards (kerja-sehari-hari, bisnis-ukm), with its nav-bottom button jumping straight to `showModule(4)` (feedback) instead of generic `nextModule()`.
+- `admin.html`'s `COURSES` config for `mulai-claude` updated from `modules: 6` to `modules: 3` so the admin video/document module dropdown only offers valid module numbers.
+- Any pre-existing `module_videos`/`module_documents` rows for `mulai-claude` modules 4-6 are now orphaned (harmless — nothing renders them anymore).
 
 ---
 
