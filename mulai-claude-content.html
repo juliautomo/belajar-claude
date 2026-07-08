@@ -152,6 +152,13 @@
   .tip-box { background: var(--gold-pale); border: 1px solid rgba(239,159,39,0.25); border-left: 3px solid var(--gold); border-radius: 10px; padding: 14px 18px; margin: 14px 0; }
   .tip-box .tip-label { font-size: 10px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; font-family: monospace; }
   .tip-box p { font-size: 13px; color: var(--ink); line-height: 1.65; }
+  .tip-box.warn { background: rgba(220,38,38,0.05); border-color: rgba(220,38,38,0.2); border-left-color: #DC2626; }
+  .tip-box.warn .tip-label { color: #DC2626; }
+  .mistake-list { list-style: none; margin: 0; }
+  .mistake-list li { font-size: 13px; color: var(--ink); line-height: 1.65; padding-left: 20px; position: relative; margin-bottom: 8px; }
+  .mistake-list li:last-child { margin-bottom: 0; }
+  .mistake-list li::before { content: "✖"; color: #DC2626; position: absolute; left: 0; font-size: 11px; top: 2px; }
+  .mistake-list li strong { color: var(--ink); }
 
   /* Ringkasan modul */
   .summary-box { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; margin: 20px 0; }
@@ -287,7 +294,7 @@
       <div class="sidebar-course-name">Mulai dengan Claude AI</div>
       <div class="progress-bar-wrap">
         <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-        <span class="progress-label" id="progressLabel">0/4</span>
+        <span class="progress-label" id="progressLabel">0/7</span>
       </div>
     </div>
     <div id="pdf-download-slot"></div>
@@ -315,16 +322,40 @@
         <div class="mod-item-sub">Modul 3 · Role Prompting</div>
       </div>
     </div>
+    <div class="mod-item" id="nav-mod4" onclick="showModule(4)">
+      <div class="mod-check" id="check4"></div>
+      <div class="mod-item-info">
+        <div class="mod-item-title">Claude Artifacts — Output Langsung Jadi Dokumen</div>
+        <div class="mod-item-sub">Modul 4 · Artifacts</div>
+      </div>
+    </div>
+    <div class="mod-item" id="nav-mod5" onclick="showModule(5)">
+      <div class="mod-check" id="check5"></div>
+      <div class="mod-item-info">
+        <div class="mod-item-title">Claude Projects — Memori Pekerjaan Kamu</div>
+        <div class="mod-item-sub">Modul 5 · Projects</div>
+      </div>
+    </div>
+    <div class="mod-item" id="nav-mod6" onclick="showModule(6)">
+      <div class="mod-check" id="check6"></div>
+      <div class="mod-item-info">
+        <div class="mod-item-title">PRAKTEK: Workflow End-to-End Pertamamu</div>
+        <div class="mod-item-sub">Modul 6 · Praktek</div>
+      </div>
+    </div>
 
     <div class="sidebar-footer">
       <div class="sidebar-section-label" style="padding:0 0 8px;">Tools yang dipakai</div>
       <div class="sidebar-tools">
         <span class="tool-chip">Claude.ai</span>
+        <span class="tool-chip">Claude Projects</span>
+        <span class="tool-chip">Claude Artifacts</span>
+        <span class="tool-chip">Google Docs</span>
       </div>
     </div>
     <div class="mod-feedback">
-      <div class="mod-item" id="nav-mod4" onclick="showModule(4)">
-        <div class="mod-check" id="check4">★</div>
+      <div class="mod-item" id="nav-mod7" onclick="showModule(7)">
+        <div class="mod-check" id="check7">★</div>
         <div><div class="mod-item-title">Feedback</div><div class="mod-item-sub">Nilai kursus ini</div></div>
       </div>
     </div>
@@ -426,7 +457,7 @@ Bisa bantu jelaskan bagaimana kamu bisa membantu saya?<button class="copy-btn" o
         <div class="doc-slot" id="doc-slot-1"></div>
         <div class="nav-bottom">
           <button class="nav-btn" disabled>← Sebelumnya</button>
-          <span class="nav-counter">1 / 3</span>
+          <span class="nav-counter">1 / 6</span>
           <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
       </div>
@@ -533,7 +564,7 @@ tapi tetap profesional.<button class="copy-btn" onclick="copyPrompt(this)">Salin
         <div class="doc-slot" id="doc-slot-2"></div>
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">2 / 3</span>
+          <span class="nav-counter">2 / 6</span>
           <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
       </div>
@@ -627,11 +658,255 @@ Format: [format].<button class="copy-btn" onclick="copyPrompt(this)">Salin</butt
           <p>Simpan role-role yang sering kamu pakai di satu dokumen (Notion/Notepad) supaya tidak perlu mengetik ulang setiap kali — tinggal copy-paste dan sesuaikan situasinya.</p>
         </div>
 
+        <div class="tip-box">
+          <div class="tip-label">💡 Tips</div>
+          <p>Simpan role-role yang sering kamu pakai di satu dokumen (Notion/Notepad) supaya tidak perlu mengetik ulang setiap kali — tinggal copy-paste dan sesuaikan situasinya.</p>
+        </div>
+
+        <div class="doc-slot" id="doc-slot-3"></div>
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">3 / 6</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <!-- MODULE 4 -->
+      <div class="module-panel" id="panel4">
+        <div class="video-slot" id="video-slot-4"></div>
+        <div class="breadcrumb"><span>Mulai dengan Claude AI</span><span>›</span><strong>Modul 4</strong></div>
+        <h1 class="module-title">Claude Artifacts — Output Langsung Jadi Dokumen</h1>
+        <p class="module-subtitle">Generate & edit dokumen terstruktur tanpa copy-paste — 10 menit</p>
+
+        <div class="module-desc-box">
+          Kamu minta Claude buatkan tabel perbandingan, dapat hasilnya di tengah-tengah chat, lalu harus scroll, select, copy, buka Google Docs, paste, rapikan formatnya lagi — dan kalau ada revisi, ulangi semua dari awal. Untuk dokumen panjang (laporan, kode, draft proposal), proses copy-paste manual ini jadi titik paling melelahkan dari pakai AI.
+        </div>
+
+        <p class="body-text"><strong>Apa itu Artifacts?</strong> Canvas terpisah di sisi chat — begitu Claude membuat output yang cukup terstruktur (dokumen, tabel, kode, diagram), ia otomatis muncul di panel sendiri, bukan tercampur di aliran percakapan. Kamu bisa edit langsung di panel itu, minta revisi tanpa kehilangan tampilan sebelumnya, dan export kapan sudah final — tanpa satu kali pun copy-paste manual.</p>
+
+        <p class="body-text"><strong>Kapan Artifacts muncul otomatis?</strong> Claude memicu Artifacts untuk output yang punya struktur jelas dan cukup panjang untuk berdiri sendiri: tabel data, dokumen multi-bagian, kode program, diagram. Untuk jawaban singkat, Claude tetap menjawab di chat biasa — tapi kamu bisa secara eksplisit minta ("buatkan di Artifacts") kalau ingin memastikan.</p>
+
+        <div class="section-heading">Jenis Artifacts yang Paling Berguna untuk Kerja</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Markdown</strong><span>Dokumen, laporan, SOP, proposal — format paling umum untuk kerja kantoran</span></div>
+          <div class="info-card"><strong>Tabel</strong><span>Perbandingan, tracking, rekap data terstruktur</span></div>
+          <div class="info-card"><strong>Kode</strong><span>Script, formula, atau halaman HTML sederhana</span></div>
+          <div class="info-card"><strong>SVG / Diagram</strong><span>Flowchart, struktur organisasi, alur proses</span></div>
+        </div>
+
+        <div class="tip-box warn">
+          <div class="tip-label">⚠️ Kesalahan Umum Memakai Artifacts</div>
+          <ul class="mistake-list">
+            <li><strong>Tidak memanfaatkan iterasi</strong> — merasa harus minta ulang dari nol kalau ada bagian yang kurang pas, padahal cukup minta revisi bagian tertentu</li>
+            <li><strong>Lupa Artifacts tetap perlu direview</strong> — tampilannya rapi seperti dokumen jadi, sering dianggap otomatis benar padahal isinya tetap perlu dicek</li>
+            <li><strong>Tidak export, cuma screenshot</strong> — kehilangan format asli yang bisa di-edit atau di-copy sebagai teks</li>
+          </ul>
+        </div>
+
+        <div class="section-heading">Contoh Prompt: Biasa vs Eksplisit Minta Artifacts</div>
+        <div class="two-col">
+          <div class="col-card">
+            <h4>Prompt Biasa</h4>
+            <p>"Bandingkan 5 fitur Claude dengan ChatGPT"</p>
+            <p style="margin-top:8px;"><strong>Hasil:</strong> Claude mungkin menjawab di chat biasa dengan poin-poin, tergantung panjang jawabannya.</p>
+          </div>
+          <div class="col-card highlight">
+            <h4>Prompt Eksplisit + Terstruktur</h4>
+            <p>"Buatkan tabel perbandingan 5 fitur Claude vs ChatGPT dalam bentuk tabel markdown. Setelah itu saya mau minta revisi kolom tertentu, jadi buat di Artifacts supaya bisa saya edit langsung."</p>
+            <p style="margin-top:8px;"><strong>Hasil:</strong> instruksi eksplisit + format tabel + niat mau revisi → Claude tahu ini perlu jadi dokumen yang bisa diiterasi.</p>
+          </div>
+        </div>
+
+        <div class="section-heading">Cara Kerja Step-by-Step</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Minta Claude buat output terstruktur (tabel, dokumen, kode) — Artifacts biasanya muncul otomatis</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Kalau ada bagian kurang pas, minta revisi spesifik — bukan minta ulang dari nol</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Review isi Artifacts sebelum dipakai — jangan asumsikan otomatis benar</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Kalau sudah final, export ke Google Docs atau download sebagai file lokal</p></div>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Exercise</div>
+          <div class="case-box">
+            <p>Generate tabel perbandingan 5 fitur Claude vs Chat biasa (bukan AI) — misalnya kecepatan, kemampuan olah dokumen, konsistensi jawaban, dll. Minta revisi 1 kolom setelah tabel muncul untuk coba fitur iterasi.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>1 tabel Artifacts yang sudah direvisi minimal 1 kali — kamu paham cara generate dan edit dokumen langsung di Claude tanpa copy-paste manual.</p>
+          </div>
+        </div>
+
+        <div class="doc-slot" id="doc-slot-4"></div>
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">4 / 6</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <!-- MODULE 5 -->
+      <div class="module-panel" id="panel5">
+        <div class="video-slot" id="video-slot-5"></div>
+        <div class="breadcrumb"><span>Mulai dengan Claude AI</span><span>›</span><strong>Modul 5</strong></div>
+        <h1 class="module-title">Claude Projects — Memori Pekerjaan Kamu</h1>
+        <p class="module-subtitle">Simpan konteks kerja supaya tidak dijelaskan ulang — 10 menit</p>
+
+        <div class="module-desc-box">
+          Setiap kali buka chat baru untuk pekerjaan yang sama, kamu harus jelaskan ulang: ini konteksnya apa, gaya bahasa yang saya mau seperti apa, dokumen referensinya begini. Chat biasa tidak mengingat apa-apa dari sesi sebelumnya — jadi kerja yang sebenarnya berulang terasa seperti mulai dari nol setiap kali.
+        </div>
+
+        <p class="body-text"><strong>Cara kerja Projects:</strong> Project adalah folder kerja yang menyimpan konteks secara permanen — instruksi sistem (aturan/gaya yang selalu berlaku) dan dokumen referensi (file yang bisa terus diakses Claude tanpa upload ulang). Begitu project dibuat, setiap chat baru di dalamnya otomatis "tahu" semua konteks itu.</p>
+
+        <div class="section-heading">Cara Membuat Project</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Nama project — spesifik ke konteks kerja (mis. "Klien PT Maju Jaya", bukan "Kerjaan")</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Instruksi sistem — gaya bahasa, format output, batasan yang harus diikuti Claude</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Upload dokumen referensi — SOP, panduan brand, template, atau acuan lain</p></div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">💡 Best Practice</div>
+          <p>Satu Project per konteks kerja — pisahkan berdasarkan konteks yang benar-benar berbeda kebutuhannya: satu per klien, satu per departemen, atau satu per proyek besar. Mencampur semua kerjaan dalam 1 project besar membuat instruksi sistem jadi campur aduk.</p>
+        </div>
+
+        <div class="section-heading">Contoh Skenario Berdasarkan Profesi</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>HRD</strong><span>Project "Interview Marketing Manager" — instruksi nada profesional + upload job description</span></div>
+          <div class="info-card"><strong>Guru SMA</strong><span>Project "Matematika Kelas 11" — level kesulitan soal + upload silabus</span></div>
+          <div class="info-card"><strong>Freelancer Desain</strong><span>Project per klien — brand guideline + upload contoh karya sebelumnya</span></div>
+        </div>
+
+        <div class="tip-box warn">
+          <div class="tip-label">⚠️ Kesalahan Umum Memakai Projects</div>
+          <ul class="mistake-list">
+            <li><strong>Instruksi sistem terlalu umum</strong> — "jadilah asisten yang membantu" tidak memberi arah spesifik</li>
+            <li><strong>Tidak upload dokumen referensi</strong> — padahal ini yang paling menghemat waktu, upload sekali dipakai selamanya</li>
+            <li><strong>Satu project untuk semua hal</strong> — kehilangan manfaat utama Projects yaitu konteks yang benar-benar spesifik</li>
+          </ul>
+        </div>
+
+        <div class="section-heading">Contoh Prompt: Instruksi Sistem yang Baik</div>
+        <div class="two-col">
+          <div class="col-card">
+            <h4>Instruksi Sistem Lemah</h4>
+            <p>"Bantu saya kerja lebih efisien"</p>
+            <p style="margin-top:8px;"><strong>Masalah:</strong> tidak memberi arah spesifik apapun ke Claude tentang konteks kerja di project ini.</p>
+          </div>
+          <div class="col-card highlight">
+            <h4>Instruksi Sistem Baik</h4>
+            <p>"Kamu membantu saya (HRD) menyiapkan pertanyaan interview untuk posisi Marketing Manager. Fokus ke kompetensi: leadership, data-driven decision making, komunikasi lintas tim. Format: daftar bernomor dengan 1 kalimat penjelasan."</p>
+            <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> konteks + fokus + format yang jelas → berlaku otomatis di setiap chat dalam project ini.</p>
+          </div>
+        </div>
+
+        <div class="section-heading">Cara Kerja Step-by-Step</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Identifikasi 1 konteks kerja yang paling sering berulang</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Buat Project baru, beri nama spesifik ke konteks itu</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Tulis instruksi sistem: gaya, format, batasan yang harus diikuti</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Upload dokumen referensi yang relevan</p></div>
+          <div class="step-card"><div class="step-num">5</div><p>Test dengan 1 chat — cek apakah Claude sudah "paham" konteksnya</p></div>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Exercise</div>
+          <div class="case-box">
+            <p>Buat 1 Project untuk pekerjaan yang paling sering kamu lakukan berulang. Isi instruksi sistem sesuai kebutuhan spesifik pekerjaan itu, lalu upload 1 dokumen referensi yang relevan.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>Project pertamamu — siap dipakai untuk pekerjaan berikutnya tanpa perlu jelaskan ulang konteks dari nol.</p>
+          </div>
+        </div>
+
+        <div class="doc-slot" id="doc-slot-5"></div>
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">5 / 6</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <!-- MODULE 6 -->
+      <div class="module-panel" id="panel6">
+        <div class="video-slot" id="video-slot-6"></div>
+        <div class="breadcrumb"><span>Mulai dengan Claude AI</span><span>›</span><strong>Modul 6</strong></div>
+        <h1 class="module-title">PRAKTEK: Workflow End-to-End Pertamamu</h1>
+        <p class="module-subtitle">Menyatukan Artifacts + Projects jadi 1 alur kerja nyata — 10 menit</p>
+
+        <div class="module-desc-box">
+          Dua modul sebelumnya mengajarkan dua kemampuan terpisah: Artifacts (output langsung jadi dokumen) dan Projects (konteks kerja yang tersimpan). Modul ini menyatukan keduanya jadi satu workflow nyata — dari input berantakan sampai output yang siap dikirim ke atasan, klien, atau siapapun yang menunggu hasil kerja kamu.
+        </div>
+
+        <p class="body-text"><strong>Studi kasus:</strong> keluar dari meeting dengan catatan yang tercecer (poin loncat-loncat, tidak terstruktur), tapi tetap harus dikirim sebagai laporan rapi berisi ringkasan dan action items dalam waktu dekat. Workflow ini mengubah proses yang biasanya makan waktu 30-45 menit merapikan manual, menjadi hitungan menit.</p>
+
+        <div class="section-heading">Alur Kerja 4 Langkah</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Buka Project pekerjaan yang sudah dibuat di Modul 5 — Claude sudah punya konteks gaya laporan</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Paste catatan meeting, minta ringkasan + action items</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Generate output via Artifacts — format dokumen terstruktur, bisa diedit langsung</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Export ke Google Docs, rapikan font, spacing, heading — siap kirim</p></div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">💡 Kenapa Urutan Ini Penting</div>
+          <p>Menggabungkan Project (konteks tersimpan) dengan Artifacts (output langsung terstruktur) menghilangkan dua titik lambat sekaligus: tidak perlu jelaskan ulang konteks kerja, dan tidak perlu copy-paste manual dari chat ke dokumen. Ini yang membuat workflow-nya benar-benar end-to-end.</p>
+        </div>
+
+        <div class="section-heading">Contoh Skenario Berdasarkan Profesi</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Manajer</strong><span>Catatan meeting 2 halaman diolah jadi ringkasan + action items dalam project departemen</span></div>
+          <div class="info-card"><strong>HRD</strong><span>Hasil interview (catatan wawancara kandidat) diolah jadi laporan evaluasi terstruktur</span></div>
+          <div class="info-card"><strong>Mahasiswa</strong><span>Catatan kuliah/diskusi kelompok diolah jadi rangkuman untuk bahan belajar</span></div>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Contoh Prompt Lengkap (1 Alur Penuh)</div>
+          <div class="prompt-box">(Di dalam Project "Tim Marketing") Ini catatan meeting saya hari ini,
+masih berantakan: [paste catatan mentah]. Tolong olah jadi laporan
+dengan 2 bagian: (1) Ringkasan poin utama dalam bentuk paragraf
+singkat, (2) Action items dalam bentuk tabel dengan kolom Tugas,
+PIC, dan Deadline. Buatkan dalam format dokumen supaya bisa
+saya export ke Google Docs.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="section-heading">Cara Kerja Step-by-Step</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Buka Project pekerjaan yang relevan</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Siapkan 1 catatan meeting/rapat nyata yang masih berantakan</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Paste catatan, minta ringkasan + action items sekaligus</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Review hasil di Artifacts, minta revisi kalau kurang pas</p></div>
+          <div class="step-card"><div class="step-num">5</div><p>Export ke Google Docs, rapikan format akhir</p></div>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Exercise</div>
+          <div class="case-box">
+            <p>Ambil catatan rapat nyata dari minggu ini (atau catatan kuliah/diskusi kalau kamu mahasiswa). Jalankan alur 4 langkah di atas dari awal sampai selesai.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>1 laporan meeting profesional di Google Docs — dibuat dari catatan berantakan, lewat Project yang sudah ada konteksnya, tanpa satu kali pun copy-paste manual dari chat.</p>
+          </div>
+        </div>
+
         <div class="output-box" style="background:var(--accent-dim);border-color:var(--accent-glow);">
           <div class="output-icon">🎉</div>
           <div>
             <h3 style="color:var(--accent);">Kursus Selesai!</h3>
-            <p>Kamu sudah paham dasar Claude, tahu cara menyusun prompt yang jelas (K-I-F), dan bisa memanfaatkan role prompting untuk output yang lebih tajam — fondasi yang cukup untuk mulai pakai Claude rutin di pekerjaan sehari-hari.</p>
+            <p>Dari membalas chat pelanggan, membuat dokumen terstruktur, sampai menyimpan konteks kerja supaya tidak perlu dijelaskan ulang — kamu sekarang punya fondasi yang cukup kuat untuk mulai memakai Claude secara rutin dalam pekerjaan sehari-hari.</p>
           </div>
         </div>
 
@@ -653,16 +928,17 @@ Format: [format].<button class="copy-btn" onclick="copyPrompt(this)">Salin</butt
           <span class="next-arrow">→</span>
         </a>
 
-        <div class="doc-slot" id="doc-slot-3"></div>
+        <div class="doc-slot" id="doc-slot-6"></div>
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">3 / 3</span>
-          <button class="nav-btn primary" onclick="showModule(4)">Lanjut →</button>
+          <span class="nav-counter">6 / 6</span>
+          <button class="nav-btn primary" onclick="showModule(7)">Lanjut →</button>
         </div>
       </div>
 
       
-      <div class="module-panel" id="panel4">
+      <div class="module-panel" id="panel7">
+
         <div class="feedback-panel">
           <div class="completion-badge">
             <div class="badge-check">
@@ -695,7 +971,7 @@ Format: [format].<button class="copy-btn" onclick="copyPrompt(this)">Salin</butt
 
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">4 / 4</span>
+          <span class="nav-counter">7 / 7</span>
           <a href="dashboard.html" class="nav-btn primary" style="text-decoration:none;">Ke Dashboard →</a>
         </div>
       </div>
@@ -705,7 +981,7 @@ Format: [format].<button class="copy-btn" onclick="copyPrompt(this)">Salin</butt
 </div>
 
 <script>
-  const TOTAL = 4;
+  const TOTAL = 7;
   let current = 1;
   const done = new Set();
 

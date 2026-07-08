@@ -136,13 +136,15 @@ All pages use these CSS variables:
 - Last panel = feedback panel: star rating (1-5) + optional comment → saved to `course_feedback`
 - "Ke Dashboard" on last content module → navigates to feedback panel first
 
-### mulai-claude-content.html — Modul 1-3 rewritten + trimmed to 3 modules, July 2026
-Course cut down from 7 panels (6 content + feedback) to 4 panels (3 content + feedback) to match the source PDF "Mulai dengan Claude AI (Modul 1-3)" exactly — the PDF only covers 3 modules, so Artifacts/Projects/Google Docs (old modules 4-6) were removed entirely, not just left unedited.
-- Modules 1-3 (Apa itu Claude & Setup Akun / Anatomi Prompt K-I-F / Role Prompting) rewritten to follow the PDF — same case study throughout (usaha kecil membalas chat pelanggan), same analogies, comparison tables, and exercises. New reusable CSS box classes: `.tip-box` (gold, analogies/tips/catatan/kesalahan), `.summary-box` (Ringkasan Modul bullets), `.compare-table`/`.compare-table-wrap`, `.step-row`/`.step-card`, `.two-col`/`.col-card`, `.info-grid`/`.info-card`, `.section-heading`, `.body-text`.
-- Feedback panel renumbered from `panel7`/`nav-mod7`/`check7` to `panel4`/`nav-mod4`/`check4`. `TOTAL` constant changed from 7 to 4. Sidebar tool chips trimmed to just "Claude.ai" (Projects/Artifacts/Google Docs no longer taught in this course).
-- Module 3 (now the last content module) gained the course-completion treatment previously on module 6: a "Kursus Selesai!" box + "Lanjutkan Belajar" next-course cards (kerja-sehari-hari, bisnis-ukm), with its nav-bottom button jumping straight to `showModule(4)` (feedback) instead of generic `nextModule()`.
-- `admin.html`'s `COURSES` config for `mulai-claude` updated from `modules: 6` to `modules: 3` so the admin video/document module dropdown only offers valid module numbers.
-- Any pre-existing `module_videos`/`module_documents` rows for `mulai-claude` modules 4-6 are now orphaned (harmless — nothing renders them anymore).
+### mulai-claude-content.html — content history, July 2026
+Course has gone through two PDF-driven restructures in July 2026. Current state: **7 panels (6 content + feedback)**, matching the source PDF "Mulai dengan Claude AI (Modul 1-6)".
+
+1. First pass: modules 1-3 (Apa itu Claude & Setup Akun / Anatomi Prompt K-I-F / Role Prompting) rewritten to follow a "Modul 1-3" PDF — same case study throughout (usaha kecil membalas chat pelanggan), same analogies, comparison tables, and exercises. New reusable CSS box classes introduced: `.tip-box` (gold, analogies/tips/catatan/kesalahan), `.summary-box` (Ringkasan Modul bullets), `.compare-table`/`.compare-table-wrap`, `.step-row`/`.step-card`, `.two-col`/`.col-card`, `.info-grid`/`.info-card`, `.section-heading`, `.body-text`.
+2. The course was then temporarily trimmed to just those 3 modules (panel4 = feedback, TOTAL = 4) because that PDF only covered 3 modules.
+3. A follow-up "Modul 1-6" PDF arrived adding 3 more modules, so panels 4-6 were added back: **Modul 4 — Claude Artifacts** (generate/edit dokumen terstruktur, `.mistake-list`/`.tip-box.warn` for "Kesalahan Umum" sections), **Modul 5 — Claude Projects** (menyimpan konteks kerja), **Modul 6 — PRAKTEK: Workflow End-to-End** (capstone menggabungkan Artifacts + Projects). Feedback panel renumbered back to `panel7`/`nav-mod7`/`check7`, `TOTAL` back to 7, sidebar tool chips restored to all 4 (Claude.ai, Claude Projects, Claude Artifacts, Google Docs).
+- The course-completion treatment ("Kursus Selesai!" box + "Lanjutkan Belajar" next-course cards linking to kerja-sehari-hari/bisnis-ukm) always lives on whichever module is currently last before feedback — moved from module 3 to module 6 in this restructure. That module's nav-bottom button jumps straight to `showModule(7)` instead of generic `nextModule()`.
+- `admin.html`'s `COURSES` config for `mulai-claude` tracks this: `modules: 6` (currently).
+- Video/PDF/document mapping (course_slug + module_num) is content-agnostic, so nothing needed to change there — re-adding modules 4-6 just means those module numbers are valid targets again in the admin dropdowns.
 
 ---
 
