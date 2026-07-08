@@ -50,6 +50,11 @@ select:focus { outline: none; border-color: var(--accent); }
 .status.success { background: var(--green-dim); color: #14532D; border: 1px solid var(--green-border); }
 .status.error { background: var(--red-dim); color: #7F1D1D; border: 1px solid var(--red-border); }
 .status.pending { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-glow); }
+.current-indicator { margin-top: 10px; font-size: 12.5px; padding: 10px 12px; border-radius: 8px; display: none; align-items: center; gap: 8px; }
+.current-indicator.show { display: flex; }
+.current-indicator.has-video { background: var(--green-dim); color: #14532D; border: 1px solid var(--green-border); }
+.current-indicator.no-video { background: var(--surface-2); color: var(--ink-2); border: 1px solid var(--border); }
+.current-indicator a { color: inherit; font-weight: 700; text-decoration: underline; word-break: break-all; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
 th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--border); }
 th { color: var(--ink-2); font-weight: 600; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.4px; }
@@ -112,9 +117,10 @@ td a:hover { text-decoration: underline; }
     <h2>Video per Modul</h2>
     <p class="hint">Pilih kursus dan modul, lalu tempel link YouTube video untuk modul tersebut. Video akan tampil di bagian paling atas modul, di atas judul.</p>
     <label for="videoCourseSelect">Kursus</label>
-    <select id="videoCourseSelect" onchange="populateModuleSelect()"></select>
+    <select id="videoCourseSelect" onchange="populateModuleSelect(); checkCurrentVideo();"></select>
     <label for="videoModuleSelect">Modul</label>
-    <select id="videoModuleSelect"></select>
+    <select id="videoModuleSelect" onchange="checkCurrentVideo()"></select>
+    <div class="current-indicator" id="currentVideoInfo"></div>
     <label for="videoUrlInput">Link YouTube</label>
     <input type="text" id="videoUrlInput" placeholder="https://www.youtube.com/watch?v=... atau https://youtu.be/...">
     <button class="btn" id="videoUploadBtn" onclick="saveVideo()">Simpan Video</button>
@@ -232,6 +238,30 @@ function extractYoutubeId(url) {
   return m ? m[1] : null;
 }
 
+async function checkCurrentVideo() {
+  var slug = document.getElementById('videoCourseSelect').value;
+  var moduleNum = parseInt(document.getElementById('videoModuleSelect').value, 10);
+  var indicator = document.getElementById('currentVideoInfo');
+  var urlInput = document.getElementById('videoUrlInput');
+  if (!slug || !moduleNum) return;
+
+  indicator.className = 'current-indicator show no-video';
+  indicator.textContent = 'Memeriksa...';
+
+  var res = await sbClient.from('module_videos').select('video_url')
+    .eq('course_slug', slug).eq('module_num', moduleNum).maybeSingle();
+
+  if (res.data && res.data.video_url) {
+    indicator.className = 'current-indicator show has-video';
+    indicator.innerHTML = '✓ Video sudah ada untuk modul ini: <a href="' + res.data.video_url + '" target="_blank" rel="noopener">' + res.data.video_url + '</a>';
+    urlInput.value = res.data.video_url;
+  } else {
+    indicator.className = 'current-indicator show no-video';
+    indicator.textContent = 'Belum ada video untuk modul ini.';
+    urlInput.value = '';
+  }
+}
+
 async function saveVideo() {
   var slug = document.getElementById('videoCourseSelect').value;
   var moduleNum = parseInt(document.getElementById('videoModuleSelect').value, 10);
@@ -256,7 +286,7 @@ async function saveVideo() {
   if (db.error) { setStatus('videoStatus', 'Gagal simpan ke database: ' + db.error.message, 'error'); return; }
 
   setStatus('videoStatus', 'Video berhasil disimpan untuk ' + courseName(slug) + ' — Modul ' + moduleNum + ' ✓', 'success');
-  urlInput.value = '';
+  checkCurrentVideo();
   refreshOverview();
 }
 
@@ -352,6 +382,7 @@ async function logout() {
   document.getElementById('logoutLink').style.display = 'inline';
   showState('admin');
   populateCourseSelects();
+  checkCurrentVideo();
   refreshOverview();
 })();
 </script>
