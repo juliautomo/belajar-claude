@@ -83,6 +83,45 @@
   .output-icon { font-size: 28px; flex-shrink: 0; }
   .output-box h3 { font-size: 15px; font-weight: 700; color: var(--green); margin-bottom: 4px; }
   .output-box p { font-size: 13px; color: var(--ink-2); line-height: 1.65; }
+  /* Tip / analogy / warning box */
+  .tip-box { background: var(--accent-dim); border: 1px solid var(--accent-glow); border-left: 3px solid var(--accent); border-radius: 10px; padding: 14px 18px; margin: 14px 0; }
+  .tip-box .tip-label { font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; font-family: monospace; }
+  .tip-box p { font-size: 13px; color: var(--ink); line-height: 1.65; }
+  .tip-box.warn { background: rgba(220,38,38,0.05); border-color: rgba(220,38,38,0.2); border-left-color: #DC2626; }
+  .tip-box.warn .tip-label { color: #DC2626; }
+  .mistake-list { list-style: none; margin: 0; }
+  .mistake-list li { font-size: 13px; color: var(--ink); line-height: 1.65; padding-left: 20px; position: relative; margin-bottom: 8px; }
+  .mistake-list li:last-child { margin-bottom: 0; }
+  .mistake-list li::before { content: "✖"; color: #DC2626; position: absolute; left: 0; font-size: 11px; top: 2px; }
+  .mistake-list li strong { color: var(--ink); }
+
+  /* Comparison / grid layouts */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .two-col .col-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .two-col .col-card.highlight { border-color: var(--accent); background: var(--accent-dim); }
+  .two-col .col-card h4 { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+  .two-col .col-card ul { list-style: none; }
+  .two-col .col-card li { font-size: 12px; color: var(--ink-2); line-height: 1.6; padding-left: 14px; position: relative; margin-bottom: 2px; }
+  .two-col .col-card li::before { content: "\2013"; position: absolute; left: 0; }
+  .two-col .col-card p { font-size: 12px; color: var(--ink-2); line-height: 1.6; }
+
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 14px 0; }
+  .info-card { background: var(--gold-pale); border-radius: 10px; padding: 12px 14px; }
+  .info-card strong { font-size: 12.5px; color: var(--ink); display: block; margin-bottom: 3px; }
+  .info-card span { font-size: 11.5px; color: var(--ink-2); }
+
+  .step-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+  .step-card { flex: 1; min-width: 100px; background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 12px; text-align: center; }
+  .step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; }
+  .step-card p { font-size: 11.5px; color: var(--ink-2); line-height: 1.4; }
+
+  .section-heading { font-size: 14px; font-weight: 700; color: var(--ink); margin: 22px 0 10px; }
+  .body-text { font-size: 13.5px; color: var(--ink-2); line-height: 1.75; margin-bottom: 10px; }
+
+  @media (max-width: 600px) {
+    .two-col, .info-grid { grid-template-columns: 1fr; }
+  }
+
   .next-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--ink-2); margin: 28px 0 12px; font-family: monospace; }
   .next-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; text-decoration: none; margin-bottom: 10px; transition: border-color 0.2s, box-shadow 0.2s; }
   .next-card:hover { border-color: var(--accent); box-shadow: 0 2px 12px var(--border); }
@@ -157,33 +196,33 @@
     <div class="sidebar-section-label">Materi Kursus</div>
     <div class="mod-item active" id="nav-mod1" onclick="showModule(1)">
       <div class="mod-check" id="check1"></div>
-      <div class="mod-item-info"><div class="mod-item-title">Tokopedia/Shopee — 50 Deskripsi Produk SEO</div><div class="mod-item-sub">Modul 1 · Marketplace</div></div>
+      <div class="mod-item-info"><div class="mod-item-title">Analisis Kompetitor & Positioning</div><div class="mod-item-sub">Modul 1 · Positioning</div></div>
     </div>
     <div class="mod-item" id="nav-mod2" onclick="showModule(2)">
       <div class="mod-check" id="check2"></div>
-      <div class="mod-item-info"><div class="mod-item-title">Instagram System — 30 Caption + Jadwal</div><div class="mod-item-sub">Modul 2 · Instagram</div></div>
+      <div class="mod-item-info"><div class="mod-item-title">Deskripsi Produk & Listing yang Menjual</div><div class="mod-item-sub">Modul 2 · Listing Produk</div></div>
     </div>
     <div class="mod-item" id="nav-mod3" onclick="showModule(3)">
       <div class="mod-check" id="check3"></div>
-      <div class="mod-item-info"><div class="mod-item-title">WhatsApp Business — 10 Template Quick Reply</div><div class="mod-item-sub">Modul 3 · WA Business</div></div>
+      <div class="mod-item-info"><div class="mod-item-title">Sistem Konten Instagram</div><div class="mod-item-sub">Modul 3 · Konten Instagram</div></div>
     </div>
     <div class="mod-item" id="nav-mod4" onclick="showModule(4)">
       <div class="mod-check" id="check4"></div>
-      <div class="mod-item-info"><div class="mod-item-title">Notion Content OS — Build Sistem Konten</div><div class="mod-item-sub">Modul 4 · Notion</div></div>
+      <div class="mod-item-info"><div class="mod-item-title">Iklan & Promosi: Claude Tulis, Kamu Design</div><div class="mod-item-sub">Modul 4 · Iklan & Promosi</div></div>
     </div>
     <div class="mod-item" id="nav-mod5" onclick="showModule(5)">
       <div class="mod-check" id="check5"></div>
-      <div class="mod-item-info"><div class="mod-item-title">Canva Copy Workflow — Iklan dalam 20 Menit</div><div class="mod-item-sub">Modul 5 · Canva</div></div>
+      <div class="mod-item-info"><div class="mod-item-title">Template CS WhatsApp yang On-Brand</div><div class="mod-item-sub">Modul 5 · CS WhatsApp</div></div>
     </div>
     <div class="mod-item" id="nav-mod6" onclick="showModule(6)">
       <div class="mod-check" id="check6"></div>
-      <div class="mod-item-info"><div class="mod-item-title">Competitive Analysis — Audit 3 Kompetitor</div><div class="mod-item-sub">Modul 6 · Riset</div></div>
+      <div class="mod-item-info"><div class="mod-item-title">Content Operating System di Notion</div><div class="mod-item-sub">Modul 6 · Content OS</div></div>
     </div>
     <div class="sidebar-footer">
       <div class="sidebar-section-label" style="padding:0 0 8px;">Tools yang dipakai</div>
       <div class="sidebar-tools">
-        <span class="tool-chip">Tokopedia/Shopee</span><span class="tool-chip">Instagram</span>
-        <span class="tool-chip">WA Business</span><span class="tool-chip">Notion</span><span class="tool-chip">Canva</span>
+        <span class="tool-chip">Tokopedia/Shopee</span><span class="tool-chip">Notion</span>
+        <span class="tool-chip">WhatsApp Business</span><span class="tool-chip">Instagram</span><span class="tool-chip">Canva</span>
       </div>
     </div>
     <div class="mod-feedback">
@@ -201,33 +240,63 @@
       <div class="module-panel active" id="panel1">
         <div class="video-slot" id="video-slot-1"></div>
         <div class="breadcrumb"><span>Bisnis & UKM</span><span>›</span><strong>Modul 1</strong></div>
-        <h1 class="module-title">Tokopedia/Shopee — 50 Deskripsi Produk SEO-Ready</h1>
-        <p class="module-subtitle">Generate dan upload massal dalam 45 menit</p>
-        
-        <div class="module-desc-box">Deskripsi produk yang bagus di Shopee/Tokopedia harus mengandung keyword pencarian, benefit yang jelas, dan CTA yang mendorong beli. Claude bisa generate 50 deskripsi dalam waktu yang sama kamu biasa buat 5.</div>
-        <div class="prompt-section">
-          <div class="prompt-label">📝 Template Deskripsi Produk SEO</div>
-          <div class="prompt-box">Buatkan deskripsi produk Tokopedia/Shopee yang SEO-friendly untuk:
+        <h1 class="module-title">Analisis Kompetitor & Positioning</h1>
+        <p class="module-subtitle">Cari tahu kenapa pelanggan harus pilih kamu, bukan kompetitor — 10 menit</p>
 
-Nama Produk: [nama produk]
-Kategori: [kategori toko]
-Target Pembeli: [deskripsi target customer]
-Keunggulan Utama: [3-5 keunggulan]
-Harga: [range harga]
-Kata Kunci Target: [2-3 keyword yang ingin muncul]
+        <div class="module-desc-box">
+          Riset kompetitor selalu ada di daftar "harus dilakukan," tapi paling sering jadi yang pertama dikorbankan saat waktu terbatas. Hasilnya, keputusan bisnis (harga, konten, positioning) akhirnya dibuat berdasarkan feeling, bukan data — dan bisnis yang tidak punya positioning jelas akan terus bersaing di harga, padahal peluang sebenarnya ada di bersaing lewat value yang belum ditawarkan kompetitor manapun.
+        </div>
 
-Format output:
-- Judul produk (max 70 karakter, mengandung keyword utama)
-- Deskripsi pendek (2 kalimat hook)
-- Spesifikasi/fitur (list poin)
-- Alasan beli (3 benefit utama)
-- CTA penutup<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-          <div class="case-box">
-            <div class="case-role">🎯 Batch 50 Produk Sekaligus</div>
-            <p>Untuk batch besar: buat template sekali, lalu minta Claude: "Gunakan template yang sama, buat untuk 10 produk berikut: [list produk dengan detail singkat]." Hemat dari 8 jam ke 45 menit.</p>
+        <p class="body-text"><strong>Bagaimana Claude membantu:</strong> riset kompetitor sebenarnya dua pekerjaan — mengumpulkan data (tetap butuh kamu lakukan) dan mengolah data itu jadi kesimpulan (pola, gap, rekomendasi). Bagian kedua inilah yang bisa dipercepat drastis dengan Claude: riset yang biasanya makan waktu 1 sore, selesai dalam 15-20 menit.</p>
+
+        <div class="section-heading">Sebelum Prompting: Tentukan Dulu Objektifnya</div>
+        <p class="body-text">Kesalahan paling umum: minta Claude "analisis kompetitor saya" tanpa tahu spesifiknya apa yang mau dicari. Tentukan dulu kamu mau cari salah satu (atau kombinasi) dari ini:</p>
+        <div class="info-grid">
+          <div class="info-card"><strong>Pricing</strong><span>Di harga berapa mereka bermain, apakah ada paket/bundling</span></div>
+          <div class="info-card"><strong>Branding & tone of voice</strong><span>Formal, santai, aspirational, down-to-earth?</span></div>
+          <div class="info-card"><strong>Product range</strong><span>Seberapa luas variasi produk/jasa mereka</span></div>
+          <div class="info-card"><strong>Customer sentiment</strong><span>Apa yang dipuji dan dikeluhkan di review mereka</span></div>
+          <div class="info-card"><strong>Promotional pattern</strong><span>Seberapa sering promo, jenis promo apa</span></div>
+        </div>
+
+        <div class="section-heading">Contoh Prompt: Buruk vs Baik</div>
+        <div class="two-col">
+          <div class="col-card">
+            <h4>Prompt Buruk</h4>
+            <p>"Analisis kompetitor toko saya"</p>
+            <p style="margin-top:8px;"><strong>Masalah:</strong> Claude tidak tahu siapa kompetitornya, apa yang dijual, atau apa yang mau dicari. Hasilnya generik dan tidak bisa langsung dipakai.</p>
+          </div>
+          <div class="col-card highlight">
+            <h4>Prompt Baik</h4>
+            <p>"Saya jualan skincare online. Ini 3 kompetitor saya: Toko A [deskripsi+harga dari IG], Toko B [...], Toko C [...]. Saya ingin tahu: (1) rentang harga mereka, (2) tone of voice caption mereka, (3) keluhan tersering di review. Buatkan SWOT sederhana dan 1 gap yang belum diisi kompetitor manapun."</p>
+            <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> objektif jelas + data spesifik → Claude bisa langsung susun perbandingan dan gap yang actionable.</p>
           </div>
         </div>
-        
+
+        <div class="section-heading">Cara Kerja Step-by-Step</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Tentukan objektif riset — pilih 1-3 fokus, jangan semua sekaligus</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Pilih 3 kompetitor nyata yang bersaing langsung dengan kamu</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Kumpulkan info publik sesuai objektif (screenshot IG, harga, review)</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Brief Claude: konteks bisnismu + data kompetitor + objektif + minta SWOT & gap</p></div>
+          <div class="step-card"><div class="step-num">5</div><p>Dari gap yang ditemukan, minta Claude bantu rumuskan 1 kalimat positioning</p></div>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Exercise</div>
+          <div class="case-box">
+            <p>Pilih 3 kompetitor asli bisnismu. Tentukan 1-2 objektif riset (pricing, branding, atau sentiment pelanggan). Kumpulkan info publik mereka, lalu prompt Claude dengan format di atas.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>1 analisis SWOT sederhana + 1 gap yang jelas + 1 kalimat positioning bisnismu — yang akan dipakai sebagai acuan di Modul 2 sampai 6.</p>
+          </div>
+        </div>
+
         <div class="doc-slot" id="doc-slot-1"></div>
         <div class="nav-bottom">
           <button class="nav-btn" disabled>← Sebelumnya</button>
@@ -239,30 +308,86 @@ Format output:
       <div class="module-panel" id="panel2">
         <div class="video-slot" id="video-slot-2"></div>
         <div class="breadcrumb"><span>Bisnis & UKM</span><span>›</span><strong>Modul 2</strong></div>
-        <h1 class="module-title">Instagram System — 30 Caption + Hashtag + Jadwal</h1>
-        <p class="module-subtitle">Kalender konten 1 bulan selesai dalam 1 sesi</p>
-        
-        <div class="module-desc-box">Kita akan buat sistem konten IG yang lengkap: caption untuk feed, story ideas, hashtag yang relevan, dan jadwal posting — semuanya tersimpan di Notion dan siap dijadwalkan.</div>
-        <div class="prompt-section">
-          <div class="prompt-label">📝 Template 30 Caption IG</div>
-          <div class="prompt-box">Buat kalender konten Instagram untuk [nama bisnis] selama 30 hari.
+        <h1 class="module-title">Deskripsi Produk & Listing yang Menjual</h1>
+        <p class="module-subtitle">Tulis listing yang convert, pakai positioning dari Modul 1 — 10 menit</p>
 
-PROFIL BISNIS:
-- Jenis: [tipe bisnis]
-- Target: [deskripsi pelanggan ideal]
-- Tone: [casual/inspirational/edukasi/fun]
-- Produk/jasa unggulan: [list 3-5]
-
-BUAT:
-- 30 caption (mix: edukasi 40%, promo 30%, behind-the-scenes 30%)
-- 5 hashtag relevan per post
-- Ide visual/konten yang cocok
-- Jadwal: Senin-Jumat (skip weekend)
-
-Format: tabel Notion-ready dengan kolom:
-Tanggal | Tipe | Caption | Hashtag | Ide Visual<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        <div class="module-desc-box">
+          Deskripsi produk adalah titik di mana calon pembeli memutuskan lanjut atau berhenti, dan kualitasnya langsung memengaruhi seberapa banyak orang yang sampai ke checkout. Ini bukan formula baru — ini prinsip dasar direct-response copywriting dan conversion rate optimization (CRO) yang sudah lama dipakai di e-commerce.
         </div>
-        
+
+        <div class="section-heading">Anatomi Listing yang Convert</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Judul (SEO-driven) — mengandung keyword yang dicari pembeli</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Hook pembuka — bicara ke masalah/keinginan pembeli, bukan "produk ini terbuat dari..."</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Benefit, bukan cuma fitur — "kenapa ini penting buat saya?"</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Trust signal — size guide, cara rawat, garansi</p></div>
+          <div class="step-card"><div class="step-num">5</div><p>Format scannable — bullet points, bukan satu paragraf panjang</p></div>
+        </div>
+
+        <div class="tip-box warn">
+          <div class="tip-label">⚠️ Kesalahan Umum di Listing</div>
+          <ul class="mistake-list">
+            <li><strong>Feature-dumping</strong> — menyebutkan semua spesifikasi tanpa menjelaskan relevansinya buat pembeli</li>
+            <li><strong>Keyword stuffing</strong> — menjejalkan kata kunci berulang-ulang, justru menurunkan kepercayaan</li>
+            <li><strong>Wall of text</strong> — satu paragraf panjang tanpa bullet atau jeda</li>
+            <li><strong>Suara generik</strong> — deskripsi yang bisa ditemukan di toko manapun</li>
+          </ul>
+        </div>
+
+        <p class="body-text"><strong>Bagaimana Claude membantu:</strong> begitu Claude paham 1 formula yang kamu mau (struktur + positioning + tone), ia bisa mereplikasi pola yang sama ke puluhan listing lain — cukup sesuaikan detail spesifiknya saja.</p>
+
+        <div class="section-heading">Sebelum Prompting: Tentukan Dulu Elemen Wajibnya</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Nama & kategori produk</strong><span>Spesifik, bukan cuma "baju"</span></div>
+          <div class="info-card"><strong>Manfaat utama</strong><span>Bukan cuma fitur, tapi kenapa fitur itu penting</span></div>
+          <div class="info-card"><strong>Target pembeli</strong><span>Siapa yang beli ini, apa concern mereka</span></div>
+          <div class="info-card"><strong>Positioning dari Modul 1</strong><span>Pembeda yang mau selalu muncul di setiap listing</span></div>
+          <div class="info-card"><strong>Format platform</strong><span>Tokopedia/Shopee butuh keyword SEO di judul</span></div>
+        </div>
+
+        <div class="section-heading">Contoh Prompt: Buruk vs Baik</div>
+        <div class="two-col">
+          <div class="col-card">
+            <h4>Prompt Buruk</h4>
+            <p>"Buatkan deskripsi produk untuk kaos katun warna hitam ukuran M-L"</p>
+            <p style="margin-top:8px;"><strong>Hasil:</strong> deskripsi generik yang bisa dipakai toko manapun.</p>
+          </div>
+          <div class="col-card highlight">
+            <h4>Prompt Baik</h4>
+            <p>"Positioning saya 'paling akurat soal ukuran'. Buatkan deskripsi kaos katun combed 30s, hitam & putih, size M-L, target usia 20-35 yang sering kesulitan cari size pas online. Ikuti struktur: judul SEO (max 60 karakter), hook pembuka soal masalah size, 3-4 bullet benefit, size guide sebagai trust signal."</p>
+            <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> struktur anatomi listing + positioning → deskripsi yang khas ke bisnismu, bukan generik.</p>
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">💡 Contoh Skenario</div>
+          <p><strong>Toko Skincare</strong> — positioning dari Modul 1: "kandungan jujur, tanpa klaim berlebihan." Diterapkan ke anatomi listing: hook pembuka bicara soal capek baca klaim skincare yang berlebihan, benefit ditulis berdasarkan persentase bahan aktif, trust signal berupa keterangan lengkap komposisi — konsisten dari judul sampai penutup.</p>
+        </div>
+
+        <div class="section-heading">Cara Kerja Step-by-Step</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Siapkan data produk: nama, manfaat, target pembeli, platform tujuan</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Ambil kembali positioning dari Modul 1</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Brief Claude: data produk + positioning + struktur anatomi listing</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Minta Claude tulis 1 deskripsi dulu, cek strukturnya lengkap</p></div>
+          <div class="step-card"><div class="step-num">5</div><p>Setelah formatnya pas, minta Claude replikasi ke produk-produk lain</p></div>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Exercise</div>
+          <div class="case-box">
+            <p>Ambil 3 listing produk asli kamu yang sudah ada. Cek dulu: apakah sudah ada hook, benefit (bukan cuma fitur), dan trust signal? Brief Claude dengan positioning dari Modul 1 + struktur anatomi listing, minta tulis ulang ketiganya.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>3 deskripsi produk SEO-ready yang mengikuti struktur anatomi listing dan konsisten dengan positioning dari Modul 1 — siap dipakai sebagai template untuk listing produk lainnya.</p>
+          </div>
+        </div>
+
         <div class="doc-slot" id="doc-slot-2"></div>
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
@@ -274,35 +399,80 @@ Tanggal | Tipe | Caption | Hashtag | Ide Visual<button class="copy-btn" onclick=
       <div class="module-panel" id="panel3">
         <div class="video-slot" id="video-slot-3"></div>
         <div class="breadcrumb"><span>Bisnis & UKM</span><span>›</span><strong>Modul 3</strong></div>
-        <h1 class="module-title">WhatsApp Business — 10 Template Quick Reply</h1>
-        <p class="module-subtitle">CS yang on-brand untuk semua situasi umum bisnis kamu</p>
-        
-        <div class="module-desc-box">Template WA yang bagus harus terdengar personal, tidak robotic, dan sesuai brand tone bisnis kamu. Kita buat 10 template untuk situasi yang paling sering terjadi.</div>
-        <div class="prompt-section">
-          <div class="prompt-label">📝 Template WA Business System</div>
-          <div class="prompt-box">Buatkan 10 template WhatsApp Business untuk [nama bisnis].
+        <h1 class="module-title">Sistem Konten Instagram</h1>
+        <p class="module-subtitle">Bangun konten sosial media yang konsisten, bukan asal posting — 12 menit</p>
 
-BRAND VOICE: [casual/profesional/warm/fun]
-BISNIS: [deskripsi singkat bisnis]
-
-Template yang dibutuhkan:
-1. Sambutan pertama kali chat
-2. Balas inquiry harga
-3. Konfirmasi pesanan
-4. Update pengiriman
-5. Balas komplain dengan empati
-6. Follow-up pembayaran yang belum masuk
-7. Penawaran promo/diskon
-8. Permintaan review/testimoni
-9. Pesanan sold out / tidak tersedia
-10. Closing chat yang ramah
-
-Format setiap template:
-[NAMA SITUASI]
-Template: [teks WA]
-Catatan: [kapan digunakan]<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        <div class="module-desc-box">
+          Tanpa sistem, konten jadi reaktif (posting kalau lagi mood atau lagi butuh jualan cepat), bukan proaktif (posting sesuai rencana yang sudah dipikirkan matang). Hasilnya feed yang isinya campur aduk, tanpa pola yang bisa diikuti audiens.
         </div>
-        
+
+        <div class="section-heading">Framework 3-2-1: Sistem, Bukan Sekadar Ide</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>3 konten edukasi</strong><span>Tips, cara pakai produk, informasi berguna buat audiens</span></div>
+          <div class="info-card"><strong>2 konten hiburan/relatable</strong><span>Behind the scenes, momen sehari-hari</span></div>
+          <div class="info-card"><strong>1 konten promosi</strong><span>Jualan langsung, promo, produk baru</span></div>
+        </div>
+        <p class="body-text">Rasio ini penting karena algoritma dan audiens sama-sama menghukum akun yang isinya jualan terus — engagement turun, dan orang unfollow. Konten edukasi & relatable membangun kepercayaan dulu, baru promosi masuk secara natural.</p>
+
+        <div class="tip-box warn">
+          <div class="tip-label">⚠️ Kesalahan Umum di Konten Sosial Media</div>
+          <ul class="mistake-list">
+            <li><strong>All promotion, no value</strong> — feed isinya diskon dan jualan terus</li>
+            <li><strong>Tone tidak konsisten</strong> — caption formal di satu post, terlalu santai di post lain</li>
+            <li><strong>Posting tanpa rencana</strong> — ide dadakan setiap hari H, tidak ada continuity</li>
+            <li><strong>Repurpose nol</strong> — 1 ide bagus cuma dipakai sekali di 1 format</li>
+          </ul>
+        </div>
+
+        <p class="body-text"><strong>Bagaimana Claude membantu:</strong> begitu Claude paham tone of voice dari positioning-mu (Modul 1), ia bisa generate rasio 3-2-1 penuh dalam satu sesi, bahkan sekaligus repurpose 1 ide jadi beberapa format konten (feed, story, reels hook).</p>
+
+        <div class="section-heading">Sebelum Prompting: Tentukan Dulu Elemen Wajibnya</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Positioning dari Modul 1</strong><span>Menentukan tone of voice caption</span></div>
+          <div class="info-card"><strong>Topik edukasi relevan</strong><span>Hal yang audiens ingin tahu terkait produk/jasa</span></div>
+          <div class="info-card"><strong>Momen relatable</strong><span>Apa yang terjadi di balik layar bisnis</span></div>
+          <div class="info-card"><strong>Item promosi minggu ini</strong><span>Produk/promo spesifik yang mau didorong</span></div>
+          <div class="info-card"><strong>Platform & format</strong><span>Feed, story, reels punya panjang dan gaya berbeda</span></div>
+        </div>
+
+        <div class="section-heading">Contoh Prompt: Buruk vs Baik</div>
+        <div class="two-col">
+          <div class="col-card">
+            <h4>Prompt Buruk</h4>
+            <p>"Buatkan 7 caption Instagram untuk toko saya"</p>
+            <p style="margin-top:8px;"><strong>Hasil:</strong> caption acak tanpa keseimbangan edukasi-hiburan-promosi, tanpa tone khusus.</p>
+          </div>
+          <div class="col-card highlight">
+            <h4>Prompt Baik</h4>
+            <p>"Warung kopi saya, positioning 'kafe yang didesain buat kerja seharian'. Buatkan 7 caption rasio 3-2-1: 3 edukasi (tips produktif kerja di kafe), 2 relatable (momen deadline), 1 promosi (menu baru). Tone: santai tapi informatif."</p>
+            <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> rasio jelas + tone + repurpose → 1 sesi menghasilkan konten 1 minggu penuh.</p>
+          </div>
+        </div>
+
+        <div class="section-heading">Cara Kerja Step-by-Step</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Ambil kembali positioning dari Modul 1</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Tentukan 1 topik edukasi, 1 momen relatable, 1 item promosi minggu ini</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Brief Claude dengan rasio 3-2-1 + tone + hashtag dalam 1 prompt</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Review hasil — pastikan tone konsisten dan sesuai positioning</p></div>
+          <div class="step-card"><div class="step-num">5</div><p>Pilih 1 caption terbaik, minta repurpose ke format lain</p></div>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Exercise</div>
+          <div class="case-box">
+            <p>Brief Claude dengan positioning dari Modul 1, minta 7 caption untuk minggu ini mengikuti rasio 3-2-1. Setelah itu, pilih 1 caption terbaik dan minta Claude repurpose jadi 3 format (feed, story, reels hook).</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>7 caption siap posting dengan rasio 3-2-1 yang konsisten dengan positioning Modul 1, ditambah 1 caption yang sudah di-repurpose ke 3 format berbeda.</p>
+          </div>
+        </div>
+
         <div class="doc-slot" id="doc-slot-3"></div>
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
@@ -314,29 +484,79 @@ Catatan: [kapan digunakan]<button class="copy-btn" onclick="copyPrompt(this)">Sa
       <div class="module-panel" id="panel4">
         <div class="video-slot" id="video-slot-4"></div>
         <div class="breadcrumb"><span>Bisnis & UKM</span><span>›</span><strong>Modul 4</strong></div>
-        <h1 class="module-title">Notion Content OS — Build Sistem Konten Bisnis</h1>
-        <p class="module-subtitle">Satu database Notion untuk semua konten dan kampanye</p>
-        
-        <div class="module-desc-box">Kita bangun Notion database yang bisa menyimpan semua konten — IG, WA broadcast, email newsletter, dan ide konten. Claude jadi "content engine" yang isi database ini setiap minggu.</div>
-        <div class="prompt-section">
-          <div class="prompt-label">📝 Prompt Isi Notion Database</div>
-          <div class="prompt-box">Saya punya Notion database konten dengan kolom:
-Judul | Platform | Tanggal | Status | Konten | Hashtag/CTA
+        <h1 class="module-title">Iklan & Promosi: Claude Tulis, Kamu Design</h1>
+        <p class="module-subtitle">Copy AIDA yang tajam, kamu tinggal design — 12 menit</p>
 
-Generate konten untuk minggu ini ([tanggal]):
-
-BISNIS: [nama dan jenis bisnis]
-TEMA MINGGU INI: [tema atau kampanye yang sedang jalan]
-JADWAL: [berapa post per platform]
-
-Platform:
-- Instagram: [jumlah post]
-- WhatsApp Broadcast: [jumlah pesan]
-- [platform lain jika ada]
-
-Output dalam format tabel yang bisa langsung di-copy ke Notion.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        <div class="module-desc-box">
+          Kebanyakan iklan di Instagram/Facebook di-skip dalam waktu kurang dari 1 detik. Bedanya bukan di budget iklan atau desain semata — biasanya di copy-nya: headline yang langsung kena ke masalah/keinginan, alur yang menuntun ke satu tindakan jelas. Orang membaca sebelum mereka melihat estetika.
         </div>
-        
+
+        <div class="section-heading">Framework AIDA: Struktur di Balik Iklan yang Convert</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Attention</strong><span>Headline yang langsung menarik perhatian — masalah, pertanyaan, atau statement mengejutkan</span></div>
+          <div class="info-card"><strong>Interest</strong><span>Body copy yang membangun rasa penasaran, kenapa ini relevan</span></div>
+          <div class="info-card"><strong>Desire</strong><span>Menghubungkan produk ke keinginan/kebutuhan, lewat benefit konkret atau social proof</span></div>
+          <div class="info-card"><strong>Action</strong><span>CTA yang jelas dan spesifik: "Order sekarang," "DM untuk booking"</span></div>
+        </div>
+
+        <div class="tip-box warn">
+          <div class="tip-label">⚠️ Kesalahan Umum di Copy Iklan</div>
+          <ul class="mistake-list">
+            <li><strong>CTA lemah atau tidak ada</strong> — pembaca tertarik tapi tidak tahu harus ngapain</li>
+            <li><strong>Langsung jualan tanpa attention hook</strong> — headline langsung "Diskon 50%"</li>
+            <li><strong>Satu variasi saja</strong> — tidak pernah tes copy alternatif</li>
+            <li><strong>Tidak terhubung ke positioning</strong> — iklan yang bisa dipasang toko manapun</li>
+          </ul>
+        </div>
+
+        <p class="body-text"><strong>Bagaimana Claude membantu:</strong> menulis 3 variasi yang benar-benar berbeda sudut pandangnya untuk A/B testing biasanya yang bikin proses lambat. Claude bisa generate beberapa variasi sekaligus dengan angle berbeda (problem-based, benefit-based, social proof-based) dari 1 brief yang sama.</p>
+
+        <div class="section-heading">Sebelum Prompting: Tentukan Dulu Elemen Wajibnya</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Positioning dari Modul 1</strong><span>Jadi dasar hook/attention di iklan</span></div>
+          <div class="info-card"><strong>Produk/promo spesifik</strong><span>Apa yang mau dipromosikan, ada diskon/urgency atau tidak</span></div>
+          <div class="info-card"><strong>Target audiens</strong><span>Siapa yang lihat iklan ini, apa masalah/keinginan mereka</span></div>
+          <div class="info-card"><strong>Platform & tujuan CTA</strong><span>FB/IG Ads vs landing page; mau DM, klik link, atau checkout</span></div>
+        </div>
+
+        <div class="section-heading">Contoh Prompt: Buruk vs Baik</div>
+        <div class="two-col">
+          <div class="col-card">
+            <h4>Prompt Buruk</h4>
+            <p>"Buatkan copy iklan untuk promo skincare saya"</p>
+            <p style="margin-top:8px;"><strong>Hasil:</strong> copy generik tanpa struktur AIDA yang jelas.</p>
+          </div>
+          <div class="col-card highlight">
+            <h4>Prompt Baik</h4>
+            <p>"Positioning saya 'kandungan jujur, tanpa klaim berlebihan'. Buatkan 3 variasi copy iklan FB/IG untuk serum niacinamide 10%, target perempuan 20-30 tahun. Ikuti AIDA, tapi beda angle: (1) problem-based, (2) benefit-based, (3) social proof-based."</p>
+            <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> AIDA + positioning + 3 angle berbeda → siap dibandingkan untuk A/B testing.</p>
+          </div>
+        </div>
+
+        <div class="section-heading">Cara Kerja Step-by-Step</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Ambil kembali positioning dari Modul 1 — dasar attention hook</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Tentukan produk/promo spesifik dan target audiensnya</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Brief Claude dengan AIDA + minta 3 variasi dengan angle berbeda</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Bandingkan ketiga variasi — pilih atau gabungkan bagian terbaik</p></div>
+          <div class="step-card"><div class="step-num">5</div><p>Bawa copy terpilih ke Canva untuk didesain jadi visual iklan</p></div>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Exercise</div>
+          <div class="case-box">
+            <p>Brief Claude dengan positioning dari Modul 1 untuk 1 produk/promo nyata. Minta 3 variasi copy iklan (headline + body + CTA) dengan framework AIDA, masing-masing angle berbeda (problem/benefit/social proof).</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>3 set copy iklan siap didesain di Canva, masing-masing dengan angle berbeda tapi konsisten dengan positioning dari Modul 1.</p>
+          </div>
+        </div>
+
         <div class="doc-slot" id="doc-slot-4"></div>
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
@@ -348,32 +568,84 @@ Output dalam format tabel yang bisa langsung di-copy ke Notion.<button class="co
       <div class="module-panel" id="panel5">
         <div class="video-slot" id="video-slot-5"></div>
         <div class="breadcrumb"><span>Bisnis & UKM</span><span>›</span><strong>Modul 5</strong></div>
-        <h1 class="module-title">Canva Copy Workflow — Iklan Profesional dalam 20 Menit</h1>
-        <p class="module-subtitle">Claude tulis copy → kamu tinggal design di Canva</p>
-        
-        <div class="module-desc-box">Workflow paling cepat untuk buat iklan: Claude generate headline, subheadline, body copy, dan CTA — kamu tinggal copy ke Canva dan pilih template yang cocok. Dari ide ke iklan jadi dalam 20 menit.</div>
-        <div class="prompt-section">
-          <div class="prompt-label">📝 Template Copy untuk Iklan</div>
-          <div class="prompt-box">Buatkan copy lengkap untuk iklan [platform: IG/Facebook/TikTok] ini:
+        <h1 class="module-title">Template CS WhatsApp yang On-Brand</h1>
+        <p class="module-subtitle">Balas pelanggan cepat tanpa kehilangan tone brand — 12 menit</p>
 
-PRODUK/JASA: [deskripsi singkat]
-TARGET: [siapa yang dituju]
-TUJUAN IKLAN: [awareness/penjualan/traffic]
-PENAWARAN: [promo/diskon/bonus yang ditawarkan]
-DEADLINE: [apakah ada waktu terbatas?]
+        <div class="module-desc-box">
+          "Kak, ini ready stock?" "Ongkirnya berapa ya?" "Bisa COD?" — kalau kamu pegang sendiri CS bisnismu, kemungkinan besar kamu balas pertanyaan yang sama berkali-kali sehari. Ini pekerjaan yang menyita waktu tapi sebenarnya predictable — polanya sudah bisa ditebak, cuma pelanggannya yang berbeda-beda.
+        </div>
 
-Format output (siap copy ke Canva):
-1. Headline utama (max 8 kata, eye-catching)
-2. Subheadline (1 kalimat benefit)
-3. Body copy (2-3 kalimat)
-4. CTA button text (max 4 kata)
-5. Variasi headline (3 opsi berbeda untuk A/B test)<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-          <div class="case-box">
-            <div class="case-role">🎯 Tips: A/B Test Selalu</div>
-            <p>Minta Claude selalu generate 3 variasi headline. Test 2 sekaligus di Instagram — budget Rp 50K, jalankan 24 jam, pakai yang CTR-nya lebih tinggi.</p>
+        <div class="section-heading">Dari Template ke Bot: Dua Level Otomatisasi</div>
+        <div class="two-col">
+          <div class="col-card">
+            <h4>Level 1 — Template Quick Reply</h4>
+            <p>Kamu masih balas manual, tapi tinggal pilih template yang sudah disiapkan. Cocok kalau volume chat masih bisa kamu handle sendiri.</p>
+          </div>
+          <div class="col-card highlight">
+            <h4>Level 2 — Bot / Alur Otomatis</h4>
+            <p>Percakapan berjalan sendiri berdasarkan kata kunci atau pilihan menu, pelanggan dapat balasan instan 24/7. Cocok kalau volume chat sudah mulai tidak terkejar manual.</p>
           </div>
         </div>
-        
+
+        <div class="tip-box">
+          <div class="tip-label">💡 Kenapa Konsistensi Tone Tetap Penting</div>
+          <p>CS sering jadi titik kontak paling personal antara bisnis dan pelanggan. Kalau tone di Instagram santai dan hangat tapi balasan bot terasa kaku dan robotic, pelanggan bisa merasa ada dua "kepribadian" berbeda dari brand yang sama.</p>
+        </div>
+
+        <div class="tip-box warn">
+          <div class="tip-label">⚠️ Kesalahan Umum di Template & Bot CS</div>
+          <ul class="mistake-list">
+            <li><strong>Terlalu kaku/formal</strong> — balasan seperti robot, tidak terasa ada manusia</li>
+            <li><strong>Bot tanpa jalan keluar</strong> — pelanggan terjebak di alur otomatis tanpa opsi bicara ke manusia</li>
+            <li><strong>Defensif saat komplain</strong> — buru-buru membela diri sebelum mendengarkan keluhan</li>
+            <li><strong>Berhenti setelah closing</strong> — tidak ada follow-up setelah order selesai</li>
+          </ul>
+        </div>
+
+        <div class="section-heading">Sebelum Prompting: Tentukan Dulu Elemen Wajibnya</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Positioning dari Modul 1</strong><span>Dasar tone semua template maupun bot</span></div>
+          <div class="info-card"><strong>Situasi CS paling umum</strong><span>5-10 pertanyaan/keluhan yang paling sering masuk</span></div>
+          <div class="info-card"><strong>Batasan kebijakan bisnis</strong><span>Kebijakan retur, garansi, waktu respons</span></div>
+          <div class="info-card"><strong>Titik eskalasi</strong><span>Kondisi yang harus lepas dari bot ke CS manusia</span></div>
+        </div>
+
+        <div class="section-heading">Contoh Prompt: Template vs Bot Flow</div>
+        <div class="two-col">
+          <div class="col-card">
+            <h4>Template (Manual, 1 Situasi)</h4>
+            <p>"Positioning saya 'paling akurat soal ukuran'. Buatkan template balasan WhatsApp untuk situasi: pelanggan komplain baju yang diterima ukurannya tidak sesuai chart. Tone: hangat, akui masalah tanpa defensif, tawarkan solusi jelas."</p>
+          </div>
+          <div class="col-card highlight">
+            <h4>Bot Flow (Alur Otomatis)</h4>
+            <p>"Bantu saya rancang alur bot WhatsApp untuk 4 skenario: (1) tanya stok, (2) tanya ongkir, (3) cara order, (4) komplain ukuran. Untuk tiap skenario: kata kunci pemicu, balasan otomatis, dan kondisi eskalasi ke CS manusia."</p>
+          </div>
+        </div>
+
+        <div class="section-heading">Cara Kerja Step-by-Step</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Ambil kembali positioning dari Modul 1</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>List 5-10 situasi CS yang paling sering terjadi</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Mulai dari template — brief Claude dengan tone + situasi + batasan kebijakan</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Brief Claude untuk merancang alur bot: kata kunci, respons, titik eskalasi</p></div>
+          <div class="step-card"><div class="step-num">5</div><p>Review — pastikan tone konsisten dan ada jalan keluar jelas ke manusia</p></div>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Exercise</div>
+          <div class="case-box">
+            <p>Pilih 3 skenario CS paling sering terjadi di bisnismu, minta Claude rancang alur bot lengkap (kata kunci pemicu, balasan otomatis, titik eskalasi ke manusia) dengan tone sesuai positioning dari Modul 1.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>1 rancangan alur bot WhatsApp untuk 3 skenario CS, lengkap dengan kata kunci pemicu, balasan otomatis, dan titik eskalasi — siap jadi dasar implementasi bot.</p>
+          </div>
+        </div>
+
         <div class="doc-slot" id="doc-slot-5"></div>
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
@@ -385,39 +657,77 @@ Format output (siap copy ke Canva):
       <div class="module-panel" id="panel6">
         <div class="video-slot" id="video-slot-6"></div>
         <div class="breadcrumb"><span>Bisnis & UKM</span><span>›</span><strong>Modul 6</strong></div>
-        <h1 class="module-title">Competitive Analysis — Audit 3 Kompetitor</h1>
-        <p class="module-subtitle">SWOT + rekomendasi siap presentasi dalam 30 menit</p>
-        
-        <div class="module-desc-box">Kita akan membuat template analisis kompetitor yang bisa dipakai berulang. Copy profil kompetitor dari website/media sosial mereka → paste ke Claude → dapat laporan SWOT + gap analysis + rekomendasi.</div>
+        <h1 class="module-title">Content Operating System di Notion</h1>
+        <p class="module-subtitle">Satukan semua jadi sistem konten berjalan — Capstone, 12 menit</p>
+
+        <div class="module-desc-box">
+          Sampai titik ini, kamu sudah punya: positioning (Modul 1), deskripsi produk (Modul 2), caption Instagram seminggu (Modul 3), copy iklan (Modul 4), dan template/bot WhatsApp (Modul 5). Kalau semua ini cuma tersimpan terpisah-pisah, akan sulit dilacak — hasil kerja keras 5 modul sebelumnya berisiko cuma jadi "pernah dibuat sekali," bukan rutinitas yang jalan terus.
+        </div>
+
+        <p class="body-text"><strong>Kenapa Notion, dan kenapa sekarang:</strong> modul ini sengaja ditaruh di akhir — supaya kamu sudah pernah merasakan cara kerja tiap jenis konten sebelum menyusunnya jadi sistem. Notion dipilih karena bisa jadi database sekaligus kalender, bukan cuma daftar tugas.</p>
+
+        <div class="section-heading">Anatomi Content Operating System</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Status</strong><span>Draft, review, siap posting, sudah publish</span></div>
+          <div class="info-card"><strong>Platform</strong><span>Instagram, WhatsApp, Tokopedia/Shopee, dll</span></div>
+          <div class="info-card"><strong>Tanggal</strong><span>Kapan direncanakan posting/kirim</span></div>
+          <div class="info-card"><strong>Copy/isi konten</strong><span>Teks final, bisa hasil dari Modul 2-5</span></div>
+          <div class="info-card"><strong>Visual brief</strong><span>Catatan singkat untuk kebutuhan desain</span></div>
+        </div>
+
+        <div class="tip-box warn">
+          <div class="tip-label">⚠️ Kesalahan Umum Menyusun Sistem Konten</div>
+          <ul class="mistake-list">
+            <li><strong>Terlalu rumit di awal</strong> — bikin database dengan puluhan kolom sehingga malas diisi rutin</li>
+            <li><strong>Tidak ada status yang jelas</strong> — jadi tidak tahu mana yang masih draft dan mana yang final</li>
+            <li><strong>Sistem tanpa rutinitas</strong> — database dibuat sekali, diisi sekali, tidak pernah dibuka lagi</li>
+            <li><strong>Tidak terhubung ke proses sebelumnya</strong> — bikin ide baru dari nol tiap minggu</li>
+          </ul>
+        </div>
+
+        <p class="body-text"><strong>Bagaimana Claude membantu:</strong> peran Claude bergeser sedikit — bukan cuma jadi penulis konten, tapi jadi "engine ideasi" yang bantu isi database dengan cepat: generate ide konten bulan ini, atau meringkas mana dari konten Modul 2-5 yang siap masuk kalender.</p>
+
         <div class="prompt-section">
-          <div class="prompt-label">📝 Template Analisis Kompetitor</div>
-          <div class="prompt-box">Lakukan analisis kompetitor untuk membantu bisnis saya:
+          <div class="prompt-label">📝 Contoh Prompt: Konsolidasi ke Kalender</div>
+          <div class="prompt-box">Saya sudah punya: 3 deskripsi produk (Modul 2), 7 caption Instagram
+rasio 3-2-1 (Modul 3), 3 variasi copy iklan (Modul 4), dan 5 template
+WhatsApp (Modul 5) — semua dengan positioning saya. Bantu saya
+susun jadi kalender konten 2 minggu: tentukan tanggal posting untuk
+tiap caption Instagram (3x seminggu), kapan iklan sebaiknya jalan,
+dan susun dalam format tabel dengan kolom status, platform,
+tanggal, dan isi konten. Kalau ada hari kosong, sarankan 1 ide
+konten tambahan yang sesuai positioning saya.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
 
-BISNIS SAYA:
-- Jenis: [deskripsi bisnis kamu]
-- Keunggulan saat ini: [apa yang sudah kamu lakukan dengan baik]
-- Target pasar: [siapa pelanggan kamu]
+        <div class="section-heading">Cara Kerja Step-by-Step</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Kumpulkan semua output dari Modul 2-5 di satu tempat</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Bangun struktur database Notion: status, platform, tanggal, copy, visual brief</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Brief Claude untuk konsolidasi ke kalender 2 minggu + isi slot kosong</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Masukkan hasil ke Notion — isi kolom status sesuai kondisi tiap konten</p></div>
+          <div class="step-card"><div class="step-num">5</div><p>Jadikan rutinitas: buka & update kalender ini tiap minggu</p></div>
+        </div>
 
-KOMPETITOR YANG DIANALISIS:
-[Paste informasi dari website/IG/Tokopedia mereka]
-
-Kompetitor 1: [nama + info]
-Kompetitor 2: [nama + info]
-Kompetitor 3: [nama + info]
-
-OUTPUT YANG DIBUTUHKAN:
-1. Tabel perbandingan (harga, produk, target, channel)
-2. SWOT masing-masing kompetitor
-3. Gap opportunities yang bisa saya ambil
-4. 5 rekomendasi konkret untuk diferensiasi
-Format: Google Docs-ready, siap presentasi.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Exercise</div>
+          <div class="case-box">
+            <p>Bangun database Notion dengan struktur di atas. Kumpulkan semua output dari Modul 2-5, lalu brief Claude untuk menyusunnya jadi kalender konten 2 minggu lengkap dengan status dan tanggal.</p>
+          </div>
         </div>
 
         <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>Notion Content Operating System lengkap: database dengan struktur status-platform-tanggal-copy, terisi kalender 2 minggu dari hasil Modul 2-5 — siap dipakai sebagai rutinitas konten mingguan.</p>
+          </div>
+        </div>
+
+        <div class="output-box" style="background:var(--accent-dim);border-color:var(--accent-glow);">
           <div class="output-icon">🎉</div>
           <div>
-            <h3>Kursus Selesai!</h3>
-            <p>Sistem konten 30 hari di Notion · Template CS WhatsApp untuk 10 situasi · 50 template deskripsi produk SEO — semuanya siap deploy ke bisnis kamu hari ini.</p>
+            <h3 style="color:var(--accent);">Kursus Selesai!</h3>
+            <p>Dari 1 positioning di Modul 1, kamu sekarang punya sistem konten yang konsisten di 6 kanal berbeda — deskripsi produk, Instagram, iklan, CS WhatsApp, dan kalender yang menyatukan semuanya. Jadikan rutinitas mingguan supaya sistemnya terus jalan.</p>
           </div>
         </div>
 
@@ -428,7 +738,6 @@ Format: Google Docs-ready, siap presentasi.<button class="copy-btn" onclick="cop
           <span class="next-arrow">→</span>
         </a>
 
-        
         <div class="doc-slot" id="doc-slot-6"></div>
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>

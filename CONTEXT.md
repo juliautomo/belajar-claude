@@ -146,6 +146,14 @@ Course has gone through two PDF-driven restructures in July 2026. Current state:
 - `admin.html`'s `COURSES` config for `mulai-claude` tracks this: `modules: 6` (currently).
 - Video/PDF/document mapping (course_slug + module_num) is content-agnostic, so nothing needed to change there — re-adding modules 4-6 just means those module numbers are valid targets again in the admin dropdowns.
 
+### bisnis-ukm-content.html — rewritten per K3 PDF, July 2026
+All 6 content panels rewritten to follow the uploaded PDF "K3 · Konten & Pemasaran Bisnis" (course "Claude untuk Bisnis & UKM"), replacing the old generic per-tool tutorials. Panel count/TOTAL unchanged (already 7 = 6 content + feedback), just content + order + sidebar titles replaced.
+- **New module order/titles**: 1) Analisis Kompetitor & Positioning, 2) Deskripsi Produk & Listing yang Menjual, 3) Sistem Konten Instagram, 4) Iklan & Promosi: Claude Tulis, Kamu Design, 5) Template CS WhatsApp yang On-Brand, 6) Content Operating System di Notion (capstone — carries the "Kursus Selesai!" box + "Lanjutkan Belajar" next-card, nav-bottom jumps to `showModule(7)`).
+- **Throughline**: Modul 1 produces a one-sentence "positioning" that every subsequent module explicitly reuses (listing copy, IG captions, ad copy, CS tone, Notion calendar) — this is the PDF's core structure, "Satu Positioning, Enam Kanal."
+- Same CSS box vocabulary as `mulai-claude-content.html` was added to this file (`.tip-box`, `.tip-box.warn` + `.mistake-list`, `.two-col`/`.col-card`, `.info-grid`/`.info-card`, `.step-row`/`.step-card`, `.section-heading`, `.body-text`), but tuned to this file's existing palette: `.tip-box` uses accent purple (this file's pre-existing `.case-box` already occupied gold, used for "Contoh Skenario"/example callouts, left as-is).
+- Sidebar tool chips updated to match the PDF's tool list exactly: Tokopedia/Shopee, Notion, WhatsApp Business, Instagram, Canva.
+- `admin.html` already had `bisnis-ukm: modules: 6` configured — no change needed there.
+
 ---
 
 ## Admin Content Manager (admin.html) — added July 2026 (live, verified working)
