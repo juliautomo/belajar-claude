@@ -1,9 +1,17 @@
-// course-video.js — Injects admin-uploaded module videos, PDF, and practice
-// documents into content pages.
+// course-video.js — Injects admin-set module videos (YouTube embeds), PDF,
+// and practice documents into content pages.
 // Requires: sbClient (from supabase-config.js) and a global COURSE_SLUG
 // constant defined before this script tag loads. Looks for elements with id
 // "video-slot-<moduleNum>", "doc-slot-<moduleNum>", "pdf-download-slot"
 // (sidebar) and "pdf-banner-slot" (top of main content, always visible).
+
+// Extracts an 11-char YouTube video ID from watch/share/shorts/embed URLs.
+function extractYoutubeId(url) {
+  if (!url) return null;
+  var m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
 (function () {
   function run() {
     if (typeof COURSE_SLUG === 'undefined' || !COURSE_SLUG) return;
@@ -17,9 +25,21 @@
           if (!row.video_url) return;
           var slot = document.getElementById('video-slot-' + row.module_num);
           if (!slot) return;
-          slot.innerHTML =
-            '<video controls preload="metadata" style="width:100%;border-radius:12px;margin:4px 0 24px;background:#000;max-height:420px;display:block;">' +
-            '<source src="' + row.video_url + '" type="video/mp4"></video>';
+          var ytId = extractYoutubeId(row.video_url);
+          if (ytId) {
+            slot.innerHTML =
+              '<div style="position:relative;width:100%;padding-top:56.25%;border-radius:12px;overflow:hidden;margin-bottom:24px;background:#000;">' +
+              '<iframe src="https://www.youtube.com/embed/' + ytId + '" title="Video Modul" frameborder="0" ' +
+              'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ' +
+              'allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe></div>';
+          } else {
+            // Fallback: not a recognizable YouTube URL, just link it.
+            slot.innerHTML =
+              '<a href="' + row.video_url + '" target="_blank" rel="noopener" ' +
+              'style="display:block;margin-bottom:24px;padding:12px 14px;background:var(--accent-dim);' +
+              'color:var(--accent);border-radius:10px;font-size:13px;font-weight:600;text-decoration:none;">' +
+              '▶ Tonton Video Modul</a>';
+          }
         });
       })
       .catch(function (e) { console.log('course-video: gagal memuat video', e); });

@@ -37,7 +37,7 @@ h1.page-title { font-family: var(--serif); font-size: 30px; font-weight: 400; le
 .card .hint { font-size: 12.5px; color: var(--ink-2); margin-bottom: 18px; line-height: 1.5; }
 label { display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 6px; margin-top: 14px; }
 label:first-of-type { margin-top: 0; }
-select, input[type="file"] {
+select, input[type="file"], input[type="text"] {
   width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 10px;
   font-size: 13.5px; color: var(--ink); font-family: inherit; background: #fff;
 }
@@ -110,14 +110,14 @@ td a:hover { text-decoration: underline; }
 
   <div class="card">
     <h2>Video per Modul</h2>
-    <p class="hint">Pilih kursus dan modul, lalu unggah video untuk modul tersebut. File besar bisa memakan waktu beberapa menit untuk diunggah — jangan tutup halaman ini sampai selesai.</p>
+    <p class="hint">Pilih kursus dan modul, lalu tempel link YouTube video untuk modul tersebut. Video akan tampil di bagian paling atas modul, di atas judul.</p>
     <label for="videoCourseSelect">Kursus</label>
     <select id="videoCourseSelect" onchange="populateModuleSelect()"></select>
     <label for="videoModuleSelect">Modul</label>
     <select id="videoModuleSelect"></select>
-    <label for="videoFileInput">File Video</label>
-    <input type="file" id="videoFileInput" accept="video/*">
-    <button class="btn" id="videoUploadBtn" onclick="uploadVideo()">Unggah Video</button>
+    <label for="videoUrlInput">Link YouTube</label>
+    <input type="text" id="videoUrlInput" placeholder="https://www.youtube.com/watch?v=... atau https://youtu.be/...">
+    <button class="btn" id="videoUploadBtn" onclick="saveVideo()">Simpan Video</button>
     <div class="status" id="videoStatus"></div>
   </div>
 
@@ -226,27 +226,28 @@ async function uploadPdf() {
   refreshOverview();
 }
 
-async function uploadVideo() {
+function extractYoutubeId(url) {
+  if (!url) return null;
+  var m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
+async function saveVideo() {
   var slug = document.getElementById('videoCourseSelect').value;
   var moduleNum = parseInt(document.getElementById('videoModuleSelect').value, 10);
-  var fileInput = document.getElementById('videoFileInput');
-  var file = fileInput.files[0];
+  var urlInput = document.getElementById('videoUrlInput');
+  var url = urlInput.value.trim();
   var btn = document.getElementById('videoUploadBtn');
-  if (!file) { setStatus('videoStatus', 'Pilih file video dulu.', 'error'); return; }
-  if (file.type.indexOf('video/') !== 0) { setStatus('videoStatus', 'File harus berupa video.', 'error'); return; }
+  if (!url) { setStatus('videoStatus', 'Tempel link YouTube dulu.', 'error'); return; }
+  if (!extractYoutubeId(url)) { setStatus('videoStatus', 'Link nggak dikenali sebagai YouTube. Pastikan formatnya seperti youtube.com/watch?v=... atau youtu.be/...', 'error'); return; }
 
   btn.disabled = true;
-  setStatus('videoStatus', 'Mengunggah... (bisa beberapa menit untuk file besar, jangan tutup halaman)', 'pending');
+  setStatus('videoStatus', 'Menyimpan...', 'pending');
 
-  var path = slug + '/module-' + moduleNum + '-' + Date.now() + '-' + file.name;
-  var up = await sbClient.storage.from('course-videos').upload(path, file, { upsert: true });
-  if (up.error) { setStatus('videoStatus', 'Gagal unggah: ' + up.error.message, 'error'); btn.disabled = false; return; }
-
-  var pub = sbClient.storage.from('course-videos').getPublicUrl(path);
   var db = await sbClient.from('module_videos').upsert({
     course_slug: slug,
     module_num: moduleNum,
-    video_url: pub.data.publicUrl,
+    video_url: url,
     updated_at: new Date().toISOString(),
     updated_by: currentSession.user.email
   }, { onConflict: 'course_slug,module_num' });
@@ -254,8 +255,8 @@ async function uploadVideo() {
   btn.disabled = false;
   if (db.error) { setStatus('videoStatus', 'Gagal simpan ke database: ' + db.error.message, 'error'); return; }
 
-  setStatus('videoStatus', 'Video berhasil diunggah untuk ' + courseName(slug) + ' — Modul ' + moduleNum + ' ✓', 'success');
-  fileInput.value = '';
+  setStatus('videoStatus', 'Video berhasil disimpan untuk ' + courseName(slug) + ' — Modul ' + moduleNum + ' ✓', 'success');
+  urlInput.value = '';
   refreshOverview();
 }
 
