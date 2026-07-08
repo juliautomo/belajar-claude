@@ -131,6 +131,8 @@ All pages use these CSS variables:
 - **Profile modal**: 3-step questionnaire (role, goal, experience). Has X close button. Saves to `profiles` table. Freelancer, Karir, and Jarang pakai options removed.
 
 ## Course Content Pages Features
+**⚠️ July 2026 bug fix note**: `kerja-sehari-hari-content.html` and `bisnis-ukm-content.html` were found to have been truncated mid-file since before this engagement started (missing back half of `submitFeedback()` + no closing `</script></body></html>`) — this meant their trailing `<script>` block (containing `init()`) never executed at all in the browser, so those two course pages were **permanently stuck on the loading screen** for every user, always. `prompt-gratis-content.html` and `mulai-claude-content.html` were unaffected. Fixed July 2026 by restoring the missing code from the known-good `mulai-claude-content.html` pattern. If a course content page ever shows a blank/stuck-loading page again, check `grep -c "</script>" file.html` matches the number of `<script` tags before looking anywhere else.
+
 - Left sidebar nav with module items + separate "Feedback" item at bottom (★ icon)
 - Progress bar + completion tracking per module → saved to `module_completions`
 - Last panel = feedback panel: star rating (1-5) + optional comment → saved to `course_feedback`
