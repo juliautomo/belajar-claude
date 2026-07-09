@@ -9,19 +9,19 @@
   <script src="supabase-config.js"></script>
   <style>
     :root {
-    --bg: #FAFAFA; --surface: #FFFFFF; --surface-2: #F5F5F7;
-    --border: #E8E8E8; --border-strong: #D0D0D0;
-    --ink: #111111; --ink-2: #777777; --ink-3: #BBBBBB;
-    --accent: #6C47FF; --accent-2: #9B7DFF;
-    --accent-dim: rgba(108,71,255,0.08); --accent-glow: rgba(108,71,255,0.18);
-    --green: #16A34A; --green-dim: rgba(22,163,74,0.08); --green-border: rgba(22,163,74,0.2);
-    --gold: #EF9F27; --gold-pale: rgba(239,159,39,0.08);
-    --shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.05);
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 2px 8px rgba(0,0,0,0.04);
-    --serif: 'Instrument Serif', Georgia, serif;
-    --font: 'Geist', sans-serif;
-    --r: 14px;
-  }
+      --bg: #FAFAFA; --surface: #FFFFFF; --surface-2: #F5F5F7;
+      --border: #E8E8E8; --border-strong: #D0D0D0;
+      --ink: #111111; --ink-2: #777777; --ink-3: #BBBBBB;
+      --accent: #6C47FF; --accent-2: #9B7DFF;
+      --accent-dim: rgba(108,71,255,0.08); --accent-glow: rgba(108,71,255,0.18);
+      --green: #16A34A; --green-dim: rgba(22,163,74,0.08); --green-border: rgba(22,163,74,0.2);
+      --gold: #EF9F27; --gold-pale: rgba(239,159,39,0.08);
+      --shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.05);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 2px 8px rgba(0,0,0,0.04);
+      --serif: 'Instrument Serif', Georgia, serif;
+      --font: 'Geist', sans-serif;
+      --r: 14px;
+    }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: var(--font);
@@ -30,44 +30,65 @@
       display: flex; align-items: center; justify-content: center;
       padding: 20px;
     }
-  body::before {
-    content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    background-image: radial-gradient(circle, #D8D8DC 1px, transparent 1px);
-    background-size: 26px 26px; opacity: 0.5;
-    mask-image: radial-gradient(ellipse 90% 60% at 50% 0%, black 20%, transparent 80%);
-  }
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: radial-gradient(circle, #D8D8DC 1px, transparent 1px);
+      background-size: 26px 26px; opacity: 0.5;
+      mask-image: radial-gradient(ellipse 90% 60% at 50% 0%, black 20%, transparent 80%);
+    }
     .card {
-      background: #fff;
-      border-radius: 20px;
-      padding: 44px 40px 36px;
+      background: #fff; border-radius: 20px; padding: 44px 40px 36px;
       max-width: 400px; width: 100%;
       box-shadow: 0 4px 40px rgba(0,0,0,0.08);
-      border: 1px solid var(--border);
+      border: 1px solid var(--border); position: relative; z-index: 1;
     }
-    .logo { font-family: var(--font); font-size: 17px; color: var(--ink);
-     letter-spacing: -0.4px; }
+    .logo { font-family: var(--font); font-size: 17px; font-weight: 700; color: var(--ink);
+      letter-spacing: -0.4px; margin-bottom: 28px; display: block; }
     .logo span { color: var(--accent); }
-    h2 { font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--ink); margin-bottom: 6px; letter-spacing: -0.3px; }
-    .sub { font-size: 14px; color: var(--ink-2); line-height: 1.65; margin-bottom: 28px; }
+
+    /* Tabs */
+    .tabs { display: flex; margin-bottom: 28px;
+      border-bottom: 1.5px solid var(--border); }
+    .tab-btn {
+      flex: 1; background: none; border: none; padding: 10px 0;
+      font-family: var(--font); font-size: 14px; font-weight: 600;
+      color: var(--ink-2); cursor: pointer; position: relative;
+      transition: color 0.15s;
+    }
+    .tab-btn.active { color: var(--accent); }
+    .tab-btn.active::after {
+      content: ''; position: absolute; bottom: -1.5px; left: 0; right: 0;
+      height: 2px; background: var(--accent); border-radius: 2px 2px 0 0;
+    }
+
     label { display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 6px; }
-    input[type="email"] {
+    input[type="email"], input[type="password"] {
       width: 100%; padding: 12px 14px;
       border: 1.5px solid var(--border); border-radius: 10px;
       font-size: 14px; color: var(--ink); outline: none;
       transition: border-color 0.2s; margin-bottom: 14px;
       font-family: inherit; background: #fff;
     }
-    input[type="email"]:focus { border-color: var(--accent); }
+    input[type="email"]:focus, input[type="password"]:focus { border-color: var(--accent); }
     .btn {
       width: 100%; padding: 13px;
       background: var(--ink); color: #fff;
       border: none; border-radius: 10px;
       font-size: 15px; font-weight: 700;
       cursor: pointer; transition: background 0.2s;
-      font-family: inherit;
+      font-family: inherit; margin-top: 2px;
     }
     .btn:hover:not(:disabled) { background: #333; }
     .btn:disabled { background: #9CA3AF; cursor: not-allowed; }
+
+    .forgot-link {
+      display: block; text-align: right; font-size: 12px;
+      color: var(--accent); margin-top: -8px; margin-bottom: 16px;
+      cursor: pointer; background: none; border: none;
+      font-family: inherit; padding: 0;
+    }
+    .forgot-link:hover { text-decoration: underline; }
+
     .msg {
       margin-top: 14px; padding: 12px 14px;
       border-radius: 10px; font-size: 13px;
@@ -75,63 +96,45 @@
     }
     .msg.success { background: #ECFDF5; color: #065F46; display: block; }
     .msg.error   { background: #FEE2E2; color: #991B1B; display: block; }
+
     .note { margin-top: 20px; font-size: 12px; color: #9CA3AF; text-align: center; line-height: 1.6; }
-    .back { display: block; text-align: center; margin-top: 16px; font-size: 13px; color: var(--ink-2); text-decoration: none; }
+    .back { display: block; text-align: center; margin-top: 16px; font-size: 13px;
+      color: var(--ink-2); text-decoration: none; }
     .back:hover { color: var(--ink); }
+
+    .view { display: none; }
+    .view.active { display: block; }
+
+    .back-link {
+      display: inline-block; margin-top: 14px; font-size: 12px;
+      color: var(--accent); cursor: pointer; background: none;
+      border: none; font-family: inherit; padding: 0;
+    }
+    .back-link:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
   <div class="card">
-    <div class="logo">belajar<span>claude</span></div>
-    <h2>Masuk atau Daftar</h2>
-    <p class="sub">Masukkan email kamu — kami kirimkan link masuk langsung ke inbox. Tidak perlu password.</p>
-    <div id="form">
-      <label for="email">Email</label>
-      <input type="email" id="email" placeholder="nama@email.com" autofocus />
-      <button class="btn" id="btn" onclick="sendLink()">Lanjutkan →</button>
+    <a class="logo" href="index.html">belajar<span>claude</span></a>
+
+    <!-- Tabs -->
+    <div class="tabs" id="tabs">
+      <button class="tab-btn active" onclick="switchTab('login')">Masuk</button>
+      <button class="tab-btn" onclick="switchTab('register')">Daftar</button>
     </div>
-    <div class="msg" id="msg"></div>
-    <p class="note">Dengan melanjutkan, kamu menyetujui syarat & ketentuan Belajar Claude.</p>
-    <a href="index.html" class="back">← Kembali ke beranda</a>
-  </div>
 
-  <script>
-    // Redirect if already logged in
-    (async function() {
-      var r = await sbClient.auth.getSession();
-      if (r.data.session) window.location.href = 'dashboard.html';
-    })();
+    <!-- Login view -->
+    <div class="view active" id="view-login">
+      <label for="login-email">Email</label>
+      <input type="email" id="login-email" placeholder="nama@email.com" autocomplete="email" autofocus />
+      <label for="login-password">Password</label>
+      <input type="password" id="login-password" placeholder="Password kamu" autocomplete="current-password" />
+      <button class="forgot-link" onclick="switchView('forgot')">Lupa password?</button>
+      <button class="btn" id="login-btn" onclick="doLogin()">Masuk →</button>
+      <div class="msg" id="login-msg"></div>
+    </div>
 
-    async function sendLink() {
-      var email = document.getElementById('email').value.trim();
-      var btn   = document.getElementById('btn');
-      var msg   = document.getElementById('msg');
-      if (!email || !email.includes('@')) {
-        msg.textContent = 'Masukkan alamat email yang valid ya.';
-        msg.className = 'msg error'; return;
-      }
-      btn.disabled = true; btn.textContent = 'Mengirim...';
-      msg.className = 'msg'; msg.style.display = 'none';
-      var result = await sbClient.auth.signInWithOtp({
-        email: email,
-        options: { emailRedirectTo: 'https://juliautomo.github.io/klaud-id/dashboard.html' }
-      });
-      if (result.error) {
-        msg.textContent = 'Gagal mengirim: ' + result.error.message;
-        msg.className = 'msg error';
-        btn.disabled = false; btn.textContent = 'Lanjutkan →';
-      } else {
-        btn.textContent = '✉️ Link terkirim!';
-        btn.style.background = '#065F46';
-        msg.innerHTML = 'Link masuk sudah dikirim ke <strong>' + email + '</strong>.<br>Cek inbox dan klik linknya untuk masuk.';
-        msg.className = 'msg success';
-        document.getElementById('form').style.opacity = '0.5';
-        document.getElementById('form').style.pointerEvents = 'none';
-      }
-    }
-    document.getElementById('email').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') sendLink();
-    });
-  </script>
-</body>
-</html>
+    <!-- Register view -->
+    <div class="view" id="view-register">
+      <label for="reg-email">Email</label>
+      <input type="email" id="reg-email" placeholder="nama@email.com" 

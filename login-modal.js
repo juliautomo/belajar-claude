@@ -28,7 +28,7 @@
       box-shadow: 0 24px 64px rgba(0,0,0,0.22);
       position: relative;
       animation: klaudModalIn 0.2s ease;
-      font-family: 'Plus Jakarta Sans', 'Helvetica Neue', sans-serif;
+      font-family: 'Geist', 'Plus Jakarta Sans', 'Helvetica Neue', sans-serif;
     }
     @keyframes klaudModalIn {
       from { opacity: 0; transform: translateY(12px) scale(0.98); }
@@ -47,56 +47,84 @@
 
     #klaud-modal .m-logo {
       text-align: center; margin-bottom: 24px;
-      font-size: 24px; font-weight: 800; letter-spacing: -0.5px;
+      font-size: 18px; font-weight: 800; letter-spacing: -0.4px;
       color: #13163A;
     }
-    #klaud-modal .m-logo span { color: #4A72D6; }
+    #klaud-modal .m-logo span { color: #6C47FF; }
 
-    #klaud-modal h2 {
-      font-size: 20px; font-weight: 800; color: #13163A;
-      margin-bottom: 6px; letter-spacing: -0.3px;
+    /* Tabs */
+    #klaud-modal .m-tabs {
+      display: flex; border-bottom: 1.5px solid #E8EAF0;
+      margin-bottom: 24px;
     }
-    #klaud-modal .m-sub {
-      font-size: 14px; color: #6B7080; line-height: 1.65;
-      margin-bottom: 28px;
+    #klaud-modal .m-tab {
+      flex: 1; background: none; border: none; padding: 9px 0;
+      font-family: inherit; font-size: 14px; font-weight: 600;
+      color: #6B7080; cursor: pointer; position: relative;
+      transition: color 0.15s;
+    }
+    #klaud-modal .m-tab.active { color: #6C47FF; }
+    #klaud-modal .m-tab.active::after {
+      content: ''; position: absolute; bottom: -1.5px; left: 0; right: 0;
+      height: 2px; background: #6C47FF; border-radius: 2px 2px 0 0;
     }
 
     #klaud-modal label {
       display: block; font-size: 12px; font-weight: 600;
-      color: #374151; margin-bottom: 6px; letter-spacing: 0.3px;
+      color: #374151; margin-bottom: 6px;
     }
-    #klaud-modal input[type="email"] {
+    #klaud-modal input[type="email"],
+    #klaud-modal input[type="password"] {
       width: 100%; padding: 12px 14px;
       border: 1.5px solid #E8EAF0; border-radius: 10px;
       font-size: 14px; color: #13163A; outline: none;
       transition: border-color 0.2s; margin-bottom: 14px;
       font-family: inherit; background: #fff;
     }
-    #klaud-modal input[type="email"]:focus { border-color: #4A72D6; }
+    #klaud-modal input[type="email"]:focus,
+    #klaud-modal input[type="password"]:focus { border-color: #6C47FF; }
 
-    #klaud-modal-btn {
+    #klaud-modal .m-btn {
       width: 100%; padding: 13px;
       background: #13163A; color: #fff;
       border: none; border-radius: 10px;
       font-size: 15px; font-weight: 700;
       cursor: pointer; transition: background 0.2s;
-      font-family: inherit;
+      font-family: inherit; margin-top: 2px;
     }
-    #klaud-modal-btn:hover:not(:disabled) { background: #4A72D6; }
-    #klaud-modal-btn:disabled { background: #94A3B8; cursor: not-allowed; }
+    #klaud-modal .m-btn:hover:not(:disabled) { background: #6C47FF; }
+    #klaud-modal .m-btn:disabled { background: #94A3B8; cursor: not-allowed; }
 
-    #klaud-modal-msg {
+    #klaud-modal .m-forgot {
+      display: block; text-align: right; font-size: 12px;
+      color: #6C47FF; margin-top: -8px; margin-bottom: 16px;
+      cursor: pointer; background: none; border: none;
+      font-family: inherit; padding: 0;
+    }
+    #klaud-modal .m-forgot:hover { text-decoration: underline; }
+
+    #klaud-modal .m-back-link {
+      display: inline-block; margin-top: 14px; font-size: 12px;
+      color: #6C47FF; cursor: pointer; background: none;
+      border: none; font-family: inherit; padding: 0;
+    }
+    #klaud-modal .m-back-link:hover { text-decoration: underline; }
+
+    #klaud-modal .m-msg {
       margin-top: 14px; padding: 12px 14px;
       border-radius: 10px; font-size: 13px;
       text-align: center; line-height: 1.6; display: none;
     }
-    #klaud-modal-msg.success { background: #ECFDF5; color: #065F46; display: block; }
-    #klaud-modal-msg.error   { background: #FEE2E2; color: #991B1B; display: block; }
+    #klaud-modal .m-msg.success { background: #ECFDF5; color: #065F46; display: block; }
+    #klaud-modal .m-msg.error   { background: #FEE2E2; color: #991B1B; display: block; }
 
     #klaud-modal .m-note {
       margin-top: 18px; font-size: 12px;
       color: #94A3B8; text-align: center; line-height: 1.6;
     }
+
+    #klaud-modal .m-view { display: none; }
+    #klaud-modal .m-view.active { display: block; }
   `;
   document.head.appendChild(style);
 
@@ -105,108 +133,62 @@
   overlay.id = 'klaud-modal-overlay';
   overlay.innerHTML = `
     <div id="klaud-modal">
-      <button id="klaud-modal-close" onclick="window.closeLoginModal()" aria-label="Tutup">✕</button>
+      <button id="klaud-modal-close" aria-label="Tutup">✕</button>
       <div class="m-logo">belajar<span>claude</span></div>
-      <h2>Masuk atau Daftar</h2>
-      <p class="m-sub">Masukkan email kamu — kami kirimkan link masuk langsung ke inbox. Tidak perlu password.</p>
-      <div id="klaud-modal-form">
-        <label for="klaud-modal-email">Email</label>
-        <input type="email" id="klaud-modal-email" placeholder="nama@email.com" />
-        <button id="klaud-modal-btn" onclick="window.sendModalMagicLink()">Lanjutkan →</button>
+
+      <div class="m-tabs" id="m-tabs">
+        <button class="m-tab active" data-tab="login">Masuk</button>
+        <button class="m-tab" data-tab="register">Daftar</button>
       </div>
-      <div id="klaud-modal-msg"></div>
+
+      <!-- Login view -->
+      <div class="m-view active" id="m-view-login">
+        <label for="m-login-email">Email</label>
+        <input type="email" id="m-login-email" placeholder="nama@email.com" autocomplete="email" />
+        <label for="m-login-password">Password</label>
+        <input type="password" id="m-login-password" placeholder="Password kamu" autocomplete="current-password" />
+        <button class="m-forgot" id="m-forgot-link">Lupa password?</button>
+        <button class="m-btn" id="m-login-btn">Masuk →</button>
+        <div class="m-msg" id="m-login-msg"></div>
+      </div>
+
+      <!-- Register view -->
+      <div class="m-view" id="m-view-register">
+        <label for="m-reg-email">Email</label>
+        <input type="email" id="m-reg-email" placeholder="nama@email.com" autocomplete="email" />
+        <label for="m-reg-password">Password</label>
+        <input type="password" id="m-reg-password" placeholder="Minimal 6 karakter" autocomplete="new-password" />
+        <label for="m-reg-confirm">Konfirmasi Password</label>
+        <input type="password" id="m-reg-confirm" placeholder="Ulangi password" autocomplete="new-password" style="margin-bottom:14px;" />
+        <button class="m-btn" id="m-reg-btn">Daftar →</button>
+        <div class="m-msg" id="m-reg-msg"></div>
+      </div>
+
+      <!-- Forgot password view -->
+      <div class="m-view" id="m-view-forgot">
+        <p style="font-size:14px;color:#6B7080;margin-bottom:20px;line-height:1.6;">
+          Masukkan email kamu. Kami kirimkan link untuk buat password baru.
+        </p>
+        <label for="m-forgot-email">Email</label>
+        <input type="email" id="m-forgot-email" placeholder="nama@email.com" />
+        <button class="m-btn" id="m-forgot-btn">Kirim Link Reset →</button>
+        <div class="m-msg" id="m-forgot-msg"></div>
+        <button class="m-back-link" id="m-back-to-login">← Kembali ke Masuk</button>
+      </div>
+
       <p class="m-note">Dengan melanjutkan, kamu menyetujui syarat & ketentuan Belajar Claude.</p>
     </div>
   `;
   document.body.appendChild(overlay);
 
-  // Close on backdrop click
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) window.closeLoginModal();
-  });
-
-  // Enter key support
-  overlay.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') window.sendModalMagicLink();
-    if (e.key === 'Escape') window.closeLoginModal();
-  });
-
-  // ── Public API ───────────────────────────────────────────────────────────────
-  window.openLoginModal = function () {
-    overlay.classList.add('open');
-    // Reset form state
-    const form = document.getElementById('klaud-modal-form');
-    const msg  = document.getElementById('klaud-modal-msg');
-    const btn  = document.getElementById('klaud-modal-btn');
-    const inp  = document.getElementById('klaud-modal-email');
-    form.style.opacity = '';
-    form.style.pointerEvents = '';
-    msg.className = 'klaud-modal-msg';
-    msg.style.display = 'none';
-    btn.disabled = false;
-    btn.textContent = 'Lanjutkan →';
-    btn.style.background = '';
-    inp.value = '';
-    setTimeout(() => inp.focus(), 100);
-  };
-
-  window.closeLoginModal = function () {
-    overlay.classList.remove('open');
-  };
-
-  window.sendModalMagicLink = async function () {
-    const email = document.getElementById('klaud-modal-email').value.trim();
-    const btn   = document.getElementById('klaud-modal-btn');
-    const msg   = document.getElementById('klaud-modal-msg');
-
-    if (!email || !email.includes('@')) {
-      msg.innerHTML = 'Masukkan alamat email yang valid ya.';
-      msg.className = 'error';
-      msg.style.display = 'block';
-      return;
-    }
-
-    btn.disabled = true;
-    btn.textContent = 'Mengirim...';
-    msg.style.display = 'none';
-
-    const { error } = await sbClient.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: 'https://belajar-claude.vercel.app/dashboard.html' },
+  // ── Internal helpers ────────────────────────────────────────────────────────
+  function mSwitchTab(tab) {
+    overlay.querySelectorAll('.m-tab').forEach(function(b) {
+      b.classList.toggle('active', b.dataset.tab === tab);
     });
+    mSwitchView(tab);
+  }
 
-    if (error) {
-      msg.innerHTML = 'Gagal mengirim email: ' + error.message;
-      msg.className = 'error';
-      msg.style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = 'Lanjutkan →';
-    } else {
-      btn.textContent = '✉️ Link terkirim!';
-      btn.style.background = '#065F46';
-      msg.innerHTML = 'Link masuk sudah dikirim ke <strong>' + email + '</strong>.<br>Cek inbox dan klik linknya untuk masuk.';
-      msg.className = 'success';
-      msg.style.display = 'block';
-      document.getElementById('klaud-modal-form').style.opacity = '0.5';
-      document.getElementById('klaud-modal-form').style.pointerEvents = 'none';
-    }
-  };
-
-  // ── Intercept all login.html links ──────────────────────────────────────────
-  document.addEventListener('click', async (e) => {
-    const link = e.target.closest('a[href="login.html"]');
-    if (!link) return;
-    e.preventDefault();
-
-    // Check if already logged in
-    const { data: { session } } = await sbClient.auth.getSession();
-    if (session) {
-      // Already logged in — go to dashboard or the course/package destination
-      const dest = link.getAttribute('data-dest') || 'dashboard.html';
-      window.location.href = dest;
-    } else {
-      window.openLoginModal();
-    }
-  });
-
-})();
+  function mSwitchView(view) {
+    overlay.querySelectorAll('.m-view').forEach(function(v) { v.classList.remove('active'); });
+    var el = overlay.querySelector('#m-view-'
