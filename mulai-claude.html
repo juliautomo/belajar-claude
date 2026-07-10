@@ -180,8 +180,14 @@
     <a href="index.html#kursus">Kursus</a>
     <a href="login.html" id="navLoginBtn">Masuk</a>
     <a href="login.html" id="navCtaBtn" class="nav-cta" style="display:none">Gabung Gratis</a>
-    <div class="nav-user-pill" id="navUserPill">
+    <div class="nav-user-pill" id="navUserPill" onclick="toggleUserMenu(event)">
       <div><span class="nav-uname" id="navUname"></span><span class="nav-uemail" id="navUemail"></span></div>
+      <span class="nav-user-chevron">▾</span>
+      <div class="nav-user-dropdown" id="navUserDropdown">
+        <a href="dashboard.html">Dashboard</a>
+        <div class="dropdown-divider"></div>
+        <button class="dropdown-signout" onclick="doSignOut(event)">Keluar</button>
+      </div>
     </div>
   </div>
 </nav>
@@ -390,6 +396,20 @@
     if (session) { window.location.href = 'mulai-claude-content.html'; }
     else { window.openLoginModal(); }
   }
+
+  function toggleUserMenu(e) {
+    e.stopPropagation();
+    document.getElementById('navUserPill').classList.toggle('open');
+  }
+  async function doSignOut(e) {
+    if (e) e.stopPropagation();
+    await sbClient.auth.signOut();
+    window.location.href = 'index.html';
+  }
+  document.addEventListener('click', function() {
+    var pill = document.getElementById('navUserPill');
+    if (pill) pill.classList.remove('open');
+  });
 </script>
 </body>
 </html>

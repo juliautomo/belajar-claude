@@ -43,9 +43,18 @@ nav {
 .nav-links a:hover { color: var(--ink); }
 .nav-cta { background: linear-gradient(135deg, var(--accent), var(--accent-2)) !important; color: #fff !important; padding: 8px 18px !important; border-radius: 9px !important; font-weight: 600 !important; font-size: 13px !important; box-shadow: 0 2px 10px var(--accent-glow); transition: all 0.18s !important; }
 .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 18px var(--accent-glow) !important; }
-.nav-user-pill { display: none; align-items: center; gap: 10px; }
+.nav-user-pill { display: none; align-items: center; gap: 8px; cursor: pointer; position: relative; padding: 5px 10px 5px 5px; border-radius: 10px; transition: background 0.15s; user-select: none; }
+.nav-user-pill:hover { background: var(--surface-2, #F5F5F7); }
 .nav-uname { font-size: 13px; font-weight: 600; color: var(--ink); display: block; }
 .nav-uemail { font-size: 11px; color: var(--ink-2); display: block; }
+.nav-user-chevron { font-size: 9px; color: var(--ink-3, #BBB); margin-left: 2px; transition: transform 0.15s; }
+.nav-user-pill.open .nav-user-chevron { transform: rotate(180deg); }
+.nav-user-dropdown { display: none; position: absolute; top: calc(100% + 8px); right: 0; background: #fff; border: 1px solid var(--border, #E8E8E8); border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.10); min-width: 160px; overflow: hidden; z-index: 999; }
+.nav-user-pill.open .nav-user-dropdown { display: block; }
+.nav-user-dropdown a, .nav-user-dropdown button { display: block; width: 100%; text-align: left; padding: 11px 16px; font-size: 13px; font-weight: 500; color: var(--ink, #111); text-decoration: none; background: none; border: none; cursor: pointer; font-family: inherit; transition: background 0.12s; }
+.nav-user-dropdown a:hover, .nav-user-dropdown button:hover { background: var(--surface-2, #F5F5F7); }
+.nav-user-dropdown .dropdown-divider { height: 1px; background: var(--border, #E8E8E8); margin: 4px 0; }
+.nav-user-dropdown .dropdown-signout { color: #DC2626 !important; }
 .hero { padding: 144px 40px 96px; max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
 .hero-eyebrow { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 600; color: var(--accent); background: var(--accent-dim); border: 1px solid rgba(108,71,255,0.18); padding: 5px 12px; border-radius: 100px; margin-bottom: 28px; letter-spacing: 0.02em; }
 .eyebrow-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
@@ -171,8 +180,14 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     <a href="#kursus">Kursus</a>
     <a href="login.html" id="navLoginBtn">Masuk</a>
     <a href="login.html" id="navCtaBtn" class="nav-cta" style="display:none">Gabung Gratis</a>
-    <div class="nav-user-pill" id="navUserPill">
+    <div class="nav-user-pill" id="navUserPill" onclick="toggleUserMenu(event)">
       <div><span class="nav-uname" id="navUname"></span><span class="nav-uemail" id="navUemail"></span></div>
+      <span class="nav-user-chevron">▾</span>
+      <div class="nav-user-dropdown" id="navUserDropdown">
+        <a href="dashboard.html">Dashboard</a>
+        <div class="dropdown-divider"></div>
+        <button class="dropdown-signout" onclick="doSignOut(event)">Keluar</button>
+      </div>
     </div>
   </div>
 </nav>
@@ -353,6 +368,20 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
       }
     } catch(e) {}
   })();
+
+  function toggleUserMenu(e) {
+    e.stopPropagation();
+    document.getElementById('navUserPill').classList.toggle('open');
+  }
+  async function doSignOut(e) {
+    if (e) e.stopPropagation();
+    await sbClient.auth.signOut();
+    window.location.href = 'index.html';
+  }
+  document.addEventListener('click', function() {
+    var pill = document.getElementById('navUserPill');
+    if (pill) pill.classList.remove('open');
+  });
 </script>
 </body>
 </html>
