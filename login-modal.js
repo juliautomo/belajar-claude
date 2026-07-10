@@ -191,4 +191,164 @@
 
   function mSwitchView(view) {
     overlay.querySelectorAll('.m-view').forEach(function(v) { v.classList.remove('active'); });
-    var el = overlay.querySelector('#m-view-'
+    var el = overlay.querySelector('#m-view-' + view);
+    if (el) el.classList.add('active');
+    var tabs = overlay.querySelector('#m-tabs');
+    if (tabs) tabs.style.display = view === 'forgot' ? 'none' : 'flex';
+    // Focus first input in active view
+    if (el) {
+      var inp = el.querySelector('input');
+      if (inp) setTimeout(function() { inp.focus(); }, 60);
+    }
+  }
+
+  function mShowMsg(el, type, text) {
+    el.textContent = text; el.className = 'm-msg ' + type;
+  }
+
+  // ── Event listeners ─────────────────────────────────────────────────────────
+  overlay.querySelector('#klaud-modal-close').addEventListener('click', function() {
+    window.closeLoginModal();
+  });
+
+  // Tab clicks
+  overlay.querySelectorAll('.m-tab').forEach(function(btn) {
+    btn.addEventListener('click', function() { mSwitchTab(btn.dataset.tab); });
+  });
+
+  // Forgot password link
+  overlay.querySelector('#m-forgot-link').addEventListener('click', function() {
+    mSwitchView('forgot');
+  });
+
+  // Back to login
+  overlay.querySelector('#m-back-to-login').addEventListener('click', function() {
+    mSwitchView('login');
+    mSwitchTab('login');
+  });
+
+  // Login button
+  overlay.querySelector('#m-login-btn').addEventListener('click', async function() {
+    var email = overlay.querySelector('#m-login-email').value.trim();
+    var password = overlay.querySelector('#m-login-password').value;
+    var btn = overlay.querySelector('#m-login-btn');
+    var msg = overlay.querySelector('#m-login-msg');
+
+    if (!email || !password) return mShowMsg(msg, 'error', 'Isi email dan password ya.');
+    btn.disabled = true; btn.textContent = 'Memproses...';
+    msg.className = 'm-msg';
+
+    var res = await sbClient.auth.signInWithPassword({ email: email, password: password });
+    if (res.error) {
+      var text = res.error.message.includes('Invalid login credentials')
+        ? 'Email atau password salah. Belum punya password? Klik "Lupa password?" untuk buat password baru.'
+        : res.error.message;
+      mShowMsg(msg, 'error', text);
+      btn.disabled = false; btn.textContent = 'Masuk →';
+    } else {
+      btn.textContent = 'Berhasil!';
+      window.location.href = 'dashboard.html';
+    }
+  });
+
+  // Register button
+  overlay.querySelector('#m-reg-btn').addEventListener('click', async function() {
+    var email = overlay.querySelector('#m-reg-email').value.trim();
+    var password = overlay.querySelector('#m-reg-password').value;
+    var confirm = overlay.querySelector('#m-reg-confirm').value;
+    var btn = overlay.querySelector('#m-reg-btn');
+    var msg = overlay.querySelector('#m-reg-msg');
+
+    if (!email || !password) return mShowMsg(msg, 'error', 'Isi semua kolom ya.');
+    if (password.length < 6) return mShowMsg(msg, 'error', 'Password minimal 6 karakter.');
+    if (password !== confirm) return mShowMsg(msg, 'error', 'Konfirmasi password tidak cocok.');
+
+    btn.disabled = true; btn.textContent = 'Mendaftar...';
+    msg.className = 'm-msg';
+
+    var res = await sbClient.auth.signUp({ email: email, password: password });
+    if (res.error) {
+      mShowMsg(msg, 'error', res.error.message);
+      btn.disabled = false; btn.textContent = 'Daftar →';
+    } else if (res.data.session) {
+      btn.textContent = 'Berhasil!';
+      window.location.href = 'dashboard.html';
+    } else {
+      mShowMsg(msg, 'success', 'Cek inbox ' + email + ' untuk konfirmasi akun, lalu kembali untuk masuk.');
+      btn.disabled = false; btn.textContent = 'Daftar →';
+    }
+  });
+
+  // Forgot password button
+  overlay.querySelector('#m-forgot-btn').addEventListener('click', async function() {
+    var email = overlay.querySelector('#m-forgot-email').value.trim();
+    var btn = overlay.querySelector('#m-forgot-btn');
+    var msg = overlay.querySelector('#m-forgot-msg');
+
+    if (!email || !email.includes('@')) return mShowMsg(msg, 'error', 'Masukkan email yang valid ya.');
+    btn.disabled = true; btn.textContent = 'Mengirim...';
+    msg.className = 'm-msg';
+
+    var res = await sbClient.auth.resetPasswordForEmail(email, {
+      redirectTo: 'https://belajar-claude.vercel.app/reset-password.html'
+    });
+    if (res.error) {
+      mShowMsg(msg, 'error', res.error.message);
+      btn.disabled = false; btn.textContent = 'Kirim Link Reset →';
+    } else {
+      mShowMsg(msg, 'success', 'Link reset sudah dikirim ke ' + email + '. Cek inbox kamu.');
+      btn.textContent = 'Terkirim!';
+    }
+  });
+
+  // Close on backdrop click
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) window.closeLoginModal();
+  });
+
+  // Enter key support
+  overlay.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { window.closeLoginModal(); return; }
+    if (e.key !== 'Enter') return;
+    var active = overlay.querySelector('.m-view.active');
+    if (!active) return;
+    if (active.id === 'm-view-login') overlay.querySelector('#m-login-btn').click();
+    else if (active.id === 'm-view-register') overlay.querySelector('#m-reg-btn').click();
+    else if (active.id === 'm-view-forgot') overlay.querySelector('#m-forgot-btn').click();
+  });
+
+  // ── Public API ───────────────────────────────────────────────────────────────
+  window.openLoginModal = function(defaultTab) {
+    overlay.classList.add('open');
+    // Reset all forms
+    overlay.querySelectorAll('input').forEach(function(i) { i.value = ''; });
+    overlay.querySelectorAll('.m-msg').forEach(function(m) { m.className = 'm-msg'; m.style.display = 'none'; });
+    overlay.querySelectorAll('.m-btn').forEach(function(b) { b.disabled = false; });
+    overlay.querySelector('#m-login-btn').textContent = 'Masuk →';
+    overlay.querySelector('#m-reg-btn').textContent = 'Daftar →';
+    overlay.querySelector('#m-forgot-btn').textContent = 'Kirim Link Reset →';
+    // Show tabs, go to requested tab (default: login)
+    overlay.querySelector('#m-tabs').style.display = 'flex';
+    mSwitchTab(defaultTab || 'login');
+  };
+
+  window.closeLoginModal = function() {
+    overlay.classList.remove('open');
+  };
+
+  // ── Intercept all login.html links ──────────────────────────────────────────
+  document.addEventListener('click', async function(e) {
+    const link = e.target.closest('a[href="login.html"]');
+    if (!link) return;
+    e.preventDefault();
+
+    const { data: { session } } = await sbClient.auth.getSession();
+    if (session) {
+      const dest = link.getAttribute('data-dest') || 'dashboard.html';
+      window.location.href = dest;
+    } else {
+      window.openLoginModal();
+    }
+  });
+
+})();

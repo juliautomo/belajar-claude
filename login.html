@@ -137,4 +137,134 @@
     <!-- Register view -->
     <div class="view" id="view-register">
       <label for="reg-email">Email</label>
-      <input type="email" id="reg-email" placeholder="nama@email.com" 
+      <input type="email" id="reg-email" placeholder="nama@email.com" autocomplete="email" />
+      <label for="reg-password">Password</label>
+      <input type="password" id="reg-password" placeholder="Minimal 6 karakter" autocomplete="new-password" />
+      <label for="reg-confirm">Konfirmasi Password</label>
+      <input type="password" id="reg-confirm" placeholder="Ulangi password" autocomplete="new-password" style="margin-bottom:14px;" />
+      <button class="btn" id="reg-btn" onclick="doRegister()">Daftar →</button>
+      <div class="msg" id="reg-msg"></div>
+    </div>
+
+    <!-- Forgot password view -->
+    <div class="view" id="view-forgot">
+      <p style="font-size:14px;color:var(--ink-2);margin-bottom:20px;line-height:1.6;">
+        Masukkan email kamu. Kami akan kirimkan link untuk buat password baru.
+      </p>
+      <label for="forgot-email">Email</label>
+      <input type="email" id="forgot-email" placeholder="nama@email.com" />
+      <button class="btn" id="forgot-btn" onclick="doForgot()">Kirim Link Reset →</button>
+      <div class="msg" id="forgot-msg"></div>
+      <button class="back-link" onclick="switchView('login')">← Kembali ke Masuk</button>
+    </div>
+
+    <p class="note">Dengan melanjutkan, kamu menyetujui syarat & ketentuan Belajar Claude.</p>
+    <a href="index.html" class="back">← Kembali ke beranda</a>
+  </div>
+
+  <script>
+    // Redirect if already logged in
+    (async function() {
+      var r = await sbClient.auth.getSession();
+      if (r.data.session) window.location.href = 'dashboard.html';
+    })();
+
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(function(b, i) {
+        b.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'register'));
+      });
+      switchView(tab);
+    }
+
+    function switchView(view) {
+      document.querySelectorAll('.view').forEach(function(v) { v.classList.remove('active'); });
+      document.getElementById('view-' + view).classList.add('active');
+      document.getElementById('tabs').style.display = view === 'forgot' ? 'none' : 'flex';
+    }
+
+    async function doLogin() {
+      var email = document.getElementById('login-email').value.trim();
+      var password = document.getElementById('login-password').value;
+      var btn = document.getElementById('login-btn');
+      var msg = document.getElementById('login-msg');
+
+      if (!email || !password) return showMsg(msg, 'error', 'Isi email dan password ya.');
+      btn.disabled = true; btn.textContent = 'Memproses...';
+      msg.className = 'msg';
+
+      var res = await sbClient.auth.signInWithPassword({ email: email, password: password });
+      if (res.error) {
+        var text = res.error.message.includes('Invalid login credentials')
+          ? 'Email atau password salah. Belum punya password? Klik "Lupa password?" untuk buat password baru.'
+          : res.error.message;
+        showMsg(msg, 'error', text);
+        btn.disabled = false; btn.textContent = 'Masuk →';
+      } else {
+        btn.textContent = 'Berhasil!';
+        window.location.href = 'dashboard.html';
+      }
+    }
+
+    async function doRegister() {
+      var email = document.getElementById('reg-email').value.trim();
+      var password = document.getElementById('reg-password').value;
+      var confirm = document.getElementById('reg-confirm').value;
+      var btn = document.getElementById('reg-btn');
+      var msg = document.getElementById('reg-msg');
+
+      if (!email || !password) return showMsg(msg, 'error', 'Isi semua kolom ya.');
+      if (password.length < 6) return showMsg(msg, 'error', 'Password minimal 6 karakter.');
+      if (password !== confirm) return showMsg(msg, 'error', 'Konfirmasi password tidak cocok.');
+
+      btn.disabled = true; btn.textContent = 'Mendaftar...';
+      msg.className = 'msg';
+
+      var res = await sbClient.auth.signUp({ email: email, password: password });
+      if (res.error) {
+        showMsg(msg, 'error', res.error.message);
+        btn.disabled = false; btn.textContent = 'Daftar →';
+      } else if (res.data.session) {
+        btn.textContent = 'Berhasil!';
+        window.location.href = 'dashboard.html';
+      } else {
+        showMsg(msg, 'success', 'Cek inbox ' + email + ' untuk konfirmasi akun, lalu kembali ke sini untuk masuk.');
+        btn.disabled = false; btn.textContent = 'Daftar →';
+      }
+    }
+
+    async function doForgot() {
+      var email = document.getElementById('forgot-email').value.trim();
+      var btn = document.getElementById('forgot-btn');
+      var msg = document.getElementById('forgot-msg');
+
+      if (!email || !email.includes('@')) return showMsg(msg, 'error', 'Masukkan email yang valid ya.');
+      btn.disabled = true; btn.textContent = 'Mengirim...';
+      msg.className = 'msg';
+
+      var res = await sbClient.auth.resetPasswordForEmail(email, {
+        redirectTo: 'https://belajar-claude.vercel.app/reset-password.html'
+      });
+      if (res.error) {
+        showMsg(msg, 'error', res.error.message);
+        btn.disabled = false; btn.textContent = 'Kirim Link Reset →';
+      } else {
+        showMsg(msg, 'success', 'Link reset sudah dikirim ke ' + email + '. Cek inbox kamu.');
+        btn.textContent = 'Terkirim!';
+      }
+    }
+
+    function showMsg(el, type, text) {
+      el.textContent = text; el.className = 'msg ' + type;
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key !== 'Enter') return;
+      var active = document.querySelector('.view.active');
+      if (!active) return;
+      if (active.id === 'view-login') doLogin();
+      else if (active.id === 'view-register') doRegister();
+      else if (active.id === 'view-forgot') doForgot();
+    });
+  </script>
+</body>
+</html>
