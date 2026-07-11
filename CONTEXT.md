@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 7, 2026_
+_Last updated: July 11, 2026_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -51,6 +51,7 @@ All pages use these CSS variables:
 ```
 - **Fonts**: `Geist` (body/UI, `--font`) + `Instrument Serif` (headings, `--serif`). Loaded from Google Fonts with weights 300–700.
 - **Nav**: `rgba(250,250,250,0.88)` frosted glass, `height: 58px`, `padding: 0 40px`, `backdrop-filter: blur(16px)`, `border-bottom: 1px solid var(--border)`. Fixed position on all pages.
+- **Nav logout dropdown** (added July 11, 2026): All 9 marketing/sales pages (`index.html`, `bisnis-ukm.html`, `kerja-sehari-hari.html`, `kursus-karyawan.html`, `kursus-mahasiswa.html`, `kursus-ukm.html`, `mulai-claude.html`, `paket-content-creator.html`, `prompt-gratis.html`) have a `.nav-user-pill` that shows logged-in user name/email. Now clickable — opens a dropdown with "Dashboard" link and "Keluar" button. Keluar calls `sbClient.auth.signOut()` then redirects to `index.html`. JS functions: `toggleUserMenu(e)`, `doSignOut(e)`. Dropdown closes on outside click.
 - **Logo**: `<a class="logo">belajar<span>claude</span></a>` — `font-family: var(--font)` (Geist), `font-size: 17px`, `font-weight: 700`, `letter-spacing: -0.4px`. Span `claude` uses `color: var(--accent)` (purple).
 - **Cards**: White surface, `1px solid var(--border)`, `border-radius: 14-16px`, subtle shadow
 - **Body**: `-webkit-font-smoothing: antialiased`
@@ -61,8 +62,9 @@ All pages use these CSS variables:
 - **Project**: "Belajar-Claude" — `ctqtdqbsucbhikwnagvl`
 - **Region**: ap-southeast-2
 - **Site URL**: `https://belajar-claude.vercel.app`
-- **Redirect URLs**: `https://belajar-claude.vercel.app/**`, `https://juliautomo.github.io/belajar-claude/**`
-- **Magic link template**: Updated to Belajar Claude branding (confirm signup also updated)
+- **Redirect URLs**: `https://belajar-claude.vercel.app/**` (GitHub Pages URL removed July 11, 2026)
+- **SMTP**: Custom SMTP configured → SendGrid (`smtp.sendgrid.net:587`, username `apikey`) so auth emails (password reset, signup confirmation) bypass Supabase's 3/hour free-tier limit
+- **Auth method**: Email + password (switched from magic link, July 11, 2026). `signInWithPassword` / `signUp` / `resetPasswordForEmail` with `redirectTo: https://belajar-claude.vercel.app/reset-password.html`
 
 ### Tables
 | Table | Key Columns | Notes |
@@ -100,7 +102,8 @@ All pages use these CSS variables:
 ### App
 | File | Purpose |
 |------|---------|
-| `login.html` | Auth page (Supabase magic link) |
+| `login.html` | Auth page — email + password (Masuk / Daftar tabs + Lupa password? view). Replaced magic link July 11, 2026. |
+| `reset-password.html` | Password recovery page — listens for `PASSWORD_RECOVERY` Supabase event, calls `updateUser({ password })`. Added July 11, 2026. |
 | `dashboard.html` | Main user dashboard |
 | `prompt-gratis-content.html` | Course reader — 5 modules + feedback panel |
 | `mulai-claude-content.html` | Course reader — 6 modules + feedback panel |
@@ -112,7 +115,7 @@ All pages use these CSS variables:
 ### Assets
 | File | Purpose |
 |------|---------|
-| `login-modal.js` | Shared login modal logic |
+| `login-modal.js` | Shared login modal — email+password (Masuk/Daftar tabs + forgot password view). Intercepts all `<a href="login.html">` clicks. Public API: `window.openLoginModal(tab)` / `window.closeLoginModal()`. Rewritten July 11, 2026. |
 | `payment-success-modal.js` | Post-payment modal logic |
 | `supabase-config.js` | Shared Supabase client config |
 | `20-prompt-claude-terbaik.pdf` | Free PDF download |
@@ -197,26 +200,4 @@ Hosted on Railway (`https://klaud-backend-production.up.railway.app`). Handles p
 |------|------|-------|
 | `kerja-sehari-hari` | K2: Produktivitas Kantor | Rp 149,000 |
 | `bisnis-ukm` | K3: Konten & Pemasaran Bisnis | Rp 149,000 |
-| `konten-copywriting` | K4: Copywriting & Konten Digital | Rp 199,000 |
-| `analisis-data` | K5: Analisis Data & Laporan | Rp 199,000 |
-| `build-automation` | K6: Automasi Workflow | Rp 299,000 |
-| `ai-powered-app` | K7: Build AI App Sederhana | Rp 299,000 |
-| `claude-api-dev` | K8: Claude API untuk Developer | Rp 399,000 |
-| `jual-produk-ai` | K9: Build & Monetisasi Produk AI | Rp 499,000 |
-| `paket-mahasiswa` | Claude untuk Mahasiswa | Rp 249,000 |
-| `paket-karyawan` | Claude untuk Karyawan & Profesional | Rp 299,000 |
-| `paket-pengusaha` | Claude untuk Pengusaha | Rp 499,000 |
-| `paket-creator` | Claude untuk Content Creator | Rp 299,000 |
-| `workshop-zoom` | Workshop Bulanan via Zoom | Rp 149,000 |
-| `coaching-1on1` | Coaching 1-on-1 | Rp 1,500,000 |
-
-### Package → Course Enrollment Map (PAKET_COURSES)
-| Package | Constituent Courses |
-|---------|-------------------|
-| `paket-karyawan` | mulai-claude, kerja-sehari-hari, analisis-data |
-| `paket-mahasiswa` | mulai-claude, konten-copywriting, analisis-data |
-| `paket-pengusaha` | mulai-claude, bisnis-ukm, konten-copywriting, build-automation |
-| `paket-creator` | mulai-claude, bisnis-ukm, konten-copywriting |
-
-### Backend Integrations
-- **Duitku**: Payment gateway (sandbox: `api-sandbox.duitku.com`). Signature: SHA256 for invoice creation, M
+| `konte
