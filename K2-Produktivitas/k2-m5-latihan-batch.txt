@@ -1,0 +1,67 @@
+# FILE LATIHAN BATCH PROMPTING — K2 MODUL 5
+# Cara pakai: Copy seluruh bagian yang kamu butuhkan ke Claude, tambahkan instruksi di atas list-nya.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LATIHAN A — DESKRIPSI PRODUK (untuk caption / deskripsi toko online)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Instruksi contoh:
+"Buat caption Instagram (maks 100 kata, tone hangat dan menggiurkan) untuk setiap produk di bawah.
+Format: Nama Produk → Caption → 5 hashtag relevan"
+
+DAFTAR PRODUK:
+1. Kopi Susu Gula Aren — minuman kekinian berbasis espresso, manis alami, cocok untuk anak muda
+2. Matcha Latte Premium — teh hijau Jepang dicampur susu oat, creamy dan tidak terlalu manis
+3. Es Coklat Belgium — dark chocolate leleh dengan es batu, topping whipped cream
+4. Brown Sugar Boba — teh susu dengan tapioca pearl dan saus gula merah karamel
+5. Strawberry Smoothie — buah strawberry segar blended dengan yogurt dan madu
+6. Americano Cold Brew — kopi hitam pekat yang diseduh 18 jam, tanpa rasa pahit berlebih
+7. Taro Cream Latte — ubi ungu Jepang dipadukan susu segar dan foam vanilla
+8. Lemon Tea Sparkling — teh hitam dengan perasan lemon segar dan soda, segar dan ringan
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LATIHAN B — RINGKASAN EMAIL (untuk latihan ringkas cepat)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Instruksi contoh:
+"Untuk setiap email di bawah, buat ringkasan 1 kalimat (maks 20 kata) yang menangkap isi utama dan action item-nya."
+
+DAFTAR EMAIL (subjek + isi singkat):
+1. Subjek: "Follow up proposal bulan lalu" — Klien tanya kapan presentasi bisa dijadwalkan, minta hari Rabu atau Kamis minggu depan
+2. Subjek: "Revisi konten Instagram minggu ini" — Klien minta ganti warna background post dari biru ke hijau tosca, minta dikirim ulang sebelum Jumat
+3. Subjek: "Invoice Mei belum diterima" — Klien bilang invoice bulan Mei belum ada di inbox mereka, minta kirim ulang ke email baru: finance@klien.co.id
+4. Subjek: "Laporan ads terlalu teknis" — Klien complain laporan Meta Ads terlalu penuh angka, minta dibuat lebih ringkas dan ada rekomendasi actionable
+5. Subjek: "Minta tambah satu konten video" — Klien minta tambahan 1 Reels per minggu di luar paket, ingin tahu harga add-on-nya
+6. Subjek: "Konfirmasi meeting besok" — Klien konfirmasi meeting jam 14.00 via Zoom, minta link meeting dikirim pagi hari
+7. Subjek: "Feedback konten bulan April" — Klien sangat puas dengan performa April, engagement naik 40%, minta strategi yang sama dilanjutkan
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LATIHAN C — KLASIFIKASI (untuk latihan batch klasifikasi/kategorisasi)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Instruksi contoh:
+"Klasifikasikan setiap pesan di bawah ke dalam salah satu kategori: KOMPLAIN / PERTANYAAN / PUJIAN / PERMINTAAN.
+Format: Nomor | Kategori | Tingkat urgensi (Segera/Normal/Rendah)"
+
+DAFTAR PESAN MASUK (DM/WA dari klien dan calon klien):
+1. "Halo, saya mau tanya paket kelola Instagram berapa ya? Tim saya cuma 3 orang dan belum ada yang ngurusin sosmed"
+2. "Konten yang diposting tadi salah! Itu promo sudah expired dari 2 minggu lalu, tolong hapus sekarang"
+3. "Terima kasih ya tim! Followers naik 500 dalam sebulan, klien saya juga mulai notice kontennya lebih rapi"
+4. "Kalau mau tambah TikTok ke paket saya yang sekarang, bisa? Berapa tambahannya?"
+5. "Laporan bulan ini belum saya terima padahal sudah tanggal 15"
+6. "Apakah bisa bantu bikin konten untuk launching produk baru kami bulan depan? Ada 3 varian produk baru"
+7. "Iklan kita sudah jalan 2 minggu tapi tidak ada yang convert sama sekali, ini kenapa?"
+8. "Senang banget kerja sama kalian, responnya cepat dan hasilnya sesuai ekspektasi. Sudah rekomendasiin ke teman saya juga"
+9. "Boleh minta sample report dulu sebelum saya putuskan mau lanjut atau tidak?"
+10. "Password akun Instagram lama kami hilang, bisa bantu recover tidak?"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LATIHAN D — BALASAN EMAIL BATCH (tingkat lanjut)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Instruksi contoh:
+"Tulis draft balasan singkat (maks 60 kata) untuk setiap situasi di bawah.
+Tone: profesional tapi hangat. Sertakan CTA yang spesifik di setiap balasan."
+
+SITUASI:
+1. Klien tanya harga paket — belum pernah kenal sebelumnya
+2. Klien minta revisi konten yang sudah disetujui sebelumnya
+3. Klien puas dan kasih pujian setelah bulan pertama
+4. Klien complain iklan tidak perform, butuh penjelasan
+5. Klien minta penawaran untuk 6 bulan ke depan dengan harga lebih murah
