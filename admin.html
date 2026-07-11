@@ -377,6 +377,7 @@ async function uploadDoc() {
 
   btn.disabled = true;
   var okCount = 0;
+  var okNames = [];
   var errors = [];
 
   for (var j = 0; j < files.length; j++) {
@@ -398,11 +399,14 @@ async function uploadDoc() {
     });
     if (db.error) { errors.push(file.name + ': ' + db.error.message); continue; }
     okCount++;
+    okNames.push(file.name);
   }
 
   btn.disabled = false;
   if (errors.length) {
-    setStatus('docStatus', okCount + '/' + files.length + ' berhasil diunggah. Gagal: ' + errors.join(' | '), okCount > 0 ? 'pending' : 'error');
+    setStatus('docStatus', okCount + '/' + files.length + ' berhasil diunggah' + (okNames.length ? ' (' + okNames.join(', ') + ')' : '') + '. Gagal: ' + errors.join(' | '), okCount > 0 ? 'pending' : 'error');
+  } else if (okCount > 1) {
+    setStatus('docStatus', okCount + ' dokumen berhasil diunggah untuk ' + courseName(slug) + ' — Modul ' + moduleNum + ' ✓ (' + okNames.join(', ') + ')', 'success');
   } else {
     setStatus('docStatus', okCount + ' dokumen berhasil diunggah untuk ' + courseName(slug) + ' — Modul ' + moduleNum + ' ✓', 'success');
   }
