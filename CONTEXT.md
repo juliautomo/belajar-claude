@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 11, 2026_
+_Last updated: July 11, 2026 (checkpoint 2)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -20,6 +20,7 @@ Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign 
 - **belajar-claude push**: PAT `ghp_YOUR_PAT_HERE` embedded in remote URL. Claude clones to `/tmp/bc-push`, edits there, and pushes. Windows-mounted `.git/` folder blocks lock file writes so direct git from mount doesn't work.
 - **belajar-claude-backend push**: Same PAT, clones to `/tmp/belajar-claude-backend`. Local folder at `C:\Users\julia\GitHub\belajar-claude-backend\`.
 - **Local file sync**: Claude edits files directly on the Windows mount via file tools AND in `/tmp` clone before pushing. Both stay in sync.
+- **K2 files**: All K2-related files are in `C:\Users\julia\GitHub\belajar-claude\K2-Produktivitas\` (moved July 11, 2026)
 - **Pulling latest**: Claude can't `git pull` on Windows mounts. Workaround: `git clone --depth=1` to `/tmp`, then copy files as needed.
 
 ## Local Folder Structure (as of June 2026)
@@ -103,7 +104,7 @@ All pages use these CSS variables:
 | File | Purpose |
 |------|---------|
 | `login.html` | Auth page — email + password (Masuk / Daftar tabs + Lupa password? view). Replaced magic link July 11, 2026. |
-| `reset-password.html` | Password recovery page — listens for `PASSWORD_RECOVERY` Supabase event, calls `updateUser({ password })`. Added July 11, 2026. |
+| `reset-password.html` | Password recovery page — handles both PKCE (`?code=` in URL) and implicit (`#access_token`) flows. Calls `updateUser({ password })`. Added + fixed July 11, 2026. |
 | `dashboard.html` | Main user dashboard |
 | `prompt-gratis-content.html` | Course reader — 5 modules + feedback panel |
 | `mulai-claude-content.html` | Course reader — 6 modules + feedback panel |
@@ -200,4 +201,26 @@ Hosted on Railway (`https://klaud-backend-production.up.railway.app`). Handles p
 |------|------|-------|
 | `kerja-sehari-hari` | K2: Produktivitas Kantor | Rp 149,000 |
 | `bisnis-ukm` | K3: Konten & Pemasaran Bisnis | Rp 149,000 |
-| `konte
+| `konten-copywriting` | K4: Copywriting & Konten Digital | Rp 199,000 |
+| `analisis-data` | K5: Analisis Data & Laporan | Rp 199,000 |
+| `build-automation` | K6: Automasi Workflow | Rp 299,000 |
+| `ai-powered-app` | K7: Build AI App Sederhana | Rp 299,000 |
+| `claude-api-dev` | K8: Claude API untuk Developer | Rp 399,000 |
+| `jual-produk-ai` | K9: Build & Monetisasi Produk AI | Rp 499,000 |
+| `paket-mahasiswa` | Claude untuk Mahasiswa | Rp 249,000 |
+| `paket-karyawan` | Claude untuk Karyawan & Profesional | Rp 299,000 |
+| `paket-pengusaha` | Claude untuk Pengusaha | Rp 499,000 |
+| `paket-creator` | Claude untuk Content Creator | Rp 299,000 |
+| `workshop-zoom` | Workshop Bulanan via Zoom | Rp 149,000 |
+| `coaching-1on1` | Coaching 1-on-1 | Rp 1,500,000 |
+
+### Package → Course Enrollment Map (PAKET_COURSES)
+| Package | Constituent Courses |
+|---------|-------------------|
+| `paket-karyawan` | mulai-claude, kerja-sehari-hari, analisis-data |
+| `paket-mahasiswa` | mulai-claude, konten-copywriting, analisis-data |
+| `paket-pengusaha` | mulai-claude, bisnis-ukm, konten-copywriting, build-automation |
+| `paket-creator` | mulai-claude, bisnis-ukm, konten-copywriting |
+
+### Backend Integrations
+- **Duitku**: Payment gateway (sandbox: `api-sandbox.duitku.com`). Signature: SHA256 for invoice creation, M
