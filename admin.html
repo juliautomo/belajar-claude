@@ -143,13 +143,13 @@ td a:hover { text-decoration: underline; }
 
   <div class="card">
     <h2>Dokumen Praktik per Modul</h2>
-    <p class="hint">Dokumen pendukung untuk sesi praktik di akhir modul (PDF, DOC, atau DOCX). Bisa pilih dan unggah lebih dari satu file sekaligus — tidak menggantikan yang sudah ada.</p>
+    <p class="hint">Dokumen pendukung untuk sesi praktik di akhir modul (PDF, DOC, DOCX, atau MD). Bisa pilih dan unggah lebih dari satu file sekaligus — tidak menggantikan yang sudah ada.</p>
     <label for="docCourseSelect">Kursus</label>
     <select id="docCourseSelect" onchange="populateDocModuleSelect()"></select>
     <label for="docModuleSelect">Modul</label>
     <select id="docModuleSelect"></select>
     <label for="docFileInput">File Dokumen (bisa pilih lebih dari satu)</label>
-    <input type="file" id="docFileInput" accept=".pdf,.doc,.docx" multiple>
+    <input type="file" id="docFileInput" accept=".pdf,.doc,.docx,.md" multiple>
     <button class="btn" id="docUploadBtn" onclick="uploadDoc()">Unggah Dokumen</button>
     <div class="status" id="docStatus"></div>
   </div>
@@ -372,7 +372,7 @@ async function uploadDoc() {
   if (!files.length) { setStatus('docStatus', 'Pilih minimal 1 file dokumen dulu.', 'error'); return; }
   for (var i = 0; i < files.length; i++) {
     var ext = files[i].name.split('.').pop().toLowerCase();
-    if (['pdf', 'doc', 'docx'].indexOf(ext) === -1) { setStatus('docStatus', 'File "' + files[i].name + '" harus PDF, DOC, atau DOCX.', 'error'); return; }
+    if (['pdf', 'doc', 'docx', 'md'].indexOf(ext) === -1) { setStatus('docStatus', 'File "' + files[i].name + '" harus PDF, DOC, DOCX, atau MD.', 'error'); return; }
   }
 
   btn.disabled = true;
