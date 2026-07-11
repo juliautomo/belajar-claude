@@ -1,9 +1,10 @@
 // course-video.js — Injects admin-set module videos (YouTube embeds), PDF,
-// and practice documents into content pages.
+// module PPT slides, and practice documents into content pages.
 // Requires: sbClient (from supabase-config.js) and a global COURSE_SLUG
 // constant defined before this script tag loads. Looks for elements with id
-// "video-slot-<moduleNum>", "doc-slot-<moduleNum>", "pdf-download-slot"
-// (sidebar) and "pdf-banner-slot" (top of main content, always visible).
+// "video-slot-<moduleNum>", "ppt-slot-<moduleNum>", "doc-slot-<moduleNum>"
+// (all below the module title) and "pdf-download-slot" (sidebar link to the
+// course-level PDF).
 
 // Extracts an 11-char YouTube video ID from watch/share/shorts/embed URLs.
 function extractYoutubeId(url) {
@@ -65,24 +66,29 @@ function extractYoutubeId(url) {
             '<span style="font-size:18px;line-height:1;">📄</span>' +
             '<span>Unduh ' + label + '</span></a>';
         }
-
-        // Main content banner — full-width, always visible above the module content.
-        var bannerSlot = document.getElementById('pdf-banner-slot');
-        if (bannerSlot) {
-          bannerSlot.innerHTML =
-            '<a href="' + resource.pdf_url + '" target="_blank" rel="noopener" ' +
-            'style="display:flex;align-items:center;gap:14px;margin-bottom:24px;padding:16px 20px;' +
-            'background:var(--accent);color:#fff;border-radius:14px;text-decoration:none;' +
-            'box-shadow:0 4px 20px var(--accent-glow);">' +
-            '<span style="font-size:26px;line-height:1;">📄</span>' +
-            '<div style="flex:1;">' +
-            '<div style="font-size:14px;font-weight:700;">Unduh ' + label + '</div>' +
-            '<div style="font-size:12px;opacity:0.85;">Materi lengkap kursus ini, siap disimpan atau dicetak</div>' +
-            '</div>' +
-            '<span style="font-size:18px;">→</span></a>';
-        }
       })
       .catch(function (e) { console.log('course-video: gagal memuat PDF', e); });
+
+    sbClient
+      .from('module_ppts')
+      .select('module_num, ppt_url, ppt_label')
+      .eq('course_slug', COURSE_SLUG)
+      .then(function (res) {
+        (res.data || []).forEach(function (row) {
+          if (!row.ppt_url) return;
+          var slot = document.getElementById('ppt-slot-' + row.module_num);
+          if (!slot) return;
+          var label = row.ppt_label || 'Slide Modul';
+          slot.innerHTML =
+            '<a href="' + row.ppt_url + '" target="_blank" rel="noopener" ' +
+            'style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding:12px 14px;' +
+            'background:var(--accent-dim, rgba(108,71,255,0.08));color:var(--accent);border-radius:10px;' +
+            'font-size:13px;font-weight:700;text-decoration:none;">' +
+            '<span style="font-size:18px;line-height:1;">📊</span>' +
+            '<span>Lihat ' + label + '</span></a>';
+        });
+      })
+      .catch(function (e) { console.log('course-video: gagal memuat PPT', e); });
 
     sbClient
       .from('module_documents')
