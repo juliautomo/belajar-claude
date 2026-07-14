@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 14, 2026 (checkpoint 6)_
+_Last updated: July 14, 2026 (checkpoint 7)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -177,6 +177,7 @@ const COURSE_SLUG = 'produktivitas';
 - `window._supabase` → `sbClient` (progress was not saving at all — completions silently failed)
 - M08 scenario cards made clickable (Skenario A/B toggle via `showScenario()`)
 - Video placeholder shown in empty `video-slot-N` divs (dashed box, 1.5s timeout after `course-video.js`)
+- **Truncated file bug (July 14, 2026, checkpoint 7)**: file was pushed truncated at 79326 bytes, ending with `comment: comment |` (half of `|| null`). Everything from there to end of file was missing — `doLogout()`, `init()`, setTimeout placeholder, `showScenario()`, and closing `</script></body></html>`. This caused a JS syntax error so NO functions were registered: buttons did nothing, Selanjutnya was unresponsive. Root cause: push workflow copied from Linux mount of Windows directory, which had a stale cache of an older file version while the Windows-layer file was already complete. Fixed by rewriting the correct tail directly via Python in bash, then pushed as commit `5091a3d`. **Diagnostic tip**: if a content page renders HTML but all buttons are dead, run `python3 -c "data=open('file.html','rb').read(); print(repr(data[-100:]))"` — a truncated file will show incomplete JS at the end rather than `</html>`.
 
 **Supabase MCP note**: MCP is connected to `pyuvofppbfuytkcazgwh` ("Personal"), NOT the live project `ctqtdqbsucbhikwnagvl`. The live project is owned by a different account — MCP cannot query it. Use Supabase dashboard directly for DB queries on the live project.
 
@@ -206,12 +207,4 @@ All 6 content panels rewritten to follow the uploaded PDF "K3 · Konten & Pemasa
 - **RLS fix + PPT feature (July 11, 2026) — RESOLVED**: the "Dokumen Praktik" upload was failing with "new row violates row-level security policy" because the `course-documents` storage bucket had never been created in the *correct* Supabase project. Root cause turned out to be a **two-project mix-up**: Julia had been running SQL/creating buckets in an unrelated Supabase project (`pyuvofppbfuytkcazgwh`), while `supabase-config.js` actually points the live site at `ctqtdqbsucbhikwnagvl` ("Belajar-Claude"). Artifacts created in the wrong project (a `module_ppts` table, `course-documents`/`course-ppts` buckets) were left in place there since they're inert and don't affect the live site — cleanup is optional, not required. Fix: ran `sql/admin-content-setup.sql` + `sql/module-ppts-and-fix-uploads.sql` (concatenated as `run-this-in-belajar-claude-project.sql`, given directly to Julia) in the correct project `ctqtdqbsucbhikwnagvl`. **Confirmed working as of this checkpoint** — PDF, PPT, and multi-file Dokumen Praktik uploads all succeed in production.
 - **Practice document file types (July 11, 2026)**: `docFileInput` now also accepts `.md` in addition to PDF/DOC/DOCX (`accept` attribute + the extension whitelist in `uploadDoc()`).
 - **Multi-file upload success message (July 11, 2026)**: `uploadDoc()` now lists the uploaded filenames in the success status when more than one file is uploaded in a batch, e.g. "2 dokumen berhasil diunggah untuk ... ✓ (a.pdf, b.pdf)" — purely cosmetic, the underlying count (`okCount`) was already accurate.
-- **Known limitation**: practice documents and PPTs are uploaded as raw files to Supabase Storage, subject to Supabase's per-file upload size limit and total storage/bandwidth quota. Videos remain link-based (YouTube) so they're not affected by this.
-- **Supabase project gotcha to remember**: there are (at least) two Supabase projects in play — `ctqtdqbsucbhikwnagvl` ("Belajar-Claude", the real one, referenced in `supabase-config.js`) and `pyuvofppbfuytkcazgwh` (unrelated, has stray leftover objects from this incident). Always confirm the project ID in the dashboard URL before giving SQL to run.
-
----
-
-## Index.html Key Details
-- **Hero section title**: "Pilih jalur sesuai tujuanmu" — single line (no `<br>`)
-- **Jalur grid**: Individual white cards with `1.5px solid #D5D5D2` border + drop shadow. 3-column grid, `gap: 16px`. Featured (All Access) card = dark background.
-- **Course carousel**: Horizontal scroll, individual cards with border+shadow. Tags use `align-items: flex-start` on card to
+- **Known limitation**: practice documents and PPTs are uploaded as raw files t
