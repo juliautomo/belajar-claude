@@ -1258,7 +1258,7 @@ Singkat, cocok untuk diucapkan, bukan dibaca.<button class="copy-btn" onclick="c
   const done = new Set();
   let starRating = 0;
 
-  const sb = window._supabase;
+  const sb = sbClient;
 
   async function init() {
     const { data: { session } } = await sb.auth.getSession();
@@ -1358,4 +1358,4 @@ Singkat, cocok untuk diucapkan, bukan dibaca.<button class="copy-btn" onclick="c
       email: session.user.email,
       course_slug: COURSE_SLUG,
       rating: starRating,
-      comment: c
+      comment: comment |
