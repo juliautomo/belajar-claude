@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 14, 2026 (checkpoint 5)_
+_Last updated: July 14, 2026 (checkpoint 6)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -89,7 +89,7 @@ All pages use these CSS variables:
 | `index.html` | Landing page — hero, jalur belajar grid, course carousel, CTA |
 | `mulai-claude.html` | Sales page for "Mulai dengan Claude AI" (free) |
 | `produktivitas.html` | Sales page — K2 · Produktivitas Kantor — Rp 149K (8 modules) |
-| `kerja-sehari-hari.html` | RETIRED — old K2 sales page (still in repo, nothing links to it) |
+| `kerja-sehari-hari.html` | DELETED from repo (July 14, 2026) |
 | `bisnis-ukm.html` | Sales page — Rp 149K |
 | `prompt-gratis.html` | Sales page for free prompt guide |
 | `kursus-karyawan.html` | Jalur Profesional page |
@@ -110,7 +110,7 @@ All pages use these CSS variables:
 | `prompt-gratis-content.html` | Course reader — 5 modules + feedback panel |
 | `mulai-claude-content.html` | Course reader — 6 modules + feedback panel |
 | `produktivitas-content.html` | Course reader — K2, 8 modules + feedback panel (COURSE_SLUG='produktivitas') |
-| `kerja-sehari-hari-content.html` | RETIRED — old K2 content (6 modules, COURSE_SLUG='kerja-sehari-hari'). Still in repo, nothing links to it. |
+| `kerja-sehari-hari-content.html` | DELETED from repo (July 14, 2026) |
 | `bisnis-ukm-content.html` | Course reader — 6 modules + feedback panel |
 | `payment-success.html` | Post-payment confirmation |
 | `admin.html` | Admin-only content manager — upload course PDFs + per-module videos to Supabase Storage. Gated to `julia.utomo@gmail.com` / `tiffany.utomo@gmail.com` via session email check. Linked from a hidden "Admin" nav item on `prompt-gratis.html` (shown only to those emails). |
@@ -163,8 +163,8 @@ const COURSE_SLUG = 'produktivitas';
 ```
 **8 modules**: M01 Role Prompting → M02 Claude Projects → M03 Gmail+Claude → M04 Google Sheets → M05 Batch Prompting → M06 Prompt Chaining → M07 Dokumen & Riset → M08 Case Study (Satu Hari dengan Claude). Personas used throughout: Rina (UMKM fashion "Kasual Studio") and Budi (konsultan freelance). M08 includes completion badge + "Lanjutkan Belajar" card linking to `bisnis-ukm.html`. 30+ copyable prompt boxes with Salin/copy buttons.
 
-**Files replaced across the codebase (July 14, 2026)**:
-- `kerja-sehari-hari` slug fully retired from the live frontend
+**Files replaced/deleted across the codebase (July 14, 2026)**:
+- `kerja-sehari-hari.html` + `kerja-sehari-hari-content.html` — **deleted from repo**
 - `produktivitas.html` — new landing page (8 modul, 2 jam)
 - `admin.html` — removed `kerja-sehari-hari` entry, `produktivitas` entry has `modules: 8`
 - `index.html` — K2 card now links to `produktivitas.html`, shows 8 modul
@@ -172,7 +172,15 @@ const COURSE_SLUG = 'produktivitas';
 - `mulai-claude-content.html` — "Lanjutkan Belajar" card → `produktivitas.html`
 - `bisnis-ukm-content.html` — cross-sell card → `produktivitas.html`
 - `kursus-karyawan.html` — `hasAccess` check uses `produktivitas` slug
-- **Backend (index.js) NOT yet updated** — still has `kerja-sehari-hari` as K2 slug. Needs to be updated to `produktivitas` for the payment webhook to enroll correctly.
+
+**produktivitas-content.html bugs fixed (July 14, 2026)**:
+- `window._supabase` → `sbClient` (progress was not saving at all — completions silently failed)
+- M08 scenario cards made clickable (Skenario A/B toggle via `showScenario()`)
+- Video placeholder shown in empty `video-slot-N` divs (dashed box, 1.5s timeout after `course-video.js`)
+
+**Supabase MCP note**: MCP is connected to `pyuvofppbfuytkcazgwh` ("Personal"), NOT the live project `ctqtdqbsucbhikwnagvl`. The live project is owned by a different account — MCP cannot query it. Use Supabase dashboard directly for DB queries on the live project.
+
+**Backend (index.js) NOT yet updated** — still has `kerja-sehari-hari` as K2 slug. Needs to be updated to `produktivitas` for the payment webhook to enroll correctly.
 
 ### bisnis-ukm-content.html — rewritten per K3 PDF, July 2026
 All 6 content panels rewritten to follow the uploaded PDF "K3 · Konten & Pemasaran Bisnis" (course "Claude untuk Bisnis & UKM"), replacing the old generic per-tool tutorials. Panel count/TOTAL unchanged (already 7 = 6 content + feedback), just content + order + sidebar titles replaced.
@@ -206,17 +214,4 @@ All 6 content panels rewritten to follow the uploaded PDF "K3 · Konten & Pemasa
 ## Index.html Key Details
 - **Hero section title**: "Pilih jalur sesuai tujuanmu" — single line (no `<br>`)
 - **Jalur grid**: Individual white cards with `1.5px solid #D5D5D2` border + drop shadow. 3-column grid, `gap: 16px`. Featured (All Access) card = dark background.
-- **Course carousel**: Horizontal scroll, individual cards with border+shadow. Tags use `align-items: flex-start` on card to prevent stretching.
-- **"Segera Hadir"** on jalur links: Developer → `coming-soon.html`, Mahasiswa → `kursus-mahasiswa.html`
-
----
-
-## Backend (klaud-backend — Node.js/Express)
-Hosted on Railway (`https://klaud-backend-production.up.railway.app`). Handles payments and signups.
-- **GitHub repo**: `juliautomo/belajar-claude-backend` (renamed from `klaud-backend`)
-- **Railway service name**: still shows `klaud-backend` (cosmetic only, URL unchanged)
-
-### API Endpoints
-| Method | Path | Purpose |
-|--------|------|---------|
-| `GE
+- **Course carousel**: Horizontal scroll, individual cards with border+shadow. Tags use `align-items: flex-start` on card to
