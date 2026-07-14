@@ -1358,4 +1358,45 @@ Singkat, cocok untuk diucapkan, bukan dibaca.<button class="copy-btn" onclick="c
       email: session.user.email,
       course_slug: COURSE_SLUG,
       rating: starRating,
-      comment: comment |
+      comment: comment || null
+    }, { onConflict: 'email,course_slug' });
+
+    // Mark module 8 done on feedback submission
+    if (!done.has(8)) { done.add(8); markDone(8); saveCompletion(8); updateProgress(); }
+
+    document.querySelector('.submit-feedback-btn').style.display = 'none';
+    document.getElementById('feedbackThanks').style.display = 'block';
+  }
+
+  async function doLogout() {
+    await sb.auth.signOut();
+    window.location.href = 'index.html';
+  }
+
+  init();
+
+  // Show video placeholders for slots not filled by course-video.js
+  // course-video.js runs async; we wait 1.5s then show placeholder only in still-empty slots
+  setTimeout(function() {
+    document.querySelectorAll('.video-slot[data-placeholder="true"]').forEach(function(slot) {
+      if (!slot.innerHTML.trim()) {
+        slot.innerHTML =
+          '<div style="display:flex;align-items:center;gap:12px;padding:14px 16px;' +
+          'background:var(--surface-2);border:1px dashed var(--border-strong);border-radius:12px;' +
+          'margin-bottom:20px;color:var(--ink-2);">' +
+          '<span style="font-size:22px;line-height:1;">\U0001f3ac</span>' +
+          '<span style="font-size:13px;font-weight:500;">Video untuk modul ini akan segera hadir.</span>' +
+          '</div>';
+      }
+    });
+  }, 1500);
+
+  function showScenario(name) {
+    document.getElementById('scenario-a').style.display = name === 'a' ? '' : 'none';
+    document.getElementById('scenario-b').style.display = name === 'b' ? '' : 'none';
+    document.getElementById('scenario-card-a').classList.toggle('highlight', name === 'a');
+    document.getElementById('scenario-card-b').classList.toggle('highlight', name === 'b');
+  }
+</script>
+</body>
+</html>
