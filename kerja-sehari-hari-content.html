@@ -3,595 +3,1371 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Claude untuk Pekerjaan Sehari-hari — Belajar Claude</title>
+<title>Produktivitas Kantor dengan Claude — Belajar Claude</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-config.js"></script>
-  <script>const COURSE_SLUG = 'kerja-sehari-hari';</script>
-  <script src="course-video.js"></script>
+<script src="supabase-config.js"></script>
+<script>const COURSE_SLUG = 'kerja-sehari-hari';</script>
+<script src="course-video.js"></script>
 <style>
-      :root {
-    --bg: #FAFAFA; --surface: #FFFFFF; --surface-2: #F5F5F7;
-    --border: #E8E8E8; --border-strong: #D0D0D0;
-    --ink: #111111; --ink-2: #777777; --ink-3: #BBBBBB;
-    --accent: #6C47FF; --accent-2: #9B7DFF;
-    --accent-dim: rgba(108,71,255,0.08); --accent-glow: rgba(108,71,255,0.18);
-    --green: #16A34A; --green-dim: rgba(22,163,74,0.08); --green-border: rgba(22,163,74,0.2);
-    --gold: #EF9F27; --gold-pale: rgba(239,159,39,0.08);
-    --shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.05);
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 2px 8px rgba(0,0,0,0.04);
-    --serif: 'Instrument Serif', Georgia, serif;
-    --font: 'Geist', sans-serif;
-    --r: 14px;
+  :root {
+    --bg:#FAFAFA;--surface:#FFFFFF;--surface-2:#F5F5F7;
+    --border:#E8E8E8;--border-strong:#D0D0D0;
+    --ink:#111111;--ink-2:#777777;--ink-3:#BBBBBB;
+    --accent:#6C47FF;--accent-2:#9B7DFF;
+    --accent-dim:rgba(108,71,255,0.08);--accent-glow:rgba(108,71,255,0.18);
+    --green:#16A34A;--green-dim:rgba(22,163,74,0.08);--green-border:rgba(22,163,74,0.2);
+    --gold:#EF9F27;--gold-pale:rgba(239,159,39,0.08);
+    --shadow:0 1px 4px rgba(0,0,0,0.06),0 4px 20px rgba(0,0,0,0.05);
+    --shadow-sm:0 1px 3px rgba(0,0,0,0.05),0 2px 8px rgba(0,0,0,0.04);
+    --serif:'Instrument Serif',Georgia,serif;--font:'Geist',sans-serif;--r:14px;
   }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font); background: var(--bg); color: var(--ink); height: 100vh; -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; overflow: hidden; }
-  nav { height: 58px; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; background: rgba(250,250,250,0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); flex-shrink: 0; z-index: 10; }
-  .nav-left { display: flex; align-items: center; gap: 16px; }
-  .nav-logo { font-family: var(--font); font-size: 17px; color: var(--ink); text-decoration: none;  font-weight: 700; letter-spacing: -0.4px; }
-  .nav-logo span { color: var(--accent); }
-  .nav-divider { width: 1px; height: 20px; background: var(--border); }
-  .nav-course-title { font-size: 13px; font-weight: 600; color: var(--ink-2); }
-  .nav-right { display: flex; align-items: center; gap: 14px; }
-  .nav-email { font-size: 12px; color: var(--ink-2); }
-  .nav-back { font-size: 13px; color: var(--ink-2); text-decoration: none; font-weight: 500; transition: color 0.2s; }
-  .nav-back:hover { color: var(--ink); }
-  .logout-btn { background: transparent; border: 1px solid var(--border); color: var(--ink-2); padding: 5px 12px; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s; }
-  .logout-btn:hover { border-color: var(--accent); color: var(--ink); }
-  .layout { display: flex; flex: 1; overflow: hidden; }
-  .sidebar { width: 280px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; }
-  .sidebar-header { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
-  .sidebar-course-name { font-size: 14px; font-weight: 800; color: var(--ink); line-height: 1.35; margin-bottom: 10px; }
-  .progress-bar-wrap { display: flex; align-items: center; gap: 8px; }
-  .progress-bar { flex: 1; height: 5px; background: var(--border); border-radius: 10px; overflow: hidden; }
-  .progress-fill { height: 100%; background: var(--accent); border-radius: 10px; transition: width 0.3s; }
-  .progress-label { font-size: 11px; color: var(--ink-2); white-space: nowrap; font-family: monospace; }
-  .sidebar-section-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-2); padding: 16px 20px 8px; font-family: monospace; }
-  .mod-item { display: flex; align-items: flex-start; gap: 12px; padding: 11px 20px; cursor: pointer; transition: background 0.15s; border-left: 3px solid transparent; }
-  .mod-item:hover { background: var(--bg); }
-  .mod-item.active { background: var(--accent-dim); border-left-color: var(--accent); }
-  .mod-check { width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; margin-top: 1px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; transition: all 0.2s; }
-  .mod-item.done .mod-check { background: var(--green); border-color: var(--green); color: #fff; }
-  .mod-item.active .mod-check { border-color: var(--accent); background: var(--accent-dim); }
-  .mod-item-info { flex: 1; }
-  .mod-item-title { font-size: 12px; font-weight: 600; color: var(--ink); line-height: 1.4; margin-bottom: 2px; }
-  .mod-item.active .mod-item-title { color: var(--accent); }
-  .mod-item-sub { font-size: 11px; color: var(--ink-2); }
-  .sidebar-footer { margin-top: auto; padding: 16px 20px; border-top: 1px solid var(--border); }
-  .sidebar-tools { display: flex; flex-wrap: wrap; gap: 5px; }
-  .tool-chip { font-size: 10px; font-weight: 600; background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 100px; }
-  .main { flex: 1; overflow-y: auto; background: var(--bg); }
-  .main-inner { max-width: 720px; margin: 0 auto; padding: 36px 32px 60px; }
-  .breadcrumb { font-size: 12px; color: var(--ink-2); margin-bottom: 24px; display: flex; align-items: center; gap: 6px; }
-  .breadcrumb strong { color: var(--ink); }
-  .module-panel { display: none; }
-  .module-panel.active { display: block; }
-  .module-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: var(--ink); margin-bottom: 6px; line-height: 1.3; }
-  .module-subtitle { font-size: 14px; color: var(--ink-2); margin-bottom: 28px; }
-  .module-desc-box { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin-bottom: 24px; font-size: 14px; color: var(--ink-2); line-height: 1.8; }
-  .module-desc-box strong { color: var(--ink); }
-  .prompt-section { margin-bottom: 20px; }
-  .prompt-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--ink-2); margin-bottom: 8px; font-family: monospace; }
-  .prompt-box { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 16px 48px 16px 16px; font-size: 13px; color: var(--ink); line-height: 1.75; font-family: monospace; white-space: pre-wrap; position: relative; }
-  .copy-btn { position: absolute; top: 10px; right: 10px; background: var(--ink); color: #fff; border: none; border-radius: 6px; padding: 4px 10px; font-size: 11px; font-weight: 600; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: background 0.2s; }
-  .copy-btn:hover { background: var(--accent); }
-  .copy-btn.copied { background: var(--green); }
-  .case-box { background: var(--accent-dim); border-radius: 10px; padding: 14px 18px; margin-top: 14px; border-left: 3px solid var(--accent); }
-  .case-role { font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; font-family: monospace; }
-  .case-box p { font-size: 13px; color: var(--ink); line-height: 1.65; }
-  .output-box { background: var(--green-dim); border: 1px solid rgba(29,158,117,0.2); border-radius: 12px; padding: 20px 24px; margin-top: 24px; display: flex; gap: 14px; align-items: flex-start; }
-  .output-icon { font-size: 28px; flex-shrink: 0; }
-  .output-box h3 { font-size: 15px; font-weight: 700; color: var(--green); margin-bottom: 4px; }
-  .output-box p { font-size: 13px; color: var(--ink-2); line-height: 1.65; }
-  .next-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--ink-2); margin: 28px 0 12px; font-family: monospace; }
-  .next-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; text-decoration: none; margin-bottom: 10px; transition: border-color 0.2s, box-shadow 0.2s; }
-  .next-card:hover { border-color: var(--accent); box-shadow: 0 2px 12px var(--border); }
-  .next-icon { font-size: 26px; flex-shrink: 0; }
-  .next-info { flex: 1; }
-  .next-info h4 { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
-  .next-info p  { font-size: 12px; color: var(--ink-2); }
-  .next-arrow { font-size: 16px; color: var(--accent); }
-  .nav-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--border); }
-  .nav-btn { display: flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); transition: all 0.2s; background: #fff; color: var(--ink); font-family: 'Plus Jakarta Sans', sans-serif; }
-  .nav-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .nav-btn:disabled { opacity: 0.35; cursor: default; pointer-events: none; }
-  .nav-btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
-  .nav-btn.primary:hover { background: var(--accent); border-color: var(--accent); }
-  .nav-counter { font-size: 12px; color: var(--ink-2); font-family: monospace; }
-  .loading { display: flex; align-items: center; justify-content: center; height: 100vh; font-size: 14px; color: var(--ink-2); }
-  @media (max-width: 768px) { .sidebar { display: none; } .main-inner { padding: 24px 16px 48px; } .module-title { font-size: 20px; } }
-
-    /* Feedback panel */
-    .feedback-panel { max-width: 600px; }
-    .completion-badge { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 24px; background: var(--green-dim); border: 1px solid rgba(29,158,117,0.2); border-radius: 16px; margin-bottom: 32px; }
-    .completion-badge .badge-check { width: 56px; height: 56px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
-    .completion-badge .badge-check svg { width: 26px; height: 26px; color: #fff; }
-    .completion-badge h2 { font-family: var(--serif); font-size: 26px; font-weight: 400; color: var(--ink); margin-bottom: 8px; letter-spacing: -0.3px; }
-    .completion-badge p { font-size: 14px; color: var(--ink-2); line-height: 1.6; }
-    .feedback-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 28px; box-shadow: var(--shadow-sm); }
-    .feedback-card h3 { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
-    .feedback-card .feedback-sub { font-size: 13px; color: var(--ink-2); margin-bottom: 24px; }
-    .star-row { display: flex; gap: 8px; margin-bottom: 24px; }
-    .star-btn { background: none; border: none; cursor: pointer; padding: 4px; font-size: 28px; color: var(--border); transition: color 0.15s, transform 0.1s; line-height: 1; }
-    .star-btn:hover, .star-btn.active { color: var(--gold); transform: scale(1.1); }
-    .feedback-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--ink-2); margin-bottom: 8px; }
-    .feedback-textarea { width: 100%; border: 1.5px solid var(--border); border-radius: 10px; padding: 12px 14px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: var(--ink); resize: vertical; min-height: 90px; background: var(--bg); transition: border-color 0.15s; outline: none; }
-    .feedback-textarea:focus { border-color: var(--ink); background: #fff; }
-    .feedback-submit { display: block; width: 100%; margin-top: 20px; background: var(--ink); color: #fff; border: none; padding: 14px; border-radius: 10px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
-    .feedback-submit:hover { background: var(--accent); }
-    .feedback-submit:disabled { opacity: 0.5; cursor: default; }
-    .feedback-done { display: none; text-align: center; padding: 24px; }
-    .feedback-done p { font-size: 14px; color: var(--ink-2); margin-bottom: 16px; }
-    .feedback-done a { display: inline-block; background: var(--ink); color: #fff; text-decoration: none; font-size: 14px; font-weight: 700; padding: 12px 28px; border-radius: 10px; transition: background 0.2s; }
-    .feedback-done a:hover { background: var(--accent); }
-
-  </style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--font);background:var(--bg);color:var(--ink);height:100vh;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;overflow:hidden;}
+  nav{height:58px;padding:0 32px;display:flex;align-items:center;justify-content:space-between;background:rgba(250,250,250,0.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);flex-shrink:0;z-index:10;}
+  .nav-left{display:flex;align-items:center;gap:16px;}
+  .nav-logo{font-family:var(--font);font-size:17px;color:var(--ink);text-decoration:none;font-weight:700;letter-spacing:-0.4px;}
+  .nav-logo span{color:var(--accent);}
+  .nav-divider{width:1px;height:20px;background:var(--border);}
+  .nav-course-title{font-size:13px;font-weight:600;color:var(--ink-2);}
+  .nav-right{display:flex;align-items:center;gap:14px;}
+  .nav-email{font-size:12px;color:var(--ink-2);}
+  .nav-back{font-size:13px;color:var(--ink-2);text-decoration:none;font-weight:500;transition:color 0.2s;}
+  .nav-back:hover{color:var(--ink);}
+  .logout-btn{background:transparent;border:1px solid var(--border);color:var(--ink-2);padding:5px 12px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all 0.2s;}
+  .logout-btn:hover{border-color:var(--accent);color:var(--ink);}
+  .layout{display:flex;flex:1;overflow:hidden;}
+  .sidebar{width:280px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;}
+  .sidebar-header{padding:20px 20px 16px;border-bottom:1px solid var(--border);}
+  .sidebar-course-name{font-size:14px;font-weight:800;color:var(--ink);line-height:1.35;margin-bottom:10px;}
+  .progress-bar-wrap{display:flex;align-items:center;gap:8px;}
+  .progress-bar{flex:1;height:5px;background:var(--border);border-radius:10px;overflow:hidden;}
+  .progress-fill{height:100%;background:var(--accent);border-radius:10px;transition:width 0.3s;}
+  .progress-label{font-size:11px;color:var(--ink-2);white-space:nowrap;font-family:monospace;}
+  .sidebar-section-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-2);padding:16px 20px 8px;font-family:monospace;}
+  .mod-item{display:flex;align-items:flex-start;gap:12px;padding:11px 20px;cursor:pointer;transition:background 0.15s;border-left:3px solid transparent;}
+  .mod-item:hover{background:var(--bg);}
+  .mod-item.active{background:var(--accent-dim);border-left-color:var(--accent);}
+  .mod-check{width:20px;height:20px;border-radius:50%;flex-shrink:0;margin-top:1px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;transition:all 0.2s;}
+  .mod-item.done .mod-check{background:var(--green);border-color:var(--green);color:#fff;}
+  .mod-item.active .mod-check{border-color:var(--accent);background:var(--accent-dim);}
+  .mod-item-info{flex:1;}
+  .mod-item-title{font-size:12px;font-weight:600;color:var(--ink);line-height:1.4;margin-bottom:2px;}
+  .mod-item.active .mod-item-title{color:var(--accent);}
+  .mod-item-sub{font-size:11px;color:var(--ink-2);}
+  .sidebar-footer{margin-top:auto;padding:16px 20px;border-top:1px solid var(--border);}
+  .sidebar-tools{display:flex;flex-wrap:wrap;gap:5px;}
+  .tool-chip{font-size:10px;font-weight:600;background:var(--accent-dim);color:var(--accent);padding:2px 8px;border-radius:100px;}
+  .main{flex:1;overflow-y:auto;background:var(--bg);}
+  .main-inner{max-width:720px;margin:0 auto;padding:36px 32px 60px;}
+  .breadcrumb{font-size:12px;color:var(--ink-2);margin-bottom:24px;display:flex;align-items:center;gap:6px;}
+  .breadcrumb strong{color:var(--ink);}
+  .module-panel{display:none;}
+  .module-panel.active{display:block;}
+  .module-title{font-size:22px;font-weight:800;letter-spacing:-0.5px;color:var(--ink);margin-bottom:6px;line-height:1.3;}
+  .module-subtitle{font-size:14px;color:var(--ink-2);margin-bottom:28px;}
+  .module-desc-box{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:24px;font-size:14px;color:var(--ink-2);line-height:1.8;}
+  .module-desc-box strong{color:var(--ink);}
+  .prompt-section{margin-bottom:20px;}
+  .prompt-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--ink-2);margin-bottom:8px;font-family:monospace;display:flex;align-items:center;gap:6px;}
+  .prompt-box{background:#fff;border:1px solid var(--border);border-radius:10px;padding:16px 48px 16px 16px;font-size:13px;color:var(--ink);line-height:1.75;font-family:monospace;white-space:pre-wrap;position:relative;}
+  .copy-btn{position:absolute;top:10px;right:10px;background:var(--ink);color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font);transition:background 0.2s;}
+  .copy-btn:hover{background:var(--accent);}
+  .copy-btn.copied{background:var(--green);}
+  .case-box{background:var(--accent-dim);border-radius:10px;padding:14px 18px;margin-top:14px;border-left:3px solid var(--accent);}
+  .case-role{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;font-family:monospace;}
+  .case-box p{font-size:13px;color:var(--ink);line-height:1.65;}
+  .output-box{background:var(--green-dim);border:1px solid rgba(29,158,117,0.2);border-radius:12px;padding:20px 24px;margin-top:24px;display:flex;gap:14px;align-items:flex-start;}
+  .output-icon{font-size:28px;flex-shrink:0;}
+  .output-box h3{font-size:15px;font-weight:700;color:var(--green);margin-bottom:4px;}
+  .output-box p{font-size:13px;color:var(--ink-2);line-height:1.65;}
+  .tip-box{background:var(--gold-pale);border:1px solid rgba(239,159,39,0.25);border-left:3px solid var(--gold);border-radius:10px;padding:14px 18px;margin:14px 0;}
+  .tip-box .tip-label{font-size:10px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;font-family:monospace;}
+  .tip-box p{font-size:13px;color:var(--ink);line-height:1.65;}
+  .tip-box.warn{background:rgba(220,38,38,0.05);border-color:rgba(220,38,38,0.2);border-left-color:#DC2626;}
+  .tip-box.warn .tip-label{color:#DC2626;}
+  .tip-box.bonus{background:rgba(22,163,74,0.05);border-color:rgba(22,163,74,0.2);border-left-color:var(--green);}
+  .tip-box.bonus .tip-label{color:var(--green);}
+  .mistake-list{list-style:none;margin:0;}
+  .mistake-list li{font-size:13px;color:var(--ink);line-height:1.65;padding-left:20px;position:relative;margin-bottom:8px;}
+  .mistake-list li:last-child{margin-bottom:0;}
+  .mistake-list li::before{content:"✖";color:#DC2626;position:absolute;left:0;font-size:11px;top:2px;}
+  .summary-box{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin:20px 0;}
+  .summary-box .summary-label{font-size:10px;font-weight:700;color:var(--ink-2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;font-family:monospace;}
+  .summary-box ul{list-style:none;}
+  .summary-box li{font-size:13px;color:var(--ink);line-height:1.7;padding-left:18px;position:relative;margin-bottom:4px;}
+  .summary-box li::before{content:"•";color:var(--accent);position:absolute;left:2px;}
+  .compare-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:12.5px;}
+  .compare-table th{background:var(--ink);color:#fff;text-align:left;padding:9px 10px;font-size:11px;font-weight:600;}
+  .compare-table td{padding:10px;border-bottom:1px solid var(--border);color:var(--ink);vertical-align:top;line-height:1.55;}
+  .compare-table tr:last-child td{border-bottom:none;}
+  .compare-table-wrap{overflow-x:auto;margin:14px 0;}
+  .step-row{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;}
+  .step-card{flex:1;min-width:100px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;}
+  .step-num{width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;}
+  .step-card p{font-size:11.5px;color:var(--ink-2);line-height:1.4;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0;}
+  .two-col .col-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 16px;}
+  .two-col .col-card.highlight{border-color:var(--accent);background:var(--accent-dim);}
+  .two-col .col-card h4{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+  .two-col .col-card ul{list-style:none;}
+  .two-col .col-card li{font-size:12px;color:var(--ink-2);line-height:1.6;padding-left:14px;position:relative;margin-bottom:2px;}
+  .two-col .col-card li::before{content:"\2013";position:absolute;left:0;}
+  .two-col .col-card p{font-size:12px;color:var(--ink-2);line-height:1.6;}
+  .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0;}
+  .info-card{background:var(--accent-dim);border-radius:10px;padding:12px 14px;}
+  .info-card strong{font-size:12.5px;color:var(--ink);display:block;margin-bottom:3px;}
+  .info-card span{font-size:11.5px;color:var(--ink-2);}
+  .section-heading{font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 10px;}
+  .sub-heading{font-size:13px;font-weight:700;color:var(--ink);margin:18px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+  .body-text{font-size:13.5px;color:var(--ink-2);line-height:1.75;margin-bottom:10px;}
+  .next-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--ink-2);margin:28px 0 12px;font-family:monospace;}
+  .next-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:14px;text-decoration:none;margin-bottom:10px;transition:border-color 0.2s,box-shadow 0.2s;}
+  .next-card:hover{border-color:var(--accent);box-shadow:0 2px 12px var(--border);}
+  .next-icon{font-size:26px;flex-shrink:0;}
+  .next-info{flex:1;}
+  .next-info h4{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+  .next-info p{font-size:12px;color:var(--ink-2);}
+  .next-arrow{font-size:16px;color:var(--accent);}
+  .nav-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:36px;padding-top:24px;border-top:1px solid var(--border);}
+  .nav-btn{display:flex;align-items:center;gap:8px;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--border);transition:all 0.2s;background:#fff;color:var(--ink);font-family:var(--font);}
+  .nav-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .nav-btn:disabled{opacity:0.35;cursor:default;pointer-events:none;}
+  .nav-btn.primary{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .nav-btn.primary:hover{background:var(--accent);border-color:var(--accent);}
+  .nav-counter{font-size:12px;color:var(--ink-2);font-family:monospace;}
+  .loading{display:flex;align-items:center;justify-content:center;height:100vh;font-size:14px;color:var(--ink-2);}
+  .feedback-panel{max-width:600px;}
+  .completion-badge{display:flex;flex-direction:column;align-items:center;text-align:center;padding:40px 24px;background:var(--green-dim);border:1px solid rgba(29,158,117,0.2);border-radius:16px;margin-bottom:32px;}
+  .completion-badge .badge-check{width:56px;height:56px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+  .completion-badge .badge-check svg{width:26px;height:26px;color:#fff;}
+  .completion-badge h2{font-family:var(--serif);font-size:24px;color:var(--ink);margin-bottom:8px;}
+  .completion-badge p{font-size:14px;color:var(--ink-2);line-height:1.6;}
+  .stars{display:flex;gap:8px;justify-content:center;margin:16px 0;}
+  .star{font-size:28px;cursor:pointer;transition:transform 0.15s;color:var(--border);}
+  .star:hover,.star.active{color:var(--gold);transform:scale(1.15);}
+  .feedback-textarea{width:100%;border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-size:13px;font-family:var(--font);color:var(--ink);resize:vertical;min-height:100px;outline:none;transition:border-color 0.2s;}
+  .feedback-textarea:focus{border-color:var(--accent);}
+  .submit-feedback-btn{background:var(--ink);color:#fff;border:none;border-radius:8px;padding:12px 28px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);transition:background 0.2s;margin-top:16px;}
+  .submit-feedback-btn:hover{background:var(--accent);}
+  .feedback-thanks{display:none;text-align:center;padding:20px;color:var(--green);font-weight:600;}
+  @media(max-width:600px){.two-col,.info-grid{grid-template-columns:1fr;}}
+  @media(max-width:768px){.sidebar{display:none;}.main-inner{padding:24px 16px 48px;}.module-title{font-size:20px;}}
+</style>
 </head>
 <body>
-
 <nav>
   <div class="nav-left">
-    <a href="index.html" class="nav-logo">belajar<span>claude</span></a>
+    <a class="nav-logo" href="index.html">belajar<span>claude</span></a>
     <div class="nav-divider"></div>
-    <span class="nav-course-title">Claude untuk Pekerjaan Sehari-hari</span>
+    <span class="nav-course-title">Produktivitas Kantor</span>
   </div>
   <div class="nav-right">
-    <a href="dashboard.html" class="nav-back">← Dashboard</a>
     <span class="nav-email" id="navEmail"></span>
-    <button class="logout-btn" onclick="logout()">Keluar</button>
+    <a class="nav-back" href="dashboard.html">← Dashboard</a>
+    <button class="logout-btn" onclick="doLogout()">Keluar</button>
   </div>
 </nav>
-
-<div id="loadingScreen" class="loading">Memuat materi kursus...</div>
-
-<div class="layout" id="mainLayout" style="display:none;">
+<div class="layout">
   <aside class="sidebar">
     <div class="sidebar-header">
-      <div class="sidebar-course-name">Claude untuk Pekerjaan Sehari-hari</div>
+      <div class="sidebar-course-name">Produktivitas Kantor dengan Claude</div>
       <div class="progress-bar-wrap">
         <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-        <span class="progress-label" id="progressLabel">0/6</span>
+        <span class="progress-label" id="progressLabel">0/8</span>
       </div>
     </div>
-    <div id="pdf-download-slot"></div>
-    <div class="sidebar-section-label">Materi Kursus</div>
+    <div class="sidebar-section-label">Modul</div>
     <div class="mod-item active" id="nav-mod1" onclick="showModule(1)">
       <div class="mod-check" id="check1"></div>
-      <div class="mod-item-info"><div class="mod-item-title">Gmail + Claude — 10 Template Email Profesional</div><div class="mod-item-sub">Modul 1 · Gmail</div></div>
+      <div class="mod-item-info"><div class="mod-item-title">Role Prompting</div><div class="mod-item-sub">Modul 1 · Framework 4 Elemen</div></div>
     </div>
     <div class="mod-item" id="nav-mod2" onclick="showModule(2)">
       <div class="mod-check" id="check2"></div>
-      <div class="mod-item-info"><div class="mod-item-title">Google Sheets — Analisis Data dengan Claude</div><div class="mod-item-sub">Modul 2 · Sheets</div></div>
+      <div class="mod-item-info"><div class="mod-item-title">Claude Projects</div><div class="mod-item-sub">Modul 2 · Memori Permanen</div></div>
     </div>
     <div class="mod-item" id="nav-mod3" onclick="showModule(3)">
       <div class="mod-check" id="check3"></div>
-      <div class="mod-item-info"><div class="mod-item-title">Claude Projects Advanced — Per Klien/Divisi</div><div class="mod-item-sub">Modul 3 · Claude Projects</div></div>
+      <div class="mod-item-info"><div class="mod-item-title">Gmail + Claude</div><div class="mod-item-sub">Modul 3 · Email Cepat</div></div>
     </div>
     <div class="mod-item" id="nav-mod4" onclick="showModule(4)">
       <div class="mod-check" id="check4"></div>
-      <div class="mod-item-info"><div class="mod-item-title">Batch Prompting — 10 Dokumen dalam 1 Sesi</div><div class="mod-item-sub">Modul 4 · Batch</div></div>
+      <div class="mod-item-info"><div class="mod-item-title">Google Sheets + Claude</div><div class="mod-item-sub">Modul 4 · Data jadi Insight</div></div>
     </div>
     <div class="mod-item" id="nav-mod5" onclick="showModule(5)">
       <div class="mod-check" id="check5"></div>
-      <div class="mod-item-info"><div class="mod-item-title">Google Docs Templates — Laporan Mingguan Otomatis</div><div class="mod-item-sub">Modul 5 · Google Docs</div></div>
+      <div class="mod-item-info"><div class="mod-item-title">Batch Prompting</div><div class="mod-item-sub">Modul 5 · 20 Output, 1 Prompt</div></div>
     </div>
     <div class="mod-item" id="nav-mod6" onclick="showModule(6)">
       <div class="mod-check" id="check6"></div>
-      <div class="mod-item-info"><div class="mod-item-title">Prompt Chaining — Meeting Notes ke Email</div><div class="mod-item-sub">Modul 6 · Chaining</div></div>
+      <div class="mod-item-info"><div class="mod-item-title">Prompt Chaining</div><div class="mod-item-sub">Modul 6 · Output Kompleks</div></div>
+    </div>
+    <div class="mod-item" id="nav-mod7" onclick="showModule(7)">
+      <div class="mod-check" id="check7"></div>
+      <div class="mod-item-info"><div class="mod-item-title">Dokumen &amp; Riset</div><div class="mod-item-sub">Modul 7 · Meeting, Ringkasan, SOP</div></div>
+    </div>
+    <div class="mod-item" id="nav-mod8" onclick="showModule(8)">
+      <div class="mod-check" id="check8"></div>
+      <div class="mod-item-info"><div class="mod-item-title">Case Study: Satu Hari Kerja</div><div class="mod-item-sub">Modul 8 · Studi Kasus Nyata</div></div>
     </div>
     <div class="sidebar-footer">
       <div class="sidebar-section-label" style="padding:0 0 8px;">Tools yang dipakai</div>
       <div class="sidebar-tools">
-        <span class="tool-chip">Gmail</span><span class="tool-chip">Google Sheets</span>
-        <span class="tool-chip">Google Docs</span><span class="tool-chip">Claude Projects</span>
+        <span class="tool-chip">Claude.ai</span>
+        <span class="tool-chip">Claude Projects</span>
+        <span class="tool-chip">Gmail</span>
+        <span class="tool-chip">Google Sheets</span>
       </div>
     </div>
     <div class="mod-feedback">
-      <div class="mod-item" id="nav-mod7" onclick="showModule(7)">
-        <div class="mod-check" id="check7">★</div>
+      <div class="mod-item" id="nav-mod9" onclick="showModule(9)">
+        <div class="mod-check" id="check9">★</div>
         <div><div class="mod-item-title">Feedback</div><div class="mod-item-sub">Nilai kursus ini</div></div>
       </div>
     </div>
   </aside>
 
+  <!-- MAIN CONTENT -->
   <main class="main">
     <div class="main-inner">
 
+      <!-- MODULE 1: Role Prompting -->
       <div class="module-panel active" id="panel1">
         <div class="video-slot" id="video-slot-1"></div>
-        <div class="breadcrumb"><span>Pekerjaan Sehari-hari</span><span>›</span><strong>Modul 1</strong></div>
-        <h1 class="module-title">Gmail + Claude — 10 Template Email Profesional</h1>
-        <p class="module-subtitle">Draft, reply, follow-up email siap kirim dalam hitungan detik</p>
+        <div class="breadcrumb"><span>Produktivitas Kantor</span><span>›</span><strong>Modul 1</strong></div>
+        <h1 class="module-title">Role Prompting</h1>
+        <p class="module-subtitle">Framework 4 elemen yang jadi dasar semua modul berikutnya — 10 menit</p>
         <div class="ppt-slot" id="ppt-slot-1"></div>
         <div class="doc-slot" id="doc-slot-1"></div>
-        
-        <div class="module-desc-box">Kita akan membuat 10 template email profesional untuk situasi paling umum di kantor: follow-up, konfirmasi meeting, eskalasi masalah, proposal, dan balasan komplain. Setiap template tersimpan di Claude Projects dan bisa langsung di-copy ke Gmail.</div>
-        <div class="prompt-section">
-          <div class="prompt-label">📝 Template Email Profesional</div>
-          <div class="prompt-box">Kamu adalah email writer profesional untuk konteks Indonesia.
 
-Tulis email [jenis: follow-up/konfirmasi/proposal/komplain]
-dengan detail berikut:
+        <div class="module-desc-box">
+          Rina menghabiskan 45 menit setiap pagi untuk balas email dan buat caption. Hasilnya sering tidak sesuai ekspektasi dan harus diedit ulang. <strong>Setelah modul ini:</strong> waktu yang sama, output 3× lebih baik — karena Claude tahu persis apa yang dibutuhkan.
+        </div>
 
-Kepada: [nama/jabatan penerima]
-Konteks: [jelaskan situasi singkat]
-Tujuan email: [apa yang kamu inginkan dari penerima]
-Tone: [formal/semi-formal]
-Panjang: [singkat/sedang]
+        <div class="section-heading">Framework: 4 Elemen Prompt</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>ROLE — Siapa Claude dalam situasi ini?</strong><span>"Kamu adalah copywriter fashion yang paham pasar Gen Z Indonesia."</span></div>
+          <div class="info-card"><strong>KONTEKS — Situasi, latar, info relevan</strong><span>"Toko saya jual pakaian kasual wanita, harga Rp 150–350rb, beli lewat DM Instagram."</span></div>
+          <div class="info-card"><strong>TUGAS — Satu instruksi utama yang jelas</strong><span>"Tulis caption Instagram untuk koleksi baru: kemeja linen putih."</span></div>
+          <div class="info-card"><strong>FORMAT — Panjang, struktur, tone, bahasa</strong><span>"Maks 80 kata, 1 hook kuat di baris pertama, 3 hashtag relevan, bahasa Indonesia santai."</span></div>
+        </div>
 
-Format: subject line + body email siap kirim.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-          <div class="case-box">
-            <div class="case-role">🎯 Contoh: Sales Manager</div>
-            <p>"Tulis email follow-up kepada Bapak Rudi, Procurement Manager PT Maju Bersama. Konteks: sudah meeting 2 minggu lalu, belum ada kabar. Tujuan: minta update keputusan dan tawarkan demo ulang. Tone: profesional tapi hangat."</p>
+        <div class="section-heading">Sebelum vs. Sesudah</div>
+        <div class="two-col">
+          <div class="col-card">
+            <h4>❌ SEBELUM (prompt lama)</h4>
+            <p>"Buatkan caption Instagram untuk baju baru saya"</p>
+            <p style="margin-top:8px;font-size:11.5px;">Hasil: caption generik, tidak ada hook, hashtag tidak relevan, harus ditulis ulang. Waktu terbuang: 20 menit edit.</p>
+          </div>
+          <div class="col-card highlight">
+            <h4>✅ SESUDAH (4-elemen prompt)</h4>
+            <p>"Kamu adalah copywriter fashion Gen Z Indonesia. Toko saya jual baju kasual wanita harga Rp 150–350rb via DM Instagram. Tulis caption untuk kemeja linen putih — koleksi summer. Maks 80 kata, hook kuat, 3 hashtag, bahasa santai."</p>
+            <p style="margin-top:8px;font-size:11.5px;">Hasil: caption siap posting dalam 30 detik. Hemat 18 menit per caption.</p>
           </div>
         </div>
-        
-        <div class="nav-bottom">
-          <button class="nav-btn" disabled>← Sebelumnya</button>
-          <span class="nav-counter">1 / 6</span>
-          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+
+        <div class="tip-box">
+          <div class="tip-label">📋 Cheat Sheet — Copy dan Simpan</div>
+          <p><strong>ROLE:</strong> "Kamu adalah [jabatan/keahlian] yang [spesialisasi]."<br>
+          <strong>KONTEKS:</strong> "[Situasi saat ini / info bisnis / latar penerima]"<br>
+          <strong>TUGAS:</strong> "[Satu instruksi utama — buat / tulis / analisis / ringkas]"<br>
+          <strong>FORMAT:</strong> "[Panjang] · [Struktur] · [Tone] · [Bahasa]"</p>
         </div>
-      </div>
 
-      <div class="module-panel" id="panel2">
-        <div class="video-slot" id="video-slot-2"></div>
-        <div class="breadcrumb"><span>Pekerjaan Sehari-hari</span><span>›</span><strong>Modul 2</strong></div>
-        <h1 class="module-title">Google Sheets — Analisis Data dengan Claude</h1>
-        <p class="module-subtitle">Paste data → analisis → formula → insight dalam satu workflow</p>
-        <div class="ppt-slot" id="ppt-slot-2"></div>
-        <div class="doc-slot" id="doc-slot-2"></div>
-        
-        <div class="module-desc-box">Claude bisa membaca data yang kamu paste, mengidentifikasi anomali, menyarankan formula, dan memberikan insight yang actionable. Tidak perlu jago Excel — Claude yang bantu analisis.</div>
+        <div class="tip-box">
+          <div class="tip-label">💡 Tips Perbaikan</div>
+          <p>Tidak perlu urutan persis. Yang penting 4 elemen hadir. Kalau hasilnya kurang tepat: identifikasi elemen yang hilang — lalu tambahkan. Jangan ganti prompt dari nol.</p>
+        </div>
+
         <div class="prompt-section">
-          <div class="prompt-label">📝 Template Analisis Data</div>
-          <div class="prompt-box">Berikut data [jenis data: penjualan/pengeluaran/survei/dll]:
-
-[paste data kamu di sini — bisa dari Google Sheets]
-
-Tolong:
-1. Identifikasi 3 tren atau pola utama
-2. Tandai anomali atau outlier yang perlu diperhatikan
-3. Berikan 3 rekomendasi actionable berdasarkan data
-4. Sarankan formula Google Sheets yang berguna untuk data ini
-
-Format output: poin-poin dengan sub-heading yang jelas.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="prompt-label">📝 Latihan</div>
           <div class="case-box">
-            <div class="case-role">🎯 Contoh: Finance Manager</div>
-            <p>Paste data pengeluaran 3 bulan terakhir → Claude identifikasi kategori pembengkakan, sarankan formula summary, dan buat rekomendasi efisiensi yang siap dipresentasikan ke direksi.</p>
+            <p>Pilih 1 pesan atau dokumen yang perlu kamu buat hari ini — bisa email, caption, balasan komplain, atau laporan singkat. Tulis prompt menggunakan 4 elemen. Kirim ke Claude. Kalau hasilnya belum tepat, tanya diri sendiri: <em>elemen mana yang kurang spesifik?</em> Tambahkan info itu dan coba lagi.</p>
           </div>
-        </div>
-        
-        <div class="nav-bottom">
-          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">2 / 6</span>
-          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
-        </div>
-      </div>
-
-      <div class="module-panel" id="panel3">
-        <div class="video-slot" id="video-slot-3"></div>
-        <div class="breadcrumb"><span>Pekerjaan Sehari-hari</span><span>›</span><strong>Modul 3</strong></div>
-        <h1 class="module-title">Claude Projects Advanced — Project per Klien/Divisi</h1>
-        <p class="module-subtitle">Simpan SOP, tone, dan konteks khusus untuk setiap klien atau divisi</p>
-        <div class="ppt-slot" id="ppt-slot-3"></div>
-        <div class="doc-slot" id="doc-slot-3"></div>
-        
-        <div class="module-desc-box">Di modul ini kamu akan setup minimal 3 project berbeda: satu untuk pekerjaan utama, satu untuk komunikasi eksternal, dan satu untuk divisi atau klien spesifik. Masing-masing project punya system prompt yang berbeda.</div>
-        <div class="prompt-section">
-          <div class="prompt-label">📝 System Prompt untuk Project Klien</div>
-          <div class="prompt-box">Kamu adalah asisten khusus untuk [nama klien/divisi].
-
-KONTEKS KLIEN:
-- Nama: [nama klien/perusahaan]
-- Industri: [bidang usaha]
-- Hubungan: [kita vendor mereka / mereka klien strategis / dll]
-- Kontak utama: [nama dan jabatan]
-- Tone komunikasi yang mereka sukai: [formal/hangat/teknis]
-
-SOP KOMUNIKASI:
-- Selalu sertakan referensi ke project [nama project]
-- Hindari: [hal yang tidak boleh dibahas]
-- Format dokumen: [letterhead/template tertentu]
-
-HISTORY PENTING:
-[catatan penting tentang klien ini]<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-        </div>
-        
-        <div class="nav-bottom">
-          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">3 / 6</span>
-          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
-        </div>
-      </div>
-
-      <div class="module-panel" id="panel4">
-        <div class="video-slot" id="video-slot-4"></div>
-        <div class="breadcrumb"><span>Pekerjaan Sehari-hari</span><span>›</span><strong>Modul 4</strong></div>
-        <h1 class="module-title">Batch Prompting — 10 Dokumen dalam 1 Sesi</h1>
-        <p class="module-subtitle">Proses job description, laporan, dan summary sekaligus</p>
-        <div class="ppt-slot" id="ppt-slot-4"></div>
-        <div class="doc-slot" id="doc-slot-4"></div>
-        
-        <div class="module-desc-box">Batch prompting adalah teknik memproses banyak item dalam satu prompt terstruktur. Alih-alih membuat 10 prompt terpisah untuk 10 JD, kamu bisa kirim satu prompt dengan semua konteks dan dapat 10 hasil sekaligus.</div>
-        <div class="prompt-section">
-          <div class="prompt-label">📝 Template Batch Processing</div>
-          <div class="prompt-box">Saya perlu membuat [jenis dokumen] untuk [jumlah] item berbeda.
-Gunakan struktur yang sama untuk setiap item.
-
-Format output setiap item:
----
-[NAMA ITEM]
-[konten yang dibutuhkan]
----
-
-Berikut daftar item dan detailnya:
-
-Item 1: [detail item 1]
-Item 2: [detail item 2]
-Item 3: [detail item 3]
-[dst...]
-
-Buat semua [jumlah] item dengan kualitas yang konsisten.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-          <div class="case-box">
-            <div class="case-role">🎯 Contoh: HR Manager</div>
-            <p>"Saya perlu membuat JD untuk 5 posisi berbeda: Marketing Manager, Content Writer, Data Analyst, Sales Executive, Customer Service. Buat semua 5 JD dengan format yang konsisten."</p>
-          </div>
-        </div>
-        
-        <div class="nav-bottom">
-          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">4 / 6</span>
-          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
-        </div>
-      </div>
-
-      <div class="module-panel" id="panel5">
-        <div class="video-slot" id="video-slot-5"></div>
-        <div class="breadcrumb"><span>Pekerjaan Sehari-hari</span><span>›</span><strong>Modul 5</strong></div>
-        <h1 class="module-title">Google Docs Templates — Laporan Mingguan Otomatis</h1>
-        <p class="module-subtitle">Template siap isi yang menghemat 2 jam setiap Senin pagi</p>
-        <div class="ppt-slot" id="ppt-slot-5"></div>
-        <div class="doc-slot" id="doc-slot-5"></div>
-        
-        <div class="module-desc-box">Kita akan membuat template laporan mingguan yang tinggal diisi data — Claude yang format, analisis, dan buat narasi. Kamu cukup paste angka dan bullet point kasar, Claude yang ubah jadi laporan profesional.</div>
-        <div class="prompt-section">
-          <div class="prompt-label">📝 Template Laporan Mingguan</div>
-          <div class="prompt-box">Ubah data mentah berikut menjadi laporan mingguan profesional
-untuk dikirim ke [atasan/tim/manajemen]:
-
-PERIODE: [tanggal]
-DIVISI/TIM: [nama]
-
-DATA MINGGU INI:
-[paste angka, pencapaian, dan catatan kamu di sini]
-
-FORMAT LAPORAN:
-1. Executive Summary (2-3 kalimat)
-2. Pencapaian Utama (3-5 poin)
-3. Tantangan & Solusi (jika ada)
-4. Rencana Minggu Depan (3-5 poin)
-5. Support yang Dibutuhkan (jika ada)
-
-Tone: profesional, ringkas, action-oriented.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-        </div>
-        
-        <div class="nav-bottom">
-          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">5 / 6</span>
-          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
-        </div>
-      </div>
-
-      <div class="module-panel" id="panel6">
-        <div class="video-slot" id="video-slot-6"></div>
-        <div class="breadcrumb"><span>Pekerjaan Sehari-hari</span><span>›</span><strong>Modul 6</strong></div>
-        <h1 class="module-title">Prompt Chaining — Meeting Notes ke Action Items ke Email</h1>
-        <p class="module-subtitle">Satu chain yang menghemat 2 jam setiap minggu</p>
-        <div class="ppt-slot" id="ppt-slot-6"></div>
-        <div class="doc-slot" id="doc-slot-6"></div>
-        
-        <div class="module-desc-box">Prompt chaining berarti output dari satu prompt langsung menjadi input untuk prompt berikutnya. Chain yang paling berguna: Meeting Notes → Ringkasan Action Items → Draft Email Follow-up ke semua peserta.</div>
-        <div class="prompt-section">
-          <div class="prompt-label">📝 Chain Step 1 — Meeting Notes → Action Items</div>
-          <div class="prompt-box">Berikut catatan meeting yang saya buat:
-[paste catatan meeting kamu]
-
-Ekstrak semua action items dengan format:
-| Aksi | PIC | Deadline | Status |
-Urutkan berdasarkan urgensi.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-        </div>
-        <div class="prompt-section">
-          <div class="prompt-label">📝 Chain Step 2 — Action Items → Email Follow-up</div>
-          <div class="prompt-box">Berdasarkan action items berikut:
-[paste action items dari step 1]
-
-Tulis email follow-up ke semua peserta meeting yang:
-- Merangkum keputusan utama
-- Mengingatkan action items + PIC + deadline
-- Menutup dengan next steps yang jelas
-Tone: profesional, konstruktif.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
 
         <div class="output-box">
-          <div class="output-icon">🎉</div>
+          <div class="output-icon">✅</div>
           <div>
-            <h3>Kursus Selesai!</h3>
-            <p>20+ prompt templates di Claude Projects · Template laporan mingguan di Google Docs · Workflow email, analisis data, dan dokumen yang bisa langsung dipakai besok kerja.</p>
+            <h3>Output yang Diharapkan</h3>
+            <p>1 draft siap pakai. Simpan promptnya — kamu akan pakai lagi di modul berikutnya.</p>
           </div>
         </div>
 
-        <div class="next-label">Lanjutkan Belajar</div>
-        <a href="bisnis-ukm.html" class="next-card">
-          <span class="next-icon">🏪</span>
-          <div class="next-info"><h4>Claude untuk Bisnis & UKM</h4><p>Tokopedia, WA Business, Notion, Canva · Rp 149K</p></div>
-          <span class="next-arrow">→</span>
-        </a>
-
-        
         <div class="nav-bottom">
-          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">6 / 6</span>
-          <button class="nav-btn primary" onclick="showModule(7)">Lanjut →</button>
+          <button class="nav-btn" disabled>← Sebelumnya</button>
+          <span class="nav-counter">1 / 8</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
       </div>
 
-      
-      <div class="module-panel" id="panel7">
-        <div class="feedback-panel">
-          <div class="completion-badge">
-            <div class="badge-check">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <h2>Kursus Selesai!</h2>
-            <p>Kamu telah menyelesaikan <strong>Claude untuk Pekerjaan Sehari-hari</strong>.<br>Badge pencapaian sudah tersimpan di dashboard kamu.</p>
-          </div>
+      <!-- MODULE 2: Claude Projects -->
+      <div class="module-panel" id="panel2">
+        <div class="video-slot" id="video-slot-2"></div>
+        <div class="breadcrumb"><span>Produktivitas Kantor</span><span>›</span><strong>Modul 2</strong></div>
+        <h1 class="module-title">Claude Projects</h1>
+        <p class="module-subtitle">Setup sekali, Claude ingat bisnismu selamanya — 8 menit</p>
+        <div class="ppt-slot" id="ppt-slot-2"></div>
+        <div class="doc-slot" id="doc-slot-2"></div>
 
-          <div class="feedback-card" id="feedbackForm">
-            <h3>Bagaimana kursus ini menurut kamu?</h3>
-            <p class="feedback-sub">Feedback kamu membantu kami bikin kursus yang lebih baik.</p>
-            <div class="star-row" id="starRow">
-              <button class="star-btn" data-val="1" onclick="setRating(1)">★</button>
-              <button class="star-btn" data-val="2" onclick="setRating(2)">★</button>
-              <button class="star-btn" data-val="3" onclick="setRating(3)">★</button>
-              <button class="star-btn" data-val="4" onclick="setRating(4)">★</button>
-              <button class="star-btn" data-val="5" onclick="setRating(5)">★</button>
-            </div>
-            <div class="feedback-label">Komentar (opsional)</div>
-            <textarea class="feedback-textarea" id="feedbackComment" placeholder="Apa yang paling berguna? Ada yang bisa diperbaiki?"></textarea>
-            <button class="feedback-submit" id="feedbackSubmit" onclick="submitFeedback()">Kirim & Ke Dashboard →</button>
-          </div>
+        <div class="module-desc-box">
+          Setiap kali Rina buka chat baru, dia harus briefing ulang — tulis nama toko, jelaskan produk, tentukan tone. Ini buang 5 menit per sesi. <strong>Setelah modul ini:</strong> setup Claude Projects sekali — Claude ingat semua konteks bisnismu tanpa perlu diulang.
+        </div>
 
-          <div class="feedback-done" id="feedbackDone">
-            <p>Terima kasih atas feedbacknya!</p>
-            <a href="dashboard.html">Ke Dashboard →</a>
+        <div class="section-heading">Chat Biasa vs. Claude Projects</div>
+        <div class="two-col">
+          <div class="col-card">
+            <h4>Chat Biasa</h4>
+            <ul>
+              <li>Memori reset setiap sesi baru</li>
+              <li>Harus briefing ulang setiap kali</li>
+              <li>Konteks tidak tersimpan</li>
+              <li>5 menit terbuang per sesi</li>
+            </ul>
+          </div>
+          <div class="col-card highlight">
+            <h4>Claude Projects</h4>
+            <ul>
+              <li>Memori permanen yang bisa dikonfigurasi</li>
+              <li>Claude langsung "ngerti" dari chat pertama</li>
+              <li>Simpan instruksi, file, tone, format default</li>
+              <li>Hemat 25–30 menit per minggu</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="section-heading">Cara Setup Project — 3 Langkah</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Klik "New Project" di sidebar kiri Claude → beri nama</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Isi "Project Instructions" — ini yang Claude baca setiap chat</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Mulai chat. Tidak perlu briefing ulang lagi.</p></div>
+        </div>
+
+        <div class="section-heading">Template System Instructions — Copy &amp; Pakai</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Template (isi sesuai bisnismu)</div>
+          <div class="prompt-box"># Tentang Bisnis
+Nama: [nama toko/perusahaan kamu]
+Produk/Layanan: [deskripsikan singkat]
+Target customer: [siapa yang beli]
+Harga rata-rata: [range harga]
+Channel penjualan: [Instagram / Tokopedia / WhatsApp / dll]
+
+# Tone &amp; Bahasa
+- Bahasa Indonesia [formal / semi-formal / santai]
+- Gunakan "kamu" bukan "Anda"
+- [tambahkan gaya unik bisnismu]
+
+# Format Output Default
+- Caption IG: maks [X] kata + [X] hashtag
+- Email: maks [X] kata, ada CTA di penutup
+- Balas komplain: empati dulu, solusi kedua<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="case-box">
+          <div class="case-role">Contoh Rina — Kasual Studio</div>
+          <p># Tentang Bisnis<br>
+          Nama: Kasual Studio — pakaian kasual wanita, basic &amp; trendy<br>
+          Target: wanita 20–32 tahun, Gen Z &amp; Millennial<br>
+          Harga: Rp 150.000–350.000 | Channel: Instagram DM &amp; Tokopedia<br><br>
+          # Tone: Bahasa Indonesia santai, hangat, relatable. Pakai "kamu" bukan "Anda".<br>
+          # Format: Caption IG maks 80 kata + 5 hashtag. Balasan komplain: mulai dengan empati, lalu solusi konkret.</p>
+        </div>
+
+        <div class="section-heading">Dengan Project, Prompt Jadi Super Pendek</div>
+        <div class="two-col">
+          <div class="col-card">
+            <h4>Tanpa Project</h4>
+            <p>"Kamu adalah copywriter fashion. Toko saya namanya Kasual Studio, jual baju kasual wanita, target Gen Z, harga 150–350rb. Tulis caption untuk..."</p>
+          </div>
+          <div class="col-card highlight">
+            <h4>Dengan Project</h4>
+            <p>"Tulis caption untuk kemeja linen putih baru — koleksi summer."</p>
+            <p style="margin-top:6px;font-size:11.5px;">Sama hasilnya. Hemat 3–5 menit briefing setiap sesi.</p>
+          </div>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Latihan</div>
+          <div class="case-box">
+            <p>Setup Claude Project pertamamu sekarang: Buka Claude → klik "New Project" → salin template di atas → isi dengan info bisnismu → test dengan 3 prompt pendek tanpa briefing. Lihat apakah Claude langsung paham konteks tanpa perlu dijelaskan ulang.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>1 Claude Project aktif dengan System Instructions terisi. Coba minimal 3 prompt berbeda tanpa briefing ulang.</p>
           </div>
         </div>
 
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">7 / 7</span>
-          <a href="dashboard.html" class="nav-btn primary" style="text-decoration:none;">Ke Dashboard →</a>
+          <span class="nav-counter">2 / 8</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <!-- MODULE 3: Gmail + Claude -->
+      <div class="module-panel" id="panel3">
+        <div class="video-slot" id="video-slot-3"></div>
+        <div class="breadcrumb"><span>Produktivitas Kantor</span><span>›</span><strong>Modul 3</strong></div>
+        <h1 class="module-title">Gmail + Claude</h1>
+        <p class="module-subtitle">Dari 15 email, 12 selesai dalam 10 menit — 12 menit</p>
+        <div class="ppt-slot" id="ppt-slot-3"></div>
+        <div class="doc-slot" id="doc-slot-3"></div>
+
+        <div class="module-desc-box">
+          Rata-rata orang menghabiskan 2,5 jam sehari untuk email. Sebagian besar terbuang untuk memikirkan kata-kata yang tepat. Rina punya 15 email yang perlu dibalas setiap hari: komplain pelanggan, pertanyaan reseller, konfirmasi supplier, follow-up pembayaran. <strong>Setelah modul ini:</strong> dari 15 email, 12 bisa diselesaikan dalam 10 menit.
+        </div>
+
+        <div class="section-heading">Workflow: Email → Claude → Review → Kirim</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Buka email yang perlu dibalas</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Copy isi email → paste ke Claude</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Tambahkan konteks 1–2 kalimat</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Dapat draft → review → kirim</p></div>
+        </div>
+
+        <div class="section-heading">3 Elemen Wajib Saat Prompt Email</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Teks email asli</strong><span>Paste seluruhnya, jangan diringkas sendiri dulu</span></div>
+          <div class="info-card"><strong>Konteks hubungan</strong><span>Pelanggan baru? Supplier lama? Reseller potensial?</span></div>
+          <div class="info-card"><strong>Tujuan balasan</strong><span>Konfirmasi, tolak, klarifikasi, follow-up, atau tawaran?</span></div>
+        </div>
+
+        <div class="section-heading">4 Tipe Email — Prompt Siap Pakai</div>
+
+        <div class="sub-heading">① Komplain Pelanggan</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt</div>
+          <div class="prompt-box">[paste email komplain]
+
+Ini pelanggan yang sudah beli 3x. Dia komplain baju yang diterima
+warnanya beda dari foto. Tulis balasan yang: (1) minta maaf tulus,
+(2) tawarkan tukar atau refund, (3) minta foto bukti.
+Tone: hangat dan profesional. Maks 5 kalimat.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="sub-heading">② Pertanyaan Reseller</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt</div>
+          <div class="prompt-box">[paste email tanya-tanya reseller]
+
+Ini calon reseller dari Surabaya. Dia tanya soal harga grosir
+dan minimum order. Kita belum punya program reseller formal.
+Tulis balasan yang: informatif, tidak menutup pintu,
+dan minta nomor WA untuk diskusi lebih lanjut.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="sub-heading">③ Follow-up Supplier yang Tidak Balas</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt</div>
+          <div class="prompt-box">Saya perlu follow-up supplier kain yang belum balas email saya
+dari 3 hari lalu soal pesanan 50 meter kain linen.
+Tulis follow-up yang: singkat, sopan, ada sense of urgency ringan.
+Maks 3 kalimat.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="sub-heading">④ Konfirmasi Pembayaran</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt</div>
+          <div class="prompt-box">[paste bukti transfer pelanggan]
+
+Pelanggan sudah transfer. Tulis konfirmasi yang: akui pembayaran,
+sebutkan estimasi pengiriman 1–2 hari kerja, ucapkan terima kasih.
+Maks 3 kalimat.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">✅ Checklist Sebelum Kirim</div>
+          <p>☐ Nama penerima sudah benar (bukan "[Nama]")<br>
+          ☐ Tone sesuai dengan hubungan (formal / santai)<br>
+          ☐ Tidak ada info yang salah atau perlu dicek ulang<br>
+          ☐ CTA atau next step jelas (kalau dibutuhkan)<br>
+          ☐ Panjang email sesuai (tidak terlalu panjang untuk hal sederhana)</p>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Latihan</div>
+          <div class="case-box">
+            <p>Buka inbox kamu sekarang. Pilih 3 email yang perlu dibalas. Untuk masing-masing: paste isi email ke Claude, tambahkan konteks 1–2 kalimat, minta draft, lalu hitung waktu yang dibutuhkan vs. menulis dari nol.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>3 draft balasan email siap kirim. Target: rata-rata di bawah 3 menit per email.</p>
+          </div>
+        </div>
+
+        <div class="tip-box bonus">
+          <div class="tip-label">🚀 Bonus — Gmail Langsung dari Claude (MCP Connector)</div>
+          <p>Workflow copy-paste di atas bekerja untuk siapa saja. Kalau ingin lebih cepat: Claude bisa baca dan draft email langsung dari inbox tanpa copy-paste menggunakan Gmail Connector.<br><br>
+          <strong>Cara connect:</strong> Buka claude.ai → foto profil kanan atas → Settings → Connectors → cari Gmail → klik Connect → login akun Google → Allow.<br><br>
+          Setelah terhubung, cukup bilang: <em>"Cek 5 email terbaru di inbox saya yang belum dibalas dan ringkas mana yang paling urgent."</em><br><br>
+          Claude tidak akan kirim email tanpa konfirmasi kamu.</p>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">3 / 8</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <!-- MODULE 4: Google Sheets + Claude -->
+      <div class="module-panel" id="panel4">
+        <div class="video-slot" id="video-slot-4"></div>
+        <div class="breadcrumb"><span>Produktivitas Kantor</span><span>›</span><strong>Modul 4</strong></div>
+        <h1 class="module-title">Google Sheets + Claude</h1>
+        <p class="module-subtitle">Laporan 2 jam jadi 15 menit — data langsung jadi insight — 12 menit</p>
+        <div class="ppt-slot" id="ppt-slot-4"></div>
+        <div class="doc-slot" id="doc-slot-4"></div>
+
+        <div class="module-desc-box">
+          Rina punya data penjualan di Google Sheets — 6 bulan, 12 produk, 300+ transaksi. Setiap minggu dia butuh 2 jam untuk bikin laporan manual. <strong>Setelah modul ini:</strong> laporan yang sama selesai dalam 15 menit — dan hasilnya lebih akurat.
+        </div>
+
+        <div class="section-heading">Yang Bisa Claude Bantu di Sheets</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Formula</strong><span>Buat, jelaskan, dan debug formula yang error — tanpa harus hafal sintaks</span></div>
+          <div class="info-card"><strong>Analisis</strong><span>Temukan pola, bandingkan performa, identifikasi anomali dari data yang kamu paste</span></div>
+          <div class="info-card"><strong>Rekomendasi</strong><span>Dari data ke keputusan bisnis konkret — bukan sekadar angka, tapi artinya apa</span></div>
+        </div>
+
+        <div class="section-heading">Data yang Aman vs. Tidak untuk Dibagikan ke Claude</div>
+        <div class="two-col">
+          <div class="col-card highlight">
+            <h4>✅ AMAN Dibagikan</h4>
+            <ul>
+              <li>Nama produk, kategori, harga</li>
+              <li>Jumlah penjualan per periode</li>
+              <li>Data performa (tanpa nama pelanggan)</li>
+              <li>Struktur kolom dan formula</li>
+            </ul>
+          </div>
+          <div class="col-card">
+            <h4>⚠️ HINDARI Dibagikan</h4>
+            <ul>
+              <li>Nama lengkap + nomor telepon pelanggan</li>
+              <li>Nomor kartu kredit / rekening</li>
+              <li>Password atau API key</li>
+              <li>Data karyawan dengan info personal</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="section-heading">Alur Lengkap: Data → Formula → Insight → Keputusan</div>
+
+        <div class="sub-heading">Step 1 — Minta Formula</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt</div>
+          <div class="prompt-box">Sheet saya punya kolom: A=Nama Produk, B=Jan, C=Feb, D=Mar, E=Target.
+Buatkan formula di F2 untuk hitung total penjualan Jan–Mar,
+dan G2 untuk hitung % pencapaian target.
+Saya pakai Google Sheets.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="sub-heading">Step 2 — Minta Analisis (paste 5–10 baris hasil)</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt</div>
+          <div class="prompt-box">Ini data penjualan Kasual Studio 3 bulan terakhir:
+[paste data]
+
+Analisis: produk mana yang performa paling konsisten?
+Mana yang tren naik vs. turun? Rekomendasikan 2 produk
+yang perlu ditingkatkan stok bulan depan.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="sub-heading">Step 3 — Keputusan Bisnis</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt</div>
+          <div class="prompt-box">Dari analisis tadi, saya punya budget restock Rp 5 juta.
+Sarankan alokasi yang paling optimal berdasarkan data performa.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">📌 Tips Prompt Sheets</div>
+          <p>Selalu sebutkan struktur data dulu sebelum bertanya. Contoh: <em>"Sheet saya punya kolom: A: Nama Produk | B: Kategori | C: Jan | D: Feb | E: Mar"</em> — Claude tidak bisa melihat sheet-mu langsung, jadi konteks ini sangat penting untuk mendapat formula yang tepat.</p>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Latihan</div>
+          <div class="case-box">
+            <p>Download file latihan <strong>k2-data-penjualan.csv</strong> dari halaman materi. Import ke Google Sheets. Minta Claude buat 3 formula dasar (total, rata-rata, % target). Paste 5 baris data dan minta analisis pola. Tanya: <em>"Dari data ini, produk mana yang harus saya prioritaskan bulan depan?"</em></p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>Sheet dengan 3 formula berjalan + 1 paragraf analisis dari Claude tentang pola performa berdasarkan data kamu.</p>
+          </div>
+        </div>
+
+        <div class="tip-box bonus">
+          <div class="tip-label">🚀 Bonus — Claude in Chrome: Sheets Tanpa Copy-Paste</div>
+          <p>Claude in Chrome bisa buka Google Sheets-mu langsung, baca data, dan masukkan formula tanpa copy-paste. <strong>Setup:</strong> Chrome Web Store → cari "Claude" → install "Claude for Chrome" (dari Anthropic) → login → buka Google Sheets → klik ikon Claude di toolbar → panel Claude muncul di sisi kanan.<br><br>
+          Setelah setup: <em>"Lihat sheet yang terbuka. Buatkan formula total penjualan di kolom F untuk setiap baris."</em></p>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">4 / 8</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <!-- MODULE 5: Batch Prompting -->
+      <div class="module-panel" id="panel5">
+        <div class="video-slot" id="video-slot-5"></div>
+        <div class="breadcrumb"><span>Produktivitas Kantor</span><span>›</span><strong>Modul 5</strong></div>
+        <h1 class="module-title">Batch Prompting</h1>
+        <p class="module-subtitle">20 output dari 1 prompt — kerjakan satu set tugas sekaligus — 10 menit</p>
+        <div class="ppt-slot" id="ppt-slot-5"></div>
+        <div class="doc-slot" id="doc-slot-5"></div>
+
+        <div class="module-desc-box">
+          Rina punya 20 produk baru yang perlu deskripsi untuk Tokopedia. Dengan cara biasa: 20 prompt terpisah, 20 copy-paste, 40 menit. <strong>Dengan batch prompting:</strong> 1 prompt, 20 deskripsi, 5 menit.
+        </div>
+
+        <div class="section-heading">Apa itu Batch Prompting?</div>
+        <p class="body-text">Kamu berikan Claude satu set instruksi + daftar item → Claude proses semua sekaligus. Berlaku untuk item apapun yang membutuhkan <strong>perlakuan sama</strong>: deskripsi produk, ringkasan review, balasan template, kategori data, dan lain-lain.</p>
+
+        <div class="section-heading">Struktur Prompt Batch</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Template Dasar</div>
+          <div class="prompt-box">[Instruksi yang berlaku untuk SEMUA item]
+
+Format output per item:
+[tentukan struktur yang diinginkan]
+
+Daftar item:
+1. [item pertama]
+2. [item kedua]
+3. [item ketiga]
+...<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="section-heading">4 Contoh Langsung Pakai</div>
+
+        <div class="sub-heading">① Deskripsi Produk Tokopedia</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt</div>
+          <div class="prompt-box">Tulis deskripsi produk Tokopedia untuk setiap item berikut.
+Format per produk:
+- Nama: [nama produk]
+- Deskripsi: 2 kalimat manfaat + 1 kalimat CTA, maks 50 kata
+- Highlight: 3 bullet point keunggulan
+
+Produk:
+1. Kemeja linen putih, bahan adem, cocok kerja &amp; kasual
+2. Celana kulot hitam, pinggang elastis, all size S–XL
+3. Dress midi floral, bahan katun, tersedia 4 warna
+[lanjutkan sampai semua produk]<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="sub-heading">② Kategori Review Pelanggan</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt</div>
+          <div class="prompt-box">Kategorikan setiap review berikut sebagai: POSITIF / NEGATIF / NETRAL
+Lalu ekstrak: poin utama yang disebut pelanggan (maks 5 kata)
+
+Review:
+1. "Baju bagus, jahitan rapi, tapi pengiriman lama"
+2. "Warna persis seperti foto, puas!"
+3. "Ukuran kebesaran dari yang tertera"
+[lanjutkan]<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="sub-heading">③ Ringkasan Email Masuk</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt</div>
+          <div class="prompt-box">Ringkas setiap email berikut dalam 1 kalimat.
+Sebutkan: siapa pengirim + apa yang mereka minta/sampaikan.
+
+Email 1: [paste email]
+Email 2: [paste email]
+[lanjutkan]<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="sub-heading">④ 5 Variasi Caption dari 1 Konsep</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt</div>
+          <div class="prompt-box">Buat 5 variasi caption Instagram untuk produk yang sama.
+Tiap variasi: hook berbeda, tone berbeda
+(santai / inspiratif / edukatif / FOMO / relatable).
+Semua: maks 60 kata + 3 hashtag.
+
+Produk: Kemeja linen putih, koleksi summer, harga Rp 189.000<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="tip-box warn">
+          <div class="tip-label">⚠️ Kapan TIDAK Pakai Batch Prompting</div>
+          <ul class="mistake-list">
+            <li>Kalau setiap item butuh konteks yang sangat berbeda satu sama lain</li>
+            <li>Kalau output satu item bergantung pada output item lain</li>
+            <li>Kalau kamu butuh review mendalam per item (bukan proses cepat)</li>
+            <li>Kalau jumlah item lebih dari ~30 (pecah jadi beberapa batch)</li>
+          </ul>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Latihan</div>
+          <div class="case-box">
+            <p>Pilih 5–10 item sejenis dari pekerjaanmu: deskripsi produk, email template, ringkasan, atau apapun. Tulis satu batch prompt dengan instruksi + format + semua item. Proses sekaligus. Simpan prompt tersebut sebagai template — pakai lagi kapanpun perlu.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>5–10 output terproses sekaligus. 1 template prompt tersimpan untuk dipakai lagi.</p>
+          </div>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">5 / 8</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <!-- MODULE 6: Prompt Chaining -->
+      <div class="module-panel" id="panel6">
+        <div class="video-slot" id="video-slot-6"></div>
+        <div class="breadcrumb"><span>Produktivitas Kantor</span><span>›</span><strong>Modul 6</strong></div>
+        <h1 class="module-title">Prompt Chaining</h1>
+        <p class="module-subtitle">Output kompleks dari langkah sederhana — tugas 2 jam jadi 25 menit — 12 menit</p>
+        <div class="ppt-slot" id="ppt-slot-6"></div>
+        <div class="doc-slot" id="doc-slot-6"></div>
+
+        <div class="module-desc-box">
+          Rina perlu buat proposal kerjasama untuk reseller potensial di Bandung. Kalau satu prompt: hasilnya generik dan dangkal. Kalau dicicil dengan chain: setiap step membangun di atas yang sebelumnya — dan hasilnya jauh lebih kuat.
+        </div>
+
+        <div class="section-heading">Apa itu Prompt Chaining?</div>
+        <p class="body-text">Satu prompt menghasilkan output. Output itu jadi input untuk prompt berikutnya. Setiap step membangun di atas konteks yang sudah ada.</p>
+        <div class="info-grid">
+          <div class="info-card"><strong>Kapan dibutuhkan</strong><span>Output yang terlalu kompleks untuk 1 prompt</span></div>
+          <div class="info-card"><strong>Kapan dibutuhkan</strong><span>Tugas yang punya tahapan logis (riset → draft → review → finalisasi)</span></div>
+          <div class="info-card"><strong>Kapan dibutuhkan</strong><span>Kalau 1 prompt menghasilkan hasil yang dangkal atau generik</span></div>
+          <div class="info-card"><strong>Tetap di satu chat</strong><span>Semua step dalam 1 chat yang sama — Claude ingat konteks sebelumnya</span></div>
+        </div>
+
+        <div class="section-heading">Contoh Nyata: Rina Buat Proposal Reseller — Chain 4 Step</div>
+
+        <div class="sub-heading">Step 1 — Riset &amp; Profil Calon Reseller</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt 1</div>
+          <div class="prompt-box">Saya akan buat proposal kerjasama reseller untuk Kasual Studio
+(brand fashion kasual wanita, harga Rp 150–350rb).
+
+Calon reseller: toko fashion di Bandung, sudah 2 tahun berjualan,
+follower IG 8.000, fokus ke pasar mahasiswi.
+
+Buat: (1) profil calon reseller berdasarkan info ini,
+(2) apa yang kemungkinan mereka cari dari kerjasama,
+(3) kekhawatiran yang mungkin mereka punya.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="sub-heading">Step 2 — Kerangka Proposal (gunakan output Step 1)</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt 2</div>
+          <div class="prompt-box">Berdasarkan profil dan kebutuhan reseller tadi,
+buat kerangka proposal kerjasama yang menjawab kekhawatiran mereka.
+
+Sertakan: penawaran harga grosir, minimum order,
+keuntungan eksklusif reseller, dan cara mulai.
+Formatnya: 5 section dengan heading.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="sub-heading">Step 3 — Tulis Proposal Lengkap</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt 3</div>
+          <div class="prompt-box">Tulis proposal lengkap berdasarkan kerangka tadi.
+Tone: profesional tapi hangat. Panjang: 400–500 kata.
+Bahasa Indonesia formal.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="sub-heading">Step 4 — Review &amp; Perkuat</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt 4</div>
+          <div class="prompt-box">Identifikasi 3 bagian paling lemah dari proposal ini
+dan tulis ulang agar lebih meyakinkan.
+Fokus pada bagian yang bisa membuat reseller ragu.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="section-heading">5 Aturan Chain yang Efektif</div>
+        <div class="summary-box">
+          <div class="summary-label">Panduan</div>
+          <ul>
+            <li><strong>Tetap di satu chat</strong> — jangan buka chat baru di tengah chain</li>
+            <li><strong>Review output di setiap step</strong> sebelum lanjut ke step berikutnya</li>
+            <li><strong>Mulai dari yang luas, semakin spesifik</strong> setiap step</li>
+            <li><strong>Gunakan "dari hasil tadi..."</strong> untuk merujuk ke output sebelumnya</li>
+            <li><strong>Step terakhir selalu review</strong> — "identifikasi 3 bagian paling lemah dan perbaiki"</li>
+          </ul>
+        </div>
+
+        <div class="section-heading">Ide Chain untuk Bisnismu</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Konten Bulanan</strong><span>Riset trend → Kalender konten → Draft caption → Review &amp; finalisasi</span></div>
+          <div class="info-card"><strong>Laporan Performa</strong><span>Analisis data → Temukan insight → Buat narasi → Slide summary</span></div>
+          <div class="info-card"><strong>Onboarding Karyawan</strong><span>Buat checklist → Tulis SOP → Buat template pertanyaan</span></div>
+          <div class="info-card"><strong>Pitch atau Proposal</strong><span>Riset klien → Kerangka → Draft lengkap → Identifikasi kelemahan</span></div>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Latihan</div>
+          <div class="case-box">
+            <p>Pilih satu tugas yang biasanya kamu kerjakan dalam beberapa langkah terpisah. Buat chain minimal 3 step. Kerjakan dalam satu chat yang sama. Review output di setiap step sebelum lanjut. Bandingkan hasilnya dengan satu prompt langsung — mana yang lebih baik?</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>1 output final dari chain minimal 3 step yang lebih baik dari yang dihasilkan 1 prompt langsung.</p>
+          </div>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">6 / 8</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <!-- MODULE 7: Dokumen & Riset -->
+      <div class="module-panel" id="panel7">
+        <div class="video-slot" id="video-slot-7"></div>
+        <div class="breadcrumb"><span>Produktivitas Kantor</span><span>›</span><strong>Modul 7</strong></div>
+        <h1 class="module-title">Dokumen &amp; Riset</h1>
+        <p class="module-subtitle">Meeting notes, ringkasan, SWOT, SOP — semua 3× lebih cepat — 15 menit</p>
+        <div class="ppt-slot" id="ppt-slot-7"></div>
+        <div class="doc-slot" id="doc-slot-7"></div>
+
+        <div class="module-desc-box">
+          Ada satu kategori kerja yang menyita waktu tapi jarang disadari: membaca, meringkas, dan memikirkan sesuatu. Rapat 1 jam yang tidak menghasilkan action items jelas. Dokumen 15 halaman yang harus dibaca sebelum meeting besok. SOP yang tidak pernah sempat ditulis. <strong>Setelah modul ini:</strong> semua pekerjaan "berpikir" ini selesai 3× lebih cepat.
+        </div>
+
+        <div class="info-grid">
+          <div class="info-card"><strong>01 Meeting Notes</strong><span>Catatan berantakan → action items terstruktur dalam 2 menit</span></div>
+          <div class="info-card"><strong>02 Summarizing</strong><span>Dokumen 10 halaman → ringkasan 1 halaman untuk ambil keputusan</span></div>
+          <div class="info-card"><strong>03 Riset &amp; SWOT</strong><span>Observasimu + analisis Claude = framework keputusan bisnis</span></div>
+          <div class="info-card"><strong>04 SOP Writing</strong><span>Ceritakan prosesnya → Claude tulis SOPnya siap pakai</span></div>
+        </div>
+
+        <div class="section-heading">01 — Meeting Notes → Action Items</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt</div>
+          <div class="prompt-box">Ini catatan meeting saya dengan supplier kain tadi:
+[paste catatan — boleh berantakan, boleh campur bahasa]
+
+Tolong buat:
+1. Ringkasan keputusan yang disepakati (maks 5 poin)
+2. Action items dalam format tabel: Siapa | Apa | Deadline
+3. Pertanyaan yang belum terjawab dan perlu di-follow-up<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+        <div class="tip-box">
+          <div class="tip-label">💡 Tips</div>
+          <p>Tidak perlu catatan yang rapi — poin acak, singkatan, bahkan typo tetap bisa diproses. Kalau rapat direkam: transkrip audio dulu, lalu paste hasilnya ke Claude. Minta Claude kirim ulang dalam format "siap dishare ke tim" kalau perlu.</p>
+        </div>
+        <div class="output-box" style="margin-bottom:24px;">
+          <div class="output-icon">✅</div>
+          <div><h3>Output</h3><p>Tabel action items siap dishare ke peserta rapat, dalam waktu di bawah 5 menit sejak rapat selesai.</p></div>
+        </div>
+
+        <div class="section-heading">02 — Summarizing Dokumen</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt</div>
+          <div class="prompt-box">Ini proposal kerjasama yang saya terima:
+[paste dokumen]
+
+Saya perlu memutuskan apakah mau lanjut atau tidak. Ringkas dalam format:
+- Apa yang mereka tawarkan (3 poin konkret)
+- Apa yang mereka minta dari saya (3 poin konkret)
+- Hal yang perlu saya perhatikan sebelum setuju
+- Pertanyaan yang perlu saya tanyakan sebelum tanda tangan<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+        <div class="section-heading" style="margin-top:8px;">4 Variasi Siap Pakai</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Laporan keuangan</strong><span>"Highlight 3 angka paling penting dan jelaskan artinya untuk kondisi bisnis saya."</span></div>
+          <div class="info-card"><strong>Kontrak/perjanjian</strong><span>"Apa klausul yang tidak biasa atau perlu saya perhatikan sebelum tanda tangan?"</span></div>
+          <div class="info-card"><strong>Artikel atau riset panjang</strong><span>"Ringkas ide utamanya dalam 5 kalimat. Apa yang relevan untuk bisnis saya?"</span></div>
+          <div class="info-card"><strong>Email thread panjang</strong><span>"Apa inti permasalahan dalam thread ini dan keputusan apa yang sudah disepakati?"</span></div>
+        </div>
+        <div class="output-box" style="margin-bottom:24px;">
+          <div class="output-icon">✅</div>
+          <div><h3>Output</h3><p>Ringkasan 1 halaman atau kurang — cukup untuk ambil keputusan atau membalas dengan confident.</p></div>
+        </div>
+
+        <div class="section-heading">03 — Riset &amp; Analisis (SWOT)</div>
+        <div class="tip-box">
+          <div class="tip-label">📌 Yang Perlu Dipahami</div>
+          <p>Claude tidak punya akses ke data pasar terkini atau harga kompetitor saat ini. Riset terbaik terjadi ketika <strong>kamu yang membawa observasi</strong> → Claude yang membantu <strong>menganalisis dan menyusunnya</strong>.</p>
+        </div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt SWOT</div>
+          <div class="prompt-box">Saya mau masuk ke kategori tas kanvas untuk pasar yang sama
+(wanita 20–32 tahun, harga Rp 150–350rb, Instagram &amp; Tokopedia).
+
+Yang sudah saya observasi:
+- [kompetitor yang kamu lihat dan harga mereka]
+- [tren yang kamu tangkap dari Instagram atau pelanggan]
+- [modal dan kapasitas yang kamu miliki]
+- [kekhawatiran yang kamu punya]
+
+Buatkan SWOT analysis untuk keputusan ini.
+Setiap kuadran: 3–4 poin yang konkret dan spesifik — bukan generik.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+        <div class="output-box" style="margin-bottom:24px;">
+          <div class="output-icon">✅</div>
+          <div><h3>Output</h3><p>SWOT analysis 1 halaman siap dijadikan bahan diskusi atau dasar keputusan bisnis.</p></div>
+        </div>
+
+        <div class="section-heading">04 — SOP Writing</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt</div>
+          <div class="prompt-box">Saya mau dokumentasikan proses packing pesanan di toko saya.
+
+Prosesnya kira-kira: cek pesanan masuk dari Tokopedia, siapkan
+produk dari rak, cek kondisi produk (tidak ada cacat, warna sesuai),
+lipat dengan benar, bungkus bubble wrap untuk produk yang mudah kusut,
+masukkan nota pembelian dan kartu ucapan kecil, seal packaging dengan
+lakban bening, tempel label pengiriman, foto produk yang sudah di-pack
+sebelum diserahkan ke kurir.
+
+Tulis ini sebagai SOP yang bisa dibaca pegawai baru. Formatnya:
+- Judul dan tujuan SOP
+- Alat/bahan yang dibutuhkan
+- Langkah-langkah bernomor (detail cukup untuk diikuti tanpa penjelasan lisan)
+- Checklist verifikasi di akhir
+- Kesalahan umum yang harus dihindari<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+        <div class="section-heading" style="margin-top:8px;">Proses Lain yang Bisa Didokumentasikan</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Penanganan Komplain</strong><span>Alur dari komplain masuk sampai resolusi dan follow-up</span></div>
+          <div class="info-card"><strong>Onboarding Reseller</strong><span>Proses menerima, verifikasi, dan orientasi reseller baru</span></div>
+          <div class="info-card"><strong>Konten Instagram</strong><span>Cara membuat, review, schedule, dan posting konten harian</span></div>
+          <div class="info-card"><strong>Cek Stok &amp; Restock</strong><span>Prosedur audit stok mingguan dan pemesanan ulang ke supplier</span></div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>1 SOP siap pakai yang bisa langsung diberikan ke pegawai baru atau disimpan sebagai dokumentasi bisnis.</p>
+          </div>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">7 / 8</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <!-- MODULE 8: Case Study -->
+      <div class="module-panel" id="panel8">
+        <div class="video-slot" id="video-slot-8"></div>
+        <div class="breadcrumb"><span>Produktivitas Kantor</span><span>›</span><strong>Modul 8</strong></div>
+        <h1 class="module-title">Case Study: Satu Hari Kerja Penuh</h1>
+        <p class="module-subtitle">Semua modul dalam aksi nyata — pilih skenario yang paling mirip denganmu — 20 menit</p>
+        <div class="ppt-slot" id="ppt-slot-8"></div>
+        <div class="doc-slot" id="doc-slot-8"></div>
+
+        <div class="module-desc-box">
+          Dua skenario berbeda — pilih yang paling mirip dengan situasimu. Ikuti salah satu step by step, dan perhatikan modul mana yang dipakai di setiap langkah.
+        </div>
+
+        <div class="two-col">
+          <div class="col-card highlight">
+            <h4>Skenario A: Rina — UMKM Fashion Online</h4>
+            <p>Pulang liburan 3 hari: 23 email, 10 deskripsi produk baru, analisis penjualan, 1 proposal reseller, catatan meeting, deadline IG hari ini. Tanpa Claude: 5–6 jam. Dengan Claude: sebelum makan siang.</p>
+          </div>
+          <div class="col-card">
+            <h4>Skenario B: Budi — Konsultan Freelance</h4>
+            <p>Pitching ke klien baru besok jam 10. Sekarang jam 2 siang. Belum ada: riset kompetitor, proposal, deck 8 slide, 2 follow-up klien. Tanpa Claude: lembur sampai tengah malam. Dengan Claude: selesai jam 6 sore.</p>
+          </div>
+        </div>
+
+        <div class="section-heading">Skenario A: Senin Pagi di Kasual Studio</div>
+
+        <div class="sub-heading">Step 1 — Buka Claude Project, Langsung Kerja (Modul 2)</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt Pertama Rina Hari Ini</div>
+          <div class="prompt-box">Bantu saya prioritaskan pekerjaan hari ini. Saya punya:
+- 23 email belum dibalas (campuran komplain, inquiry, konfirmasi)
+- 10 deskripsi produk baru untuk Tokopedia
+- Analisis data penjualan bulan lalu
+- 1 proposal reseller yang perlu dibuat
+- 1 post Instagram hari ini
+
+Urutkan dari yang paling urgent ke yang bisa ditunda.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+        <p class="body-text">Claude langsung menjawab dengan urutan yang logis — karena sudah tahu konteks bisnis Rina dari Project.</p>
+
+        <div class="sub-heading">Step 2 — Bersihkan 23 Email dalam 30 Menit (Modul 1 + 3 + 5)</div>
+        <p class="body-text">Rina kelompokkan email jadi 4 tipe dan proses masing-masing secara berbeda:</p>
+        <div class="compare-table-wrap">
+          <table class="compare-table">
+            <tr><th>Tipe Email</th><th>Jumlah</th><th>Cara Proses</th><th>Waktu</th></tr>
+            <tr><td>Komplain pelanggan</td><td>5</td><td>Template prompt komplain dari M03 + konteks per email</td><td>~10 menit</td></tr>
+            <tr><td>Inquiry reseller</td><td>3</td><td>Batch ringkas semua dulu (M05), lalu balas satu per satu</td><td>~8 menit</td></tr>
+            <tr><td>Konfirmasi pembayaran</td><td>12</td><td>Batch prompting 12 sekaligus dengan nama pembeli</td><td>~5 menit</td></tr>
+            <tr><td>Lain-lain</td><td>3</td><td>Manual (tidak butuh Claude)</td><td>~5 menit</td></tr>
+          </table>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Batch 12 Konfirmasi Pembayaran Sekaligus</div>
+          <div class="prompt-box">Tulis 12 balasan konfirmasi pembayaran. Setiap balasan:
+akui transfer, estimasi kirim 1-2 hari kerja, ucapkan terima kasih.
+Format: singkat, maks 3 kalimat, bahasa santai.
+
+Nama pembeli:
+1. Dinda - transfer Rp 189.000 - Kemeja Linen Putih
+2. Sarah - transfer Rp 245.000 - Dress Midi Floral
+[lanjut sampai 12]<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="sub-heading">Step 3 — 10 Deskripsi Produk Sekaligus (Modul 5)</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt</div>
+          <div class="prompt-box">Tulis deskripsi produk Tokopedia untuk 10 produk berikut.
+Format per produk:
+- Judul listing: maks 60 karakter, sertakan kata kunci pencarian
+- Deskripsi: 3 kalimat — bahan, kecocokan, dan keunggulan produk
+- Highlight: 4 bullet point singkat
+
+Produk koleksi Summer Linen Kasual Studio:
+1. Kemeja linen putih, 100% linen, adem, cocok kerja &amp; weekend
+2. Celana kulot krem, pinggang elastis, all size S–XL
+3. Dress midi sage green, lengan panjang, linen mix
+4. Blouse off-white, kerah V, bahan linen ringan
+5. Co-ord set linen hitam (atasan + celana)
+6. Jumpsuit linen dusty pink, tali adjustable, one size
+7. Rok midi linen stripe, zipper belakang, panjang di bawah lutut
+8. Kemeja oversized linen biru muda, fit boxy
+9. Set piyama linen krem, untuk tidur &amp; santai di rumah
+10. Dress mini linen terracotta, lengan balon, acara kasual<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+        <p class="body-text">10 deskripsi siap upload dalam 4 menit.</p>
+
+        <div class="sub-heading">Step 4 — Analisis Data Penjualan (Modul 4)</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt</div>
+          <div class="prompt-box">Ini data penjualan Kasual Studio bulan Juni:
+[paste data: nama produk, jumlah terjual, revenue, stok tersisa]
+
+Analisis:
+1. Produk mana yang paling cepat habis (perlu restock segera)?
+2. Produk mana yang stagnan (perlu promosi atau diskon)?
+3. Koleksi warna apa yang sebaiknya saya tambah bulan depan?<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="sub-heading">Step 5 — Proposal Reseller Yogyakarta (Modul 6)</div>
+        <p class="body-text">Rina pakai chain 4 step persis seperti di M06: Profil calon reseller → Kerangka proposal → Tulis proposal lengkap → Review &amp; perkuat 3 bagian lemah. Total: 22 menit untuk proposal yang biasanya butuh 2 jam.</p>
+
+        <div class="sub-heading">Step 6 — Rapikan Catatan Meeting Supplier (Modul 7)</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt</div>
+          <div class="prompt-box">Ini catatan meeting saya minggu lalu dengan supplier kain:
+[paste catatan berantakan dari HP]
+
+Buat: ringkasan keputusan yang disepakati +
+action items (siapa / apa / kapan).<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+        <p class="body-text">Dapat tabel action items dalam 2 menit. Langsung forward ke supplier sebagai konfirmasi.</p>
+
+        <div class="sub-heading">Step 7 — Caption Instagram Hari Ini (Modul 1 + 2)</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt (via Claude Project — super pendek)</div>
+          <div class="prompt-box">Tulis caption Instagram untuk kemeja linen putih dari koleksi summer baru.
+Hook tentang "senin yang adem". Sertakan CTA untuk DM.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+        <p class="body-text">Done. 45 detik.</p>
+
+        <div class="section-heading">Rekap Skenario A</div>
+        <div class="compare-table-wrap">
+          <table class="compare-table">
+            <tr><th>Tugas</th><th>Modul</th><th>Biasanya</th><th>Dengan Claude</th></tr>
+            <tr><td>23 email</td><td>M01 + M03 + M05</td><td>2 jam</td><td>28 menit</td></tr>
+            <tr><td>10 deskripsi produk</td><td>M05</td><td>40 menit</td><td>4 menit</td></tr>
+            <tr><td>Analisis penjualan</td><td>M04</td><td>45 menit</td><td>8 menit</td></tr>
+            <tr><td>Proposal reseller</td><td>M06</td><td>2 jam</td><td>22 menit</td></tr>
+            <tr><td>Catatan meeting</td><td>M07</td><td>20 menit</td><td>2 menit</td></tr>
+            <tr><td>Caption Instagram</td><td>M01 + M02</td><td>15 menit</td><td>2 menit</td></tr>
+            <tr><td><strong>Total</strong></td><td></td><td><strong>~6 jam</strong></td><td><strong>~66 menit</strong></td></tr>
+          </table>
+        </div>
+
+        <div class="section-heading">Skenario B: Deadline Besok — Budi, Konsultan Freelance</div>
+        <p class="body-text">Pitching ke klien baru besok jam 10. Sekarang jam 2 siang. Yang belum ada: riset kompetitor, proposal kerjasama, deck presentasi 8 slide, 2 follow-up klien.</p>
+
+        <div class="sub-heading">Step 1 — Riset Kompetitor Klien (Modul 7)</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt</div>
+          <div class="prompt-box">Klien saya adalah brand retail fashion lokal yang mau ekspansi ke e-commerce.
+Saya sudah observasi 3 kompetitor mereka:
+
+Kompetitor A: [deskripsi — harga, produk, cara promosi]
+Kompetitor B: [deskripsi]
+Kompetitor C: [deskripsi]
+
+Bantu saya:
+1. Identifikasi celah yang belum diisi kompetitor
+2. Susun SWOT singkat untuk klien saya
+3. Rekomendasikan 1 angle positioning yang bisa saya tawarkan<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+        <p class="body-text">Competitive brief terstruktur dalam 8 menit. Ini jadi fondasi proposal.</p>
+
+        <div class="sub-heading">Step 2 — Proposal Kerjasama (Modul 6)</div>
+        <p class="body-text">Pakai chain 4 step. Step 1 (profil klien) sudah selesai dari riset di atas. Lanjut ke kerangka → proposal lengkap → review. Total: 25 menit.</p>
+
+        <div class="sub-heading">Step 3 — Batch 3 Email Sekaligus (Modul 5)</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt</div>
+          <div class="prompt-box">Tulis 3 email sekaligus:
+1. Konfirmasi jadwal pitching besok jam 10 ke klien baru — profesional, singkat
+2. Follow-up klien A yang belum balas soal revisi proposal minggu lalu — gentle reminder
+3. Follow-up klien B soal pembayaran invoice bulan lalu — sedikit lebih tegas tapi sopan
+
+Format masing-masing: subject line + isi email. Bahasa Indonesia formal.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="sub-heading">Step 4 — Ringkas Proposal Jadi Deck 8 Slide (Modul 7 + 6)</div>
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt</div>
+          <div class="prompt-box">Ini proposal yang sudah saya tulis:
+[paste proposal]
+
+Ringkas menjadi kerangka deck presentasi 8 slide:
+- Slide 1: Problem klien
+- Slide 2–3: Situasi pasar &amp; kompetitor
+- Slide 4–5: Solusi yang saya tawarkan
+- Slide 6: Timeline &amp; deliverable
+- Slide 7: Investasi
+- Slide 8: Next steps
+
+Per slide: judul + 3 poin bullet maksimal.
+Singkat, cocok untuk diucapkan, bukan dibaca.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="compare-table-wrap">
+          <table class="compare-table">
+            <tr><th>Tugas</th><th>Modul</th><th>Biasanya</th><th>Dengan Claude</th></tr>
+            <tr><td>Riset kompetitor</td><td>M07</td><td>90 menit</td><td>10 menit</td></tr>
+            <tr><td>Proposal kerjasama</td><td>M06</td><td>2 jam</td><td>25 menit</td></tr>
+            <tr><td>3 email</td><td>M05</td><td>20 menit</td><td>5 menit</td></tr>
+            <tr><td>Deck presentasi</td><td>M07 + M06</td><td>45 menit</td><td>15 menit</td></tr>
+            <tr><td><strong>Total</strong></td><td></td><td><strong>~4,5 jam</strong></td><td><strong>~55 menit</strong></td></tr>
+          </table>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">🎯 Tantangan Akhir</div>
+          <p>Pilih skenario yang paling mirip denganmu — atau buat versimu sendiri. Sebelum hari kerja sibuk berikutnya: list semua tugas, tandai modul mana yang bisa bantu, kerjakan dengan Claude, dan catat waktu aktual yang dihemat.</p>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>Satu hari kerja selesai lebih awal dari biasanya. Catat berapa jam yang berhasil kamu hemat.</p>
+          </div>
+        </div>
+
+        <!-- Kursus Selesai! -->
+        <div style="background:var(--green-dim);border:1px solid rgba(29,158,117,0.2);border-radius:16px;padding:32px 24px;margin-top:32px;text-align:center;">
+          <div style="width:56px;height:56px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+            <svg width="26" height="26" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <h2 style="font-family:var(--serif);font-size:24px;color:var(--ink);margin-bottom:8px;">Kursus Selesai!</h2>
+          <p style="font-size:14px;color:var(--ink-2);line-height:1.6;max-width:440px;margin:0 auto;">Kamu sudah menguasai 8 modul produktivitas. Kurangi 2 jam kerja harianmu — tanpa tools baru, tanpa kursus coding.</p>
+        </div>
+
+        <div class="next-label">Lanjutkan Belajar</div>
+        <a class="next-card" href="bisnis-ukm.html">
+          <div class="next-icon">📣</div>
+          <div class="next-info">
+            <h4>Konten &amp; Pemasaran Bisnis</h4>
+            <p>Strategi konten, deskripsi produk, iklan, dan sistem CS dengan Claude</p>
+          </div>
+          <div class="next-arrow">→</div>
+        </a>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">8 / 8</span>
+          <button class="nav-btn primary" onclick="showModule(9)">Beri Feedback →</button>
+        </div>
+      </div>
+
+      <!-- PANEL 9: Feedback -->
+      <div class="module-panel" id="panel9">
+        <div class="feedback-panel">
+          <div class="completion-badge">
+            <div class="badge-check">
+              <svg width="26" height="26" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h2>Kursus Selesai!</h2>
+            <p>Bagaimana pengalamanmu belajar Produktivitas Kantor dengan Claude?<br>Feedback kamu membantu kami terus memperbaiki kursus ini.</p>
+          </div>
+          <p style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:12px;">Beri nilai kursus ini</p>
+          <div class="stars">
+            <span class="star" onclick="setStar(1)" id="star1">★</span>
+            <span class="star" onclick="setStar(2)" id="star2">★</span>
+            <span class="star" onclick="setStar(3)" id="star3">★</span>
+            <span class="star" onclick="setStar(4)" id="star4">★</span>
+            <span class="star" onclick="setStar(5)" id="star5">★</span>
+          </div>
+          <textarea class="feedback-textarea" id="feedbackText" placeholder="Ada yang ingin kamu sampaikan? (opsional)"></textarea>
+          <button class="submit-feedback-btn" onclick="submitFeedback()">Kirim Feedback</button>
+          <div class="feedback-thanks" id="feedbackThanks">Terima kasih atas feedbackmu! 🙏</div>
+        </div>
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter"></span>
+          <a href="dashboard.html" class="nav-btn primary">Ke Dashboard →</a>
         </div>
       </div>
 
     </div>
   </main>
 </div>
-
 <script>
-  const TOTAL = 7;
+  const TOTAL = 9;
+  const CONTENT_MODULES = 8;
   let current = 1;
   const done = new Set();
+  let starRating = 0;
+
+  const sb = window._supabase;
 
   async function init() {
-    const { data: { session } } = await sbClient.auth.getSession();
+    const { data: { session } } = await sb.auth.getSession();
     if (!session) { window.location.href = 'login.html'; return; }
-    document.getElementById('navEmail').textContent = session.user.email;
-    document.getElementById('loadingScreen').style.display = 'none';
-    document.getElementById('mainLayout').style.display = 'flex';
-    try {
-      await sbClient.from('enrollments').upsert({ email: session.user.email, course_slug: 'kerja-sehari-hari', course_name: 'Claude untuk Pekerjaan Sehari-hari', type: 'paid' }, { onConflict: 'email,course_slug', ignoreDuplicates: true });
-    } catch (e) {}
+    const email = session.user.email;
+    document.getElementById('navEmail').textContent = email;
 
-    // Restore saved progress from Supabase
-    try {
-      const { data: completions } = await sbClient
-        .from('module_completions').select('module_num')
-        .eq('email', session.user.email).eq('course_slug', 'kerja-sehari-hari');
-      if (completions && completions.length > 0) {
-        completions.forEach(function(row) {
-          done.add(row.module_num);
-          var checkEl = document.getElementById('check' + row.module_num);
-          var navEl = document.getElementById('nav-mod' + row.module_num);
-          if (checkEl) checkEl.textContent = '✓';
-          if (navEl) navEl.classList.add('done');
-        });
-        updateProgress();
-      }
-    } catch(e) {}
-  }
+    // Load completions
+    const { data } = await sb.from('module_completions')
+      .select('module_num')
+      .eq('email', email)
+      .eq('course_slug', COURSE_SLUG);
+    if (data) data.forEach(r => { done.add(r.module_num); markDone(r.module_num); });
+    updateProgress();
 
-  async function saveProgress(moduleNum) {
-    localStorage.setItem('klaud_progress_kerja-sehari-hari', done.size);
-    try {
-      const { data: { session } } = await sbClient.auth.getSession();
-      if (session) {
-        await sbClient.from('module_completions').upsert({
-          email: session.user.email, course_slug: 'kerja-sehari-hari', module_num: moduleNum
-        }, { onConflict: 'email,course_slug,module_num', ignoreDuplicates: true });
-      }
-    } catch (e) {}
+    // Check existing feedback
+    const { data: fb } = await sb.from('course_feedback')
+      .select('rating')
+      .eq('email', email)
+      .eq('course_slug', COURSE_SLUG)
+      .single();
+    if (fb) {
+      document.getElementById('feedbackThanks').style.display = 'block';
+      setStar(fb.rating);
+    }
   }
 
   function showModule(n) {
-    done.add(current);
-    saveProgress(current);
-    document.getElementById(`check${current}`).textContent = '✓';
-    document.getElementById(`nav-mod${current}`).classList.add('done');
-    document.getElementById(`panel${current}`).classList.remove('active');
-    document.getElementById(`nav-mod${current}`).classList.remove('active');
+    document.getElementById('panel' + current).classList.remove('active');
+    document.getElementById('nav-mod' + current).classList.remove('active');
     current = n;
-    document.getElementById(`panel${current}`).classList.add('active');
-    document.getElementById(`nav-mod${current}`).classList.add('active');
-    document.querySelector('.main').scrollTo({ top: 0, behavior: 'smooth' });
-    updateProgress();
+    document.getElementById('panel' + n).classList.add('active');
+    document.getElementById('nav-mod' + n).classList.add('active');
+    document.querySelector('.main').scrollTo(0, 0);
+
+    // Mark previous content module done
+    const prev = n - 1;
+    if (prev >= 1 && prev <= CONTENT_MODULES && !done.has(prev)) {
+      done.add(prev);
+      markDone(prev);
+      saveCompletion(prev);
+      updateProgress();
+    }
   }
 
   function nextModule() { if (current < TOTAL) showModule(current + 1); }
   function prevModule() { if (current > 1) showModule(current - 1); }
 
-  function updateProgress() {
-    const pct = Math.round((done.size / TOTAL) * 100);
-    document.getElementById('progressFill').style.width = pct + '%';
-    document.getElementById('progressLabel').textContent = `${done.size}/${TOTAL}`;
+  function markDone(n) {
+    const item = document.getElementById('nav-mod' + n);
+    const check = document.getElementById('check' + n);
+    if (item) item.classList.add('done');
+    if (check) check.textContent = '✓';
   }
 
-  async function logout() { await sbClient.auth.signOut(); window.location.href = 'index.html'; }
+  function updateProgress() {
+    const pct = Math.round((done.size / CONTENT_MODULES) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = done.size + '/' + CONTENT_MODULES;
+  }
+
+  async function saveCompletion(moduleNum) {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) return;
+    await sb.from('module_completions').upsert({
+      email: session.user.email,
+      course_slug: COURSE_SLUG,
+      module_num: moduleNum
+    }, { onConflict: 'email,course_slug,module_num' });
+  }
 
   function copyPrompt(btn) {
     const box = btn.closest('.prompt-box');
     const clone = box.cloneNode(true);
-    clone.querySelector('button')?.remove();
+    clone.querySelectorAll('button').forEach(b => b.remove());
     navigator.clipboard.writeText(clone.innerText.trim()).then(() => {
-      btn.textContent = '✓ Tersalin'; btn.classList.add('copied');
+      btn.textContent = 'Disalin!';
+      btn.classList.add('copied');
       setTimeout(() => { btn.textContent = 'Salin'; btn.classList.remove('copied'); }, 2000);
     });
   }
 
-  init();
-
-  // ── Feedback ─────────────────────────────────────
-  let currentRating = 0;
-
-  function setRating(val) {
-    currentRating = val;
-    document.querySelectorAll('.star-btn').forEach(function(btn) {
-      btn.classList.toggle('active', parseInt(btn.getAttribute('data-val')) <= val);
-    });
+  function setStar(n) {
+    starRating = n;
+    for (let i = 1; i <= 5; i++) {
+      const s = document.getElementById('star' + i);
+      s.classList.toggle('active', i <= n);
+    }
   }
 
   async function submitFeedback() {
-    const btn = document.getElementById('feedbackSubmit');
-    btn.disabled = true;
-    btn.textContent = 'Menyimpan...';
-    const comment = document.getElementById('feedbackComment').value.trim();
-    try {
-      const r = await sbClient.auth.getSession();
-      const session = r.data.session;
-      if (session) {
-        await sbClient.from('course_feedback').upsert({
-          email: session.user.email,
-          course_slug: 'kerja-sehari-hari',
-          rating: currentRating || null,
-          comment: comment || null,
-          submitted_at: new Date().toISOString()
-        }, { onConflict: 'email,course_slug' });
-      }
-    } catch(e) { console.error(e); }
-    document.getElementById('feedbackForm').style.display = 'none';
-    document.getElementById('feedbackDone').style.display = 'block';
+    if (!starRating) { alert('Pilih dulu bintang penilaian kamu.'); return; }
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) return;
+    const comment = document.getElementById('feedbackText').value.trim();
+    await sb.from('course_feedback').upsert({
+      email: session.user.email,
+      course_slug: COURSE_SLUG,
+      rating: starRating,
+      comment: comment || null
+    }, { onConflict: 'email,course_slug' });
+
+    // Mark module 8 done on feedback submission
+    if (!done.has(8)) { done.add(8); markDone(8); saveCompletion(8); updateProgress(); }
+
+    document.querySelector('.submit-feedback-btn').style.display = 'none';
+    document.getElementById('feedbackThanks').style.display = 'block';
   }
 
+  async function doLogout() {
+    await sb.auth.signOut();
+    window.location.href = 'index.html';
+  }
+
+  init();
 </script>
 </body>
 </html>
