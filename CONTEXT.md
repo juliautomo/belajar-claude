@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 14, 2026 (checkpoint 7)_
+_Last updated: July 14, 2026 (checkpoint 8)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -181,7 +181,7 @@ const COURSE_SLUG = 'produktivitas';
 
 **Supabase MCP note**: MCP is connected to `pyuvofppbfuytkcazgwh` ("Personal"), NOT the live project `ctqtdqbsucbhikwnagvl`. The live project is owned by a different account — MCP cannot query it. Use Supabase dashboard directly for DB queries on the live project.
 
-**Backend (index.js) NOT yet updated** — still has `kerja-sehari-hari` as K2 slug. Needs to be updated to `produktivitas` for the payment webhook to enroll correctly.
+**Backend (index.js) updated July 14, 2026 (checkpoint 8)** — `kerja-sehari-hari` replaced with `produktivitas` in both `COURSES` and `PAKET_COURSES`. K2 access link updated to `https://belajar-claude.vercel.app/produktivitas-content.html`. Pushed as commit `992a1dc` to `belajar-claude-backend`. No remaining references to `kerja-sehari-hari` anywhere in the codebase.
 
 ### bisnis-ukm-content.html — rewritten per K3 PDF, July 2026
 All 6 content panels rewritten to follow the uploaded PDF "K3 · Konten & Pemasaran Bisnis" (course "Claude untuk Bisnis & UKM"), replacing the old generic per-tool tutorials. Panel count/TOTAL unchanged (already 7 = 6 content + feedback), just content + order + sidebar titles replaced.
@@ -206,5 +206,4 @@ All 6 content panels rewritten to follow the uploaded PDF "K3 · Konten & Pemasa
 - **Setup status**: `sql/admin-content-setup.sql` has been run in the Supabase SQL editor (tables + RLS confirmed in Table Editor), and the `course-pdfs` / `course-videos` public storage buckets have been created. Admin login + nav link confirmed working on `prompt-gratis.html` as of July 7, 2026.
 - **RLS fix + PPT feature (July 11, 2026) — RESOLVED**: the "Dokumen Praktik" upload was failing with "new row violates row-level security policy" because the `course-documents` storage bucket had never been created in the *correct* Supabase project. Root cause turned out to be a **two-project mix-up**: Julia had been running SQL/creating buckets in an unrelated Supabase project (`pyuvofppbfuytkcazgwh`), while `supabase-config.js` actually points the live site at `ctqtdqbsucbhikwnagvl` ("Belajar-Claude"). Artifacts created in the wrong project (a `module_ppts` table, `course-documents`/`course-ppts` buckets) were left in place there since they're inert and don't affect the live site — cleanup is optional, not required. Fix: ran `sql/admin-content-setup.sql` + `sql/module-ppts-and-fix-uploads.sql` (concatenated as `run-this-in-belajar-claude-project.sql`, given directly to Julia) in the correct project `ctqtdqbsucbhikwnagvl`. **Confirmed working as of this checkpoint** — PDF, PPT, and multi-file Dokumen Praktik uploads all succeed in production.
 - **Practice document file types (July 11, 2026)**: `docFileInput` now also accepts `.md` in addition to PDF/DOC/DOCX (`accept` attribute + the extension whitelist in `uploadDoc()`).
-- **Multi-file upload success message (July 11, 2026)**: `uploadDoc()` now lists the uploaded filenames in the success status when more than one file is uploaded in a batch, e.g. "2 dokumen berhasil diunggah untuk ... ✓ (a.pdf, b.pdf)" — purely cosmetic, the underlying count (`okCount`) was already accurate.
-- **Known limitation**: practice documents and PPTs are uploaded as raw files t
+- **Multi-file upload success message (July 11, 2026)**: `uploadDoc()` now lists the uploaded filenames in the success status when more than one file is uploaded in a batch, e.g. "2 dokumen 
