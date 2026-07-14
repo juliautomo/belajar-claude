@@ -233,7 +233,7 @@
 
       <!-- MODULE 1: Role Prompting -->
       <div class="module-panel active" id="panel1">
-        <div class="video-slot" id="video-slot-1"></div>
+        <div class="video-slot" data-placeholder="true" id="video-slot-1"></div>
         <div class="breadcrumb"><span>Produktivitas Kantor</span><span>›</span><strong>Modul 1</strong></div>
         <h1 class="module-title">Role Prompting</h1>
         <p class="module-subtitle">Framework 4 elemen yang jadi dasar semua modul berikutnya — 10 menit</p>
@@ -303,7 +303,7 @@
 
       <!-- MODULE 2: Claude Projects -->
       <div class="module-panel" id="panel2">
-        <div class="video-slot" id="video-slot-2"></div>
+        <div class="video-slot" data-placeholder="true" id="video-slot-2"></div>
         <div class="breadcrumb"><span>Produktivitas Kantor</span><span>›</span><strong>Modul 2</strong></div>
         <h1 class="module-title">Claude Projects</h1>
         <p class="module-subtitle">Setup sekali, Claude ingat bisnismu selamanya — 8 menit</p>
@@ -411,7 +411,7 @@ Channel penjualan: [Instagram / Tokopedia / WhatsApp / dll]
 
       <!-- MODULE 3: Gmail + Claude -->
       <div class="module-panel" id="panel3">
-        <div class="video-slot" id="video-slot-3"></div>
+        <div class="video-slot" data-placeholder="true" id="video-slot-3"></div>
         <div class="breadcrumb"><span>Produktivitas Kantor</span><span>›</span><strong>Modul 3</strong></div>
         <h1 class="module-title">Gmail + Claude</h1>
         <p class="module-subtitle">Dari 15 email, 12 selesai dalam 10 menit — 12 menit</p>
@@ -521,7 +521,7 @@ Maks 3 kalimat.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button
 
       <!-- MODULE 4: Google Sheets + Claude -->
       <div class="module-panel" id="panel4">
-        <div class="video-slot" id="video-slot-4"></div>
+        <div class="video-slot" data-placeholder="true" id="video-slot-4"></div>
         <div class="breadcrumb"><span>Produktivitas Kantor</span><span>›</span><strong>Modul 4</strong></div>
         <h1 class="module-title">Google Sheets + Claude</h1>
         <p class="module-subtitle">Laporan 2 jam jadi 15 menit — data langsung jadi insight — 12 menit</p>
@@ -625,7 +625,7 @@ Sarankan alokasi yang paling optimal berdasarkan data performa.<button class="co
 
       <!-- MODULE 5: Batch Prompting -->
       <div class="module-panel" id="panel5">
-        <div class="video-slot" id="video-slot-5"></div>
+        <div class="video-slot" data-placeholder="true" id="video-slot-5"></div>
         <div class="breadcrumb"><span>Produktivitas Kantor</span><span>›</span><strong>Modul 5</strong></div>
         <h1 class="module-title">Batch Prompting</h1>
         <p class="module-subtitle">20 output dari 1 prompt — kerjakan satu set tugas sekaligus — 10 menit</p>
@@ -741,7 +741,7 @@ Produk: Kemeja linen putih, koleksi summer, harga Rp 189.000<button class="copy-
 
       <!-- MODULE 6: Prompt Chaining -->
       <div class="module-panel" id="panel6">
-        <div class="video-slot" id="video-slot-6"></div>
+        <div class="video-slot" data-placeholder="true" id="video-slot-6"></div>
         <div class="breadcrumb"><span>Produktivitas Kantor</span><span>›</span><strong>Modul 6</strong></div>
         <h1 class="module-title">Prompt Chaining</h1>
         <p class="module-subtitle">Output kompleks dari langkah sederhana — tugas 2 jam jadi 25 menit — 12 menit</p>
@@ -848,7 +848,7 @@ Fokus pada bagian yang bisa membuat reseller ragu.<button class="copy-btn" oncli
 
       <!-- MODULE 7: Dokumen & Riset -->
       <div class="module-panel" id="panel7">
-        <div class="video-slot" id="video-slot-7"></div>
+        <div class="video-slot" data-placeholder="true" id="video-slot-7"></div>
         <div class="breadcrumb"><span>Produktivitas Kantor</span><span>›</span><strong>Modul 7</strong></div>
         <h1 class="module-title">Dokumen &amp; Riset</h1>
         <p class="module-subtitle">Meeting notes, ringkasan, SWOT, SOP — semua 3× lebih cepat — 15 menit</p>
@@ -978,7 +978,7 @@ Tulis ini sebagai SOP yang bisa dibaca pegawai baru. Formatnya:
 
       <!-- MODULE 8: Case Study -->
       <div class="module-panel" id="panel8">
-        <div class="video-slot" id="video-slot-8"></div>
+        <div class="video-slot" data-placeholder="true" id="video-slot-8"></div>
         <div class="breadcrumb"><span>Produktivitas Kantor</span><span>›</span><strong>Modul 8</strong></div>
         <h1 class="module-title">Case Study: Satu Hari Kerja Penuh</h1>
         <p class="module-subtitle">Semua modul dalam aksi nyata — pilih skenario yang paling mirip denganmu — 20 menit</p>
@@ -990,16 +990,17 @@ Tulis ini sebagai SOP yang bisa dibaca pegawai baru. Formatnya:
         </div>
 
         <div class="two-col">
-          <div class="col-card highlight">
+          <div class="col-card highlight" id="scenario-card-a" onclick="showScenario('a')" style="cursor:pointer;">
             <h4>Skenario A: Rina — UMKM Fashion Online</h4>
             <p>Pulang liburan 3 hari: 23 email, 10 deskripsi produk baru, analisis penjualan, 1 proposal reseller, catatan meeting, deadline IG hari ini. Tanpa Claude: 5–6 jam. Dengan Claude: sebelum makan siang.</p>
           </div>
-          <div class="col-card">
+          <div class="col-card" id="scenario-card-b" onclick="showScenario('b')" style="cursor:pointer;">
             <h4>Skenario B: Budi — Konsultan Freelance</h4>
             <p>Pitching ke klien baru besok jam 10. Sekarang jam 2 siang. Belum ada: riset kompetitor, proposal, deck 8 slide, 2 follow-up klien. Tanpa Claude: lembur sampai tengah malam. Dengan Claude: selesai jam 6 sore.</p>
           </div>
         </div>
 
+        <div id="scenario-a">
         <div class="section-heading">Skenario A: Senin Pagi di Kasual Studio</div>
 
         <div class="sub-heading">Step 1 — Buka Claude Project, Langsung Kerja (Modul 2)</div>
@@ -1111,6 +1112,9 @@ Hook tentang "senin yang adem". Sertakan CTA untuk DM.<button class="copy-btn" o
           </table>
         </div>
 
+        </div><!-- /scenario-a -->
+
+        <div id="scenario-b" style="display:none;">
         <div class="section-heading">Skenario B: Deadline Besok — Budi, Konsultan Freelance</div>
         <p class="body-text">Pitching ke klien baru besok jam 10. Sekarang jam 2 siang. Yang belum ada: riset kompetitor, proposal kerjasama, deck presentasi 8 slide, 2 follow-up klien.</p>
 
@@ -1173,6 +1177,8 @@ Singkat, cocok untuk diucapkan, bukan dibaca.<button class="copy-btn" onclick="c
             <tr><td><strong>Total</strong></td><td></td><td><strong>~4,5 jam</strong></td><td><strong>~55 menit</strong></td></tr>
           </table>
         </div>
+
+        </div><!-- /scenario-b -->
 
         <div class="tip-box">
           <div class="tip-label">🎯 Tantangan Akhir</div>
@@ -1352,22 +1358,4 @@ Singkat, cocok untuk diucapkan, bukan dibaca.<button class="copy-btn" onclick="c
       email: session.user.email,
       course_slug: COURSE_SLUG,
       rating: starRating,
-      comment: comment || null
-    }, { onConflict: 'email,course_slug' });
-
-    // Mark module 8 done on feedback submission
-    if (!done.has(8)) { done.add(8); markDone(8); saveCompletion(8); updateProgress(); }
-
-    document.querySelector('.submit-feedback-btn').style.display = 'none';
-    document.getElementById('feedbackThanks').style.display = 'block';
-  }
-
-  async function doLogout() {
-    await sb.auth.signOut();
-    window.location.href = 'index.html';
-  }
-
-  init();
-</script>
-</body>
-</html>
+      comment: c
