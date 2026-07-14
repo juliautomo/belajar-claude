@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 14, 2026 (checkpoint 8)_
+_Last updated: July 14, 2026 (checkpoint 9)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -206,4 +206,68 @@ All 6 content panels rewritten to follow the uploaded PDF "K3 · Konten & Pemasa
 - **Setup status**: `sql/admin-content-setup.sql` has been run in the Supabase SQL editor (tables + RLS confirmed in Table Editor), and the `course-pdfs` / `course-videos` public storage buckets have been created. Admin login + nav link confirmed working on `prompt-gratis.html` as of July 7, 2026.
 - **RLS fix + PPT feature (July 11, 2026) — RESOLVED**: the "Dokumen Praktik" upload was failing with "new row violates row-level security policy" because the `course-documents` storage bucket had never been created in the *correct* Supabase project. Root cause turned out to be a **two-project mix-up**: Julia had been running SQL/creating buckets in an unrelated Supabase project (`pyuvofppbfuytkcazgwh`), while `supabase-config.js` actually points the live site at `ctqtdqbsucbhikwnagvl` ("Belajar-Claude"). Artifacts created in the wrong project (a `module_ppts` table, `course-documents`/`course-ppts` buckets) were left in place there since they're inert and don't affect the live site — cleanup is optional, not required. Fix: ran `sql/admin-content-setup.sql` + `sql/module-ppts-and-fix-uploads.sql` (concatenated as `run-this-in-belajar-claude-project.sql`, given directly to Julia) in the correct project `ctqtdqbsucbhikwnagvl`. **Confirmed working as of this checkpoint** — PDF, PPT, and multi-file Dokumen Praktik uploads all succeed in production.
 - **Practice document file types (July 11, 2026)**: `docFileInput` now also accepts `.md` in addition to PDF/DOC/DOCX (`accept` attribute + the extension whitelist in `uploadDoc()`).
-- **Multi-file upload success message (July 11, 2026)**: `uploadDoc()` now lists the uploaded filenames in the success status when more than one file is uploaded in a batch, e.g. "2 dokumen 
+- **Multi-file upload success message (July 11, 2026)**: `uploadDoc()` now lists the uploaded filenames in the success status when more than one file is uploaded in a batch, e.g. "2 dokumen berhasil diunggah untuk ... ✓ (a.pdf, b.pdf)" — purely cosmetic, the underlying count (`okCount`) was already accurate.
+- **Known limitation**: practice documents and PPTs are uploaded as raw files to Supabase Storage, subject to Supabase's per-file upload size limit and total storage/bandwidth quota. Videos remain link-based (YouTube) so they're not affected by this.
+- **Supabase project gotcha to remember**: there are (at least) two Supabase projects in play — `ctqtdqbsucbhikwnagvl` ("Belajar-Claude", the real one, referenced in `supabase-config.js`) and `pyuvofppbfuytkcazgwh` (unrelated, has stray leftover objects from this incident). Always confirm the project ID in the dashboard URL before giving SQL to run.
+
+---
+
+## Index.html Key Details
+- **Hero section title**: "Pilih jalur sesuai tujuanmu" — single line (no `<br>`)
+- **Jalur grid**: Individual white cards with `1.5px solid #D5D5D2` border + drop shadow. 3-column grid, `gap: 16px`. Featured (All Access) card = dark background.
+- **Course carousel**: Horizontal scroll, individual cards with border+shadow. Tags use `align-items: flex-start` on card to prevent stretching.
+- **"Segera Hadir"** on jalur links: Developer → `coming-soon.html`, Mahasiswa → `kursus-mahasiswa.html`
+
+---
+
+## Backend (klaud-backend — Node.js/Express)
+Hosted on Railway (`https://klaud-backend-production.up.railway.app`). Handles payments and signups.
+- **GitHub repo**: `juliautomo/belajar-claude-backend` (renamed from `klaud-backend`)
+- **Railway service name**: still shows `klaud-backend` (cosmetic only, URL unchanged)
+
+### API Endpoints
+| Method | Path | Purpose |
+|--------|------|---------|
+| `GET` | `/` | Health check |
+| `POST` | `/signup` | Free signup — adds to ConvertKit, Google Sheets, creates Supabase user, enrolls in `prompt-gratis`, sends welcome email |
+| `POST` | `/create-payment` | Creates Duitku invoice, returns `reference` + `orderId` |
+| `POST` | `/webhook/duitku` | Payment confirmation — saves enrollment to Supabase + Google Sheets, adds ConvertKit tag, sends access email |
+
+### Course Catalog (COURSES in index.js)
+Updated July 14, 2026 — `kerja-sehari-hari` fully replaced with `produktivitas`.
+
+| Slug | Name | Price |
+|------|------|-------|
+| `produktivitas` | K2: Produktivitas Kantor | Rp 149,000 |
+| `bisnis-ukm` | K3: Konten & Pemasaran Bisnis | Rp 149,000 |
+| `konten-copywriting` | K4: Copywriting & Konten Digital | Rp 199,000 |
+| `analisis-data` | K5: Analisis Data & Laporan | Rp 199,000 |
+| `build-automation` | K6: Automasi Workflow | Rp 299,000 |
+| `ai-powered-app` | K7: Build AI App Sederhana | Rp 299,000 |
+| `claude-api-dev` | K8: Claude API untuk Developer | Rp 399,000 |
+| `jual-produk-ai` | K9: Build & Monetisasi Produk AI | Rp 499,000 |
+| `paket-mahasiswa` | Claude untuk Mahasiswa | Rp 249,000 |
+| `paket-karyawan` | Claude untuk Karyawan & Profesional | Rp 299,000 |
+| `paket-pengusaha` | Claude untuk Pengusaha | Rp 499,000 |
+| `paket-creator` | Claude untuk Content Creator | Rp 299,000 |
+| `workshop-zoom` | Workshop Bulanan via Zoom | Rp 149,000 |
+| `coaching-1on1` | Coaching 1-on-1 | Rp 1,500,000 |
+
+### Package → Course Enrollment Map (PAKET_COURSES)
+Updated July 14, 2026 — fully in sync with frontend.
+
+| Package | Constituent Courses |
+|---------|-------------------|
+| `paket-karyawan` | mulai-claude, produktivitas, analisis-data |
+| `paket-mahasiswa` | mulai-claude, konten-copywriting, analisis-data |
+| `paket-pengusaha` | mulai-claude, bisnis-ukm, konten-copywriting, build-automation |
+| `paket-creator` | mulai-claude, bisnis-ukm, konten-copywriting |
+
+### Backend Integrations
+- **Duitku**: Payment gateway (sandbox: `api-sandbox.duitku.com`). Signature: SHA256 for invoice creation, MD5 for webhook verification. Merchant code + API key stored as Railway env vars. Webhook endpoint `/webhook/duitku` verifies signature, updates Supabase `enrollments`, sends access email via SendGrid, logs to Google Sheets.
+- **ConvertKit**: Email marketing. Tags applied on signup and on course purchase.
+- **Google Sheets**: Logs signups and purchases for tracking. Credentials stored as Railway env var (`GOOGLE_CREDENTIALS_JSON`).
+
+---
+
+## Checkpoint 9 (July 14, 2026) — GitHub PAT rotated, ConvertKit call-signature bug fixed, CONTEXT.md tr
