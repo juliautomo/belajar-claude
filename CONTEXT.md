@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 11, 2026 (checkpoint 4)_
+_Last updated: July 14, 2026 (checkpoint 5)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -17,7 +17,7 @@ Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign 
 ---
 
 ## Git / Claude Workflow
-- **belajar-claude push**: PAT `ghp_YOUR_PAT_HERE` embedded in remote URL. Claude clones to `/tmp/bc-push`, edits there, and pushes. Windows-mounted `.git/` folder blocks lock file writes so direct git from mount doesn't work.
+- **belajar-claude push**: PAT (ask Julia for current token) embedded in remote URL. Claude clones to `/tmp/bc-push`, edits there, and pushes. Windows-mounted `.git/` folder blocks lock file writes so direct git from mount doesn't work.
 - **belajar-claude-backend push**: Same PAT, clones to `/tmp/belajar-claude-backend`. Local folder at `C:\Users\julia\GitHub\belajar-claude-backend\`.
 - **Local file sync**: Claude edits files directly on the Windows mount via file tools AND in `/tmp` clone before pushing. Both stay in sync.
 - **K2 files**: All K2-related files are in `C:\Users\julia\GitHub\belajar-claude\K2-Produktivitas\` (moved July 11, 2026)
@@ -88,7 +88,8 @@ All pages use these CSS variables:
 |------|---------|
 | `index.html` | Landing page — hero, jalur belajar grid, course carousel, CTA |
 | `mulai-claude.html` | Sales page for "Mulai dengan Claude AI" (free) |
-| `kerja-sehari-hari.html` | Sales page — Rp 149K |
+| `produktivitas.html` | Sales page — K2 · Produktivitas Kantor — Rp 149K (8 modules) |
+| `kerja-sehari-hari.html` | RETIRED — old K2 sales page (still in repo, nothing links to it) |
 | `bisnis-ukm.html` | Sales page — Rp 149K |
 | `prompt-gratis.html` | Sales page for free prompt guide |
 | `kursus-karyawan.html` | Jalur Profesional page |
@@ -108,7 +109,8 @@ All pages use these CSS variables:
 | `dashboard.html` | Main user dashboard |
 | `prompt-gratis-content.html` | Course reader — 5 modules + feedback panel |
 | `mulai-claude-content.html` | Course reader — 6 modules + feedback panel |
-| `kerja-sehari-hari-content.html` | Course reader — 6 modules + feedback panel |
+| `produktivitas-content.html` | Course reader — K2, 8 modules + feedback panel (COURSE_SLUG='produktivitas') |
+| `kerja-sehari-hari-content.html` | RETIRED — old K2 content (6 modules, COURSE_SLUG='kerja-sehari-hari'). Still in repo, nothing links to it. |
 | `bisnis-ukm-content.html` | Course reader — 6 modules + feedback panel |
 | `payment-success.html` | Post-payment confirmation |
 | `admin.html` | Admin-only content manager — upload course PDFs + per-module videos to Supabase Storage. Gated to `julia.utomo@gmail.com` / `tiffany.utomo@gmail.com` via session email check. Linked from a hidden "Admin" nav item on `prompt-gratis.html` (shown only to those emails). |
@@ -151,6 +153,26 @@ Course has gone through two PDF-driven restructures in July 2026. Current state:
 - The course-completion treatment ("Kursus Selesai!" box + "Lanjutkan Belajar" next-course cards linking to kerja-sehari-hari/bisnis-ukm) always lives on whichever module is currently last before feedback — moved from module 3 to module 6 in this restructure. That module's nav-bottom button jumps straight to `showModule(7)` instead of generic `nextModule()`.
 - `admin.html`'s `COURSES` config for `mulai-claude` tracks this: `modules: 6` (currently).
 - Video/PDF/document mapping (course_slug + module_num) is content-agnostic, so nothing needed to change there — re-adding modules 4-6 just means those module numbers are valid targets again in the admin dropdowns.
+
+### produktivitas-content.html — K2 course (July 14, 2026)
+New content page for the upgraded K2 course. Created from `K2-Produktivitas/K2-improved-content.md`. Key constants:
+```javascript
+const TOTAL = 9;           // 8 content panels + 1 feedback
+const CONTENT_MODULES = 8;
+const COURSE_SLUG = 'produktivitas';
+```
+**8 modules**: M01 Role Prompting → M02 Claude Projects → M03 Gmail+Claude → M04 Google Sheets → M05 Batch Prompting → M06 Prompt Chaining → M07 Dokumen & Riset → M08 Case Study (Satu Hari dengan Claude). Personas used throughout: Rina (UMKM fashion "Kasual Studio") and Budi (konsultan freelance). M08 includes completion badge + "Lanjutkan Belajar" card linking to `bisnis-ukm.html`. 30+ copyable prompt boxes with Salin/copy buttons.
+
+**Files replaced across the codebase (July 14, 2026)**:
+- `kerja-sehari-hari` slug fully retired from the live frontend
+- `produktivitas.html` — new landing page (8 modul, 2 jam)
+- `admin.html` — removed `kerja-sehari-hari` entry, `produktivitas` entry has `modules: 8`
+- `index.html` — K2 card now links to `produktivitas.html`, shows 8 modul
+- `dashboard.html` — ALL_COURSES, PAKET_COURSES, COURSE_ORDER, PAKET_TRACKS all updated
+- `mulai-claude-content.html` — "Lanjutkan Belajar" card → `produktivitas.html`
+- `bisnis-ukm-content.html` — cross-sell card → `produktivitas.html`
+- `kursus-karyawan.html` — `hasAccess` check uses `produktivitas` slug
+- **Backend (index.js) NOT yet updated** — still has `kerja-sehari-hari` as K2 slug. Needs to be updated to `produktivitas` for the payment webhook to enroll correctly.
 
 ### bisnis-ukm-content.html — rewritten per K3 PDF, July 2026
 All 6 content panels rewritten to follow the uploaded PDF "K3 · Konten & Pemasaran Bisnis" (course "Claude untuk Bisnis & UKM"), replacing the old generic per-tool tutorials. Panel count/TOTAL unchanged (already 7 = 6 content + feedback), just content + order + sidebar titles replaced.
@@ -197,36 +219,4 @@ Hosted on Railway (`https://klaud-backend-production.up.railway.app`). Handles p
 ### API Endpoints
 | Method | Path | Purpose |
 |--------|------|---------|
-| `GET` | `/` | Health check |
-| `POST` | `/signup` | Free signup — adds to ConvertKit, Google Sheets, creates Supabase user, enrolls in `prompt-gratis`, sends welcome email |
-| `POST` | `/create-payment` | Creates Duitku invoice, returns `reference` + `orderId` |
-| `POST` | `/webhook/duitku` | Payment confirmation — saves enrollment to Supabase + Google Sheets, adds ConvertKit tag, sends access email |
-
-### Course Catalog (COURSES in index.js)
-| Slug | Name | Price |
-|------|------|-------|
-| `kerja-sehari-hari` | K2: Produktivitas Kantor | Rp 149,000 |
-| `bisnis-ukm` | K3: Konten & Pemasaran Bisnis | Rp 149,000 |
-| `konten-copywriting` | K4: Copywriting & Konten Digital | Rp 199,000 |
-| `analisis-data` | K5: Analisis Data & Laporan | Rp 199,000 |
-| `build-automation` | K6: Automasi Workflow | Rp 299,000 |
-| `ai-powered-app` | K7: Build AI App Sederhana | Rp 299,000 |
-| `claude-api-dev` | K8: Claude API untuk Developer | Rp 399,000 |
-| `jual-produk-ai` | K9: Build & Monetisasi Produk AI | Rp 499,000 |
-| `paket-mahasiswa` | Claude untuk Mahasiswa | Rp 249,000 |
-| `paket-karyawan` | Claude untuk Karyawan & Profesional | Rp 299,000 |
-| `paket-pengusaha` | Claude untuk Pengusaha | Rp 499,000 |
-| `paket-creator` | Claude untuk Content Creator | Rp 299,000 |
-| `workshop-zoom` | Workshop Bulanan via Zoom | Rp 149,000 |
-| `coaching-1on1` | Coaching 1-on-1 | Rp 1,500,000 |
-
-### Package → Course Enrollment Map (PAKET_COURSES)
-| Package | Constituent Courses |
-|---------|-------------------|
-| `paket-karyawan` | mulai-claude, kerja-sehari-hari, analisis-data |
-| `paket-mahasiswa` | mulai-claude, konten-copywriting, analisis-data |
-| `paket-pengusaha` | mulai-claude, bisnis-ukm, konten-copywriting, build-automation |
-| `paket-creator` | mulai-claude, bisnis-ukm, konten-copywriting |
-
-### Backend Integrations
-- **Duitku**: Payment gateway (sandbox: `api-sandbox.duitku.com`). Signature: SHA256 for invoice creation, M
+| `GE
