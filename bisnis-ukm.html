@@ -379,4 +379,29 @@
     <div style="font-family:var(--serif);font-size:20px;color:var(--ink);margin-bottom:4px;letter-spacing:-0.3px;">Claude untuk Bisnis UKM</div>
     <div style="font-size:13px;color:var(--ink-2);margin-bottom:24px;">Rp 149.000 · Akses seumur hidup</div>
     <label style="display:block;font-size:12px;font-weight:600;color:var(--ink-2);margin-bottom:6px;">Nama lengkap</label>
-    <input type="text" id="paymentName" placeholder="Nama lengkap Anda" style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;color:var(--ink);margin-bottom:12px;outline:none;font-family:var(--font);box-siz
+    <input type="text" id="paymentName" placeholder="Nama lengkap Anda" style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;color:var(--ink);margin-bottom:12px;outline:none;font-family:var(--font);box-sizbox-sizing:border-box;">
+    <label style="display:block;font-size:12px;font-weight:600;color:var(--ink-2);margin-bottom:6px;">Email</label>
+    <input type="email" id="paymentEmail" placeholder="nama@email.com" style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;color:var(--ink);margin-bottom:20px;outline:none;font-family:var(--font);box-sizing:border-box;">
+    <button id="paymentSubmitBtn" onclick="submitPayment()" style="width:100%;padding:13px;background:var(--ink);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:background 0.2s;">Lanjutkan Pembayaran →</button>
+  </div>
+</div>
+
+<!-- Duitku POP -->
+<script src="https://app-sandbox.duitku.com/lib/js/duitku.js"></script>
+<script>
+  function toggleUserMenu(e) {
+    e.stopPropagation();
+    document.getElementById('navUserPill').classList.toggle('open');
+  }
+  async function doSignOut(e) {
+    if (e) e.stopPropagation();
+    await sbClient.auth.signOut();
+    window.location.href = 'index.html';
+  }
+  document.addEventListener('click', function() {
+    var pill = document.getElementById('navUserPill');
+    if (pill) pill.classList.remove('open');
+  });
+</script>
+</body>
+</html>
