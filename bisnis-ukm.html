@@ -37,9 +37,18 @@
   .nav-links a:hover { color: var(--ink); }
   .nav-cta { background: linear-gradient(135deg, var(--accent), var(--accent-2)) !important; color: #fff !important; padding: 8px 18px !important; border-radius: 9px !important; font-weight: 600 !important; font-size: 13px !important; box-shadow: 0 2px 10px var(--accent-glow); transition: all 0.18s !important; }
   .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 18px var(--accent-glow) !important; }
-  .nav-user-pill { display: none; align-items: center; gap: 10px; }
+  .nav-user-pill { display: none; align-items: center; gap: 8px; cursor: pointer; position: relative; padding: 5px 10px 5px 5px; border-radius: 10px; transition: background 0.15s; user-select: none; }
+  .nav-user-pill:hover { background: var(--surface-2); }
   .nav-uname { font-size: 13px; font-weight: 600; color: var(--ink); display: block; }
   .nav-uemail { font-size: 11px; color: var(--ink-2); display: block; }
+  .nav-user-chevron { font-size: 9px; color: var(--ink-3); margin-left: 2px; transition: transform 0.15s; }
+  .nav-user-pill.open .nav-user-chevron { transform: rotate(180deg); }
+  .nav-user-dropdown { display: none; position: absolute; top: calc(100% + 8px); right: 0; background: #fff; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.10); min-width: 160px; overflow: hidden; z-index: 999; }
+  .nav-user-pill.open .nav-user-dropdown { display: block; }
+  .nav-user-dropdown a, .nav-user-dropdown button { display: block; width: 100%; text-align: left; padding: 11px 16px; font-size: 13px; font-weight: 500; color: var(--ink); text-decoration: none; background: none; border: none; cursor: pointer; font-family: inherit; transition: background 0.12s; }
+  .nav-user-dropdown a:hover, .nav-user-dropdown button:hover { background: var(--surface-2); }
+  .nav-user-dropdown .dropdown-divider { height: 1px; background: var(--border); margin: 4px 0; }
+  .nav-user-dropdown .dropdown-signout { color: #DC2626 !important; }
   .hero { padding: 100px 24px 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; }
   .hero-bg { position: absolute; inset: 0; z-index: 0; background: radial-gradient(ellipse 80% 60% at 60% 0%, rgba(74,114,214,0.1) 0%, transparent 70%); }
   .hero-grid { position: absolute; inset: 0; z-index: 0; background-image: linear-gradient(rgba(74,114,214,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(74,114,214,0.05) 1px, transparent 1px); background-size: 48px 48px;  }
@@ -370,28 +379,4 @@
     <div style="font-family:var(--serif);font-size:20px;color:var(--ink);margin-bottom:4px;letter-spacing:-0.3px;">Claude untuk Bisnis UKM</div>
     <div style="font-size:13px;color:var(--ink-2);margin-bottom:24px;">Rp 149.000 · Akses seumur hidup</div>
     <label style="display:block;font-size:12px;font-weight:600;color:var(--ink-2);margin-bottom:6px;">Nama lengkap</label>
-    <input type="text" id="paymentName" placeholder="Nama lengkap Anda" style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;color:var(--ink);margin-bottom:12px;outline:none;font-family:var(--font);box-sizing:border-box;">
-    <label style="display:block;font-size:12px;font-weight:600;color:var(--ink-2);margin-bottom:6px;">Email</label>
-    <input type="email" id="paymentEmail" placeholder="nama@email.com" style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;color:var(--ink);margin-bottom:20px;outline:none;font-family:var(--font);box-sizing:border-box;">
-    <button id="paymentSubmitBtn" onclick="submitPayment()" style="width:100%;padding:13px;background:var(--ink);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:background 0.2s;">Lanjutkan Pembayaran →</button>
-  </div>
-</div>
-
-<!-- Duitku POP -->
-<script src="https://app-sandbox.duitku.com/lib/js/duitku.js">
-  function toggleUserMenu(e) {
-    e.stopPropagation();
-    document.getElementById('navUserPill').classList.toggle('open');
-  }
-  async function doSignOut(e) {
-    if (e) e.stopPropagation();
-    await sbClient.auth.signOut();
-    window.location.href = 'index.html';
-  }
-  document.addEventListener('click', function() {
-    var pill = document.getElementById('navUserPill');
-    if (pill) pill.classList.remove('open');
-  });
-</script>
-</body>
-</html>
+    <input type="text" id="paymentName" placeholder="Nama lengkap Anda" style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;color:var(--ink);margin-bottom:12px;outline:none;font-family:var(--font);box-siz
