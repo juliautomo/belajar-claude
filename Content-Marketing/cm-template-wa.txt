@@ -1,0 +1,66 @@
+# TEMPLATE WHATSAPP BUSINESS — 10 SKENARIO
+# Course: Content & Marketing — Modul 5
+# Cara pakai: Paste skenario yang kamu butuhkan ke Claude, minta tulis template sesuai brand voice kamu
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INFO BRAND (isi dulu sebelum generate)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Nama Bisnis  : [ISIAN]
+Produk/Jasa  : [ISIAN]
+Tone         : [Formal / Semi-formal / Santai]
+Nama Sapaan  : [Kak / Bapak/Ibu / nama pembeli]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+10 SKENARIO TEMPLATE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SKENARIO 1 — Balas inquiry pertama (calon pembeli tanya produk)
+Situasi: Ada yang DM atau WA tanya "Harga berapa?" atau "Ada stok?"
+Template yang dibutuhkan: Sambut hangat + info singkat + arahkan ke katalog/order
+
+SKENARIO 2 — Konfirmasi pesanan masuk
+Situasi: Pembeli sudah transfer / order
+Template yang dibutuhkan: Konfirmasi diterima + estimasi proses + next step
+
+SKENARIO 3 — Info pengiriman (sudah dikirim)
+Situasi: Paket sudah di-pickup kurir
+Template yang dibutuhkan: Nomor resi + estimasi tiba + minta review setelah terima
+
+SKENARIO 4 — Follow up pembayaran (belum bayar setelah 24 jam)
+Situasi: Pembeli sudah order tapi belum transfer
+Template yang dibutuhkan: Reminder ramah + tenggat waktu + opsi batalkan jika tidak jadi
+
+SKENARIO 5 — Balas komplain (produk bermasalah)
+Situasi: Pembeli komplain produk rusak / tidak sesuai
+Template yang dibutuhkan: Minta maaf + minta foto bukti + solusi (ganti/refund)
+
+SKENARIO 6 — Minta testimoni / review
+Situasi: 3-5 hari setelah produk diterima
+Template yang dibutuhkan: Tanya pengalaman + minta bintang di marketplace / foto review
+
+SKENARIO 7 — Broadcast promo (flash sale / diskon)
+Situasi: Mau kirim promo ke daftar kontak
+Template yang dibutuhkan: Hook menarik + detail promo + deadline + cara order
+
+SKENARIO 8 — Balas negosiasi harga
+Situasi: Pembeli minta diskon atau tawar harga
+Template yang dibutuhkan: Pertahankan harga dengan sopan + tawarkan value / bundle
+
+SKENARIO 9 — Produk habis / out of stock
+Situasi: Pembeli tanya produk yang kosong
+Template yang dibutuhkan: Informasi stok habis + estimasi restock + waitlist option
+
+SKENARIO 10 — Ucapan terima kasih / penutup transaksi
+Situasi: Setelah transaksi selesai dan review masuk
+Template yang dibutuhkan: Terima kasih + undang kembali + hint produk lain yang relevan
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PROMPT SIAP PAKAI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+"Bisnisku: [nama bisnis], jual [produk], tone [formal/santai], sapaan '[Kak/nama]'.
+
+Buatkan template WhatsApp untuk skenario berikut:
+[tempel skenario yang kamu butuhkan]
+
+Setiap template: maks 5 baris, ada emoji 1-2 yang sesuai, ada CTA yang jelas.
+Jangan terlalu formal dan jangan berlebihan."

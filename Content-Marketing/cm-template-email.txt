@@ -1,0 +1,78 @@
+# TEMPLATE EMAIL BISNIS — 6 JENIS EMAIL
+# Course: Content & Marketing — Modul 6
+# Cara pakai: Isi [ISIAN], paste ke Claude, minta generate email lengkap
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PROFIL BISNIS (isi sekali, berlaku untuk semua template)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Nama Bisnis     : [ISIAN]
+Produk/Jasa     : [ISIAN]
+Tone Email      : [Formal / Semi-formal]
+Nama Pengirim   : [ISIAN]
+Jabatan         : [Owner / Founder / Customer Service]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EMAIL 1 — LAUNCH PRODUK BARU
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Nama Produk Baru    : [ISIAN]
+Keunggulan Utama    : [ISIAN]
+Harga / Promo Launch: [ISIAN]
+Tanggal Tersedia    : [ISIAN]
+Link/CTA            : [ISIAN — link toko/WA/website]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EMAIL 2 — FLASH SALE / PROMO TERBATAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Nama Promo      : [ISIAN — contoh: "Harbolnas Spesial"]
+Diskon          : [ISIAN — contoh: 30% untuk semua produk]
+Berlaku         : [ISIAN — tanggal mulai s/d selesai]
+Kode Promo      : [ISIAN atau kosong jika tidak ada]
+Minimum Pembelian: [ISIAN atau kosong]
+Link/CTA        : [ISIAN]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EMAIL 3 — FOLLOW UP PEMBELI (setelah beli, minta review)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Produk yang Dibeli  : [ISIAN]
+Hari Setelah Beli   : [ISIAN — biasanya 5-7 hari]
+Platform Review     : [Tokopedia / Shopee / Google / Instagram]
+Insentif Review     : [ISIAN — contoh: diskon 10% order berikutnya, atau kosong]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EMAIL 4 — NEWSLETTER BULANAN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Bulan           : [ISIAN]
+Highlight Utama : [ISIAN — produk terlaris / tips / cerita di balik bisnis]
+Produk Unggulan : [ISIAN]
+Tips untuk Penerima: [ISIAN — tips relevan untuk pembeli produk ini]
+CTA Bulan Ini   : [ISIAN — apa yang mau kamu dorong pembeli lakukan?]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EMAIL 5 — REACTIVATION (pelanggan lama yang belum beli lagi)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Terakhir Beli   : [ISIAN — contoh: "3 bulan lalu"]
+Produk Dulu     : [ISIAN]
+Penawaran Khusus: [ISIAN — diskon/hadiah untuk balik lagi]
+Pesan Utama     : [ISIAN — kenapa mereka harus kembali?]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EMAIL 6 — PENAWARAN RESELLER / MITRA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Target Penerima : [ISIAN — siapa yang mau diajak jadi reseller?]
+Produk          : [ISIAN]
+Margin Reseller : [ISIAN — contoh: 30% dari harga jual]
+Syarat          : [ISIAN — minimum order, dll]
+Keuntungan      : [ISIAN — support marketing, ready stock, dll]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PROMPT SIAP PAKAI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+"Berdasarkan data berikut, tulis email [nomor + jenis email] untuk bisnisku:
+[tempel bagian yang relevan di atas]
+
+Ketentuan:
+- Subjek email: menarik, tidak lebih dari 9 kata
+- Isi: maks 200 kata
+- Tone: [formal/semi-formal]
+- Ada CTA yang jelas di akhir
+- Bahasa Indonesia yang natural, tidak kaku"

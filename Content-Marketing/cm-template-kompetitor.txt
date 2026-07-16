@@ -1,0 +1,64 @@
+# TEMPLATE ANALISIS KOMPETITOR
+# Course: Content & Marketing — Modul 1
+# Cara pakai: Isi kolom [ISIAN] dengan data bisnismu dan kompetitor, lalu paste ke Claude
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BAGIAN 1 — DATA BISNISMU
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Nama Bisnis    : [ISIAN]
+Produk Utama   : [ISIAN]
+Platform Jual  : [Tokopedia / Shopee / Instagram / WhatsApp / Toko Fisik]
+Harga Produk   : [ISIAN]
+Target Pembeli : [ISIAN — contoh: ibu rumah tangga 25-40 tahun di Jabodetabek]
+Keunggulan yg  : [ISIAN — apa yang menurutmu bisnismu lebih baik dari kompetitor?]
+kamu rasa ada
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BAGIAN 2 — DATA KOMPETITOR (isi 3 kompetitor)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KOMPETITOR 1
+Nama/Toko      : [ISIAN]
+Platform       : [ISIAN]
+Produk         : [ISIAN]
+Harga          : [ISIAN]
+Rating/Review  : [ISIAN — contoh: 4.8 bintang, 2.300 ulasan]
+Yang mereka    : [ISIAN — apa yang kelihatan jadi kelebihan mereka?]
+lakukan bagus
+Yang kurang    : [ISIAN — lihat review negatif, apa keluhan pembeli mereka?]
+dari review
+
+KOMPETITOR 2
+Nama/Toko      : [ISIAN]
+Platform       : [ISIAN]
+Produk         : [ISIAN]
+Harga          : [ISIAN]
+Rating/Review  : [ISIAN]
+Yang mereka    : [ISIAN]
+lakukan bagus
+Yang kurang    : [ISIAN]
+dari review
+
+KOMPETITOR 3
+Nama/Toko      : [ISIAN]
+Platform       : [ISIAN]
+Produk         : [ISIAN]
+Harga          : [ISIAN]
+Rating/Review  : [ISIAN]
+Yang mereka    : [ISIAN]
+lakukan bagus
+Yang kurang    : [ISIAN]
+dari review
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PROMPT YANG SUDAH DISIAPKAN — Copy & Paste ke Claude
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Paste isi file ini di atas prompt berikut:
+
+"Berdasarkan data di atas, tolong buatkan:
+1. SWOT sederhana untuk bisnisku (maks 4 poin per kuadran)
+2. Gap yang belum diisi kompetitor manapun — peluang yang bisa aku ambil
+3. 1 kalimat positioning yang jelas: 'Untuk [siapa], [nama bisnis] adalah [apa]
+   yang [benefit utama] karena [bukti/diferensiasi]'
+4. 3 rekomendasi konten yang bisa langsung membedakan brandku dari kompetitor
+
+Format: gunakan heading yang jelas, jawaban ringkas dan actionable."

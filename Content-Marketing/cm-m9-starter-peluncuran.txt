@@ -1,0 +1,173 @@
+STARTER PACK — MODUL 09: PELUNCURAN PRODUK BARU
+Case Study — Dapur Rara meluncurkan Garang Asem Frozen
+=================================================
+
+File ini berisi semua bahan latihan untuk Case Study Modul 09.
+Gunakan sebagai pengganti data nyata jika kamu belum punya produk baru untuk
+diluncurkan. Atau jadikan referensi format saat kamu pakai data bisnismu sendiri.
+
+Konteks: Dapur Rara (lihat Modul 1-8) sudah punya positioning, sistem konten,
+dan tracking iklan yang jalan. Sekarang mereka meluncurkan produk baru —
+Garang Asem Frozen — dan harus jalankan seluruh sistem dari Modul 1-8 dalam
+1 minggu kerja, dari riset sampai produk live dan iklannya dioptimasi.
+
+Urutan pengerjaan: Hari 1 -> Hari 5 (ikuti urutan di modul, 1 hari = 1-2 modul)
+
+===========================================
+HARI 1 (Senin) — CEK POSITIONING + LISTING
+Modul yang dipakai: M01 Positioning, M02 Deskripsi Produk
+===========================================
+
+Positioning Dapur Rara (hasil Modul 1, dipakai sebagai acuan):
+---
+Untuk keluarga muda yang ingin makan masakan daerah otentik tanpa masak lama,
+Dapur Rara adalah frozen food yang dibuat dari resep rumahan asli daerah,
+bukan resep restoran yang dimodifikasi.
+---
+
+Data produk baru (isi ke cm-data-produk.csv, baris baru):
+---
+Nama: Garang Asem Frozen
+Kategori: Frozen food — masakan daerah (Jawa Tengah)
+Harga: Rp 42.000 / 500g
+Keunggulan 1: Resep asli Kudus, asam-pedas seimbang, bukan versi restoran
+Keunggulan 2: Ayam kampung, bukan broiler — tekstur lebih kenyal
+Keunggulan 3: Tinggal kukus 15 menit, tanpa santan jadi tahan lebih lama di freezer
+Target pembeli: keluarga muda 25-40 tahun, suka masakan tradisional tapi tidak sempat masak
+Keyword pencarian: garang asem frozen, garang asem kudus, frozen food jawa tengah
+---
+
+Prompt siap pakai (Hari 1):
+---
+Positioning bisnis saya: [paste positioning di atas].
+Ini data produk baru saya [paste data Garang Asem Frozen di atas].
+Buatkan deskripsi Tokopedia: hook 2 kalimat, keyword, benefit (bukan fitur),
+spesifikasi, dan CTA. Maks 200 kata.
+---
+
+===========================================
+HARI 2 (Selasa) — KONTEN INSTAGRAM PELUNCURAN
+Modul yang dipakai: M03 Konten Instagram
+===========================================
+
+Info untuk kalender launch week (5 hari, bukan kalender bulanan penuh):
+- Senin: teaser "ada yang baru minggu ini" (jangan sebut nama produk)
+- Selasa: reveal produk + cerita asal resep (Kudus)
+- Rabu: proses masak / behind the scene dapur
+- Kamis: testimoni tester internal / keluarga
+- Jumat: launch day — CTA beli + promo early bird
+
+Prompt siap pakai (Hari 2):
+---
+Bisnis: frozen food halal, positioning [paste positioning di atas].
+Produk baru: Garang Asem Frozen, launch hari Jumat ini.
+Buatkan 5 caption untuk launch week (Senin-Jumat) sesuai tema per hari:
+[paste 5 tema di atas]. Setiap caption: maks 80 kata, 1 hook kuat di baris
+pertama, 5 hashtag relevan. Format tabel: Hari | Tema | Caption | Hashtag.
+---
+
+===========================================
+HARI 3 (Rabu) — IKLAN LAUNCH + DESAIN CANVA
+Modul yang dipakai: M04 Iklan + Canva
+===========================================
+
+Brief iklan:
+- Produk: Garang Asem Frozen
+- Promo: early bird diskon 20% untuk 100 pembeli pertama, kode GARANG20
+- Berlaku: Jumat-Minggu (launch weekend)
+- Platform: Instagram/Meta Ads
+- Target: ibu rumah tangga & keluarga muda 25-40 tahun, suka masakan tradisional
+
+Prompt siap pakai (Hari 3):
+---
+Buat 3 variasi copy iklan Meta Ads untuk launch produk baru Garang Asem
+Frozen. Promo: diskon 20% untuk 100 pembeli pertama, kode GARANG20, berlaku
+Jumat-Minggu. Target: ibu rumah tangga & keluarga muda 25-40 tahun.
+Format tiap variasi: headline (maks 7 kata) + body (maks 30 kata) + CTA.
+Variasi tone: urgensi, emosional, fungsional.
+
+Lalu (jika Canva Connector aktif): buatkan desain Instagram Post
+(1080x1080px) untuk variasi terbaik di Canva, warna hijau tua dan putih,
+font bold untuk headline.
+---
+
+===========================================
+HARI 4 (Kamis) — SIAPKAN CS + EMAIL LAUNCH
+Modul yang dipakai: M05 WhatsApp CS, M06 Email & Promosi
+===========================================
+
+3 skenario CS baru khusus produk baru (tambahan dari 10 template yang sudah
+ada di Modul 5):
+1. Calon pembeli tanya "ini beda apa sama garang asem biasa?"
+2. Calon pembeli tanya "tahan berapa lama di freezer, tanpa santan kan?"
+3. Pembeli lama tanya "kenapa gak ada di menu sebelumnya, baru ya?"
+
+Prompt siap pakai — CS (via Claude Project yang sudah aktif):
+---
+Buatkan 3 template WA untuk pertanyaan seputar produk baru Garang Asem
+Frozen: [paste 3 skenario di atas]. Maks 4 baris tiap template, ada emoji
+1-2, ada CTA ke katalog atau checkout.
+---
+
+Data untuk email launch (isi ke cm-template-email.txt bagian "Email
+Launch"):
+---
+Produk: Garang Asem Frozen
+Keunggulan: resep asli Kudus, ayam kampung, tinggal kukus 15 menit
+Promo: diskon 20% kode GARANG20, untuk 100 pembeli pertama, berlaku
+Jumat-Minggu
+Link: bit.ly/dapurrara-garangasem
+Target: 200 pelanggan lama (list email)
+---
+
+Prompt siap pakai — Email (dengan Gmail Connector jika aktif):
+---
+Isi cm-template-email.txt bagian Email Launch sudah saya lengkapi
+[paste data di atas]. Tulis email launch dengan tone hangat, subjek maks 9
+kata, isi maks 150 kata, highlight 3 keunggulan produk, CTA ke link.
+Simpan sebagai draft di Gmail saya.
+---
+
+===========================================
+HARI 5 (Jumat) — LAUNCH DAY: PANTAU IKLAN + LOG KE CONTENT OS
+Modul yang dipakai: M07 Performance Ads, M08 Content OS
+===========================================
+
+Data performa iklan 3 jam pertama setelah launch (isi ke Sheet 1
+cm-performance-ads.xlsx, baris baru):
+
+Platform     | Kampanye              | Spend   | Impressions | Klik | Konversi | Revenue
+Meta Ads     | Garang Asem - Urgensi | 150.000 | 8.200       | 164  | 6        | 252.000
+Meta Ads     | Garang Asem - Emosional | 150.000 | 7.900     | 98   | 11       | 462.000
+TikTok Ads   | Garang Asem - Fungsional | 100.000 | 12.400   | 210  | 4        | 168.000
+
+Prompt siap pakai — analisis (Hari 5, pagi):
+---
+[Upload/paste data 3 jam pertama di atas]. Ini performa iklan launch Garang
+Asem Frozen 3 jam pertama. Analisis: (1) mana yang paling menjanjikan untuk
+di-scale budget-nya hari ini, (2) mana yang sebaiknya dimatikan, (3) berikan
+1 rekomendasi copy baru untuk kampanye dengan performa terlemah.
+---
+
+Prompt siap pakai — log ke Content OS (Hari 5, sore, penutup minggu):
+---
+Ringkas launch week Garang Asem Frozen untuk disimpan di Notion Content OS:
+positioning yang dipakai, deskripsi produk, 5 caption launch week, hasil
+iklan (kampanye terbaik & yang dimatikan), dan 3 template CS baru. Format
+laporan singkat 1 halaman, siap paste ke halaman Tracker Performa.
+---
+
+===========================================
+REKAP — WAKTU YANG DIHEMAT (isi setelah selesai)
+===========================================
+
+Tugas                          | Modul      | Biasa    | Dengan Claude
+Cek positioning + listing      | M01+M02    | 1 jam    | ...
+5 caption launch week          | M03        | 90 menit | ...
+Copy iklan + desain Canva      | M04        | 2 jam    | ...
+3 template CS + email launch   | M05+M06    | 1 jam    | ...
+Analisis performa + log OS     | M07+M08    | 45 menit | ...
+Total                          |            | ~6,25 jam| ...
+
+Isi kolom "Dengan Claude" setelah kamu benar-benar kerjakan setiap step —
+ini jadi output akhir Modul 09.

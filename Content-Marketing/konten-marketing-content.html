@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Content & Marketing — Belajar Claude</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script>const COURSE_SLUG = 'konten-marketing';</script>
+  <script src="course-video.js"></script>
+<style>
+      :root {
+    --bg: #FAFAFA; --surface: #FFFFFF; --surface-2: #F5F5F7;
+    --border: #E8E8E8; --border-strong: #D0D0D0;
+    --ink: #111111; --ink-2: #777777; --ink-3: #BBBBBB;
+    --accent: #6C47FF; --accent-2: #9B7DFF;
+    --accent-dim: rgba(108,71,255,0.08); --accent-glow: rgba(108,71,255,0.18);
+    --green: #16A34A; --green-dim: rgba(22,163,74,0.08); --green-border: rgba(22,163,74,0.2);
+    --gold: #EF9F27; --gold-pale: rgba(239,159,39,0.08);
+    --shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.05);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 2px 8px rgba(0,0,0,0.04);
+    --serif: 'Instrument Serif', Georgia, serif;
+    --font: 'Geist', sans-serif;
+    --r: 14px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--bg); color: var(--ink); height: 100vh; -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; overflow: hidden; }
+  nav { height: 58px; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; background: rgba(250,250,250,0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); flex-shrink: 0; z-index: 10; }
+  .nav-left { display: flex; align-items: center; gap: 16px; }
+  .nav-logo { font-family: var(--font); font-size: 17px; color: var(--ink); text-decoration: none;  font-weight: 700; letter-spacing: -0.4px; }
+  .nav-logo span { color: var(--accent); }
+  .nav-divider { width: 1px; height: 20px; background: var(--border); }
+  .nav-course-title { font-size: 13px; font-weight: 600; color: var(--ink-2); }
+  .nav-right { display: flex; align-items: center; gap: 14px; }
+  .nav-email { font-size: 12px; color: var(--ink-2); }
+  .nav-back { font-size: 13px; color: var(--ink-2); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+  .nav-back:hover { color: var(--ink); }
+  .logout-btn { background: transparent; border: 1px solid var(--border); color: var(--ink-2); padding: 5px 12px; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s; }
+  .logout-btn:hover { border-color: var(--accent); color: var(--ink); }
+  .layout { display: flex; flex: 1; overflow: hidden; }
+  .sidebar { width: 280px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; }
+  .sidebar-header { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
+  .sidebar-course-name { font-size: 14px; font-weight: 800; color: var(--ink); line-height: 1.35; margin-bottom: 10px; }
+  .progress-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .progress-bar { flex: 1; height: 5px; background: var(--border); border-radius: 10px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--gold); border-radius: 10px; transition: width 0.3s; }
+  .progress-label { font-size: 11px; color: var(--ink-2); white-space: nowrap; font-family: monospace; }
+  .sidebar-section-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-2); padding: 16px 20px 8px; font-family: monospace; }
+  .mod-item { display: flex; align-items: flex-start; gap: 12px; padding: 11px 20px; cursor: pointer; transition: background 0.15s; border-left: 3px solid transparent; }
+  .mod-item:hover { background: var(--bg); }
+  .mod-item.active { background: var(--gold-pale); border-left-color: var(--gold); }
+  .mod-check { width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; margin-top: 1px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; transition: all 0.2s; }
+  .mod-item.done .mod-check { background: var(--green); border-color: var(--green); color: #fff; }
+  .mod-item.active .mod-check { border-color: var(--gold); background: var(--gold-pale); }
+  .mod-item-info { flex: 1; }
+  .mod-item-title { font-size: 12px; font-weight: 600; color: var(--ink); line-height: 1.4; margin-bottom: 2px; }
+  .mod-item.active .mod-item-title { color: #A0650A; }
+  .mod-item-sub { font-size: 11px; color: var(--ink-2); }
+  .sidebar-footer { margin-top: auto; padding: 16px 20px; border-top: 1px solid var(--border); }
+  .sidebar-tools { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tool-chip { font-size: 10px; font-weight: 600; background: var(--gold-pale); color: #A0650A; padding: 2px 8px; border-radius: 100px; }
+  .main { flex: 1; overflow-y: auto; background: var(--bg); }
+  .main-inner { max-width: 720px; margin: 0 auto; padding: 36px 32px 60px; }
+  .breadcrumb { font-size: 12px; color: var(--ink-2); margin-bottom: 24px; display: flex; align-items: center; gap: 6px; }
+  .breadcrumb strong { color: var(--ink); }
+  .module-panel { display: none; }
+  .module-panel.active { display: block; }
+  .module-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: var(--ink); margin-bottom: 6px; line-height: 1.3; }
+  .module-subtitle { font-size: 14px; color: var(--ink-2); margin-bottom: 28px; }
+  .module-desc-box { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin-bottom: 24px; font-size: 14px; color: var(--ink-2); line-height: 1.8; }
+  .module-desc-box strong { color: var(--ink); }
+  .prompt-section { margin-bottom: 20px; }
+  .prompt-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--ink-2); margin-bottom: 8px; font-family: monospace; }
+  .prompt-box { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 16px 48px 16px 16px; font-size: 13px; color: var(--ink); line-height: 1.75; font-family: monospace; white-space: pre-wrap; position: relative; }
+  .copy-btn { position: absolute; top: 10px; right: 10px; background: var(--ink); color: #fff; border: none; border-radius: 6px; padding: 4px 10px; font-size: 11px; font-weight: 600; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: background 0.2s; }
+  .copy-btn:hover { background: var(--gold); }
+  .copy-btn.copied { background: var(--green); }
+  .case-box { background: var(--gold-pale); border-radius: 10px; padding: 14px 18px; margin-top: 14px; border-left: 3px solid var(--gold); }
+  .case-role { font-size: 10px; font-weight: 700; color: #A0650A; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; font-family: monospace; }
+  .case-box p { font-size: 13px; color: var(--ink); line-height: 1.65; }
+  .output-box { background: var(--green-dim); border: 1px solid rgba(29,158,117,0.2); border-radius: 12px; padding: 20px 24px; margin-top: 24px; display: flex; gap: 14px; align-items: flex-start; }
+  .output-icon { font-size: 28px; flex-shrink: 0; }
+  .output-box h3 { font-size: 15px; font-weight: 700; color: var(--green); margin-bottom: 4px; }
+  .output-box p { font-size: 13px; color: var(--ink-2); line-height: 1.65; }
+  .tip-box { background: var(--accent-dim); border: 1px solid var(--accent-glow); border-left: 3px solid var(--accent); border-radius: 10px; padding: 14px 18px; margin: 14px 0; }
+  .tip-box .tip-label { font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; font-family: monospace; }
+  .tip-box p { font-size: 13px; color: var(--ink); line-height: 1.65; }
+  .tip-box.warn { background: rgba(220,38,38,0.05); border-color: rgba(220,38,38,0.2); border-left-color: #DC2626; }
+  .tip-box.warn .tip-label { color: #DC2626; }
+  .tip-box.connector { background: var(--gold-pale); border-color: rgba(239,159,39,0.3); border-left-color: var(--gold); }
+  .tip-box.connector .tip-label { color: #A0650A; }
+  .mistake-list { list-style: none; margin: 0; }
+  .mistake-list li { font-size: 13px; color: var(--ink); line-height: 1.65; padding-left: 20px; position: relative; margin-bottom: 8px; }
+  .mistake-list li:last-child { margin-bottom: 0; }
+  .mistake-list li::before { content: "✖"; color: #DC2626; position: absolute; left: 0; font-size: 11px; top: 2px; }
+  .mistake-list li strong { color: var(--ink); }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .two-col .col-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .two-col .col-card.highlight { border-color: var(--accent); background: var(--accent-dim); }
+  .two-col .col-card h4 { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+  .two-col .col-card ul { list-style: none; }
+  .two-col .col-card li { font-size: 12px; color: var(--ink-2); line-height: 1.6; padding-left: 14px; position: relative; margin-bottom: 2px; }
+  .two-col .col-card li::before { content: "\2013"; position: absolute; left: 0; }
+  .two-col .col-card p { font-size: 12px; color: var(--ink-2); line-height: 1.6; }
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 14px 0; }
+  .info-card { background: var(--gold-pale); border-radius: 10px; padding: 12px 14px; }
+  .info-card strong { font-size: 12.5px; color: var(--ink); display: block; margin-bottom: 3px; }
+  .info-card span { font-size: 11.5px; color: var(--ink-2); }
+  .step-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+  .step-card { flex: 1; min-width: 100px; background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 12px; text-align: center; }
+  .step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; }
+  .step-card p { font-size: 11.5px; color: var(--ink-2); line-height: 1.4; }
+  .section-heading { font-size: 14px; font-weight: 700; color: var(--ink); margin: 22px 0 10px; }
+  .body-text { font-size: 13.5px; color: var(--ink-2); line-height: 1.75; margin-bottom: 10px; }
+  .metric-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 12.5px; }
+  .metric-table th { text-align: left; background: var(--surface-2); color: var(--ink-2); font-weight: 700; padding: 8px 10px; border-bottom: 1px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .metric-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); color: var(--ink); }
+  .day-block { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; margin: 14px 0; }
+  .day-label { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; font-family: monospace; }
+  .day-block h4 { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+  @media (max-width: 600px) {
+    .two-col, .info-grid { grid-template-columns: 1fr; }
+  }
+  .next-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--ink-2); margin: 28px 0 12px; font-family: monospace; }
+  .next-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; text-decoration: none; margin-bottom: 10px; transition: border-color 0.2s, box-shadow 0.2s; }
+  .next-card:hover { border-color: var(--accent); box-shadow: 0 2px 12px var(--border); }
+  .next-icon { font-size: 26px; flex-shrink: 0; }
+  .next-info { flex: 1; }
+  .next-info h4 { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+  .next-info p  { font-size: 12px; color: var(--ink-2); }
+  .next-arrow { font-size: 16px; color: var(--accent); }
+  .nav-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .nav-btn { display: flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); transition: all 0.2s; background: #fff; color: var(--ink); font-family: 'Plus Jakarta Sans', sans-serif; }
+  .nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .nav-btn:disabled { opacity: 0.35; cursor: default; pointer-events: none; }
+  .nav-btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .nav-btn.primary:hover { background: var(--accent); border-color: var(--accent); }
+  .nav-counter { font-size: 12px; color: var(--ink-2); font-family: monospace; }
+  .loading { display: flex; align-items: center; justify-content: center; height: 100vh; font-size: 14px; color: var(--ink-2); }
+  @media (max-width: 768px) { .sidebar { display: none; } .main-inner { padding: 24px 16px 48px; } .module-title { font-size: 20px; } }
+
+    .feedback-panel { max-width: 600px; }
+    .completion-badge { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 24px; background: var(--green-dim); border: 1px solid rgba(29,158,117,0.2); border-radius: 16px; margin-bottom: 32px; }
+    .completion-badge .badge-check { width: 56px; height: 56px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+    .completion-badge .badge-check svg { width: 26px; height: 26px; color: #fff; }
+    .completion-badge h2 { font-family: var(--serif); font-size: 26px; font-weight: 400; color: var(--ink); margin-bottom: 8px; letter-spacing: -0.3px; }
+    .completion-badge p { font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+    .feedback-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 28px; box-shadow: var(--shadow-sm); }
+    .feedback-card h3 { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+    .feedback-card .feedback-sub { font-size: 13px; color: var(--ink-2); margin-bottom: 24px; }
+    .star-row { display: flex; gap: 8px; margin-bottom: 24px; }
+    .star-btn { background: none; border: none; cursor: pointer; padding: 4px; font-size: 28px; color: var(--border); transition: color 0.15s, transform 0.1s; line-height: 1; }
+    .star-btn:hover, .star-btn.active { color: var(--gold); transform: scale(1.1); }
+    .feedback-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--ink-2); margin-bottom: 8px; }
+    .feedback-textarea { width: 100%; border: 1.5px solid var(--border); border-radius: 10px; padding: 12px 14px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: var(--ink); resize: vertical; min-height: 90px; background: var(--bg); transition: border-color 0.15s; outline: none; }
+    .feedback-textarea:focus { border-color: var(--ink); background: #fff; }
+    .feedback-submit { display: block; width: 100%; margin-top: 20px; background: var(--ink); color: #fff; border: none; padding: 14px; border-radius: 10px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+    .feedback-submit:hover { background: var(--accent); }
+    .feedback-submit:disabled { opacity: 0.5; cursor: default; }
+    .feedback-done { display: none; text-align: center; padding: 24px; }
+    .feedback-done p { font-size: 14px; color: var(--ink-2); margin-bottom: 16px; }
+    .feedback-done a { display: inline-block; background: var(--ink); color: #fff; text-decoration: none; font-size: 14px; font-weight: 700; padding: 12px 28px; border-radius: 10px; transition: background 0.2s; }
+    .feedback-done a:hover { background: var(--accent); }
+
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <a href="index.html" class="nav-logo">belajar<span>claude</span></a>
+    <div class="nav-divider"></div>
+    <span class="nav-course-title">Content & Marketing</span>
+  </div>
+  <div class="nav-right">
+    <a href="dashboard.html" class="nav-back">← Dashboard</a>
+    <span class="nav-email" id="navEmail"></span>
+    <button class="logout-btn" onclick="logout()">Keluar</button>
+  </div>
+</nav>
+
+<div id="loadingScreen" class="loading">Memuat materi kursus...</div>
+
+<div class="layout" id="mainLayout" style="display:none;">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-course-name">Content & Marketing</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        <span class="progress-label" id="progressLabel">0/10</span>
+      </div>
+    </div>
+    <div id="pdf-download-slot"></div>
+    <div class="sidebar-section-label">Materi Kursus</div>
+    <div class="mod-item active" id="nav-mod1" onclick="showModule(1)">
+      <div class="mod-check" id="check1"></div>
+      <div class="mod-item-info"><div class="mod-item-title">Positioning & Analisis Kompetitor</div><div class="mod-item-sub">Modul 1 · Positioning</div></div>
+    </div>
+    <div class="mod-item" id="nav-mod2" onclick="showModule(2)">
+      <div class="mod-check" id="check2"></div>
+      <div class="mod-item-info"><div class="mod-item-title">Deskripsi Produk Marketplace</div><div class="mod-item-sub">Modul 2 · Deskripsi Produk</div></div>
+    </div>
+    <div class="mod-item" id="nav-mod3" onclick="showModule(3)">
+      <div class="mod-check" id="check3"></div>
+      <div class="mod-item-info"><div class="mod-item-title">Sistem Konten Instagram</div><div class="mod-item-sub">Modul 3 · Konten Instagram</div></div>
+    </div>
+    <div class="mod-item" id="nav-mod4" onclick="showModule(4)">
+      <div class="mod-check" id="check4"></div>
+      <div class="mod-item-info"><div class="mod-item-title">Copy Iklan + Canva Connector</div><div class="mod-item-sub">Modul 4 · Iklan + Canva</div></div>
+    </div>
+    <div class="mod-item" id="nav-mod5" onclick="showModule(5)">
+      <div class="mod-check" id="check5"></div>
+      <div class="mod-item-info"><div class="mod-item-title">WhatsApp Business CS System</div><div class="mod-item-sub">Modul 5 · WhatsApp CS</div></div>
+    </div>
+    <div class="mod-item" id="nav-mod6" onclick="showModule(6)">
+      <div class="mod-check" id="check6"></div>
+      <div class="mod-item-info"><div class="mod-item-title">Email & Promosi Bisnis</div><div class="mod-item-sub">Modul 6 · Email & Promosi</div></div>
+    </div>
+    <div class="mod-item" id="nav-mod7" onclick="showModule(7)">
+      <div class="mod-check" id="check7"></div>
+      <div class="mod-item-info"><div class="mod-item-title">Performance Marketing</div><div class="mod-item-sub">Modul 7 · Performance Ads</div></div>
+    </div>
+    <div class="mod-item" id="nav-mod8" onclick="showModule(8)">
+      <div class="mod-check" id="check8"></div>
+      <div class="mod-item-info"><div class="mod-item-title">Content OS di Notion</div><div class="mod-item-sub">Modul 8 · Content OS</div></div>
+    </div>
+    <div class="mod-item" id="nav-mod9" onclick="showModule(9)">
+      <div class="mod-check" id="check9"></div>
+      <div class="mod-item-info"><div class="mod-item-title">Case Study: Peluncuran Produk</div><div class="mod-item-sub">Modul 9 · Case Study</div></div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="sidebar-section-label" style="padding:0 0 8px;">Tools yang dipakai</div>
+      <div class="sidebar-tools">
+        <span class="tool-chip">Tokopedia/Shopee</span><span class="tool-chip">Instagram</span>
+        <span class="tool-chip">Canva</span><span class="tool-chip">WhatsApp Business</span>
+        <span class="tool-chip">Gmail</span><span class="tool-chip">Notion</span>
+      </div>
+    </div>
+    <div class="mod-feedback">
+      <div class="mod-item" id="nav-mod10" onclick="showModule(10)">
+        <div class="mod-check" id="check10">★</div>
+        <div><div class="mod-item-title">Feedback</div><div class="mod-item-sub">Nilai kursus ini</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="main-inner">
+      <div class="module-panel active" id="panel1">
+        <div class="video-slot" id="video-slot-1"></div>
+        <div class="breadcrumb"><span>Content & Marketing</span><span>›</span><strong>Modul 1</strong></div>
+        <h1 class="module-title">Positioning & Analisis Kompetitor</h1>
+        <p class="module-subtitle">Untuk siapa produk ini, dan kenapa harus pilih kamu — 10 menit</p>
+        <div class="ppt-slot" id="ppt-slot-1"></div>
+        <div class="doc-slot" id="doc-slot-1"></div>
+
+        <div class="case-box">
+          <div class="case-role">Case Study — Dapur Rara</div>
+          <p><strong>"Semua orang jual frozen food. Kenapa harus beli dari kita?"</strong> Rara punya 5 produk di Tokopedia. Penjualan stagnan — ada 200+ toko frozen food di kategori yang sama, semuanya bilang "halal, enak, berkualitas." Claude membantu Rara menemukan bahwa tidak ada kompetitor yang spesifik menyasar keluarga muda dengan masakan daerah otentik. Itulah positioning Dapur Rara sekarang — dan dalam 3 minggu, konten dan deskripsi produknya jadi jauh lebih spesifik dan resonan.</p>
+        </div>
+
+        <div class="module-desc-box">
+          Bisnis yang tidak punya positioning jelas akan selalu bersaing di harga. Positioning yang tepat membuat calon pembeli merasa produkmu dibuat spesifik untuk mereka — dan membuat semua konten, iklan, dan pesan bisnismu jadi konsisten.
+        </div>
+
+        <div class="section-heading">Apa Itu Positioning dan Kenapa Penting</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Menjawab satu pertanyaan</strong><span>"Untuk siapa produk ini, dan kenapa harus pilih kamu?"</span></div>
+          <div class="info-card"><strong>Tanpa positioning</strong><span>Bisnis terdengar sama dengan ratusan kompetitor lainnya</span></div>
+          <div class="info-card"><strong>Jadi acuan semua konten</strong><span>Konten, iklan, dan komunikasi bisnis jadi konsisten</span></div>
+          <div class="info-card"><strong>Claude bisa bantu</strong><span>Analisis kompetitor & susun positioning dari data yang kamu kumpulkan</span></div>
+        </div>
+
+        <div class="tip-box warn">
+          <div class="tip-label">⚠️ Kesalahan Umum dalam Riset Kompetitor</div>
+          <ul class="mistake-list">
+            <li><strong>Hanya lihat produk kompetitor</strong>, bukan ulasan negatifnya — padahal ulasan negatif adalah peta gap yang bisa kamu isi</li>
+            <li><strong>Langsung tiru</strong> apa yang kompetitor lakukan — bukan cari apa yang belum mereka lakukan</li>
+            <li><strong>Positioning terlalu umum</strong> — "produk berkualitas" tidak berarti apapun bagi pembeli</li>
+            <li><strong>Tidak pernah di-update</strong> — pasar berubah, positioning perlu di-review tiap 6 bulan</li>
+          </ul>
+        </div>
+
+        <div class="section-heading">Yang Kamu Butuhkan Sebelum Mulai</div>
+        <p class="body-text">Data 3 kompetitor (nama toko, produk, harga, rating, ulasan positif + negatif), data bisnismu sendiri (produk, harga, siapa pembeli saat ini, apa yang paling sering dipuji), dan file <strong>cm-template-kompetitor.txt</strong> — isi terlebih dahulu sebelum mulai prompting.</p>
+
+        <div class="section-heading">Contoh Prompt: Buruk vs Baik</div>
+        <div class="two-col">
+          <div class="col-card">
+            <h4>Prompt Buruk</h4>
+            <p>"Analisis kompetitor saya di frozen food"</p>
+            <p style="margin-top:8px;"><strong>Masalah:</strong> Claude tidak punya data apapun. Jawabannya akan generik dan tidak relevan untuk bisnismu.</p>
+          </div>
+          <div class="col-card highlight">
+            <h4>Prompt Baik</h4>
+            <p>"Ini data 3 kompetitor frozen food saya [paste isi cm-template-kompetitor.txt]. Buatkan: SWOT singkat, gap yang belum diisi kompetitor manapun, dan 1 kalimat positioning: Untuk [siapa], [bisnis] adalah [apa] yang [benefit] karena [bukti]."</p>
+            <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> data lengkap + format jelas = positioning siap pakai dalam 1 respons.</p>
+          </div>
+        </div>
+
+        <div class="section-heading">Cara Kerja Step-by-Step</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Isi cm-template-kompetitor.txt dengan data 3 kompetitor — catat harga, rating, dan 10 ulasan paling buruk mereka</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Isi bagian "data bisnismu" — tanya 3 pelanggan lama kenapa mereka beli dari kamu</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Paste seluruh template ke Claude dengan prompt di atas</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Minta 3 variasi kalimat positioning: formal, santai untuk caption, emosional untuk iklan</p></div>
+          <div class="step-card"><div class="step-num">5</div><p>Simpan positioning final di Claude Projects — jadi acuan Modul 2-9</p></div>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Exercise</div>
+          <div class="case-box">
+            <p>Download dan isi cm-template-kompetitor.txt dengan data 3 kompetitor nyata bisnismu. Paste ke Claude dan minta analisis SWOT + gap + 3 variasi kalimat positioning. Pilih satu, simpan di Claude Projects — ini akan dipakai di Modul 2 sampai 9.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>SWOT singkat (4 poin per kuadran), 1 gap peluang yang konkret, dan 1 kalimat positioning final yang bisa langsung dipakai di bio Instagram, deskripsi toko Tokopedia, dan iklan. File pendukung: cm-template-kompetitor.txt</p>
+          </div>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" disabled>← Sebelumnya</button>
+          <span class="nav-counter">1 / 10</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <div class="module-panel" id="panel2">
+        <div class="video-slot" id="video-slot-2"></div>
+        <div class="breadcrumb"><span>Content & Marketing</span><span>›</span><strong>Modul 2</strong></div>
+        <h1 class="module-title">Deskripsi Produk Marketplace</h1>
+        <p class="module-subtitle">Listing yang SEO dan menjual, pakai positioning dari Modul 1 — 10 menit</p>
+        <div class="ppt-slot" id="ppt-slot-2"></div>
+        <div class="doc-slot" id="doc-slot-2"></div>
+
+        <div class="case-box">
+          <div class="case-role">Case Study — Dapur Rara</div>
+          <p><strong>10 produk ter-listing dalam 30 menit — semuanya SEO-ready.</strong> Rara biasanya habis 1 jam untuk tulis 1 deskripsi produk. Dengan file cm-data-produk.csv, dia isi data 10 produk, upload ke Claude, dan dapat 10 deskripsi lengkap dalam 1 respons — tinggal paste ke Tokopedia. Dalam 2 minggu, 3 produk masuk halaman 1 hasil pencarian untuk keyword utamanya.</p>
+        </div>
+
+        <div class="module-desc-box">
+          Deskripsi produk yang bagus harus mengandung keyword pencarian, benefit yang jelas, dan CTA yang mendorong pembelian. Claude bisa generate puluhan deskripsi sekaligus dari data produk yang kamu siapkan dalam file CSV.
+        </div>
+
+        <div class="section-heading">Struktur Deskripsi Produk yang Menjual</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Hook (2 kalimat pertama)</strong><span>Langsung ke benefit, bukan nama produk — pembeli scan, bukan baca</span></div>
+          <div class="info-card"><strong>Keyword pencarian</strong><span>Kata yang dipakai pembeli saat search, bukan istilah teknis internal</span></div>
+          <div class="info-card"><strong>Spesifikasi jelas</strong><span>Berat, ukuran, varian, cara simpan — kurangi pertanyaan pembeli</span></div>
+          <div class="info-card"><strong>Benefit bukan fitur</strong><span>Bukan "350ml" tapi "cukup untuk diminum seharian tanpa isi ulang"</span></div>
+        </div>
+        <p class="body-text">Penutup: <strong>CTA yang jelas</strong> — "Tambahkan ke keranjang sekarang" atau "Pesan sebelum stok habis."</p>
+
+        <div class="tip-box warn">
+          <div class="tip-label">⚠️ Kesalahan Umum</div>
+          <ul class="mistake-list">
+            <li><strong>Deskripsi salinan dari supplier</strong> — sama persis dengan ratusan toko lain, tidak bisa ranking</li>
+            <li><strong>Terlalu fokus fitur teknis</strong> — pembeli peduli manfaat, bukan bahan apa</li>
+            <li><strong>Tidak ada keyword</strong> — deskripsi bagus tapi tidak ketemu di search</li>
+            <li><strong>Terlalu panjang tanpa struktur</strong> — pembeli marketplace scan dalam 5 detik</li>
+          </ul>
+        </div>
+
+        <p class="body-text"><strong>Yang kamu butuhkan:</strong> file cm-data-produk.csv (isi minimal 5 produk: nama, kategori, harga, keunggulan, target pembeli, keyword), kalimat positioning dari Modul 1, dan akun Tokopedia/Shopee aktif.</p>
+
+        <div class="section-heading">Contoh Prompt: Buruk vs Baik</div>
+        <div class="two-col">
+          <div class="col-card">
+            <h4>Prompt Buruk</h4>
+            <p>"Buatkan deskripsi produk frozen rendang"</p>
+            <p style="margin-top:8px;"><strong>Masalah:</strong> tidak ada data produk atau keyword. Hasilnya sangat generik.</p>
+          </div>
+          <div class="col-card highlight">
+            <h4>Prompt Baik</h4>
+            <p>"Ini data produkku [upload cm-data-produk.csv]. Positioning: Untuk keluarga muda yang ingin masakan daerah otentik tanpa masak lama. Buatkan deskripsi Tokopedia untuk tiap produk: hook 2 kalimat, keyword, benefit, spesifikasi, CTA. Maks 200 kata per produk."</p>
+            <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> upload CSV + positioning = semua produk selesai dalam 1 prompt, siap paste.</p>
+          </div>
+        </div>
+
+        <div class="section-heading">Cara Kerja Step-by-Step</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Isi cm-data-produk.csv — kolom terpenting: Keunggulan 1-3 dan Keyword Pencarian</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Upload file CSV ke Claude chat (klik ikon lampiran)</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Tambahkan positioning dari Modul 1 + instruksi format, maks 200 kata/produk</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Review tiap deskripsi — pastikan keyword terasa natural, tidak dipaksakan</p></div>
+          <div class="step-card"><div class="step-num">5</div><p>Paste ke Tokopedia/Shopee, catat posisi ranking setelah 7 hari</p></div>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Exercise</div>
+          <div class="case-box">
+            <p>Isi cm-data-produk.csv dengan minimal 5 produk bisnismu (atau produk Dapur Rara sebagai latihan). Upload ke Claude dan generate semua deskripsi sekaligus. Paste 1 deskripsi terbaik ke listing-mu, catat posisi ranking-nya setelah 7 hari.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>Minimal 5 deskripsi produk lengkap (hook + keyword + benefit + spesifikasi + CTA), siap dipaste langsung ke marketplace — waktu yang dihemat: sekitar 45 menit. File pendukung: cm-data-produk.csv</p>
+          </div>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">2 / 10</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <div class="module-panel" id="panel3">
+        <div class="video-slot" id="video-slot-3"></div>
+        <div class="breadcrumb"><span>Content & Marketing</span><span>›</span><strong>Modul 3</strong></div>
+        <h1 class="module-title">Sistem Konten Instagram</h1>
+        <p class="module-subtitle">Kalender 30 hari selesai dalam 1 sesi — 12 menit</p>
+        <div class="ppt-slot" id="ppt-slot-3"></div>
+        <div class="doc-slot" id="doc-slot-3"></div>
+
+        <div class="case-box">
+          <div class="case-role">Case Study — Dapur Rara</div>
+          <p><strong>Dari "bingung mau post apa" ke 30 hari konten siap dalam 2 jam.</strong> Rara biasa habis 30 menit tiap hari hanya untuk mikir "mau post apa hari ini." Dengan sistem kalender konten Claude, dia duduk 2 jam di awal bulan: generate tema dan caption 30 hari, isi ke spreadsheet, set jadwal di Later. Sisanya tinggal foto produk dan klik publish.</p>
+        </div>
+
+        <div class="module-desc-box">
+          Konsistensi konten adalah salah satu faktor terbesar pertumbuhan organik Instagram. Masalahnya bukan kreativitas — tapi tidak ada sistem. Claude bisa membantu kamu build sistem itu sekali, lalu jalankan terus setiap bulan.
+        </div>
+
+        <div class="section-heading">Sistem Konten yang Sustainable</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>4 tema rotasi per minggu</strong><span>Produk, edukasi/tips, behind the scene, testimoni</span></div>
+          <div class="info-card"><strong>Claude generate sekaligus</strong><span>Tema + caption + hashtag untuk 30 hari dalam 1 prompt terstruktur</span></div>
+          <div class="info-card"><strong>Format output CSV</strong><span>Langsung import ke Google Sheets atau tool scheduling</span></div>
+          <div class="info-card"><strong>Review dan personalisasi</strong><span>Claude buat draft, kamu tambahkan detail spesifik yang hanya kamu tahu</span></div>
+        </div>
+
+        <div class="tip-box warn">
+          <div class="tip-label">⚠️ Kesalahan Umum</div>
+          <ul class="mistake-list">
+            <li><strong>Posting tanpa tema</strong> — audiens tidak dapat kesan brand konsisten, growth stagnan</li>
+            <li><strong>Caption terlalu panjang</strong> — 80% audiens tidak baca lebih dari 2 baris pertama</li>
+            <li><strong>Hashtag asal tempel</strong> — campurkan hashtag besar (1M+) dan niche (10K-100K)</li>
+            <li><strong>Generate lalu langsung post</strong> — Claude tidak tahu promo yang baru berubah atau stok habis</li>
+          </ul>
+        </div>
+
+        <p class="body-text"><strong>Yang kamu butuhkan:</strong> positioning dari Modul 1 + daftar produk dari Modul 2, file cm-kalender-konten.csv (template 16 slot posting per bulan), akun Instagram bisnis aktif + 5-10 foto produk.</p>
+
+        <div class="section-heading">Contoh Prompt: Buruk vs Baik</div>
+        <div class="two-col">
+          <div class="col-card">
+            <h4>Prompt Buruk</h4>
+            <p>"Buatkan caption Instagram untuk produk saya"</p>
+            <p style="margin-top:8px;"><strong>Masalah:</strong> hasilnya 1 caption generik, harus diulang besok dari nol.</p>
+          </div>
+          <div class="col-card highlight">
+            <h4>Prompt Baik</h4>
+            <p>"Bisnis: frozen food halal. Target: keluarga muda 25-35. Buatkan kalender Instagram Juli — 16 post (4/minggu): 1 produk, 1 edukasi, 1 BTS, 1 testimoni. Tiap post: tema, caption maks 80 kata, 8 hashtag. Format tabel."</p>
+            <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> 1 prompt = 16 caption terstruktur siap isi ke kalender.</p>
+          </div>
+        </div>
+
+        <div class="section-heading">Cara Kerja Step-by-Step</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Siapkan bahan: produk bulan ini, promo yang ada, momen spesial</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Generate kalender 30 hari dalam format tabel: Minggu | Hari | Tema | Caption | Hashtag</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Review dan personalisasi — tambahkan cerita atau info promo spesifik</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Import ke Google Sheets atau tool scheduling (Later, Buffer)</p></div>
+          <div class="step-card"><div class="step-num">5</div><p>Ulangi tiap awal bulan — simpan prompt terbaik sebagai template</p></div>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Exercise</div>
+          <div class="case-box">
+            <p>Generate kalender konten Instagram bulan depan — 16 post (4/minggu) — dalam 1 prompt. Isi hasilnya ke cm-kalender-konten.csv. Pilih 3 caption terbaik, personalisasi, dan jadwalkan di Instagram.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>Kalender konten 1 bulan (16 post) dalam spreadsheet — tema, caption, dan hashtag terisi — siap dijadwalkan. Waktu yang dihemat: ~8 jam per bulan. File pendukung: cm-kalender-konten.csv</p>
+          </div>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">3 / 10</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+      <div class="module-panel" id="panel4">
+        <div class="video-slot" id="video-slot-4"></div>
+        <div class="breadcrumb"><span>Content & Marketing</span><span>›</span><strong>Modul 4</strong></div>
+        <h1 class="module-title">Copy Iklan + Canva Connector</h1>
+        <p class="module-subtitle">Claude tulis copy, Canva bikin desain — 12 menit</p>
+        <div class="ppt-slot" id="ppt-slot-4"></div>
+        <div class="doc-slot" id="doc-slot-4"></div>
+
+        <div class="tip-box connector">
+          <div class="tip-label">🔌 Integrasi: Canva Connector</div>
+          <p>Level: Connector (gratis) · Setup: 60 detik di Settings > Connectors > Canva. Dengan Canva Connector aktif, Claude tidak hanya menulis copy iklan — Claude bisa langsung membuat desain di Canva. Instruksikan: "Buat desain Instagram Story iklan produk ini di Canva, ukuran 1080x1920px, warna hijau tua dan putih" — Claude akan buka Canva, pilih template, masukkan teks, hasilkan desain siap download. Tanpa setup ini, kamu tetap bisa ikuti modul ini dengan workflow copy-paste manual ke Canva.</p>
+        </div>
+
+        <div class="case-box">
+          <div class="case-role">Case Study — Dapur Rara</div>
+          <p><strong>Iklan Flash Sale selesai dalam 20 menit — desain sudah jadi.</strong> Rara mau jalankan flash sale weekend. Biasanya dia habis 2 jam untuk tulis copy, pilih template Canva, atur layout. Dengan Canva Connector, dia instruksikan Claude: buat 3 variasi copy iklan Flash Sale Frozen Soto, lalu buatkan desain Instagram Post di Canva. 20 menit kemudian, 3 desain iklan siap didownload.</p>
+        </div>
+
+        <div class="section-heading">Framework Copy Iklan yang Convert</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Hook (1-2 detik pertama)</strong><span>Scroll stopper — pertanyaan, angka, atau pernyataan mengejutkan</span></div>
+          <div class="info-card"><strong>Problem/Pain</strong><span>Tunjukkan kamu mengerti masalah pembeli, bukan langsung jual</span></div>
+          <div class="info-card"><strong>Solution + Proof</strong><span>Produkmu sebagai solusi, dengan bukti konkret (review, angka, testimoni)</span></div>
+          <div class="info-card"><strong>CTA spesifik</strong><span>Bukan "hubungi kami" tapi "klik link di bio, stok terbatas 50 pcs"</span></div>
+        </div>
+        <p class="body-text">Selalu buat <strong>3 variasi</strong> — A/B test mana yang perform terbaik setelah 3 hari.</p>
+
+        <div class="tip-box warn">
+          <div class="tip-label">⚠️ Kesalahan Umum</div>
+          <ul class="mistake-list">
+            <li><strong>Hanya promosi fitur</strong> — "premium, halal, enak" — tidak ada hook, tidak ada pain point</li>
+            <li><strong>Hanya 1 versi copy</strong> — tidak mungkin tahu mana yang perform terbaik tanpa tes</li>
+            <li><strong>CTA ambigu</strong> — "kunjungi toko kami" tidak jelas apa yang harus dilakukan pembeli</li>
+            <li><strong>Desain sibuk dan teks penuh</strong> — iklan terbaik punya 1 visual kuat + maks 7 kata headline</li>
+          </ul>
+        </div>
+
+        <div class="section-heading">Contoh Prompt: Buruk vs Baik</div>
+        <div class="two-col">
+          <div class="col-card">
+            <h4>Prompt Buruk</h4>
+            <p>"Buatkan copy iklan untuk frozen rendang saya"</p>
+            <p style="margin-top:8px;"><strong>Masalah:</strong> Claude tidak tahu tujuan, platform, target, promo. Hasilnya tidak bisa langsung dipakai.</p>
+          </div>
+          <div class="col-card highlight">
+            <h4>Prompt Baik</h4>
+            <p>"Buat 3 variasi copy iklan Meta Ads untuk Flash Sale Frozen Rendang Sapi, diskon 30%, stok 50 pcs, Sabtu-Minggu. Target: ibu rumah tangga 28-40 di Jabodetabek. Format: headline (maks 7 kata) + body (maks 30 kata) + CTA. Variasi tone: urgensi, emosional, fungsional."</p>
+            <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> 3 variasi siap langsung ditest — tinggal pilih mana untuk A/B test.</p>
+          </div>
+        </div>
+
+        <div class="section-heading">Cara Kerja Step-by-Step</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Setup Canva Connector: Settings > Connectors > Canva > Connect</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Instruksikan Claude buat 3 variasi copy sesuai framework, spesifik platform + target + promo</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Pilih variasi terbaik, minta Claude buat desain Canva (ukuran + warna + font)</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Review desain, sesuaikan warna/foto brand kamu</p></div>
+          <div class="step-card"><div class="step-num">5</div><p>Download, jalankan A/B test 3 hari, track CTR dan ROAS</p></div>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Exercise</div>
+          <div class="case-box">
+            <p>Buat 3 variasi copy iklan untuk 1 produk unggulan atau promo yang berjalan. Jika Canva Connector aktif: instruksikan Claude buat desain untuk variasi terbaik langsung di Canva. Jika belum: paste manual ke Canva. Jalankan iklan 3 hari, catat CTR dan konversi.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>3 variasi copy iklan siap pakai + minimal 1 desain Canva (via Connector atau manual) + iklan aktif berjalan dengan tracking A/B test.</p>
+          </div>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">4 / 10</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <div class="module-panel" id="panel5">
+        <div class="video-slot" id="video-slot-5"></div>
+        <div class="breadcrumb"><span>Content & Marketing</span><span>›</span><strong>Modul 5</strong></div>
+        <h1 class="module-title">WhatsApp Business CS System</h1>
+        <p class="module-subtitle">Template yang on-brand, tanpa briefing ulang — 10 menit</p>
+        <div class="ppt-slot" id="ppt-slot-5"></div>
+        <div class="doc-slot" id="doc-slot-5"></div>
+
+        <div class="tip-box connector">
+          <div class="tip-label">🔌 Integrasi: Claude Projects</div>
+          <p>Level: Claude Projects (tersedia di semua plan termasuk Free) · Setup: 5 menit sekali. Setup 1 Claude Project dengan brand voice bisnismu sekali. Setelah itu, generate template WA apapun tanpa perlu briefing ulang — Claude sudah "ingat" tone, sapaan, dan gaya bisnismu.</p>
+        </div>
+
+        <div class="case-box">
+          <div class="case-role">Case Study — Dapur Rara</div>
+          <p><strong>CS WA dari 45 menit per hari jadi 10 menit</strong> — dengan 10 template siap pakai. Rara habis 45 menit sehari balas WA pelanggan — kebanyakan pertanyaan yang sama berulang. Setelah buat 10 template dengan Claude Projects, dia tinggal copy-paste, edit nama pelanggan, kirim. Dari 45 menit jadi 10 menit, dan semua balasan terasa on-brand.</p>
+        </div>
+
+        <div class="section-heading">Mengapa Template WA Penting</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Konsistensi tone</strong><span>Semua orang di tim balas dengan gaya yang sama</span></div>
+          <div class="info-card"><strong>Kecepatan</strong><span>Copy-paste + edit nama &lt;30 detik vs 3-5 menit tulis dari nol</span></div>
+          <div class="info-card"><strong>Tidak ada yang terlewat</strong><span>Template untuk semua skenario = tidak bingung harus balas apa</span></div>
+          <div class="info-card"><strong>Profesionalisme</strong><span>Template yang baik membuat bisnis terlihat lebih besar</span></div>
+        </div>
+
+        <div class="tip-box warn">
+          <div class="tip-label">⚠️ Kesalahan Umum</div>
+          <ul class="mistake-list">
+            <li><strong>Terlalu formal dan kaku</strong> — pembeli modern tidak suka merasa bicara dengan bot</li>
+            <li><strong>Tidak ada CTA di akhir</strong> — tiap template harus ada next step yang jelas</li>
+            <li><strong>Tidak dikustomisasi per situasi</strong> — satu template untuk semua situasi terasa generic</li>
+            <li><strong>Terlalu panjang</strong> — WA medium yang cepat, maksimal 5 baris per pesan</li>
+          </ul>
+        </div>
+
+        <div class="section-heading">Contoh Prompt: Buruk vs Baik (via Claude Projects)</div>
+        <div class="two-col">
+          <div class="col-card">
+            <h4>Prompt Buruk</h4>
+            <p>"Buatkan template balas WA untuk toko saya"</p>
+            <p style="margin-top:8px;"><strong>Masalah:</strong> tidak ada info bisnis, tone, atau situasi. Hasilnya generik dan tidak on-brand.</p>
+          </div>
+          <div class="col-card highlight">
+            <h4>Prompt Baik</h4>
+            <p>"[Claude Project sudah punya profil bisnis, tone santai-hangat, sapaan 'Kak'] Buatkan template WA untuk Skenario 1 dari cm-template-wa.txt: calon pembeli tanya harga pertama kali. Maks 4 baris, emoji 1-2, ada CTA ke katalog."</p>
+            <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> dengan Projects aktif, 1 kalimat instruksi sudah cukup — konteks bisnis sudah tersimpan.</p>
+          </div>
+        </div>
+
+        <div class="section-heading">Cara Kerja Step-by-Step</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Setup Claude Project khusus CS WA — isi nama bisnis, tone, sapaan, batasan</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Buka cm-template-wa.txt, pilih 5 skenario paling sering: harga, konfirmasi order, komplain, follow-up bayar, minta review</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Generate template untuk tiap skenario — Claude sudah tahu konteks bisnis</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Test tiap template — kirim ke diri sendiri, pastikan terasa natural</p></div>
+          <div class="step-card"><div class="step-num">5</div><p>Simpan 10 template final di catatan WhatsApp atau Google Keep</p></div>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Exercise</div>
+          <div class="case-box">
+            <p>Setup Claude Project khusus CS WA dengan system instructions bisnismu. Generate 10 template WA menggunakan skenario di cm-template-wa.txt. Gunakan minimal 5 kali dalam 1 minggu — catat mana yang paling sering dipakai.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>10 template WhatsApp on-brand untuk 10 skenario berbeda, tersimpan dan siap pakai. Claude Project aktif yang bisa generate template baru kapanpun. File pendukung: cm-template-wa.txt</p>
+          </div>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">5 / 10</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <div class="module-panel" id="panel6">
+        <div class="video-slot" id="video-slot-6"></div>
+        <div class="breadcrumb"><span>Content & Marketing</span><span>›</span><strong>Modul 6</strong></div>
+        <h1 class="module-title">Email & Promosi Bisnis</h1>
+        <p class="module-subtitle">Draft langsung via Gmail Connector — 10 menit</p>
+        <div class="ppt-slot" id="ppt-slot-6"></div>
+        <div class="doc-slot" id="doc-slot-6"></div>
+
+        <div class="tip-box connector">
+          <div class="tip-label">🔌 Integrasi: Gmail Connector</div>
+          <p>Level: Connector (gratis) · Setup: 60 detik di Settings > Connectors > Gmail. Dengan Gmail Connector aktif, Claude bisa membaca email masuk dan membuat draft email langsung di inbox Gmail-mu. Kamu hanya perlu review dan klik Send. Tanpa connector, kamu tetap bisa copy-paste hasil Claude ke Gmail manual.</p>
+        </div>
+
+        <div class="case-box">
+          <div class="case-role">Case Study — Dapur Rara</div>
+          <p><strong>Email launch produk baru ke 200 pelanggan — ditulis dan di-draft dalam 5 menit.</strong> Dapur Rara launching Garang Asem Frozen. Rara perlu kirim email ke 200 pelanggan lama. Dengan Gmail Connector, dia instruksikan Claude: tulis email launch tone hangat, highlight 3 keunggulan, simpan sebagai draft Gmail. Dalam 5 menit, draft siap di inbox — Rara review sekali, klik Send.</p>
+        </div>
+
+        <div class="section-heading">6 Jenis Email Bisnis yang Perlu Kamu Kuasai</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Launch produk baru</strong><span>Hook kuat + 3 keunggulan + CTA ke link pembelian</span></div>
+          <div class="info-card"><strong>Flash sale / promo</strong><span>Urgensi + detail promo + deadline jelas</span></div>
+          <div class="info-card"><strong>Follow-up pembelian</strong><span>Minta review + tawarkan produk komplementer</span></div>
+          <div class="info-card"><strong>Newsletter bulanan</strong><span>Highlight + tips + produk unggulan</span></div>
+          <div class="info-card"><strong>Reactivation</strong><span>Pelanggan 3+ bulan tidak beli — "kami kangen kamu"</span></div>
+          <div class="info-card"><strong>Penawaran reseller/mitra</strong><span>Email B2B untuk ajak kolaborasi</span></div>
+        </div>
+
+        <div class="tip-box warn">
+          <div class="tip-label">⚠️ Kesalahan Umum</div>
+          <ul class="mistake-list">
+            <li><strong>Subjek generik</strong> — "Newsletter Bulan Juli" tidak ada yang mau buka</li>
+            <li><strong>Email terlalu panjang</strong> — maksimal 200 kata, pembaca scan bukan baca</li>
+            <li><strong>Tidak ada CTA spesifik</strong> — "hubungi kami" bukan CTA</li>
+            <li><strong>Kirim ke semua tanpa segmentasi</strong> — pelanggan lama butuh pesan berbeda dari calon baru</li>
+          </ul>
+        </div>
+
+        <div class="section-heading">Contoh Prompt: Buruk vs Baik</div>
+        <div class="two-col">
+          <div class="col-card">
+            <h4>Prompt Buruk</h4>
+            <p>"Buatkan email promo untuk produk saya"</p>
+            <p style="margin-top:8px;"><strong>Masalah:</strong> tidak ada info produk, promo, target, atau CTA. Hasilnya generik.</p>
+          </div>
+          <div class="col-card highlight">
+            <h4>Prompt Baik</h4>
+            <p>"cm-template-email.txt Email 2 sudah saya lengkapi: Flash Sale Frozen Soto, diskon 25%, kode SOTO25, berlaku 3 hari. Tulis email promosi, subjek maks 9 kata, isi maks 150 kata, tone hangat, CTA ke bit.ly/dapurrara. Simpan sebagai draft di Gmail saya."</p>
+            <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> template + Gmail Connector = email draft langsung di inbox, siap send.</p>
+          </div>
+        </div>
+
+        <div class="section-heading">Cara Kerja Step-by-Step</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Setup Gmail Connector — izinkan akses "read" dan "draft" (Claude tidak bisa kirim)</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Isi cm-template-email.txt bagian yang relevan: nama produk, harga promo, tanggal, CTA</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Paste isian ke Claude, minta tulis email + "simpan sebagai draft di Gmail saya"</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Buka Gmail, review draft — cek nama, angka, dan link</p></div>
+          <div class="step-card"><div class="step-num">5</div><p>Track open rate dan CTR untuk email berikutnya</p></div>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Exercise</div>
+          <div class="case-box">
+            <p>Isi cm-template-email.txt untuk 2 jenis email: launch produk baru dan flash sale. Generate keduanya dan simpan sebagai draft Gmail (via Connector atau manual). Kirim ke minimal 10 kontak, catat open rate dan respons.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>2 email bisnis siap kirim (launch + promo), tersimpan sebagai draft di Gmail. Subjek menarik, isi maks 200 kata, CTA jelas. File pendukung: cm-template-email.txt</p>
+          </div>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">6 / 10</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+      <div class="module-panel" id="panel7">
+        <div class="video-slot" id="video-slot-7"></div>
+        <div class="breadcrumb"><span>Content & Marketing</span><span>›</span><strong>Modul 7</strong></div>
+        <h1 class="module-title">Performance Marketing</h1>
+        <p class="module-subtitle">Analisis iklan dengan data, bukan feeling — 12 menit</p>
+        <div class="ppt-slot" id="ppt-slot-7"></div>
+        <div class="doc-slot" id="doc-slot-7"></div>
+
+        <div class="case-box">
+          <div class="case-role">Case Study — Dapur Rara</div>
+          <p><strong>Rara hemat Rp 600.000/minggu iklan yang tidak perform — ditemukan dalam 5 menit.</strong> Rara jalankan 8 kampanye iklan sekaligus — Meta Ads, TikTok, Shopee TopAds. Upload data semua kampanye ke Claude dalam cm-performance-ads.xlsx, minta analisis: mana yang harus dihentikan, mana yang di-scale. Claude temukan 1 kampanye Meta Ads (Garang Asem) punya ROAS 0.86x — di bawah breakeven. Rara matikan hari itu juga, redirect budget ke TikTok Soto yang ROAS-nya 8.6x.</p>
+        </div>
+
+        <div class="section-heading">Metrik Performance Marketing yang Harus Kamu Pahami</div>
+        <table class="metric-table">
+          <tr><th>Metrik</th><th>Artinya</th><th>Target Sehat</th></tr>
+          <tr><td>ROAS (Return on Ad Spend)</td><td>Pendapatan / biaya iklan</td><td>&gt; 2.0x (idealnya 3-5x)</td></tr>
+          <tr><td>CTR (Click-Through Rate)</td><td>Klik / Tayangan</td><td>&gt; 2% feed, &gt; 0.5% awareness</td></tr>
+          <tr><td>CPC (Cost per Click)</td><td>Biaya iklan / total klik</td><td>Tergantung margin produk</td></tr>
+          <tr><td>Conversion Rate</td><td>Pembeli / pengunjung toko</td><td>&gt; 1% marketplace, &gt; 2% toko sendiri</td></tr>
+          <tr><td>Breakeven ROAS</td><td>ROAS minimum agar tidak rugi</td><td>1 / margin kotor (margin 40% = breakeven 2.5x)</td></tr>
+        </table>
+
+        <div class="section-heading">Cara Kerja Claude untuk Analisis Ads</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Upload spreadsheet</strong><span>Claude bisa membaca seluruh cm-performance-ads.xlsx sekaligus</span></div>
+          <div class="info-card"><strong>Minta analisis spesifik</strong><span>Mana yang dihentikan, mana yang di-scale, dan kenapa</span></div>
+          <div class="info-card"><strong>Minta copy baru</strong><span>Rekomendasi copy untuk kampanye yang underperform</span></div>
+          <div class="info-card"><strong>A/B Copy Tracker</strong><span>Sheet 3 untuk test copy baru yang direkomendasikan</span></div>
+        </div>
+
+        <div class="tip-box warn">
+          <div class="tip-label">⚠️ Kesalahan Umum</div>
+          <ul class="mistake-list">
+            <li><strong>Matikan iklan setelah 1-2 hari</strong> — butuh minimal 3-5 hari dan 50+ konversi untuk evaluasi akurat</li>
+            <li><strong>Hanya fokus CTR</strong> — CTR tinggi tapi konversi rendah bisa berarti landing page bermasalah</li>
+            <li><strong>Tidak tracking ROAS per kampanye</strong> — agregat bisa menutupi 1 kampanye yang buang uang</li>
+            <li><strong>Scale iklan yang belum profitabel</strong> — scale bukan solusi jika ROAS masih di bawah breakeven</li>
+          </ul>
+        </div>
+
+        <div class="section-heading">Contoh Prompt: Buruk vs Baik</div>
+        <div class="two-col">
+          <div class="col-card">
+            <h4>Prompt Buruk</h4>
+            <p>"Iklan saya kurang perform, apa yang harus saya lakukan?"</p>
+            <p style="margin-top:8px;"><strong>Masalah:</strong> Claude tidak punya data. Jawaban hanya saran generik yang tidak actionable.</p>
+          </div>
+          <div class="col-card highlight">
+            <h4>Prompt Baik</h4>
+            <p>"[Upload cm-performance-ads.xlsx] Analisis: (1) kampanye mana yang harus dihentikan berdasarkan ROAS, (2) mana yang harus ditingkatkan budgetnya, (3) untuk kampanye terburuk, sarankan 2 variasi copy iklan baru."</p>
+            <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> data konkret = rekomendasi konkret dan actionable.</p>
+          </div>
+        </div>
+
+        <div class="section-heading">Cara Kerja Step-by-Step</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Export data iklan tiap platform tiap minggu, paste ke Sheet 1 cm-performance-ads.xlsx</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Hitung ROAS tiap kampanye — warna merah/kuning/hijau otomatis di Excel</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Upload ke Claude, minta analisis komprehensif: hentikan/scale + kenapa + copy baru</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Catat rekomendasi, test copy baru di Sheet 3 (A/B Copy Tracker) dengan budget kecil dulu</p></div>
+          <div class="step-card"><div class="step-num">5</div><p>Isi Sheet 2 (Trend Mingguan) — setelah 4 minggu, minta analisis tren jangka panjang</p></div>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Exercise</div>
+          <div class="case-box">
+            <p>Buka cm-performance-ads.xlsx (data Dapur Rara sudah terisi sebagai contoh). Upload ke Claude, minta analisis: mana 2 kampanye yang harus segera dihentikan dan kenapa. Minta 2 variasi copy iklan baru untuk kampanye dengan ROAS terburuk.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>Keputusan konkret berbasis data: daftar kampanye yang dihentikan + yang di-scale + 2-3 variasi copy iklan baru untuk A/B test. File pendukung: cm-performance-ads.xlsx (3 sheet: Data Kampanye, Trend Mingguan, A/B Copy Tracker)</p>
+          </div>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">7 / 10</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <div class="module-panel" id="panel8">
+        <div class="video-slot" id="video-slot-8"></div>
+        <div class="breadcrumb"><span>Content & Marketing</span><span>›</span><strong>Modul 8</strong></div>
+        <h1 class="module-title">Content OS di Notion</h1>
+        <p class="module-subtitle">Marketing command center — 12 menit</p>
+        <div class="ppt-slot" id="ppt-slot-8"></div>
+        <div class="doc-slot" id="doc-slot-8"></div>
+
+        <div class="tip-box connector">
+          <div class="tip-label">🔌 Integrasi: Claude Projects + Notion</div>
+          <p>Content OS bukan tentang Notion-nya — tapi tentang punya satu sistem terpusat di mana semua informasi pemasaran bisnismu tersimpan, terhubung, dan mudah diakses. Claude bisa membantu kamu membangun seluruh struktur Notion dan mengisi kontennya — kamu yang setup halamannya, Claude yang generate struktur & isinya.</p>
+        </div>
+
+        <div class="case-box">
+          <div class="case-role">Case Study — Dapur Rara</div>
+          <p><strong>Dari 7 alat yang berserakan ke 1 command center yang rapi.</strong> Sebelum modul ini, Rara punya konten di WA, template di Notes iPhone, kalender di Google Sheets, dan data iklan di Excel terpisah. Dengan Content OS di Notion, semua sistem dari Modul 1-7 tersambung di satu tempat: database produk, kalender konten, tracker iklan, library template, dan log performa bulanan. Claude bisa generate laporan bulanan hanya dari satu prompt.</p>
+        </div>
+
+        <div class="section-heading">Struktur Content OS yang Disarankan</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Database Produk</strong><span>Semua produk, harga, keunggulan, status stok — sumber data konten</span></div>
+          <div class="info-card"><strong>Kalender Konten</strong><span>Terhubung ke Database Produk, filter by bulan/platform/status</span></div>
+          <div class="info-card"><strong>Library Template</strong><span>Semua template WA, email, caption Instagram di satu tempat</span></div>
+          <div class="info-card"><strong>Tracker Performa</strong><span>Data iklan dan engagement bulanan</span></div>
+          <div class="info-card"><strong>Positioning & Brand Guide</strong><span>Positioning dari Modul 1 + tone guide — referensi semua konten</span></div>
+        </div>
+
+        <div class="tip-box warn">
+          <div class="tip-label">⚠️ Kesalahan Umum</div>
+          <ul class="mistake-list">
+            <li><strong>Terlalu rumit di awal</strong> — database dengan puluhan kolom sehingga malas diisi rutin</li>
+            <li><strong>Tidak ada status yang jelas</strong> — jadi tidak tahu mana yang draft, mana yang final</li>
+            <li><strong>Sistem tanpa rutinitas</strong> — dibuat sekali, diisi sekali, tidak pernah dibuka lagi</li>
+            <li><strong>Tidak terhubung ke proses sebelumnya</strong> — bikin ide baru dari nol tiap minggu</li>
+          </ul>
+        </div>
+
+        <div class="section-heading">Cara Kerja Step-by-Step</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Buat halaman Notion "Content OS — [Nama Bisnis]" dengan 5 sub-halaman dasar</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Minta Claude generate struktur database untuk tiap halaman (kolom, tipe data, contoh entri)</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Isi Brand Guide dengan output dari Modul 1-4 (positioning, tone, contoh caption)</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Hubungkan kalender konten ke database produk dengan Notion Relations</p></div>
+          <div class="step-card"><div class="step-num">5</div><p>Setup ritual bulanan: 1 jam di awal bulan untuk isi semua sistem</p></div>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Contoh Prompt</div>
+          <div class="prompt-box">Bisnisku: frozen food. Buatkan struktur database Notion untuk
+Kalender Konten — kolom apa yang perlu ada, tipe datanya apa, dan
+isi 3 contoh entri.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Exercise</div>
+          <div class="case-box">
+            <p>Buat halaman Content OS di Notion dengan 5 sub-halaman dasar. Minta Claude generate struktur database untuk Kalender Konten. Isi halaman Brand Guide dengan positioning dari Modul 1 dan tone guide bisnismu. Tentukan 1 hari di awal bulan untuk isi semua sistem sekaligus.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>1 Content OS aktif di Notion dengan 5 bagian terisi — bukan hanya template kosong. Brand Guide sudah punya konten. Kalender bulan depan sudah mulai diisi. Sistem siap dijalankan setiap bulan.</p>
+          </div>
+        </div>
+
+        <div class="output-box" style="background:var(--accent-dim);border-color:var(--accent-glow);">
+          <div class="output-icon">🎯</div>
+          <div>
+            <h3 style="color:var(--accent);">Sistem Lengkap — Waktunya Uji di Dunia Nyata</h3>
+            <p>Dari 1 positioning di Modul 1, kamu sekarang punya sistem pemasaran lengkap di 7 kanal berbeda. Modul 9 menggabungkan semuanya jadi 1 skenario nyata: meluncurkan produk baru dalam 1 minggu kerja.</p>
+          </div>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">8 / 10</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+      <div class="module-panel" id="panel9">
+        <div class="video-slot" id="video-slot-9"></div>
+        <div class="breadcrumb"><span>Content & Marketing</span><span>›</span><strong>Modul 9</strong></div>
+        <h1 class="module-title">Case Study: Peluncuran Produk Baru</h1>
+        <p class="module-subtitle">Dapur Rara meluncurkan Garang Asem Frozen — Capstone, 1 minggu kerja dalam 8 modul</p>
+        <div class="ppt-slot" id="ppt-slot-9"></div>
+        <div class="doc-slot" id="doc-slot-9"></div>
+
+        <div class="module-desc-box">
+          Dapur Rara (lihat Modul 1-8) sudah punya positioning, sistem konten, dan tracking iklan yang jalan. Sekarang mereka meluncurkan produk baru — <strong>Garang Asem Frozen</strong> — dan harus jalankan seluruh sistem dari Modul 1 sampai 8 dalam 1 minggu kerja, dari cek positioning sampai produk live dan iklannya dioptimasi. Ikuti Rara step by step, dan perhatikan modul mana yang dipakai di setiap langkah.
+        </div>
+
+        <p class="body-text">Tanpa sistem yang sudah dibangun di Modul 1-8: peluncuran produk baru biasanya makan waktu <strong>6+ jam kerja tersebar</strong> dalam seminggu. Dengan sistem yang sudah jalan: sebagian besar selesai di sela-sela kerja harian.</p>
+
+        <div class="day-block">
+          <div class="day-label">Hari 1 · Senin — Modul 01 + 02</div>
+          <h4>Cek Positioning + Listing Produk Baru</h4>
+          <p class="body-text">Positioning Dapur Rara dari Modul 1 sudah tersimpan di Claude Projects: <em>"Untuk keluarga muda yang ingin masakan daerah otentik tanpa masak lama, Dapur Rara adalah frozen food yang dibuat dari resep rumahan asli daerah, bukan resep restoran yang dimodifikasi."</em> Rara tinggal isi data produk baru ke cm-data-produk.csv dan generate listing-nya.</p>
+          <div class="prompt-section">
+            <div class="prompt-label">📝 Prompt Hari 1</div>
+            <div class="prompt-box">Positioning bisnis saya: [paste positioning di atas].
+Ini data produk baru saya: Garang Asem Frozen, Rp 42.000/500g,
+resep asli Kudus dengan ayam kampung, tinggal kukus 15 menit.
+Buatkan deskripsi Tokopedia: hook 2 kalimat, keyword, benefit,
+spesifikasi, dan CTA. Maks 200 kata.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          </div>
+        </div>
+
+        <div class="day-block">
+          <div class="day-label">Hari 2 · Selasa — Modul 03</div>
+          <h4>Konten Instagram Launch Week</h4>
+          <p class="body-text">Bukan kalender bulanan penuh — hanya 5 hari khusus launch week, dengan tema harian yang membangun antisipasi: teaser → reveal → behind the scene → testimoni → launch day.</p>
+          <div class="prompt-section">
+            <div class="prompt-label">📝 Prompt Hari 2</div>
+            <div class="prompt-box">Bisnis: frozen food halal, positioning [paste positioning].
+Produk baru: Garang Asem Frozen, launch hari Jumat ini.
+Buatkan 5 caption launch week (Senin-Jumat): Senin teaser,
+Selasa reveal + cerita asal resep, Rabu proses masak/BTS,
+Kamis testimoni tester, Jumat launch day + CTA beli. Tiap
+caption: maks 80 kata, hook kuat di baris pertama, 5 hashtag.
+Format tabel: Hari | Tema | Caption | Hashtag.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          </div>
+        </div>
+
+        <div class="day-block">
+          <div class="day-label">Hari 3 · Rabu — Modul 04</div>
+          <h4>Iklan Launch + Desain Canva</h4>
+          <p class="body-text">Promo early bird: diskon 20% untuk 100 pembeli pertama, kode GARANG20, berlaku Jumat-Minggu (launch weekend). Target: ibu rumah tangga & keluarga muda 25-40 tahun.</p>
+          <div class="prompt-section">
+            <div class="prompt-label">📝 Prompt Hari 3</div>
+            <div class="prompt-box">Buat 3 variasi copy iklan Meta Ads untuk launch Garang Asem
+Frozen. Promo: diskon 20% untuk 100 pembeli pertama, kode
+GARANG20, berlaku Jumat-Minggu. Target: ibu rumah tangga &
+keluarga muda 25-40 tahun. Format: headline (maks 7 kata) +
+body (maks 30 kata) + CTA. Variasi tone: urgensi, emosional,
+fungsional. Lalu (jika Canva Connector aktif): buatkan desain
+Instagram Post 1080x1080px untuk variasi terbaik, warna hijau
+tua dan putih.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          </div>
+        </div>
+
+        <div class="day-block">
+          <div class="day-label">Hari 4 · Kamis — Modul 05 + 06</div>
+          <h4>Siapkan CS Baru + Draft Email Launch</h4>
+          <p class="body-text">3 pertanyaan baru yang khusus muncul untuk produk baru — belum ada di 10 template yang sudah dibuat di Modul 5: "beda apa sama garang asem biasa?", "tahan berapa lama di freezer?", "kenapa baru ada sekarang?" Sekaligus siapkan email launch ke 200 pelanggan lama.</p>
+          <div class="prompt-section">
+            <div class="prompt-label">📝 Prompt Hari 4 — CS</div>
+            <div class="prompt-box">Buatkan 3 template WA untuk pertanyaan seputar produk baru
+Garang Asem Frozen: (1) beda apa sama garang asem biasa,
+(2) tahan berapa lama di freezer tanpa santan, (3) kenapa baru
+ada sekarang. Maks 4 baris tiap template, emoji 1-2, ada CTA
+ke katalog atau checkout.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          </div>
+          <div class="prompt-section">
+            <div class="prompt-label">📝 Prompt Hari 4 — Email (Gmail Connector)</div>
+            <div class="prompt-box">Produk: Garang Asem Frozen, resep asli Kudus, ayam kampung,
+tinggal kukus 15 menit. Promo: diskon 20% kode GARANG20,
+untuk 100 pembeli pertama, berlaku Jumat-Minggu. Target: 200
+pelanggan lama. Tulis email launch tone hangat, subjek maks
+9 kata, isi maks 150 kata, highlight 3 keunggulan, CTA ke
+bit.ly/dapurrara-garangasem. Simpan sebagai draft di Gmail
+saya.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          </div>
+        </div>
+
+        <div class="day-block">
+          <div class="day-label">Hari 5 · Jumat — Modul 07 + 08</div>
+          <h4>Launch Day: Pantau Iklan + Log ke Content OS</h4>
+          <p class="body-text">3 jam pertama setelah launch, cek performa iklan langsung — jangan tunggu sampai malam. Tutup minggu dengan meringkas semuanya ke Content OS supaya launch berikutnya tinggal ikuti pola yang sama.</p>
+          <div class="prompt-section">
+            <div class="prompt-label">📝 Prompt Hari 5 — Analisis Performa</div>
+            <div class="prompt-box">[Upload data performa 3 jam pertama]. Ini performa iklan
+launch Garang Asem Frozen 3 jam pertama. Analisis: (1) mana
+yang paling menjanjikan untuk di-scale budget-nya hari ini,
+(2) mana yang sebaiknya dimatikan, (3) berikan 1 rekomendasi
+copy baru untuk kampanye dengan performa terlemah.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          </div>
+          <div class="prompt-section">
+            <div class="prompt-label">📝 Prompt Hari 5 — Log ke Content OS</div>
+            <div class="prompt-box">Ringkas launch week Garang Asem Frozen untuk disimpan di
+Notion Content OS: positioning yang dipakai, deskripsi produk,
+5 caption launch week, hasil iklan (kampanye terbaik & yang
+dimatikan), dan 3 template CS baru. Format laporan singkat
+1 halaman, siap paste ke halaman Tracker Performa.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          </div>
+        </div>
+
+        <div class="section-heading">Rekap: Waktu yang Dihemat</div>
+        <table class="metric-table">
+          <tr><th>Tugas</th><th>Modul</th><th>Biasa</th><th>Dengan Claude</th></tr>
+          <tr><td>Cek positioning + listing</td><td>M01+M02</td><td>1 jam</td><td>~20 menit</td></tr>
+          <tr><td>5 caption launch week</td><td>M03</td><td>90 menit</td><td>~20 menit</td></tr>
+          <tr><td>Copy iklan + desain Canva</td><td>M04</td><td>2 jam</td><td>~25 menit</td></tr>
+          <tr><td>3 template CS + email launch</td><td>M05+M06</td><td>1 jam</td><td>~15 menit</td></tr>
+          <tr><td>Analisis performa + log OS</td><td>M07+M08</td><td>45 menit</td><td>~15 menit</td></tr>
+          <tr style="font-weight:700;background:var(--accent-dim);"><td>Total</td><td></td><td>~6,25 jam</td><td>~1,6 jam</td></tr>
+        </table>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Exercise</div>
+          <div class="case-box">
+            <p>Pilih produk baru dari bisnismu sendiri (atau pakai Garang Asem Frozen sebagai latihan, dengan file cm-m9-starter-peluncuran.txt). Jalankan kelima hari di atas dalam 1 minggu kerja nyata. Catat waktu aktual yang kamu habiskan di tiap hari, bandingkan dengan kolom "Biasa" di tabel — ini jadi output akhir kursus.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>1 produk baru live di marketplace, 5 hari konten Instagram launch week, iklan launch berjalan dengan tracking, CS baru siap, email launch terkirim, dan semuanya terlog di Content OS. Bandingkan waktu aktualmu dengan tabel rekap di atas.</p>
+          </div>
+        </div>
+
+        <div class="output-box" style="background:var(--accent-dim);border-color:var(--accent-glow);">
+          <div class="output-icon">🎉</div>
+          <div>
+            <h3 style="color:var(--accent);">Kursus Selesai!</h3>
+            <p>Dari 1 kalimat positioning di Modul 1, kamu sekarang punya sistem pemasaran lengkap yang teruji — dari listing produk sampai analisis iklan berbasis data — dan sudah membuktikannya lewat 1 peluncuran produk nyata di Modul 9. Jadikan minggu peluncuran ini sebagai template untuk produk barumu berikutnya.</p>
+          </div>
+        </div>
+
+        <div class="next-label">Lanjutkan Belajar</div>
+        <a href="coming-soon.html" class="next-card">
+          <span class="next-icon">✍️</span>
+          <div class="next-info"><h4>K4 · Copywriting & Konten Digital</h4><p>Segera hadir — lanjutkan sistem pemasaranmu dengan copywriting yang lebih tajam</p></div>
+          <span class="next-arrow">→</span>
+        </a>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">9 / 10</span>
+          <button class="nav-btn primary" onclick="showModule(10)">Lanjut →</button>
+        </div>
+      </div>
+      <div class="module-panel" id="panel10">
+        <div class="feedback-panel">
+          <div class="completion-badge">
+            <div class="badge-check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h2>Kursus Selesai!</h2>
+            <p>Kamu telah menyelesaikan <strong>Content & Marketing</strong>.<br>Badge pencapaian sudah tersimpan di dashboard kamu.</p>
+          </div>
+
+          <div class="feedback-card" id="feedbackForm">
+            <h3>Bagaimana kursus ini menurut kamu?</h3>
+            <p class="feedback-sub">Feedback kamu membantu kami bikin kursus yang lebih baik.</p>
+            <div class="star-row" id="starRow">
+              <button class="star-btn" data-val="1" onclick="setRating(1)">★</button>
+              <button class="star-btn" data-val="2" onclick="setRating(2)">★</button>
+              <button class="star-btn" data-val="3" onclick="setRating(3)">★</button>
+              <button class="star-btn" data-val="4" onclick="setRating(4)">★</button>
+              <button class="star-btn" data-val="5" onclick="setRating(5)">★</button>
+            </div>
+            <div class="feedback-label">Komentar (opsional)</div>
+            <textarea class="feedback-textarea" id="feedbackComment" placeholder="Apa yang paling berguna? Ada yang bisa diperbaiki?"></textarea>
+            <button class="feedback-submit" id="feedbackSubmit" onclick="submitFeedback()">Kirim & Ke Dashboard →</button>
+          </div>
+
+          <div class="feedback-done" id="feedbackDone">
+            <p>Terima kasih atas feedbacknya!</p>
+            <a href="dashboard.html">Ke Dashboard →</a>
+          </div>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">10 / 10</span>
+          <a href="dashboard.html" class="nav-btn primary" style="text-decoration:none;">Ke Dashboard →</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+  const TOTAL = 10;
+  let current = 1;
+  const done = new Set();
+
+  async function init() {
+    const { data: { session } } = await sbClient.auth.getSession();
+    if (!session) { window.location.href = 'login.html'; return; }
+    document.getElementById('navEmail').textContent = session.user.email;
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('mainLayout').style.display = 'flex';
+    try {
+      await sbClient.from('enrollments').upsert({ email: session.user.email, course_slug: 'konten-marketing', course_name: 'Content & Marketing', type: 'paid' }, { onConflict: 'email,course_slug', ignoreDuplicates: true });
+    } catch (e) {}
+
+    // Restore saved progress from Supabase
+    try {
+      const { data: completions } = await sbClient
+        .from('module_completions').select('module_num')
+        .eq('email', session.user.email).eq('course_slug', 'konten-marketing');
+      if (completions && completions.length > 0) {
+        completions.forEach(function(row) {
+          done.add(row.module_num);
+          var checkEl = document.getElementById('check' + row.module_num);
+          var navEl = document.getElementById('nav-mod' + row.module_num);
+          if (checkEl) checkEl.textContent = '✓';
+          if (navEl) navEl.classList.add('done');
+        });
+        updateProgress();
+      }
+    } catch(e) {}
+  }
+
+  async function saveProgress(moduleNum) {
+    localStorage.setItem('klaud_progress_konten-marketing', done.size);
+    try {
+      const { data: { session } } = await sbClient.auth.getSession();
+      if (session) {
+        await sbClient.from('module_completions').upsert({
+          email: session.user.email, course_slug: 'konten-marketing', module_num: moduleNum
+        }, { onConflict: 'email,course_slug,module_num', ignoreDuplicates: true });
+      }
+    } catch (e) {}
+  }
+
+  function showModule(n) {
+    done.add(current);
+    saveProgress(current);
+    document.getElementById(`check${current}`).textContent = '✓';
+    document.getElementById(`nav-mod${current}`).classList.add('done');
+    document.getElementById(`panel${current}`).classList.remove('active');
+    document.getElementById(`nav-mod${current}`).classList.remove('active');
+    current = n;
+    document.getElementById(`panel${current}`).classList.add('active');
+    document.getElementById(`nav-mod${current}`).classList.add('active');
+    document.querySelector('.main').scrollTo({ top: 0, behavior: 'smooth' });
+    updateProgress();
+  }
+
+  function nextModule() { if (current < TOTAL) showModule(current + 1); }
+  function prevModule() { if (current > 1) showModule(current - 1); }
+
+  function updateProgress() {
+    const pct = Math.round((done.size / TOTAL) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = `${done.size}/${TOTAL}`;
+  }
+
+  async function logout() { await sbClient.auth.signOut(); window.location.href = 'index.html'; }
+
+  function copyPrompt(btn) {
+    const box = btn.closest('.prompt-box');
+    const clone = box.cloneNode(true);
+    clone.querySelector('button')?.remove();
+    navigator.clipboard.writeText(clone.innerText.trim()).then(() => {
+      btn.textContent = '✓ Tersalin'; btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Salin'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  init();
+
+  // ── Feedback ─────────────────────────────────────
+  let currentRating = 0;
+
+  function setRating(val) {
+    currentRating = val;
+    document.querySelectorAll('.star-btn').forEach(function(btn) {
+      btn.classList.toggle('active', parseInt(btn.getAttribute('data-val')) <= val);
+    });
+  }
+
+  async function submitFeedback() {
+    const btn = document.getElementById('feedbackSubmit');
+    btn.disabled = true;
+    btn.textContent = 'Menyimpan...';
+    const comment = document.getElementById('feedbackComment').value.trim();
+    try {
+      const r = await sbClient.auth.getSession();
+      const session = r.data.session;
+      if (session) {
+        await sbClient.from('course_feedback').upsert({
+          email: session.user.email,
+          course_slug: 'konten-marketing',
+          rating: currentRating || null,
+          comment: comment || null,
+          submitted_at: new Date().toISOString()
+        }, { onConflict: 'email,course_slug' });
+      }
+    } catch(e) { console.error(e); }
+    document.getElementById('feedbackForm').style.display = 'none';
+    document.getElementById('feedbackDone').style.display = 'block';
+  }
+
+</script>
+</body>
+</html>
