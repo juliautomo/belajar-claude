@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 14, 2026 (checkpoint 9)_
+_Last updated: July 16, 2026 (checkpoint 10)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -90,7 +90,7 @@ All pages use these CSS variables:
 | `mulai-claude.html` | Sales page for "Mulai dengan Claude AI" (free) |
 | `produktivitas.html` | Sales page — K2 · Produktivitas Kantor — Rp 149K (8 modules) |
 | `kerja-sehari-hari.html` | DELETED from repo (July 14, 2026) |
-| `bisnis-ukm.html` | Sales page — Rp 149K |
+| `bisnis-ukm.html` | Sales page — K3 · Konten & Pemasaran Bisnis — Rp 149K (9 modules, rewritten checkpoint 10) |
 | `prompt-gratis.html` | Sales page for free prompt guide |
 | `kursus-karyawan.html` | Jalur Profesional page |
 | `kursus-mahasiswa.html` | Jalur Mahasiswa page |
@@ -111,7 +111,7 @@ All pages use these CSS variables:
 | `mulai-claude-content.html` | Course reader — 6 modules + feedback panel |
 | `produktivitas-content.html` | Course reader — K2, 8 modules + feedback panel (COURSE_SLUG='produktivitas') |
 | `kerja-sehari-hari-content.html` | DELETED from repo (July 14, 2026) |
-| `bisnis-ukm-content.html` | Course reader — 6 modules + feedback panel |
+| `bisnis-ukm-content.html` | Course reader — K3, 9 modules + feedback panel (COURSE_SLUG='bisnis-ukm', rewritten checkpoint 10) |
 | `payment-success.html` | Post-payment confirmation |
 | `admin.html` | Admin-only content manager — upload course PDFs + per-module videos to Supabase Storage. Gated to `julia.utomo@gmail.com` / `tiffany.utomo@gmail.com` via session email check. Linked from a hidden "Admin" nav item on `prompt-gratis.html` (shown only to those emails). |
 
@@ -183,7 +183,7 @@ const COURSE_SLUG = 'produktivitas';
 
 **Backend (index.js) updated July 14, 2026 (checkpoint 8)** — `kerja-sehari-hari` replaced with `produktivitas` in both `COURSES` and `PAKET_COURSES`. K2 access link updated to `https://belajar-claude.vercel.app/produktivitas-content.html`. Pushed as commit `992a1dc` to `belajar-claude-backend`. No remaining references to `kerja-sehari-hari` anywhere in the codebase.
 
-### bisnis-ukm-content.html — rewritten per K3 PDF, July 2026
+### bisnis-ukm-content.html — rewritten per K3 PDF, July 2026 (SUPERSEDED, see Checkpoint 10)
 All 6 content panels rewritten to follow the uploaded PDF "K3 · Konten & Pemasaran Bisnis" (course "Claude untuk Bisnis & UKM"), replacing the old generic per-tool tutorials. Panel count/TOTAL unchanged (already 7 = 6 content + feedback), just content + order + sidebar titles replaced.
 - **New module order/titles**: 1) Analisis Kompetitor & Positioning, 2) Deskripsi Produk & Listing yang Menjual, 3) Sistem Konten Instagram, 4) Iklan & Promosi: Claude Tulis, Kamu Design, 5) Template CS WhatsApp yang On-Brand, 6) Content Operating System di Notion (capstone — carries the "Kursus Selesai!" box + "Lanjutkan Belajar" next-card, nav-bottom jumps to `showModule(7)`).
 - **Throughline**: Modul 1 produces a one-sentence "positioning" that every subsequent module explicitly reuses (listing copy, IG captions, ad copy, CS tone, Notion calendar) — this is the PDF's core structure, "Satu Positioning, Enam Kanal."
@@ -270,4 +270,36 @@ Updated July 14, 2026 — fully in sync with frontend.
 
 ---
 
-## Checkpoint 9 (July 14, 2026) — GitHub PAT rotated, ConvertKit call-signature bug fixed, CONTEXT.md tr
+## Checkpoint 9 (July 14, 2026) — GitHub PAT rotated, ConvertKit call-signature bug fixed, CONTEXT.md truncation fixed
+- **GitHub PAT expired**: the token previously embedded in the `belajar-claude`/`belajar-claude-backend` remote URLs stopped working ("Invalid username or token"). Julia generated a new one; Claude should ask her for the current token if push fails with that error, then embed it in the remote URL the same way as before (`https://<token>@github.com/juliautomo/<repo>.git`) — cloning to `/tmp` and pushing from there, since the Windows-mounted `.git/` still blocks lock file writes for direct pushes from the mount.
+- **`addToConvertKit` bug fixed (backend)**: `index.js`'s webhook handler was calling `addToConvertKit({ name, email, courseSlug })` (single object) but the function itself is defined as `addToConvertKit(name, email, tags = [])` (three positional args) — the object was being silently assigned to `name`, `email` came through `undefined`, and `tags` defaulted to `[]`. This meant ConvertKit tagging on every paid purchase was silently broken. Fixed the call site to pass positional args with the correct tags (`course?.tag`, `'Pembeli: Semua Kursus'`), matching the working pattern already used in `/signup`. Pushed as commits `f9c678d` and `0ff0d5f` to `belajar-claude-backend`.
+- **False alarm, corrected**: this session initially misdiagnosed `index.js` as having a truncated webhook handler (missing `app.listen()`, error handling, etc.) — that diagnosis was based on a stale `origin/main` git cache on the mount (from the dead PAT never successfully fetching). The real GitHub file (`992a1dc`) was already complete and correct from checkpoint 8. A corrective commit (`0ff0d5f`) restored the `produktivitas` course link to `https://belajar-claude.vercel.app/produktivitas-content.html` after an intermediate commit accidentally reverted it to the stale `github.io` pattern. Net effect after both commits: catalog is correct, only the real ConvertKit bug was fixed.
+- **`CONTEXT.md` was truncated on GitHub**: the checkpoint-8 push of this file (commit `5636bd5`) cut off mid-sentence at "e.g. \"2 dokumen" and was missing ~60 lines (Known limitation, Supabase project gotcha, Index.html Key Details, Backend/API Endpoints, Course Catalog table, PAKET_COURSES map, Backend Integrations — everything from that point through checkpoint 8). The Windows-mount-to-`/tmp`-clone copy step likely raced with a not-yet-flushed write, same class of bug as the earlier `produktivitas-content.html` truncation. This checkpoint 9 push restores the full file. **Lesson**: after copying a file mount → `/tmp` clone for push, diff the copied file's line count / tail against the mount source before committing, don't assume the copy completed.
+- **SendGrid**: Transactional email (welcome email on signup, access email on purchase). API key in Railway env.
+
+
+---
+
+## Checkpoint 10 (July 16, 2026) — New 9-module K3 course built, migrated into `bisnis-ukm` slug, header bug fixed, truncation bug hit repeatedly
+
+**New K3 course content built**: A new, larger K3 curriculum ("Content & Marketing") was built from `Content-Marketing/Content-Marketing-Panduan-Belajar.pdf` — 9 modules instead of the old 6: 01 Positioning & Analisis Kompetitor, 02 Deskripsi Produk Marketplace, 03 Sistem Konten Instagram, 04 Copy Iklan + Canva Connector, 05 WhatsApp Business CS System, 06 Email & Promosi Bisnis (Gmail Connector), 07 Performance Marketing, 08 Content OS di Notion, 09 Case Study: Peluncuran Produk Baru (capstone, new — mirrors K2's Modul 08 pattern). Running persona: "Dapur Rara," a fictional frozen-food UMKM, launching "Garang Asem Frozen" in Modul 9. Supporting starter file: `Content-Marketing/cm-m9-starter-peluncuran.txt` (5-day Senin–Jumat launch-week scenario covering all 8 prior modules, ends in a Rekap savings table).
+
+**Slug collision discovered and resolved**: the new course was initially built under a brand-new `course_slug = 'konten-marketing'` with its own page (`konten-marketing-content.html`). This turned out to be wrong — `dashboard.html`'s `ALL_COURSES` catalog, `admin.html`'s `COURSES` config, and the backend's `COURSES` catalog already had a **half-finished rename in place**: the `bisnis-ukm` slug's *title* had already been changed to "K3 · Konten & Pemasaran Bisnis" everywhere, but the underlying page content was still the old 6-module curriculum. Asked Julia directly; confirmed the new 9-module content should **replace `bisnis-ukm` in place** (same slug, so existing Rp149K buyers keep access under the same enrollment record) rather than exist as a separate course. Migrated accordingly:
+- `bisnis-ukm-content.html` overwritten with the new 9-module lesson page (`course_slug` rewritten from `konten-marketing` → `bisnis-ukm` throughout: `COURSE_SLUG` const, `enrollments`/`module_completions`/`course_feedback` queries, `localStorage` key).
+- `bisnis-ukm.html` (sales page) — curriculum, hero copy, tool chips, skills grid, and case studies all rewritten to describe the 9 modules instead of the old 6.
+- `dashboard.html` and `admin.html` — `bisnis-ukm` entry's `modules` count bumped 6 → 9.
+- Backend `index.js` — `bisnis-ukm` catalog link corrected from a stale `juliautomo.github.io` URL to `https://belajar-claude.vercel.app/bisnis-ukm-content.html` (same class of bug as the `produktivitas` link fixed in checkpoint 9).
+- Superseded `Content-Marketing/konten-marketing-content.html` deleted from the repo.
+- **Important**: since course content pages auto-`upsert` an enrollment row for any logged-in visitor on page load (no payment gate client-side — see `init()` in every `*-content.html`), no manual SQL enrollment was needed. Visiting `bisnis-ukm-content.html` while logged in is sufficient to make the course appear on the dashboard.
+
+**Dashboard/catalog architecture note (important, easy to re-trip on)**: `dashboard.html`'s `_init()` does `enrollments = paketExpanded.filter(e => ALL_COURSES[e.course_slug])` — any enrollment row whose `course_slug` isn't a key in the hardcoded `ALL_COURSES` object is **silently dropped**, not shown, no error. If a new course is ever added under a new slug, it must be registered in `ALL_COURSES` (dashboard.html), `COURSES` (admin.html), and `COURSES` (backend index.js) before enrollments under that slug will show up anywhere.
+
+**`bisnis-ukm.html` nav dropdown bug fixed**: the user-account dropdown (`.nav-user-pill` → `.nav-user-dropdown`) was rendering permanently open/unstyled (showing "Dashboard" and "Keluar" as plain stacked links next to the pill at all times) because of two stacked bugs left over from an earlier incomplete edit: (1) the CSS for `.nav-user-dropdown`, `.nav-user-chevron`, and related hover/open states was missing entirely from this file's `<style>` block (present on `index.html` but never copied here), so the dropdown had no `display:none` default; (2) the `<script src="https://app-sandbox.duitku.com/lib/js/duitku.js">` tag had inline JS (`toggleUserMenu`, `doSignOut`, outside-click handler) nested *inside* it instead of a separate `<script>` block — browsers ignore all child content of a `<script src=...>` tag, so those functions were never defined at all, meaning clicking the pill threw a silent reference error. Fixed both: copied the correct dropdown CSS from `index.html`, and split the Duitku script tag from the inline handlers into two separate `<script>` elements.
+
+**Truncation bug hit repeatedly this session, worse than before**: the known Windows-mount Edit-tool truncation bug (see checkpoint 9 note re: `produktivitas-content.html`) recurred multiple times on `bisnis-ukm.html` and `dashboard.html` specifically — and this time the cut always landed at the **absolute end of the file**, regardless of where in the file the `Edit` call's `old_string`/`new_string` actually were (e.g. editing the `<title>` tag near the top of `bisnis-ukm.html` truncated the file's closing `</script></body></html>` at the bottom). `wc -c` immediately after an `Edit` call is not sufficient to catch this if the byte count coincidentally looks plausible — must `tail -c 100` and confirm the file actually ends with `</html>` after every Edit on these two files. Repairs were done by diffing against the last known-good pushed copy (in the `/tmp` git clone) and either restoring from that clone or appending the correct tail via a Python heredoc, then re-verifying with `tail`/`diff` before the next edit. **Established practice going forward for `bisnis-ukm.html` and `dashboard.html` specifically**: prefer Python `str.replace()` via `mcp__workspace__bash` over the `Edit` tool for these two files, since every Python-based edit this session completed cleanly while multiple `Edit`-tool calls truncated.
+
+**Commits this checkpoint**:
+- `belajar-claude`: `c9c6d76` (initial Content-Marketing course + starter file, later superseded), `0bab627` + `a3ff581` (nav dropdown CSS/script fix, first attempt truncated the file, second commit repaired it), `562824e` (migrate 9-module course into `bisnis-ukm` slug — content page, sales page, dashboard.html, admin.html), `55e2f22` (remove superseded `konten-marketing-content.html` duplicate — first attempt at removal wasn't staged, had to be re-committed).
+- `belajar-claude-backend`: `69daa4b` (fix `bisnis-ukm` catalog link to `vercel.app` domain).
+
+**Verification method used**: after every push, did a fresh `git clone` to a new `/tmp` directory (never trusted the `/tmp/bc_push` working clone's local state alone) and grepped/tailed the cloned copy to confirm what's actually live on GitHub — this caught the un-staged deletion of `konten-marketing-content.html` that would otherwise have gone unnoticed.
