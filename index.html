@@ -79,38 +79,6 @@ section { padding: 88px 0; position: relative; z-index: 1; }
 .section-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 14px; }
 .section-title { font-family: var(--serif); font-size: clamp(30px, 3.5vw, 46px); font-weight: 400; letter-spacing: -1.5px; color: var(--ink); margin-bottom: 12px; line-height: 1.1; }
 .section-sub { font-size: 14px; color: var(--ink-2); line-height: 1.75; max-width: 440px; }
-.jalur-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 52px; }
-.jalur-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 26px 22px; display: flex; flex-direction: column; gap: 14px; transition: all 0.2s; }
-.jalur-card:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,0.07); border-color: var(--border-strong); }
-.jalur-card.featured { background: var(--ink); border-color: var(--ink); position: relative; overflow: hidden; }
-.jalur-card.featured::before { content: ''; position: absolute; top: -60px; right: -60px; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, rgba(108,71,255,0.25), transparent 70%); }
-.jalur-card.featured:hover { box-shadow: 0 16px 40px rgba(0,0,0,0.2); }
-.jalur-persona { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); }
-.jalur-card.featured .jalur-persona { color: rgba(255,255,255,0.35); }
-.jalur-card h3 { font-family: var(--serif); font-size: 32px; font-weight: 400; letter-spacing: -1px; color: var(--ink); line-height: 1.1; }
-.jalur-card.featured h3 { color: #fff; }
-.jalur-courses { display: flex; flex-direction: column; gap: 7px; }
-.jalur-course-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink-3); }
-.jalur-card.featured .jalur-course-item { color: rgba(255,255,255,0.4); }
-.jalur-course-item.available { color: var(--ink-2); font-weight: 500; }
-.jalur-card.featured .jalur-course-item.available { color: rgba(255,255,255,0.75); }
-.jalur-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
-.jalur-course-item.available .jalur-dot { background: var(--accent); }
-.jalur-card.featured .jalur-course-item.available .jalur-dot { background: var(--accent-2); }
-.cs-tag { font-size: 9px; color: var(--ink-3); background: var(--surface-2); border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; }
-.jalur-card.featured .cs-tag { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.1); color: rgba(255,255,255,0.3); }
-.jalur-divider { height: 1px; background: var(--border); }
-.jalur-card.featured .jalur-divider { background: rgba(255,255,255,0.1); }
-.jalur-price { font-family: var(--serif); font-size: 26px; font-weight: 400; color: var(--ink); display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-.jalur-card.featured .jalur-price { color: #fff; }
-.jalur-original { font-family: var(--font); font-size: 12px; color: var(--ink-3); text-decoration: line-through; }
-.jalur-save { font-family: var(--font); font-size: 10px; font-weight: 600; color: var(--green); background: var(--green-dim); border: 1px solid var(--green-border); padding: 2px 7px; border-radius: 100px; }
-.jalur-note { font-size: 11px; color: var(--ink-3); line-height: 1.6; }
-.jalur-card.featured .jalur-note { color: rgba(255,255,255,0.3); }
-.jalur-btn { display: block; text-align: center; font-family: var(--font); font-size: 12px; font-weight: 600; padding: 11px 16px; border-radius: 9px; text-decoration: none; transition: all 0.18s; margin-top: auto; border: 1px solid var(--border); color: var(--ink); background: transparent; }
-.jalur-btn:hover { border-color: var(--border-strong); background: var(--surface-2); }
-.jalur-btn.primary { background: #fff; border-color: rgba(255,255,255,0.2); color: var(--ink); box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
-.jalur-btn.primary:hover { background: rgba(255,255,255,0.9); }
 .carousel-wrap { position: relative; margin-top: 52px; }
 .carousel { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding-bottom: 4px; }
 .carousel::-webkit-scrollbar { display: none; }
@@ -158,12 +126,10 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
 .footer-links ul a:hover { color: #fff; }
 .footer-bottom { max-width: 1100px; margin: 28px auto 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
 .footer-bottom p { font-size: 11px; color: rgba(255,255,255,0.18); }
-@media (max-width: 640px) { .jalur-grid { grid-template-columns: 1fr; } }
 @media (max-width: 640px) {
   nav { padding: 0 20px; } .nav-links { display: none; }
   .hero { padding: 100px 20px 64px; } .divider { margin: 0 20px; }
   section { padding: 64px 0; } .container { padding: 0 20px; }
-  .jalur-grid { grid-template-columns: 1fr; }
   .course-card { min-width: 260px; max-width: 260px; }
   .cta-section { padding: 64px 20px; }
   footer { padding: 40px 20px 24px; } .footer-inner { flex-direction: column; gap: 24px; }
@@ -176,7 +142,6 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
 <nav>
   <a href="index.html" class="logo">belajar<span>claude</span></a>
   <div class="nav-links">
-    <a href="#jalur">Jalur Belajar</a>
     <a href="#kursus">Kursus</a>
     <a href="login.html" id="navLoginBtn">Masuk</a>
     <a href="login.html" id="navCtaBtn" class="nav-cta" style="display:none">Gabung Gratis</a>
@@ -196,7 +161,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
   <h1>Kuasai Claude AI,<br><em>tingkatkan karir</em></h1>
   <p class="hero-sub">Kursus dan panduan Claude AI yang praktis — sepenuhnya dalam Bahasa Indonesia, untuk profesional, UKM, dan mahasiswa.</p>
   <div class="hero-actions">
-    <a href="#jalur" class="btn-dark">Pilih Jalur Belajar →</a>
+    <a href="#kursus" class="btn-dark">Lihat Kursus →</a>
     <a href="login.html" class="btn-outline" id="heroGabungBtn">Gabung Gratis</a>
   </div>
   <div class="hero-proof" style="display:none;">
@@ -207,68 +172,6 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     <p class="proof-text"><strong>2.000+</strong> pelajar sudah bergabung · Gratis selamanya</p>
   </div>
 </div>
-<div class="divider"></div>
-<section id="jalur">
-  <div class="container">
-    <div class="reveal">
-      <div class="section-eyebrow">Jalur Belajar</div>
-      <h2 class="section-title">Pilih jalur sesuai tujuanmu</h2>
-      <p class="section-sub">Setiap jalur berisi kursus yang paling relevan. Beli satu jalur atau kursus satuan.</p>
-    </div>
-    <div class="jalur-grid reveal">
-      <div class="jalur-card">
-        <div class="jalur-persona">Mahasiswa & Fresh Graduate</div>
-        <h3>Claude untuk Mahasiswa</h3>
-        <div class="jalur-courses">
-          <div class="jalur-course-item available"><span class="jalur-dot"></span>Dasar Claude AI</div>
-          <div class="jalur-course-item"><span class="jalur-dot"></span>Analisis Data & Laporan <span class="cs-tag">Segera</span></div>
-        </div>
-        <div class="jalur-divider"></div>
-        <div class="jalur-price">Rp 249K <span class="jalur-original">Rp 398K</span><span class="jalur-save">Hemat Rp 149K</span></div>
-        <p class="jalur-note">3 kursus · Lifetime access</p>
-        <a href="kursus-mahasiswa.html" class="jalur-btn">Lihat Jalur Mahasiswa →</a>
-      </div>
-      <div class="jalur-card">
-        <div class="jalur-persona">Karyawan & Profesional</div>
-        <h3>Claude untuk Karyawan</h3>
-        <div class="jalur-courses">
-          <div class="jalur-course-item available"><span class="jalur-dot"></span>Dasar Claude AI</div>
-          <div class="jalur-course-item available"><span class="jalur-dot"></span>Produktivitas Kantor</div>
-          <div class="jalur-course-item"><span class="jalur-dot"></span>Analisis Data & Laporan <span class="cs-tag">Segera</span></div>
-        </div>
-        <div class="jalur-divider"></div>
-        <div class="jalur-price">Rp 299K <span class="jalur-original">Rp 398K</span><span class="jalur-save">Hemat Rp 99K</span></div>
-        <p class="jalur-note">3 kursus · Lifetime access</p>
-        <a href="kursus-karyawan.html" class="jalur-btn">Lihat Jalur Karyawan →</a>
-      </div>
-      <div class="jalur-card">
-        <div class="jalur-persona">Pengusaha & UMKM</div>
-        <h3>Claude untuk Pengusaha</h3>
-        <div class="jalur-courses">
-          <div class="jalur-course-item available"><span class="jalur-dot"></span>Dasar Claude AI</div>
-          <div class="jalur-course-item available"><span class="jalur-dot"></span>Content & Marketing</div>
-          <div class="jalur-course-item"><span class="jalur-dot"></span>Automasi Workflow <span class="cs-tag">Segera</span></div>
-        </div>
-        <div class="jalur-divider"></div>
-        <div class="jalur-price">Rp 499K <span class="jalur-original">Rp 647K</span><span class="jalur-save">Hemat Rp 148K</span></div>
-        <p class="jalur-note">4 kursus · Lifetime access</p>
-        <a href="kursus-ukm.html" class="jalur-btn">Lihat Jalur Pengusaha →</a>
-      </div>
-      <div class="jalur-card">
-        <div class="jalur-persona">Content Creator & Digital Marketer</div>
-        <h3>Claude untuk Content Creator</h3>
-        <div class="jalur-courses">
-          <div class="jalur-course-item available"><span class="jalur-dot"></span>Dasar Claude AI</div>
-          <div class="jalur-course-item available"><span class="jalur-dot"></span>Content & Marketing</div>
-        </div>
-        <div class="jalur-divider"></div>
-        <div class="jalur-price">Rp 299K <span class="jalur-original">Rp 348K</span><span class="jalur-save">Hemat Rp 49K</span></div>
-        <p class="jalur-note">3 kursus · Lifetime access</p>
-        <a href="paket-content-creator.html" class="jalur-btn">Lihat Jalur Creator →</a>
-      </div>
-    </div>
-  </div>
-</section>
 <div class="divider"></div>
 <section id="kursus">
   <div class="container">
