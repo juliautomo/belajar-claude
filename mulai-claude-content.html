@@ -486,7 +486,7 @@ Bisa bantu jelaskan bagaimana kamu bisa membantu saya?<button class="copy-btn" o
         <div class="video-slot" id="video-slot-2"></div>
         <div class="breadcrumb"><span>Mulai dengan Claude AI</span><span>›</span><strong>Modul 2</strong></div>
         <h1 class="module-title">Anatomi Prompt yang Menghasilkan Output Bagus</h1>
-        <p class="module-subtitle">Cara menyusun instruksi yang jelas (framework K-I-F) — 12 menit</p>
+        <p class="module-subtitle">Cara menyusun instruksi yang jelas (framework R-K-T-F) — 12 menit</p>
         <div class="ppt-slot" id="ppt-slot-2"></div>
         <div class="doc-slot" id="doc-slot-2"></div>
         
@@ -500,20 +500,20 @@ Bisa bantu jelaskan bagaimana kamu bisa membantu saya?<button class="copy-btn" o
           <p>Anggap prompt sebagai instruksi kerja yang kamu kasih ke karyawan baru — karyawan baru tidak tahu bisnismu, kebiasaanmu, atau standar yang kamu mau. Kalau instruksinya jelas, hasil kerjanya jauh lebih tepat dan kamu tidak perlu revisi berkali-kali.</p>
         </div>
 
-        <div class="section-heading">4 Elemen Prompt: Konteks + Peran + Tugas + Format</div>
+        <div class="section-heading">4 Elemen Prompt: Role + Konteks + Tugas + Format</div>
         <p class="body-text">Contoh nyata untuk kasus membalas chat pelanggan (studi kasus toko sepatu online):</p>
         <div class="info-grid">
+          <div class="info-card"><strong>Role</strong><span>"Bertindaklah sebagai customer service yang ramah dan solutif."</span></div>
           <div class="info-card"><strong>Konteks</strong><span>"Saya jualan sepatu online, pelanggan bernama Rina baru saja komplain sepatunya sobek setelah dipakai 3 hari."</span></div>
-          <div class="info-card"><strong>Peran</strong><span>"Bertindaklah sebagai customer service yang ramah dan solutif."</span></div>
           <div class="info-card"><strong>Tugas</strong><span>"Balas komplain Rina, tawarkan penggantian sepatu baru gratis, minta dia kirim foto kerusakan dulu."</span></div>
           <div class="info-card"><strong>Format</strong><span>"Tulis sebagai pesan chat WhatsApp, 3-4 kalimat, nada minta maaf tapi tetap profesional."</span></div>
         </div>
 
         <div class="prompt-section">
           <div class="prompt-label">📝 Digabung Jadi Satu Prompt</div>
-          <div class="prompt-box">Saya jualan sepatu online, pelanggan bernama Rina baru saja komplain
-sepatunya sobek setelah dipakai 3 hari. Bertindaklah sebagai customer
-service yang ramah dan solutif. Balas komplain Rina, tawarkan
+          <div class="prompt-box">Bertindaklah sebagai customer service yang ramah dan solutif. Saya
+jualan sepatu online, pelanggan bernama Rina baru saja komplain
+sepatunya sobek setelah dipakai 3 hari. Balas komplain Rina, tawarkan
 penggantian sepatu baru gratis, minta dia kirim foto kerusakan dulu.
 Tulis sebagai pesan chat WhatsApp, 3-4 kalimat, nada minta maaf
 tapi tetap profesional.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
@@ -547,25 +547,25 @@ tapi tetap profesional.<button class="copy-btn" onclick="copyPrompt(this)">Salin
         </div>
 
         <div class="tip-box">
-          <div class="tip-label">🧭 Framework K-I-F</div>
-          <p>Susun promptmu dengan urutan ini setiap kali: mulai dari <strong>Konteks</strong> situasi, lalu <strong>Instruksi</strong> spesifik, tutup dengan <strong>Format</strong> output yang kamu mau.</p>
+          <div class="tip-label">🧭 Framework R-K-T-F</div>
+          <p>Susun promptmu dengan urutan ini setiap kali: mulai dari <strong>Role</strong> (siapa Claude), lalu <strong>Konteks</strong> situasi, <strong>Tugas</strong> yang jelas, tutup dengan <strong>Format</strong> output yang kamu mau.</p>
         </div>
 
         <div class="summary-box">
           <div class="summary-label">Ringkasan Modul 2</div>
           <ul>
             <li>Prompt adalah instruksi kamu ke Claude — kualitas prompt menentukan kualitas hasil</li>
-            <li>Prompt yang baik punya 4 elemen: Konteks, Peran, Tugas, Format</li>
+            <li>Prompt yang baik punya 4 elemen: Role, Konteks, Tugas, Format</li>
             <li>Prompt yang terlalu umum menghasilkan output generik yang perlu banyak revisi</li>
             <li>Semakin spesifik detail yang kamu berikan, semakin dekat hasilnya dengan kebutuhan aslimu</li>
-            <li>Gunakan urutan K-I-F (Konteks → Instruksi → Format) setiap menulis prompt</li>
+            <li>Gunakan urutan R-K-T-F (Role → Konteks → Tugas → Format) setiap menulis prompt</li>
           </ul>
         </div>
 
         <div class="prompt-section">
           <div class="prompt-label">📝 Exercise</div>
           <div class="case-box">
-            <p>Ambil prompt buruk ini: <em>"Balesin chat pelanggan komplain barang rusak"</em>. Tulis ulang jadi prompt yang baik menggunakan framework K-I-F. Sertakan: jenis usahamu, apa yang rusak, solusi yang mau kamu tawarkan (ganti barang/refund), dan minta Claude membalas dengan nada empatik.</p>
+            <p>Ambil prompt buruk ini: <em>"Balesin chat pelanggan komplain barang rusak"</em>. Tulis ulang jadi prompt yang baik menggunakan framework R-K-T-F. Sertakan: role yang sesuai, jenis usahamu, apa yang rusak, solusi yang mau kamu tawarkan (ganti barang/refund), dan minta Claude membalas dengan nada empatik.</p>
           </div>
         </div>
 
@@ -573,13 +573,13 @@ tapi tetap profesional.<button class="copy-btn" onclick="copyPrompt(this)">Salin
           <div class="output-icon">✅</div>
           <div>
             <h3>Output yang Diharapkan</h3>
-            <p>1 prompt lengkap (Konteks-Instruksi-Format) yang menghasilkan balasan chat siap kirim ke pelanggan — bukan draft generik yang masih perlu diedit banyak.</p>
+            <p>1 prompt lengkap (Role-Konteks-Tugas-Format) yang menghasilkan balasan chat siap kirim ke pelanggan — bukan draft generik yang masih perlu diedit banyak.</p>
           </div>
         </div>
 
         <div class="tip-box">
           <div class="tip-label">⚠️ Kesalahan Umum</div>
-          <p>Menulis prompt sepanjang paragraf tapi tanpa struktur jelas. Lebih baik prompt pendek tapi punya konteks-instruksi-format yang jelas, daripada prompt panjang tapi berantakan.</p>
+          <p>Menulis prompt sepanjang paragraf tapi tanpa struktur jelas. Lebih baik prompt pendek tapi punya role-konteks-tugas-format yang jelas, daripada prompt panjang tapi berantakan.</p>
         </div>
 
         <div class="nav-bottom">
