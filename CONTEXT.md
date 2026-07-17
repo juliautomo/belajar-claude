@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 16, 2026 (checkpoint 10)_
+_Last updated: July 17, 2026 (checkpoint 11)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -90,15 +90,13 @@ All pages use these CSS variables:
 | `mulai-claude.html` | Sales page for "Mulai dengan Claude AI" (free) |
 | `produktivitas.html` | Sales page — K2 · Produktivitas Kantor — Rp 149K (8 modules) |
 | `kerja-sehari-hari.html` | DELETED from repo (July 14, 2026) |
-| `bisnis-ukm.html` | Sales page — K3 · Konten & Pemasaran Bisnis — Rp 149K (9 modules, rewritten checkpoint 10) |
+| `content-marketing.html` | Sales page — Content & Marketing — Rp 149K (9 modules; renamed from bisnis-ukm.html checkpoint 11) |
 | `prompt-gratis.html` | Sales page for free prompt guide |
 | `kursus-karyawan.html` | Jalur Profesional page |
 | `kursus-mahasiswa.html` | Jalur Mahasiswa page |
 | `kursus-ukm.html` | Jalur UKM page |
 | `paket.html` | Pricing/packages page |
 | `paket-content-creator.html` | Paket Content Creator page |
-| `coaching-1on1.html` | 1-on-1 coaching page |
-| `workshop-zoom.html` | Workshop page |
 | `coming-soon.html` | Placeholder for unreleased courses |
 
 ### App
@@ -111,7 +109,7 @@ All pages use these CSS variables:
 | `mulai-claude-content.html` | Course reader — 6 modules + feedback panel |
 | `produktivitas-content.html` | Course reader — K2, 8 modules + feedback panel (COURSE_SLUG='produktivitas') |
 | `kerja-sehari-hari-content.html` | DELETED from repo (July 14, 2026) |
-| `bisnis-ukm-content.html` | Course reader — K3, 9 modules + feedback panel (COURSE_SLUG='bisnis-ukm', rewritten checkpoint 10) |
+| `content-marketing-content.html` | Course reader — 9 modules + feedback panel (COURSE_SLUG='content-marketing'; renamed from bisnis-ukm-content.html checkpoint 11) |
 | `payment-success.html` | Post-payment confirmation |
 | `admin.html` | Admin-only content manager — upload course PDFs + per-module videos to Supabase Storage. Gated to `julia.utomo@gmail.com` / `tiffany.utomo@gmail.com` via session email check. Linked from a hidden "Admin" nav item on `prompt-gratis.html` (shown only to those emails). |
 
@@ -238,20 +236,18 @@ Updated July 14, 2026 — `kerja-sehari-hari` fully replaced with `produktivitas
 
 | Slug | Name | Price |
 |------|------|-------|
-| `produktivitas` | K2: Produktivitas Kantor | Rp 149,000 |
-| `bisnis-ukm` | K3: Konten & Pemasaran Bisnis | Rp 149,000 |
-| `konten-copywriting` | K4: Copywriting & Konten Digital | Rp 199,000 |
-| `analisis-data` | K5: Analisis Data & Laporan | Rp 199,000 |
-| `build-automation` | K6: Automasi Workflow | Rp 299,000 |
-| `ai-powered-app` | K7: Build AI App Sederhana | Rp 299,000 |
-| `claude-api-dev` | K8: Claude API untuk Developer | Rp 399,000 |
-| `jual-produk-ai` | K9: Build & Monetisasi Produk AI | Rp 499,000 |
+| `produktivitas` | Produktivitas Kantor | Rp 149,000 |
+| `content-marketing` | Content & Marketing | Rp 149,000 |
+| `konten-copywriting` | Copywriting & Konten Digital | Rp 199,000 |
+| `analisis-data` | Analisis Data & Laporan | Rp 199,000 |
+| `build-automation` | Automasi Workflow | Rp 299,000 |
+| `ai-powered-app` | Build AI App Sederhana | Rp 299,000 |
+| `claude-api-dev` | Claude API untuk Developer | Rp 399,000 |
+| `jual-produk-ai` | Build & Monetisasi Produk AI | Rp 499,000 |
 | `paket-mahasiswa` | Claude untuk Mahasiswa | Rp 249,000 |
 | `paket-karyawan` | Claude untuk Karyawan & Profesional | Rp 299,000 |
 | `paket-pengusaha` | Claude untuk Pengusaha | Rp 499,000 |
 | `paket-creator` | Claude untuk Content Creator | Rp 299,000 |
-| `workshop-zoom` | Workshop Bulanan via Zoom | Rp 149,000 |
-| `coaching-1on1` | Coaching 1-on-1 | Rp 1,500,000 |
 
 ### Package → Course Enrollment Map (PAKET_COURSES)
 Updated July 14, 2026 — fully in sync with frontend.
@@ -260,8 +256,8 @@ Updated July 14, 2026 — fully in sync with frontend.
 |---------|-------------------|
 | `paket-karyawan` | mulai-claude, produktivitas, analisis-data |
 | `paket-mahasiswa` | mulai-claude, konten-copywriting, analisis-data |
-| `paket-pengusaha` | mulai-claude, bisnis-ukm, konten-copywriting, build-automation |
-| `paket-creator` | mulai-claude, bisnis-ukm, konten-copywriting |
+| `paket-pengusaha` | mulai-claude, content-marketing, konten-copywriting, build-automation |
+| `paket-creator` | mulai-claude, content-marketing, konten-copywriting |
 
 ### Backend Integrations
 - **Duitku**: Payment gateway (sandbox: `api-sandbox.duitku.com`). Signature: SHA256 for invoice creation, MD5 for webhook verification. Merchant code + API key stored as Railway env vars. Webhook endpoint `/webhook/duitku` verifies signature, updates Supabase `enrollments`, sends access email via SendGrid, logs to Google Sheets.
@@ -303,3 +299,32 @@ Updated July 14, 2026 — fully in sync with frontend.
 - `belajar-claude-backend`: `69daa4b` (fix `bisnis-ukm` catalog link to `vercel.app` domain).
 
 **Verification method used**: after every push, did a fresh `git clone` to a new `/tmp` directory (never trusted the `/tmp/bc_push` working clone's local state alone) and grepped/tailed the cloned copy to confirm what's actually live on GitHub — this caught the un-staged deletion of `konten-marketing-content.html` that would otherwise have gone unnoticed.
+
+
+---
+
+## Checkpoint 11 (July 17, 2026) — K1-K9 prefixes stripped, nav dropdown bug found on 7 more pages, module previews audited, `bisnis-ukm` renamed to `content-marketing`, two dead offerings removed
+
+**K1-K9 course code prefixes removed site-wide**: every user-facing course title (dashboard cards, sales page eyebrows/titles/H1s, content page cross-sell "Lanjutkan Belajar" cards, index.html's jalur-belajar lists and course-card grid, backend catalog `name` fields used in payment emails) had its "K1 · ", "K2 · " etc. prefix stripped, e.g. "K2 · Produktivitas Kantor" → "Produktivitas Kantor". Internal ConvertKit `tag:` fields in the backend catalog were deliberately left untouched (not user-visible, and changing them risks breaking existing ConvertKit segment filters). `index.html` also had a sentence referencing "K1" by code in a post-login CTA subtext — changed to plain prose ("Kamu sudah mulai belajar...") instead of a course code.
+
+**Nav dropdown bug (see checkpoint 10) found on 7 more pages, not just `bisnis-ukm.html`**: the same root cause — `.nav-user-dropdown` CSS never added when the dropdown feature shipped — turned out to affect `produktivitas.html`, `mulai-claude.html`, `kursus-karyawan.html`, `kursus-mahasiswa.html`, `kursus-ukm.html`, `paket-content-creator.html`, and `prompt-gratis.html` (10 total pages have the dropdown markup; only `index.html` had correct CSS from the start). `produktivitas.html` additionally had the second bug from checkpoint 10 (inline JS nested inside a `<script src=...>` tag, never executing) — fixed the same way, splitting into two script tags. All 7 fixed and verified via fresh clone in one commit.
+
+**Module preview audit**: compared each of the 4 live course's landing-page "curriculum" section against its actual lesson page (source of truth), since they're hand-maintained separately and drift over time.
+- `mulai-claude.html` was stale for modules 4-6 — still described an older course structure (generic Artifacts/Projects copy, a "Google Docs Export" module that no longer exists) instead of the current "Claude Artifacts — Output Langsung Jadi Dokumen" / "Claude Projects — Memori Pekerjaan Kamu" / "PRAKTEK: Workflow End-to-End Pertamamu" restructure from earlier work. Fixed all three, including changing module 6's tool-chip from "Google Docs" to "Praktek".
+- `prompt-gratis.html`'s category breakdown grid was worse than stale — 6 categories totaling only 14 prompts, while the actual content page groups all 20 prompts into 5 categories (Produktivitas Kerja 4, Bisnis & Marketing 5, Karir & CV 4, Komunikasi Profesional 4, Belajar & Riset 3). Replaced the whole grid.
+- `produktivitas.html` and `bisnis-ukm.html`/`content-marketing.html` were already aligned — no changes needed (the latter was built directly from the lesson content this session, so no drift had occurred yet).
+- **Lesson for future course edits**: whenever a lesson page's module structure changes, the corresponding landing page's module-preview section needs a matching update — nothing enforces this automatically, it's two independently-maintained blocks of copy.
+
+**`bisnis-ukm` renamed to `content-marketing`** (slug, both filenames, and display title "Konten & Pemasaran Bisnis" → "Content & Marketing", per explicit instruction — the earlier half-Indonesian branding from checkpoint 10's migration was reverted in favor of the English name matching the original source PDF):
+- `bisnis-ukm.html` → `content-marketing.html`, `bisnis-ukm-content.html` → `content-marketing-content.html` (renamed via `git mv`, content also text-substituted: `course_slug`, `COURSE_SLUG` const, all Supabase query filters, `localStorage` key, title tags, breadcrumbs, sidebar course name, completion badge text).
+- Cross-link fixups required in 7 more files: `dashboard.html` (`ALL_COURSES` key/title/links, `PAKET_COURSES`, `COURSE_ORDER`, `PAKET_TRACKS`), `admin.html` (`COURSES` config), backend `index.js` (`COURSES` catalog + `PAKET_COURSES`), `kursus-ukm.html` + `paket-content-creator.html` (`hasAccess` arrays gating bundle content), `index.html` (course card — also fixed unrelated stale copy still claiming "6 modul · 1.5 jam" and Tokopedia/Notion-focused description, missed during the checkpoint 10 migration), `mulai-claude-content.html` + `produktivitas-content.html` (cross-sell "Lanjutkan Belajar" next-cards).
+- **Pattern confirmed again**: any time a course's identity changes, the full checklist is: both HTML files (if renamed) → `dashboard.html` (4 separate places) → `admin.html` → backend `index.js` (2 places) → any `hasAccess`/`PAKET_COURSES` gating on bundle pages → any other course's cross-sell "next card" pointing at it → `index.html`'s course grid. Missing any one of these leaves a dangling reference or an invisible enrollment (see checkpoint 10's `ALL_COURSES` filter note).
+- Existing enrollment/progress data under the old `bisnis-ukm` slug does not carry over automatically (Supabase rows are keyed by `course_slug` as literal text) — since content pages auto-enroll on visit with no payment gate, this only matters for module *progress*, not access; a fresh visit to the renamed page re-enrolls instantly but starts progress at 0/9 again.
+
+**Two offerings taken offline entirely**: `workshop-zoom.html` and `coaching-1on1.html` deleted from the repo, and their `workshop-zoom`/`coaching-1on1` entries removed from the backend `COURSES` catalog (so `/create-payment` can no longer process them even via a direct/bookmarked link). Both pages were already unlinked from anywhere else on the live site (no nav, no course grid, no cross-sell) before deletion — confirmed via full-repo grep before removing, so no dangling links were created.
+
+**Sandbox note**: the `/tmp` working directory was wiped mid-session (all previous `/tmp/bc_push` and `/tmp/backend_push` clones vanished without warning). Recovered by re-cloning fresh from GitHub and confirming the prior commits were already safely pushed before continuing — the "always verify via fresh clone after pushing" habit from checkpoint 10 is what made this a non-event rather than a lost-work incident.
+
+**Commits this checkpoint**:
+- `belajar-claude`: `c5ba0c6` (strip K1-K9 prefixes), `d823e67` (nav dropdown fix on 7 pages), `1758c7a` (align mulai-claude.html + prompt-gratis.html module previews with lesson content), `bcded6c` (rename bisnis-ukm → content-marketing across 9 files), `38ba90c` (remove workshop-zoom.html + coaching-1on1.html).
+- `belajar-claude-backend`: `0109361` (strip K1-K9 prefixes from catalog names), `70c64d8` (rename bisnis-ukm → content-marketing in catalog), `b7dd35c` (remove workshop-zoom + coaching-1on1 from catalog).
