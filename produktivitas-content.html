@@ -1260,10 +1260,19 @@ Singkat, cocok untuk diucapkan, bukan dibaca.<button class="copy-btn" onclick="c
 
   const sb = sbClient;
 
+  const ADMIN_EMAILS = ['julia.utomo@gmail.com', 'tiffany.utomo@gmail.com'];
+
   async function init() {
     const { data: { session } } = await sb.auth.getSession();
     if (!session) { window.location.href = 'login.html'; return; }
     const email = session.user.email;
+
+    // Only grant access if a real enrollment already exists (created by the Duitku payment webhook) - admins bypass
+    if (!ADMIN_EMAILS.includes(email)) {
+      const { data: existing } = await sb.from('enrollments').select('course_slug').eq('email', email).eq('course_slug', COURSE_SLUG).maybeSingle();
+      if (!existing) { window.location.href = 'produktivitas.html'; return; }
+    }
+
     document.getElementById('navEmail').textContent = email;
 
     // Load completions

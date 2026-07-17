@@ -1101,15 +1101,21 @@ dimatikan), dan 3 template CS baru. Format laporan singkat
   let current = 1;
   const done = new Set();
 
+  const ADMIN_EMAILS = ['julia.utomo@gmail.com', 'tiffany.utomo@gmail.com'];
+
   async function init() {
     const { data: { session } } = await sbClient.auth.getSession();
     if (!session) { window.location.href = 'login.html'; return; }
+
+    // Only grant access if a real enrollment already exists (created by the Duitku payment webhook) - admins bypass
+    if (!ADMIN_EMAILS.includes(session.user.email)) {
+      const { data: existing } = await sbClient.from('enrollments').select('course_slug').eq('email', session.user.email).eq('course_slug', 'content-marketing').maybeSingle();
+      if (!existing) { window.location.href = 'content-marketing.html'; return; }
+    }
+
     document.getElementById('navEmail').textContent = session.user.email;
     document.getElementById('loadingScreen').style.display = 'none';
     document.getElementById('mainLayout').style.display = 'flex';
-    try {
-      await sbClient.from('enrollments').upsert({ email: session.user.email, course_slug: 'content-marketing', course_name: 'Content & Marketing', type: 'paid' }, { onConflict: 'email,course_slug', ignoreDuplicates: true });
-    } catch (e) {}
 
     // Restore saved progress from Supabase
     try {
