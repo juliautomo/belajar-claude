@@ -206,7 +206,7 @@
     if (!session) return;
     const { data: enrollments } = await sbClient.from('enrollments').select('course_slug').eq('email', session.user.email);
     const enrolledSlugs = new Set((enrollments || []).map(e => e.course_slug));
-    const hasAccess = ['paket-pengusaha', 'bisnis-ukm', 'konten-copywriting', 'build-automation'].some(s => enrolledSlugs.has(s));
+    const hasAccess = ['paket-pengusaha', 'content-marketing', 'konten-copywriting', 'build-automation'].some(s => enrolledSlugs.has(s));
     if (hasAccess) {
       document.querySelectorAll('.btn-buy').forEach(btn => {
         btn.textContent = 'Ke Dashboard →';

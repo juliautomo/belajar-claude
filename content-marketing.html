@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Claude untuk Konten & Pemasaran Bisnis — Rp 149K | Belajar Claude</title>
+<title>Claude untuk Content & Marketing — Rp 149K | Belajar Claude</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
       :root {
@@ -123,8 +123,8 @@
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-content">
-    <span class="level-tag">Beginner · 2.5 Jam · 9 Modul · Konten & Pemasaran Bisnis</span>
-    <h1>Claude untuk <span class="accent">Konten & Pemasaran Bisnis</span></h1>
+    <span class="level-tag">Beginner · 2.5 Jam · 9 Modul · Content & Marketing</span>
+    <h1>Claude untuk <span class="accent">Content & Marketing</span></h1>
     <p class="hero-sub">Bangun sistem pemasaran lengkap dengan Claude — dari positioning, deskripsi produk, dan konten Instagram sampai iklan, CS WhatsApp, email promosi, dan analisis performa. Diuji langsung lewat 1 simulasi peluncuran produk nyata di Modul 9.</p>
     <div class="hero-meta">
       <span>🛒 Tokopedia/Shopee</span>
@@ -136,7 +136,7 @@
     </div>
     <div class="cta-box">
       <div style="font-size:10px;font-weight:700;letter-spacing:2px;color:var(--accent);text-transform:uppercase;margin-bottom:8px;font-family:monospace;">Kursus Berbayar</div>
-      <div style="font-family:var(--serif);font-size:24px;font-weight:400;letter-spacing:-0.5px;color:var(--ink);line-height:1.15;margin-bottom:16px;">Konten & Pemasaran Bisnis</div>
+      <div style="font-family:var(--serif);font-size:24px;font-weight:400;letter-spacing:-0.5px;color:var(--ink);line-height:1.15;margin-bottom:16px;">Content & Marketing</div>
       <div class="cta-price">Rp 149K</div>
       <div class="cta-price-sub">Akses seumur hidup · Materi terus diperbarui</div>
       <a class="btn-primary" onclick="buyCourse()" href="#" style="margin-top:18px;">Beli Kursus — Rp 149K →</a>
@@ -345,11 +345,11 @@
     const { data: { session } } = await sbClient.auth.getSession();
     if (!session) return;
     const { data: enrollments } = await sbClient.from('enrollments').select('course_slug').eq('email', session.user.email);
-    if (enrollments && enrollments.some(e => e.course_slug === 'bisnis-ukm')) {
+    if (enrollments && enrollments.some(e => e.course_slug === 'content-marketing')) {
       document.querySelectorAll('.btn-primary').forEach(btn => {
         btn.textContent = 'Buka Kursus →';
         btn.removeAttribute('onclick');
-        btn.setAttribute('href', 'bisnis-ukm-content.html');
+        btn.setAttribute('href', 'content-marketing-content.html');
         btn.style.background = 'var(--accent)';
       });
     }
@@ -389,7 +389,7 @@
     try {
       const res  = await fetch('https://klaud-backend-production.up.railway.app/create-payment', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ courseSlug: 'bisnis-ukm', customerName: name, customerEmail: email })
+        body: JSON.stringify({ courseSlug: 'content-marketing', customerName: name, customerEmail: email })
       });
       const data = await res.json();
       if (!data.success) throw new Error(data.message);
