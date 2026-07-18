@@ -235,6 +235,7 @@
         <span class="tool-chip">Tokopedia/Shopee</span><span class="tool-chip">Instagram</span>
         <span class="tool-chip">Canva</span><span class="tool-chip">WhatsApp Business</span>
         <span class="tool-chip">Gmail</span><span class="tool-chip">Notion</span>
+        <span class="tool-chip">Claude Artifacts</span>
       </div>
     </div>
     <div class="mod-feedback">
@@ -473,10 +474,24 @@
           <div class="step-card"><div class="step-num">5</div><p>Ulangi tiap awal bulan — simpan prompt terbaik sebagai template</p></div>
         </div>
 
+        <div class="section-heading">Level Up: Bikin Dashboard Kalender Sendiri</div>
+        <div class="tip-box connector">
+          <div class="tip-label">🛠️ Bonus: Claude Bisa Bangun Tool untuk Kamu</div>
+          <p>Selain spreadsheet, Claude bisa langsung membuat halaman kalender visual dari data di atas — kamu tinggal jelaskan apa yang kamu mau, tidak perlu bisa coding sama sekali. Hasilnya 1 file HTML yang bisa dibuka di browser mana saja, tersimpan di komputer kamu sendiri, tidak perlu Google Sheets atau tool scheduling berbayar.</p>
+        </div>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Contoh Prompt</div>
+          <div class="prompt-box">Dari kalender konten di atas, buatkan saya halaman web
+sederhana (HTML) yang menampilkan kalender ini secara visual per
+minggu — tiap post ada checkbox "sudah diposting", warna beda per
+tema (produk/edukasi/BTS/testimoni). Simpan sebagai 1 file HTML
+yang bisa saya buka langsung di browser, tidak perlu internet.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
         <div class="prompt-section">
           <div class="prompt-label">📝 Exercise</div>
           <div class="case-box">
-            <p>Generate kalender konten Instagram bulan depan — 16 post (4/minggu) — dalam 1 prompt. Isi hasilnya ke cm-kalender-konten.csv. Pilih 3 caption terbaik, personalisasi, dan jadwalkan di Instagram.</p>
+            <p>Generate kalender konten Instagram bulan depan — 16 post (4/minggu) — dalam 1 prompt. Isi hasilnya ke cm-kalender-konten.csv. Pilih 3 caption terbaik, personalisasi, dan jadwalkan di Instagram. Bonus: minta Claude ubah kalender ini jadi 1 halaman HTML visual yang bisa kamu buka tiap hari.</p>
           </div>
         </div>
 
@@ -484,7 +499,7 @@
           <div class="output-icon">✅</div>
           <div>
             <h3>Output yang Diharapkan</h3>
-            <p>Kalender konten 1 bulan (16 post) dalam spreadsheet — tema, caption, dan hashtag terisi — siap dijadwalkan. Waktu yang dihemat: ~8 jam per bulan. File pendukung: cm-kalender-konten.csv</p>
+            <p>Kalender konten 1 bulan (16 post) dalam spreadsheet — tema, caption, dan hashtag terisi — siap dijadwalkan. Waktu yang dihemat: ~8 jam per bulan. File pendukung: cm-kalender-konten.csv. Bonus: 1 dashboard kalender HTML sendiri, tidak perlu tool berbayar.</p>
           </div>
         </div>
 
@@ -505,6 +520,11 @@
         <div class="tip-box connector">
           <div class="tip-label">🔌 Integrasi: Canva Connector</div>
           <p>Level: Connector (gratis) · Setup: 60 detik di Settings > Connectors > Canva. Dengan Canva Connector aktif, Claude tidak hanya menulis copy iklan — Claude bisa langsung membuat desain di Canva. Instruksikan: "Buat desain Instagram Story iklan produk ini di Canva, ukuran 1080x1920px, warna hijau tua dan putih" — Claude akan buka Canva, pilih template, masukkan teks, hasilkan desain siap download. Tanpa setup ini, kamu tetap bisa ikuti modul ini dengan workflow copy-paste manual ke Canva.</p>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">📸 Butuh Edit Foto Produk?</div>
+          <p>Claude tidak bisa mengedit foto secara langsung (crop, retouch, hapus background, dsb). Untuk itu pakai editor foto bawaan Canva — kalau Canva Connector aktif, Claude bisa buka Canva dan susun desainnya, tapi proses edit foto detail tetap dikerjakan di Canva sendiri. Butuh cara cepat hapus background saja? Coba <strong>remove.bg</strong>. Peran Claude di modul ini: arahan kreatif + copy, bukan pengeditan piksel.</p>
         </div>
 
         <div class="case-box">
@@ -803,10 +823,25 @@
           <div class="step-card"><div class="step-num">5</div><p>Isi Sheet 2 (Trend Mingguan) — setelah 4 minggu, minta analisis tren jangka panjang</p></div>
         </div>
 
+        <div class="section-heading">Level Up: Dashboard Performa Otomatis</div>
+        <div class="tip-box connector">
+          <div class="tip-label">🛠️ Bonus: Claude Bisa Bangun Tool untuk Kamu</div>
+          <p>Selain analisis teks, Claude bisa langsung membuat dashboard visual dari data iklanmu — tidak perlu bisa coding. Hasilnya 1 file HTML: tabel semua kampanye dengan ROAS berwarna (hijau/kuning/merah) dan rekomendasi Hentikan/Scale/Pertahankan otomatis untuk tiap kampanye — kamu tinggal buka file-nya tiap minggu.</p>
+        </div>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Contoh Prompt</div>
+          <div class="prompt-box">[Upload cm-performance-ads.xlsx] Dari data ini, buatkan saya
+dashboard HTML sederhana: tabel semua kampanye dengan ROAS, warna
+hijau kalau di atas breakeven, kuning kalau mendekati, merah kalau
+di bawah. Tambahkan 1 kolom rekomendasi otomatis (Hentikan/Scale/
+Pertahankan) untuk tiap kampanye. Simpan sebagai 1 file HTML yang
+bisa saya buka di browser tiap minggu.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
         <div class="prompt-section">
           <div class="prompt-label">📝 Exercise</div>
           <div class="case-box">
-            <p>Buka cm-performance-ads.xlsx (data Dapur Rara sudah terisi sebagai contoh). Upload ke Claude, minta analisis: mana 2 kampanye yang harus segera dihentikan dan kenapa. Minta 2 variasi copy iklan baru untuk kampanye dengan ROAS terburuk.</p>
+            <p>Buka cm-performance-ads.xlsx (data Dapur Rara sudah terisi sebagai contoh). Upload ke Claude, minta analisis: mana 2 kampanye yang harus segera dihentikan dan kenapa. Minta 2 variasi copy iklan baru untuk kampanye dengan ROAS terburuk. Bonus: minta Claude ubah data ini jadi dashboard HTML dengan warna dan rekomendasi otomatis.</p>
           </div>
         </div>
 
@@ -814,7 +849,7 @@
           <div class="output-icon">✅</div>
           <div>
             <h3>Output yang Diharapkan</h3>
-            <p>Keputusan konkret berbasis data: daftar kampanye yang dihentikan + yang di-scale + 2-3 variasi copy iklan baru untuk A/B test. File pendukung: cm-performance-ads.xlsx (3 sheet: Data Kampanye, Trend Mingguan, A/B Copy Tracker)</p>
+            <p>Keputusan konkret berbasis data: daftar kampanye yang dihentikan + yang di-scale + 2-3 variasi copy iklan baru untuk A/B test. File pendukung: cm-performance-ads.xlsx (3 sheet: Data Kampanye, Trend Mingguan, A/B Copy Tracker). Bonus: 1 dashboard HTML performa iklan sendiri.</p>
           </div>
         </div>
 
