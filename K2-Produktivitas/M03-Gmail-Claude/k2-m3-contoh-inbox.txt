@@ -1,0 +1,78 @@
+# FILE LATIHAN — K2 MODUL 3: GMAIL + CLAUDE
+# Bonus: Inbox Triage Board
+# Cara pakai: Kalau kamu belum sempat connect Gmail Connector, atau mau latihan
+# tanpa buka inbox asli dulu, paste seluruh isi file ini ke Claude dan minta
+# dibuatkan Inbox Triage Board (lihat prompt bonus di halaman materi Modul 3).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INBOX — KASUAL STUDIO (12 EMAIL BELUM DIBALAS)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Dari: dinda.k@gmail.com — Subjek: "Baju yang saya terima warnanya beda"
+   Diterima: Hari ini, 08.12
+   Isi: Halo, saya pesan kemeja linen putih tapi yang datang warnanya agak
+   krem, tidak seperti di foto. Saya kecewa karena mau dipakai acara besok.
+   Bisa tolong dibantu?
+
+2. Dari: reseller.bdg@gmail.com — Subjek: "Tanya harga grosir"
+   Diterima: Hari ini, 07.45
+   Isi: Halo min, saya jual baju juga di Bandung, follower IG 8rb. Mau tanya
+   apakah ada harga grosir/reseller? Minimal order berapa?
+
+3. Dari: supplier.kain.jaya@yahoo.com — Subjek: "Re: Pesanan 50 meter linen"
+   Diterima: 3 hari lalu, belum dibalas oleh kita
+   Isi: (tidak ada balasan dari supplier terkait follow-up sebelumnya —
+   kamu yang perlu follow-up ulang)
+
+4. Dari: sarah.tokopedia@gmail.com — Subjek: "Bukti transfer Dress Midi Floral"
+   Diterima: Hari ini, 09.30
+   Isi: Halo, saya sudah transfer Rp 245.000 untuk Dress Midi Floral.
+   [terlampir bukti transfer]. Mohon dikonfirmasi ya, terima kasih!
+
+5. Dari: budi.customer@gmail.com — Subjek: "Ukuran kebesaran"
+   Diterima: Kemarin, 16.20
+   Isi: Saya beli size M tapi kok kerasa kebesaran ya dibanding size chart.
+   Apa bisa tukar ke size S? Belum dipakai sama sekali.
+
+6. Dari: calon.reseller.sby@gmail.com — Subjek: "Program reseller?"
+   Diterima: Kemarin, 14.05
+   Isi: Halo kak, apakah Kasual Studio ada program reseller resmi?
+   Saya di Surabaya, sudah ada toko online kecil untuk fashion wanita.
+
+7. Dari: linda.pelanggan@gmail.com — Subjek: "Terima kasih!"
+   Diterima: Kemarin, 11.15
+   Isi: Barang sudah sampai, packing rapi, sesuai foto. Makasih banyak,
+   pasti order lagi bulan depan!
+
+8. Dari: rina.followup@gmail.com — Subjek: "Kapan invoice bulan ini?"
+   Diterima: Kemarin, 10.40
+   Isi: Halo, saya reseller aktif Kasual Studio. Invoice bulan ini belum
+   saya terima, biasanya tanggal segini sudah ada. Bisa dicek?
+
+9. Dari: supplier.kain.jaya@yahoo.com — Subjek: "Update stok linen"
+   Diterima: 2 hari lalu
+   Isi: Info stok linen warna sage green tinggal 40 meter, kalau mau
+   tambah pesanan sebaiknya bulan ini karena supplier pusat lagi kosong.
+
+10. Dari: calon.pembeli99@gmail.com — Subjek: "Apakah COD tersedia?"
+    Diterima: Hari ini, 06.55
+    Isi: Halo min, domisili Jakarta Selatan, apakah bisa COD untuk area
+    saya? Mau order 2 kemeja linen.
+
+11. Dari: komplain.serius@gmail.com — Subjek: "Paket belum sampai 2 minggu"
+    Diterima: Hari ini, 08.50
+    Isi: Saya order 2 minggu lalu, resi sudah ada tapi status masih
+    "diproses" terus di aplikasi kurir. Ini gimana ya? Sudah mulai kesal.
+
+12. Dari: partnership@brandlokal.co.id — Subjek: "Kolaborasi konten bulan depan"
+    Diterima: 4 hari lalu
+    Isi: Halo tim Kasual Studio, kami dari brand aksesoris lokal, tertarik
+    kolaborasi konten IG bulan depan. Bisa dijadwalkan call minggu ini?
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATATAN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Email di atas sengaja dicampur: ada yang butuh balasan segera (komplain,
+paket belum sampai), ada yang bisa ditunda (kolaborasi, FYI stok), dan ada
+yang sekadar informasi (ucapan terima kasih). Ini pola nyata yang biasa
+muncul di inbox UMKM sehari-hari — cocok untuk latihan Inbox Triage Board.

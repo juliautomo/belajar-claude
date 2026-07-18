@@ -1,0 +1,71 @@
+# FILE LATIHAN — K2 MODUL 7: DOKUMEN & RISET
+# Bonus: Team Wiki / Knowledge Base Page
+# Cara pakai: Gunakan salah satu atau semua bagian di bawah sebagai bahan
+# latihan 4 sub-skill Modul 7, lalu minta Claude menyatukan hasilnya jadi
+# 1 halaman Team Wiki HTML (lihat prompt bonus di halaman materi Modul 7).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BAGIAN 1 — CATATAN MEETING (untuk latihan 01: Meeting Notes)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+meeting supplier kain jaya, 14.00
+- bahas order linen 50m warna putih & sage green
+- harga naik dikit dari 45rb/m jadi 48rb/m mulai bulan depan
+- mereka minta DP 50% di muka utk order di atas 100m
+- linen sage green stok terbatas, kalo mau tambah harus bulan ini
+- next order kita target akhir bulan, budi yg follow up ke supplier
+- supplier tanya juga apa kita bisa jadi reseller kain mereka ke UMKM lain,
+  blm diputusin, perlu diskusi internal dulu
+- rencana sample kain baru (linen mix katun) dikirim minggu depan
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BAGIAN 2 — DOKUMEN UNTUK DIRINGKAS (untuk latihan 02: Summarizing)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PROPOSAL KERJASAMA — INFLUENCER MARKETING PACKAGE
+Dari: Agensi KreatifKita
+
+Kami menawarkan paket kerjasama endorse dengan 5 micro-influencer fashion
+(follower 10rb-50rb) untuk brand Kasual Studio. Paket termasuk: 1 post
+feed + 2 story per influencer, konten dibuat oleh influencer sendiri
+(bukan template kaku), laporan performa mingguan.
+
+Investasi: Rp 4.500.000 untuk 5 influencer (1 bulan campaign).
+Kami minta: produk sample dikirim H-7 sebelum posting, brief singkat
+dari brand (tone, hal yang wajib disebut), dan akses melihat insight
+post influencer selama campaign berjalan.
+
+Kami butuh konfirmasi maksimal akhir minggu ini karena slot influencer
+terbatas dan biasanya penuh 2 minggu sebelum bulan berjalan.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BAGIAN 3 — OBSERVASI UNTUK SWOT (untuk latihan 03: Riset & SWOT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Rencana: masuk kategori tas kanvas untuk pasar yang sama (wanita 20-32
+tahun, harga Rp 150-350rb, Instagram & Tokopedia).
+
+Observasi:
+- Kompetitor "Kanvas Kita" jual tas kanvas polos Rp 120-180rb, desain
+  simpel, followers 15rb, cukup ramai di Tokopedia
+- Kompetitor "Totewear.id" fokus tas custom nama/inisial, harga lebih
+  mahal Rp 200-280rb, banyak endorse selebgram kecil
+- Belum ada kompetitor yang gabungkan tas kanvas dengan tema linen/kasual
+  yang senada dengan produk baju kita
+- Follower Instagram kita banyak nanya "ada tas yang matching sama baju
+  gak?" di kolom komentar bulan-bulan terakhir
+- Modal awal terbatas, baru bisa produksi 100 pcs pertama, supplier
+  jahit tas belum punya relasi tetap
+- Khawatir kalau tas jadi terlalu beda dari image "Kasual Studio" yang
+  selama ini fokus baju, bukan aksesoris
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BAGIAN 4 — PROSES UNTUK SOP (untuk latihan 04: SOP Writing)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Proses: penanganan komplain pelanggan soal ukuran/warna tidak sesuai
+
+Kira-kira begini: pelanggan chat/email komplain, CS cek dulu nomor
+pesanan & foto produk yang diterima, CS bandingkan sama foto asli
+sebelum dikirim (dari database internal), kalau memang salah kirim/
+cacat maka tawarkan tukar barang atau refund, kalau kesalahan customer
+(pilih ukuran salah) tetap tawarkan tukar tapi ongkir ditanggung
+customer, semua kasus dicatat di spreadsheet komplain biar bisa dipantau
+polanya, target respon awal maksimal 2 jam kerja, target penyelesaian
+maksimal 3 hari kerja.

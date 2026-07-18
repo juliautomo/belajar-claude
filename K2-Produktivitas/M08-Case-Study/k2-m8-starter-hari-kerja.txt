@@ -1,0 +1,47 @@
+# FILE LATIHAN — K2 MODUL 8: CASE STUDY
+# Bonus: Daily Command Center
+# Cara pakai: Ini versi "siap pakai" dari data Skenario A (Rina) di halaman
+# materi Modul 8. Jalankan modul-modul di atas menggunakan data ini, lalu di
+# akhir minta Claude menyatukan semuanya jadi 1 Daily Command Center HTML
+# (lihat prompt bonus di halaman materi Modul 8).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. EMAIL MASUK — 6 DARI 23 (SAMPEL UNTUK LATIHAN)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Dinda — komplain warna kemeja linen putih beda dari foto
+2. Reseller Bandung — tanya harga grosir & minimum order
+3. Sarah — bukti transfer Dress Midi Floral Rp 245.000, minta konfirmasi
+4. Supplier Kain Jaya — belum balas follow-up soal pesanan 50m linen
+5. Budi — ukuran M kebesaran, minta tukar ke S
+6. Calon reseller Surabaya — tanya program reseller resmi
+
+Ditambah 17 email lain: 12 konfirmasi pembayaran, 3 pertanyaan produk,
+2 follow-up pengiriman.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. DATA PENJUALAN BULAN JUNI (UNTUK ANALISIS SHEETS)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Nama Produk | Terjual | Revenue | Stok Tersisa
+Kemeja Linen Putih | 42 | Rp 7.938.000 | 8
+Celana Kulot Krem | 18 | Rp 3.312.000 | 25
+Dress Midi Floral | 31 | Rp 7.595.000 | 4
+Blouse Off-White | 12 | Rp 2.148.000 | 30
+Rok Midi Stripe | 9 | Rp 1.611.000 | 22
+Jumpsuit Dusty Pink | 26 | Rp 6.058.000 | 6
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. CATATAN MEETING SUPPLIER (UNTUK DOKUMEN & RISET)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+meeting supplier kain jaya, 14.00 — bahas order linen 50m, harga naik
+jadi 48rb/m mulan depan, DP 50% utk order >100m, stok sage green
+terbatas bulan ini, budi follow up akhir bulan.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. TUGAS HARI INI (UNTUK RINGKASAN COMMAND CENTER)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+- Balas 23 email (target selesai sebelum makan siang)
+- Tulis 10 deskripsi produk baru untuk Tokopedia
+- Analisis data penjualan bulan Juni di atas
+- Buat proposal kerjasama reseller (calon: toko fashion Bandung)
+- Rapikan catatan meeting supplier jadi action items
+- 1 caption Instagram untuk hari ini (tema: "senin yang adem")

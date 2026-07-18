@@ -387,10 +387,15 @@ Channel penjualan: [Instagram / Tokopedia / WhatsApp / dll]
           </div>
         </div>
 
+        <div class="tip-box">
+          <div class="tip-label">📎 Contoh Lengkap — Referensi Project</div>
+          <p>Template di atas cukup untuk mulai. Kalau mau lihat versi lebih lengkap (profil bisnis, brand voice, format output, catatan khusus untuk Claude), download <strong>k2-m2-referensi-project.txt</strong> dari halaman materi — contoh System Instructions penuh untuk sebuah agensi digital marketing. Bisa dipakai sebagai kerangka, tinggal ganti isinya dengan data bisnismu.</p>
+        </div>
+
         <div class="prompt-section">
           <div class="prompt-label">📝 Latihan</div>
           <div class="case-box">
-            <p>Setup Claude Project pertamamu sekarang: Buka Claude → klik "New Project" → salin template di atas → isi dengan info bisnismu → test dengan 3 prompt pendek tanpa briefing. Lihat apakah Claude langsung paham konteks tanpa perlu dijelaskan ulang.</p>
+            <p>Setup Claude Project pertamamu sekarang: Buka Claude → klik "New Project" → salin template di atas (atau referensi lengkap di k2-m2-referensi-project.txt) → isi dengan info bisnismu → test dengan 3 prompt pendek tanpa briefing. Lihat apakah Claude langsung paham konteks tanpa perlu dijelaskan ulang.</p>
           </div>
         </div>
 
@@ -513,6 +518,22 @@ Maks 3 kalimat.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button
           Tersedia juga di paket <strong>Claude Free</strong> — cocok untuk mulai. Kalau kamu pakai beberapa connector sekaligus (Gmail + Sheets, dll) dalam 1 hari kerja padat, paket Pro punya limit pemakaian harian yang lebih longgar.</p>
         </div>
 
+        <div class="section-heading">Level Up: Inbox Triage Board</div>
+        <div class="tip-box connector">
+          <div class="tip-label">🛠️ Bonus: Papan Prioritas Email, Bukan Cuma Draft Balasan</div>
+          <p>Membalas 1-1 memang perlu, tapi kalau inbox-mu sering menumpuk, minta Claude susun dulu papan prioritasnya — kolom Urgent / Perlu Dibalas / Sekadar Info — sebelum kamu mulai membalas. Belum sempat connect Gmail? Pakai file contoh <strong>k2-m3-contoh-inbox.txt</strong> untuk latihan.</p>
+        </div>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Contoh Prompt</div>
+          <div class="prompt-box">[paste k2-m3-contoh-inbox.txt atau minta Claude cek inbox
+via Gmail Connector] Kelompokkan semua email ini ke 3 kategori:
+URGENT (perlu dibalas hari ini), PERLU DIBALAS (bisa besok),
+SEKADAR INFO (tidak perlu balasan). Untuk tiap email, tulis
+ringkasan 1 kalimat. Buatkan sebagai 1 halaman HTML dengan
+3 kolom berwarna berbeda, supaya saya bisa lihat sekilas mana
+yang harus dikerjakan duluan.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
           <span class="nav-counter">3 / 8</span>
@@ -599,7 +620,7 @@ Sarankan alokasi yang paling optimal berdasarkan data performa.<button class="co
         <div class="prompt-section">
           <div class="prompt-label">📝 Latihan</div>
           <div class="case-box">
-            <p>Download file latihan <strong>k2-data-penjualan.csv</strong> dari halaman materi. Import ke Google Sheets. Minta Claude buat 3 formula dasar (total, rata-rata, % target). Paste 5 baris data dan minta analisis pola. Tanya: <em>"Dari data ini, produk mana yang harus saya prioritaskan bulan depan?"</em></p>
+            <p>Download file latihan <strong>k2-data-latihan-sheets.csv</strong> dari halaman materi. Import ke Google Sheets. Minta Claude buat 3 formula dasar (total, rata-rata, % target). Paste 5 baris data dan minta analisis pola. Tanya: <em>"Dari data ini, produk mana yang harus saya prioritaskan bulan depan?"</em></p>
           </div>
         </div>
 
@@ -615,6 +636,28 @@ Sarankan alokasi yang paling optimal berdasarkan data performa.<button class="co
           <div class="tip-label">🚀 Bonus — Claude in Chrome: Sheets Tanpa Copy-Paste</div>
           <p>Claude in Chrome bisa buka Google Sheets-mu langsung, baca data, dan masukkan formula tanpa copy-paste. <strong>Setup:</strong> Chrome Web Store → cari "Claude" → install "Claude for Chrome" (dari Anthropic) → login → buka Google Sheets → klik ikon Claude di toolbar → panel Claude muncul di sisi kanan.<br><br>
           Setelah setup: <em>"Lihat sheet yang terbuka. Buatkan formula total penjualan di kolom F untuk setiap baris."</em></p>
+        </div>
+
+        <div class="tip-box bonus">
+          <div class="tip-label">🛠️ Bonus — Menu "Claude AI" Langsung di Google Sheets</div>
+          <p>Untuk yang ingin lebih permanen dari Claude in Chrome: download <strong>k2-claude-sheets-helper.js</strong> dari halaman materi — sebuah Google Apps Script yang menambahkan menu "Claude AI" ke Sheets-mu, dengan 5 fungsi siap pakai: Analisis Data Terpilih, Buat Formula dari Deskripsi, Ringkasan Eksekutif Tabel, Isi Kolom dengan Claude (batch otomatis per baris), dan Debug Formula Error.<br><br>
+          <strong>Cara install:</strong> Buka Sheets-mu → Extensions → Apps Script → hapus kode yang ada → paste isi file ini → ganti <code>YOUR_API_KEY_HERE</code> dengan API key dari console.anthropic.com → Save → refresh Sheets. Menu "Claude AI" akan muncul di menu bar.<br><br>
+          Butuh API key terpisah (bukan akun claude.ai biasa) dan sedikit biaya pemakaian API — cocok untuk kamu yang mau pakai fitur ini rutin tiap minggu tanpa copy-paste berulang. Jangan share spreadsheet ini secara publik karena API key tersimpan di script.</p>
+        </div>
+
+        <div class="section-heading">Level Up: Dashboard Performa Produk</div>
+        <div class="tip-box connector">
+          <div class="tip-label">🛠️ Bonus: Satu Halaman, Bukan Cuma Formula</div>
+          <p>Setelah dapat formula dan analisis, minta Claude satu langkah lagi: ubah datanya jadi dashboard HTML — tabel produk dengan status warna (perlu restock / stabil / perlu promosi) yang bisa kamu buka tiap minggu tanpa buka Sheets sama sekali.</p>
+        </div>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Contoh Prompt</div>
+          <div class="prompt-box">[Upload atau paste k2-data-latihan-sheets.csv] Dari data ini,
+buatkan saya dashboard HTML sederhana: tabel semua produk dengan
+kolom terjual, revenue, dan stok. Beri warna merah kalau stok di
+bawah 10 (perlu restock segera), kuning kalau penjualan stagnan,
+hijau kalau performa bagus. Simpan sebagai 1 file HTML yang bisa
+saya buka tiap minggu untuk cek performa produk.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
 
         <div class="nav-bottom">
@@ -721,7 +764,7 @@ Produk: Kemeja linen putih, koleksi summer, harga Rp 189.000<button class="copy-
         <div class="prompt-section">
           <div class="prompt-label">📝 Latihan</div>
           <div class="case-box">
-            <p>Pilih 5–10 item sejenis dari pekerjaanmu: deskripsi produk, email template, ringkasan, atau apapun. Tulis satu batch prompt dengan instruksi + format + semua item. Proses sekaligus. Simpan prompt tersebut sebagai template — pakai lagi kapanpun perlu.</p>
+            <p>Pilih 5–10 item sejenis dari pekerjaanmu: deskripsi produk, email template, ringkasan, atau apapun. Belum ada bahan sendiri? Pakai <strong>k2-m5-latihan-batch.txt</strong> dari halaman materi (4 set latihan: caption produk, ringkasan email, klasifikasi pesan, balasan batch). Tulis satu batch prompt dengan instruksi + format + semua item. Proses sekaligus. Simpan prompt tersebut sebagai template — pakai lagi kapanpun perlu.</p>
           </div>
         </div>
 
@@ -731,6 +774,20 @@ Produk: Kemeja linen putih, koleksi summer, harga Rp 189.000<button class="copy-
             <h3>Output yang Diharapkan</h3>
             <p>5–10 output terproses sekaligus. 1 template prompt tersimpan untuk dipakai lagi.</p>
           </div>
+        </div>
+
+        <div class="section-heading">Level Up: Batch Output Tracker</div>
+        <div class="tip-box connector">
+          <div class="tip-label">🛠️ Bonus: Jangan Cuma Scroll 20 Hasil</div>
+          <p>Batch prompting menghasilkan banyak output sekaligus — tapi kalau cuma jadi teks panjang, gampang lupa mana yang sudah diproses. Minta Claude susun hasilnya sebagai daftar tercentang, supaya kamu bisa pantau progres saat menindaklanjuti satu per satu (kirim, posting, atau balas).</p>
+        </div>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Contoh Prompt</div>
+          <div class="prompt-box">Dari hasil klasifikasi 10 pesan tadi (Latihan C di
+k2-m5-latihan-batch.txt), buatkan saya 1 halaman HTML: daftar
+tercentang per pesan, dengan kategori dan urgensi sebagai label
+warna, dan checkbox "sudah ditindaklanjuti". Simpan sebagai 1 file
+yang bisa saya buka sambil kerja menyelesaikan satu per satu.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
 
         <div class="nav-bottom">
@@ -840,6 +897,19 @@ Fokus pada bagian yang bisa membuat reseller ragu.<button class="copy-btn" oncli
           </div>
         </div>
 
+        <div class="section-heading">Level Up: Dokumen Jadi, Bukan Cuma Teks Chat</div>
+        <div class="tip-box connector">
+          <div class="tip-label">🛠️ Bonus: Hasil Akhir Chain Bisa Langsung Jadi File</div>
+          <p>Proposal hasil chain 4 step di atas masih berupa teks di chat — masih perlu disalin manual ke Word. Langkah terakhir yang sering kelewat: minta Claude langsung hasilkan filenya. Claude bisa membuat Word (.docx) atau PDF asli, lengkap dengan heading dan format rapi, siap dilampirkan ke email tanpa kamu susun ulang.</p>
+        </div>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Contoh Prompt</div>
+          <div class="prompt-box">Dari proposal yang sudah kita perkuat tadi, buatkan sebagai
+dokumen Word (.docx) yang rapi: judul, heading per section,
+paragraf yang sudah diformat, dan siap saya lampirkan langsung
+ke email tanpa perlu saya susun ulang di Word.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
           <span class="nav-counter">6 / 8</span>
@@ -858,6 +928,11 @@ Fokus pada bagian yang bisa membuat reseller ragu.<button class="copy-btn" oncli
 
         <div class="module-desc-box">
           Ada satu kategori kerja yang menyita waktu tapi jarang disadari: membaca, meringkas, dan memikirkan sesuatu. Rapat 1 jam yang tidak menghasilkan action items jelas. Dokumen 15 halaman yang harus dibaca sebelum meeting besok. SOP yang tidak pernah sempat ditulis. <strong>Setelah modul ini:</strong> semua pekerjaan "berpikir" ini selesai 3× lebih cepat.
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">📎 Bahan Latihan</div>
+          <p>Belum punya catatan meeting, dokumen, atau proses sendiri untuk dicoba? Download <strong>k2-m7-contoh-dokumen.txt</strong> dari halaman materi — berisi 4 bagian yang cocok untuk masing-masing sub-skill di bawah: catatan meeting, dokumen proposal, bahan SWOT, dan deskripsi proses untuk SOP.</p>
         </div>
 
         <div class="info-grid">
@@ -970,6 +1045,21 @@ Tulis ini sebagai SOP yang bisa dibaca pegawai baru. Formatnya:
           </div>
         </div>
 
+        <div class="section-heading">Level Up: Team Wiki</div>
+        <div class="tip-box connector">
+          <div class="tip-label">🛠️ Bonus: 4 Dokumen Terpisah Jadi 1 Halaman yang Bisa Dibuka Tim</div>
+          <p>Meeting notes, ringkasan, SWOT, dan SOP di atas biasanya berakhir sebagai 4 chat terpisah yang gampang hilang. Minta Claude satu langkah lagi: satukan jadi 1 halaman HTML dengan navigasi sederhana — team wiki kecil yang bisa kamu tambah isinya setiap kali menjalankan modul ini lagi.</p>
+        </div>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Contoh Prompt</div>
+          <div class="prompt-box">Dari 4 hasil tadi — ringkasan meeting supplier, ringkasan
+proposal, SWOT tas kanvas, dan SOP packing — buatkan saya 1
+halaman HTML "Team Wiki" dengan sidebar navigasi ke 4 bagian
+tersebut. Setiap bagian tampil rapi dengan heading. Simpan
+sebagai 1 file HTML yang bisa saya buka lagi dan tambahkan
+dokumen baru tiap minggu.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
           <span class="nav-counter">7 / 8</span>
@@ -988,6 +1078,11 @@ Tulis ini sebagai SOP yang bisa dibaca pegawai baru. Formatnya:
 
         <div class="module-desc-box">
           Dua skenario berbeda — pilih yang paling mirip dengan situasimu. Ikuti salah satu step by step, dan perhatikan modul mana yang dipakai di setiap langkah.
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">📎 Bahan Latihan</div>
+          <p>Mau langsung praktik dengan data konkret alih-alih data milikmu sendiri? Download <strong>k2-m8-starter-hari-kerja.txt</strong> dari halaman materi — bundel data 1 hari kerja penuh (sampel email, data penjualan, catatan meeting, daftar tugas) mengikuti Skenario A di bawah.</p>
         </div>
 
         <div class="two-col">
@@ -1192,6 +1287,22 @@ Singkat, cocok untuk diucapkan, bukan dibaca.<button class="copy-btn" onclick="c
             <h3>Output yang Diharapkan</h3>
             <p>Satu hari kerja selesai lebih awal dari biasanya. Catat berapa jam yang berhasil kamu hemat.</p>
           </div>
+        </div>
+
+        <div class="section-heading">Level Up: Daily Command Center</div>
+        <div class="tip-box connector">
+          <div class="tip-label">🛠️ Bonus: Satu Dashboard untuk Seluruh Hari Kerja</div>
+          <p>Ini penutup kursus — gabungkan semua yang sudah kamu kerjakan hari ini jadi 1 file HTML: papan prioritas email (Modul 3), insight penjualan (Modul 4), daftar tugas yang sudah selesai, dan rekap waktu yang dihemat. Bukan cuma laporan penutup — command center yang bisa kamu pakai ulang setiap hari kerja sibuk berikutnya.</p>
+        </div>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Contoh Prompt</div>
+          <div class="prompt-box">Dari semua yang saya kerjakan hari ini — triase email,
+analisis penjualan, proposal reseller, catatan meeting, dan
+caption Instagram — buatkan saya 1 halaman HTML "Daily Command
+Center": ringkasan status email (urgent/selesai), insight
+penjualan utama, daftar tugas hari ini dengan checkbox, dan
+rekap waktu Biasa vs Dengan Claude. Simpan sebagai 1 file HTML
+yang bisa saya buka lagi setiap hari kerja padat berikutnya.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
 
         <!-- Kursus Selesai! -->
