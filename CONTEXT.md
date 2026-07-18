@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 18, 2026 (checkpoint 13)_
+_Last updated: July 18, 2026 (checkpoint 14)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -399,3 +399,36 @@ Updated July 14, 2026 — fully in sync with frontend.
 
 **Commits this checkpoint**:
 - `belajar-claude`: `23b631e` (save pptx style spec to repo root), `62e765d` (rebuild all 8 K2 module PPTs, fix real overflow bugs), `c5b5f31` (new Mulai Claude M02 PPT + PDF panduan), `0f27436` (fix 2 leftover K-I-F framework mentions).
+
+---
+
+## Checkpoint 14 (July 18, 2026) — Content & Marketing (K3) module plan documented, "build something real" artifact bonuses added to M3/M7/M9, Canva Connector scoped away from photo editing, Claude Free plan compatibility highlighted
+
+**Full 9-module structure of `content-marketing-content.html` (Content & Marketing / K3) recapped and documented** — persona "Dapur Rara" (fictional frozen-food UMKM) runs through all 9 modules + a feedback panel (10 total). Module-by-module plan:
+
+| # | Module | Focus | Tool/Integration | Supporting File | Artifact/Output |
+|---|--------|-------|-------------------|------------------|--------------------|
+| 1 | Positioning & Analisis Kompetitor | SWOT + positioning statement | Claude Projects (persists into M2–M9) | `cm-template-kompetitor.txt` | Text: positioning sentence + SWOT |
+| 2 | Deskripsi Produk Marketplace | SEO product listings | none | `cm-data-produk.csv` | Text: 5+ product descriptions |
+| 3 | Sistem Konten Instagram | 30-day content calendar | Claude Artifacts (bonus) | `cm-kalender-konten.csv` | Spreadsheet + **bonus: HTML calendar dashboard** (checkboxes, progress bar) |
+| 4 | Copy Iklan + Canva Connector | Ad copy + design | Canva Connector; remove.bg (non-Claude, photo edit) | none | Text (copy) + Canva design file |
+| 5 | WhatsApp Business CS System | CS reply templates | Claude Project | `cm-template-wa.txt` | Text: 10 CS templates |
+| 6 | Email & Promosi Bisnis | Launch/promo emails | Gmail Connector | `cm-template-email.txt` | Text: 2 email drafts (live in Gmail if connected) |
+| 7 | Performance Marketing | ROAS-based ad decisions | Spreadsheet upload; Claude Artifacts (bonus) | `cm-performance-ads.xlsx` (3 sheets) | Text (recommendations) + **bonus: HTML ROAS dashboard** (color-coded, auto stop/scale/hold) |
+| 8 | Content OS di Notion | Central marketing system tying M1–M7 together | Claude Projects + Notion | none | Notion workspace: 5 connected pages/databases |
+| 9 | Case Study: Peluncuran Produk Baru | Capstone — 5-day launch using M1–M8 | Canva + Gmail + Notion (all reused) | `cm-m9-starter-peluncuran.txt` | Day-by-day outputs + time-saved recap table + **bonus: "Launch Command Center" HTML dashboard** combining positioning, calendar, ROAS table, and time-saved recap into 1 reusable file |
+
+**Artifact-type assessment (why the bonuses were added)**: audited all 9 modules through an "is this a real produceable artifact or just prompt-and-paste text" lens. Verdict: modules 1, 2, 5, 6, 8, 9 were text/system output only; only M3 and M7 had natural "build a tool" potential (a calendar and a performance dashboard, respectively) that wasn't being used. Julia confirmed she wants the course to produce real things, not just chat/prompt output.
+
+**M3 and M7 "Level Up" bonuses added** (commit `b6d022a`, done pre-checkpoint but included here for the full plan record): each gets a `.tip-box.connector` callout + a `.prompt-box` teaching students to ask Claude to turn their spreadsheet/calendar data into a standalone, reusable HTML tool (Claude Artifacts) — no coding required. Two real sample dashboards were hand-built and verified this session (`sample-kalender-konten-dashboard.html`, `sample-performance-dashboard.html`) using the actual course data files (`cm-kalender-konten.csv`, `cm-performance-ads.xlsx`) to confirm the prompts produce genuinely usable output before shipping the idea into the lesson content. Delivered to Julia via `present_files` and as live interactive chat previews (Playwright screenshot automation was attempted for a more rigorous headless-browser verification but blocked by the sandbox's network allowlist on `cdn.playwright.dev`).
+
+**M4 scoped**: added a `.tip-box` clarifying Claude cannot edit photos directly (crop/retouch/background removal) — that work stays in Canva's own editor (or `remove.bg` for quick background removal). Claude's role in M4 is creative direction + copy, not pixel editing. Same commit `b6d022a`.
+
+**M9 "Launch Command Center" bonus added** (commit `66cd616`): the capstone previously ended in a static time-saved recap table with no unifying artifact. Added a Level-Up bonus, placed right after the existing "Rekap: Waktu yang Dihemat" table (kept as a bonus alongside it, not a replacement), combining the M3 calendar concept and M7 dashboard concept plus the recap table into one prompt for a single reusable "Launch Command Center" HTML file. Exercise and Output-box text updated to reference it.
+
+**Claude Free plan compatibility researched and highlighted directly in the lesson content** (commit `7870449`): confirmed via `support.claude.com` that Projects (5 on Free), Artifacts, file uploads, and *directory* connectors (Gmail, Canva, Notion — as opposed to *custom* connectors, which Free caps at 1) are all available on the Free plan. The only real constraint is Free's lower daily usage capacity ("Limited" vs Pro's "Standard"), which matters most on connector-heavy sessions like K3 M9. Added a one-line Free-plan note to each connector tip-box: K3 M4 (Canva), M6 (Gmail), M8 (Notion), a dedicated "💳 Paket Claude yang Dipakai" tip-box at the top of K3 M9, and K2 (Produktivitas Kantor) M3's existing Gmail Connector bonus box.
+
+**K2 (Produktivitas Kantor) artifact assessment (research only, not yet acted on)**: audited `produktivitas-content.html`'s 8 modules (Role Prompting, Claude Projects, Gmail + Claude, Google Sheets + Claude, Batch Prompting, Prompt Chaining, Dokumen & Riset, Case Study). Unlike K3, **K2 has zero "build a tool" bonuses** — every module's output is text (email drafts, Sheets formulas/analysis, batch outputs, chained outputs, SWOT/SOP documents). Candidate spots for a similar Level-Up bonus, flagged but not yet built or approved: M4 (Google Sheets + Claude) could get an M7-style dashboard bonus from spreadsheet data; M8 (Case Study, the capstone) could get an M9-style combined "Daily Command Center" artifact. Awaiting Julia's direction before touching K2's content.
+
+**Commits this checkpoint**:
+- `belajar-claude`: `66cd616` (M9 Launch Command Center bonus), `7870449` (highlight Claude Free plan compatibility next to connector callouts in K2 and K3).
