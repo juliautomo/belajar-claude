@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 18, 2026 (checkpoint 14)_
+_Last updated: July 18, 2026 (checkpoint 15)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -432,3 +432,32 @@ Updated July 14, 2026 — fully in sync with frontend.
 
 **Commits this checkpoint**:
 - `belajar-claude`: `66cd616` (M9 Launch Command Center bonus), `7870449` (highlight Claude Free plan compatibility next to connector callouts in K2 and K3).
+
+---
+
+## Checkpoint 15 (July 18, 2026) — K2 (Produktivitas Kantor) brought up to parity with K3: 3 new supporting files, orphaned files surfaced, 6 artifact bonuses added to lesson content + PPTs, full study-guide PDF rebuilt
+
+**Full re-audit of K2's existing supporting files found 2 were built but never wired into the lesson content**, caught after Julia flagged a file she saw in the folder that wasn't in the module recap table. Cross-referenced every file physically in `K2-Produktivitas/` against every filename mentioned in `produktivitas-content.html`:
+- `M02-Claude-Projects/k2-m2-referensi-project.txt` — a complete example System Instructions doc (fictional agency "PT Kreatif Digital") — existed on disk, zero mentions in the lesson text.
+- `M04-Google-Sheets/k2-claude-sheets-helper.js` — a real Google Apps Script adding a "Claude AI" menu to Sheets (5 functions: analyze selection, generate formula, summarize table, fill column, debug formula) — existed on disk, zero mentions in the lesson text. This was the closest thing K2 already had to a real "build something" artifact, and it was completely invisible to students.
+- `M04-Google-Sheets/k2-data-latihan-sheets.csv` — exists, but the lesson's exercise text named a different, non-existent filename (`k2-data-penjualan.csv`). Fixed the text to match the real file.
+- `M05-Batch-Prompting/k2-m5-latihan-batch.txt` — exists, correlates content-wise with the lesson's built-in examples but was never explicitly named/linked either.
+- Caveat noted to Julia: the site also delivers files via a separate `doc-slot`/`module_documents` Supabase system driven by `admin.html` uploads, which isn't reachable from this session (different Supabase project than the live one) — so it's possible these were already attached as downloads there even though absent from the static HTML. Not confirmed either way.
+
+**5 "build something real" artifact ideas brainstormed for K2** (mirroring the K3 M3/M7/M9 pattern, at Julia's request after the "just a dashboard, what else" prompt): Inbox Triage Board (M3), Batch Output Tracker (M5), Team Wiki (M7), Polished Document Output via native docx/pdf file creation (M6), Daily Command Center (M8, capstone). Confirmed via `support.claude.com` that all five run on the Free plan — Projects, Artifacts, directory connectors, and code execution/file creation (rolled out to Free Feb 2026) are all available Free-tier; only Free's lower daily usage cap is a constraint, not a feature gate.
+
+**3 new supporting files built** (all pushed, none existed before):
+- `M03-Gmail-Claude/k2-m3-contoh-inbox.txt` — 12 mock inbox emails (mixed complaint/reseller/supplier/payment types) for Inbox Triage Board practice without needing Gmail Connector set up.
+- `M07-Dokumen-Riset/k2-m7-contoh-dokumen.txt` — 4-part bundle (meeting notes, a proposal to summarize, SWOT observations, a process to turn into an SOP) matching M7's 4 existing sub-skills, for Team Wiki practice.
+- `M08-Case-Study/k2-m8-starter-hari-kerja.txt` — a full day's data bundle (emails, sales data, meeting notes, task list) mirroring Scenario A, for Daily Command Center practice.
+
+**`produktivitas-content.html` updated** — same "Level Up" `.tip-box.connector` + `.prompt-box` pattern used in K3: M2 (links referensi file), M3 (Inbox Triage Board), M4 (fixed CSV filename reference, surfaced the Apps Script helper as its own bonus box, added Dashboard Performa Produk bonus), M5 (linked latihan-batch.txt in the exercise text, added Batch Output Tracker bonus), M6 (Polished Document Output — native docx/pdf file creation, no new supporting file needed), M7 (linked new contoh-dokumen.txt, added Team Wiki bonus), M8 (linked new starter file, added Daily Command Center bonus as the course's true capstone artifact). Integrity-checked (div/script tag balance, proper `</html>` ending) before push.
+
+**All 7 affected PPTs (M02–M08) got a new bonus slide each**, built with the same `lib.js` component library from checkpoint 13 (still live in the build sandbox at `k2build/`, pptxgenjs + node_modules intact from the same session) — reused `addTipCallout` and `addCodeTemplateBox` for a consistent "Level Up" slide layout. All 8 new slides rendered via LibreOffice → PDF → image and visually inspected — no overflow/clipping.
+
+**Full course-level PDF rebuilt from scratch**: the existing `K2-Produktivitas-Kantor.pdf` (27 pages) turned out to be ReportLab-built with no source file anywhere in the repo or sandbox — couldn't be edited, only replaced. Built a new 11-page WeasyPrint HTML/CSS version matching the established house style (navy cover with purple ring, purple-pill module badges, left-purple-border tip bars, dark code/template boxes) reused from the K1 M02 PDF template. Deliberately more concise than the original per-module deep-dives (1 page per module instead of 2-3) to keep the new "Level Up" bonus box visible on every module page without the guide ballooning past ~15 pages. Hit the same emoji-glyph rendering bug as the PPT work (📎/🛠️ rendered as `.notdef` tofu boxes in Liberation Sans) — stripped emoji from labels entirely rather than substituting a Unicode symbol this time, since plain text labels ("REFERENSI LENGKAP", "LEVEL UP: ...") read cleanly at this font size. All 11 pages rendered to image and visually inspected — clean.
+
+**Action needed from Julia**: same as checkpoint 13's outstanding item — none of this can be pushed into Supabase Storage directly (no live-project write access from this session). The updated `K2-Produktivitas-Kantor.pdf`, the 7 updated PPTs, and the 3 new .txt supporting files all need manual re-upload via `admin.html` for the `produktivitas` course if the site actually serves downloadable module materials from Supabase Storage rather than (or in addition to) direct GitHub-repo links. Worth confirming which mechanism `admin.html` actually uses before re-uploading everything blind.
+
+**Commits this checkpoint**:
+- `belajar-claude`: `aca3192` (K2 artifact bonuses in lesson content + 3 new supporting files + M4 filename fix + surface Sheets helper), `cb02d11` (Level-Up bonus slides added to K2 M02-M08 PPTs), `5805dc3` (full K2 study guide PDF rebuilt with WeasyPrint, reflecting all bonuses).
