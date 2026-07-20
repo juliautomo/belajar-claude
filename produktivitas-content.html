@@ -58,6 +58,8 @@
   .sidebar-footer{margin-top:auto;padding:16px 20px;border-top:1px solid var(--border);}
   .sidebar-tools{display:flex;flex-wrap:wrap;gap:5px;}
   .tool-chip{font-size:10px;font-weight:600;background:var(--accent-dim);color:var(--accent);padding:2px 8px;border-radius:100px;}
+  .content-chip-row{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 20px;}
+  .content-chip{font-size:13px;font-weight:600;background:var(--accent-dim);color:var(--accent);padding:6px 14px;border-radius:100px;}
   .main{flex:1;overflow-y:auto;background:var(--bg);}
   .main-inner{max-width:720px;margin:0 auto;padding:36px 32px 60px;}
   .breadcrumb{font-size:12px;color:var(--ink-2);margin-bottom:24px;display:flex;align-items:center;gap:6px;}
@@ -311,7 +313,7 @@
         <div class="doc-slot" id="doc-slot-2"></div>
 
         <div class="module-desc-box">
-          Setiap kali Rina buka chat baru, dia harus briefing ulang — tulis nama toko, jelaskan produk, tentukan tone. Ini buang 5 menit per sesi. <strong>Setelah modul ini:</strong> setup Claude Projects sekali — Claude ingat semua konteks bisnismu tanpa perlu diulang.
+          Chat biasa di Claude tidak menyimpan konteks — tiap sesi baru berarti mulai dari nol lagi: jelaskan bisnismu, tentukan tone, jelaskan produk, dari awal. Claude Projects menyimpan semua itu sekali, lalu otomatis aktif di setiap chat baru dalam project yang sama. <strong>Setelah modul ini:</strong> kamu setup 1 project sekali, dan setiap chat berikutnya langsung "ngerti" konteks bisnismu tanpa briefing ulang.
         </div>
 
         <div class="section-heading">Chat Biasa vs. Claude Projects</div>
@@ -319,21 +321,30 @@
           <div class="col-card">
             <h4>Chat Biasa</h4>
             <ul>
-              <li>Memori reset setiap sesi baru</li>
-              <li>Harus briefing ulang setiap kali</li>
-              <li>Konteks tidak tersimpan</li>
-              <li>5 menit terbuang per sesi</li>
+              <li>Memori direset setiap sesi baru</li>
+              <li>Harus briefing ulang setiap kali buka chat</li>
+              <li>Claude tidak ingat nama toko, produk, atau tone</li>
+              <li>Tidak bisa simpan file referensi secara permanen</li>
             </ul>
           </div>
           <div class="col-card highlight">
             <h4>Claude Projects</h4>
             <ul>
-              <li>Memori permanen yang bisa dikonfigurasi</li>
-              <li>Claude langsung "ngerti" dari chat pertama</li>
-              <li>Simpan instruksi, file, tone, format default</li>
-              <li>Hemat 25–30 menit per minggu</li>
+              <li>Memori permanen — ingat semua konteks bisnismu</li>
+              <li>Sekali setup, selamanya aktif di semua sesi</li>
+              <li>Bisa simpan tone, format, dan file referensi</li>
+              <li>Langsung kerja tanpa briefing ulang</li>
             </ul>
           </div>
+        </div>
+
+        <div class="sub-heading">Contoh yang Bisa Disimpan di Project</div>
+        <div class="content-chip-row">
+          <span class="content-chip">Nama &amp; info bisnis</span>
+          <span class="content-chip">Tone bahasa</span>
+          <span class="content-chip">Format output</span>
+          <span class="content-chip">Price list</span>
+          <span class="content-chip">Template SOP</span>
         </div>
 
         <div class="section-heading">Cara Setup Project — 3 Langkah</div>
