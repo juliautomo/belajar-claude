@@ -570,12 +570,13 @@ sekilas mana yang harus dikerjakan duluan.<button class="copy-btn" onclick="copy
 
         <div class="section-heading">Yang Bisa Claude Bantu di Sheets</div>
         <div class="info-grid">
-          <div class="info-card"><strong>Formula</strong><span>Buat, jelaskan, dan debug formula yang error — tanpa harus hafal sintaks</span></div>
-          <div class="info-card"><strong>Analisis</strong><span>Temukan pola, bandingkan performa, identifikasi anomali dari data yang kamu paste</span></div>
-          <div class="info-card"><strong>Rekomendasi</strong><span>Dari data ke keputusan bisnis konkret — bukan sekadar angka, tapi artinya apa</span></div>
+          <div class="info-card"><strong>Formula</strong><span>Claude menulis formula dari deskripsi biasa, menjelaskan formula yang membingungkan, dan membantu debug formula yang error</span></div>
+          <div class="info-card"><strong>Analisis</strong><span>Temukan pola dari data penjualan, bandingkan performa antar produk atau periode, dan identifikasi anomali yang mudah terlewat</span></div>
+          <div class="info-card"><strong>Rekomendasi</strong><span>Dari data ke keputusan bisnis konkret — produk mana yang perlu direstock, dipromosikan, atau dihentikan</span></div>
         </div>
 
-        <div class="section-heading">Data yang Aman vs. Tidak untuk Dibagikan ke Claude</div>
+        <div class="section-heading">Data Aman vs. Data Sensitif</div>
+        <div class="sub-heading">Yang Boleh dan Tidak Boleh Dibagikan ke Claude</div>
         <div class="two-col">
           <div class="col-card highlight">
             <h4>✅ AMAN Dibagikan</h4>
@@ -597,7 +598,7 @@ sekilas mana yang harus dikerjakan duluan.<button class="copy-btn" onclick="copy
           </div>
         </div>
 
-        <div class="section-heading">Alur Lengkap: Data → Formula → Insight → Keputusan</div>
+        <div class="section-heading">Alur Prompt: Data → Keputusan</div>
 
         <div class="sub-heading">Step 1 — Minta Formula</div>
         <div class="prompt-section">
@@ -615,8 +616,7 @@ Saya pakai Google Sheets.<button class="copy-btn" onclick="copyPrompt(this)">Sal
 [paste data]
 
 Analisis: produk mana yang performa paling konsisten?
-Mana yang tren naik vs. turun? Rekomendasikan 2 produk
-yang perlu ditingkatkan stok bulan depan.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+Mana yang tren naik vs. turun?<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
 
         <div class="sub-heading">Step 3 — Keputusan Bisnis</div>
@@ -648,13 +648,14 @@ Sarankan alokasi yang paling optimal berdasarkan data performa.<button class="co
 
         <div class="tip-box bonus">
           <div class="tip-label">🚀 Bonus — Claude in Chrome: Sheets Tanpa Copy-Paste</div>
-          <p>Claude in Chrome bisa buka Google Sheets-mu langsung, baca data, dan masukkan formula tanpa copy-paste. <strong>Butuh paket Pro atau lebih tinggi — tidak tersedia di paket Free.</strong> Setup: Chrome Web Store → cari "Claude" → install "Claude for Chrome" (dari Anthropic) → login → buka Google Sheets → klik ikon Claude di toolbar → panel Claude muncul di sisi kanan.<br><br>
+          <p>Claude in Chrome bisa baca &amp; isi formula langsung di Google Sheets tanpa copy-paste. <strong>Butuh paket Pro atau lebih tinggi — tidak tersedia di paket Free.</strong> Setup: Chrome Web Store → cari "Claude" → install "Claude for Chrome" (dari Anthropic) → login → buka Google Sheets → klik ikon Claude di toolbar → panel Claude muncul di sisi kanan.<br><br>
           Setelah setup: <em>"Lihat sheet yang terbuka. Buatkan formula total penjualan di kolom F untuk setiap baris."</em></p>
         </div>
 
         <div class="tip-box bonus">
           <div class="tip-label">🛠️ Bonus — Menu "Export PDF" Langsung di Google Sheets (100% Gratis)</div>
-          <p><strong>Bukan Claude yang jalan di dalam Sheets-mu — tapi Claude yang menulis automasinya untukmu.</strong> Script di bawah ini awalnya dibuat dengan cara memprompt Claude langsung (lihat prompt persisnya di bawah), lalu tinggal di-paste ke Apps Script sekali. Hasilnya: menu "Export PDF" permanen di Sheets-mu — dengan format angka Rupiah otomatis, judul laporan, dan grafik ringkas — tanpa API key, tanpa biaya, tanpa perlu paket Pro.</p>
+          <p>Google Apps Script yang menambahkan menu "Export PDF" ke Sheets-mu: rapikan angka jadi format Rupiah, tambah judul laporan, buat grafik kolom ringkas, lalu export sheet aktif atau rentang terpilih jadi PDF rapi ke Drive. Dibuat dengan memprompt Claude langsung — tidak ada API key atau paket Pro yang dibutuhkan.<br><br>
+          <strong>Bukan Claude yang jalan di dalam Sheets-mu — tapi Claude yang menulis automasinya untukmu.</strong> Script di bawah ini awalnya dibuat dengan cara memprompt Claude langsung (lihat prompt persisnya di bawah), lalu tinggal di-paste ke Apps Script sekali.</p>
         </div>
 
         <div class="prompt-section">
@@ -672,19 +673,23 @@ bawaan Apps Script dan Drive.<button class="copy-btn" onclick="copyPrompt(this)"
 
         <div class="tip-box">
           <div class="tip-label">✏️ Mau Versimu Sendiri?</div>
-          <p>Kamu tidak harus pakai script <strong>k2-pdf-export-helper.js</strong> di bawah ini persis apa adanya — paste prompt di atas ke Claude dan minta modifikasi sesuai kebutuhanmu. Contoh: <em>"tambahkan nama toko di judul PDF-nya"</em>, <em>"ubah warna grafik jadi hijau"</em>, atau <em>"export ke folder Drive tertentu, bukan folder baru"</em>. Claude akan tulis ulang scriptnya untukmu — kamu tinggal paste versi barunya ke Apps Script.</p>
+          <p>Kamu tidak harus pakai script <strong>k2-pdf-export-helper.txt</strong> di bawah ini persis apa adanya — paste prompt di atas ke Claude dan minta modifikasi sesuai kebutuhanmu. Contoh: <em>"tambahkan nama toko di judul PDF-nya"</em>, <em>"ubah warna grafik jadi hijau"</em>, atau <em>"export ke folder Drive tertentu, bukan folder baru"</em>. Claude akan tulis ulang scriptnya untukmu — kamu tinggal paste versi barunya ke Apps Script.</p>
         </div>
 
         <div class="section-heading">Cara Install — 6 Langkah</div>
-        <div class="step-row">
-          <div class="step-card"><div class="step-num">1</div><p>Download <strong>k2-pdf-export-helper.js</strong> dari halaman materi (atau pakai versi hasil promptmu sendiri ke Claude)</p></div>
-          <div class="step-card"><div class="step-num">2</div><p>Buka Google Sheets-mu → klik menu <strong>Extensions</strong> → <strong>Apps Script</strong></p></div>
-          <div class="step-card"><div class="step-num">3</div><p>Hapus semua kode default yang ada di editor, lalu paste seluruh isi file ini</p></div>
+        <div class="tip-box">
+          <div class="tip-label">📎 File-nya Cuma Teks Biasa</div>
+          <p>File <strong>k2-pdf-export-helper.txt</strong> bukan program yang perlu di-install atau dijalankan di komputermu — isinya cuma teks kode yang nanti kamu copy-paste ke Google Sheets. Bisa dibuka dengan Notepad (Windows) atau TextEdit (Mac), aplikasi bawaan yang sudah ada di komputermu — tidak perlu software tambahan.</p>
         </div>
         <div class="step-row">
-          <div class="step-card"><div class="step-num">4</div><p>Klik <strong>Save</strong> (ikon disket atau Ctrl+S), lalu tutup tab Apps Script</p></div>
-          <div class="step-card"><div class="step-num">5</div><p>Refresh halaman Google Sheets — menu <strong>"Export PDF"</strong> akan muncul di menu bar</p></div>
-          <div class="step-card"><div class="step-num">6</div><p>Saat pertama kali dipakai, Google akan minta izin akses — klik <strong>Allow</strong> (normal, script perlu izin baca sheet &amp; simpan ke Drive-mu)</p></div>
+          <div class="step-card"><div class="step-num">1</div><p>Download <strong>k2-pdf-export-helper.txt</strong> dari halaman materi (atau pakai versi hasil promptmu sendiri ke Claude)</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Klik kanan file-nya → <strong>Open with</strong> → pilih <strong>Notepad</strong> (Windows) atau <strong>TextEdit</strong> (Mac) untuk membukanya sebagai teks</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Select All (<strong>Ctrl+A</strong> / <strong>Cmd+A</strong>) lalu Copy (<strong>Ctrl+C</strong> / <strong>Cmd+C</strong>) seluruh isinya</p></div>
+        </div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">4</div><p>Buka Google Sheets-mu → <strong>Extensions</strong> → <strong>Apps Script</strong> → hapus kode default → Paste (<strong>Ctrl+V</strong> / <strong>Cmd+V</strong>) isi yang tadi di-copy</p></div>
+          <div class="step-card"><div class="step-num">5</div><p>Klik <strong>Save</strong> (ikon disket atau Ctrl+S), lalu tutup tab Apps Script</p></div>
+          <div class="step-card"><div class="step-num">6</div><p>Refresh halaman Google Sheets → menu <strong>"Export PDF"</strong> muncul di menu bar. Saat pertama dipakai, klik <strong>Allow</strong> saat Google minta izin akses (normal, script perlu izin baca sheet &amp; simpan ke Drive-mu)</p></div>
         </div>
 
         <div class="section-heading">Cara Pakai — 4 Langkah Sebelum Export</div>
