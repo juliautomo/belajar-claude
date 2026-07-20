@@ -15,6 +15,13 @@
  * 6. Saat pertama kali dipakai, Google akan minta izin akses — klik Allow
  *    (ini normal, script perlu izin baca sheet & simpan file ke Drive-mu)
  *
+ * CARA PAKAI (alur yang disarankan):
+ * 1. Pilih kolom angka (mis. kolom revenue) → jalankan "1. Rapikan Angka (Rp)"
+ * 2. Pilih rentang data (termasuk header) → jalankan "2. Tambah Judul Laporan"
+ * 3. Pilih 2 kolom (nama produk + 1 kolom angka) → jalankan "3. Buat Grafik Ringkas"
+ * 4. Jalankan "Export Sheet Aktif sebagai PDF" — judul, angka rapi, dan
+ *    grafik ikut ter-export karena semuanya bagian dari tampilan sheet.
+ *
  * KENAPA INI GRATIS:
  * Script ini cuma memakai SpreadsheetApp, DriveApp, dan UrlFetchApp bawaan
  * Google — tidak ada panggilan ke Claude API sama sekali. Beda dengan versi
@@ -26,6 +33,10 @@
 function onOpen() {
   SpreadsheetApp.getUi()
     .createMenu('Export PDF')
+    .addItem('1. Rapikan Angka (Rp)', 'formatAsRupiah')
+    .addItem('2. Tambah Judul Laporan', 'addReportHeader')
+    .addItem('3. Buat Grafik Ringkas', 'insertSimpleChart')
+    .addSeparator()
     .addItem('Export Sheet Aktif sebagai PDF', 'exportActiveSheet')
     .addItem('Export Rentang Terpilih sebagai PDF', 'exportSelection')
     .addSeparator()
@@ -33,10 +44,89 @@ function onOpen() {
     .addToUi();
 }
 
-// ─── FUNGSI UTAMA ────────────────────────────────────────────────────────────
+// ─── 1. FORMAT ANGKA ─────────────────────────────────────────────────────────
 
 /**
- * Export sheet yang sedang aktif jadi 1 file PDF rapi.
+ * Rapikan kolom angka yang sedang dipilih jadi format Rupiah
+ * (mis. 4200000 -> Rp 4.200.000) supaya PDF hasil export enak dibaca.
+ */
+function formatAsRupiah() {
+  var sheet = SpreadsheetApp.getActiveSheet();
+  var range = sheet.getActiveRange();
+  if (!range) {
+    SpreadsheetApp.getUi().alert('Pilih dulu kolom/rentang angka yang mau dirapikan, lalu jalankan menu ini lagi.');
+    return;
+  }
+  range.setNumberFormat('"Rp" #,##0');
+}
+
+// ─── 2. JUDUL LAPORAN ────────────────────────────────────────────────────────
+
+/**
+ * Sisipkan 1 baris judul di atas rentang yang dipilih -- nama sheet + tanggal
+ * hari ini, di-bold dan diberi warna, supaya PDF hasil export punya header
+ * yang jelas (bukan cuma tabel polos).
+ */
+function addReportHeader() {
+  var sheet = SpreadsheetApp.getActiveSheet();
+  var range = sheet.getActiveRange();
+  if (!range) {
+    SpreadsheetApp.getUi().alert('Pilih dulu rentang data (termasuk baris header kolom), lalu jalankan menu ini lagi.');
+    return;
+  }
+  var startRow = range.getRow();
+  var startCol = range.getColumn();
+  var numCols = range.getNumColumns();
+
+  sheet.insertRowBefore(startRow);
+  var titleRange = sheet.getRange(startRow, startCol, 1, numCols);
+  titleRange.merge();
+
+  var today = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'd MMMM yyyy');
+  titleRange.setValue(SpreadsheetApp.getActiveSpreadsheet().getName() + ' — Laporan ' + today);
+  titleRange.setFontWeight('bold');
+  titleRange.setFontSize(13);
+  titleRange.setBackground('#6C47FF');
+  titleRange.setFontColor('#FFFFFF');
+  titleRange.setHorizontalAlignment('center');
+  sheet.setRowHeight(startRow, 30);
+}
+
+// ─── 3. GRAFIK RINGKAS ───────────────────────────────────────────────────────
+
+/**
+ * Buat grafik kolom sederhana dari rentang yang dipilih (mis. kolom nama
+ * produk + 1 kolom angka seperti revenue). Grafik ini bagian dari tampilan
+ * sheet, jadi otomatis ikut ter-export saat kamu jalankan Export PDF.
+ */
+function insertSimpleChart() {
+  var sheet = SpreadsheetApp.getActiveSheet();
+  var range = sheet.getActiveRange();
+  if (!range) {
+    SpreadsheetApp.getUi().alert('Pilih dulu 2 kolom: nama produk + 1 kolom angka (mis. revenue), lalu jalankan menu ini lagi.');
+    return;
+  }
+
+  var chart = sheet.newChart()
+    .addRange(range)
+    .setChartType(Charts.ChartType.COLUMN)
+    .setPosition(range.getLastRow() + 2, range.getColumn(), 0, 0)
+    .setOption('title', 'Grafik Ringkas')
+    .setOption('legend', { position: 'none' })
+    .setOption('colors', ['#6C47FF'])
+    .setOption('width', 560)
+    .setOption('height', 320)
+    .build();
+
+  sheet.insertChart(chart);
+  SpreadsheetApp.getUi().alert('Grafik ditambahkan di bawah data. Grafik ini akan ikut muncul saat kamu export sheet ini sebagai PDF.');
+}
+
+// ─── EXPORT ──────────────────────────────────────────────────────────────────
+
+/**
+ * Export sheet yang sedang aktif jadi 1 file PDF rapi -- termasuk judul dan
+ * grafik yang sudah ditambahkan lewat menu 1-3 di atas, kalau ada.
  */
 function exportActiveSheet() {
   var sheet = SpreadsheetApp.getActiveSheet();
@@ -141,11 +231,13 @@ function getOrCreateExportFolder() {
 function showAbout() {
   SpreadsheetApp.getUi().alert(
     'PDF Export Helper untuk Google Sheets',
-    'Versi 1.0 — Belajar Claude K2: Produktivitas Kantor, Modul 4\n\n'
+    'Versi 1.1 — Belajar Claude K2: Produktivitas Kantor, Modul 4\n\n'
     + '100% gratis — tidak butuh API key atau paket Claude Pro.\n'
     + 'Cuma pakai fitur bawaan Google Apps Script + Drive.\n\n'
-    + 'Export sheet aktif atau rentang terpilih jadi PDF rapi (tanpa\n'
-    + 'gridlines, fit ke halaman), otomatis tersimpan di folder\n'
+    + 'Alur: (1) Rapikan Angka jadi format Rupiah, (2) Tambah Judul\n'
+    + 'Laporan, (3) Buat Grafik Ringkas, lalu Export sebagai PDF —\n'
+    + 'judul dan grafik ikut ter-export karena bagian dari tampilan\n'
+    + 'sheet. Hasil PDF otomatis tersimpan di folder\n'
     + '"Export PDF - Belajar Claude" di Drive-mu.\n\n'
     + 'Dokumentasi: belajarclaude.id',
     SpreadsheetApp.getUi().ButtonSet.OK

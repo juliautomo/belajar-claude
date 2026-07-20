@@ -640,23 +640,25 @@ Sarankan alokasi yang paling optimal berdasarkan data performa.<button class="co
 
         <div class="tip-box bonus">
           <div class="tip-label">🛠️ Bonus — Menu "Export PDF" Langsung di Google Sheets (100% Gratis)</div>
-          <p><strong>Bukan Claude yang jalan di dalam Sheets-mu — tapi Claude yang menulis automasinya untukmu.</strong> Script di bawah ini awalnya dibuat dengan cara memprompt Claude langsung (lihat prompt persisnya di bawah), lalu tinggal di-paste ke Apps Script sekali. Hasilnya: menu "Export PDF" permanen di Sheets-mu — tanpa API key, tanpa biaya, tanpa perlu paket Pro, cuma pakai fitur bawaan Google.</p>
+          <p><strong>Bukan Claude yang jalan di dalam Sheets-mu — tapi Claude yang menulis automasinya untukmu.</strong> Script di bawah ini awalnya dibuat dengan cara memprompt Claude langsung (lihat prompt persisnya di bawah), lalu tinggal di-paste ke Apps Script sekali. Hasilnya: menu "Export PDF" permanen di Sheets-mu — dengan format angka Rupiah otomatis, judul laporan, dan grafik ringkas — tanpa API key, tanpa biaya, tanpa perlu paket Pro.</p>
         </div>
 
         <div class="prompt-section">
           <div class="prompt-label">📋 Prompt yang Dipakai untuk Generate Script Ini</div>
-          <div class="prompt-box">Buatkan saya Google Apps Script untuk Google Sheets yang menambahkan
-menu custom "Export PDF" dengan 2 fungsi: (1) export sheet yang sedang
-aktif jadi 1 file PDF rapi tanpa gridlines dan fit ke lebar halaman,
-(2) export hanya rentang sel yang sedang dipilih jadi PDF. Simpan hasil
-PDF-nya ke folder khusus di Google Drive, lalu tampilkan link untuk
-membukanya. Tidak boleh pakai API key eksternal apapun — cukup pakai
-fitur bawaan Apps Script dan Drive.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="prompt-box">Buatkan saya Google Apps Script untuk Google Sheets dengan menu custom
+"Export PDF" berisi: (1) rapikan kolom angka yang dipilih jadi format
+Rupiah, (2) sisipkan 1 baris judul laporan (nama sheet + tanggal hari
+ini) di atas rentang yang dipilih, diberi warna dan bold, (3) buat
+grafik kolom sederhana dari rentang yang dipilih, (4) export sheet
+aktif atau rentang terpilih jadi 1 file PDF rapi (tanpa gridlines, fit
+ke lebar halaman), disimpan ke folder khusus di Drive dengan link untuk
+membukanya. Tidak boleh pakai API key eksternal apapun — cukup fitur
+bawaan Apps Script dan Drive.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
 
         <div class="tip-box">
           <div class="tip-label">✏️ Mau Versimu Sendiri?</div>
-          <p>Kamu tidak harus pakai script <strong>k2-pdf-export-helper.js</strong> di bawah ini persis apa adanya — paste prompt di atas ke Claude dan minta modifikasi sesuai kebutuhanmu. Contoh: <em>"tambahkan nama toko di judul PDF-nya"</em>, <em>"ubah nama folder tujuan di Drive"</em>, atau <em>"export ke folder Drive tertentu, bukan folder baru"</em>. Claude akan tulis ulang scriptnya untukmu — kamu tinggal paste versi barunya ke Apps Script.</p>
+          <p>Kamu tidak harus pakai script <strong>k2-pdf-export-helper.js</strong> di bawah ini persis apa adanya — paste prompt di atas ke Claude dan minta modifikasi sesuai kebutuhanmu. Contoh: <em>"tambahkan nama toko di judul PDF-nya"</em>, <em>"ubah warna grafik jadi hijau"</em>, atau <em>"export ke folder Drive tertentu, bukan folder baru"</em>. Claude akan tulis ulang scriptnya untukmu — kamu tinggal paste versi barunya ke Apps Script.</p>
         </div>
 
         <div class="section-heading">Cara Install — 6 Langkah</div>
@@ -669,6 +671,20 @@ fitur bawaan Apps Script dan Drive.<button class="copy-btn" onclick="copyPrompt(
           <div class="step-card"><div class="step-num">4</div><p>Klik <strong>Save</strong> (ikon disket atau Ctrl+S), lalu tutup tab Apps Script</p></div>
           <div class="step-card"><div class="step-num">5</div><p>Refresh halaman Google Sheets — menu <strong>"Export PDF"</strong> akan muncul di menu bar</p></div>
           <div class="step-card"><div class="step-num">6</div><p>Saat pertama kali dipakai, Google akan minta izin akses — klik <strong>Allow</strong> (normal, script perlu izin baca sheet &amp; simpan ke Drive-mu)</p></div>
+        </div>
+
+        <div class="section-heading">Cara Pakai — 4 Langkah Sebelum Export</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Pilih kolom angka (mis. Revenue Q1) → jalankan <strong>"1. Rapikan Angka (Rp)"</strong></p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Pilih rentang data + header → jalankan <strong>"2. Tambah Judul Laporan"</strong></p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Pilih kolom Nama Produk + Revenue Q1 → jalankan <strong>"3. Buat Grafik Ringkas"</strong></p></div>
+        </div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">4</div><p>Jalankan <strong>"Export Sheet Aktif sebagai PDF"</strong> — judul, angka rapi, dan grafik ikut ter-export karena semuanya bagian dari tampilan sheet</p></div>
+        </div>
+        <div class="tip-box">
+          <div class="tip-label">👀 Contoh Hasil</div>
+          <p>Kalau kamu jalankan alur ini pakai <strong>k2-data-latihan-sheets.csv</strong>, hasil PDF-nya berupa: judul "Kasual Studio — Laporan [tanggal]" dengan latar ungu, tabel dengan angka Rupiah rapi (Rp 4.200.000, bukan 4200000), dan grafik kolom ringkas revenue per produk di bawah tabel.</p>
         </div>
 
         <div class="tip-box">
