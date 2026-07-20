@@ -164,6 +164,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
       <span class="nav-user-chevron">▾</span>
       <div class="nav-user-dropdown" id="navUserDropdown">
         <a href="dashboard.html">Dashboard</a>
+        <a href="admin.html" id="navAdminLink" style="display:none;">Admin</a>
         <div class="dropdown-divider"></div>
         <button class="dropdown-signout" onclick="doSignOut(event)">Keluar</button>
       </div>
@@ -265,6 +266,10 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         document.getElementById('navUserPill').style.display = 'flex';
         document.getElementById('navUname').textContent  = name;
         document.getElementById('navUemail').textContent = s.user.email;
+        var ADMIN_EMAILS = ['julia.utomo@gmail.com', 'tiffany.utomo@gmail.com'];
+        if (ADMIN_EMAILS.indexOf(s.user.email.toLowerCase()) !== -1) {
+          document.getElementById('navAdminLink').style.display = 'block';
+        }
         var lb = document.getElementById('navLoginBtn');
         lb.textContent = 'Dashboard'; lb.href = 'dashboard.html';
         document.getElementById('navCtaBtn').style.display = 'none';
