@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 20, 2026 (checkpoint 18)_
+_Last updated: July 20, 2026 (checkpoint 19)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -540,3 +540,21 @@ The concrete Kasual Studio-specific worked example was moved out of the abstract
 **Note for future RLS-related admin features**: when adding delete (or any new operation) to a table that predates the feature, check whether a matching RLS policy actually exists before assuming a code bug — Supabase's default-deny-via-missing-policy behavior fails silently (0 rows affected, no error) rather than throwing, which makes it easy to mistake for a frontend bug.
 
 **Commits this checkpoint**: `981912c` (admin.html: delete buttons for Video/PPT, TXT/CSV/XLSX added to Dokumen uploads), `f59ff9c` (sql/fix-video-ppt-delete-policies.sql — the actual fix, run manually by Julia in Supabase Dashboard).
+
+---
+
+## Checkpoint 19 (July 20, 2026)
+
+**K2 M4 further restructured based on PPT review feedback.** Julia reviewed the rebuilt PPT from checkpoint 17 and flagged 5 issues, all fixed across HTML + PDF source + PPT (scope confirmed as "all 3 formats" via AskUserQuestion before starting):
+
+1. **"This alur should be part of latihan"** — the standalone "Alur Prompt: Data → Keputusan" section (an abstract 3-step template) was a separate concept from the "Latihan" exercise that followed it, creating redundancy (the Latihan callout basically re-described the same 3 prompts in prose). Merged them into one section, **"Latihan — Langkah demi Langkah,"** across all 3 formats.
+2. **"Be very clear, like download, then drag and drop excel file to claude"** — the merged Latihan now opens with a literal 3-card mechanical walkthrough before the prompts: (1) download `k2-data-latihan-sheets.csv`, (2) open claude.ai, drag & drop the CSV into the chat (or click the attach icon), (3) send the 3 prompts one at a time in the same chat (Claude retains context, no re-upload needed). The 3 prompts (Formula / Analisis & Rekomendasi / File Excel Ringkasan) follow directly, each in its own copyable prompt-box (HTML), codebox (PDF), or code-template block (PPT). A closing tip now explicitly distinguishes the two prompt outcomes: Prompt 1's formula must be copied manually into the user's own sheet, while Prompt 3 produces an actual downloadable `.xlsx` attachment in the chat.
+3. **"No need this bonus here"** — PPT's old "Latihan & Output" slide had a small teaser paragraph pointing to the next slide's Apps Script bonus ("Untuk otomatisasi berulang... lihat detailnya di slide berikut"). Removed — HTML/PDF never had this teaser (they link to the bonus section directly), so this was PPT-only cleanup.
+4. **"Remove level up dashboard section from this module"** — the "Level Up: Dashboard Performa Produk" section (HTML tip-box + prompt-section, PDF bonus block, PPT's 7th slide) was removed entirely from all 3 formats. The "Claude in Chrome" tip that had been living right after/inside that section was preserved and now sits at the very bottom of the module (after the Apps Script bonus content) in all 3 formats — HTML/PDF needed no repositioning since it was already the last block before nav; PPT's tip was moved onto the end of the Bonus slide (formerly its own final slide).
+5. **"Apps script 1 2 3, it's not a step, that's the requirement for apps script, change the style"** — PPT's Bonus slide displayed the 3 Apps Script menu items ("Rapikan & Beri Judul" / "Buat Grafik" / "Export PDF") using the same numbered-circle `addStepRow` component used for genuine sequential-action flows elsewhere in the deck, which misleadingly implied "do this now, in this exact order" rather than "here's what the script's menu contains." Swapped to `addTierStrip` — a plain card style with no numbered badge — under a relabeled section heading "Yang Ada di Menu Export PDF (bukan langkah berurutan)." HTML/PDF's parallel content (`.step-row` numbered cards for "Cara Install — 6 Langkah" / "Cara Pakai — 4 Langkah") was left untouched since those genuinely are sequential user actions, not a menu-contents list — the critique was specific to PPT's condensed version.
+
+**PPT slide count dropped from 7 to 6**: Cover, Yang Bisa Claude Bantu, Data Aman vs Sensitif, Latihan (Part 1: mechanics + Prompt 1 & 2), Latihan (Part 2: Prompt 3 + Tip + Output), Bonus (Apps Script + relocated Claude-in-Chrome tip). Rebuilt via `node build_m04.js`, LibreOffice-converted, all 6 slides rendered to PNG and visually verified clean — no overflow, tier-strip cards render without number badges as intended.
+
+**HTML div-balance**: 510/510 (down from 514, net removal of content). **PDF source div-balance**: 217/217.
+
+**Commits this checkpoint**: `0a9ec75` (produktivitas-content.html + K2-M04-Google-Sheets.pptx: merge Alur Prompt into Latihan with concrete steps, remove Level Up Dashboard, restyle Apps Script menu list, relocate Claude in Chrome tip). PDF source (`k2_full_pdf.html`) updated in sandbox only, per standing practice — not committed, kept in wording parity with HTML.
