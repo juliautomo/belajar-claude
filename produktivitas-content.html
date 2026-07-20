@@ -438,77 +438,71 @@ Channel penjualan: [Instagram / Tokopedia / WhatsApp / dll]
           Menulis balasan email yang tepat — nada yang pas, informasi lengkap, tidak bertele-tele — biasanya makan waktu lebih lama dari yang seharusnya. Claude bisa bantu susun draft balasan dalam hitungan detik: kamu kasih konteks singkat soal email dan tujuan balasannya, Claude yang menyusun kalimatnya. <strong>Setelah modul ini:</strong> email yang biasanya kamu tulis dari nol selesai dalam hitungan menit — kamu tetap yang menentukan isi dan nadanya, bukan Claude.
         </div>
 
-        <div class="section-heading">Workflow: Email → Claude → Review → Kirim</div>
+        <div class="section-heading">Workflow Email dengan Claude</div>
+        <div class="sub-heading">4 Langkah dari Inbox ke Terkirim</div>
         <div class="step-row">
-          <div class="step-card"><div class="step-num">1</div><p>Buka email yang perlu dibalas</p></div>
-          <div class="step-card"><div class="step-num">2</div><p>Copy isi email → paste ke Claude</p></div>
-          <div class="step-card"><div class="step-num">3</div><p>Tambahkan konteks 1–2 kalimat</p></div>
-          <div class="step-card"><div class="step-num">4</div><p>Dapat draft → review → kirim</p></div>
+          <div class="step-card"><div class="step-num">1</div><p><strong>Baca Email</strong><br>Buka email masuk. Pahami inti pesan: apa yang diminta, siapa pengirimnya, seberapa urgent.</p></div>
+          <div class="step-card"><div class="step-num">2</div><p><strong>Tulis Prompt</strong><br>Ceritakan konteks ke Claude: email dari siapa, isinya apa, tone yang diinginkan. Pakai 3 Elemen Wajib.</p></div>
+          <div class="step-card"><div class="step-num">3</div><p><strong>Baca &amp; Edit</strong><br>Baca output Claude. Tambahkan info personal atau detail spesifik yang hanya kamu tahu. Sesuaikan jika perlu.</p></div>
+          <div class="step-card"><div class="step-num">4</div><p><strong>Kirim</strong><br>Lakukan checklist sebelum kirim. Pastikan nama, detail, dan tone sudah sesuai. Baru tekan "Send".</p></div>
         </div>
 
-        <div class="section-heading">3 Elemen Wajib Saat Prompt Email</div>
+        <div class="section-heading">3 Elemen Wajib Prompt Email</div>
         <div class="info-grid">
-          <div class="info-card"><strong>Teks email asli</strong><span>Paste seluruhnya, jangan diringkas sendiri dulu</span></div>
-          <div class="info-card"><strong>Konteks hubungan</strong><span>Pelanggan baru? Supplier lama? Reseller potensial?</span></div>
-          <div class="info-card"><strong>Tujuan balasan</strong><span>Konfirmasi, tolak, klarifikasi, follow-up, atau tawaran?</span></div>
+          <div class="info-card"><strong>A · Konteks Penerima</strong><span>Siapa yang menerima? Hubungan apa (klien baru, supplier lama, pelanggan kecewa)? Tingkat formalitas yang sesuai?</span></div>
+          <div class="info-card"><strong>B · Inti Pesan</strong><span>Apa yang ingin disampaikan? Satu kalimat yang merangkum tujuan email ini.</span></div>
+          <div class="info-card"><strong>C · Tone &amp; Panjang</strong><span>Formal / santai / tegas / empati? Maks berapa kata? Ada CTA atau tidak?</span></div>
         </div>
 
-        <div class="section-heading">4 Tipe Email — Prompt Siap Pakai</div>
+        <div class="section-heading">4 Tipe Email yang Sering Ditulis</div>
+        <div class="sub-heading">Template Prompt untuk Masing-masing Tipe</div>
 
-        <div class="sub-heading">① Komplain Pelanggan</div>
+        <div class="sub-heading">① Balas Pertanyaan / Inquiry</div>
         <div class="prompt-section">
           <div class="prompt-label">📋 Prompt</div>
-          <div class="prompt-box">[paste email komplain]
-
-Ini pelanggan yang sudah beli 3x. Dia komplain baju yang diterima
-warnanya beda dari foto. Tulis balasan yang: (1) minta maaf tulus,
-(2) tawarkan tukar atau refund, (3) minta foto bukti.
-Tone: hangat dan profesional. Maks 5 kalimat.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="prompt-box">[paste email inquiry] Balas email dari [nama] yang tanya
+tentang [topik]. Berikan info lengkap tapi singkat.
+Tone: ramah-profesional. Maks 80 kata.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
 
-        <div class="sub-heading">② Pertanyaan Reseller</div>
+        <div class="sub-heading">② Menangani Komplain</div>
         <div class="prompt-section">
           <div class="prompt-label">📋 Prompt</div>
-          <div class="prompt-box">[paste email tanya-tanya reseller]
-
-Ini calon reseller dari Surabaya. Dia tanya soal harga grosir
-dan minimum order. Kita belum punya program reseller formal.
-Tulis balasan yang: informatif, tidak menutup pintu,
-dan minta nomor WA untuk diskusi lebih lanjut.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="prompt-box">[paste email komplain] Balas komplain dari [nama] soal [masalah].
+Mulai dengan empati, akui masalahnya, tawarkan solusi [sebutkan].
+Tone: hangat, tidak defensif.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
 
-        <div class="sub-heading">③ Follow-up Supplier yang Tidak Balas</div>
+        <div class="sub-heading">③ Follow-up &amp; Pengingat</div>
         <div class="prompt-section">
           <div class="prompt-label">📋 Prompt</div>
-          <div class="prompt-box">Saya perlu follow-up supplier kain yang belum balas email saya
-dari 3 hari lalu soal pesanan 50 meter kain linen.
-Tulis follow-up yang: singkat, sopan, ada sense of urgency ringan.
-Maks 3 kalimat.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="prompt-box">[paste email atau catatan follow-up] Kirim follow-up ke [nama]
+soal [topik] yang belum direspons sejak [tanggal].
+Tone: sopan, gentle reminder. Jangan terkesan mendesak.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
 
-        <div class="sub-heading">④ Konfirmasi Pembayaran</div>
+        <div class="sub-heading">④ Konfirmasi &amp; Informasi</div>
         <div class="prompt-section">
           <div class="prompt-label">📋 Prompt</div>
-          <div class="prompt-box">[paste bukti transfer pelanggan]
-
-Pelanggan sudah transfer. Tulis konfirmasi yang: akui pembayaran,
-sebutkan estimasi pengiriman 1–2 hari kerja, ucapkan terima kasih.
-Maks 3 kalimat.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="prompt-box">[paste bukti/detail terkait] Tulis konfirmasi ke [nama] bahwa
+[detail pesanan/meeting/keputusan] sudah diterima. Sertakan
+ringkasan poin penting. Singkat, maks 60 kata.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
 
         <div class="tip-box">
           <div class="tip-label">✅ Checklist Sebelum Kirim</div>
-          <p>☐ Nama penerima sudah benar (bukan "[Nama]")<br>
-          ☐ Tone sesuai dengan hubungan (formal / santai)<br>
-          ☐ Tidak ada info yang salah atau perlu dicek ulang<br>
-          ☐ CTA atau next step jelas (kalau dibutuhkan)<br>
-          ☐ Panjang email sesuai (tidak terlalu panjang untuk hal sederhana)</p>
+          <p>☐ Nama penerima benar (bukan placeholder [nama])<br>
+          ☐ Isi email akurat, bukan halusinasi Claude<br>
+          ☐ Ada CTA yang jelas jika diperlukan<br>
+          ☐ Tone sudah sesuai: formal / santai / tegas?<br>
+          ☐ Tidak ada info sensitif yang ikut di-paste ke Claude<br>
+          ☐ Panjang sudah sesuai, tidak bertele-tele</p>
         </div>
 
         <div class="prompt-section">
           <div class="prompt-label">📝 Latihan</div>
           <div class="case-box">
-            <p>Download file latihan <strong>k2-m3-contoh-inbox.txt</strong> dari halaman materi — isinya 12 email contoh inbox Kasual Studio. Pilih 3 email dengan tipe berbeda (komplain, reseller, konfirmasi, dll). Untuk masing-masing: paste ke Claude, tambahkan konteks 1–2 kalimat, pakai template dari atas, minta draft, lalu hitung waktu yang dibutuhkan vs. menulis dari nol.</p>
+            <p>Download file latihan <strong>k2-m3-contoh-inbox.txt</strong> dari halaman materi — isinya 12 email contoh inbox Kasual Studio. Pilih 3 email dengan tipe berbeda (inquiry, komplain, follow-up, konfirmasi). Untuk masing-masing: identifikasi tipenya, pilih template yang sesuai dari atas dan isi [placeholder] dengan info dari email, paste ke Claude, baca draft, edit seperlunya, lalu hitung waktu yang dibutuhkan vs. menulis dari nol.</p>
           </div>
         </div>
 
