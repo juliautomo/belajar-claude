@@ -639,10 +639,41 @@ Sarankan alokasi yang paling optimal berdasarkan data performa.<button class="co
         </div>
 
         <div class="tip-box bonus">
-          <div class="tip-label">🛠️ Bonus — Menu "Claude AI" Langsung di Google Sheets</div>
-          <p>Untuk yang ingin lebih permanen dari Claude in Chrome: download <strong>k2-claude-sheets-helper.js</strong> dari halaman materi — sebuah Google Apps Script yang menambahkan menu "Claude AI" ke Sheets-mu, dengan 5 fungsi siap pakai: Analisis Data Terpilih, Buat Formula dari Deskripsi, Ringkasan Eksekutif Tabel, Isi Kolom dengan Claude (batch otomatis per baris), dan Debug Formula Error.<br><br>
-          <strong>Cara install:</strong> Buka Sheets-mu → Extensions → Apps Script → hapus kode yang ada → paste isi file ini → ganti <code>YOUR_API_KEY_HERE</code> dengan API key dari console.anthropic.com → Save → refresh Sheets. Menu "Claude AI" akan muncul di menu bar.<br><br>
-          Butuh API key terpisah (bukan akun claude.ai biasa) dan sedikit biaya pemakaian API — cocok untuk kamu yang mau pakai fitur ini rutin tiap minggu tanpa copy-paste berulang. Jangan share spreadsheet ini secara publik karena API key tersimpan di script.</p>
+          <div class="tip-label">🛠️ Bonus — Menu "Export PDF" Langsung di Google Sheets (100% Gratis)</div>
+          <p><strong>Bukan Claude yang jalan di dalam Sheets-mu — tapi Claude yang menulis automasinya untukmu.</strong> Script di bawah ini awalnya dibuat dengan cara memprompt Claude langsung (lihat prompt persisnya di bawah), lalu tinggal di-paste ke Apps Script sekali. Hasilnya: menu "Export PDF" permanen di Sheets-mu — tanpa API key, tanpa biaya, tanpa perlu paket Pro, cuma pakai fitur bawaan Google.</p>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📋 Prompt yang Dipakai untuk Generate Script Ini</div>
+          <div class="prompt-box">Buatkan saya Google Apps Script untuk Google Sheets yang menambahkan
+menu custom "Export PDF" dengan 2 fungsi: (1) export sheet yang sedang
+aktif jadi 1 file PDF rapi tanpa gridlines dan fit ke lebar halaman,
+(2) export hanya rentang sel yang sedang dipilih jadi PDF. Simpan hasil
+PDF-nya ke folder khusus di Google Drive, lalu tampilkan link untuk
+membukanya. Tidak boleh pakai API key eksternal apapun — cukup pakai
+fitur bawaan Apps Script dan Drive.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">✏️ Mau Versimu Sendiri?</div>
+          <p>Kamu tidak harus pakai script <strong>k2-pdf-export-helper.js</strong> di bawah ini persis apa adanya — paste prompt di atas ke Claude dan minta modifikasi sesuai kebutuhanmu. Contoh: <em>"tambahkan nama toko di judul PDF-nya"</em>, <em>"ubah nama folder tujuan di Drive"</em>, atau <em>"export ke folder Drive tertentu, bukan folder baru"</em>. Claude akan tulis ulang scriptnya untukmu — kamu tinggal paste versi barunya ke Apps Script.</p>
+        </div>
+
+        <div class="section-heading">Cara Install — 6 Langkah</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Download <strong>k2-pdf-export-helper.js</strong> dari halaman materi (atau pakai versi hasil promptmu sendiri ke Claude)</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Buka Google Sheets-mu → klik menu <strong>Extensions</strong> → <strong>Apps Script</strong></p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Hapus semua kode default yang ada di editor, lalu paste seluruh isi file ini</p></div>
+        </div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">4</div><p>Klik <strong>Save</strong> (ikon disket atau Ctrl+S), lalu tutup tab Apps Script</p></div>
+          <div class="step-card"><div class="step-num">5</div><p>Refresh halaman Google Sheets — menu <strong>"Export PDF"</strong> akan muncul di menu bar</p></div>
+          <div class="step-card"><div class="step-num">6</div><p>Saat pertama kali dipakai, Google akan minta izin akses — klik <strong>Allow</strong> (normal, script perlu izin baca sheet &amp; simpan ke Drive-mu)</p></div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">💳 Soal Biaya</div>
+          <p>Beda dengan bonus versi sebelumnya (yang butuh API key berbayar dari console.anthropic.com), script ini tidak memanggil Claude API sama sekali — cuma pakai fitur bawaan Google Apps Script dan Google Drive. 100% gratis, tidak butuh paket Claude Pro, dan tidak ada biaya pemakaian apapun di luar akun Google-mu sendiri.</p>
         </div>
 
         <div class="section-heading">Level Up: Dashboard Performa Produk</div>
