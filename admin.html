@@ -173,6 +173,48 @@ const COURSES = [
   { slug: 'content-marketing',  name: 'Content & Marketing',             modules: 9 },
 ];
 
+const MODULE_TITLES = {
+  'mulai-claude': [
+    'Apa itu Claude & Setup Akun',
+    'Anatomi Prompt yang Menghasilkan Output Bagus',
+    'Role Prompting — Claude sebagai Ahli',
+    'Claude Artifacts — Output Langsung Jadi Dokumen',
+    'Claude Projects — Memori Pekerjaan Kamu',
+    'PRAKTEK: Workflow End-to-End Pertamamu',
+  ],
+  'produktivitas': [
+    'Role Prompting',
+    'Claude Projects',
+    'Gmail + Claude',
+    'Google Sheets + Claude',
+    'Batch Prompting',
+    'Prompt Chaining',
+    'Dokumen & Riset',
+    'Case Study',
+  ],
+  'content-marketing': [
+    'Positioning & Analisis Kompetitor',
+    'Deskripsi Produk Marketplace',
+    'Sistem Konten Instagram',
+    'Copy Iklan + Canva Connector',
+    'WhatsApp Business CS System',
+    'Email & Promosi Bisnis',
+    'Performance Marketing',
+    'Content OS di Notion',
+    'Case Study: Peluncuran Produk Baru',
+  ],
+};
+
+function moduleTitle(slug, num) {
+  var titles = MODULE_TITLES[slug];
+  return (titles && titles[num - 1]) ? titles[num - 1] : null;
+}
+
+function moduleLabel(slug, num) {
+  var t = moduleTitle(slug, num);
+  return t ? ('Modul ' + num + ' — ' + t) : ('Modul ' + num);
+}
+
 let currentSession = null;
 let lastDocs = [];
 
@@ -203,7 +245,7 @@ function populateModuleSelectFor(courseSelectId, moduleSelectId) {
   var course = COURSES.find(function (c) { return c.slug === slug; });
   var sel = document.getElementById(moduleSelectId);
   var opts = '';
-  for (var i = 1; i <= (course ? course.modules : 1); i++) opts += '<option value="' + i + '">Modul ' + i + '</option>';
+  for (var i = 1; i <= (course ? course.modules : 1); i++) opts += '<option value="' + i + '">' + moduleLabel(slug, i) + '</option>';
   sel.innerHTML = opts;
 }
 
@@ -301,7 +343,7 @@ async function saveVideo() {
   btn.disabled = false;
   if (db.error) { setStatus('videoStatus', 'Gagal simpan ke database: ' + db.error.message, 'error'); return; }
 
-  setStatus('videoStatus', 'Video berhasil disimpan untuk ' + courseName(slug) + ' — Modul ' + moduleNum + ' ✓', 'success');
+  setStatus('videoStatus', 'Video berhasil disimpan untuk ' + courseName(slug) + ' — ' + moduleLabel(slug, moduleNum) + ' ✓', 'success');
   checkCurrentVideo();
   refreshOverview();
 }
@@ -357,7 +399,7 @@ async function uploadPpt() {
   btn.disabled = false;
   if (db.error) { setStatus('pptStatus', 'Gagal simpan ke database: ' + db.error.message, 'error'); return; }
 
-  setStatus('pptStatus', 'PPT berhasil diunggah untuk ' + courseName(slug) + ' — Modul ' + moduleNum + ' ✓', 'success');
+  setStatus('pptStatus', 'PPT berhasil diunggah untuk ' + courseName(slug) + ' — ' + moduleLabel(slug, moduleNum) + ' ✓', 'success');
   fileInput.value = '';
   checkCurrentPpt();
   refreshOverview();
@@ -406,9 +448,9 @@ async function uploadDoc() {
   if (errors.length) {
     setStatus('docStatus', okCount + '/' + files.length + ' berhasil diunggah' + (okNames.length ? ' (' + okNames.join(', ') + ')' : '') + '. Gagal: ' + errors.join(' | '), okCount > 0 ? 'pending' : 'error');
   } else if (okCount > 1) {
-    setStatus('docStatus', okCount + ' dokumen berhasil diunggah untuk ' + courseName(slug) + ' — Modul ' + moduleNum + ' ✓ (' + okNames.join(', ') + ')', 'success');
+    setStatus('docStatus', okCount + ' dokumen berhasil diunggah untuk ' + courseName(slug) + ' — ' + moduleLabel(slug, moduleNum) + ' ✓ (' + okNames.join(', ') + ')', 'success');
   } else {
-    setStatus('docStatus', okCount + ' dokumen berhasil diunggah untuk ' + courseName(slug) + ' — Modul ' + moduleNum + ' ✓', 'success');
+    setStatus('docStatus', okCount + ' dokumen berhasil diunggah untuk ' + courseName(slug) + ' — ' + moduleLabel(slug, moduleNum) + ' ✓', 'success');
   }
   fileInput.value = '';
   refreshOverview();
@@ -444,18 +486,18 @@ async function refreshOverview() {
 
   videos.forEach(function (v) {
     if (!v.video_url) return;
-    rows += '<tr><td>' + courseName(v.course_slug) + '</td><td>Video Modul ' + v.module_num + '</td><td>' +
+    rows += '<tr><td>' + courseName(v.course_slug) + '</td><td>Video — ' + moduleLabel(v.course_slug, v.module_num) + '</td><td>' +
       '<a href="' + v.video_url + '" target="_blank">Lihat</a></td></tr>';
   });
 
   ppts.forEach(function (p) {
     if (!p.ppt_url) return;
-    rows += '<tr><td>' + courseName(p.course_slug) + '</td><td>PPT Modul ' + p.module_num + '</td><td>' +
+    rows += '<tr><td>' + courseName(p.course_slug) + '</td><td>PPT — ' + moduleLabel(p.course_slug, p.module_num) + '</td><td>' +
       '<a href="' + p.ppt_url + '" target="_blank">' + (p.ppt_label || 'Lihat') + '</a></td></tr>';
   });
 
   lastDocs.forEach(function (d, idx) {
-    rows += '<tr><td>' + courseName(d.course_slug) + '</td><td>Dokumen Modul ' + d.module_num + '</td><td>' +
+    rows += '<tr><td>' + courseName(d.course_slug) + '</td><td>Dokumen — ' + moduleLabel(d.course_slug, d.module_num) + '</td><td>' +
       '<a href="' + d.doc_url + '" target="_blank">' + (d.doc_label || 'Lihat') + '</a>' +
       '<button class="del-btn" onclick="deleteDoc(' + idx + ')">Hapus</button></td></tr>';
   });
