@@ -353,11 +353,11 @@ function renderMatrix() {
     var docs = dataCache.docs.filter(function (d) { return d.course_slug === activeCourse && d.module_num === i; });
 
     var videoCell = (video && video.video_url)
-      ? '<div class="cell-done"><a class="cell-link" href="' + video.video_url + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">✓ Lihat</a><button class="btn-mini" onclick="openVideoModal(' + i + ')">Ganti</button></div>'
+      ? '<div class="cell-done"><a class="cell-link" href="' + video.video_url + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">✓ Lihat</a><button class="btn-mini" onclick="openVideoModal(' + i + ')">Ganti</button><button class="del-btn" onclick="deleteVideoModal(' + i + ')">Hapus</button></div>'
       : '<button class="cell-missing" onclick="openVideoModal(' + i + ')">+ Unggah</button>';
 
     var pptCell = (ppt && ppt.ppt_url)
-      ? '<div class="cell-done"><a class="cell-link" href="' + ppt.ppt_url + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">✓ ' + escapeHtml(ppt.ppt_label || 'Lihat') + '</a><button class="btn-mini" onclick="openPptModal(' + i + ')">Ganti</button></div>'
+      ? '<div class="cell-done"><a class="cell-link" href="' + ppt.ppt_url + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">✓ ' + escapeHtml(ppt.ppt_label || 'Lihat') + '</a><button class="btn-mini" onclick="openPptModal(' + i + ')">Ganti</button><button class="del-btn" onclick="deletePptModal(' + i + ')">Hapus</button></div>'
       : '<button class="cell-missing" onclick="openPptModal(' + i + ')">+ Unggah</button>';
 
     var docCell = docs.length
@@ -404,6 +404,15 @@ async function submitVideoModal(moduleNum) {
   await reloadAndRender();
 }
 
+async function deleteVideoModal(moduleNum) {
+  var video = dataCache.videos.find(function (v) { return v.course_slug === activeCourse && v.module_num === moduleNum; });
+  if (!video) return;
+  if (!confirm('Hapus video untuk ' + moduleLabel(activeCourse, moduleNum) + '?')) return;
+  var db = await sbClient.from('module_videos').delete().eq('course_slug', activeCourse).eq('module_num', moduleNum);
+  if (db.error) { alert('Gagal hapus video: ' + db.error.message); return; }
+  await reloadAndRender();
+}
+
 // ─── PPT MODAL ───────────────────────────────────────────────────────────────
 
 function openPptModal(moduleNum) {
@@ -446,6 +455,25 @@ async function submitPptModal(moduleNum) {
   await reloadAndRender();
 }
 
+async function deletePptModal(moduleNum) {
+  var ppt = dataCache.ppts.find(function (p) { return p.course_slug === activeCourse && p.module_num === moduleNum; });
+  if (!ppt) return;
+  if (!confirm('Hapus PPT "' + (ppt.ppt_label || 'file ini') + '"?')) return;
+  var path = extractStoragePath(ppt.ppt_url, 'course-ppts');
+  if (path) { await sbClient.storage.from('course-ppts').remove([path]); }
+  var db = await sbClient.from('module_ppts').delete().eq('course_slug', activeCourse).eq('module_num', moduleNum);
+  if (db.error) { alert('Gagal hapus PPT: ' + db.error.message); return; }
+  await reloadAndRender();
+}
+
+function extractStoragePath(publicUrl, bucket) {
+  if (!publicUrl) return null;
+  var marker = '/storage/v1/object/public/' + bucket + '/';
+  var idx = publicUrl.indexOf(marker);
+  if (idx === -1) return null;
+  return decodeURIComponent(publicUrl.slice(idx + marker.length));
+}
+
 // ─── DOKUMEN MODAL (bisa lebih dari satu file per modul) ────────────────────
 
 function openDocsModal(moduleNum) {
@@ -461,7 +489,7 @@ function openDocsModal(moduleNum) {
     '<p class="modal-sub">' + escapeHtml(courseName(activeCourse)) + ' — ' + escapeHtml(moduleLabel(activeCourse, moduleNum)) + '</p>' +
     listHtml +
     '<label>Tambah dokumen (bisa pilih lebih dari satu)</label>' +
-    '<input type="file" id="modalDocFile" accept=".pdf,.doc,.docx,.md" multiple>' +
+    '<input type="file" id="modalDocFile" accept=".pdf,.doc,.docx,.md,.txt,.csv,.xlsx" multiple>' +
     '<button class="btn" onclick="submitDocsModal(' + moduleNum + ')">Unggah Dokumen</button>' +
     '<div class="status" id="modalStatus"></div>';
   openModal('Dokumen — ' + moduleLabel(activeCourse, moduleNum), body);
@@ -473,7 +501,7 @@ async function submitDocsModal(moduleNum) {
   if (!files.length) { setStatus('modalStatus', 'Pilih minimal 1 file dokumen dulu.', 'error'); return; }
   for (var i = 0; i < files.length; i++) {
     var ext = files[i].name.split('.').pop().toLowerCase();
-    if (['pdf', 'doc', 'docx', 'md'].indexOf(ext) === -1) { setStatus('modalStatus', 'File "' + files[i].name + '" harus PDF, DOC, DOCX, atau MD.', 'error'); return; }
+    if (['pdf', 'doc', 'docx', 'md', 'txt', 'csv', 'xlsx'].indexOf(ext) === -1) { setStatus('modalStatus', 'File "' + files[i].name + '" harus PDF, DOC, DOCX, MD, TXT, CSV, atau XLSX.', 'error'); return; }
   }
 
   var okCount = 0;
