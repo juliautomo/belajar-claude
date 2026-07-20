@@ -1,11 +1,185 @@
-Nama Produk,Jan,Feb,Mar,Target Kuartal,Revenue Q1,Unit Terjual,Stok
-Kemeja Linen Putih,4200000,4800000,5100000,15000000,14100000,68,8
-Celana Kulot Krem,3600000,3550000,3700000,12000000,10850000,54,42
-Dress Midi Sage Green,5000000,5600000,6200000,16000000,16800000,72,6
-Blouse Off-White,2800000,2750000,2600000,10000000,8150000,40,55
-Co-ord Set Linen Hitam,4500000,4450000,4600000,14000000,13550000,46,31
-Jumpsuit Linen Dusty Pink,2100000,1950000,1800000,9000000,5850000,27,60
-Rok Midi Linen Stripe,3300000,3650000,4000000,11000000,10950000,50,9
-Kemeja Oversized Linen Biru Muda,3900000,3850000,3800000,12000000,11550000,55,24
-Set Piyama Linen Krem,1800000,2100000,2450000,8000000,6350000,38,33
-Dress Mini Linen Terracotta,2600000,2300000,1950000,9500000,6850000,32,5
+Tanggal,Order ID,Produk,Region,Sales,Qty,Harga Satuan,Total
+2026-04-01,ORD-1001,Celana Kulot Krem,Jawa Tengah & DIY,Sari,1,145000,145000
+2026-04-01,ORD-1002,Blouse Linen Dusty Pink,Jabodetabek,Putri,1,155000,155000
+2026-04-01,ORD-1003,Tunik Linen Oversize,Luar Jawa,Dimas,1,170000,170000
+2026-04-04,ORD-1004,Blouse Linen Dusty Pink,Luar Jawa,Putri,1,155000,155000
+2026-04-05,ORD-1005,Tunik Linen Oversize,Luar Jawa,Dimas,1,170000,170000
+2026-04-06,ORD-1006,Celana Linen Wide Leg,Jawa Tengah & DIY,Sari,2,150000,300000
+2026-04-07,ORD-1007,Setelan Linen Two Piece,Jawa Tengah & DIY,Sari,1,275000,275000
+2026-04-08,ORD-1008,Outer Kimono Linen,Jabodetabek,Dimas,1,185000,185000
+2026-04-10,ORD-1009,Outer Kimono Linen,Jawa Tengah & DIY,Sari,2,185000,370000
+2026-04-11,ORD-1010,Celana Linen Wide Leg,Jabodetabek,Dimas,2,150000,300000
+2026-04-11,ORD-1011,Celana Kulot Krem,Jawa Tengah & DIY,Putri,2,145000,290000
+2026-04-11,ORD-1012,Dress Maxi Linen Navy,Luar Jawa,Sari,1,230000,230000
+2026-04-11,ORD-1013,Celana Kulot Krem,Jawa Barat,Dimas,1,145000,145000
+2026-04-12,ORD-1014,Blouse Linen Dusty Pink,Jawa Timur,Dimas,1,155000,155000
+2026-04-13,ORD-1015,Outer Kimono Linen,Jawa Tengah & DIY,Dimas,1,185000,185000
+2026-04-13,ORD-1016,Blouse Linen Dusty Pink,Jawa Tengah & DIY,Putri,3,155000,465000
+2026-04-14,ORD-1017,Celana Kulot Krem,Jawa Barat,Putri,2,145000,290000
+2026-04-14,ORD-1018,Blouse Linen Dusty Pink,Jawa Timur,Dimas,1,155000,155000
+2026-04-14,ORD-1019,Rok Lilit Linen Coklat,Luar Jawa,Sari,3,135000,405000
+2026-04-15,ORD-1020,Outer Kimono Linen,Jawa Barat,Sari,1,185000,185000
+2026-04-15,ORD-1021,Outer Kimono Linen,Jawa Tengah & DIY,Sari,2,185000,370000
+2026-04-15,ORD-1022,Blouse Linen Dusty Pink,Jawa Tengah & DIY,Sari,2,155000,310000
+2026-04-16,ORD-1023,Celana Linen Wide Leg,Jawa Timur,Sari,2,150000,300000
+2026-04-16,ORD-1024,Rok Lilit Linen Coklat,Jawa Barat,Putri,1,135000,135000
+2026-04-16,ORD-1025,Tunik Linen Oversize,Jawa Tengah & DIY,Putri,2,170000,340000
+2026-04-17,ORD-1026,Setelan Linen Two Piece,Jawa Timur,Dimas,2,275000,550000
+2026-04-17,ORD-1027,Blouse Linen Dusty Pink,Luar Jawa,Dimas,1,155000,155000
+2026-04-18,ORD-1028,Kemeja Linen Putih,Jawa Barat,Putri,1,165000,165000
+2026-04-19,ORD-1029,Setelan Linen Two Piece,Jabodetabek,Dimas,2,275000,550000
+2026-04-19,ORD-1030,Setelan Linen Two Piece,Jawa Timur,Putri,2,275000,550000
+2026-04-20,ORD-1031,Tunik Linen Oversize,Jabodetabek,Putri,1,170000,170000
+2026-04-21,ORD-1032,Rok Lilit Linen Coklat,Jawa Tengah & DIY,Sari,3,135000,405000
+2026-04-21,ORD-1033,Rok Lilit Linen Coklat,Jawa Barat,Dimas,2,135000,270000
+2026-04-23,ORD-1034,Rok Lilit Linen Coklat,Jawa Barat,Putri,2,135000,270000
+2026-04-23,ORD-1035,Celana Kulot Krem,Jawa Tengah & DIY,Putri,3,145000,435000
+2026-04-23,ORD-1036,Tunik Linen Oversize,Jawa Barat,Sari,2,170000,340000
+2026-04-24,ORD-1037,Dress Midi Sage Green,Luar Jawa,Sari,2,210000,420000
+2026-04-25,ORD-1038,Outer Kimono Linen,Jabodetabek,Sari,2,185000,370000
+2026-04-25,ORD-1039,Outer Kimono Linen,Jawa Barat,Sari,1,185000,185000
+2026-04-25,ORD-1040,Blouse Linen Dusty Pink,Jabodetabek,Sari,2,155000,310000
+2026-04-26,ORD-1041,Celana Linen Wide Leg,Luar Jawa,Sari,1,150000,150000
+2026-04-26,ORD-1042,Dress Midi Sage Green,Jawa Timur,Putri,3,210000,630000
+2026-04-26,ORD-1043,Dress Midi Sage Green,Luar Jawa,Putri,1,210000,210000
+2026-04-26,ORD-1044,Setelan Linen Two Piece,Luar Jawa,Putri,1,275000,275000
+2026-04-27,ORD-1045,Blouse Linen Dusty Pink,Jawa Tengah & DIY,Dimas,3,155000,465000
+2026-04-27,ORD-1046,Outer Kimono Linen,Luar Jawa,Dimas,2,185000,370000
+2026-04-27,ORD-1047,Celana Kulot Krem,Jawa Barat,Sari,1,145000,145000
+2026-04-28,ORD-1048,Kemeja Linen Putih,Luar Jawa,Sari,2,165000,330000
+2026-04-29,ORD-1049,Blouse Linen Dusty Pink,Jabodetabek,Putri,1,155000,155000
+2026-04-29,ORD-1050,Kemeja Linen Putih,Jabodetabek,Sari,1,165000,165000
+2026-04-30,ORD-1051,Celana Kulot Krem,Jawa Barat,Dimas,2,145000,290000
+2026-05-01,ORD-1052,Celana Linen Wide Leg,Luar Jawa,Sari,1,150000,150000
+2026-05-01,ORD-1053,Dress Maxi Linen Navy,Jawa Timur,Sari,2,230000,460000
+2026-05-01,ORD-1054,Celana Linen Wide Leg,Jawa Barat,Sari,2,150000,300000
+2026-05-02,ORD-1055,Setelan Linen Two Piece,Jawa Timur,Dimas,1,275000,275000
+2026-05-03,ORD-1056,Kemeja Linen Putih,Jabodetabek,Sari,3,165000,495000
+2026-05-03,ORD-1057,Setelan Linen Two Piece,Jawa Tengah & DIY,Sari,3,275000,825000
+2026-05-03,ORD-1058,Blouse Linen Dusty Pink,Jawa Barat,Putri,1,155000,155000
+2026-05-04,ORD-1059,Dress Midi Sage Green,Jawa Barat,Dimas,2,210000,420000
+2026-05-04,ORD-1060,Celana Linen Wide Leg,Jabodetabek,Dimas,1,150000,150000
+2026-05-05,ORD-1061,Celana Kulot Krem,Luar Jawa,Sari,1,145000,145000
+2026-05-05,ORD-1062,Celana Kulot Krem,Jawa Barat,Dimas,1,145000,145000
+2026-05-06,ORD-1063,Celana Linen Wide Leg,Jawa Timur,Sari,1,150000,150000
+2026-05-06,ORD-1064,Dress Midi Sage Green,Jabodetabek,Dimas,2,210000,420000
+2026-05-07,ORD-1065,Celana Linen Wide Leg,Jawa Timur,Putri,1,150000,150000
+2026-05-08,ORD-1066,Tunik Linen Oversize,Jawa Timur,Sari,3,170000,510000
+2026-05-08,ORD-1067,Blouse Linen Dusty Pink,Jawa Barat,Sari,1,155000,155000
+2026-05-08,ORD-1068,Dress Maxi Linen Navy,Luar Jawa,Sari,3,230000,690000
+2026-05-09,ORD-1069,Outer Kimono Linen,Jabodetabek,Putri,1,185000,185000
+2026-05-09,ORD-1070,Celana Linen Wide Leg,Luar Jawa,Sari,2,150000,300000
+2026-05-09,ORD-1071,Kemeja Linen Putih,Jabodetabek,Sari,2,165000,330000
+2026-05-09,ORD-1072,Celana Kulot Krem,Jabodetabek,Putri,2,145000,290000
+2026-05-10,ORD-1073,Setelan Linen Two Piece,Luar Jawa,Sari,1,275000,275000
+2026-05-10,ORD-1074,Dress Maxi Linen Navy,Jabodetabek,Putri,2,230000,460000
+2026-05-12,ORD-1075,Dress Maxi Linen Navy,Luar Jawa,Dimas,2,230000,460000
+2026-05-12,ORD-1076,Rok Lilit Linen Coklat,Jawa Tengah & DIY,Sari,1,135000,135000
+2026-05-13,ORD-1077,Setelan Linen Two Piece,Jawa Tengah & DIY,Dimas,1,275000,275000
+2026-05-14,ORD-1078,Celana Kulot Krem,Jawa Timur,Putri,1,145000,145000
+2026-05-15,ORD-1079,Celana Kulot Krem,Luar Jawa,Sari,1,145000,145000
+2026-05-15,ORD-1080,Tunik Linen Oversize,Jawa Barat,Dimas,1,170000,170000
+2026-05-16,ORD-1081,Blouse Linen Dusty Pink,Jawa Tengah & DIY,Sari,1,155000,155000
+2026-05-17,ORD-1082,Tunik Linen Oversize,Jawa Tengah & DIY,Putri,3,170000,510000
+2026-05-17,ORD-1083,Tunik Linen Oversize,Luar Jawa,Dimas,1,170000,170000
+2026-05-17,ORD-1084,Celana Kulot Krem,Jawa Tengah & DIY,Sari,1,145000,145000
+2026-05-19,ORD-1085,Tunik Linen Oversize,Jawa Tengah & DIY,Dimas,1,170000,170000
+2026-05-19,ORD-1086,Dress Maxi Linen Navy,Jawa Tengah & DIY,Sari,1,230000,230000
+2026-05-19,ORD-1087,Rok Lilit Linen Coklat,Jawa Timur,Dimas,2,135000,270000
+2026-05-22,ORD-1088,Setelan Linen Two Piece,Jabodetabek,Sari,1,275000,275000
+2026-05-22,ORD-1089,Outer Kimono Linen,Jawa Tengah & DIY,Sari,1,185000,185000
+2026-05-22,ORD-1090,Celana Linen Wide Leg,Jawa Timur,Putri,2,150000,300000
+2026-05-23,ORD-1091,Celana Kulot Krem,Jawa Barat,Putri,1,145000,145000
+2026-05-24,ORD-1092,Outer Kimono Linen,Luar Jawa,Sari,2,185000,370000
+2026-05-25,ORD-1093,Dress Midi Sage Green,Jawa Tengah & DIY,Dimas,1,210000,210000
+2026-05-25,ORD-1094,Kemeja Linen Putih,Jawa Barat,Putri,1,165000,165000
+2026-05-26,ORD-1095,Celana Kulot Krem,Luar Jawa,Dimas,1,145000,145000
+2026-05-27,ORD-1096,Dress Midi Sage Green,Jawa Barat,Sari,1,210000,210000
+2026-05-27,ORD-1097,Setelan Linen Two Piece,Jawa Barat,Putri,1,275000,275000
+2026-05-28,ORD-1098,Setelan Linen Two Piece,Jawa Barat,Dimas,3,275000,825000
+2026-05-29,ORD-1099,Celana Kulot Krem,Jabodetabek,Dimas,2,145000,290000
+2026-05-30,ORD-1100,Blouse Linen Dusty Pink,Jawa Tengah & DIY,Dimas,2,155000,310000
+2026-05-30,ORD-1101,Blouse Linen Dusty Pink,Jabodetabek,Putri,1,155000,155000
+2026-05-31,ORD-1102,Setelan Linen Two Piece,Jawa Tengah & DIY,Sari,1,275000,275000
+2026-05-31,ORD-1103,Rok Lilit Linen Coklat,Luar Jawa,Dimas,1,135000,135000
+2026-06-01,ORD-1104,Tunik Linen Oversize,Jabodetabek,Sari,1,170000,170000
+2026-06-01,ORD-1105,Rok Lilit Linen Coklat,Luar Jawa,Dimas,1,135000,135000
+2026-06-01,ORD-1106,Kemeja Linen Putih,Luar Jawa,Dimas,1,165000,165000
+2026-06-02,ORD-1107,Outer Kimono Linen,Luar Jawa,Putri,2,185000,370000
+2026-06-04,ORD-1108,Dress Maxi Linen Navy,Jawa Tengah & DIY,Sari,1,230000,230000
+2026-06-04,ORD-1109,Setelan Linen Two Piece,Luar Jawa,Putri,1,275000,275000
+2026-06-05,ORD-1110,Blouse Linen Dusty Pink,Jawa Timur,Sari,1,155000,155000
+2026-06-05,ORD-1111,Outer Kimono Linen,Jawa Tengah & DIY,Putri,2,185000,370000
+2026-06-05,ORD-1112,Celana Kulot Krem,Jawa Tengah & DIY,Putri,3,145000,435000
+2026-06-06,ORD-1113,Setelan Linen Two Piece,Jawa Timur,Putri,1,275000,275000
+2026-06-06,ORD-1114,Rok Lilit Linen Coklat,Jawa Barat,Sari,2,135000,270000
+2026-06-07,ORD-1115,Setelan Linen Two Piece,Jawa Barat,Putri,3,275000,825000
+2026-06-07,ORD-1116,Dress Maxi Linen Navy,Jawa Timur,Putri,1,230000,230000
+2026-06-07,ORD-1117,Kemeja Linen Putih,Jawa Tengah & DIY,Sari,1,165000,165000
+2026-06-08,ORD-1118,Dress Maxi Linen Navy,Jawa Tengah & DIY,Dimas,2,230000,460000
+2026-06-08,ORD-1119,Celana Linen Wide Leg,Jawa Barat,Putri,2,150000,300000
+2026-06-09,ORD-1120,Dress Midi Sage Green,Jabodetabek,Dimas,3,210000,630000
+2026-06-09,ORD-1121,Tunik Linen Oversize,Luar Jawa,Dimas,3,170000,510000
+2026-06-11,ORD-1122,Rok Lilit Linen Coklat,Jawa Barat,Sari,1,135000,135000
+2026-06-13,ORD-1123,Blouse Linen Dusty Pink,Luar Jawa,Sari,2,155000,310000
+2026-06-14,ORD-1124,Setelan Linen Two Piece,Luar Jawa,Sari,3,275000,825000
+2026-06-14,ORD-1125,Setelan Linen Two Piece,Jawa Timur,Sari,2,275000,550000
+2026-06-14,ORD-1126,Dress Midi Sage Green,Jabodetabek,Sari,3,210000,630000
+2026-06-15,ORD-1127,Blouse Linen Dusty Pink,Luar Jawa,Dimas,1,155000,155000
+2026-06-15,ORD-1128,Kemeja Linen Putih,Jawa Barat,Sari,2,165000,330000
+2026-06-16,ORD-1129,Dress Midi Sage Green,Luar Jawa,Putri,2,210000,420000
+2026-06-16,ORD-1130,Dress Maxi Linen Navy,Jawa Timur,Putri,1,230000,230000
+2026-06-17,ORD-1131,Tunik Linen Oversize,Luar Jawa,Dimas,2,170000,340000
+2026-06-17,ORD-1132,Dress Midi Sage Green,Jawa Timur,Dimas,3,210000,630000
+2026-06-17,ORD-1133,Rok Lilit Linen Coklat,Jawa Tengah & DIY,Putri,1,135000,135000
+2026-06-18,ORD-1134,Blouse Linen Dusty Pink,Jawa Timur,Sari,1,155000,155000
+2026-06-18,ORD-1135,Rok Lilit Linen Coklat,Jawa Tengah & DIY,Dimas,1,135000,135000
+2026-06-19,ORD-1136,Tunik Linen Oversize,Jawa Barat,Sari,1,170000,170000
+2026-06-20,ORD-1137,Setelan Linen Two Piece,Jawa Barat,Putri,3,275000,825000
+2026-06-20,ORD-1138,Blouse Linen Dusty Pink,Jawa Timur,Dimas,1,155000,155000
+2026-06-21,ORD-1139,Tunik Linen Oversize,Jawa Timur,Sari,2,170000,340000
+2026-06-21,ORD-1140,Blouse Linen Dusty Pink,Jawa Timur,Putri,2,155000,310000
+2026-06-22,ORD-1141,Kemeja Linen Putih,Jawa Timur,Dimas,2,165000,330000
+2026-06-22,ORD-1142,Kemeja Linen Putih,Jawa Tengah & DIY,Dimas,1,165000,165000
+2026-06-22,ORD-1143,Setelan Linen Two Piece,Luar Jawa,Putri,2,275000,550000
+2026-06-23,ORD-1144,Celana Linen Wide Leg,Jawa Tengah & DIY,Dimas,1,150000,150000
+2026-06-24,ORD-1145,Kemeja Linen Putih,Jawa Tengah & DIY,Putri,2,165000,330000
+2026-06-24,ORD-1146,Setelan Linen Two Piece,Jawa Barat,Dimas,3,275000,825000
+2026-06-25,ORD-1147,Dress Maxi Linen Navy,Jabodetabek,Dimas,2,230000,460000
+2026-06-26,ORD-1148,Dress Maxi Linen Navy,Jabodetabek,Sari,3,230000,690000
+2026-06-26,ORD-1149,Setelan Linen Two Piece,Jawa Timur,Sari,1,275000,275000
+2026-06-27,ORD-1150,Rok Lilit Linen Coklat,Jawa Tengah & DIY,Sari,2,135000,270000
+2026-06-28,ORD-1151,Outer Kimono Linen,Jawa Timur,Dimas,1,185000,185000
+2026-06-28,ORD-1152,Setelan Linen Two Piece,Jabodetabek,Dimas,1,275000,275000
+2026-06-28,ORD-1153,Kemeja Linen Putih,Luar Jawa,Sari,3,165000,495000
+2026-06-29,ORD-1154,Blouse Linen Dusty Pink,Jabodetabek,Putri,3,155000,465000
+2026-07-02,ORD-1155,Blouse Linen Dusty Pink,Luar Jawa,Sari,1,155000,155000
+2026-07-03,ORD-1156,Dress Midi Sage Green,Jabodetabek,Putri,2,210000,420000
+2026-07-04,ORD-1157,Celana Linen Wide Leg,Jawa Tengah & DIY,Dimas,3,150000,450000
+2026-07-04,ORD-1158,Dress Midi Sage Green,Luar Jawa,Putri,2,210000,420000
+2026-07-05,ORD-1159,Celana Kulot Krem,Jawa Tengah & DIY,Sari,1,145000,145000
+2026-07-05,ORD-1160,Dress Maxi Linen Navy,Jawa Tengah & DIY,Putri,1,230000,230000
+2026-07-05,ORD-1161,Setelan Linen Two Piece,Jawa Barat,Sari,2,275000,550000
+2026-07-05,ORD-1162,Dress Maxi Linen Navy,Jawa Barat,Sari,3,230000,690000
+2026-07-06,ORD-1163,Rok Lilit Linen Coklat,Luar Jawa,Sari,3,135000,405000
+2026-07-06,ORD-1164,Dress Maxi Linen Navy,Jawa Tengah & DIY,Putri,1,230000,230000
+2026-07-06,ORD-1165,Setelan Linen Two Piece,Jawa Tengah & DIY,Sari,3,275000,825000
+2026-07-07,ORD-1166,Outer Kimono Linen,Jawa Timur,Dimas,1,185000,185000
+2026-07-07,ORD-1167,Celana Kulot Krem,Jawa Tengah & DIY,Putri,2,145000,290000
+2026-07-08,ORD-1168,Dress Midi Sage Green,Jawa Barat,Putri,2,210000,420000
+2026-07-08,ORD-1169,Tunik Linen Oversize,Jawa Tengah & DIY,Putri,3,170000,510000
+2026-07-09,ORD-1170,Celana Linen Wide Leg,Jawa Timur,Putri,2,150000,300000
+2026-07-09,ORD-1171,Dress Maxi Linen Navy,Jawa Tengah & DIY,Sari,1,230000,230000
+2026-07-11,ORD-1172,Celana Linen Wide Leg,Jawa Timur,Putri,1,150000,150000
+2026-07-11,ORD-1173,Dress Maxi Linen Navy,Jawa Timur,Dimas,3,230000,690000
+2026-07-12,ORD-1174,Celana Linen Wide Leg,Jawa Barat,Dimas,1,150000,150000
+2026-07-13,ORD-1175,Outer Kimono Linen,Jawa Tengah & DIY,Dimas,1,185000,185000
+2026-07-14,ORD-1176,Rok Lilit Linen Coklat,Jabodetabek,Putri,2,135000,270000
+2026-07-14,ORD-1177,Blouse Linen Dusty Pink,Jawa Barat,Putri,1,155000,155000
+2026-07-15,ORD-1178,Celana Linen Wide Leg,Jawa Barat,Putri,2,150000,300000
+2026-07-15,ORD-1179,Celana Linen Wide Leg,Jawa Timur,Dimas,3,150000,450000
+2026-07-18,ORD-1180,Blouse Linen Dusty Pink,Jawa Barat,Dimas,2,155000,310000
+2026-07-18,ORD-1181,Dress Maxi Linen Navy,Jawa Timur,Putri,1,230000,230000
+2026-07-19,ORD-1182,Outer Kimono Linen,Luar Jawa,Dimas,2,185000,370000
+2026-07-19,ORD-1183,Outer Kimono Linen,Jawa Timur,Dimas,3,185000,555000
+2026-07-19,ORD-1184,Rok Lilit Linen Coklat,Jawa Barat,Sari,1,135000,135000
