@@ -67,6 +67,36 @@ td a:hover { text-decoration: underline; }
 .gate h2 { font-family: var(--serif); font-size: 20px; font-weight: 400; margin-bottom: 8px; }
 .gate p { font-size: 13.5px; color: var(--ink-2); line-height: 1.6; margin-bottom: 18px; }
 .gate a.btn { display: inline-block; text-decoration: none; text-align: center; }
+
+.course-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.tab-btn { padding: 9px 16px; border-radius: 10px; border: 1.5px solid var(--border); background: #fff; font-size: 13px; font-weight: 600; color: var(--ink-2); cursor: pointer; font-family: inherit; transition: all 0.15s; }
+.tab-btn:hover { border-color: var(--border-strong); color: var(--ink); }
+.tab-btn.active { background: var(--ink); border-color: var(--ink); color: #fff; }
+.pdf-status { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13.5px; }
+.pdf-status a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.pdf-status a:hover { text-decoration: underline; }
+.btn-mini { padding: 6px 12px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--ink); cursor: pointer; font-family: inherit; }
+.btn-mini:hover { border-color: var(--border-strong); }
+table.matrix-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.matrix-table th, table.matrix-table td { text-align: left; padding: 12px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.4px; }
+.mod-sub { display: block; font-size: 11.5px; color: var(--ink-2); font-weight: 400; margin-top: 1px; }
+.cell-done { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.cell-link, .cell-link-btn { color: var(--green); text-decoration: none; font-weight: 600; font-size: 12px; background: var(--green-dim); border: 1px solid var(--green-border); padding: 5px 10px; border-radius: 7px; cursor: pointer; font-family: inherit; display: inline-block; }
+.cell-link:hover, .cell-link-btn:hover { text-decoration: underline; }
+.cell-missing { padding: 6px 12px; background: var(--surface-2); border: 1.5px dashed var(--border-strong); border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--ink-2); cursor: pointer; font-family: inherit; }
+.cell-missing:hover { border-color: var(--accent); color: var(--accent); }
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.show { display: flex; }
+.modal { background: #fff; border-radius: 16px; padding: 28px; max-width: 440px; width: 100%; box-shadow: 0 24px 60px rgba(0,0,0,0.18); position: relative; max-height: 85vh; overflow-y: auto; }
+.modal-close { position: absolute; top: 14px; right: 14px; width: 28px; height: 28px; border-radius: 50%; border: none; background: var(--surface-2); cursor: pointer; font-size: 16px; color: var(--ink-2); line-height: 1; }
+.modal-close:hover { background: var(--border); color: var(--ink); }
+.modal h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.modal-sub { font-size: 12.5px; color: var(--ink-2); margin-bottom: 16px; }
+.doc-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.doc-item a { color: var(--accent); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.doc-item a:hover { text-decoration: underline; }
+.doc-list { margin-bottom: 16px; }
 </style>
 </head>
 <body>
@@ -100,67 +130,32 @@ td a:hover { text-decoration: underline; }
 <!-- State: admin -->
 <div class="wrap" id="stateAdmin" style="display:none;">
   <h1 class="page-title">Kelola Konten Kursus</h1>
-  <p class="page-sub">Unggah PDF dan video yang akan langsung tampil di halaman kursus — tidak perlu deploy ulang.</p>
+  <p class="page-sub">Unggah PDF, video, PPT, dan dokumen praktik per modul — tampil langsung di halaman kursus, tidak perlu deploy ulang.</p>
+
+  <div class="course-tabs" id="courseTabs"></div>
 
   <div class="card">
-    <h2>PDF per Kursus</h2>
-    <p class="hint">Satu PDF per kursus (mis. panduan/lembar prompt). Mengunggah file baru akan menggantikan yang lama.</p>
-    <label for="pdfCourseSelect">Kursus</label>
-    <select id="pdfCourseSelect"></select>
-    <label for="pdfFileInput">File PDF</label>
-    <input type="file" id="pdfFileInput" accept="application/pdf">
-    <button class="btn" id="pdfUploadBtn" onclick="uploadPdf()">Unggah PDF</button>
-    <div class="status" id="pdfStatus"></div>
+    <h2>PDF Kursus</h2>
+    <p class="hint">Satu PDF untuk keseluruhan kursus ini (mis. panduan/lembar prompt). Mengunggah file baru akan menggantikan yang lama.</p>
+    <div class="pdf-status" id="pdfRow">Memuat...</div>
   </div>
 
   <div class="card">
-    <h2>Video per Modul</h2>
-    <p class="hint">Pilih kursus dan modul, lalu tempel link YouTube video untuk modul tersebut. Video akan tampil di bagian paling atas modul, di atas judul.</p>
-    <label for="videoCourseSelect">Kursus</label>
-    <select id="videoCourseSelect" onchange="populateModuleSelect(); checkCurrentVideo();"></select>
-    <label for="videoModuleSelect">Modul</label>
-    <select id="videoModuleSelect" onchange="checkCurrentVideo()"></select>
-    <div class="current-indicator" id="currentVideoInfo"></div>
-    <label for="videoUrlInput">Link YouTube</label>
-    <input type="text" id="videoUrlInput" placeholder="https://www.youtube.com/watch?v=... atau https://youtu.be/...">
-    <button class="btn" id="videoUploadBtn" onclick="saveVideo()">Simpan Video</button>
-    <div class="status" id="videoStatus"></div>
-  </div>
-
-  <div class="card">
-    <h2>PPT per Modul</h2>
-    <p class="hint">Pilih kursus dan modul, lalu unggah file slide (PPT/PPTX) untuk modul tersebut. Tampil sebagai tautan "Lihat Slide" di bawah judul modul, di semua kursus (K1, K2, dst). Mengunggah file baru untuk modul yang sama akan menggantikan yang lama.</p>
-    <label for="pptCourseSelect">Kursus</label>
-    <select id="pptCourseSelect" onchange="populateModuleSelectFor('pptCourseSelect','pptModuleSelect'); checkCurrentPpt();"></select>
-    <label for="pptModuleSelect">Modul</label>
-    <select id="pptModuleSelect" onchange="checkCurrentPpt()"></select>
-    <div class="current-indicator" id="currentPptInfo"></div>
-    <label for="pptFileInput">File PPT</label>
-    <input type="file" id="pptFileInput" accept=".ppt,.pptx">
-    <button class="btn" id="pptUploadBtn" onclick="uploadPpt()">Unggah PPT</button>
-    <div class="status" id="pptStatus"></div>
-  </div>
-
-  <div class="card">
-    <h2>Dokumen Praktik per Modul</h2>
-    <p class="hint">Dokumen pendukung untuk sesi praktik di akhir modul (PDF, DOC, DOCX, atau MD). Bisa pilih dan unggah lebih dari satu file sekaligus — tidak menggantikan yang sudah ada.</p>
-    <label for="docCourseSelect">Kursus</label>
-    <select id="docCourseSelect" onchange="populateDocModuleSelect()"></select>
-    <label for="docModuleSelect">Modul</label>
-    <select id="docModuleSelect"></select>
-    <label for="docFileInput">File Dokumen (bisa pilih lebih dari satu)</label>
-    <input type="file" id="docFileInput" accept=".pdf,.doc,.docx,.md" multiple>
-    <button class="btn" id="docUploadBtn" onclick="uploadDoc()">Unggah Dokumen</button>
-    <div class="status" id="docStatus"></div>
-  </div>
-
-  <div class="card">
-    <h2>Ringkasan Konten Saat Ini</h2>
-    <p class="hint">Semua PDF dan video yang sedang aktif di situs.</p>
-    <table id="overviewTable">
-      <thead><tr><th>Kursus</th><th>Item</th><th>File</th></tr></thead>
-      <tbody id="overviewList"><tr><td colspan="3">Memuat...</td></tr></tbody>
+    <h2 id="matrixCourseTitle">Konten per Modul</h2>
+    <p class="hint">Klik sel yang sudah terisi untuk lihat/ganti filenya, atau klik "+ Unggah" untuk yang masih kosong.</p>
+    <table class="matrix-table" id="matrixTable">
+      <thead><tr><th>Modul</th><th>Video</th><th>PPT</th><th>Dokumen</th></tr></thead>
+      <tbody id="matrixBody"><tr><td colspan="4">Memuat...</td></tr></tbody>
     </table>
+  </div>
+</div>
+
+<!-- Upload modal, shared by PDF / Video / PPT / Dokumen actions -->
+<div class="modal-overlay" id="uploadModalOverlay" onclick="if(event.target===this) closeModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <h3 id="modalTitle"></h3>
+    <div id="modalBody"></div>
   </div>
 </div>
 
@@ -216,7 +211,8 @@ function moduleLabel(slug, num) {
 }
 
 let currentSession = null;
-let lastDocs = [];
+let activeCourse = COURSES[0].slug;
+let dataCache = { resources: [], videos: [], ppts: [], docs: [] };
 
 function showState(state) {
   document.getElementById('stateLoggedOut').style.display = state === 'loggedOut' ? 'block' : 'none';
@@ -229,65 +225,17 @@ function courseName(slug) {
   return c ? c.name : slug;
 }
 
-function populateCourseSelects() {
-  var opts = COURSES.map(function (c) { return '<option value="' + c.slug + '">' + c.name + '</option>'; }).join('');
-  document.getElementById('pdfCourseSelect').innerHTML = opts;
-  document.getElementById('videoCourseSelect').innerHTML = opts;
-  document.getElementById('pptCourseSelect').innerHTML = opts;
-  document.getElementById('docCourseSelect').innerHTML = opts;
-  populateModuleSelect();
-  populateModuleSelectFor('pptCourseSelect', 'pptModuleSelect');
-  populateDocModuleSelect();
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
 }
-
-function populateModuleSelectFor(courseSelectId, moduleSelectId) {
-  var slug = document.getElementById(courseSelectId).value;
-  var course = COURSES.find(function (c) { return c.slug === slug; });
-  var sel = document.getElementById(moduleSelectId);
-  var opts = '';
-  for (var i = 1; i <= (course ? course.modules : 1); i++) opts += '<option value="' + i + '">' + moduleLabel(slug, i) + '</option>';
-  sel.innerHTML = opts;
-}
-
-function populateModuleSelect() { populateModuleSelectFor('videoCourseSelect', 'videoModuleSelect'); }
-function populateDocModuleSelect() { populateModuleSelectFor('docCourseSelect', 'docModuleSelect'); }
 
 function setStatus(id, text, kind) {
   var el = document.getElementById(id);
+  if (!el) return;
   el.textContent = text;
   el.className = 'status show' + (kind ? ' ' + kind : '');
-}
-
-async function uploadPdf() {
-  var slug = document.getElementById('pdfCourseSelect').value;
-  var fileInput = document.getElementById('pdfFileInput');
-  var file = fileInput.files[0];
-  var btn = document.getElementById('pdfUploadBtn');
-  if (!file) { setStatus('pdfStatus', 'Pilih file PDF dulu.', 'error'); return; }
-  if (file.type !== 'application/pdf') { setStatus('pdfStatus', 'File harus berformat PDF.', 'error'); return; }
-
-  btn.disabled = true;
-  setStatus('pdfStatus', 'Mengunggah...', 'pending');
-
-  var path = slug + '/' + Date.now() + '-' + file.name;
-  var up = await sbClient.storage.from('course-pdfs').upload(path, file, { upsert: true });
-  if (up.error) { setStatus('pdfStatus', 'Gagal unggah: ' + up.error.message, 'error'); btn.disabled = false; return; }
-
-  var pub = sbClient.storage.from('course-pdfs').getPublicUrl(path);
-  var db = await sbClient.from('course_resources').upsert({
-    course_slug: slug,
-    pdf_url: pub.data.publicUrl,
-    pdf_label: file.name,
-    updated_at: new Date().toISOString(),
-    updated_by: currentSession.user.email
-  }, { onConflict: 'course_slug' });
-
-  btn.disabled = false;
-  if (db.error) { setStatus('pdfStatus', 'Gagal simpan ke database: ' + db.error.message, 'error'); return; }
-
-  setStatus('pdfStatus', 'PDF berhasil diunggah untuk ' + courseName(slug) + ' ✓', 'success');
-  fileInput.value = '';
-  refreshOverview();
 }
 
 function extractYoutubeId(url) {
@@ -296,99 +244,195 @@ function extractYoutubeId(url) {
   return m ? m[1] : null;
 }
 
-async function checkCurrentVideo() {
-  var slug = document.getElementById('videoCourseSelect').value;
-  var moduleNum = parseInt(document.getElementById('videoModuleSelect').value, 10);
-  var indicator = document.getElementById('currentVideoInfo');
-  var urlInput = document.getElementById('videoUrlInput');
-  if (!slug || !moduleNum) return;
+// ─── DATA LOADING ────────────────────────────────────────────────────────────
 
-  indicator.className = 'current-indicator show no-video';
-  indicator.textContent = 'Memeriksa...';
+async function loadAllData() {
+  var resourcesRes = await sbClient.from('course_resources').select('*');
+  var videosRes = await sbClient.from('module_videos').select('*').order('course_slug').order('module_num');
+  var pptsRes = await sbClient.from('module_ppts').select('*').order('course_slug').order('module_num');
+  var docsRes = await sbClient.from('module_documents').select('*').order('course_slug').order('module_num').order('created_at');
+  dataCache.resources = resourcesRes.data || [];
+  dataCache.videos = videosRes.data || [];
+  dataCache.ppts = pptsRes.data || [];
+  dataCache.docs = docsRes.data || [];
+}
 
-  var res = await sbClient.from('module_videos').select('video_url')
-    .eq('course_slug', slug).eq('module_num', moduleNum).maybeSingle();
+async function reloadAndRender() {
+  await loadAllData();
+  renderAll();
+}
 
-  if (res.data && res.data.video_url) {
-    indicator.className = 'current-indicator show has-video';
-    indicator.innerHTML = '✓ Video sudah ada untuk modul ini: <a href="' + res.data.video_url + '" target="_blank" rel="noopener">' + res.data.video_url + '</a>';
-    urlInput.value = res.data.video_url;
+// ─── TABS ────────────────────────────────────────────────────────────────────
+
+function renderCourseTabs() {
+  var el = document.getElementById('courseTabs');
+  el.innerHTML = COURSES.map(function (c) {
+    return '<button class="tab-btn' + (c.slug === activeCourse ? ' active' : '') + '" onclick="switchCourse(\'' + c.slug + '\')">' + escapeHtml(c.name) + '</button>';
+  }).join('');
+}
+
+function switchCourse(slug) {
+  activeCourse = slug;
+  renderCourseTabs();
+  renderPdfRow();
+  renderMatrix();
+}
+
+function renderAll() {
+  renderCourseTabs();
+  renderPdfRow();
+  renderMatrix();
+}
+
+// ─── PDF ROW (satu file per kursus, bukan per modul) ────────────────────────
+
+function renderPdfRow() {
+  var row = document.getElementById('pdfRow');
+  var r = dataCache.resources.find(function (x) { return x.course_slug === activeCourse; });
+  if (r && r.pdf_url) {
+    row.innerHTML = '✓ <a href="' + r.pdf_url + '" target="_blank" rel="noopener">' + escapeHtml(r.pdf_label || 'Lihat') + '</a>' +
+      '<button class="btn-mini" onclick="openPdfModal()">Ganti</button>';
   } else {
-    indicator.className = 'current-indicator show no-video';
-    indicator.textContent = 'Belum ada video untuk modul ini.';
-    urlInput.value = '';
+    row.innerHTML = '<span style="color:var(--ink-2);">Belum ada PDF untuk kursus ini.</span>' +
+      '<button class="btn-mini" onclick="openPdfModal()">+ Unggah PDF</button>';
   }
 }
 
-async function saveVideo() {
-  var slug = document.getElementById('videoCourseSelect').value;
-  var moduleNum = parseInt(document.getElementById('videoModuleSelect').value, 10);
-  var urlInput = document.getElementById('videoUrlInput');
-  var url = urlInput.value.trim();
-  var btn = document.getElementById('videoUploadBtn');
-  if (!url) { setStatus('videoStatus', 'Tempel link YouTube dulu.', 'error'); return; }
-  if (!extractYoutubeId(url)) { setStatus('videoStatus', 'Link nggak dikenali sebagai YouTube. Pastikan formatnya seperti youtube.com/watch?v=... atau youtu.be/...', 'error'); return; }
+function openPdfModal() {
+  var r = dataCache.resources.find(function (x) { return x.course_slug === activeCourse; });
+  var body =
+    '<p class="modal-sub">' + escapeHtml(courseName(activeCourse)) + '</p>' +
+    (r && r.pdf_url ? '<p style="font-size:12.5px;margin-bottom:14px;">File saat ini: <a href="' + r.pdf_url + '" target="_blank" rel="noopener">' + escapeHtml(r.pdf_label || 'Lihat') + '</a></p>' : '') +
+    '<label>File PDF baru</label>' +
+    '<input type="file" id="modalPdfFile" accept="application/pdf">' +
+    '<button class="btn" onclick="submitPdfModal()">Unggah PDF</button>' +
+    '<div class="status" id="modalStatus"></div>';
+  openModal('PDF Kursus', body);
+}
 
-  btn.disabled = true;
-  setStatus('videoStatus', 'Menyimpan...', 'pending');
+async function submitPdfModal() {
+  var fileInput = document.getElementById('modalPdfFile');
+  var file = fileInput.files[0];
+  if (!file) { setStatus('modalStatus', 'Pilih file PDF dulu.', 'error'); return; }
+  if (file.type !== 'application/pdf') { setStatus('modalStatus', 'File harus berformat PDF.', 'error'); return; }
 
+  setStatus('modalStatus', 'Mengunggah...', 'pending');
+  var path = activeCourse + '/' + Date.now() + '-' + file.name;
+  var up = await sbClient.storage.from('course-pdfs').upload(path, file, { upsert: true });
+  if (up.error) { setStatus('modalStatus', 'Gagal unggah: ' + up.error.message, 'error'); return; }
+
+  var pub = sbClient.storage.from('course-pdfs').getPublicUrl(path);
+  var db = await sbClient.from('course_resources').upsert({
+    course_slug: activeCourse,
+    pdf_url: pub.data.publicUrl,
+    pdf_label: file.name,
+    updated_at: new Date().toISOString(),
+    updated_by: currentSession.user.email
+  }, { onConflict: 'course_slug' });
+
+  if (db.error) { setStatus('modalStatus', 'Gagal simpan ke database: ' + db.error.message, 'error'); return; }
+
+  closeModal();
+  await reloadAndRender();
+}
+
+// ─── MATRIX (modul × video/ppt/dokumen) ─────────────────────────────────────
+
+function renderMatrix() {
+  var course = COURSES.find(function (c) { return c.slug === activeCourse; });
+  document.getElementById('matrixCourseTitle').textContent = 'Konten per Modul — ' + (course ? course.name : activeCourse);
+
+  var body = document.getElementById('matrixBody');
+  var rows = '';
+  var n = course ? course.modules : 0;
+
+  for (var i = 1; i <= n; i++) {
+    var title = moduleTitle(activeCourse, i);
+    var video = dataCache.videos.find(function (v) { return v.course_slug === activeCourse && v.module_num === i; });
+    var ppt = dataCache.ppts.find(function (p) { return p.course_slug === activeCourse && p.module_num === i; });
+    var docs = dataCache.docs.filter(function (d) { return d.course_slug === activeCourse && d.module_num === i; });
+
+    var videoCell = (video && video.video_url)
+      ? '<div class="cell-done"><a class="cell-link" href="' + video.video_url + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">✓ Lihat</a><button class="btn-mini" onclick="openVideoModal(' + i + ')">Ganti</button></div>'
+      : '<button class="cell-missing" onclick="openVideoModal(' + i + ')">+ Unggah</button>';
+
+    var pptCell = (ppt && ppt.ppt_url)
+      ? '<div class="cell-done"><a class="cell-link" href="' + ppt.ppt_url + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">✓ ' + escapeHtml(ppt.ppt_label || 'Lihat') + '</a><button class="btn-mini" onclick="openPptModal(' + i + ')">Ganti</button></div>'
+      : '<button class="cell-missing" onclick="openPptModal(' + i + ')">+ Unggah</button>';
+
+    var docCell = docs.length
+      ? '<button class="cell-link-btn" onclick="openDocsModal(' + i + ')">✓ ' + docs.length + ' dokumen</button>'
+      : '<button class="cell-missing" onclick="openDocsModal(' + i + ')">+ Unggah</button>';
+
+    rows += '<tr><td><strong>Modul ' + i + '</strong>' + (title ? '<span class="mod-sub">' + escapeHtml(title) + '</span>' : '') + '</td>' +
+      '<td>' + videoCell + '</td><td>' + pptCell + '</td><td>' + docCell + '</td></tr>';
+  }
+
+  body.innerHTML = rows || '<tr><td colspan="4">Kursus ini belum punya modul.</td></tr>';
+}
+
+// ─── VIDEO MODAL ─────────────────────────────────────────────────────────────
+
+function openVideoModal(moduleNum) {
+  var video = dataCache.videos.find(function (v) { return v.course_slug === activeCourse && v.module_num === moduleNum; });
+  var body =
+    '<p class="modal-sub">' + escapeHtml(courseName(activeCourse)) + ' — ' + escapeHtml(moduleLabel(activeCourse, moduleNum)) + '</p>' +
+    '<label>Link YouTube</label>' +
+    '<input type="text" id="modalVideoUrl" value="' + (video ? escapeHtml(video.video_url) : '') + '" placeholder="https://www.youtube.com/watch?v=... atau https://youtu.be/...">' +
+    '<button class="btn" onclick="submitVideoModal(' + moduleNum + ')">Simpan Video</button>' +
+    '<div class="status" id="modalStatus"></div>';
+  openModal('Video — ' + moduleLabel(activeCourse, moduleNum), body);
+}
+
+async function submitVideoModal(moduleNum) {
+  var url = document.getElementById('modalVideoUrl').value.trim();
+  if (!url) { setStatus('modalStatus', 'Tempel link YouTube dulu.', 'error'); return; }
+  if (!extractYoutubeId(url)) { setStatus('modalStatus', 'Link nggak dikenali sebagai YouTube. Pastikan formatnya seperti youtube.com/watch?v=... atau youtu.be/...', 'error'); return; }
+
+  setStatus('modalStatus', 'Menyimpan...', 'pending');
   var db = await sbClient.from('module_videos').upsert({
-    course_slug: slug,
+    course_slug: activeCourse,
     module_num: moduleNum,
     video_url: url,
     updated_at: new Date().toISOString(),
     updated_by: currentSession.user.email
   }, { onConflict: 'course_slug,module_num' });
 
-  btn.disabled = false;
-  if (db.error) { setStatus('videoStatus', 'Gagal simpan ke database: ' + db.error.message, 'error'); return; }
+  if (db.error) { setStatus('modalStatus', 'Gagal simpan ke database: ' + db.error.message, 'error'); return; }
 
-  setStatus('videoStatus', 'Video berhasil disimpan untuk ' + courseName(slug) + ' — ' + moduleLabel(slug, moduleNum) + ' ✓', 'success');
-  checkCurrentVideo();
-  refreshOverview();
+  closeModal();
+  await reloadAndRender();
 }
 
-async function checkCurrentPpt() {
-  var slug = document.getElementById('pptCourseSelect').value;
-  var moduleNum = parseInt(document.getElementById('pptModuleSelect').value, 10);
-  var indicator = document.getElementById('currentPptInfo');
-  if (!slug || !moduleNum) return;
+// ─── PPT MODAL ───────────────────────────────────────────────────────────────
 
-  indicator.className = 'current-indicator show no-video';
-  indicator.textContent = 'Memeriksa...';
-
-  var res = await sbClient.from('module_ppts').select('ppt_url, ppt_label')
-    .eq('course_slug', slug).eq('module_num', moduleNum).maybeSingle();
-
-  if (res.data && res.data.ppt_url) {
-    indicator.className = 'current-indicator show has-video';
-    indicator.innerHTML = '✓ PPT sudah ada untuk modul ini: <a href="' + res.data.ppt_url + '" target="_blank" rel="noopener">' + (res.data.ppt_label || 'Lihat') + '</a>';
-  } else {
-    indicator.className = 'current-indicator show no-video';
-    indicator.textContent = 'Belum ada PPT untuk modul ini.';
-  }
+function openPptModal(moduleNum) {
+  var ppt = dataCache.ppts.find(function (p) { return p.course_slug === activeCourse && p.module_num === moduleNum; });
+  var body =
+    '<p class="modal-sub">' + escapeHtml(courseName(activeCourse)) + ' — ' + escapeHtml(moduleLabel(activeCourse, moduleNum)) + '</p>' +
+    (ppt && ppt.ppt_url ? '<p style="font-size:12.5px;margin-bottom:14px;">File saat ini: <a href="' + ppt.ppt_url + '" target="_blank" rel="noopener">' + escapeHtml(ppt.ppt_label || 'Lihat') + '</a></p>' : '') +
+    '<label>File PPT / PPTX baru</label>' +
+    '<input type="file" id="modalPptFile" accept=".ppt,.pptx">' +
+    '<button class="btn" onclick="submitPptModal(' + moduleNum + ')">Unggah PPT</button>' +
+    '<div class="status" id="modalStatus"></div>';
+  openModal('PPT — ' + moduleLabel(activeCourse, moduleNum), body);
 }
 
-async function uploadPpt() {
-  var slug = document.getElementById('pptCourseSelect').value;
-  var moduleNum = parseInt(document.getElementById('pptModuleSelect').value, 10);
-  var fileInput = document.getElementById('pptFileInput');
+async function submitPptModal(moduleNum) {
+  var fileInput = document.getElementById('modalPptFile');
   var file = fileInput.files[0];
-  var btn = document.getElementById('pptUploadBtn');
-  if (!file) { setStatus('pptStatus', 'Pilih file PPT dulu.', 'error'); return; }
+  if (!file) { setStatus('modalStatus', 'Pilih file PPT dulu.', 'error'); return; }
   var ext = file.name.split('.').pop().toLowerCase();
-  if (['ppt', 'pptx'].indexOf(ext) === -1) { setStatus('pptStatus', 'File harus berformat PPT atau PPTX.', 'error'); return; }
+  if (['ppt', 'pptx'].indexOf(ext) === -1) { setStatus('modalStatus', 'File harus berformat PPT atau PPTX.', 'error'); return; }
 
-  btn.disabled = true;
-  setStatus('pptStatus', 'Mengunggah...', 'pending');
-
-  var path = slug + '/module-' + moduleNum + '-' + Date.now() + '-' + file.name;
+  setStatus('modalStatus', 'Mengunggah...', 'pending');
+  var path = activeCourse + '/module-' + moduleNum + '-' + Date.now() + '-' + file.name;
   var up = await sbClient.storage.from('course-ppts').upload(path, file, { upsert: true });
-  if (up.error) { setStatus('pptStatus', 'Gagal unggah: ' + up.error.message, 'error'); btn.disabled = false; return; }
+  if (up.error) { setStatus('modalStatus', 'Gagal unggah: ' + up.error.message, 'error'); return; }
 
   var pub = sbClient.storage.from('course-ppts').getPublicUrl(path);
   var db = await sbClient.from('module_ppts').upsert({
-    course_slug: slug,
+    course_slug: activeCourse,
     module_num: moduleNum,
     ppt_url: pub.data.publicUrl,
     ppt_label: file.name,
@@ -396,43 +440,55 @@ async function uploadPpt() {
     updated_by: currentSession.user.email
   }, { onConflict: 'course_slug,module_num' });
 
-  btn.disabled = false;
-  if (db.error) { setStatus('pptStatus', 'Gagal simpan ke database: ' + db.error.message, 'error'); return; }
+  if (db.error) { setStatus('modalStatus', 'Gagal simpan ke database: ' + db.error.message, 'error'); return; }
 
-  setStatus('pptStatus', 'PPT berhasil diunggah untuk ' + courseName(slug) + ' — ' + moduleLabel(slug, moduleNum) + ' ✓', 'success');
-  fileInput.value = '';
-  checkCurrentPpt();
-  refreshOverview();
+  closeModal();
+  await reloadAndRender();
 }
 
-async function uploadDoc() {
-  var slug = document.getElementById('docCourseSelect').value;
-  var moduleNum = parseInt(document.getElementById('docModuleSelect').value, 10);
-  var fileInput = document.getElementById('docFileInput');
+// ─── DOKUMEN MODAL (bisa lebih dari satu file per modul) ────────────────────
+
+function openDocsModal(moduleNum) {
+  var docs = dataCache.docs.filter(function (d) { return d.course_slug === activeCourse && d.module_num === moduleNum; });
+  var listHtml = docs.length
+    ? '<div class="doc-list">' + docs.map(function (d) {
+        return '<div class="doc-item"><a href="' + d.doc_url + '" target="_blank" rel="noopener">' + escapeHtml(d.doc_label || 'Lihat') + '</a>' +
+          '<button class="del-btn" onclick="deleteDocModal(\'' + d.id + '\', ' + moduleNum + ')">Hapus</button></div>';
+      }).join('') + '</div>'
+    : '<p style="font-size:12.5px;color:var(--ink-2);margin-bottom:14px;">Belum ada dokumen untuk modul ini.</p>';
+
+  var body =
+    '<p class="modal-sub">' + escapeHtml(courseName(activeCourse)) + ' — ' + escapeHtml(moduleLabel(activeCourse, moduleNum)) + '</p>' +
+    listHtml +
+    '<label>Tambah dokumen (bisa pilih lebih dari satu)</label>' +
+    '<input type="file" id="modalDocFile" accept=".pdf,.doc,.docx,.md" multiple>' +
+    '<button class="btn" onclick="submitDocsModal(' + moduleNum + ')">Unggah Dokumen</button>' +
+    '<div class="status" id="modalStatus"></div>';
+  openModal('Dokumen — ' + moduleLabel(activeCourse, moduleNum), body);
+}
+
+async function submitDocsModal(moduleNum) {
+  var fileInput = document.getElementById('modalDocFile');
   var files = Array.prototype.slice.call(fileInput.files || []);
-  var btn = document.getElementById('docUploadBtn');
-  if (!files.length) { setStatus('docStatus', 'Pilih minimal 1 file dokumen dulu.', 'error'); return; }
+  if (!files.length) { setStatus('modalStatus', 'Pilih minimal 1 file dokumen dulu.', 'error'); return; }
   for (var i = 0; i < files.length; i++) {
     var ext = files[i].name.split('.').pop().toLowerCase();
-    if (['pdf', 'doc', 'docx', 'md'].indexOf(ext) === -1) { setStatus('docStatus', 'File "' + files[i].name + '" harus PDF, DOC, DOCX, atau MD.', 'error'); return; }
+    if (['pdf', 'doc', 'docx', 'md'].indexOf(ext) === -1) { setStatus('modalStatus', 'File "' + files[i].name + '" harus PDF, DOC, DOCX, atau MD.', 'error'); return; }
   }
 
-  btn.disabled = true;
   var okCount = 0;
-  var okNames = [];
   var errors = [];
-
   for (var j = 0; j < files.length; j++) {
     var file = files[j];
-    setStatus('docStatus', 'Mengunggah ' + (j + 1) + '/' + files.length + ': ' + file.name + '...', 'pending');
+    setStatus('modalStatus', 'Mengunggah ' + (j + 1) + '/' + files.length + ': ' + file.name + '...', 'pending');
 
-    var path = slug + '/module-' + moduleNum + '-' + Date.now() + '-' + file.name;
+    var path = activeCourse + '/module-' + moduleNum + '-' + Date.now() + '-' + file.name;
     var up = await sbClient.storage.from('course-documents').upload(path, file);
     if (up.error) { errors.push(file.name + ': ' + up.error.message); continue; }
 
     var pub = sbClient.storage.from('course-documents').getPublicUrl(path);
     var db = await sbClient.from('module_documents').insert({
-      course_slug: slug,
+      course_slug: activeCourse,
       module_num: moduleNum,
       doc_url: pub.data.publicUrl,
       doc_path: path,
@@ -441,68 +497,35 @@ async function uploadDoc() {
     });
     if (db.error) { errors.push(file.name + ': ' + db.error.message); continue; }
     okCount++;
-    okNames.push(file.name);
   }
 
-  btn.disabled = false;
-  if (errors.length) {
-    setStatus('docStatus', okCount + '/' + files.length + ' berhasil diunggah' + (okNames.length ? ' (' + okNames.join(', ') + ')' : '') + '. Gagal: ' + errors.join(' | '), okCount > 0 ? 'pending' : 'error');
-  } else if (okCount > 1) {
-    setStatus('docStatus', okCount + ' dokumen berhasil diunggah untuk ' + courseName(slug) + ' — ' + moduleLabel(slug, moduleNum) + ' ✓ (' + okNames.join(', ') + ')', 'success');
-  } else {
-    setStatus('docStatus', okCount + ' dokumen berhasil diunggah untuk ' + courseName(slug) + ' — ' + moduleLabel(slug, moduleNum) + ' ✓', 'success');
-  }
-  fileInput.value = '';
-  refreshOverview();
+  await loadAllData();
+  renderMatrix();
+  openDocsModal(moduleNum);
+  if (errors.length) { setStatus('modalStatus', okCount + '/' + files.length + ' berhasil. Gagal: ' + errors.join(' | '), okCount > 0 ? 'pending' : 'error'); }
 }
 
-async function deleteDoc(idx) {
-  var d = lastDocs[idx];
+async function deleteDocModal(id, moduleNum) {
+  var d = dataCache.docs.find(function (x) { return String(x.id) === String(id); });
   if (!d) return;
   if (!confirm('Hapus dokumen "' + (d.doc_label || 'dokumen ini') + '"?')) return;
   await sbClient.storage.from('course-documents').remove([d.doc_path]);
   await sbClient.from('module_documents').delete().eq('id', d.id);
-  refreshOverview();
+  await loadAllData();
+  renderMatrix();
+  openDocsModal(moduleNum);
 }
 
-async function refreshOverview() {
-  var list = document.getElementById('overviewList');
-  var resourcesRes = await sbClient.from('course_resources').select('*');
-  var videosRes = await sbClient.from('module_videos').select('*').order('course_slug').order('module_num');
-  var pptsRes = await sbClient.from('module_ppts').select('*').order('course_slug').order('module_num');
-  var docsRes = await sbClient.from('module_documents').select('*').order('course_slug').order('module_num').order('created_at');
-  var resources = resourcesRes.data || [];
-  var videos = videosRes.data || [];
-  var ppts = pptsRes.data || [];
-  lastDocs = docsRes.data || [];
-  var rows = '';
+// ─── MODAL SHELL ─────────────────────────────────────────────────────────────
 
-  COURSES.forEach(function (c) {
-    var r = resources.find(function (x) { return x.course_slug === c.slug; });
-    rows += '<tr><td>' + c.name + '</td><td>PDF</td><td>' +
-      (r && r.pdf_url ? '<a href="' + r.pdf_url + '" target="_blank">' + (r.pdf_label || 'Lihat') + '</a>' : '—') +
-      '</td></tr>';
-  });
+function openModal(title, bodyHtml) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalBody').innerHTML = bodyHtml;
+  document.getElementById('uploadModalOverlay').classList.add('show');
+}
 
-  videos.forEach(function (v) {
-    if (!v.video_url) return;
-    rows += '<tr><td>' + courseName(v.course_slug) + '</td><td>Video — ' + moduleLabel(v.course_slug, v.module_num) + '</td><td>' +
-      '<a href="' + v.video_url + '" target="_blank">Lihat</a></td></tr>';
-  });
-
-  ppts.forEach(function (p) {
-    if (!p.ppt_url) return;
-    rows += '<tr><td>' + courseName(p.course_slug) + '</td><td>PPT — ' + moduleLabel(p.course_slug, p.module_num) + '</td><td>' +
-      '<a href="' + p.ppt_url + '" target="_blank">' + (p.ppt_label || 'Lihat') + '</a></td></tr>';
-  });
-
-  lastDocs.forEach(function (d, idx) {
-    rows += '<tr><td>' + courseName(d.course_slug) + '</td><td>Dokumen — ' + moduleLabel(d.course_slug, d.module_num) + '</td><td>' +
-      '<a href="' + d.doc_url + '" target="_blank">' + (d.doc_label || 'Lihat') + '</a>' +
-      '<button class="del-btn" onclick="deleteDoc(' + idx + ')">Hapus</button></td></tr>';
-  });
-
-  list.innerHTML = rows || '<tr><td colspan="3">Belum ada file diunggah.</td></tr>';
+function closeModal() {
+  document.getElementById('uploadModalOverlay').classList.remove('show');
 }
 
 async function logout() {
@@ -520,10 +543,8 @@ async function logout() {
   document.getElementById('navEmail').textContent = session.user.email;
   document.getElementById('logoutLink').style.display = 'inline';
   showState('admin');
-  populateCourseSelects();
-  checkCurrentVideo();
-  checkCurrentPpt();
-  refreshOverview();
+  await loadAllData();
+  renderAll();
 })();
 </script>
 
