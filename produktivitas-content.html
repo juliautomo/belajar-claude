@@ -598,11 +598,17 @@ sekilas mana yang harus dikerjakan duluan.<button class="copy-btn" onclick="copy
           </div>
         </div>
 
-        <div class="section-heading">Alur Prompt: Data → Keputusan</div>
+        <div class="section-heading">Latihan — Langkah demi Langkah</div>
+        <div class="sub-heading">Praktik Langsung dengan Data Kasual Studio</div>
 
-        <div class="sub-heading">Step 1 — Minta Formula</div>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p><strong>Download file-nya.</strong> Download <strong>k2-data-latihan-sheets.csv</strong> dari halaman materi — data transaksi Kasual Studio (April–Juli 2026, ~180 baris: Tanggal, Order ID, Produk, Region, Sales, Qty, Harga Satuan, Total).</p></div>
+          <div class="step-card"><div class="step-num">2</div><p><strong>Upload ke Claude.</strong> Buka <strong>claude.ai</strong>, mulai chat baru. <strong>Drag &amp; drop</strong> file CSV tadi ke jendela chat (atau klik ikon 📎 attach di kolom chat untuk upload manual).</p></div>
+          <div class="step-card"><div class="step-num">3</div><p><strong>Kirim 3 prompt di bawah, satu per satu.</strong> Tetap di chat yang sama — Claude tetap "ingat" datamu sepanjang percakapan, tidak perlu upload ulang.</p></div>
+        </div>
+
         <div class="prompt-section">
-          <div class="prompt-label">📋 Prompt</div>
+          <div class="prompt-label">📋 Prompt 1 — Formula</div>
           <div class="prompt-box">Data saya di spreadsheet punya kolom: Tanggal, Order ID, Produk,
 Region, Sales, Qty, Harga Satuan, Total.
 Buatkan formula SUMIF untuk hitung total revenue per Produk,
@@ -610,19 +616,15 @@ dan total revenue per Region.
 Saya pakai Google Sheets (sebutkan kalau kamu pakai Excel).<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
 
-        <div class="sub-heading">Step 2 — Analisis &amp; Rekomendasi (paste beberapa baris data)</div>
         <div class="prompt-section">
-          <div class="prompt-label">📋 Prompt</div>
-          <div class="prompt-box">Ini data transaksi penjualan saya beberapa bulan terakhir:
-[paste data]
-
-Produk dan region mana yang paling laris? Ada tren naik atau turun?
-Sales mana yang paling produktif? Kasih rekomendasi langkah berikutnya.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="prompt-label">📋 Prompt 2 — Analisis &amp; Rekomendasi</div>
+          <div class="prompt-box">Dari data transaksi yang saya kasih tadi: produk dan region mana
+yang paling laris? Ada tren naik atau turun? Sales mana yang
+paling produktif? Kasih rekomendasi langkah berikutnya.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
 
-        <div class="sub-heading">Step 3 — Bikin File Excel Ringkasan</div>
         <div class="prompt-section">
-          <div class="prompt-label">📋 Prompt</div>
+          <div class="prompt-label">📋 Prompt 3 — File Excel Ringkasan</div>
           <div class="prompt-box">Dari analisis dan rekomendasi tadi, buatkan saya file Excel
 ringkasan yang bisa saya bagikan ke tim: sheet 1 ringkasan per
 Produk (qty + revenue), sheet 2 ringkasan per Region, sheet 3
@@ -630,22 +632,15 @@ insight & rekomendasi dalam poin-poin. Format rapi.<button class="copy-btn" oncl
         </div>
 
         <div class="tip-box">
-          <div class="tip-label">📌 Tips Prompt Spreadsheet</div>
-          <p>Selalu sebutkan struktur data dulu sebelum bertanya. Contoh: <em>"Data saya punya kolom: Tanggal, Order ID, Produk, Region, Sales, Qty, Harga Satuan, Total"</em> — Claude tidak bisa melihat sheet-mu langsung, jadi konteks ini sangat penting untuk mendapat formula yang tepat. Berlaku sama persis di Google Sheets maupun Excel.</p>
-        </div>
-
-        <div class="prompt-section">
-          <div class="prompt-label">📝 Latihan</div>
-          <div class="case-box">
-            <p>Download file latihan <strong>k2-data-latihan-sheets.csv</strong> dari halaman materi — data transaksi penjualan Kasual Studio (brand fashion linen) selama April–Juli 2026, sekitar 180 baris dengan kolom Tanggal, Order ID, Produk, Region, Sales, Qty, Harga Satuan, dan Total. Import ke Google Sheets atau Excel. Minta Claude buat formula SUMIF total revenue per Produk dan per Region. Paste beberapa baris contoh ke Claude dan minta analisis pola + rekomendasi. Lalu minta Claude buatkan file Excel ringkasan dari hasil analisisnya. Tanya di akhir: <em>"Dari data ini, produk dan region mana yang harus saya prioritaskan bulan depan?"</em></p>
-          </div>
+          <div class="tip-label">📌 Tips</div>
+          <p>Prompt 1 hasilnya formula — kamu salin manual ke sheet-mu sendiri. Prompt 3 beda: Claude langsung generate file <strong>.xlsx</strong> yang muncul sebagai lampiran di chat, tinggal klik download — tidak perlu disalin manual.</p>
         </div>
 
         <div class="output-box">
           <div class="output-icon">✅</div>
           <div>
             <h3>Output yang Diharapkan</h3>
-            <p>Formula SUMIF berjalan di sheet, insight &amp; rekomendasi dari Claude di chat, dan 1 file Excel ringkasan (siap dibagikan ke tim) yang dibuatkan Claude dari hasil analisis.</p>
+            <p>Formula SUMIF yang siap kamu paste ke sheet-mu sendiri, insight &amp; rekomendasi dari Claude di chat, dan 1 file Excel ringkasan (bisa langsung didownload) yang dibuatkan Claude dari hasil analisis.</p>
           </div>
         </div>
 
@@ -706,22 +701,6 @@ bawaan Apps Script dan Drive.<button class="copy-btn" onclick="copyPrompt(this)"
         <div class="tip-box">
           <div class="tip-label">💳 Soal Biaya</div>
           <p>Beda dengan bonus versi sebelumnya (yang butuh API key berbayar dari console.anthropic.com), script ini tidak memanggil Claude API sama sekali — cuma pakai fitur bawaan Google Apps Script dan Google Drive. 100% gratis, tidak butuh paket Claude Pro, dan tidak ada biaya pemakaian apapun di luar akun Google-mu sendiri.</p>
-        </div>
-
-        <div class="section-heading">Level Up: Dashboard Performa Produk</div>
-        <div class="tip-box connector">
-          <div class="tip-label">🛠️ Bonus: Satu Halaman, Bukan Cuma Formula</div>
-          <p>Setelah dapat formula, analisis, dan file Excel ringkasan, minta Claude satu langkah lagi: ubah datanya jadi dashboard HTML — tabel produk dengan status warna performa yang bisa kamu buka tiap minggu tanpa buka Sheets sama sekali. Ini rekap satu-waktu dari data yang kamu punya sekarang, bukan yang otomatis update sendiri tiap ada transaksi baru.</p>
-        </div>
-        <div class="prompt-section">
-          <div class="prompt-label">📝 Contoh Prompt</div>
-          <div class="prompt-box">[Upload atau paste k2-data-latihan-sheets.csv] Dari data transaksi
-ini, buatkan saya dashboard HTML sederhana: tabel semua produk
-dengan kolom total qty terjual dan total revenue (SUMIF per
-Produk). Beri warna hijau kalau revenue di atas rata-rata semua
-produk, kuning kalau mendekati rata-rata, merah kalau jauh di
-bawah rata-rata. Simpan sebagai 1 file HTML yang bisa saya buka
-tiap minggu untuk cek performa produk.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
 
         <div class="tip-box">
