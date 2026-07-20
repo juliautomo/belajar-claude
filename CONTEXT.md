@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 20, 2026 (checkpoint 17)_
+_Last updated: July 20, 2026 (checkpoint 18)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -528,3 +528,15 @@ The concrete Kasual Studio-specific worked example was moved out of the abstract
 **Action needed from Julia**: same standing PDF-binary-staleness note as checkpoint 16 — `K2-Produktivitas-Kantor.pdf` still only reflects the M1 fix from commit `106c327`; this checkpoint's M4 changes (like all of checkpoint 16's M2/M3/M4 changes) are caught up in the WeasyPrint *source* only, not re-rendered, per standing instruction to hold off until asked.
 
 **Commits this checkpoint**: `da84203` (M4: rename to Spreadsheet & Claude, Excel-aware intro, new transactional CSV, generic Alur Prompt + new Excel-file-output step, Latihan carries the concrete example, "100% Gratis" removed, "Automasi Workflow" added to Apps Script title, Claude in Chrome moved to bottom as plain tip, Apps Script labeled Sheets-only with VBA pointer, stale PDF-intro paid-script reference fixed, PPT rebuilt).
+
+---
+
+## Checkpoint 18 (July 20, 2026)
+
+**Admin panel: added delete for Video/PPT cells + expanded Dokumen file types.** In the `admin.html` "Konten per Modul" matrix, Video and PPT cells only ever had "Ganti" (replace) — no way to remove an uploaded video link or PPT entirely. Docs already had a working "Hapus" (via `deleteDocModal`). Added `deleteVideoModal(moduleNum)` and `deletePptModal(moduleNum)`, wired to new red "Hapus" buttons next to "Ganti" in both cells (`renderMatrix()`). PPT delete also removes the file from the `course-ppts` storage bucket, via a new `extractStoragePath(publicUrl, bucket)` helper that parses the storage path out of the Supabase public URL (module_ppts has no stored `path` column like `module_documents.doc_path` does, so this was the only option without a schema change). Separately, Dokumen uploads were restricted to PDF/DOC/DOCX/MD only — expanded the `accept` attribute and the extension-validation array to also allow TXT, CSV, and XLSX. Commit `981912c`.
+
+**Bug found and fixed: Hapus silently did nothing for Video/PPT.** After the above shipped, Julia reported the new Hapus buttons didn't work. Root cause: `module_videos` and `module_ppts` were created (in `sql/admin-content-setup.sql` and `sql/module-ppts-and-fix-uploads.sql` respectively) with RLS policies for SELECT/INSERT/UPDATE only — no DELETE policy was ever added for either table, unlike `module_documents` which has one ("admin delete module_documents"). With RLS enabled and no matching DELETE policy, Supabase/Postgres doesn't throw an error on delete — it just matches zero rows, so the button appeared to do nothing (no JS error, no console noise, just a no-op). Wrote `sql/fix-video-ppt-delete-policies.sql` adding the two missing DELETE policies (same email-allowlist pattern as the existing policies), pushed to the repo. Julia ran it manually in the Supabase Dashboard SQL Editor (project `ctqtdqbsucbhikwnagvl`) and confirmed it fixed the issue — no code changes were needed, `admin.html`'s delete logic was already correct.
+
+**Note for future RLS-related admin features**: when adding delete (or any new operation) to a table that predates the feature, check whether a matching RLS policy actually exists before assuming a code bug — Supabase's default-deny-via-missing-policy behavior fails silently (0 rows affected, no error) rather than throwing, which makes it easy to mistake for a frontend bug.
+
+**Commits this checkpoint**: `981912c` (admin.html: delete buttons for Video/PPT, TXT/CSV/XLSX added to Dokumen uploads), `f59ff9c` (sql/fix-video-ppt-delete-policies.sql — the actual fix, run manually by Julia in Supabase Dashboard).
