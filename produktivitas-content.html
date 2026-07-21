@@ -126,6 +126,34 @@
   .info-card{background:#fff;border:1px solid var(--border);padding:16px 18px;border-radius:13px;}
   .info-card strong{font-size:13px;color:var(--ink);display:block;margin-bottom:5px;}
   .info-card span{font-size:12px;color:#777;line-height:1.6;}
+  .learn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0;}
+  .learn-card{background:#fff;border:1px solid var(--border);border-radius:13px;padding:20px;}
+  .learn-card .num{font-size:11px;color:var(--accent);font-weight:800;}
+  .learn-card h3{font-size:15px;margin:10px 0 7px;color:var(--ink);}
+  .learn-card p{font-size:12.5px;line-height:1.6;color:#777;margin:0;}
+  .bonus{background:#fff;border:1px solid #cfe2d3;border-radius:15px;padding:24px;margin:18px 0;position:relative;}
+  .bonus:before{content:"BONUS";position:absolute;right:20px;top:20px;font-size:9px;letter-spacing:1.5px;font-weight:800;color:var(--green);background:var(--green-dim);border-radius:999px;padding:6px 9px;}
+  .bonus h3{margin:0 78px 8px 0;font-size:17px;color:var(--ink);}
+  .bonus p{color:#666;font-size:13px;line-height:1.75;margin:0;}
+  .install-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0;}
+  .install{background:#fff;border:1px solid var(--border);border-radius:13px;padding:18px;}
+  .install-num{display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;font-weight:750;margin-bottom:10px;}
+  .install p{font-size:12px;color:#777;line-height:1.6;margin:0;}
+  details{background:#fff;border:1px solid var(--border);border-radius:13px;margin:10px 0;overflow:hidden;}
+  summary{padding:16px 18px;font-size:13px;font-weight:700;color:var(--ink);cursor:pointer;}
+  details p{padding:0 18px 16px;margin:0;color:#777;font-size:12.5px;line-height:1.7;}
+  .pro-tip-section{margin:22px 0;position:relative;overflow:hidden;border:1px solid #e4ddff;border-radius:18px;background:#17151f;color:#fff;padding:28px;}
+  .pro-tip-section:before{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:var(--accent);opacity:.14;right:-70px;top:-90px;}
+  .pro-tip-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;position:relative;}
+  .pro-tip-star{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:9px;background:var(--accent);font-size:14px;}
+  .pro-tip-label{font-size:10px;letter-spacing:1.6px;font-weight:800;color:#bcb2ff;}
+  .pro-tip-section h3{margin:0 0 6px;font-size:19px;letter-spacing:-.3px;position:relative;}
+  .pro-tip-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px;position:relative;}
+  .pro-tip-card{padding:18px;border:1px solid rgba(255,255,255,.11);background:rgba(255,255,255,.055);border-radius:13px;}
+  .pro-tip-card-head{display:flex;align-items:center;gap:9px;margin-bottom:8px;}
+  .pro-tip-card-icon{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:9px;background:rgba(255,255,255,.09);font-size:15px;}
+  .pro-tip-card h4{margin:0;font-size:13.5px;}
+  .pro-tip-card p{margin:0;color:#aaa6b4;font-size:12px;line-height:1.65;}
   .section-heading{font-size:20px;font-weight:800;letter-spacing:-.4px;color:var(--ink);margin:36px 0 14px;padding-bottom:12px;border-bottom:1px solid var(--border);}
   .sub-heading{font-size:13px;font-weight:750;color:#555;margin:20px 0 10px;text-transform:uppercase;letter-spacing:.6px;}
   .body-text{font-size:13.5px;color:#777;line-height:1.8;margin-bottom:10px;}
@@ -159,7 +187,7 @@
   .submit-feedback-btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);transition:background 0.2s;margin-top:16px;}
   .submit-feedback-btn:hover{background:#5b3fe0;}
   .feedback-thanks{display:none;text-align:center;padding:20px;color:var(--green);font-weight:650;}
-  @media(max-width:600px){.two-col,.info-grid{grid-template-columns:1fr;}}
+  @media(max-width:600px){.two-col,.info-grid,.learn-grid,.install-grid,.pro-tip-grid{grid-template-columns:1fr;}}
   @media(max-width:768px){.sidebar{display:none;}.main-inner{padding:26px 18px 52px;}.module-title{font-size:26px;}.hero{padding:24px 22px;}}
 </style>
 </head>
@@ -583,10 +611,10 @@ sekilas mana yang harus dikerjakan duluan.<button class="copy-btn" onclick="copy
         </div>
 
         <div class="section-heading">Yang Bisa Claude Bantu di Spreadsheet</div>
-        <div class="info-grid">
-          <div class="info-card"><strong>Formula</strong><span>Claude menulis formula dari deskripsi biasa, menjelaskan formula yang membingungkan, dan membantu debug formula yang error</span></div>
-          <div class="info-card"><strong>Analisis</strong><span>Temukan pola dari data penjualan, bandingkan performa antar produk atau periode, dan identifikasi anomali yang mudah terlewat</span></div>
-          <div class="info-card"><strong>Rekomendasi</strong><span>Dari data ke keputusan bisnis konkret — produk mana yang perlu direstock, dipromosikan, atau dihentikan</span></div>
+        <div class="learn-grid">
+          <div class="learn-card"><div class="num">01</div><h3>Formula</h3><p>Claude menulis formula dari deskripsi biasa, menjelaskan formula yang membingungkan, dan membantu debug formula yang error</p></div>
+          <div class="learn-card"><div class="num">02</div><h3>Analisis</h3><p>Temukan pola dari data penjualan, bandingkan performa antar produk atau periode, dan identifikasi anomali yang mudah terlewat</p></div>
+          <div class="learn-card"><div class="num">03</div><h3>Rekomendasi</h3><p>Dari data ke keputusan bisnis konkret — produk mana yang perlu direstock, dipromosikan, atau dihentikan</p></div>
         </div>
 
         <div class="section-heading">Data Aman vs. Data Sensitif</div>
@@ -658,8 +686,8 @@ insight & rekomendasi dalam poin-poin. Format rapi.<button class="copy-btn" oncl
           </div>
         </div>
 
-        <div class="tip-box bonus">
-          <div class="tip-label">🛠️ Bonus — Automasi Workflow: Menu "Export PDF" di Google Sheets</div>
+        <div class="bonus">
+          <h3>🛠️ Bonus — Automasi Workflow: Menu "Export PDF" di Google Sheets</h3>
           <p>Google Apps Script yang menambahkan menu "Export PDF" ke Sheets-mu: rapikan angka jadi format Rupiah, tambah judul laporan, buat grafik kolom ringkas, lalu export sheet aktif atau rentang terpilih jadi PDF rapi ke Drive. Dibuat dengan memprompt Claude langsung — tidak ada API key atau paket Pro yang dibutuhkan.<br><br>
           <strong>Bukan Claude yang jalan di dalam Sheets-mu — tapi Claude yang menulis automasinya untukmu.</strong> Script di bawah ini awalnya dibuat dengan cara memprompt Claude langsung (lihat prompt persisnya di bawah), lalu tinggal di-paste ke Apps Script sekali. <strong>Catatan:</strong> ini otomasi khusus Google Sheets. Kalau kamu di Excel, konsepnya sama tapi toolnya beda — minta Claude tulis versi VBA macro dengan prompt yang serupa.</p>
         </div>
@@ -687,26 +715,20 @@ bawaan Apps Script dan Drive.<button class="copy-btn" onclick="copyPrompt(this)"
           <div class="tip-label">📎 File-nya Cuma Teks Biasa</div>
           <p>File <strong>k2-pdf-export-helper.txt</strong> bukan program yang perlu di-install atau dijalankan di komputermu — isinya cuma teks kode yang nanti kamu copy-paste ke Google Sheets. Bisa dibuka dengan Notepad (Windows) atau TextEdit (Mac), aplikasi bawaan yang sudah ada di komputermu — tidak perlu software tambahan.</p>
         </div>
-        <div class="step-row">
-          <div class="step-card"><div class="step-num">1</div><p>Download <strong>k2-pdf-export-helper.txt</strong> dari halaman materi (atau pakai versi hasil promptmu sendiri ke Claude)</p></div>
-          <div class="step-card"><div class="step-num">2</div><p>Klik kanan file-nya → <strong>Open with</strong> → pilih <strong>Notepad</strong> (Windows) atau <strong>TextEdit</strong> (Mac) untuk membukanya sebagai teks</p></div>
-          <div class="step-card"><div class="step-num">3</div><p>Select All (<strong>Ctrl+A</strong> / <strong>Cmd+A</strong>) lalu Copy (<strong>Ctrl+C</strong> / <strong>Cmd+C</strong>) seluruh isinya</p></div>
-        </div>
-        <div class="step-row">
-          <div class="step-card"><div class="step-num">4</div><p>Buka Google Sheets-mu → <strong>Extensions</strong> → <strong>Apps Script</strong> → hapus kode default → Paste (<strong>Ctrl+V</strong> / <strong>Cmd+V</strong>) isi yang tadi di-copy</p></div>
-          <div class="step-card"><div class="step-num">5</div><p>Klik <strong>Save</strong> (ikon disket atau Ctrl+S), lalu tutup tab Apps Script</p></div>
-          <div class="step-card"><div class="step-num">6</div><p>Refresh halaman Google Sheets → menu <strong>"Export PDF"</strong> muncul di menu bar. Saat pertama dipakai, klik <strong>Allow</strong> saat Google minta izin akses (normal, script perlu izin baca sheet &amp; simpan ke Drive-mu)</p></div>
+        <div class="install-grid">
+          <div class="install"><div class="install-num">1</div><p>Download <strong>k2-pdf-export-helper.txt</strong> dari halaman materi (atau pakai versi hasil promptmu sendiri ke Claude)</p></div>
+          <div class="install"><div class="install-num">2</div><p>Klik kanan file-nya → <strong>Open with</strong> → pilih <strong>Notepad</strong> (Windows) atau <strong>TextEdit</strong> (Mac) untuk membukanya sebagai teks</p></div>
+          <div class="install"><div class="install-num">3</div><p>Select All (<strong>Ctrl+A</strong> / <strong>Cmd+A</strong>) lalu Copy (<strong>Ctrl+C</strong> / <strong>Cmd+C</strong>) seluruh isinya</p></div>
+          <div class="install"><div class="install-num">4</div><p>Buka Google Sheets-mu → <strong>Extensions</strong> → <strong>Apps Script</strong> → hapus kode default → Paste (<strong>Ctrl+V</strong> / <strong>Cmd+V</strong>) isi yang tadi di-copy</p></div>
+          <div class="install"><div class="install-num">5</div><p>Klik <strong>Save</strong> (ikon disket atau Ctrl+S), lalu tutup tab Apps Script</p></div>
+          <div class="install"><div class="install-num">6</div><p>Refresh halaman Google Sheets → menu <strong>"Export PDF"</strong> muncul di menu bar. Saat pertama dipakai, klik <strong>Allow</strong> saat Google minta izin akses (normal, script perlu izin baca sheet &amp; simpan ke Drive-mu)</p></div>
         </div>
 
         <div class="section-heading">Cara Pakai — 4 Langkah Sebelum Export</div>
-        <div class="step-row">
-          <div class="step-card"><div class="step-num">1</div><p>Pilih kolom angka hasil SUMIF (mis. Total Revenue per Produk) → jalankan <strong>"1. Rapikan Angka (Rp)"</strong></p></div>
-          <div class="step-card"><div class="step-num">2</div><p>Pilih rentang data + header → jalankan <strong>"2. Tambah Judul Laporan"</strong></p></div>
-          <div class="step-card"><div class="step-num">3</div><p>Pilih kolom Nama Produk + Total Revenue → jalankan <strong>"3. Buat Grafik Ringkas"</strong></p></div>
-        </div>
-        <div class="step-row">
-          <div class="step-card"><div class="step-num">4</div><p>Jalankan <strong>"Export Sheet Aktif sebagai PDF"</strong> — judul, angka rapi, dan grafik ikut ter-export karena semuanya bagian dari tampilan sheet</p></div>
-        </div>
+        <details open><summary>1. Rapikan Angka (Rp)</summary><p>Pilih kolom angka hasil SUMIF (mis. Total Revenue per Produk) → jalankan <strong>"1. Rapikan Angka (Rp)"</strong></p></details>
+        <details><summary>2. Tambah Judul Laporan</summary><p>Pilih rentang data + header → jalankan <strong>"2. Tambah Judul Laporan"</strong></p></details>
+        <details><summary>3. Buat Grafik Ringkas</summary><p>Pilih kolom Nama Produk + Total Revenue → jalankan <strong>"3. Buat Grafik Ringkas"</strong></p></details>
+        <details><summary>Export Sheet Aktif sebagai PDF</summary><p>Jalankan <strong>"Export Sheet Aktif sebagai PDF"</strong> — judul, angka rapi, dan grafik ikut ter-export karena semuanya bagian dari tampilan sheet</p></details>
         <div class="tip-box">
           <div class="tip-label">👀 Contoh Hasil</div>
           <p>Kalau kamu jalankan alur ini pakai ringkasan SUMIF dari <strong>k2-data-latihan-sheets.csv</strong>, hasil PDF-nya berupa: judul "Kasual Studio — Laporan [tanggal]" dengan latar ungu, tabel dengan angka Rupiah rapi (Rp 12.375.000, bukan 12375000 — total revenue produk terlaris di data latihan), dan grafik kolom ringkas revenue per produk di bawah tabel.</p>
@@ -717,10 +739,19 @@ bawaan Apps Script dan Drive.<button class="copy-btn" onclick="copyPrompt(this)"
           <p>Beda dengan bonus versi sebelumnya (yang butuh API key berbayar dari console.anthropic.com), script ini tidak memanggil Claude API sama sekali — cuma pakai fitur bawaan Google Apps Script dan Google Drive. 100% gratis, tidak butuh paket Claude Pro, dan tidak ada biaya pemakaian apapun di luar akun Google-mu sendiri.</p>
         </div>
 
-        <div class="tip-box">
-          <div class="tip-label">🚀 Tip — Claude di Sheets, Excel Online, &amp; Excel Desktop</div>
-          <p><strong>Claude in Chrome</strong> bisa baca &amp; isi formula langsung di Google Sheets atau Excel Online (versi browser) tanpa copy-paste. <strong>Butuh paket Pro atau lebih tinggi — tidak tersedia di paket Free.</strong> Setup: Chrome Web Store → cari "Claude" → install "Claude for Chrome" (dari Anthropic) → login → buka Sheets/Excel Online → klik ikon Claude di toolbar → panel Claude muncul di sisi kanan. Setelah setup: <em>"Lihat sheet yang terbuka. Buatkan formula total revenue per produk di kolom yang saya tunjuk."</em><br><br>
-          Pakai <strong>Excel Desktop</strong> (Windows atau Mac)? Itu tool yang beda — ada add-in terpisah bernama <strong>"Claude for Excel"</strong>, diinstall langsung dari Microsoft Marketplace, yang kerja di dalam Excel-nya sendiri (bukan lewat browser). Juga khusus paket Pro ke atas.</p>
+        <div class="pro-tip-section">
+          <div class="pro-tip-top"><div class="pro-tip-star">✦</div><div class="pro-tip-label">TIP</div></div>
+          <h3>Claude di Sheets, Excel Online, &amp; Excel Desktop</h3>
+          <div class="pro-tip-grid">
+            <div class="pro-tip-card">
+              <div class="pro-tip-card-head"><div class="pro-tip-card-icon">🌐</div><h4>Claude in Chrome</h4></div>
+              <p><strong>Claude in Chrome</strong> bisa baca &amp; isi formula langsung di Google Sheets atau Excel Online (versi browser) tanpa copy-paste. <strong>Butuh paket Pro atau lebih tinggi — tidak tersedia di paket Free.</strong> Setup: Chrome Web Store → cari "Claude" → install "Claude for Chrome" (dari Anthropic) → login → buka Sheets/Excel Online → klik ikon Claude di toolbar → panel Claude muncul di sisi kanan. Setelah setup: <em>"Lihat sheet yang terbuka. Buatkan formula total revenue per produk di kolom yang saya tunjuk."</em></p>
+            </div>
+            <div class="pro-tip-card">
+              <div class="pro-tip-card-head"><div class="pro-tip-card-icon">🖥️</div><h4>Claude for Excel</h4></div>
+              <p>Pakai <strong>Excel Desktop</strong> (Windows atau Mac)? Itu tool yang beda — ada add-in terpisah bernama <strong>"Claude for Excel"</strong>, diinstall langsung dari Microsoft Marketplace, yang kerja di dalam Excel-nya sendiri (bukan lewat browser). Juga khusus paket Pro ke atas.</p>
+            </div>
+          </div>
         </div>
 
         <div class="nav-bottom">
