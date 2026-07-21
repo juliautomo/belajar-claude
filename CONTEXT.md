@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 20, 2026 (checkpoint 19)_
+_Last updated: July 21, 2026 (checkpoint 20)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -558,3 +558,24 @@ The concrete Kasual Studio-specific worked example was moved out of the abstract
 **HTML div-balance**: 510/510 (down from 514, net removal of content). **PDF source div-balance**: 217/217.
 
 **Commits this checkpoint**: `0a9ec75` (produktivitas-content.html + K2-M04-Google-Sheets.pptx: merge Alur Prompt into Latihan with concrete steps, remove Level Up Dashboard, restyle Apps Script menu list, relocate Claude in Chrome tip). PDF source (`k2_full_pdf.html`) updated in sandbox only, per standing practice — not committed, kept in wording parity with HTML.
+
+---
+
+## Checkpoint 20 (July 21, 2026)
+
+**Three separate pieces of work: M3 PPT file swap, a small M4 fact fix, and a full visual redesign of the K2 lesson page.**
+
+1. **M3 PPT replaced with Julia's own file.** Julia edited `K2-M03-Gmail-Claude.pptx` locally and said "this is the latest file, please keep this file for m3" — pushed as-is, no content verification performed beyond confirming it's a valid, different pptx (`991eee8`).
+2. **M4 fact fix.** Removed a stray "(bukan langkah berurutan)" parenthetical from a PPT section label, and added a factual note distinguishing **Claude in Chrome** (browser extension, works inside Google Sheets/Excel Online) from **Claude for Excel** (separate native Office add-in for Excel Desktop, installed via Microsoft Marketplace, also Pro+ only) — verified via web search against `support.claude.com` before writing the claim into course material. Applied to HTML + PDF source + PPT (new 7th PPT slide, split out to avoid text overflow). Commit `e4b0aff`.
+3. **Full visual redesign of `produktivitas-content.html`.** Julia uploaded a new lesson-page mockup (purple/Inter design system: hero cards, kicker+heading sections, card-based components, dark "pro tip" panels). Standalone previews were built and approved for M4 and M2 first (`m4-preview.html`, `m2-preview.html` — sandbox only, never committed). Julia then asked to apply the new look to **all modules**, with an explicit constraint: **"dont change the context / wording yet, just the design and layout."**
+
+   Given that constraint and the size of the file (8 modules + feedback panel, ~1570 lines), the redesign was implemented as a **CSS-only reskin plus one small structural addition**, not a full DOM rewrite:
+   - Rewrote the shared `<style>` block: every existing CSS variable name and class name was kept exactly as-is (so `copyPrompt()`, `showModule()`, `showScenario()`, `markDone()`, and course-video.js's slot injection — all of which reference specific class/ID names and some of which write inline `style="...var(--accent)..."` — needed zero changes). Only the *values* changed: Inter font, purple `#6c4df6` accent, larger radii (14–18px), softer borders/shadows, bigger spacing. `.prompt-box`/`.prompt-label` were restyled (header-strip look) to visually match the mockup's "prompt-card" component without changing their DOM shape, so the copy button and `copyPrompt()`'s `.closest('.prompt-box')` lookup still work unmodified.
+   - Added one new class, `.hero`, and wrapped `<h1 class="module-title">` + `<p class="module-subtitle">` + the `video-slot` div in it, in each of the 8 module panels (breadcrumb stays outside, matching the mockup). This is a markup change but touches zero text and zero JS-relevant IDs/classes (`video-slot-N` still found by `getElementById` regardless of parent).
+   - Font import switched from Instrument Serif + Geist to Inter only.
+
+   **Verification**: div-balance 518/518. CSS brace-balance 145/145. Programmatically diffed all visible text (tags/style/script stripped, whitespace-normalized) between the pre- and post-redesign file — **0 lines differed**, confirming no wording changed. The JS `<script>` block was byte-for-byte identical before and after. No live-render/screenshot QA was possible in this sandbox (no headless browser available), so the visual result hasn't been eyeballed by Claude — Julia should sanity-check it live.
+
+**Commit this checkpoint**: `721b8f5` (produktivitas-content.html: redesign — purple/Inter visual system, hero cards, restyled components, no content changes).
+
+**Still not covered by this reskin**: the feedback panel (panel9) and sidebar/topbar got CSS-only restyling (same IDs/classes), not the mockup's literal shell markup — acceptable since they're functionally driven by JS. The PDF source and PPTs were **not** touched by this redesign (it's HTML-only, purely visual).
