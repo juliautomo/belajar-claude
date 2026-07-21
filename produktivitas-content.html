@@ -127,6 +127,7 @@
   .info-card strong{font-size:13px;color:var(--ink);display:block;margin-bottom:5px;}
   .info-card span{font-size:12px;color:#777;line-height:1.6;}
   .learn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0;}
+  .learn-grid.cols-4{grid-template-columns:repeat(4,1fr);}
   .learn-card{background:#fff;border:1px solid var(--border);border-radius:13px;padding:20px;min-width:0;overflow-wrap:break-word;}
   .learn-card .num{font-size:11px;color:var(--accent);font-weight:800;}
   .learn-card h3{font-size:15px;margin:10px 0 7px;color:var(--ink);}
@@ -148,6 +149,7 @@
   .pro-tip-star{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:9px;background:var(--accent);font-size:14px;}
   .pro-tip-label{font-size:10px;letter-spacing:1.6px;font-weight:800;color:#bcb2ff;}
   .pro-tip-section h3{margin:0 0 6px;font-size:19px;letter-spacing:-.3px;position:relative;}
+  .pro-tip-lead{margin:0;color:#c8c5cf;font-size:13px;line-height:1.7;max-width:700px;position:relative;}
   .pro-tip-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px;position:relative;}
   .pro-tip-card{padding:18px;border:1px solid rgba(255,255,255,.11);background:rgba(255,255,255,.055);border-radius:13px;min-width:0;overflow-wrap:break-word;}
   .pro-tip-card-head{display:flex;align-items:center;gap:9px;margin-bottom:8px;}
@@ -187,7 +189,8 @@
   .submit-feedback-btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);transition:background 0.2s;margin-top:16px;}
   .submit-feedback-btn:hover{background:#5b3fe0;}
   .feedback-thanks{display:none;text-align:center;padding:20px;color:var(--green);font-weight:650;}
-  @media(max-width:900px){.two-col,.info-grid,.learn-grid,.install-grid,.pro-tip-grid{grid-template-columns:1fr;}}
+  @media(max-width:900px){.two-col,.info-grid,.learn-grid,.learn-grid.cols-4,.install-grid,.pro-tip-grid{grid-template-columns:1fr;}}
+  @media(max-width:900px) and (min-width:601px){.learn-grid.cols-4{grid-template-columns:1fr 1fr;}}
   @media(max-width:768px){.sidebar{display:none;}.main-inner{padding:26px 18px 52px;}.module-title{font-size:26px;}.hero{padding:24px 22px;}}
 </style>
 </head>
@@ -488,10 +491,10 @@ Channel penjualan: [Instagram / Tokopedia / WhatsApp / dll]
         </div>
 
         <div class="section-heading">3 Elemen Wajib Prompt Email</div>
-        <div class="info-grid">
-          <div class="info-card"><strong>A · Konteks Penerima</strong><span>Siapa yang menerima? Hubungan apa (klien baru, supplier lama, pelanggan kecewa)? Tingkat formalitas yang sesuai?</span></div>
-          <div class="info-card"><strong>B · Inti Pesan</strong><span>Apa yang ingin disampaikan? Satu kalimat yang merangkum tujuan email ini.</span></div>
-          <div class="info-card"><strong>C · Tone &amp; Panjang</strong><span>Formal / santai / tegas / empati? Maks berapa kata? Ada CTA atau tidak?</span></div>
+        <div class="learn-grid">
+          <div class="learn-card"><div class="num">A</div><h3>Konteks Penerima</h3><p>Siapa yang menerima? Hubungan apa (klien baru, supplier lama, pelanggan kecewa)? Tingkat formalitas yang sesuai?</p></div>
+          <div class="learn-card"><div class="num">B</div><h3>Inti Pesan</h3><p>Apa yang ingin disampaikan? Satu kalimat yang merangkum tujuan email ini.</p></div>
+          <div class="learn-card"><div class="num">C</div><h3>Tone &amp; Panjang</h3><p>Formal / santai / tegas / empati? Maks berapa kata? Ada CTA atau tidak?</p></div>
         </div>
 
         <div class="section-heading">4 Tipe Email yang Sering Ditulis</div>
@@ -583,9 +586,10 @@ HTML dengan 3 kolom berwarna berbeda, supaya saya bisa lihat
 sekilas mana yang harus dikerjakan duluan.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
 
-        <div class="tip-box bonus">
-          <div class="tip-label">🚀 Bonus — Gmail Langsung dari Claude (MCP Connector)</div>
-          <p>Selain copy-paste manual, Claude juga bisa terhubung langsung ke inbox Gmail-mu lewat Connector — baca dan susun draft tanpa copy-paste sama sekali. Cara setup dan pemakaiannya akan dibahas lengkap di modul lain.</p>
+        <div class="pro-tip-section">
+          <div class="pro-tip-top"><div class="pro-tip-star">✦</div><div class="pro-tip-label">TIP</div></div>
+          <h3>Gmail Langsung dari Claude (MCP Connector)</h3>
+          <p class="pro-tip-lead">Selain copy-paste manual, Claude juga bisa terhubung langsung ke inbox Gmail-mu lewat Connector — baca dan susun draft tanpa copy-paste sama sekali. Cara setup dan pemakaiannya akan dibahas lengkap di modul lain.</p>
         </div>
 
         <div class="nav-bottom">
@@ -1035,11 +1039,11 @@ ke email tanpa perlu saya susun ulang di Word.<button class="copy-btn" onclick="
           <p>Belum punya catatan meeting, dokumen, atau proses sendiri untuk dicoba? Download <strong>k2-m7-contoh-dokumen.txt</strong> dari halaman materi — berisi 4 bagian yang cocok untuk masing-masing sub-skill di bawah: catatan meeting, dokumen proposal, bahan SWOT, dan deskripsi proses untuk SOP.</p>
         </div>
 
-        <div class="info-grid">
-          <div class="info-card"><strong>01 Meeting Notes</strong><span>Catatan berantakan → action items terstruktur dalam 2 menit</span></div>
-          <div class="info-card"><strong>02 Summarizing</strong><span>Dokumen 10 halaman → ringkasan 1 halaman untuk ambil keputusan</span></div>
-          <div class="info-card"><strong>03 Riset &amp; SWOT</strong><span>Observasimu + analisis Claude = framework keputusan bisnis</span></div>
-          <div class="info-card"><strong>04 SOP Writing</strong><span>Ceritakan prosesnya → Claude tulis SOPnya siap pakai</span></div>
+        <div class="learn-grid cols-4">
+          <div class="learn-card"><div class="num">01</div><h3>Meeting Notes</h3><p>Catatan berantakan → action items terstruktur dalam 2 menit</p></div>
+          <div class="learn-card"><div class="num">02</div><h3>Summarizing</h3><p>Dokumen 10 halaman → ringkasan 1 halaman untuk ambil keputusan</p></div>
+          <div class="learn-card"><div class="num">03</div><h3>Riset &amp; SWOT</h3><p>Observasimu + analisis Claude = framework keputusan bisnis</p></div>
+          <div class="learn-card"><div class="num">04</div><h3>SOP Writing</h3><p>Ceritakan prosesnya → Claude tulis SOPnya siap pakai</p></div>
         </div>
 
         <div class="section-heading">01 — Meeting Notes → Action Items</div>
