@@ -692,21 +692,23 @@ insight & rekomendasi dalam poin-poin. Format rapi.<button class="copy-btn" oncl
 
         <div class="bonus">
           <h3>🛠️ Bonus — Automasi Workflow: Menu "Export PDF" di Google Sheets</h3>
-          <p>Google Apps Script yang menambahkan menu "Export PDF" ke Sheets-mu: rapikan angka jadi format Rupiah, tambah judul laporan, buat grafik kolom ringkas, lalu export sheet aktif atau rentang terpilih jadi PDF rapi ke Drive. Dibuat dengan memprompt Claude langsung — tidak ada API key atau paket Pro yang dibutuhkan.<br><br>
+          <p>Google Apps Script yang menambahkan menu "Export PDF" ke Sheets-mu — cuma 2 klik: <strong>"1. Update Formatting"</strong> untuk otomatis menambah judul laporan, merapikan kolom Total jadi format Rupiah, dan memberi conditional formatting, lalu <strong>"2. Export ke PDF"</strong> untuk langsung export sheet aktif jadi PDF rapi ke Drive. Dibuat dengan memprompt Claude langsung — tidak ada API key atau paket Pro yang dibutuhkan.<br><br>
           <strong>Bukan Claude yang jalan di dalam Sheets-mu — tapi Claude yang menulis automasinya untukmu.</strong> Script di bawah ini awalnya dibuat dengan cara memprompt Claude langsung (lihat prompt persisnya di bawah), lalu tinggal di-paste ke Apps Script sekali. <strong>Catatan:</strong> ini otomasi khusus Google Sheets. Kalau kamu di Excel, konsepnya sama tapi toolnya beda — minta Claude tulis versi VBA macro dengan prompt yang serupa.</p>
         </div>
 
         <div class="prompt-section">
           <div class="prompt-label">📋 Prompt yang Dipakai untuk Generate Script Ini</div>
           <div class="prompt-box">Buatkan saya Google Apps Script untuk Google Sheets dengan menu custom
-"Export PDF" berisi: (1) rapikan kolom angka yang dipilih jadi format
-Rupiah, (2) sisipkan 1 baris judul laporan (nama sheet + tanggal hari
-ini) di atas rentang yang dipilih, diberi warna dan bold, (3) buat
-grafik kolom sederhana dari rentang yang dipilih, (4) export sheet
-aktif atau rentang terpilih jadi 1 file PDF rapi (tanpa gridlines, fit
-ke lebar halaman), disimpan ke folder khusus di Drive dengan link untuk
-membukanya. Tidak boleh pakai API key eksternal apapun — cukup fitur
-bawaan Apps Script dan Drive.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+"Export PDF" berisi 2 menu saja: (1) "Update Formatting" — otomatis
+deteksi tabel data (cari kolom bernama "Total" dan "Harga Satuan"
+di header, tidak perlu select range manual), tambahkan 1 baris judul
+laporan (nama sheet + tanggal hari ini, diberi warna dan bold) di
+paling atas, rapikan kolom Total/Harga Satuan jadi format Rupiah, dan
+beri conditional formatting warna skala pada kolom Total; (2) "Export
+ke PDF" — export sheet aktif jadi 1 file PDF rapi (tanpa gridlines,
+fit ke lebar halaman), disimpan ke folder khusus di Drive dengan link
+untuk membukanya. Tidak boleh pakai API key eksternal apapun — cukup
+fitur bawaan Apps Script dan Drive.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
 
         <div class="tip-box">
@@ -728,14 +730,12 @@ bawaan Apps Script dan Drive.<button class="copy-btn" onclick="copyPrompt(this)"
           <div class="install"><div class="install-num">6</div><p>Refresh halaman Google Sheets → menu <strong>"Export PDF"</strong> muncul di menu bar. Saat pertama dipakai, klik <strong>Allow</strong> saat Google minta izin akses (normal, script perlu izin baca sheet &amp; simpan ke Drive-mu)</p></div>
         </div>
 
-        <div class="section-heading">Cara Pakai — 4 Langkah Sebelum Export</div>
-        <details open><summary>1. Rapikan Angka (Rp)</summary><p>Pilih kolom angka hasil SUMIF (mis. Total Revenue per Produk) → jalankan <strong>"1. Rapikan Angka (Rp)"</strong></p></details>
-        <details><summary>2. Tambah Judul Laporan</summary><p>Pilih rentang data + header → jalankan <strong>"2. Tambah Judul Laporan"</strong></p></details>
-        <details><summary>3. Buat Grafik Ringkas</summary><p>Pilih kolom Nama Produk + Total Revenue → jalankan <strong>"3. Buat Grafik Ringkas"</strong></p></details>
-        <details><summary>Export Sheet Aktif sebagai PDF</summary><p>Jalankan <strong>"Export Sheet Aktif sebagai PDF"</strong> — judul, angka rapi, dan grafik ikut ter-export karena semuanya bagian dari tampilan sheet</p></details>
+        <div class="section-heading">Cara Pakai — 2 Langkah Sebelum Export</div>
+        <details open><summary>1. Update Formatting</summary><p>Klik sel mana saja di dalam tabel data kamu (tidak perlu select range manual) → jalankan <strong>"1. Update Formatting"</strong>. Script otomatis mendeteksi kolom Total &amp; Harga Satuan, menambah judul laporan, merapikan angka jadi Rupiah, dan memberi conditional formatting pada kolom Total.</p></details>
+        <details><summary>2. Export ke PDF</summary><p>Jalankan <strong>"2. Export ke PDF"</strong> — judul dan formatting dari langkah 1 ikut ter-export karena semuanya bagian dari tampilan sheet</p></details>
         <div class="tip-box">
           <div class="tip-label">👀 Contoh Hasil</div>
-          <p>Kalau kamu jalankan alur ini pakai ringkasan SUMIF dari <strong>k2-data-latihan-sheets.csv</strong>, hasil PDF-nya berupa: judul "Kasual Studio — Laporan [tanggal]" dengan latar ungu, tabel dengan angka Rupiah rapi (Rp 12.375.000, bukan 12375000 — total revenue produk terlaris di data latihan), dan grafik kolom ringkas revenue per produk di bawah tabel.</p>
+          <p>Kalau kamu jalankan alur ini pakai <strong>k2-data-latihan-sheets.csv</strong>, hasil PDF-nya berupa: judul "Kasual Studio — Laporan [tanggal]" dengan latar ungu, dan kolom Total dengan angka Rupiah rapi (Rp 12.375.000, bukan 12375000 — total revenue produk terlaris di data latihan) plus conditional formatting warna skala.</p>
         </div>
 
         <div class="tip-box">
