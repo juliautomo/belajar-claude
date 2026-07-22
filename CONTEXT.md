@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 22, 2026 (checkpoint 25)_
+_Last updated: July 22, 2026 (checkpoint 26)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -689,3 +689,15 @@ The concrete Kasual Studio-specific worked example was moved out of the abstract
 - Repo-wide grep confirmed no remaining "8 Modul"/"Modul 8"/"modules: 8"/"CONTENT_MODULES = 8"/"TOTAL = 9" stray references across all 4 edited files after the change.
 
 **Commits this checkpoint**: `a93772d` (M6 intro), plus one commit covering all 4 M8-restructure files (`produktivitas-content.html`, `produktivitas.html`, `dashboard.html`, `admin.html`).
+
+---
+
+## Checkpoint 26 (July 22, 2026)
+
+**M7 reviewed** (Dokumen & Riset): 4 sub-skills (Meeting Notes, Summarizing, Riset & SWOT, SOP Writing) + Level Up (Team Wiki). Confirmed it's fine for M7 to have a different structure than other modules — no unified "📝 Latihan" case-box was added, since Julia was okay leaving that as-is (the PPT already has its own explicit Latihan slide; HTML/PDF intentionally stay example-driven).
+
+**Found and fixed a real content mismatch**: the supporting file `k2-m7-contoh-dokumen.txt`'s Bagian 4 (meant for the SOP Writing sub-skill) described a customer-complaint-handling process, while the worked SOP example baked into HTML, PDF, and PPT is entirely about packing pesanan. Fixed by rewriting Bagian 4 to describe the packing process instead, matching the established example across all 3 formats.
+
+**Added a new "SWOT → Slide Presentasi" section** to M7, per Julia's idea to add PowerPoint/Google Slides content: positioned right after the "03 — Riset & Analisis (SWOT)" sub-skill (reusing the same tas-kanvas SWOT example, no new file needed). Teaches asking Claude to turn a completed SWOT/summary into an actual `.pptx` file (mirroring M6's Level Up pattern of "Claude bisa membuat Word/PDF asli"), with a fallback tip noting the same prompt also works as a plain-text slide outline if file creation isn't available. Added to HTML (new section-heading + tip-box + prompt-section + tip-box + output-box), PDF (matching codebox/tipbar/callout), and PPT (new slide inserted between the SWOT/SOP compare-cards slide and the Latihan & Output slide; the Latihan slide's SWOT bullet also updated to mention "lalu ubah jadi slide presentasi"). Module subtitle/time estimate bumped 15→18 menit in HTML and PDF to reflect the added content. Learn-grid card 03's description lightly extended ("...siap jadi slide presentasi"). PPTX rebuilt (now 8 slides, was 7) and visually confirmed clean via LibreOffice render. Div balance verified (530/530) after HTML edits.
+
+**Commits this checkpoint**: one commit covering `produktivitas-content.html`, `K2-Produktivitas/M07-Dokumen-Riset/k2-m7-contoh-dokumen.txt`, and `K2-Produktivitas/M07-Dokumen-Riset/K2-M07-Dokumen-Riset.pptx`.

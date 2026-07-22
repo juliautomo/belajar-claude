@@ -59,13 +59,12 @@ Observasi:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BAGIAN 4 — PROSES UNTUK SOP (untuk latihan 04: SOP Writing)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Proses: penanganan komplain pelanggan soal ukuran/warna tidak sesuai
+Proses: packing pesanan sebelum dikirim ke kurir
 
-Kira-kira begini: pelanggan chat/email komplain, CS cek dulu nomor
-pesanan & foto produk yang diterima, CS bandingkan sama foto asli
-sebelum dikirim (dari database internal), kalau memang salah kirim/
-cacat maka tawarkan tukar barang atau refund, kalau kesalahan customer
-(pilih ukuran salah) tetap tawarkan tukar tapi ongkir ditanggung
-customer, semua kasus dicatat di spreadsheet komplain biar bisa dipantau
-polanya, target respon awal maksimal 2 jam kerja, target penyelesaian
-maksimal 3 hari kerja.
+Kira-kira begini: cek dulu pesanan yang masuk dari Tokopedia, siapin
+produknya dari rak, cek kondisi produk — pastiin gak ada cacat dan
+warnanya sesuai pesanan, lipat produknya yang rapi, kalau bahannya
+gampang kusut bungkus pakai bubble wrap, masukin nota pembelian sama
+kartu ucapan kecil, seal packaging-nya pakai lakban bening, tempel
+label pengiriman, terakhir foto dulu produk yang udah di-pack sebelum
+diserahin ke kurir buat dokumentasi kalau ada komplain nanti.
