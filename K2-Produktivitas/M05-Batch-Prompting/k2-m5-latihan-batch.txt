@@ -1,12 +1,17 @@
 # FILE LATIHAN BATCH PROMPTING — K2 MODUL 5
 # Cara pakai: Copy seluruh bagian yang kamu butuhkan ke Claude, tambahkan instruksi di atas list-nya.
+# 4 set latihan ini sejajar dengan 4 Contoh Langsung Pakai di modul: deskripsi produk,
+# ringkasan email, klasifikasi pesan DM/WA, dan variasi caption dari 1 konsep.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-LATIHAN A — DESKRIPSI PRODUK (untuk caption / deskripsi toko online)
+LATIHAN A — DESKRIPSI PRODUK
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Instruksi contoh:
-"Buat caption Instagram (maks 100 kata, tone hangat dan menggiurkan) untuk setiap produk di bawah.
-Format: Nama Produk → Caption → 5 hashtag relevan"
+"Tulis deskripsi produk Tokopedia untuk setiap item berikut.
+Format per produk:
+- Nama: [nama produk]
+- Deskripsi: 2 kalimat manfaat + 1 kalimat CTA, maks 50 kata
+- Highlight: 3 bullet point keunggulan"
 
 DAFTAR PRODUK:
 1. Kopi Susu Gula Aren — minuman kekinian berbasis espresso, manis alami, cocok untuk anak muda
@@ -19,10 +24,11 @@ DAFTAR PRODUK:
 8. Lemon Tea Sparkling — teh hitam dengan perasan lemon segar dan soda, segar dan ringan
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-LATIHAN B — RINGKASAN EMAIL (untuk latihan ringkas cepat)
+LATIHAN B — RINGKASAN EMAIL
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Instruksi contoh:
-"Untuk setiap email di bawah, buat ringkasan 1 kalimat (maks 20 kata) yang menangkap isi utama dan action item-nya."
+"Ringkas setiap email berikut dalam 1 kalimat.
+Sebutkan: siapa pengirim + apa yang mereka minta/sampaikan."
 
 DAFTAR EMAIL (subjek + isi singkat):
 1. Subjek: "Follow up proposal bulan lalu" — Klien tanya kapan presentasi bisa dijadwalkan, minta hari Rabu atau Kamis minggu depan
@@ -34,7 +40,7 @@ DAFTAR EMAIL (subjek + isi singkat):
 7. Subjek: "Feedback konten bulan April" — Klien sangat puas dengan performa April, engagement naik 40%, minta strategi yang sama dilanjutkan
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-LATIHAN C — KLASIFIKASI (untuk latihan batch klasifikasi/kategorisasi)
+LATIHAN C — KLASIFIKASI PESAN (DM/WA)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Instruksi contoh:
 "Klasifikasikan setiap pesan di bawah ke dalam salah satu kategori: KOMPLAIN / PERTANYAAN / PUJIAN / PERMINTAAN.
@@ -53,15 +59,12 @@ DAFTAR PESAN MASUK (DM/WA dari klien dan calon klien):
 10. "Password akun Instagram lama kami hilang, bisa bantu recover tidak?"
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-LATIHAN D — BALASAN EMAIL BATCH (tingkat lanjut)
+LATIHAN D — VARIASI CAPTION DARI 1 KONSEP
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Instruksi contoh:
-"Tulis draft balasan singkat (maks 60 kata) untuk setiap situasi di bawah.
-Tone: profesional tapi hangat. Sertakan CTA yang spesifik di setiap balasan."
+"Buat 5 variasi caption Instagram untuk produk yang sama.
+Tiap variasi: hook berbeda, tone berbeda
+(santai / inspiratif / edukatif / FOMO / relatable).
+Semua: maks 60 kata + 3 hashtag."
 
-SITUASI:
-1. Klien tanya harga paket — belum pernah kenal sebelumnya
-2. Klien minta revisi konten yang sudah disetujui sebelumnya
-3. Klien puas dan kasih pujian setelah bulan pertama
-4. Klien complain iklan tidak perform, butuh penjelasan
-5. Klien minta penawaran untuk 6 bulan ke depan dengan harga lebih murah
+PRODUK: Kopi Susu Gula Aren, best seller harian, harga Rp 22.000
