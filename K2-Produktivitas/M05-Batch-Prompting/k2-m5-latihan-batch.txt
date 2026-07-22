@@ -30,14 +30,14 @@ Instruksi contoh:
 "Ringkas setiap email berikut dalam 1 kalimat.
 Sebutkan: siapa pengirim + apa yang mereka minta/sampaikan."
 
-DAFTAR EMAIL (dari + subjek + isi singkat):
-1. Dari: Toko Kopi Nusantara — Subjek: "Follow up proposal bulan lalu" — Tanya kapan presentasi bisa dijadwalkan, minta hari Rabu atau Kamis minggu depan
-2. Dari: Bengkel Motor Jaya — Subjek: "Revisi konten Instagram minggu ini" — Minta ganti warna background post dari biru ke hijau tosca, minta dikirim ulang sebelum Jumat
-3. Dari: Salon Kecantikan Ayu — Subjek: "Invoice Mei belum diterima" — Bilang invoice bulan Mei belum ada di inbox mereka, minta kirim ulang ke email baru: finance@klien.co.id
-4. Dari: Restoran Sederhana Bu Tuti — Subjek: "Laporan ads terlalu teknis" — Complain laporan Meta Ads terlalu penuh angka, minta dibuat lebih ringkas dan ada rekomendasi actionable
-5. Dari: Butik Fashion Elok — Subjek: "Minta tambah satu konten video" — Minta tambahan 1 Reels per minggu di luar paket, ingin tahu harga add-on-nya
-6. Dari: Apotek Sehat Selalu — Subjek: "Konfirmasi meeting besok" — Konfirmasi meeting jam 14.00 via Zoom, minta link meeting dikirim pagi hari
-7. Dari: Kedai Boba Manis — Subjek: "Feedback konten bulan April" — Sangat puas dengan performa April, engagement naik 40%, minta strategi yang sama dilanjutkan
+DAFTAR EMAIL (dari + subjek + isi email lengkap):
+1. Dari: Toko Kopi Nusantara — Subjek: "Follow up proposal bulan lalu" — Isi: "Halo tim, apa kabar? Saya mau follow up soal proposal kerja sama yang kita bahas bulan lalu — sudah hampir sebulan belum ada kabar lagi jadi saya agak khawatir prosesnya kelewat. Kalau memungkinkan, saya ingin kita jadwalkan ulang presentasinya minggu depan, hari Rabu atau Kamis paling pas buat saya. Mohon infonya ya, terima kasih banyak."
+2. Dari: Bengkel Motor Jaya — Subjek: "Revisi konten Instagram minggu ini" — Isi: "Halo, saya sudah cek post yang baru naik tadi pagi, kok warna background-nya biru ya? Sesuai brief awal harusnya pakai hijau tosca biar konsisten sama tema bengkel kami. Boleh tolong direvisi dan dikirim ulang sebelum hari Jumat? Post ini mau langsung dipakai untuk campaign akhir pekan."
+3. Dari: Salon Kecantikan Ayu — Subjek: "Invoice Mei belum diterima" — Isi: "Halo, saya sudah cek inbox dan folder spam tapi belum ada tagihan bulan Mei yang masuk. Mohon dicek dan dikirim ulang ke alamat finance kami: finance@klien.co.id. Kami ingin segera proses pembayarannya sebelum akhir bulan supaya tidak telat."
+4. Dari: Restoran Sederhana Bu Tuti — Subjek: "Laporan ads terlalu teknis" — Isi: "Saya sudah baca laporan ads bulan ini, tapi jujur agak bingung karena terlalu banyak angka dan istilah teknis yang saya tidak paham. Bisa tolong dibuatkan versi yang lebih ringkas? Kalau bisa sekalian dikasih rekomendasi apa yang perlu kami lakukan selanjutnya supaya hasilnya lebih baik."
+5. Dari: Butik Fashion Elok — Subjek: "Minta tambah satu konten video" — Isi: "Halo, kami tertarik menambah 1 video Reels per minggu di luar paket yang sudah berjalan sekarang. Boleh tahu berapa tambahan biayanya kalau kami ambil add-on ini? Kalau harganya cocok, kami ingin langsung mulai bulan depan."
+6. Dari: Apotek Sehat Selalu — Subjek: "Konfirmasi meeting besok" — Isi: "Baik, saya konfirmasi untuk meeting besok jam 14.00 lewat Zoom ya. Mohon link meeting-nya dikirim pagi hari saja supaya tidak lupa dan bisa disiapkan dulu sebelum masuk. Sampai jumpa besok."
+7. Dari: Kedai Boba Manis — Subjek: "Feedback konten bulan April" — Isi: "Halo tim, saya mau kasih feedback positif untuk hasil kerja bulan April. Engagement naik 40% dibanding bulan sebelumnya, dan banyak pelanggan baru yang komentar soal konten kita di kolom komentar. Tolong strategi yang sama dilanjutkan untuk bulan depan ya, sudah pas banget rasanya."
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 LATIHAN C — KLASIFIKASI PESAN (DM/WA)
