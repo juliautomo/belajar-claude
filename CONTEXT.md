@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 22, 2026 (checkpoint 24)_
+_Last updated: July 22, 2026 (checkpoint 25)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -673,3 +673,19 @@ The concrete Kasual Studio-specific worked example was moved out of the abstract
    - **New house rule surfaced and applied**: Julia clarified that HTML and PDF should carry the *same depth* of content, while the PPT is allowed to be less detailed (fewer items) but whatever it does include must use the *same wording*, not a paraphrase. Applied here: restored dropped words in the PDF's "Ide Chain" line (`& finalisasi`, `Buat narasi`, `Pitch atau Proposal` instead of `Pitch/Proposal`) so PDF matches HTML's full depth; in the PPT (which still only lists 2 of the 4 ideas — accepted as "less deep"), fixed the wording of those 2 items to match HTML exactly (capitalization, restored dropped words) rather than adding the missing 2. Also fixed a genuine word-choice drift in the PPT's step titles ("Struktur Proposal" → "Kerangka Proposal", matching HTML/PDF's actual term) and a numeral inconsistency ("satu prompt" → "1 prompt"). PPTX rebuilt, LibreOffice-rendered, all 3 affected slides visually confirmed clean.
 
 **Commits this checkpoint**: `2aa82df` (M6 HTML + PPTX: duplicate-label fix, learn-grid conversion, Rina removal, wording alignment). CONTEXT.md's new payment-plan section was pushed separately as `665073c`.
+
+---
+
+## Checkpoint 25 (July 22, 2026)
+
+**M6 intro made generic + more introductory.** Julia flagged that M6's module-desc-box opened with "Butuh buat proposal kerjasama untuk reseller potensial di Bandung..." — jumping straight into the specific worked example instead of explaining the concept first (same class of issue fixed for M5 earlier). Fixed by folding the separate "Apa itu Prompt Chaining?" section (definition + the 4-reason "kapan dibutuhkan" info-grid) directly into the module-desc-box as a proper generic introduction, then reframing the Bandung reseller scenario as an illustrative "Contohnya:" example rather than the user's literal situation. The standalone "Apa itu Prompt Chaining?" heading/paragraph/info-grid was removed since its content now lives in the intro box (mirrors M5's precedent exactly). Propagated the same wording to the PDF's M6 intro paragraph (full depth match) and to the PPT's slide 2 body text + "Kapan Dibutuhkan" bullets (same wording, still condensed — no "Contohnya" comparison since slide 3 already covers that example in full). PPTX rebuilt and visually confirmed clean. Commit: `a93772d`.
+
+**M8 (Case Study) hidden from the active lesson flow.** Julia is considering a separate future "case studies" section, so asked to remove M8 from the 7-module course while keeping its content intact for reuse — not deleting it. Scope, clarified via question before executing:
+- `produktivitas-content.html`: sidebar `nav-mod8` (Case Study) entry removed; the Feedback panel renumbered from `panel9`/`nav-mod9` to `panel8`/`nav-mod8`. The old panel8's `id` changed to `panel-casestudy-archived` (breadcrumb also updated) — it's now unreachable via any `showModule()` call or sidebar link, but every bit of its content (both Rina/Budi scenarios, all prompts) is untouched in the file for future reuse. The "Kursus Selesai!" completion banner + "Lanjutkan Belajar → Content Marketing" cross-sell card, which used to live at the end of panel8, was moved to the end of panel7 (now the last active module) with its text updated from "menguasai 8 modul" to "menguasai 7 modul" and its "Beri Feedback →" button retargeted to the renumbered feedback panel. JS constants `TOTAL` (9→8) and `CONTENT_MODULES` (8→7) updated; all `nav-counter` labels and the sidebar progress label changed from "/8" to "/7"; the hardcoded module-8 safety-net in `submitFeedback()` genericized to use `CONTENT_MODULES` instead of a literal `8`. Div balance verified (519 open / 519 close) after all edits.
+- `produktivitas.html` (sales page): "8 Modul" → "7 Modul" (hero tag + curriculum heading), the module-08 Case Study curriculum card removed, "8 Workflow Skill Praktis" → "7 Workflow Skill Praktis" with the tied-to-case-study "Workflow Integration" skill card removed to match.
+- `dashboard.html`: `produktivitas` course entry `modules:8` → `modules:7`.
+- `admin.html`: `produktivitas` course entry `modules: 8` → `7`; "Case Study" removed from the `MODULE_TITLES.produktivitas` array (now 7 items, matching the count).
+- The M8 PPT file (`K2-M08-Case-Study.pptx`) was left untouched — not referenced by any of the above, so no action needed there.
+- Repo-wide grep confirmed no remaining "8 Modul"/"Modul 8"/"modules: 8"/"CONTENT_MODULES = 8"/"TOTAL = 9" stray references across all 4 edited files after the change.
+
+**Commits this checkpoint**: `a93772d` (M6 intro), plus one commit covering all 4 M8-restructure files (`produktivitas-content.html`, `produktivitas.html`, `dashboard.html`, `admin.html`).

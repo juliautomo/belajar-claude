@@ -214,7 +214,7 @@
       <div class="sidebar-course-name">Produktivitas Kantor dengan Claude</div>
       <div class="progress-bar-wrap">
         <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-        <span class="progress-label" id="progressLabel">0/8</span>
+        <span class="progress-label" id="progressLabel">0/7</span>
       </div>
     </div>
     <div class="sidebar-section-label">Modul</div>
@@ -246,10 +246,6 @@
       <div class="mod-check" id="check7"></div>
       <div class="mod-item-info"><div class="mod-item-title">Dokumen &amp; Riset</div><div class="mod-item-sub">Modul 7 · Meeting, Ringkasan, SOP</div></div>
     </div>
-    <div class="mod-item" id="nav-mod8" onclick="showModule(8)">
-      <div class="mod-check" id="check8"></div>
-      <div class="mod-item-info"><div class="mod-item-title">Case Study: Satu Hari Kerja</div><div class="mod-item-sub">Modul 8 · Studi Kasus Nyata</div></div>
-    </div>
     <div class="sidebar-footer">
       <div class="sidebar-section-label" style="padding:0 0 8px;">Tools yang dipakai</div>
       <div class="sidebar-tools">
@@ -260,8 +256,8 @@
       </div>
     </div>
     <div class="mod-feedback">
-      <div class="mod-item" id="nav-mod9" onclick="showModule(9)">
-        <div class="mod-check" id="check9">★</div>
+      <div class="mod-item" id="nav-mod8" onclick="showModule(8)">
+        <div class="mod-check" id="check8">★</div>
         <div><div class="mod-item-title">Feedback</div><div class="mod-item-sub">Nilai kursus ini</div></div>
       </div>
     </div>
@@ -338,7 +334,7 @@
 
         <div class="nav-bottom">
           <button class="nav-btn" disabled>← Sebelumnya</button>
-          <span class="nav-counter">1 / 8</span>
+          <span class="nav-counter">1 / 7</span>
           <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
       </div>
@@ -462,7 +458,7 @@ Channel penjualan: [Instagram / Tokopedia / WhatsApp / dll]
 
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">2 / 8</span>
+          <span class="nav-counter">2 / 7</span>
           <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
       </div>
@@ -594,7 +590,7 @@ sekilas mana yang harus dikerjakan duluan.<button class="copy-btn" onclick="copy
 
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">3 / 8</span>
+          <span class="nav-counter">3 / 7</span>
           <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
       </div>
@@ -765,7 +761,7 @@ fitur bawaan Apps Script dan Drive.<button class="copy-btn" onclick="copyPrompt(
 
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">4 / 8</span>
+          <span class="nav-counter">4 / 7</span>
           <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
       </div>
@@ -895,7 +891,7 @@ yang bisa saya buka sambil kerja menyelesaikan satu per satu.<button class="copy
 
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">5 / 8</span>
+          <span class="nav-counter">5 / 7</span>
           <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
       </div>
@@ -1008,7 +1004,7 @@ ke email tanpa perlu saya susun ulang di Word.<button class="copy-btn" onclick="
 
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">6 / 8</span>
+          <span class="nav-counter">6 / 7</span>
           <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
       </div>
@@ -1158,16 +1154,35 @@ sebagai 1 file HTML yang bisa saya buka lagi dan tambahkan
 dokumen baru tiap minggu.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
 
+        <!-- Kursus Selesai! -->
+        <div style="background:var(--green-dim);border:1px solid rgba(29,158,117,0.2);border-radius:16px;padding:32px 24px;margin-top:32px;text-align:center;">
+          <div style="width:56px;height:56px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+            <svg width="26" height="26" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <h2 style="font-family:var(--serif);font-size:24px;color:var(--ink);margin-bottom:8px;">Kursus Selesai!</h2>
+          <p style="font-size:14px;color:var(--ink-2);line-height:1.6;max-width:440px;margin:0 auto;">Kamu sudah menguasai 7 modul produktivitas. Kurangi 2 jam kerja harianmu — tanpa tools baru, tanpa kursus coding.</p>
+        </div>
+
+        <div class="next-label">Lanjutkan Belajar</div>
+        <a class="next-card" href="content-marketing.html">
+          <div class="next-icon">📣</div>
+          <div class="next-info">
+            <h4>Content & Marketing</h4>
+            <p>Strategi konten, deskripsi produk, iklan, dan sistem CS dengan Claude</p>
+          </div>
+          <div class="next-arrow">→</div>
+        </a>
+
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">7 / 8</span>
-          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+          <span class="nav-counter">7 / 7</span>
+          <button class="nav-btn primary" onclick="showModule(8)">Beri Feedback →</button>
         </div>
       </div>
 
-      <!-- MODULE 8: Case Study -->
-      <div class="module-panel" id="panel8">
-        <div class="breadcrumb"><span>Produktivitas Kantor</span><span>›</span><strong>Modul 8</strong></div>
+      <!-- MODULE 8 (ARCHIVED — removed from active lesson flow, kept for a future dedicated case-studies section): Case Study -->
+      <div class="module-panel" id="panel-casestudy-archived">
+        <div class="breadcrumb"><span>Produktivitas Kantor</span><span>›</span><strong>Studi Kasus</strong></div>
         <div class="hero">
           <h1 class="module-title">Case Study: Satu Hari Kerja Penuh</h1>
           <p class="module-subtitle">Semua modul dalam aksi nyata — pilih skenario yang paling mirip denganmu — 20 menit</p>
@@ -1405,34 +1420,10 @@ rekap waktu Biasa vs Dengan Claude. Simpan sebagai 1 file HTML
 yang bisa saya buka lagi setiap hari kerja padat berikutnya.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
 
-        <!-- Kursus Selesai! -->
-        <div style="background:var(--green-dim);border:1px solid rgba(29,158,117,0.2);border-radius:16px;padding:32px 24px;margin-top:32px;text-align:center;">
-          <div style="width:56px;height:56px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
-            <svg width="26" height="26" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-          </div>
-          <h2 style="font-family:var(--serif);font-size:24px;color:var(--ink);margin-bottom:8px;">Kursus Selesai!</h2>
-          <p style="font-size:14px;color:var(--ink-2);line-height:1.6;max-width:440px;margin:0 auto;">Kamu sudah menguasai 8 modul produktivitas. Kurangi 2 jam kerja harianmu — tanpa tools baru, tanpa kursus coding.</p>
-        </div>
-
-        <div class="next-label">Lanjutkan Belajar</div>
-        <a class="next-card" href="content-marketing.html">
-          <div class="next-icon">📣</div>
-          <div class="next-info">
-            <h4>Content & Marketing</h4>
-            <p>Strategi konten, deskripsi produk, iklan, dan sistem CS dengan Claude</p>
-          </div>
-          <div class="next-arrow">→</div>
-        </a>
-
-        <div class="nav-bottom">
-          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">8 / 8</span>
-          <button class="nav-btn primary" onclick="showModule(9)">Beri Feedback →</button>
-        </div>
       </div>
 
-      <!-- PANEL 9: Feedback -->
-      <div class="module-panel" id="panel9">
+      <!-- PANEL 8: Feedback -->
+      <div class="module-panel" id="panel8">
         <div class="feedback-panel">
           <div class="completion-badge">
             <div class="badge-check">
@@ -1464,8 +1455,8 @@ yang bisa saya buka lagi setiap hari kerja padat berikutnya.<button class="copy-
   </main>
 </div>
 <script>
-  const TOTAL = 9;
-  const CONTENT_MODULES = 8;
+  const TOTAL = 8;
+  const CONTENT_MODULES = 7;
   let current = 1;
   const done = new Set();
   let starRating = 0;
@@ -1582,8 +1573,8 @@ yang bisa saya buka lagi setiap hari kerja padat berikutnya.<button class="copy-
       comment: comment || null
     }, { onConflict: 'email,course_slug' });
 
-    // Mark module 8 done on feedback submission
-    if (!done.has(8)) { done.add(8); markDone(8); saveCompletion(8); updateProgress(); }
+    // Mark last content module done on feedback submission (safety net)
+    if (!done.has(CONTENT_MODULES)) { done.add(CONTENT_MODULES); markDone(CONTENT_MODULES); saveCompletion(CONTENT_MODULES); updateProgress(); }
 
     document.querySelector('.submit-feedback-btn').style.display = 'none';
     document.getElementById('feedbackThanks').style.display = 'block';
