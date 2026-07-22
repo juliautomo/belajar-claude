@@ -30,6 +30,36 @@ Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign 
 
 ---
 
+## PLANNED: Restructure Payment — Per-Course → One-Time Platform-Wide Access
+
+**Status: not started, planning only.** Julia is considering moving from per-course payment to a single one-time payment that grants access to every course on the platform. This section is the plan to execute once she confirms pricing/timing — do not build this without her explicit go-ahead.
+
+**Business decisions Julia needs to make first (not code):**
+- The single all-access price.
+- Whether to launch now — only 2 of ~8 courses (`produktivitas`, `content-marketing`) are actually built, rest are "coming soon" placeholders — or wait until more courses ship.
+- Whether existing paying customers get grandfathered into all-access for free, or keep only what they already paid for. Current footprint is tiny (4 real rows in the live `enrollments` table as of this writing), so migration risk either way is low.
+
+**Current architecture (confirmed against the real production Supabase project `ctqtdqbsucbhikwnagvl` / "Belajar-Claude", same org as the "Personal" project, and against the backend code):**
+- Payment gateway: Duitku (not Stripe/Midtrans/Xendit — confirmed from `belajar-claude-backend/index.js`).
+- Backend `COURSES` catalog (slug → name/price/link/tag) in `index.js` is the single source of truth for what's purchasable.
+- `POST /create-payment` takes a `courseSlug`; the Duitku webhook (`/webhook/duitku`) grants access by inserting a row into Supabase `enrollments` (columns: `email, course_slug, course_name, type, amount, reference, enrolled_at, name`).
+- A bundle precedent already exists: 4 `paket-*` SKUs (karyawan/mahasiswa/pengusaha/creator) each expand into 2-4 constituent courses at purchase time via a `PAKET_COURSES` map (duplicated in `index.js` and `dashboard.html`) — one enrollment row gets inserted per constituent course. This is the closest working analog to "buy once, get many," but it enumerates courses at purchase time rather than a flag, so it wouldn't auto-cover courses added after purchase.
+- Every paid content page (`produktivitas-content.html`, `content-marketing-content.html`) independently checks client-side for an `enrollments` row matching its own exact `course_slug` before granting access.
+- `dashboard.html` expands `paket-*` enrollments into constituent courses via the same hardcoded map, then filters against a hardcoded `ALL_COURSES` catalog.
+
+**What needs to change:**
+1. Backend `index.js` — add one new SKU (e.g. `all-access`) with its own price. Change the webhook so a successful `all-access` payment inserts a **single sentinel row** (`course_slug: 'all-access'`) rather than enumerating every course — this way anyone who buys in automatically gets access to courses added later, no backfill needed. (Reusing the `PAKET_COURSES`-style per-course expansion was considered but rejected for this reason.)
+2. `mailer.js` — new confirmation email copy that doesn't reference one specific course.
+3. `sheets.js` — handle "All Access" as its own line item in the "Pembeli" ledger tab.
+4. Every paid content page's access check — accept "has `all-access` row" OR "has this specific course row," not just the latter.
+5. Checkout/sales pages — point at the new single SKU. Likely means consolidating to one pricing page; the 4 existing `paket-*` bundle sales pages would probably be retired/redirected once all-access supersedes them (they're currently live but already unlinked from site nav per Checkpoint 12).
+6. `dashboard.html` — treat "has all-access" as "enrolled in everything in `ALL_COURSES`," same logic update as #4.
+7. Database — **no schema migration is strictly required**; the sentinel-row approach reuses the existing `enrollments` table as-is.
+
+**Separate but related finding, surfaced while researching this (own decision on whether to bundle together):** the real `enrollments`, `profiles`, `module_completions`, and `waitlist` tables in the production Supabase project have RLS *enabled* but with a policy literally named "Allow all" (`USING (true)`, `WITH CHECK (true)`) — functionally no protection. Since the anon key ships in every page, anyone could currently insert a fake paid enrollment via browser devtools. Confirmed real Supabase Auth is in use (`signInWithPassword` in `login-modal.js`), so a proper per-user-email RLS policy is straightforward to write whenever Julia wants it done — independent of the payment-model decision above, but touches the same table so could be done in the same pass.
+
+---
+
 ## Design System (as of June 2026)
 All pages use these CSS variables:
 ```css
