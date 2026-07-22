@@ -30,14 +30,14 @@ Instruksi contoh:
 "Ringkas setiap email berikut dalam 1 kalimat.
 Sebutkan: siapa pengirim + apa yang mereka minta/sampaikan."
 
-DAFTAR EMAIL (subjek + isi singkat):
-1. Subjek: "Follow up proposal bulan lalu" — Klien tanya kapan presentasi bisa dijadwalkan, minta hari Rabu atau Kamis minggu depan
-2. Subjek: "Revisi konten Instagram minggu ini" — Klien minta ganti warna background post dari biru ke hijau tosca, minta dikirim ulang sebelum Jumat
-3. Subjek: "Invoice Mei belum diterima" — Klien bilang invoice bulan Mei belum ada di inbox mereka, minta kirim ulang ke email baru: finance@klien.co.id
-4. Subjek: "Laporan ads terlalu teknis" — Klien complain laporan Meta Ads terlalu penuh angka, minta dibuat lebih ringkas dan ada rekomendasi actionable
-5. Subjek: "Minta tambah satu konten video" — Klien minta tambahan 1 Reels per minggu di luar paket, ingin tahu harga add-on-nya
-6. Subjek: "Konfirmasi meeting besok" — Klien konfirmasi meeting jam 14.00 via Zoom, minta link meeting dikirim pagi hari
-7. Subjek: "Feedback konten bulan April" — Klien sangat puas dengan performa April, engagement naik 40%, minta strategi yang sama dilanjutkan
+DAFTAR EMAIL (dari + subjek + isi singkat):
+1. Dari: Toko Kopi Nusantara — Subjek: "Follow up proposal bulan lalu" — Tanya kapan presentasi bisa dijadwalkan, minta hari Rabu atau Kamis minggu depan
+2. Dari: Bengkel Motor Jaya — Subjek: "Revisi konten Instagram minggu ini" — Minta ganti warna background post dari biru ke hijau tosca, minta dikirim ulang sebelum Jumat
+3. Dari: Salon Kecantikan Ayu — Subjek: "Invoice Mei belum diterima" — Bilang invoice bulan Mei belum ada di inbox mereka, minta kirim ulang ke email baru: finance@klien.co.id
+4. Dari: Restoran Sederhana Bu Tuti — Subjek: "Laporan ads terlalu teknis" — Complain laporan Meta Ads terlalu penuh angka, minta dibuat lebih ringkas dan ada rekomendasi actionable
+5. Dari: Butik Fashion Elok — Subjek: "Minta tambah satu konten video" — Minta tambahan 1 Reels per minggu di luar paket, ingin tahu harga add-on-nya
+6. Dari: Apotek Sehat Selalu — Subjek: "Konfirmasi meeting besok" — Konfirmasi meeting jam 14.00 via Zoom, minta link meeting dikirim pagi hari
+7. Dari: Kedai Boba Manis — Subjek: "Feedback konten bulan April" — Sangat puas dengan performa April, engagement naik 40%, minta strategi yang sama dilanjutkan
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 LATIHAN C — KLASIFIKASI PESAN (DM/WA)
