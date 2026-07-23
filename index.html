@@ -188,20 +188,22 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
       <h1>Kuasai Claude AI,<br><em>tingkatkan karir</em></h1>
       <p class="hero-sub">Kursus dan panduan Claude AI yang praktis — sepenuhnya dalam Bahasa Indonesia, untuk profesional, UKM, dan mahasiswa.</p>
       <div class="hero-actions">
-        <a href="all-access.html" class="btn-dark">Dapatkan All Access →</a>
+        <a href="all-access.html" class="btn-dark" id="heroActionBtn">Dapatkan All Access →</a>
         <a href="#kursus" class="btn-outline">Lihat Semua Kursus</a>
       </div>
     </div>
-    <div class="hero-card">
-      <span class="hc-tag">ALL ACCESS</span>
-      <h2>Satu akses untuk semua kursus.</h2>
-      <p>Belajar dengan materi terstruktur yang langsung bisa dipraktikkan untuk kerja dan bisnis.</p>
-      <div id="hcDiscountBadge" style="display:none;font-size:11px;font-weight:800;background:var(--green-dim);color:var(--green);border:1px solid var(--green-border);padding:4px 11px;border-radius:100px;margin-bottom:10px;position:relative;"></div>
-      <div id="hcOriginalPrice" style="display:none;font-size:17px;color:var(--ink-3);text-decoration:line-through;margin-bottom:2px;position:relative;"></div>
-      <div class="hc-price" id="heroPrice">Rp 399K <span>sekali bayar</span></div>
-      <div class="hc-price-note">Akses selamanya · Bukan langganan bulanan</div>
-      <div id="hcDiscountEnd" style="display:none;font-size:11.5px;color:var(--accent);font-weight:600;margin-top:6px;position:relative;"></div>
-      <a href="all-access.html" class="btn-dark">Dapatkan All Access →</a>
+    <div class="hero-card" id="heroCard">
+      <span class="hc-tag" id="hcTag">ALL ACCESS</span>
+      <h2 id="hcHeadline">Satu akses untuk semua kursus.</h2>
+      <p id="hcSub">Belajar dengan materi terstruktur yang langsung bisa dipraktikkan untuk kerja dan bisnis.</p>
+      <div id="hcPricingBlock">
+        <div id="hcDiscountBadge" style="display:none;font-size:11px;font-weight:800;background:var(--green-dim);color:var(--green);border:1px solid var(--green-border);padding:4px 11px;border-radius:100px;margin-bottom:10px;position:relative;"></div>
+        <div id="hcOriginalPrice" style="display:none;font-size:17px;color:var(--ink-3);text-decoration:line-through;margin-bottom:2px;position:relative;"></div>
+        <div class="hc-price" id="heroPrice">Rp 399K <span>sekali bayar</span></div>
+        <div class="hc-price-note">Akses selamanya · Bukan langganan bulanan</div>
+        <div id="hcDiscountEnd" style="display:none;font-size:11.5px;color:var(--accent);font-weight:600;margin-top:6px;position:relative;"></div>
+      </div>
+      <a href="all-access.html" class="btn-dark" id="heroCardBtn">Dapatkan All Access →</a>
     </div>
   </div>
 </div>
@@ -310,6 +312,23 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
             : paid.length > 0
               ? 'Kamu terdaftar di ' + paid.length + ' kursus — lanjutkan belajarmu sekarang.'
               : 'Kamu sudah mulai belajar — lihat paket untuk lanjut ke kursus berikutnya.';
+
+          // Hero section: swap the purchase pitch for an "already enrolled" state so
+          // logged-in All Access holders aren't shown a price/buy button that doesn't apply.
+          if (hasAllAccess) {
+            var heroActionBtn = document.getElementById('heroActionBtn');
+            if (heroActionBtn) { heroActionBtn.textContent = 'Buka Dashboard →'; heroActionBtn.href = 'dashboard.html'; }
+            var hcTag = document.getElementById('hcTag');
+            if (hcTag) { hcTag.textContent = '✓ ALL ACCESS AKTIF'; hcTag.style.background = 'var(--green-dim)'; hcTag.style.color = 'var(--green)'; }
+            var hcHeadline = document.getElementById('hcHeadline');
+            if (hcHeadline) hcHeadline.textContent = 'Kamu sudah punya semua akses.';
+            var hcSub = document.getElementById('hcSub');
+            if (hcSub) hcSub.textContent = 'Semua kursus sudah terbuka untuk akun ini. Lanjutkan belajarmu dari dashboard kapan saja.';
+            var hcPricingBlock = document.getElementById('hcPricingBlock');
+            if (hcPricingBlock) hcPricingBlock.style.display = 'none';
+            var heroCardBtn = document.getElementById('heroCardBtn');
+            if (heroCardBtn) { heroCardBtn.textContent = 'Buka Dashboard →'; heroCardBtn.href = 'dashboard.html'; }
+          }
         } catch(e) {}
         if (btn) { btn.textContent = 'Buka Dashboard →'; btn.href = 'dashboard.html'; btn.style.background = '#6C47FF'; btn.style.color = '#fff'; }
         if (note) note.style.display = 'none';
