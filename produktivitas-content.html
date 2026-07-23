@@ -1516,15 +1516,11 @@ yang bisa saya buka lagi setiap hari kerja padat berikutnya.<button class="copy-
     if (!session) { window.location.href = 'login.html'; return; }
     const email = session.user.email;
 
-    // Only grant access if a real enrollment for THIS course exists (directly, or via a
-    // paket bundle that includes it) - holding all-access alone is not enough, it only
-    // unlocks a free one-click "Mulai Kursus" on the preview page - admins bypass
+    // Only grant access if a real enrollment for THIS course exists - holding all-access alone
+    // is not enough, it only unlocks a free one-click "Mulai Kursus" on the preview page - admins bypass
     if (!ADMIN_EMAILS.includes(email)) {
-      const PAKET_COURSES = {'paket-karyawan':['mulai-claude','produktivitas','analisis-data'],'paket-mahasiswa':['mulai-claude','analisis-data'],'paket-pengusaha':['mulai-claude','content-marketing','build-automation'],'paket-creator':['mulai-claude','content-marketing']};
-      const { data: existing } = await sb.from('enrollments').select('course_slug').eq('email', email);
-      const rows = existing || [];
-      const hasAccess = rows.some(r => r.course_slug === COURSE_SLUG) || rows.some(r => PAKET_COURSES[r.course_slug] && PAKET_COURSES[r.course_slug].includes(COURSE_SLUG));
-      if (!hasAccess) { window.location.href = 'produktivitas.html'; return; }
+      const { data: existing } = await sb.from('enrollments').select('course_slug').eq('email', email).eq('course_slug', COURSE_SLUG);
+      if (!existing || existing.length === 0) { window.location.href = 'produktivitas.html'; return; }
     }
 
     document.getElementById('navEmail').textContent = email;

@@ -285,10 +285,8 @@
 
     try {
       const { data: enrollments } = await sbClient.from('enrollments').select('course_slug').eq('email', session.user.email);
-      const PAKET_COURSES = {'paket-karyawan':['mulai-claude','produktivitas','analisis-data'],'paket-mahasiswa':['mulai-claude','analisis-data'],'paket-pengusaha':['mulai-claude','content-marketing','build-automation'],'paket-creator':['mulai-claude','content-marketing']};
-      const rows = enrollments || [];
-      const isEnrolled = rows.some(e => e.course_slug === COURSE_SLUG) || rows.some(e => PAKET_COURSES[e.course_slug] && PAKET_COURSES[e.course_slug].includes(COURSE_SLUG));
-      const hasAllAccess = rows.some(e => e.course_slug === 'all-access');
+      const isEnrolled = enrollments && enrollments.some(e => e.course_slug === COURSE_SLUG);
+      const hasAllAccess = enrollments && enrollments.some(e => e.course_slug === 'all-access');
       if (isEnrolled) {
         document.querySelectorAll('#ctaBtn, #bottomCtaBtn').forEach(btn => {
           btn.textContent = 'Buka Kursus →';

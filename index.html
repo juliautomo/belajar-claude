@@ -389,13 +389,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
             var lihNameEl = document.getElementById('lihName');
             if (lihNameEl) lihNameEl.textContent = name.split(' ')[0];
 
-            // Paket bundles (e.g. paket-karyawan) grant access to their listed component
-            // courses. New purchases get real per-course rows written by the backend
-            // webhook, but some older bundle purchases only ever got the single paket-*
-            // row — expand those here too, mirroring dashboard.html's PAKET_COURSES logic.
-            var PAKET_COURSES = {'paket-karyawan':['mulai-claude','produktivitas','analisis-data'],'paket-mahasiswa':['mulai-claude','analisis-data'],'paket-pengusaha':['mulai-claude','content-marketing','build-automation'],'paket-creator':['mulai-claude','content-marketing']};
             var enrolledSlugs = new Set((enr.data || []).map(function(e){ return e.course_slug; }));
-            (enr.data || []).forEach(function(e){ if (PAKET_COURSES[e.course_slug]) { PAKET_COURSES[e.course_slug].forEach(function(slug){ enrolledSlugs.add(slug); }); } });
             var progRes = await sbClient.from('module_completions').select('course_slug,module_num,completed_at').eq('email', s.user.email).order('completed_at', { ascending: false });
             var progressRows = progRes.data || [];
             var progressMap = {};

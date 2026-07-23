@@ -212,11 +212,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
       <a class="nav-item" id="adminNavItem" href="admin.html" style="display:none;text-decoration:none;color:inherit;">
         <span class="ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg></span>Admin
       </a>
-      <div id="paketNavSection" style="display:none;">
-        <div style="font-size:10px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:0.1em;padding:12px 10px 6px;">Paket Saya</div>
-        <div id="paketNavItems"></div>
-      </div>
-
     </div>
     <div class="sidebar-stats">
 
@@ -510,33 +505,6 @@ async function _init(){
   }
 
 
-
-  // Paket nav: only show if user has the actual paket slug enrolled
-  var rawPaketSlugs=new Set(rawEnrollments.map(function(e){return e.course_slug;}).filter(function(s){return s.startsWith('paket-');}));
-  var PAKET_TRACKS = [
-    { paketSlug:'paket-mahasiswa',  name:'Claude untuk Mahasiswa',       slugs:['mulai-claude','analisis-data'],                 link:'kursus-mahasiswa.html' },
-    { paketSlug:'paket-karyawan',   name:'Claude untuk Karyawan',        slugs:['mulai-claude','produktivitas','analisis-data'],                  link:'kursus-karyawan.html' },
-    { paketSlug:'paket-pengusaha',  name:'Claude untuk Pengusaha',       slugs:['mulai-claude','content-marketing','build-automation'], link:'kursus-ukm.html' },
-    { paketSlug:'paket-creator',    name:'Claude untuk Content Creator', slugs:['mulai-claude','content-marketing'],                    link:'paket-content-creator.html' },
-  ];
-  var paketItems = document.getElementById('paketNavItems');
-  var paketVisible = false;
-  PAKET_TRACKS.forEach(function(track) {
-    if(!rawPaketSlugs.has(track.paketSlug)) return;
-    var enrolled = track.slugs.filter(function(s){return enrolledSlugs.has(s);});
-    if(enrolled.length >= 1) {
-      var total = track.slugs.length;
-      var doneCount = enrolled.filter(function(s){var p=getProgress(s);return p.pct===100;}).length;
-      var pct = Math.round((doneCount/total)*100);
-      paketItems.innerHTML += '<div class="paket-nav-item" onclick="window.location.href=\''+track.link+'\';" style="cursor:pointer;">'
-        +'<span style="font-size:13px">📦</span>'
-        +'<span style="flex:1;font-size:12px;">'+track.name+'</span>'
-        +'<div class="paket-nav-prog"><div class="paket-nav-fill" style="width:'+pct+'%"></div></div>'
-        +'</div>';
-      paketVisible = true;
-    }
-  });
-  if(paketVisible) document.getElementById('paketNavSection').style.display='block';
 
   // Coming-soon (not-yet-launched) courses stay hidden here entirely, even when
   // unenrolled — same "hidden means hidden" rule as everywhere else on the site.
