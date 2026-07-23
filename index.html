@@ -269,7 +269,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     </div>
   </div>
 
-  <div class="container" style="padding:40px 0 64px;">
+  <div class="container" style="padding-top:40px;padding-bottom:64px;">
     <div style="margin-bottom:18px;">
       <h2 class="section-title" style="font-size:clamp(24px,3vw,32px);">Pilih apa yang ingin kamu pelajari</h2>
       <p class="section-sub">Semua kursus sudah termasuk dalam All Access kamu.</p>
@@ -287,7 +287,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
   </div>
   <p class="cta-sub" id="ctaNote" style="max-width:1100px;margin:16px auto 0;">Sekali bayar · Bukan langganan</p>
 </section>
-<section style="padding: 0 0 88px;">
+<section style="padding: 0 0 88px;" id="reassuranceSection">
   <div class="reassurance reveal">
     <div class="reassurance-item"><strong>Sekali bayar, bukan langganan.</strong><span>Satu kali pembayaran untuk mendapatkan akses ke seluruh course library.</span></div>
     <div class="reassurance-item"><strong>Belajar sesuai kebutuhanmu.</strong><span>Pilih kursus yang paling relevan untuk pekerjaan atau bisnis kamu.</span></div>
@@ -398,6 +398,8 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
           if (hasAllAccess) {
             document.getElementById('marketingHome').style.display = 'none';
             document.getElementById('loggedInHome').style.display = 'block';
+            var reassuranceEl = document.getElementById('reassuranceSection');
+            if (reassuranceEl) reassuranceEl.style.display = 'none';
             var lihNameEl = document.getElementById('lihName');
             if (lihNameEl) lihNameEl.textContent = name.split(' ')[0];
 
@@ -424,7 +426,9 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
             }
 
             var gridHtml = '';
-            LIH_COURSE_ORDER.forEach(function(slug) {
+            // Coming-soon courses stay hidden here too, same rule as all-access.html's
+            // course grid (Checkpoint 36) — only live courses show on this grid.
+            LIH_COURSE_ORDER.filter(function(slug) { return !LIH_COURSES[slug].comingSoon; }).forEach(function(slug) {
               var meta = LIH_COURSES[slug];
               var doneSet = progressMap[slug];
               var doneCount = doneSet ? doneSet.size : 0;
@@ -432,11 +436,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
               var isDone = meta.modules > 0 && doneCount >= meta.modules;
 
               var tagText, tagColor, countText, actionHtml;
-              if (meta.comingSoon) {
-                tagText = 'SEGERA HADIR'; tagColor = 'var(--ink-3)';
-                countText = 'Belum tersedia';
-                actionHtml = '<span class="disabled-action">Segera hadir</span>';
-              } else if (isDone) {
+              if (isDone) {
                 tagText = 'SELESAI'; tagColor = 'var(--green)';
                 countText = doneCount + '/' + meta.modules + ' modul';
                 actionHtml = '<a href="javascript:void(0)" class="action" onclick="lihEnrollAndGo(\'' + slug + '\',\'' + meta.contentLink + '\',true)">Ulangi →</a>';
