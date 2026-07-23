@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 23, 2026 (checkpoint 38)_
+_Last updated: July 23, 2026 (checkpoint 39)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -192,6 +192,28 @@ create table social_links (
 - New `LIH_COURSES` map (lightweight, index.html-local — title/icon/desc/modules/contentLink/comingSoon) mirrors `dashboard.html`'s `ALL_COURSES` but only carries what this view needs; not the source of truth, `dashboard.html` remains that.
 
 **Not done / known gap:** The old small-scale hero-card personalization from earlier the same day (green "ALL ACCESS AKTIF" tag swap, hiding just the pricing block) was superseded by this — that logic was removed since the entire `#marketingHome` (including the hero card) is now hidden for all-access holders in favor of `#loggedInHome`. The "continue learning" card shows only course title + done/total count, not a specific module title or number (no per-index module-title map exists on `index.html`, unlike `admin.html`'s `MODULE_TITLES`) — acceptable simplification, can be revisited if Julia wants module-level detail there.
+
+**Also fixed same day:** wrong-password error wasn't showing in the login modal (used site-wide via `login-modal.js`, e.g. the popup opened from `index.html`'s nav). Root cause: `openLoginModal()` set an inline `el.style.display = 'none'` on the `.m-msg` message box every time the modal opened; `mShowMsg()` only changed the CSS class (`m-msg error`, which has `display: block` in the injected stylesheet) but never cleared that inline style, so the browser's inline style silently won and the error box stayed invisible forever. Fixed by having `mShowMsg()` reset `el.style.display = ''` and having the modal-open reset use `''` instead of `'none'`. (`login.html`'s standalone full-page login was never affected — it doesn't set any inline `display` on its message box.)
+
+---
+
+## SHIPPED (Checkpoint 39, July 23, 2026): Course Preview Pages Restored
+
+**Status: live.** Julia asked to bring back "preview content of the courses" — specifically, clicking "Lihat" on a course card (e.g. Content & Marketing) used to show a real marketing page with the course's curriculum before the single-course-purchase retirement in Checkpoint 34 turned `produktivitas.html`, `content-marketing.html`, `mulai-claude.html`, and `prompt-gratis.html` into `all-access.html` redirect stubs — that curriculum content was lost when the redirect happened. Clarified via question that this should be a **full restoration** (hero + module curriculum + skills grid + case studies), not just a lightweight module list or a modal.
+
+**What was restored:** Used `git show <commit>:<file>` to pull each page's last real content before it became a redirect stub (`produktivitas.html` @ `e35e63d`, `content-marketing.html`/`prompt-gratis.html` @ `a909545`, `mulai-claude.html` @ `0f27436`). Rebuilt all 4 as real pages again, keeping the original hero copy, `Kurikulum` module list, `Yang Akan Kamu Kuasai` skills grid, and `Contoh Nyata Indonesia` case-study sections verbatim (same CSS classes: `.modules-list`/`.module-item`, `.skills-grid`/`.skill-card`, `.cases-grid`/`.case-card`, `.output-box`) — this is the actual "preview" content Julia meant.
+
+**What was deliberately changed vs. the old pages** (since single-course purchase is permanently retired, not un-retired):
+- Removed the old per-course buy flow entirely: the `.cta-box`/hero CTA, bottom CTA, `buyCourse()`/`submitPayment()` functions, the payment modal HTML, and the Duitku `<script>` tag.
+- Replaced with a single dynamic CTA (`#ctaBtn` in the hero, `#bottomCtaBtn` at the page bottom): defaults to "Dapatkan All Access →" linking to `all-access.html`; if the logged-in session already has access to that course (a real per-course enrollment row **or** the `all-access` sentinel), both buttons swap to "Buka Kursus →" linking straight to the `*-content.html` reader.
+- `prompt-gratis.html` specifically: the old page had a different layout (a lead-magnet-style "20 prompt cards" grid + email-signup box, from when it was a free lead magnet). Rebuilt it using the same `Kurikulum`-module-list template as the other 3 pages instead, mapped to the 5 real category modules `prompt-gratis-content.html` actually has today (Produktivitas Kerja, Bisnis & Marketing, Karir & CV, Komunikasi Profesional, Belajar & Riset) — this keeps all 4 preview pages structurally consistent and accurate to what's actually in the course reader now, rather than resurrecting stale "signup for a free PDF" copy that no longer reflects the all-access-only model. Kept a smaller 3-card "Preview Isi" teaser section with locked prompt snippets as a nod to the original design.
+- All 4 pages keep the plain one-line footer (`© 2025 Belajar Claude — ...`), matching `all-access.html`'s convention — **not** the richer social-links footer that only lives on `index.html`.
+
+**Wiring updated to point at these pages instead of straight to `all-access.html`:**
+- `index.html`'s course-library grid: each course's "Lihat →" link now points to its own page (`prompt-gratis.html`, `mulai-claude.html`, `produktivitas.html`, `content-marketing.html`) instead of `all-access.html`.
+- `dashboard.html`'s `ALL_COURSES`: `salesLink` for these same 4 courses updated to match (used by "Jelajahi Kursus" for users without all-access — clicking "Lihat Kursus →" now shows the curriculum preview before they decide to buy, instead of dropping them straight on the checkout page). Coming-soon courses' `salesLink` (`coming-soon.html`) untouched.
+
+**Not done:** No changes to `all-access.html`'s own course grid (still just icon/title/desc, no per-card "Lihat" links) or to the `*-content.html` reader pages — this checkpoint only touched the 4 marketing/preview pages plus the two places that link to them.
 
 ---
 
