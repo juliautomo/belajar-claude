@@ -32,6 +32,25 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 58px; pa
 .wrap { max-width: 760px; margin: 0 auto; padding: 96px 24px 64px; }
 h1.page-title { font-family: var(--serif); font-size: 30px; font-weight: 400; letter-spacing: -0.5px; margin-bottom: 6px; }
 .page-sub { font-size: 14px; color: var(--ink-2); margin-bottom: 32px; }
+
+.admin-layout { display: flex; padding-top: 58px; min-height: 100vh; }
+.sidebar { width: 220px; flex-shrink: 0; position: fixed; top: 58px; left: 0; bottom: 0; border-right: 1px solid var(--border); background: var(--surface); padding: 24px 14px; overflow-y: auto; }
+.sidebar-link { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; font-size: 13.5px; font-weight: 600; color: var(--ink-2); text-decoration: none; cursor: pointer; margin-bottom: 4px; transition: all 0.15s; user-select: none; }
+.sidebar-link:hover { background: var(--surface-2); color: var(--ink); }
+.sidebar-link.active { background: var(--accent-dim); color: var(--accent); }
+.sidebar-link .ic { font-size: 15px; width: 18px; text-align: center; }
+.content-area { flex: 1; margin-left: 220px; padding: 32px 32px 64px; max-width: 760px; }
+.panel { display: none; }
+.panel.active { display: block; }
+@media (max-width: 780px) {
+  .admin-layout { flex-direction: column; padding-top: 58px; }
+  .sidebar { position: static; width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border); display: flex; gap: 6px; overflow-x: auto; padding: 12px 16px; }
+  .sidebar-link { margin-bottom: 0; white-space: nowrap; }
+  .content-area { margin-left: 0; padding: 24px 16px 48px; max-width: 100%; }
+}
+.access-row { display: flex; align-items: center; gap: 10px; padding: 12px 4px; border-bottom: 1px solid var(--border); font-size: 13.5px; }
+.access-row:last-child { border-bottom: none; }
+.access-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--accent-dim); color: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 24px; margin-bottom: 20px; box-shadow: var(--shadow); }
 .card h2 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
 .card .hint { font-size: 12.5px; color: var(--ink-2); margin-bottom: 18px; line-height: 1.5; }
@@ -131,47 +150,97 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
 </div>
 
 <!-- State: admin -->
-<div class="wrap" id="stateAdmin" style="display:none;">
-  <h1 class="page-title">Kelola Konten Kursus</h1>
-  <p class="page-sub">Unggah PDF, video, PPT, dan dokumen praktik per modul — tampil langsung di halaman kursus, tidak perlu deploy ulang.</p>
+<div class="admin-layout" id="stateAdmin" style="display:none;">
+  <div class="sidebar">
+    <a class="sidebar-link active" data-panel="pricing" onclick="switchPanel('pricing');return false;"><span class="ic">💰</span> Pricing</a>
+    <a class="sidebar-link" data-panel="content" onclick="switchPanel('content');return false;"><span class="ic">🎓</span> Course Content</a>
+    <a class="sidebar-link" data-panel="social" onclick="switchPanel('social');return false;"><span class="ic">🔗</span> Social Media Links</a>
+    <a class="sidebar-link" data-panel="access" onclick="switchPanel('access');return false;"><span class="ic">🔐</span> Who Has Access</a>
+  </div>
 
-  <div class="card">
-    <h2>Harga All Access</h2>
-    <p class="hint">Atur harga normal dan diskon terjadwal untuk paket All Access (semua kursus, satu kali bayar). Perubahan berlaku langsung di all-access.html dan saat checkout — tidak perlu deploy ulang.</p>
-    <label>Harga Normal (Rp)</label>
-    <input type="number" id="priceBase" min="0" step="1000" placeholder="399000">
-    <label>Harga Diskon (Rp)</label>
-    <input type="number" id="priceDiscount" min="0" step="1000" placeholder="Kosongkan jika tidak ada diskon">
-    <div class="price-row">
-      <div>
-        <label>Diskon Mulai</label>
-        <input type="datetime-local" id="priceDiscountStart">
-      </div>
-      <div>
-        <label>Diskon Berakhir</label>
-        <input type="datetime-local" id="priceDiscountEnd">
+  <div class="content-area">
+
+    <!-- Panel: Pricing -->
+    <div class="panel active" id="panel-pricing">
+      <h1 class="page-title">Pricing</h1>
+      <p class="page-sub">Atur harga normal dan diskon terjadwal untuk paket All Access.</p>
+      <div class="card">
+        <h2>Harga All Access</h2>
+        <p class="hint">Atur harga normal dan diskon terjadwal untuk paket All Access (semua kursus, satu kali bayar). Perubahan berlaku langsung di all-access.html dan saat checkout — tidak perlu deploy ulang.</p>
+        <label>Harga Normal (Rp)</label>
+        <input type="number" id="priceBase" min="0" step="1000" placeholder="399000">
+        <label>Harga Diskon (Rp)</label>
+        <input type="number" id="priceDiscount" min="0" step="1000" placeholder="Kosongkan jika tidak ada diskon">
+        <div class="price-row">
+          <div>
+            <label>Diskon Mulai</label>
+            <input type="datetime-local" id="priceDiscountStart">
+          </div>
+          <div>
+            <label>Diskon Berakhir</label>
+            <input type="datetime-local" id="priceDiscountEnd">
+          </div>
+        </div>
+        <button class="btn" id="priceSaveBtn" onclick="savePricing()">Simpan Harga</button>
+        <div class="current-indicator" id="priceIndicator"></div>
+        <div class="status" id="priceStatus"></div>
       </div>
     </div>
-    <button class="btn" id="priceSaveBtn" onclick="savePricing()">Simpan Harga</button>
-    <div class="current-indicator" id="priceIndicator"></div>
-    <div class="status" id="priceStatus"></div>
-  </div>
 
-  <div class="course-tabs" id="courseTabs"></div>
+    <!-- Panel: Course Content -->
+    <div class="panel" id="panel-content">
+      <h1 class="page-title">Course Content</h1>
+      <p class="page-sub">Unggah PDF, video, PPT, dan dokumen praktik per modul — tampil langsung di halaman kursus, tidak perlu deploy ulang.</p>
 
-  <div class="card">
-    <h2>PDF Kursus</h2>
-    <p class="hint">Satu PDF untuk keseluruhan kursus ini (mis. panduan/lembar prompt). Mengunggah file baru akan menggantikan yang lama.</p>
-    <div class="pdf-status" id="pdfRow">Memuat...</div>
-  </div>
+      <div class="course-tabs" id="courseTabs"></div>
 
-  <div class="card">
-    <h2 id="matrixCourseTitle">Konten per Modul</h2>
-    <p class="hint">Klik sel yang sudah terisi untuk lihat/ganti filenya, atau klik "+ Unggah" untuk yang masih kosong.</p>
-    <table class="matrix-table" id="matrixTable">
-      <thead><tr><th>Modul</th><th>Video</th><th>PPT</th><th>Dokumen</th></tr></thead>
-      <tbody id="matrixBody"><tr><td colspan="4">Memuat...</td></tr></tbody>
-    </table>
+      <div class="card">
+        <h2>PDF Kursus</h2>
+        <p class="hint">Satu PDF untuk keseluruhan kursus ini (mis. panduan/lembar prompt). Mengunggah file baru akan menggantikan yang lama.</p>
+        <div class="pdf-status" id="pdfRow">Memuat...</div>
+      </div>
+
+      <div class="card">
+        <h2 id="matrixCourseTitle">Konten per Modul</h2>
+        <p class="hint">Klik sel yang sudah terisi untuk lihat/ganti filenya, atau klik "+ Unggah" untuk yang masih kosong.</p>
+        <table class="matrix-table" id="matrixTable">
+          <thead><tr><th>Modul</th><th>Video</th><th>PPT</th><th>Dokumen</th></tr></thead>
+          <tbody id="matrixBody"><tr><td colspan="4">Memuat...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Panel: Social Media Links -->
+    <div class="panel" id="panel-social">
+      <h1 class="page-title">Social Media Links</h1>
+      <p class="page-sub">Link ini tampil di footer semua halaman. Kosongkan field untuk menyembunyikan link tersebut.</p>
+      <div class="card">
+        <h2>Link Sosial Media</h2>
+        <p class="hint">Perubahan berlaku langsung di halaman utama — tidak perlu deploy ulang.</p>
+        <label>TikTok</label>
+        <input type="text" id="socialTiktok" placeholder="https://tiktok.com/@...">
+        <label>YouTube</label>
+        <input type="text" id="socialYoutube" placeholder="https://youtube.com/@...">
+        <label>Instagram</label>
+        <input type="text" id="socialInstagram" placeholder="https://instagram.com/...">
+        <label>WhatsApp Community</label>
+        <input type="text" id="socialWhatsapp" placeholder="https://chat.whatsapp.com/...">
+        <button class="btn" id="socialSaveBtn" onclick="saveSocialLinks()">Simpan Link</button>
+        <div class="status" id="socialStatus"></div>
+      </div>
+    </div>
+
+    <!-- Panel: Who Has Access to Admin -->
+    <div class="panel" id="panel-access">
+      <h1 class="page-title">Who Has Access to Admin</h1>
+      <p class="page-sub">Daftar akun yang punya akses ke halaman admin ini.</p>
+      <div class="card">
+        <h2>Admin Saat Ini</h2>
+        <p class="hint">Daftar ini bersifat tampilan saja (read-only). Untuk menambah/menghapus admin, perlu perubahan kode langsung — hubungi developer.</p>
+        <div id="accessList"></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -238,11 +307,23 @@ let currentSession = null;
 let activeCourse = COURSES[0].slug;
 let dataCache = { resources: [], videos: [], ppts: [], docs: [] };
 let pricingCache = null;
+let socialCache = null;
 
 function showState(state) {
   document.getElementById('stateLoggedOut').style.display = state === 'loggedOut' ? 'block' : 'none';
   document.getElementById('stateDenied').style.display = state === 'denied' ? 'block' : 'none';
-  document.getElementById('stateAdmin').style.display = state === 'admin' ? 'block' : 'none';
+  document.getElementById('stateAdmin').style.display = state === 'admin' ? 'flex' : 'none';
+}
+
+// ─── SIDEBAR PANELS ──────────────────────────────────────────────────────────
+
+function switchPanel(panel) {
+  document.querySelectorAll('.panel').forEach(function (p) { p.classList.remove('active'); });
+  document.querySelectorAll('.sidebar-link').forEach(function (l) { l.classList.remove('active'); });
+  var panelEl = document.getElementById('panel-' + panel);
+  var linkEl = document.querySelector('.sidebar-link[data-panel="' + panel + '"]');
+  if (panelEl) panelEl.classList.add('active');
+  if (linkEl) linkEl.classList.add('active');
 }
 
 function courseName(slug) {
@@ -277,16 +358,63 @@ async function loadAllData() {
   var pptsRes = await sbClient.from('module_ppts').select('*').order('course_slug').order('module_num');
   var docsRes = await sbClient.from('module_documents').select('*').order('course_slug').order('module_num').order('created_at');
   var pricingRes = await sbClient.from('course_pricing').select('*').eq('course_slug', 'all-access').maybeSingle();
+  var socialRes = await sbClient.from('social_links').select('*').eq('id', 'main').maybeSingle();
   dataCache.resources = resourcesRes.data || [];
   dataCache.videos = videosRes.data || [];
   dataCache.ppts = pptsRes.data || [];
   dataCache.docs = docsRes.data || [];
   pricingCache = pricingRes.data || null;
+  socialCache = socialRes.data || null;
 }
 
 async function reloadAndRender() {
   await loadAllData();
   renderAll();
+}
+
+// ─── SOCIAL MEDIA LINKS ──────────────────────────────────────────────────────
+
+function renderSocialLinks() {
+  document.getElementById('socialTiktok').value = (socialCache && socialCache.tiktok_url) || '';
+  document.getElementById('socialYoutube').value = (socialCache && socialCache.youtube_url) || '';
+  document.getElementById('socialInstagram').value = (socialCache && socialCache.instagram_url) || '';
+  document.getElementById('socialWhatsapp').value = (socialCache && socialCache.whatsapp_url) || '';
+}
+
+async function saveSocialLinks() {
+  var btn = document.getElementById('socialSaveBtn');
+  var statusEl = document.getElementById('socialStatus');
+  var payload = {
+    id: 'main',
+    tiktok_url: document.getElementById('socialTiktok').value.trim() || null,
+    youtube_url: document.getElementById('socialYoutube').value.trim() || null,
+    instagram_url: document.getElementById('socialInstagram').value.trim() || null,
+    whatsapp_url: document.getElementById('socialWhatsapp').value.trim() || null,
+    updated_at: new Date().toISOString(),
+    updated_by: currentSession.user.email,
+  };
+  btn.disabled = true; btn.textContent = 'Menyimpan...';
+  try {
+    var res = await sbClient.from('social_links').upsert(payload, { onConflict: 'id' });
+    if (res.error) throw res.error;
+    socialCache = payload;
+    statusEl.className = 'status show success';
+    statusEl.textContent = 'Link tersimpan ✓ — langsung berlaku di halaman utama.';
+  } catch (e) {
+    statusEl.className = 'status show error';
+    statusEl.textContent = 'Gagal menyimpan: ' + e.message;
+  }
+  btn.disabled = false; btn.textContent = 'Simpan Link';
+}
+
+// ─── WHO HAS ACCESS (read-only) ──────────────────────────────────────────────
+
+function renderAccessList() {
+  var el = document.getElementById('accessList');
+  el.innerHTML = ADMIN_EMAILS.map(function (email) {
+    var initial = email.charAt(0).toUpperCase();
+    return '<div class="access-row"><div class="access-avatar">' + initial + '</div><div>' + escapeHtml(email) + '</div></div>';
+  }).join('');
 }
 
 // ─── TABS ────────────────────────────────────────────────────────────────────
@@ -310,6 +438,8 @@ function renderAll() {
   renderCourseTabs();
   renderPdfRow();
   renderMatrix();
+  renderSocialLinks();
+  renderAccessList();
 }
 
 // ─── PRICING (All Access — base price + optional scheduled discount) ───────

@@ -252,11 +252,11 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
       <a href="index.html" class="logo">belajar<span>claude</span></a>
       <p>Platform belajar Claude AI dalam Bahasa Indonesia — untuk profesional, UKM, dan mahasiswa.</p>
     </div>
-    <div class="footer-links">
+    <div class="footer-links" id="footerSocialLinks" style="display:none;">
       <h4>Ikuti Kami</h4>
       <ul>
-        <li><a href="#">TikTok</a></li><li><a href="#">YouTube</a></li>
-        <li><a href="#">Instagram</a></li><li><a href="#">WhatsApp Community</a></li>
+        <li id="liTiktok" style="display:none;"><a href="#" id="linkTiktok" target="_blank" rel="noopener">TikTok</a></li><li id="liYoutube" style="display:none;"><a href="#" id="linkYoutube" target="_blank" rel="noopener">YouTube</a></li>
+        <li id="liInstagram" style="display:none;"><a href="#" id="linkInstagram" target="_blank" rel="noopener">Instagram</a></li><li id="liWhatsapp" style="display:none;"><a href="#" id="linkWhatsapp" target="_blank" rel="noopener">WhatsApp Community</a></li>
       </ul>
     </div>
   </div>
@@ -344,6 +344,32 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
           }
         }
       }
+    } catch (e) {}
+  })();
+
+  // Populate footer social links from admin-managed social_links table.
+  // Each link stays hidden unless the admin has filled in a URL for it.
+  (async function() {
+    try {
+      var res = await sbClient.from('social_links').select('*').eq('id', 'main').maybeSingle();
+      var row = res.data;
+      if (!row) return;
+      var map = [
+        ['tiktok_url', 'liTiktok', 'linkTiktok'],
+        ['youtube_url', 'liYoutube', 'linkYoutube'],
+        ['instagram_url', 'liInstagram', 'linkInstagram'],
+        ['whatsapp_url', 'liWhatsapp', 'linkWhatsapp'],
+      ];
+      var anyShown = false;
+      map.forEach(function(m) {
+        var url = row[m[0]];
+        if (url) {
+          document.getElementById(m[1]).style.display = 'block';
+          document.getElementById(m[2]).href = url;
+          anyShown = true;
+        }
+      });
+      if (anyShown) document.getElementById('footerSocialLinks').style.display = 'block';
     } catch (e) {}
   })();
 
