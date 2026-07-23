@@ -139,8 +139,40 @@ section { padding: 88px 0; position: relative; z-index: 1; }
 .lih-continue-title { font-family: var(--serif); font-size: 24px; font-weight: 400; color: #fff; margin-bottom: 6px; }
 .lih-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: all 0.2s; text-decoration: none; }
 .lih-card:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(0,0,0,0.06); border-color: rgba(108,71,255,0.2); }
-.lih-visual { height: 76px; display: flex; align-items: center; padding: 0 18px; }
-.lih-icon { width: 38px; height: 38px; background: #fff; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 3px 10px rgba(0,0,0,0.06); }
+.lih-visual { height: 96px; padding: 0; overflow: hidden; position: relative; }
+.lih-icon { width: 38px; height: 38px; background: #fff; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 3px 10px rgba(0,0,0,0.06); margin: 0 18px; }
+.lih-illustration { width: 100%; height: 100%; display: block; }
+@keyframes lihBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+@keyframes lihLegA { 0%,100% { transform: rotate(16deg); } 50% { transform: rotate(-16deg); } }
+@keyframes lihLegB { 0%,100% { transform: rotate(-16deg); } 50% { transform: rotate(16deg); } }
+@keyframes lihGround { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -24; } }
+@keyframes lihTailWag { 0%,100% { transform: rotate(-10deg); } 50% { transform: rotate(14deg); } }
+@keyframes lihScribble { 0%,100% { stroke-dashoffset: 0; opacity: 0.75; } 50% { stroke-dashoffset: 10; opacity: 0.35; } }
+@keyframes lihPenWiggle { 0%,100% { transform: rotate(-8deg); } 50% { transform: rotate(6deg); } }
+@keyframes lihSparkle { 0%,100% { opacity: 0.25; transform: scale(0.85); } 50% { opacity: 1; transform: scale(1.1); } }
+@keyframes lihCursorBlink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
+@keyframes lihDotPulse { 0%,80%,100% { opacity: 0.25; } 40% { opacity: 1; } }
+@keyframes lihBubblePop { 0%,100% { transform: scale(0.94); opacity: 0.85; } 50% { transform: scale(1.03); opacity: 1; } }
+@keyframes lihFlash { 0%,85%,100% { opacity: 0; } 92% { opacity: 0.9; } }
+@keyframes lihCamClick { 0%,88%,100% { transform: scale(1); } 92% { transform: scale(0.93); } }
+.lih-run-a { animation: lihBob 0.6s ease-in-out infinite; }
+.lih-run-b { animation: lihBob 0.6s ease-in-out infinite; animation-delay: 0.15s; }
+.lih-leg-a { animation: lihLegA 0.6s ease-in-out infinite; }
+.lih-leg-b { animation: lihLegB 0.6s ease-in-out infinite; }
+.lih-ground { animation: lihGround 1s linear infinite; }
+.lih-tail { animation: lihTailWag 0.5s ease-in-out infinite; }
+.lih-scribble { animation: lihScribble 1.6s ease-in-out infinite; }
+.lih-scribble-2 { animation: lihScribble 1.6s ease-in-out infinite; animation-delay: 0.3s; }
+.lih-scribble-3 { animation: lihScribble 1.6s ease-in-out infinite; animation-delay: 0.6s; }
+.lih-pen { animation: lihPenWiggle 0.9s ease-in-out infinite; }
+.lih-sparkle { animation: lihSparkle 1.8s ease-in-out infinite; }
+.lih-cursor { animation: lihCursorBlink 1s step-end infinite; }
+.lih-dot1 { animation: lihDotPulse 1.2s ease-in-out infinite; }
+.lih-dot2 { animation: lihDotPulse 1.2s ease-in-out infinite; animation-delay: 0.2s; }
+.lih-dot3 { animation: lihDotPulse 1.2s ease-in-out infinite; animation-delay: 0.4s; }
+.lih-bubble { animation: lihBubblePop 2s ease-in-out infinite; }
+.lih-flash { animation: lihFlash 2.4s ease-in-out infinite; }
+.lih-cam { animation: lihCamClick 2.4s ease-in-out infinite; }
 .lih-body { padding: 18px; display: flex; flex-direction: column; flex: 1; }
 .lih-tag { display: inline-flex; align-self: flex-start; font-size: 10px; letter-spacing: 0.06em; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; padding: 4px 10px; border-radius: 100px; border: 1px solid transparent; }
 .lih-card h3 { font-family: var(--font); font-size: 15px; font-weight: 700; color: var(--ink); margin: 0 0 5px; }
@@ -349,6 +381,76 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
   };
   var LIH_COURSE_ORDER = ['prompt-gratis','mulai-claude','produktivitas','content-marketing','analisis-data','build-automation','ai-powered-app','claude-api-dev','jual-produk-ai'];
 
+  // Hand-doodled animated scene banners for the live courses — replaces the plain emoji
+  // icon with a small illustrated, gently-animated scene per course (pen writing, robot+dog
+  // running, a meeting, a photoshoot). Pastel backgrounds reuse the .bnr-1..4 gradient palette.
+  var LIH_BG = {
+    'prompt-gratis':     'linear-gradient(135deg,#C7CBFF,#EEF0FF)',
+    'mulai-claude':      'linear-gradient(135deg,#B7F0D6,#E6FBF0)',
+    'produktivitas':     'linear-gradient(135deg,#FBD98A,#FDF0D5)',
+    'content-marketing': 'linear-gradient(135deg,#FBC2D9,#FDE9F1)'
+  };
+  var LIH_ILLUSTRATIONS = {
+    'prompt-gratis': '<svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">' +
+      '<line x1="20" y1="82" x2="210" y2="82" stroke="#111" stroke-width="2.5" opacity="0.25"/>' +
+      '<rect x="46" y="52" width="30" height="28" rx="10" fill="#fff" stroke="#111" stroke-width="3"/>' +
+      '<circle cx="61" cy="38" r="13" fill="#fff" stroke="#111" stroke-width="3"/>' +
+      '<path d="M52 34 Q61 22 70 34" fill="none" stroke="#111" stroke-width="2.5"/>' +
+      '<g class="lih-pen" style="transform-origin:78px 62px"><line x1="78" y1="62" x2="112" y2="54" stroke="#111" stroke-width="3" stroke-linecap="round"/><circle cx="112" cy="54" r="3.5" fill="#6C47FF"/></g>' +
+      '<rect x="100" y="42" width="72" height="46" rx="6" fill="#fff" stroke="#111" stroke-width="2.5"/>' +
+      '<line class="lih-scribble" x1="110" y1="55" x2="152" y2="55" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 4" opacity="0.6"/>' +
+      '<line class="lih-scribble-2" x1="110" y1="65" x2="160" y2="65" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 4" opacity="0.6"/>' +
+      '<line class="lih-scribble-3" x1="110" y1="75" x2="144" y2="75" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 4" opacity="0.6"/>' +
+      '<g class="lih-sparkle" style="transform-origin:180px 34px"><path d="M180 26 L183 33 L190 34 L183 35 L180 42 L177 35 L170 34 L177 33 Z" fill="#6C47FF"/></g>' +
+      '</svg>',
+    'mulai-claude': '<svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">' +
+      '<line class="lih-ground" x1="0" y1="84" x2="400" y2="84" stroke="#111" stroke-width="3" stroke-dasharray="10 10" opacity="0.25"/>' +
+      '<circle cx="368" cy="20" r="11" fill="#FBD98A" stroke="#111" stroke-width="2"/>' +
+      '<g stroke="#111" stroke-width="2" opacity="0.5"><line x1="368" y1="4" x2="368" y2="10"/><line x1="384" y1="12" x2="379" y2="16"/><line x1="390" y1="26" x2="383" y2="24"/></g>' +
+      '<rect x="24" y="58" width="6" height="24" fill="#111" opacity="0.3"/>' +
+      '<circle cx="27" cy="46" r="17" fill="#BFEAD1" stroke="#111" stroke-width="2" opacity="0.9"/>' +
+      '<g class="lih-run-a"><rect x="150" y="44" width="34" height="30" rx="8" fill="#fff" stroke="#111" stroke-width="3"/>' +
+      '<line x1="167" y1="44" x2="167" y2="34" stroke="#111" stroke-width="2.5"/><circle cx="167" cy="31" r="3.5" fill="#6C47FF"/>' +
+      '<circle cx="159" cy="58" r="2.5" fill="#111"/><circle cx="175" cy="58" r="2.5" fill="#111"/>' +
+      '<g class="lih-leg-a" style="transform-origin:158px 74px"><line x1="158" y1="74" x2="158" y2="88" stroke="#111" stroke-width="4" stroke-linecap="round"/></g>' +
+      '<g class="lih-leg-b" style="transform-origin:176px 74px"><line x1="176" y1="74" x2="176" y2="88" stroke="#111" stroke-width="4" stroke-linecap="round"/></g></g>' +
+      '<g class="lih-run-b"><ellipse cx="240" cy="66" rx="24" ry="11" fill="#fff" stroke="#111" stroke-width="3"/>' +
+      '<circle cx="265" cy="58" r="10" fill="#fff" stroke="#111" stroke-width="3"/>' +
+      '<path d="M260 50 L264 40 L268 50 Z" fill="#fff" stroke="#111" stroke-width="2"/>' +
+      '<rect x="255" y="63" width="10" height="5" rx="2" fill="#6C47FF" opacity="0.85"/>' +
+      '<g class="lih-tail" style="transform-origin:218px 62px"><path d="M218 62 Q206 50 212 42" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/></g>' +
+      '<g class="lih-leg-b" style="transform-origin:228px 76px"><line x1="228" y1="76" x2="228" y2="88" stroke="#111" stroke-width="4" stroke-linecap="round"/></g>' +
+      '<g class="lih-leg-a" style="transform-origin:250px 76px"><line x1="250" y1="76" x2="250" y2="88" stroke="#111" stroke-width="4" stroke-linecap="round"/></g></g>' +
+      '</svg>',
+    'produktivitas': '<svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">' +
+      '<circle cx="352" cy="22" r="10" fill="none" stroke="#111" stroke-width="2" opacity="0.4"/>' +
+      '<line x1="352" y1="22" x2="352" y2="15" stroke="#111" stroke-width="2" opacity="0.4"/><line x1="352" y1="22" x2="357" y2="24" stroke="#111" stroke-width="2" opacity="0.4"/>' +
+      '<rect x="120" y="66" width="150" height="10" rx="4" fill="#fff" stroke="#111" stroke-width="2.5"/>' +
+      '<line x1="135" y1="76" x2="135" y2="88" stroke="#111" stroke-width="2.5" opacity="0.4"/><line x1="255" y1="76" x2="255" y2="88" stroke="#111" stroke-width="2.5" opacity="0.4"/>' +
+      '<circle cx="140" cy="46" r="12" fill="#fff" stroke="#111" stroke-width="2.5"/><path d="M126 66 Q140 54 154 66" fill="#fff" stroke="#111" stroke-width="2.5"/>' +
+      '<circle cx="195" cy="40" r="12" fill="#fff" stroke="#111" stroke-width="2.5"/><path d="M181 66 Q195 50 209 66" fill="#fff" stroke="#111" stroke-width="2.5"/>' +
+      '<rect x="180" y="55" width="30" height="11" rx="2" fill="#fff" stroke="#111" stroke-width="2"/>' +
+      '<line class="lih-cursor" x1="185" y1="60" x2="185" y2="66" stroke="#6C47FF" stroke-width="2"/><line x1="190" y1="60" x2="204" y2="60" stroke="#111" stroke-width="1.5" opacity="0.4"/>' +
+      '<circle cx="250" cy="46" r="12" fill="#fff" stroke="#111" stroke-width="2.5"/><path d="M236 66 Q250 54 264 66" fill="#fff" stroke="#111" stroke-width="2.5"/>' +
+      '<g class="lih-bubble" style="transform-origin:140px 20px"><rect x="118" y="10" width="44" height="20" rx="8" fill="#fff" stroke="#111" stroke-width="2"/>' +
+      '<path d="M134 30 L130 37 L140 30 Z" fill="#fff" stroke="#111" stroke-width="2"/>' +
+      '<circle class="lih-dot1" cx="130" cy="20" r="2.2" fill="#6C47FF"/><circle class="lih-dot2" cx="140" cy="20" r="2.2" fill="#6C47FF"/><circle class="lih-dot3" cx="150" cy="20" r="2.2" fill="#6C47FF"/></g>' +
+      '</svg>',
+    'content-marketing': '<svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">' +
+      '<line x1="60" y1="88" x2="320" y2="88" stroke="#111" stroke-width="2.5" opacity="0.2"/>' +
+      '<g class="lih-sparkle" style="transform-origin:150px 24px"><path d="M150 17 L153 23 L159 24 L153 25 L150 31 L147 25 L141 24 L147 23 Z" fill="#6C47FF"/></g>' +
+      '<circle cx="118" cy="38" r="12" fill="#fff" stroke="#111" stroke-width="3"/><path d="M107 33 Q118 20 129 33" fill="none" stroke="#111" stroke-width="2.5"/>' +
+      '<path d="M100 86 Q100 54 118 50 Q136 54 136 86 Z" fill="#FBC2D9" stroke="#111" stroke-width="2.5"/>' +
+      '<path d="M100 66 Q90 72 92 82" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/>' +
+      '<circle cx="252" cy="42" r="12" fill="#fff" stroke="#111" stroke-width="3"/>' +
+      '<path d="M243 88 Q243 60 252 56 Q261 60 261 88 Z" fill="#fff" stroke="#111" stroke-width="2.5"/>' +
+      '<g class="lih-cam" style="transform-origin:280px 58px"><rect x="264" y="48" width="34" height="22" rx="4" fill="#fff" stroke="#111" stroke-width="3"/>' +
+      '<rect x="274" y="42" width="10" height="7" rx="2" fill="#fff" stroke="#111" stroke-width="2.5"/>' +
+      '<circle cx="281" cy="59" r="8" fill="none" stroke="#111" stroke-width="3"/><circle cx="281" cy="59" r="3.5" fill="#6C47FF"/></g>' +
+      '<circle class="lih-flash" cx="281" cy="59" r="16" fill="#FFD84D" opacity="0"/>' +
+      '</svg>'
+  };
+
   // Courses you're not really enrolled in (no real per-course row, even if you hold
   // all-access) link to the course's own preview page instead of the lesson reader
   // directly — the preview page is where the actual "Mulai Kursus" enroll click lives.
@@ -499,8 +601,10 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
                 actionHtml = '<a href="' + meta.contentLink + '" class="action">' + (doneCount > 0 ? 'Lanjutkan →' : 'Mulai →') + '</a>';
               }
 
+              var visualContent = LIH_ILLUSTRATIONS[slug] || ('<div class="lih-icon">' + meta.icon + '</div>');
+              var visualBg = LIH_BG[slug] || 'var(--accent-dim)';
               gridHtml += '<div class="lih-card">' +
-                '<div class="lih-visual" style="background:var(--accent-dim);"><div class="lih-icon">' + meta.icon + '</div></div>' +
+                '<div class="lih-visual" style="background:' + visualBg + ';">' + visualContent + '</div>' +
                 '<div class="lih-body">' +
                 '<div class="lih-tag" style="color:' + tagColor + ';background:' + tagBg + ';border-color:' + tagBorder + ';">' + tagText + '</div>' +
                 '<h3>' + meta.title + '</h3>' +
