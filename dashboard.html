@@ -430,7 +430,12 @@ async function _init(){
   // including ones added after purchase (no backfill needed) - see CONTEXT.md payment restructure notes.
   var allAccessRow=rawEnrollments.find(function(e){return e.course_slug==='all-access';});
   if(allAccessRow){
+    // Only expand into courses that are actually live - comingSoon ones stay out of
+    // "Kursus Kamu" (would just clutter it with permanent 0% entries) and surface in
+    // "Jelajahi Kursus" instead. They'll auto-appear here once comingSoon is removed,
+    // no re-purchase needed - see CONTEXT.md payment restructure notes.
     Object.keys(ALL_COURSES).forEach(function(slug){
+      if(ALL_COURSES[slug].comingSoon) return;
       if(!existingSlugs.has(slug)){existingSlugs.add(slug);paketExpanded.push({course_slug:slug,course_name:ALL_COURSES[slug].title,type:'paid',enrolled_at:allAccessRow.enrolled_at});}
     });
   }
