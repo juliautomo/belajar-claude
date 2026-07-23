@@ -151,6 +151,8 @@ create table social_links (
 
 **Follow-up same day:** added an explicit show/hide toggle per platform (`tiktok_visible`, `youtube_visible`, `instagram_visible`, `whatsapp_visible` — all boolean, default `true`), since Julia wanted to be able to hide a link temporarily without clearing its URL. Each field in `admin.html`'s Social Media Links panel now has a toggle switch next to its label; flipping it off greys out (disables) the input and the field is excluded from the footer even if a URL is saved. `index.html`'s footer logic checks both `url` and `visible !== false` before rendering a link.
 
+**Second follow-up same day:** added a contact **Email** field to the same panel (`contact_email` + `contact_email_visible`, same toggle pattern as the other 4). Basic email-format validation on save. Renders in `index.html`'s footer as `mailto:` link (no `target="_blank"`, unlike the social links).
+
 **Not done / scope check:** Only `index.html`'s footer was wired to `social_links` — no other page currently renders a social-links footer, so nothing else needed updating. If a shared footer gets added to more pages later, point it at the same table.
 
 ---
@@ -204,7 +206,7 @@ All pages use these CSS variables:
 | `module_videos` | course_slug, module_num (PK), video_url, updated_by | Admin-managed video per course module |
 | `module_documents` | id (PK), course_slug, module_num, doc_url, doc_path, doc_label | Admin-managed practice-session document(s) per module — multiple allowed |
 | `course_pricing` | course_slug (PK), base_price, discount_price, discount_start, discount_end, updated_by | Admin-editable price/scheduled discount, currently only an `all-access` row — added Checkpoint 33 |
-| `social_links` | id (PK, always `'main'`), tiktok_url/youtube_url/instagram_url/whatsapp_url, tiktok_visible/youtube_visible/instagram_visible/whatsapp_visible (bool, default true), updated_by | Single-row table for footer social links + per-platform show/hide toggle, admin-editable via `admin.html`'s Social Media Links panel — added Checkpoint 36 |
+| `social_links` | id (PK, always `'main'`), tiktok_url/youtube_url/instagram_url/whatsapp_url/contact_email, tiktok_visible/youtube_visible/instagram_visible/whatsapp_visible/contact_email_visible (bool, default true), updated_by | Single-row table for footer social links + contact email + per-field show/hide toggle, admin-editable via `admin.html`'s Social Media Links panel — added Checkpoint 36 |
 
 ---
 
