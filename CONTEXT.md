@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 23, 2026 (checkpoint 39)_
+_Last updated: July 23, 2026 (checkpoint 40)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -214,6 +214,20 @@ create table social_links (
 - `dashboard.html`'s `ALL_COURSES`: `salesLink` for these same 4 courses updated to match (used by "Jelajahi Kursus" for users without all-access — clicking "Lihat Kursus →" now shows the curriculum preview before they decide to buy, instead of dropping them straight on the checkout page). Coming-soon courses' `salesLink` (`coming-soon.html`) untouched.
 
 **Not done:** No changes to `all-access.html`'s own course grid (still just icon/title/desc, no per-card "Lihat" links) or to the `*-content.html` reader pages — this checkpoint only touched the 4 marketing/preview pages plus the two places that link to them.
+
+---
+
+## SHIPPED (Checkpoint 40, July 23, 2026): Welcome Back Home — 3 Layout/Visibility Bugs Fixed
+
+**Status: live.** Julia flagged 3 issues from screenshots of the Checkpoint 38 "Welcome Back" home in production:
+
+1. **Margin/layout misalignment.** The course-grid section's wrapper had `<div class="container" style="padding:40px 0 64px;">` — the inline `padding` **shorthand** overrides all four sides of the `.container` class's own `padding: 0 40px`, wiping out the horizontal padding and knocking that section out of alignment with the hero above it (which only set `padding-top` inline, so it never touched the class's left/right values). Fixed by switching to the non-shorthand `padding-top:40px;padding-bottom:64px;`, which extends the class instead of replacing it.
+2. **Coming-soon courses reappearing.** The `#loggedInHome` course grid was looping over all 9 entries in `LIH_COURSE_ORDER`, including the 5 not-yet-built `comingSoon` courses (rendered with a "SEGERA HADIR" tag) — this broke the site-wide convention (established Checkpoint 36 for `all-access.html`) that unreleased courses stay out of course-library-style grids. Fixed by filtering them out before the loop: `LIH_COURSE_ORDER.filter(function(slug){ return !LIH_COURSES[slug].comingSoon; }).forEach(...)`, and removed the now-dead `comingSoon` branch from the tag/CTA if-else chain.
+3. **"Sekali bayar" reassurance section showing for All Access holders.** The 2-column reassurance strip ("Sekali bayar, bukan langganan." / "Belajar sesuai kebutuhanmu.") sits as a `<section>` sibling *outside* both `#marketingHome` and `#loggedInHome`, right before `<footer>` — so it rendered unconditionally regardless of login state, even though "you still need to pay once" messaging doesn't apply to someone who already has all-access. Fixed by giving that section `id="reassuranceSection"` and adding `document.getElementById('reassuranceSection').style.display = 'none';` inside the same `if (hasAllAccess) {...}` block that swaps in `#loggedInHome`.
+
+All three fixes are in `index.html` only. Verified with the standard syntax check (`new Function()` over every inline `<script>` block — passed) and a div open/close tag-count balance check (88/88).
+
+**Commits this checkpoint**: one commit covering `index.html`.
 
 ---
 
