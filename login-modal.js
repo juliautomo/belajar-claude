@@ -203,7 +203,7 @@
   }
 
   function mShowMsg(el, type, text) {
-    el.textContent = text; el.className = 'm-msg ' + type;
+    el.textContent = text; el.className = 'm-msg ' + type; el.style.display = '';
   }
 
   // ── Event listeners ─────────────────────────────────────────────────────────
@@ -322,7 +322,7 @@
     overlay.classList.add('open');
     // Reset all forms
     overlay.querySelectorAll('input').forEach(function(i) { i.value = ''; });
-    overlay.querySelectorAll('.m-msg').forEach(function(m) { m.className = 'm-msg'; m.style.display = 'none'; });
+    overlay.querySelectorAll('.m-msg').forEach(function(m) { m.className = 'm-msg'; m.style.display = ''; });
     overlay.querySelectorAll('.m-btn').forEach(function(b) { b.disabled = false; });
     overlay.querySelector('#m-login-btn').textContent = 'Masuk →';
     overlay.querySelector('#m-reg-btn').textContent = 'Daftar →';
