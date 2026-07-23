@@ -53,18 +53,28 @@ function extractYoutubeId(url) {
       .then(function (res) {
         var resource = res.data;
         if (!resource || !resource.pdf_url) return;
-        var label = resource.pdf_label || 'PDF';
 
         // Sidebar link — bigger, bolder, hard to miss among the module list.
+        // Title is always a fixed, clear label ("Unduh Materi PDF") so it never
+        // depends on whatever raw filename the admin uploaded. The admin's
+        // custom label (if any) shows as a smaller subtitle, truncated with
+        // ellipsis so long filenames can never overflow/overlap the sidebar.
         var pdfSlot = document.getElementById('pdf-download-slot');
         if (pdfSlot) {
+          var subtitleHtml = resource.pdf_label
+            ? '<span style="display:block;font-size:10.5px;font-weight:500;color:rgba(255,255,255,0.75);' +
+              'white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;">' + resource.pdf_label + '</span>'
+            : '';
           pdfSlot.innerHTML =
             '<a href="' + resource.pdf_url + '" target="_blank" rel="noopener" ' +
             'style="display:flex;align-items:center;gap:10px;margin:12px 16px;padding:12px 14px;' +
-            'background:var(--accent);color:#fff;border-radius:12px;font-size:12.5px;' +
-            'font-weight:700;text-decoration:none;box-shadow:0 2px 10px var(--accent-glow);">' +
-            '<span style="font-size:18px;line-height:1;">📄</span>' +
-            '<span>Unduh ' + label + '</span></a>';
+            'background:var(--accent);color:#fff;border-radius:12px;' +
+            'text-decoration:none;box-shadow:0 2px 10px var(--accent-glow);">' +
+            '<span style="font-size:18px;line-height:1;flex-shrink:0;">📄</span>' +
+            '<span style="min-width:0;flex:1;overflow:hidden;">' +
+            '<span style="display:block;font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Unduh Materi PDF</span>' +
+            subtitleHtml +
+            '</span></a>';
         }
       })
       .catch(function (e) { console.log('course-video: gagal memuat PDF', e); });
