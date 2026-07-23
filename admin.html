@@ -51,6 +51,20 @@ h1.page-title { font-family: var(--serif); font-size: 30px; font-weight: 400; le
 .access-row { display: flex; align-items: center; gap: 10px; padding: 12px 4px; border-bottom: 1px solid var(--border); font-size: 13.5px; }
 .access-row:last-child { border-bottom: none; }
 .access-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--accent-dim); color: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+
+.social-field { margin-top: 18px; }
+.social-field:first-of-type { margin-top: 0; }
+.social-label-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.social-label-row label { margin: 0; }
+.social-toggle-wrap { display: flex; align-items: center; gap: 7px; }
+.social-toggle-text { font-size: 11px; font-weight: 600; color: var(--ink-2); }
+.toggle-switch { position: relative; display: inline-block; width: 34px; height: 19px; flex-shrink: 0; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-slider { position: absolute; cursor: pointer; inset: 0; background: var(--border-strong); border-radius: 20px; transition: background 0.15s; }
+.toggle-slider:before { content: ""; position: absolute; height: 13px; width: 13px; left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: transform 0.15s; }
+.toggle-switch input:checked + .toggle-slider { background: var(--accent); }
+.toggle-switch input:checked + .toggle-slider:before { transform: translateX(15px); }
+.social-field input[type="text"]:disabled { background: var(--surface-2); color: var(--ink-3); }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 24px; margin-bottom: 20px; box-shadow: var(--shadow); }
 .card h2 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
 .card .hint { font-size: 12.5px; color: var(--ink-2); margin-bottom: 18px; line-height: 1.5; }
@@ -213,18 +227,55 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
     <!-- Panel: Social Media Links -->
     <div class="panel" id="panel-social">
       <h1 class="page-title">Social Media Links</h1>
-      <p class="page-sub">Link ini tampil di footer semua halaman. Kosongkan field untuk menyembunyikan link tersebut.</p>
+      <p class="page-sub">Link ini tampil di footer semua halaman. Pakai toggle untuk sembunyikan sementara tanpa menghapus link-nya.</p>
       <div class="card">
         <h2>Link Sosial Media</h2>
         <p class="hint">Perubahan berlaku langsung di halaman utama — tidak perlu deploy ulang.</p>
-        <label>TikTok</label>
-        <input type="text" id="socialTiktok" placeholder="https://tiktok.com/@...">
-        <label>YouTube</label>
-        <input type="text" id="socialYoutube" placeholder="https://youtube.com/@...">
-        <label>Instagram</label>
-        <input type="text" id="socialInstagram" placeholder="https://instagram.com/...">
-        <label>WhatsApp Community</label>
-        <input type="text" id="socialWhatsapp" placeholder="https://chat.whatsapp.com/...">
+
+        <div class="social-field">
+          <div class="social-label-row">
+            <label>TikTok</label>
+            <div class="social-toggle-wrap">
+              <span class="social-toggle-text" id="socialTiktokVisibleLabel">Tampil</span>
+              <label class="toggle-switch"><input type="checkbox" id="socialTiktokVisible" checked onchange="onSocialToggle('Tiktok')"><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+          <input type="text" id="socialTiktok" placeholder="https://tiktok.com/@...">
+        </div>
+
+        <div class="social-field">
+          <div class="social-label-row">
+            <label>YouTube</label>
+            <div class="social-toggle-wrap">
+              <span class="social-toggle-text" id="socialYoutubeVisibleLabel">Tampil</span>
+              <label class="toggle-switch"><input type="checkbox" id="socialYoutubeVisible" checked onchange="onSocialToggle('Youtube')"><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+          <input type="text" id="socialYoutube" placeholder="https://youtube.com/@...">
+        </div>
+
+        <div class="social-field">
+          <div class="social-label-row">
+            <label>Instagram</label>
+            <div class="social-toggle-wrap">
+              <span class="social-toggle-text" id="socialInstagramVisibleLabel">Tampil</span>
+              <label class="toggle-switch"><input type="checkbox" id="socialInstagramVisible" checked onchange="onSocialToggle('Instagram')"><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+          <input type="text" id="socialInstagram" placeholder="https://instagram.com/...">
+        </div>
+
+        <div class="social-field">
+          <div class="social-label-row">
+            <label>WhatsApp Community</label>
+            <div class="social-toggle-wrap">
+              <span class="social-toggle-text" id="socialWhatsappVisibleLabel">Tampil</span>
+              <label class="toggle-switch"><input type="checkbox" id="socialWhatsappVisible" checked onchange="onSocialToggle('Whatsapp')"><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+          <input type="text" id="socialWhatsapp" placeholder="https://chat.whatsapp.com/...">
+        </div>
+
         <button class="btn" id="socialSaveBtn" onclick="saveSocialLinks()">Simpan Link</button>
         <div class="status" id="socialStatus"></div>
       </div>
@@ -374,11 +425,30 @@ async function reloadAndRender() {
 
 // ─── SOCIAL MEDIA LINKS ──────────────────────────────────────────────────────
 
+var SOCIAL_PLATFORMS = ['Tiktok', 'Youtube', 'Instagram', 'Whatsapp'];
+
 function renderSocialLinks() {
   document.getElementById('socialTiktok').value = (socialCache && socialCache.tiktok_url) || '';
   document.getElementById('socialYoutube').value = (socialCache && socialCache.youtube_url) || '';
   document.getElementById('socialInstagram').value = (socialCache && socialCache.instagram_url) || '';
   document.getElementById('socialWhatsapp').value = (socialCache && socialCache.whatsapp_url) || '';
+
+  var fieldMap = { Tiktok: 'tiktok_visible', Youtube: 'youtube_visible', Instagram: 'instagram_visible', Whatsapp: 'whatsapp_visible' };
+  SOCIAL_PLATFORMS.forEach(function (p) {
+    var visible = socialCache ? (socialCache[fieldMap[p]] !== false) : true;
+    document.getElementById('social' + p + 'Visible').checked = visible;
+    updateSocialInputState(p);
+  });
+}
+
+function updateSocialInputState(platform) {
+  var checked = document.getElementById('social' + platform + 'Visible').checked;
+  document.getElementById('social' + platform + 'VisibleLabel').textContent = checked ? 'Tampil' : 'Disembunyikan';
+  document.getElementById('social' + platform).disabled = !checked;
+}
+
+function onSocialToggle(platform) {
+  updateSocialInputState(platform);
 }
 
 async function saveSocialLinks() {
@@ -390,6 +460,10 @@ async function saveSocialLinks() {
     youtube_url: document.getElementById('socialYoutube').value.trim() || null,
     instagram_url: document.getElementById('socialInstagram').value.trim() || null,
     whatsapp_url: document.getElementById('socialWhatsapp').value.trim() || null,
+    tiktok_visible: document.getElementById('socialTiktokVisible').checked,
+    youtube_visible: document.getElementById('socialYoutubeVisible').checked,
+    instagram_visible: document.getElementById('socialInstagramVisible').checked,
+    whatsapp_visible: document.getElementById('socialWhatsappVisible').checked,
     updated_at: new Date().toISOString(),
     updated_by: currentSession.user.email,
   };

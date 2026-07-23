@@ -355,17 +355,18 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
       var row = res.data;
       if (!row) return;
       var map = [
-        ['tiktok_url', 'liTiktok', 'linkTiktok'],
-        ['youtube_url', 'liYoutube', 'linkYoutube'],
-        ['instagram_url', 'liInstagram', 'linkInstagram'],
-        ['whatsapp_url', 'liWhatsapp', 'linkWhatsapp'],
+        ['tiktok_url', 'tiktok_visible', 'liTiktok', 'linkTiktok'],
+        ['youtube_url', 'youtube_visible', 'liYoutube', 'linkYoutube'],
+        ['instagram_url', 'instagram_visible', 'liInstagram', 'linkInstagram'],
+        ['whatsapp_url', 'whatsapp_visible', 'liWhatsapp', 'linkWhatsapp'],
       ];
       var anyShown = false;
       map.forEach(function(m) {
         var url = row[m[0]];
-        if (url) {
-          document.getElementById(m[1]).style.display = 'block';
-          document.getElementById(m[2]).href = url;
+        var visible = row[m[1]] !== false; // default true if column missing/null
+        if (url && visible) {
+          document.getElementById(m[2]).style.display = 'block';
+          document.getElementById(m[3]).href = url;
           anyShown = true;
         }
       });
