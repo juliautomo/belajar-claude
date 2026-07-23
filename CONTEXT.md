@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 23, 2026 (checkpoint 35)_
+_Last updated: July 23, 2026 (checkpoint 36)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -122,6 +122,37 @@ Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign 
 
 ---
 
+## SHIPPED (Checkpoint 36, July 23, 2026): all-access.html Cleanup + admin.html Sidebar Redesign + Social Links
+
+**Status: live.** Based on 3 screenshots Julia shared of `all-access.html`'s course grid, the dark "compare box" section, and the footer social links — plus a request to redesign `admin.html` with a sidebar.
+
+**1. `all-access.html` course grid cleaned up.**
+- Removed the 5 individual "Segera Hadir" (coming-soon) cards (Analisis Data & Laporan, Automasi Workflow, Build AI App Sederhana, Claude API untuk Developer, Build & Monetisasi Produk AI) — confirmed with Julia these should not show up on the sales page at all, not even as non-clickable teasers.
+- Also added the two courses that were missing from this grid since it was first built (Checkpoint 32, before `mulai-claude`/`prompt-gratis` were gated behind All Access in Checkpoints 34/35): **20 Prompt Gratis** and **Dasar Claude AI**, both tagged "Tersedia". Grid is now: 20 Prompt Gratis, Dasar Claude AI, Produktivitas Kantor, Content & Marketing (all "Tersedia") + one generic "Semua Kursus Baru" card ("Otomatis").
+- Removed the entire dark `.compare-box` section ("Satu-satunya Cara Akses Kursus Belajar Claude") per Julia's screenshot callout.
+
+**2. `admin.html` redesigned with a sidebar.** Previously a single scrolling page (pricing card → course tabs → PDF card → module matrix, all stacked). Now a fixed left sidebar with 4 sections, each its own panel (`switchPanel()` toggles `.panel.active` / `.sidebar-link.active`, no page reload):
+- **Pricing** — the existing "Harga All Access" card (base/discount price, scheduled discount window), unchanged logic, just moved into its own panel.
+- **Course Content** — the existing course tabs + PDF card + per-module video/PPT/doc matrix, unchanged logic, moved into its own panel.
+- **Social Media Links** (new) — 4 text inputs (TikTok, YouTube, Instagram, WhatsApp Community), loads/saves to a new `social_links` table (single row, `id='main'`). Empty field = link hidden on the live site.
+- **Who Has Access to Admin** (new) — **read-only** display of the two hardcoded admin emails (`julia.utomo@gmail.com`, `tiffany.utomo@gmail.com`). Confirmed with Julia this should NOT be a DB-backed/editable admin-management system for now, to avoid touching the ~6+ hardcoded `ADMIN_EMAILS` gate-check arrays scattered across the codebase. A hint on the panel says changes require a code change.
+- Sidebar collapses to a horizontal scrollable tab row on screens ≤780px.
+
+**3. Social links now live-editable, wired into `index.html`'s footer.** New `social_links` table (SQL run directly against production via Supabase MCP):
+```sql
+create table social_links (
+  id text primary key default 'main',
+  tiktok_url text, youtube_url text, instagram_url text, whatsapp_url text,
+  updated_at timestamptz default now(), updated_by text
+);
+-- RLS: public read, admin-only write (same two admin emails, via auth.jwt()->>'email')
+```
+`index.html`'s footer "Ikuti Kami" block was hardcoded `href="#"` for all 4 platforms — now fetches the single `social_links` row on page load and only shows a link (and reveals the whole "Ikuti Kami" block) if that platform's URL is filled in. Other pages' footers were checked (`grep` across the repo) and don't have real social links to wire up — only `index.html` did.
+
+**Not done / scope check:** Only `index.html`'s footer was wired to `social_links` — no other page currently renders a social-links footer, so nothing else needed updating. If a shared footer gets added to more pages later, point it at the same table.
+
+---
+
 ## Design System (as of June 2026)
 All pages use these CSS variables:
 ```css
@@ -171,6 +202,7 @@ All pages use these CSS variables:
 | `module_videos` | course_slug, module_num (PK), video_url, updated_by | Admin-managed video per course module |
 | `module_documents` | id (PK), course_slug, module_num, doc_url, doc_path, doc_label | Admin-managed practice-session document(s) per module — multiple allowed |
 | `course_pricing` | course_slug (PK), base_price, discount_price, discount_start, discount_end, updated_by | Admin-editable price/scheduled discount, currently only an `all-access` row — added Checkpoint 33 |
+| `social_links` | id (PK, always `'main'`), tiktok_url, youtube_url, instagram_url, whatsapp_url, updated_by | Single-row table for footer social links, admin-editable via `admin.html`'s Social Media Links panel — added Checkpoint 36 |
 
 ---
 
