@@ -257,15 +257,13 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     <a href="dashboard.html" class="btn-dark" style="display:inline-flex;margin-bottom:8px;">Buka Dashboard →</a>
   </div>
 
-  <div class="container" id="lihContinueWrap" style="padding-top:40px;display:none;">
-    <div style="font-size:11px;font-weight:700;letter-spacing:0.05em;color:var(--ink-3);margin-bottom:10px;">LANJUT DARI TERAKHIR KAMU BELAJAR</div>
-    <div class="lih-continue">
+  <div class="container" id="lihContinueWrap" style="padding-top:40px;">
+    <div class="cta-card">
       <div>
-        <div style="font-size:10px;letter-spacing:0.06em;color:#9CA3AF;font-weight:700;margin-bottom:8px;">TERAKHIR DIBUKA</div>
-        <div class="lih-continue-title" id="lihContinueTitle"></div>
-        <div style="font-size:12.5px;color:#9CA3AF;" id="lihContinueMeta"></div>
+        <h2 id="lihContinueHeadline">Selamat datang kembali, <em id="lihContinueName">Julia</em></h2>
+        <p id="lihContinueSub">Kamu punya akses ke semua kursus — mulai belajar sekarang.</p>
       </div>
-      <a href="#" id="lihContinueBtn" style="background:#fff;color:var(--ink);font-size:13px;font-weight:700;padding:12px 20px;border-radius:10px;text-decoration:none;white-space:nowrap;">Lanjutkan →</a>
+      <a href="dashboard.html" class="cta-btn" id="lihContinueBtn">Buka Dashboard →</a>
     </div>
   </div>
 
@@ -406,20 +404,32 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
               progressMap[row.course_slug].add(row.module_num);
             });
 
-            // "Continue learning" = whichever course has the most recent module_completions row —
-            // only shown if the user has a real enrollment row for that course (holding all-access
-            // with old/admin-era progress but no real enrollment shouldn't surface a direct-to-lesson card).
-            if (progressRows.length) {
-              var lastSlug = progressRows[0].course_slug;
-              var lastMeta = LIH_COURSES[lastSlug];
-              if (lastMeta && enrolledSlugs.has(lastSlug)) {
-                var lastDone = progressMap[lastSlug] ? progressMap[lastSlug].size : 0;
-                document.getElementById('lihContinueTitle').textContent = lastMeta.title;
-                document.getElementById('lihContinueMeta').textContent = lastDone + ' dari ' + lastMeta.modules + ' modul selesai';
-                document.getElementById('lihContinueBtn').href = lastMeta.contentLink;
-                document.getElementById('lihContinueWrap').style.display = 'block';
-              }
+            // Top-of-grid welcome banner (dark cta-card, matching the original reference
+            // design) sits right above the course picker. Its CTA always favors "continue
+            // where you left off" when there's real progress on a real enrollment; only
+            // falls back to a generic "start learning" prompt if there's none yet — only
+            // shown if the user has a real enrollment row for that course (holding
+            // all-access with old/admin-era progress but no real enrollment shouldn't
+            // surface a direct-to-lesson CTA).
+            var lastSlug = progressRows.length ? progressRows[0].course_slug : null;
+            var lastMeta = lastSlug ? LIH_COURSES[lastSlug] : null;
+            var lihNameEl2 = document.getElementById('lihContinueName');
+            if (lihNameEl2) lihNameEl2.textContent = name.split(' ')[0];
+            var lihSubEl = document.getElementById('lihContinueSub');
+            var lihBtnEl = document.getElementById('lihContinueBtn');
+            if (lastMeta && enrolledSlugs.has(lastSlug)) {
+              var lastDone = progressMap[lastSlug] ? progressMap[lastSlug].size : 0;
+              if (lihSubEl) lihSubEl.textContent = 'Lanjutkan ' + lastMeta.title + ' — ' + lastDone + ' dari ' + lastMeta.modules + ' modul selesai.';
+              if (lihBtnEl) { lihBtnEl.textContent = 'Lanjutkan →'; lihBtnEl.setAttribute('href', lastMeta.contentLink); }
+            } else {
+              if (lihSubEl) lihSubEl.textContent = 'Kamu punya akses ke semua kursus — mulai belajar sekarang.';
+              if (lihBtnEl) { lihBtnEl.textContent = 'Mulai Belajar →'; lihBtnEl.setAttribute('href', '#lihCourseGrid'); }
             }
+
+            // The bottom marketing CTA (personalized earlier in this function) is now
+            // redundant with the banner above — hide it for All Access holders.
+            var komunitasEl = document.getElementById('komunitas');
+            if (komunitasEl) komunitasEl.style.display = 'none';
 
             var gridHtml = '';
             // Coming-soon courses stay hidden here too, same rule as all-access.html's
