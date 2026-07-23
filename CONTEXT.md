@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 22, 2026 (checkpoint 29)_
+_Last updated: July 23, 2026 (checkpoint 30)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -745,3 +745,17 @@ Content: a "Kapan Dipakai" tip (your own observations are still sharpest for bus
 **Supporting file checked, no changes needed**: `k2-m7-contoh-dokumen.txt`'s Bagian 3 (SWOT observations) already contains the exact competitor names ("Kanvas Kita," "Totewear.id") the new prompt references — the web-search step builds directly on existing file content rather than requiring new data.
 
 **Commits this checkpoint**: one commit covering `produktivitas-content.html` and `K2-Produktivitas/M07-Dokumen-Riset/K2-M07-Dokumen-Riset.pptx`.
+
+---
+
+## Checkpoint 30 (July 23, 2026)
+
+**Plan-requirement claims verified against current Anthropic documentation.** Julia asked for a check of any "requires Pro plan" type claims across K2. Researched via support.claude.com: web search, file creation (.docx/.pptx/.pdf/.xlsx), Claude Projects, and connectors are all confirmed available on the Free plan today (Pro only raises usage limits) — so the course's blanket claim ("hampir seluruh panduan ini... jalan penuh di paket Claude Free") is accurate. Separately confirmed "Claude in Chrome" and "Claude for Excel" (both bonus items in M4) genuinely do require Pro or higher — also correctly stated. No changes needed to the core claims; they check out.
+
+**Found and fixed stale content in the PDF-only source** (`k2_full_pdf.html`, sandbox-only, never committed to git) that was missed during the M8-restructure work (checkpoint 25): the front-matter overview still described the old 8-module structure — "Modul 8 menggabungkan semuanya dalam satu hari kerja nyata" in the intro paragraph, "M08 Case Study" in both the cover-page table of contents and the "Peta Belajar" roadmap, and a live Modul 08 page still presented as an active, counted module. Fixed: intro paragraph now ends at Modul 7 ("sekaligus penutup kursus"), M08 removed from the cover TOC and roadmap list, and the M08 page itself is kept (per "preserve the content" precedent from checkpoint 25) but now marked with an explicit archival HTML comment mirroring `produktivitas-content.html`'s `panel-casestudy-archived` treatment — present in the file, not counted anywhere as part of the active 7 modules. Also corrected the Pro-plan disclaimer from "1 pengecualian" to "2 pengecualian" since M4 actually has two separate Pro-gated bonus tools (Claude in Chrome *and* Claude for Excel), not one. Per Julia's instruction, actual PDF regeneration/rendering is deferred — only the underlying content was brought back in sync with the live site.
+
+**Design-system consistency re-audited across all panels** after the recent M6/M7 additions: confirmed structurally (via a script counting component-class usage per panel) that every module uses only the shared, single-stylesheet component classes (`tip-box`, `prompt-section`, `output-box`, `section-heading`, `learn-grid`, `info-grid`, etc.) — no new/one-off classes were introduced by the M6 intro rewrite or M7's two new sections (SWOT→Slide, web search). `learn-grid` usage confirmed present in M3, M4, M6, M7 (modules where a multi-skill overview grid fits the content) and correctly absent from M1, M2, M5, and the archived M8 panel — consistent with the established pattern from earlier checkpoints.
+
+**M7 PPTX: local file adopted as canonical**, per Julia's instruction. The working-tree copy in `K2-Produktivitas/M07-Dokumen-Riset/K2-M07-Dokumen-Riset.pptx` had diverged from the last sandbox-built/pushed version (different file size/hash, most likely from PowerPoint recompacting the file when opened locally). Extracted and checked all 9 slides' text via python-pptx to confirm the content is identical to what was built in checkpoint 29 (includes "Perkuat Riset dengan Web Search" and "SWOT → Slide Presentasi" in the correct order) — no content was lost. This local version is now committed as the source of truth going forward; the sandbox `outputs/k2build/` copy is no longer authoritative for M7.
+
+**Commits this checkpoint**: one commit covering `CONTEXT.md` and the M7 PPTX (local version). The PDF-source fixes live only in the sandbox working directory per established convention and aren't tracked in git.
