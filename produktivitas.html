@@ -96,10 +96,8 @@
   .module-body p { font-size: 13px; color: var(--ink-2); line-height: 1.6; }
   .tool-chip { font-size: 10px; font-weight: 700; background: var(--accent-dim); color: var(--accent); padding: 3px 9px; border-radius: 100px; white-space: nowrap; height: fit-content; }
 
-  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-  .skill-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 18px 16px; }
-  .skill-card h5 { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
-  .skill-card p { font-size: 12px; color: var(--ink-2); line-height: 1.55; }
+  .skills-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+  .skill-chip { font-size: 13.5px; font-weight: 600; color: var(--ink); background: var(--surface-2); border: 1px solid var(--border); padding: 10px 16px; border-radius: 100px; }
 
   .cases-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
   .case-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 18px 16px; }
@@ -242,34 +240,13 @@
     <h2 class="section-title">7 Workflow Skill Praktis</h2>
     <p class="section-sub">Skill yang langsung bisa diaplikasikan mulai hari berikutnya setelah kursus.</p>
     <div class="skills-grid">
-      <div class="skill-card">
-        <h5>Role Prompting</h5>
-        <p>Beri Claude persona spesifik untuk hasil yang lebih akurat dan relevan sesuai konteks kerjamu.</p>
-      </div>
-      <div class="skill-card">
-        <h5>Claude Projects</h5>
-        <p>Setup project per klien dengan SOP dan tone tersimpan — tidak perlu explain ulang setiap sesi.</p>
-      </div>
-      <div class="skill-card">
-        <h5>Gmail Workflow</h5>
-        <p>Draft dan reply email profesional dengan Claude: copy-paste langsung siap kirim.</p>
-      </div>
-      <div class="skill-card">
-        <h5>Sheets + Claude</h5>
-        <p>Paste data → analisis → formula: rekap dan insight dari data kamu sendiri tanpa rumus ribet.</p>
-      </div>
-      <div class="skill-card">
-        <h5>Batch Processing</h5>
-        <p>Proses banyak item sekaligus dalam satu prompt yang efisien dan terstruktur.</p>
-      </div>
-      <div class="skill-card">
-        <h5>Prompt Chaining</h5>
-        <p>Hubungkan output satu prompt sebagai input prompt berikutnya untuk workflow panjang.</p>
-      </div>
-      <div class="skill-card">
-        <h5>Analisis Dokumen</h5>
-        <p>Ringkas kontrak, laporan, dan riset panjang menjadi poin-poin actionable dalam menit.</p>
-      </div>
+      <span class="skill-chip">Role Prompting</span>
+      <span class="skill-chip">Claude Projects</span>
+      <span class="skill-chip">Gmail Workflow</span>
+      <span class="skill-chip">Sheets + Claude</span>
+      <span class="skill-chip">Batch Processing</span>
+      <span class="skill-chip">Prompt Chaining</span>
+      <span class="skill-chip">Analisis Dokumen</span>
     </div>
   </div>
 </section>

@@ -74,10 +74,8 @@
   .module-body h4 { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
   .module-body p { font-size: 13px; color: var(--ink-2); line-height: 1.6; }
   .tool-chip { font-size: 10px; font-weight: 700; background: var(--accent-dim); color: var(--accent); padding: 3px 9px; border-radius: 100px; white-space: nowrap; height: fit-content; }
-  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-  .skill-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 18px 16px; }
-  .skill-card h5 { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
-  .skill-card p { font-size: 12px; color: var(--ink-2); line-height: 1.55; }
+  .skills-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+  .skill-chip { font-size: 13.5px; font-weight: 600; color: var(--ink); background: var(--surface-2); border: 1px solid var(--border); padding: 10px 16px; border-radius: 100px; }
   .cases-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
   .case-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 18px 16px; }
   .case-role { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
@@ -204,30 +202,12 @@
     <h2 class="section-title">6 Skill Claude Inti</h2>
     <p class="section-sub">Skill fundamental yang menjadi dasar semua kursus lanjutan — sekali kuasai, berlaku seumur hidup.</p>
     <div class="skills-grid">
-      <div class="skill-card">
-        <h5>Prompt Engineering Dasar</h5>
-        <p>Struktur konteks + tugas + format yang menghasilkan output tepat setiap kali.</p>
-      </div>
-      <div class="skill-card">
-        <h5>Role Prompting</h5>
-        <p>Minta Claude berperan sebagai ahli untuk respons lebih akurat dan relevan.</p>
-      </div>
-      <div class="skill-card">
-        <h5>Claude Artifacts</h5>
-        <p>Generate dokumen dan tabel langsung di Claude tanpa tools tambahan.</p>
-      </div>
-      <div class="skill-card">
-        <h5>Claude Projects</h5>
-        <p>Simpan konteks pekerjaan agar tidak perlu jelaskan ulang tiap sesi baru.</p>
-      </div>
-      <div class="skill-card">
-        <h5>Format Control</h5>
-        <p>Kendalikan output: tabel, poin, paragraf, JSON sesuai kebutuhan.</p>
-      </div>
-      <div class="skill-card">
-        <h5>Iterasi Output</h5>
-        <p>Perbaiki hasil tanpa mulai dari nol menggunakan follow-up prompt yang tepat.</p>
-      </div>
+      <span class="skill-chip">Prompt Engineering Dasar</span>
+      <span class="skill-chip">Role Prompting</span>
+      <span class="skill-chip">Claude Artifacts</span>
+      <span class="skill-chip">Claude Projects</span>
+      <span class="skill-chip">Format Control</span>
+      <span class="skill-chip">Iterasi Output</span>
     </div>
   </div>
 </section>

@@ -74,10 +74,8 @@
   .module-body h4 { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
   .module-body p { font-size: 13px; color: var(--ink-2); line-height: 1.6; }
   .tool-chip { font-size: 10px; font-weight: 700; background: var(--accent-dim); color: var(--accent); padding: 3px 9px; border-radius: 100px; white-space: nowrap; height: fit-content; }
-  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-  .skill-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 18px 16px; }
-  .skill-card h5 { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
-  .skill-card p { font-size: 12px; color: var(--ink-2); line-height: 1.55; }
+  .skills-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+  .skill-chip { font-size: 13.5px; font-weight: 600; color: var(--ink); background: var(--surface-2); border: 1px solid var(--border); padding: 10px 16px; border-radius: 100px; }
   .cases-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
   .case-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 18px 16px; }
   .case-role { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
@@ -232,42 +230,15 @@
     <div class="section-label">Yang Akan Kamu Kuasai</div>
     <h2 class="section-title">9 Skill Pemasaran dengan Claude</h2>
     <div class="skills-grid">
-      <div class="skill-card">
-        <h5>Positioning & Competitive Intelligence</h5>
-        <p>Rumuskan positioning yang tajam dan audit kompetitor secara sistematis.</p>
-      </div>
-      <div class="skill-card">
-        <h5>Marketplace SEO Copy</h5>
-        <p>Deskripsi produk Tokopedia/Shopee yang muncul di search dan langsung menjual.</p>
-      </div>
-      <div class="skill-card">
-        <h5>Instagram Content System</h5>
-        <p>Kalender konten mingguan dengan caption dan hashtag yang konsisten dengan brand voice.</p>
-      </div>
-      <div class="skill-card">
-        <h5>Canva Connector Ad Workflow</h5>
-        <p>Copy iklan sampai desain jadi dalam satu alur kerja — tanpa bolak-balik tools.</p>
-      </div>
-      <div class="skill-card">
-        <h5>WhatsApp CS Templates</h5>
-        <p>Template balas WA yang on-brand untuk semua situasi umum — tinggal pilih dan kirim.</p>
-      </div>
-      <div class="skill-card">
-        <h5>Email & Promo Copywriting</h5>
-        <p>Email promosi dan newsletter tone hangat, siap kirim lewat Gmail Connector.</p>
-      </div>
-      <div class="skill-card">
-        <h5>Performance Analysis</h5>
-        <p>Baca ROAS, CTR, dan CPC untuk tahu kampanye mana yang layak di-scale.</p>
-      </div>
-      <div class="skill-card">
-        <h5>Notion as Content OS</h5>
-        <p>Satukan semua output modul jadi 1 sistem konten bisnis yang jalan otomatis.</p>
-      </div>
-      <div class="skill-card">
-        <h5>End-to-End Campaign Execution</h5>
-        <p>Jalankan seluruh sistem pemasaran dalam 1 minggu kerja nyata, dari ide sampai analisis.</p>
-      </div>
+      <span class="skill-chip">Positioning & Competitive Intelligence</span>
+      <span class="skill-chip">Marketplace SEO Copy</span>
+      <span class="skill-chip">Instagram Content System</span>
+      <span class="skill-chip">Canva Connector Ad Workflow</span>
+      <span class="skill-chip">WhatsApp CS Templates</span>
+      <span class="skill-chip">Email & Promo Copywriting</span>
+      <span class="skill-chip">Performance Analysis</span>
+      <span class="skill-chip">Notion as Content OS</span>
+      <span class="skill-chip">End-to-End Campaign Execution</span>
     </div>
   </div>
 </section>
