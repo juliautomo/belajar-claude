@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 23, 2026 (checkpoint 37)_
+_Last updated: July 23, 2026 (checkpoint 38)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -176,6 +176,22 @@ create table social_links (
 **Not done:** Legacy `paket-*` bundle expansion logic (`PAKET_COURSES` in `dashboard.html`, for pre-migration paket-karyawan/mahasiswa/pengusaha/creator customers) was left untouched — unrelated to this change and no new purchases can create those rows anymore (backend locks `/create-payment` to `all-access` only since Checkpoint 34).
 
 **Also checked, already working:** Julia asked to "add error message for wrong password" — verified this was already implemented (both `login.html` and the shared `login-modal.js` catch `Invalid login credentials` and show a red error box with a prompt to use "Lupa password?"). No change needed.
+
+---
+
+## SHIPPED (Checkpoint 38, July 23, 2026): "Welcome Back" Home for Logged-In All Access Holders
+
+**Status: live.** Julia uploaded a reference file (`belajarclaude_enrolled_landing_simple.html`) showing a "welcome back" style landing — greeting hero, a dark "continue where you left off" card, and a course grid tagged by status (belum dimulai / sedang dipelajari / selesai / segera hadir). Asked to adopt the layout/design on `index.html` for paid students, keeping our fonts (Geist + Instrument Serif). Clarified via question that this should apply to `index.html`'s logged-in state specifically (not `dashboard.html`, which stays as-is). Previewed as an HTML mockup in-chat before building, approved, then implemented for real with live data instead of the mockup's placeholder content.
+
+**What changed:**
+- Wrapped the existing marketing hero + value-strip + course-library grid in a new `#marketingHome` div (unchanged for logged-out visitors and logged-in users without all-access).
+- Added a new `#loggedInHome` div (hidden by default) directly after it: a greeting hero ("Selamat datang kembali, *[first name]* 👋"), a "Lanjut dari Terakhir Kamu Belajar" dark card showing whichever course has the most recent `module_completions` row (empty/hidden if the user has no progress yet), and a "Pilih apa yang ingin kamu pelajari" grid covering all 9 courses (4 live + 5 coming-soon) with real per-course status.
+- The personalization script (same block that already fetches enrollments for the bottom CTA) now branches on `hasAllAccess`: toggles `#marketingHome` off / `#loggedInHome` on, fetches `module_completions` for the session email, and renders the course grid. Each card's tag/CTA is computed per course: `SEGERA HADIR` (disabled) for coming-soon courses, `SELESAI` + "Ulangi →" when `doneCount >= modules`, `SEDANG KAMU PELAJARI` + "Lanjutkan →" when partially done, `BELUM DIMULAI` + "Mulai →" otherwise.
+- New global `lihEnrollAndGo(slug, link, alreadyEnrolled)` function — clicking "Mulai →" on a course with no enrollment row yet inserts one first (same explicit-enroll pattern shipped in Checkpoint 37 for `dashboard.html`), then navigates to the course reader. Already-enrolled courses skip straight to the link.
+- **Footer is untouched** — both `#marketingHome` and `#loggedInHome` sit above the existing `cta-section`/reassurance/footer markup, which render exactly as before regardless of login state (Julia explicitly asked to keep the existing footer as part of this request).
+- New `LIH_COURSES` map (lightweight, index.html-local — title/icon/desc/modules/contentLink/comingSoon) mirrors `dashboard.html`'s `ALL_COURSES` but only carries what this view needs; not the source of truth, `dashboard.html` remains that.
+
+**Not done / known gap:** The old small-scale hero-card personalization from earlier the same day (green "ALL ACCESS AKTIF" tag swap, hiding just the pricing block) was superseded by this — that logic was removed since the entire `#marketingHome` (including the hero card) is now hidden for all-access holders in favor of `#loggedInHome`. The "continue learning" card shows only course title + done/total count, not a specific module title or number (no per-index module-title map exists on `index.html`, unlike `admin.html`'s `MODULE_TITLES`) — acceptable simplification, can be revisited if Julia wants module-level detail there.
 
 ---
 
