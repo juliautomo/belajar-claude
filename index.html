@@ -261,7 +261,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     <div class="cta-card">
       <div>
         <div id="lihContinueLabel" style="font-size:11px;font-weight:700;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:10px;position:relative;">TERAKHIR DIBUKA</div>
-        <h2 id="lihContinueHeadline" style="font-family:var(--font);font-weight:800;font-size:clamp(22px,3vw,30px);letter-spacing:-0.5px;">Nama Kursus</h2>
+        <h2 id="lihContinueHeadline">Nama Kursus</h2>
         <p id="lihContinueSub">Kamu punya akses ke semua kursus — mulai belajar sekarang.</p>
       </div>
       <a href="dashboard.html" class="cta-btn" id="lihContinueBtn">Buka Dashboard →</a>
@@ -419,10 +419,21 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
               if (lihSubEl) lihSubEl.textContent = lastDone + ' dari ' + lastMeta.modules + ' modul selesai';
               if (lihBtnEl) { lihBtnEl.textContent = 'Lanjutkan →'; lihBtnEl.setAttribute('href', lastMeta.contentLink); }
             } else {
-              if (lihLabelEl) lihLabelEl.textContent = 'MULAI BELAJAR';
-              if (lihHeadlineEl) lihHeadlineEl.textContent = 'Semua kursus sudah bisa kamu akses';
-              if (lihSubEl) lihSubEl.textContent = 'Pilih kursus yang paling relevan untuk pekerjaanmu di bawah ini.';
-              if (lihBtnEl) { lihBtnEl.textContent = 'Mulai Belajar →'; lihBtnEl.setAttribute('href', '#lihCourseGrid'); }
+              // No real progress/enrollment to continue — suggest the first live course
+              // they haven't enrolled in yet instead of a generic "everything's unlocked" line.
+              var suggestSlug = LIH_COURSE_ORDER.find(function(slug) { return !LIH_COURSES[slug].comingSoon && !enrolledSlugs.has(slug); });
+              var suggestMeta = suggestSlug ? LIH_COURSES[suggestSlug] : null;
+              if (suggestMeta) {
+                if (lihLabelEl) lihLabelEl.textContent = 'MULAI BELAJAR';
+                if (lihHeadlineEl) lihHeadlineEl.textContent = suggestMeta.title;
+                if (lihSubEl) lihSubEl.textContent = suggestMeta.desc;
+                if (lihBtnEl) { lihBtnEl.textContent = 'Mulai →'; lihBtnEl.setAttribute('href', suggestMeta.previewLink); }
+              } else {
+                if (lihLabelEl) lihLabelEl.textContent = 'MULAI BELAJAR';
+                if (lihHeadlineEl) lihHeadlineEl.textContent = 'Semua kursus sudah bisa kamu akses';
+                if (lihSubEl) lihSubEl.textContent = 'Pilih kursus yang paling relevan untuk pekerjaanmu di bawah ini.';
+                if (lihBtnEl) { lihBtnEl.textContent = 'Mulai Belajar →'; lihBtnEl.setAttribute('href', '#lihCourseGrid'); }
+              }
             }
 
             // The bottom marketing CTA (personalized earlier in this function) is now
