@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 23, 2026 (checkpoint 40)_
+_Last updated: July 23, 2026 (checkpoint 41)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -228,6 +228,27 @@ create table social_links (
 All three fixes are in `index.html` only. Verified with the standard syntax check (`new Function()` over every inline `<script>` block — passed) and a div open/close tag-count balance check (88/88).
 
 **Commits this checkpoint**: one commit covering `index.html`.
+
+---
+
+## SHIPPED (Checkpoint 41, July 23, 2026): Real Enrollment Now Required for Course Content Access
+
+**Status: live.** Julia tested the explicit-enroll flow herself (after deleting her own `content-marketing` enrollment row in an earlier checkpoint) and found clicking into the course still dropped her straight into the lesson reader with old progress intact — not the preview page she expected. This surfaced a real gap: Checkpoint 37's "explicit enroll" change only affected whether a course auto-populated dashboard's "Kursus Kamu" list — the actual content-page access gates still treated holding the `all-access` sentinel row as sufficient for direct access on its own, and two click paths (index.html's Welcome Back grid, dashboard's "Jelajahi Kursus" all-access button) either silently auto-enrolled-and-redirected or auto-enrolled-and-reloaded without ever showing a preview/CTA step.
+
+**Root cause, precisely:** `content-marketing-content.html`'s access check queried `enrollments` for `course_slug in ('content-marketing', 'all-access')` — so a bare sentinel row (no real per-course row) still passed. The same pattern existed in `produktivitas-content.html`. `mulai-claude-content.html` and `prompt-gratis-content.html` only ever checked for `'all-access'`, never the specific course, a leftover from when those were free/legacy-gated pages. Separately, index.html's `#loggedInHome` course grid called `lihEnrollAndGo()` which — for courses with any historical `module_completions` progress (`doneCount > 0`) — hardcoded `alreadyEnrolled = true` regardless of whether a real enrollment row actually existed, so old progress alone was enough to skip straight to the lesson reader.
+
+**Fix — content now requires a real, course-specific enrollment row everywhere:**
+- All 4 content-page gates (`content-marketing-content.html`, `produktivitas-content.html`, `mulai-claude-content.html`, `prompt-gratis-content.html`) now check `.eq('course_slug', <this course only>)` — holding `all-access` alone no longer grants direct entry. Redirect-when-missing target updated to each course's own preview page (previously `mulai-claude-content.html`/`prompt-gratis-content.html` redirected to `all-access.html`).
+- All 4 preview pages (`produktivitas.html`, `content-marketing.html`, `mulai-claude.html`, `prompt-gratis.html`) now compute a 3-state CTA instead of a binary hasAccess check: no access at all → "Dapatkan All Access →" (unchanged); holds all-access but no real per-course row → new "Mulai Kursus →" state, a button (not a link) that inserts a real `enrollments` row for that course (`type:'paid'`) then redirects to the content reader — this is a free, instant, one-click enroll since all-access already covers the cost; has a real per-course row already → "Buka Kursus →" straight to the reader (unchanged).
+- `index.html`'s `#loggedInHome` course grid: removed `lihEnrollAndGo()` entirely. The grid now branches on `isEnrolled` (real row) first — if not enrolled, the card always links to the course's own preview page (new `previewLink` field added to each `LIH_COURSES` entry) regardless of past progress, never straight to the lesson reader and never with a silent background enroll. Only truly-enrolled courses link straight to the content reader, with the existing SELESAI/SEDANG KAMU PELAJARI/BELUM DIMULAI badge logic preserved for informational display.
+- The "continue learning" dark card at the top of `#loggedInHome` (built from the most recent `module_completions` row) is now only shown if the user has a real enrollment row for that course — old progress with no current enrollment no longer surfaces a direct-to-lesson card.
+- `dashboard.html`'s "Jelajahi Kursus" one-click `enrollCourse()` button (Checkpoint 37) was deliberately left as-is: it enrolls and reloads the dashboard (course moves into "Kursus Kamu"), it does not jump straight into the lesson reader, so it doesn't reproduce the bug Julia hit.
+
+**Known caveat, flagged to Julia rather than silently changed:** `ADMIN_EMAILS` (`julia.utomo@gmail.com`, `tiffany.utomo@gmail.com`) still bypasses every content-page gate unconditionally, same as before this checkpoint. This means Julia herself can never observe the real customer gate while logged in as herself — navigating directly to a `*-content.html` URL always works for her regardless of enrollment state. The preview-page CTA (Mulai Kursus / Buka Kursus / Dapatkan All Access) still reflects her true enrollment state correctly and is the reliable way for her to verify this flow; only a direct/typed URL to the content page bypasses it, by admin design.
+
+Verified with the standard syntax check (`new Function()` over every inline `<script>` block across all 9 touched files — passed).
+
+**Commits this checkpoint**: one commit covering `index.html`, `content-marketing.html`, `produktivitas.html`, `mulai-claude.html`, `prompt-gratis.html`, `content-marketing-content.html`, `produktivitas-content.html`, `mulai-claude-content.html`, `prompt-gratis-content.html`.
 
 ---
 
