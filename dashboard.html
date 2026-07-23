@@ -375,6 +375,24 @@ async function notifyMe(btn,slug){
   }catch(e){}
   btn.classList.add('notified');btn.textContent='Terdaftar ✓';
 }
+
+// Explicit enroll step for All Access holders: purchasing all-access only grants access
+// (checked via the sentinel row on content pages), it doesn't auto-add courses to
+// "Kursus Kamu" anymore. Clicking "Mulai Kursus" here creates the real per-course
+// enrollment row that makes it show up in the dashboard.
+async function enrollCourse(btn,slug){
+  var meta=ALL_COURSES[slug];
+  if(!meta||!currentEmail)return;
+  btn.disabled=true;btn.textContent='Memproses...';
+  try{
+    var ins=await sbClient.from('enrollments').insert({email:currentEmail,course_slug:slug,course_name:meta.title,type:'paid',enrolled_at:new Date().toISOString()});
+    if(ins.error)throw ins.error;
+    window.location.reload();
+  }catch(e){
+    btn.disabled=false;btn.textContent='Mulai Kursus →';
+    alert('Gagal mendaftar kursus: '+(e.message||'Terjadi kesalahan, coba lagi.'));
+  }
+}
 function scrollExplore(dir){document.getElementById('exploreGrid').scrollBy({left:dir*224,behavior:'smooth'});}
 async function logout(){await sbClient.auth.signOut();window.location.href='index.html';}
 
@@ -421,19 +439,12 @@ async function _init(){
   var existingSlugs=new Set(rawEnrollments.map(function(e){return e.course_slug;}));
   var paketExpanded=rawEnrollments.slice();
   rawEnrollments.forEach(function(e){if(PAKET_COURSES[e.course_slug]){PAKET_COURSES[e.course_slug].forEach(function(slug){if(!existingSlugs.has(slug)){existingSlugs.add(slug);paketExpanded.push({course_slug:slug,course_name:(ALL_COURSES[slug]&&ALL_COURSES[slug].title)||slug,type:'paid',enrolled_at:e.enrolled_at});}});}});
-  // All Access sentinel: one 'all-access' enrollment row unlocks every course in ALL_COURSES,
-  // including ones added after purchase (no backfill needed) - see CONTEXT.md payment restructure notes.
+  // All Access sentinel: one 'all-access' enrollment row grants ACCESS to every course in
+  // ALL_COURSES (content pages check for this row directly), but no longer auto-populates
+  // "Kursus Kamu" - the user has to explicitly click "Mulai Kursus" on a course under
+  // "Jelajahi Kursus" first, which inserts a real per-course enrollment row (see enrollCourse()).
+  // This keeps the dashboard from listing every course the moment someone buys all-access.
   var allAccessRow=rawEnrollments.find(function(e){return e.course_slug==='all-access';});
-  if(allAccessRow){
-    // Only expand into courses that are actually live - comingSoon ones stay out of
-    // "Kursus Kamu" (would just clutter it with permanent 0% entries) and surface in
-    // "Jelajahi Kursus" instead. They'll auto-appear here once comingSoon is removed,
-    // no re-purchase needed - see CONTEXT.md payment restructure notes.
-    Object.keys(ALL_COURSES).forEach(function(slug){
-      if(ALL_COURSES[slug].comingSoon) return;
-      if(!existingSlugs.has(slug)){existingSlugs.add(slug);paketExpanded.push({course_slug:slug,course_name:ALL_COURSES[slug].title,type:'paid',enrolled_at:allAccessRow.enrolled_at});}
-    });
-  }
   var enrollments=paketExpanded.filter(function(e){return ALL_COURSES[e.course_slug];});
   var enrolledSlugs=new Set(enrollments.map(function(e){return e.course_slug;}));
 
@@ -535,7 +546,9 @@ async function _init(){
       var meta=ALL_COURSES[slug];
       var cta=meta.comingSoon
         ?'<button class="btn-notify" onclick="notifyMe(this,\''+slug+'\')">Beritahu saya</button>'
-        :'<a href="'+meta.salesLink+'" class="btn-view">Lihat Kursus &rarr;</a>';
+        :allAccessRow
+          ?'<button class="btn-view" onclick="enrollCourse(this,\''+slug+'\')">Mulai Kursus &rarr;</button>'
+          :'<a href="'+meta.salesLink+'" class="btn-view">Lihat Kursus &rarr;</a>';
       grid.innerHTML+='<div class="explore-card">'
         +'<div class="ex-thumb '+meta.exThumb+'">'+meta.icon+'</div>'
         +'<div class="ex-body">'
