@@ -276,6 +276,17 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
           <input type="text" id="socialWhatsapp" placeholder="https://chat.whatsapp.com/...">
         </div>
 
+        <div class="social-field">
+          <div class="social-label-row">
+            <label>Email</label>
+            <div class="social-toggle-wrap">
+              <span class="social-toggle-text" id="socialEmailVisibleLabel">Tampil</span>
+              <label class="toggle-switch"><input type="checkbox" id="socialEmailVisible" checked onchange="onSocialToggle('Email')"><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+          <input type="text" id="socialEmail" placeholder="hello@belajarclaude.id">
+        </div>
+
         <button class="btn" id="socialSaveBtn" onclick="saveSocialLinks()">Simpan Link</button>
         <div class="status" id="socialStatus"></div>
       </div>
@@ -425,15 +436,16 @@ async function reloadAndRender() {
 
 // ─── SOCIAL MEDIA LINKS ──────────────────────────────────────────────────────
 
-var SOCIAL_PLATFORMS = ['Tiktok', 'Youtube', 'Instagram', 'Whatsapp'];
+var SOCIAL_PLATFORMS = ['Tiktok', 'Youtube', 'Instagram', 'Whatsapp', 'Email'];
 
 function renderSocialLinks() {
   document.getElementById('socialTiktok').value = (socialCache && socialCache.tiktok_url) || '';
   document.getElementById('socialYoutube').value = (socialCache && socialCache.youtube_url) || '';
   document.getElementById('socialInstagram').value = (socialCache && socialCache.instagram_url) || '';
   document.getElementById('socialWhatsapp').value = (socialCache && socialCache.whatsapp_url) || '';
+  document.getElementById('socialEmail').value = (socialCache && socialCache.contact_email) || '';
 
-  var fieldMap = { Tiktok: 'tiktok_visible', Youtube: 'youtube_visible', Instagram: 'instagram_visible', Whatsapp: 'whatsapp_visible' };
+  var fieldMap = { Tiktok: 'tiktok_visible', Youtube: 'youtube_visible', Instagram: 'instagram_visible', Whatsapp: 'whatsapp_visible', Email: 'contact_email_visible' };
   SOCIAL_PLATFORMS.forEach(function (p) {
     var visible = socialCache ? (socialCache[fieldMap[p]] !== false) : true;
     document.getElementById('social' + p + 'Visible').checked = visible;
@@ -454,16 +466,24 @@ function onSocialToggle(platform) {
 async function saveSocialLinks() {
   var btn = document.getElementById('socialSaveBtn');
   var statusEl = document.getElementById('socialStatus');
+  var emailVal = document.getElementById('socialEmail').value.trim();
+  if (emailVal && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+    statusEl.className = 'status show error';
+    statusEl.textContent = 'Format email tidak valid.';
+    return;
+  }
   var payload = {
     id: 'main',
     tiktok_url: document.getElementById('socialTiktok').value.trim() || null,
     youtube_url: document.getElementById('socialYoutube').value.trim() || null,
     instagram_url: document.getElementById('socialInstagram').value.trim() || null,
     whatsapp_url: document.getElementById('socialWhatsapp').value.trim() || null,
+    contact_email: document.getElementById('socialEmail').value.trim() || null,
     tiktok_visible: document.getElementById('socialTiktokVisible').checked,
     youtube_visible: document.getElementById('socialYoutubeVisible').checked,
     instagram_visible: document.getElementById('socialInstagramVisible').checked,
     whatsapp_visible: document.getElementById('socialWhatsappVisible').checked,
+    contact_email_visible: document.getElementById('socialEmailVisible').checked,
     updated_at: new Date().toISOString(),
     updated_by: currentSession.user.email,
   };

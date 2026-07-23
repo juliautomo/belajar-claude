@@ -257,6 +257,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
       <ul>
         <li id="liTiktok" style="display:none;"><a href="#" id="linkTiktok" target="_blank" rel="noopener">TikTok</a></li><li id="liYoutube" style="display:none;"><a href="#" id="linkYoutube" target="_blank" rel="noopener">YouTube</a></li>
         <li id="liInstagram" style="display:none;"><a href="#" id="linkInstagram" target="_blank" rel="noopener">Instagram</a></li><li id="liWhatsapp" style="display:none;"><a href="#" id="linkWhatsapp" target="_blank" rel="noopener">WhatsApp Community</a></li>
+        <li id="liEmail" style="display:none;"><a href="#" id="linkEmail">Email</a></li>
       </ul>
     </div>
   </div>
@@ -370,6 +371,13 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
           anyShown = true;
         }
       });
+      var email = row.contact_email;
+      var emailVisible = row.contact_email_visible !== false;
+      if (email && emailVisible) {
+        document.getElementById('liEmail').style.display = 'block';
+        document.getElementById('linkEmail').href = 'mailto:' + email;
+        anyShown = true;
+      }
       if (anyShown) document.getElementById('footerSocialLinks').style.display = 'block';
     } catch (e) {}
   })();
