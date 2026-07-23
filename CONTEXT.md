@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 23, 2026 (checkpoint 36)_
+_Last updated: July 23, 2026 (checkpoint 37)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -154,6 +154,28 @@ create table social_links (
 **Second follow-up same day:** added a contact **Email** field to the same panel (`contact_email` + `contact_email_visible`, same toggle pattern as the other 4). Basic email-format validation on save. Renders in `index.html`'s footer as `mailto:` link (no `target="_blank"`, unlike the social links).
 
 **Not done / scope check:** Only `index.html`'s footer was wired to `social_links` — no other page currently renders a social-links footer, so nothing else needed updating. If a shared footer gets added to more pages later, point it at the same table.
+
+**More follow-ups same day:**
+- Split the contact email out of "Ikuti Kami" into its own "Hubungi Kami" (Contact Us) footer column in `index.html` — same visibility-toggle pattern, but a `mailto:` link instead of `target="_blank"`, and its own `<h4>`/`<ul>` block that only appears when the email is set + visible.
+- Removed the generic "Kursus Berikutnya" catch-all card from `index.html`'s course library grid — Julia didn't want it there at all, not even as a teaser.
+
+---
+
+## SHIPPED (Checkpoint 37, July 23, 2026): Admin Course Placeholders + Explicit Dashboard Enrollment
+
+**Status: live.**
+
+**1. `admin.html` Course Content panel now lists all 9 courses, not just the 4 live ones.** Added the 5 coming-soon courses (`analisis-data`, `build-automation`, `ai-powered-app`, `claude-api-dev`, `jual-produk-ai` — slugs/module counts matched to `ALL_COURSES` in `dashboard.html`) to the `COURSES` array as regular entries (`comingSoon: true` used only for grouping/labeling, not for restricting functionality) so Julia can start prepping PDFs/videos/PPTs/docs for a course ahead of its public launch.
+- The old horizontal `course-tabs` row was replaced with a grouped vertical sub-navigation (`course-subnav`) inside the Course Content panel — "Tersedia" and "Segera Hadir" sections, each course a `subnav-item` button, coming-soon ones tagged with a small pill. Sits beside the PDF/matrix cards in a two-column `content-split` layout (collapses to a horizontal scrollable row above the content on screens ≤860px). `content-area` max-width widened to 940px for this panel only (other panels stay at 760px) to give the two-column layout room.
+
+**2. All Access purchase no longer auto-populates every course into "Kursus Kamu."** Previously (since Checkpoint 32), one `all-access` sentinel enrollment row caused `dashboard.html` to synthesize a fake per-course enrollment for every live course on every page load — so buying All Access instantly filled "Kursus Kamu" with all 4 courses, no extra action needed. Julia asked whether an explicit enroll step was possible instead, confirmed she wanted it built, so:
+- Removed the sentinel-expansion loop in `dashboard.html`'s `_init()` that pushed a synthetic entry per live course into `paketExpanded`/"Kursus Kamu". "Kursus Kamu" now reflects **only real `enrollments` rows** (the sentinel row itself is filtered out via `ALL_COURSES[e.course_slug]` since `'all-access'` isn't a key in that object).
+- "Jelajahi Kursus" (the unenrolled-courses grid) CTA now branches three ways: comingSoon → "Beritahu saya" (unchanged waitlist flow); live course + user has the `all-access` sentinel → new **"Mulai Kursus →"** button that calls `enrollCourse(slug)`, inserting a real `enrollments` row (`type:'paid'`, tied to the user's own session email) and reloading the dashboard so the course moves into "Kursus Kamu"; live course + no all-access → unchanged "Lihat Kursus →" link to `all-access.html` (still needs to purchase).
+- **Access to course content itself is unaffected** — `*-content.html` gate checks (e.g. `produktivitas-content.html` line ~1521) already check for `course_slug in (COURSE_SLUG, 'all-access')`, so an all-access holder can still open any course directly by URL without first clicking "Mulai Kursus." This change only affects what auto-appears on the dashboard home screen, not what's actually unlocked — enrolling is now about dashboard organization, not access control.
+
+**Not done:** Legacy `paket-*` bundle expansion logic (`PAKET_COURSES` in `dashboard.html`, for pre-migration paket-karyawan/mahasiswa/pengusaha/creator customers) was left untouched — unrelated to this change and no new purchases can create those rows anymore (backend locks `/create-payment` to `all-access` only since Checkpoint 34).
+
+**Also checked, already working:** Julia asked to "add error message for wrong password" — verified this was already implemented (both `login.html` and the shared `login-modal.js` catch `Invalid login credentials` and show a red error box with a prompt to use "Lupa password?"). No change needed.
 
 ---
 
