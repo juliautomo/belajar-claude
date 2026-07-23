@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 22, 2026 (checkpoint 26)_
+_Last updated: July 22, 2026 (checkpoint 27)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -701,3 +701,27 @@ The concrete Kasual Studio-specific worked example was moved out of the abstract
 **Added a new "SWOT → Slide Presentasi" section** to M7, per Julia's idea to add PowerPoint/Google Slides content: positioned right after the "03 — Riset & Analisis (SWOT)" sub-skill (reusing the same tas-kanvas SWOT example, no new file needed). Teaches asking Claude to turn a completed SWOT/summary into an actual `.pptx` file (mirroring M6's Level Up pattern of "Claude bisa membuat Word/PDF asli"), with a fallback tip noting the same prompt also works as a plain-text slide outline if file creation isn't available. Added to HTML (new section-heading + tip-box + prompt-section + tip-box + output-box), PDF (matching codebox/tipbar/callout), and PPT (new slide inserted between the SWOT/SOP compare-cards slide and the Latihan & Output slide; the Latihan slide's SWOT bullet also updated to mention "lalu ubah jadi slide presentasi"). Module subtitle/time estimate bumped 15→18 menit in HTML and PDF to reflect the added content. Learn-grid card 03's description lightly extended ("...siap jadi slide presentasi"). PPTX rebuilt (now 8 slides, was 7) and visually confirmed clean via LibreOffice render. Div balance verified (530/530) after HTML edits.
 
 **Commits this checkpoint**: one commit covering `produktivitas-content.html`, `K2-Produktivitas/M07-Dokumen-Riset/k2-m7-contoh-dokumen.txt`, and `K2-Produktivitas/M07-Dokumen-Riset/K2-M07-Dokumen-Riset.pptx`.
+
+---
+
+## Checkpoint 27 (July 22, 2026)
+
+**House rule clarified and applied strictly**: Julia clarified the HTML/PDF/PPT depth rule precisely — HTML and PDF must be *identical* (not just "same depth"), PPT may simplify but must use consistent wording (not paraphrase) for whatever it does include, and every fact/claim that appears in PPT must also be covered somewhere in HTML/PDF.
+
+**Full M7 HTML↔PDF harmonization pass** (found via a line-by-line cross-check requested by Julia, using a script to diff normalized text of the two versions side by side):
+- Intro paragraph: PDF was a thin 1-sentence summary; rewritten to be byte-identical to HTML's full 3-example version (rapat 1 jam, dokumen 15 halaman, SOP tidak ditulis), plus added a new closing clause to *both* HTML and PDF ("bukan karena Claude berpikir untuk kamu, tapi karena Claude membantu menstrukturkan dan mengeksekusi prosesnya") to cover a claim that previously existed only in the PPT's slide 2, per the "all PPT info must be covered in HTML/PDF" rule.
+- Section 03 (SWOT) tip-box: added an identical sentence to both HTML and PDF about "competitive brief" as an alternative deliverable — this fact previously existed only in the PPT (slide 5) and was missing from HTML/PDF entirely.
+- Section 01 Tips: PDF was missing HTML's third sentence ("Minta Claude kirim ulang dalam format 'siap dishare ke tim' kalau perlu") — added.
+- Section 02 "4 Variasi Siap Pakai": all 4 quotes had drifted between HTML and PDF (dropped clauses, one item reworded outright) — PDF rewritten to match HTML word-for-word.
+- Section 02 Output: HTML said "confident" (English), PDF said "percaya diri" — standardized to "percaya diri" in HTML to match PDF and the site's Indonesian-language convention.
+- Section 03 SWOT prompt: PDF's bracketed placeholder hints had drifted from HTML's wording (dropped "yang kamu..." phrasing throughout) — PDF rewritten to match HTML exactly.
+- Section 04 SOP prompt: PDF was missing several concrete details HTML has ("(tidak ada cacat, warna sesuai)", "untuk produk yang mudah kusut", "pembelian"/"kecil", "dengan lakban bening") — PDF rewritten to full HTML detail.
+- "Proses Lain yang Bisa Didokumentasikan": PDF listed only names with no descriptions; HTML's 4 info-cards each have a description — PDF rewritten to include all 4 descriptions.
+- PDF's rollup callout ("■ Output per Sub-skill") was stale after the SWOT→Slide addition (checkpoint 26) — added "1 slide deck presentasi" to the list.
+- Level Up: Team Wiki bonus paragraph had drifted into a differently-worded paraphrase in PDF — rewritten to match HTML's tip-box text exactly.
+- One accepted structural asymmetry, flagged rather than silently resolved: PDF's single combined "■ Output per Sub-skill" rollup line has no direct HTML equivalent — HTML instead conveys the same information via 5 separate per-section output-boxes throughout the module. Judged acceptable since no information is actually missing from HTML, only organized differently (same precedent as the `filebox` vs `tip-box` pattern). Flagged to Julia for override if she disagrees.
+- Confirmed the PPT's consolidated "Latihan & Output" slide (which HTML/PDF don't have as a single element) is an accepted, Julia-approved structural difference — not something needing to be added to HTML/PDF.
+
+No PPT changes needed this checkpoint — the two previously PPT-only facts are now also covered in HTML/PDF, and all other wording differences in the PPT were confirmed to be acceptable simplifications of content already present in HTML/PDF, not new information.
+
+**Commits this checkpoint**: one commit covering `produktivitas-content.html` (3 small text additions/fixes). The `k2_full_pdf.html` and `build_m07.js` files live only in the sandbox `outputs/k2build/` working directory (never committed to git, per established project convention), so this checkpoint's PDF/PPT-source fixes aren't tracked in git history beyond this note.
