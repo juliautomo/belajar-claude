@@ -257,6 +257,11 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
       <ul>
         <li id="liTiktok" style="display:none;"><a href="#" id="linkTiktok" target="_blank" rel="noopener">TikTok</a></li><li id="liYoutube" style="display:none;"><a href="#" id="linkYoutube" target="_blank" rel="noopener">YouTube</a></li>
         <li id="liInstagram" style="display:none;"><a href="#" id="linkInstagram" target="_blank" rel="noopener">Instagram</a></li><li id="liWhatsapp" style="display:none;"><a href="#" id="linkWhatsapp" target="_blank" rel="noopener">WhatsApp Community</a></li>
+      </ul>
+    </div>
+    <div class="footer-links" id="footerContactLinks" style="display:none;">
+      <h4>Hubungi Kami</h4>
+      <ul>
         <li id="liEmail" style="display:none;"><a href="#" id="linkEmail">Email</a></li>
       </ul>
     </div>
@@ -361,24 +366,25 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         ['instagram_url', 'instagram_visible', 'liInstagram', 'linkInstagram'],
         ['whatsapp_url', 'whatsapp_visible', 'liWhatsapp', 'linkWhatsapp'],
       ];
-      var anyShown = false;
+      var anySocialShown = false;
       map.forEach(function(m) {
         var url = row[m[0]];
         var visible = row[m[1]] !== false; // default true if column missing/null
         if (url && visible) {
           document.getElementById(m[2]).style.display = 'block';
           document.getElementById(m[3]).href = url;
-          anyShown = true;
+          anySocialShown = true;
         }
       });
+      if (anySocialShown) document.getElementById('footerSocialLinks').style.display = 'block';
+
       var email = row.contact_email;
       var emailVisible = row.contact_email_visible !== false;
       if (email && emailVisible) {
         document.getElementById('liEmail').style.display = 'block';
         document.getElementById('linkEmail').href = 'mailto:' + email;
-        anyShown = true;
+        document.getElementById('footerContactLinks').style.display = 'block';
       }
-      if (anyShown) document.getElementById('footerSocialLinks').style.display = 'block';
     } catch (e) {}
   })();
 
