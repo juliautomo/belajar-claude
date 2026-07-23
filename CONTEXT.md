@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 23, 2026 (checkpoint 30)_
+_Last updated: July 23, 2026 (checkpoint 31)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -118,7 +118,7 @@ All pages use these CSS variables:
 |------|---------|
 | `index.html` | Landing page — hero, jalur belajar grid, course carousel, CTA |
 | `mulai-claude.html` | Sales page for "Mulai dengan Claude AI" (free) |
-| `produktivitas.html` | Sales page — K2 · Produktivitas Kantor — Rp 149K (8 modules) |
+| `produktivitas.html` | Sales page — K2 · Produktivitas Kantor — Rp 149K (7 modules; M8 Case Study archived, see Checkpoint 25) |
 | `kerja-sehari-hari.html` | DELETED from repo (July 14, 2026) |
 | `content-marketing.html` | Sales page — Content & Marketing — Rp 149K (9 modules; renamed from bisnis-ukm.html checkpoint 11) |
 | `prompt-gratis.html` | Sales page for free prompt guide |
@@ -137,7 +137,7 @@ All pages use these CSS variables:
 | `dashboard.html` | Main user dashboard |
 | `prompt-gratis-content.html` | Course reader — 5 modules + feedback panel |
 | `mulai-claude-content.html` | Course reader — 6 modules + feedback panel |
-| `produktivitas-content.html` | Course reader — K2, 8 modules + feedback panel (COURSE_SLUG='produktivitas') |
+| `produktivitas-content.html` | Course reader — K2, 7 active modules + feedback panel (COURSE_SLUG='produktivitas'); M8 Case Study content preserved but archived/unreachable, see Checkpoint 25 |
 | `kerja-sehari-hari-content.html` | DELETED from repo (July 14, 2026) |
 | `content-marketing-content.html` | Course reader — 9 modules + feedback panel (COURSE_SLUG='content-marketing'; renamed from bisnis-ukm-content.html checkpoint 11) |
 | `payment-success.html` | Post-payment confirmation |
@@ -183,13 +183,15 @@ Course has gone through two PDF-driven restructures in July 2026. Current state:
 - Video/PDF/document mapping (course_slug + module_num) is content-agnostic, so nothing needed to change there — re-adding modules 4-6 just means those module numbers are valid targets again in the admin dropdowns.
 
 ### produktivitas-content.html — K2 course (July 14, 2026)
-New content page for the upgraded K2 course. Created from `K2-Produktivitas/K2-improved-content.md`. Key constants:
+> **⚠️ Superseded July 22, 2026 (Checkpoint 25)**: M8 Case Study was archived out of the active flow — course is now **7 active modules** (`TOTAL = 8`, `CONTENT_MODULES = 7`), M8's content preserved but unreachable under `id="panel-casestudy-archived"`. The description below is the original as-built state; see Checkpoint 25 for what changed and why.
+
+New content page for the upgraded K2 course. Created from `K2-Produktivitas/K2-improved-content.md`. Key constants (original, pre-Checkpoint-25):
 ```javascript
 const TOTAL = 9;           // 8 content panels + 1 feedback
 const CONTENT_MODULES = 8;
 const COURSE_SLUG = 'produktivitas';
 ```
-**8 modules**: M01 Role Prompting → M02 Claude Projects → M03 Gmail+Claude → M04 Google Sheets → M05 Batch Prompting → M06 Prompt Chaining → M07 Dokumen & Riset → M08 Case Study (Satu Hari dengan Claude). Personas used throughout: Rina (UMKM fashion "Kasual Studio") and Budi (konsultan freelance). M08 includes completion badge + "Lanjutkan Belajar" card linking to `bisnis-ukm.html`. 30+ copyable prompt boxes with Salin/copy buttons.
+**8 modules (original)**: M01 Role Prompting → M02 Claude Projects → M03 Gmail+Claude → M04 Google Sheets → M05 Batch Prompting → M06 Prompt Chaining → M07 Dokumen & Riset → M08 Case Study (Satu Hari dengan Claude). Personas used throughout: Rina (UMKM fashion "Kasual Studio") and Budi (konsultan freelance). M08 includes completion badge + "Lanjutkan Belajar" card linking to `bisnis-ukm.html`. 30+ copyable prompt boxes with Salin/copy buttons.
 
 **Files replaced/deleted across the codebase (July 14, 2026)**:
 - `kerja-sehari-hari.html` + `kerja-sehari-hari-content.html` — **deleted from repo**
@@ -759,3 +761,19 @@ Content: a "Kapan Dipakai" tip (your own observations are still sharpest for bus
 **M7 PPTX: local file adopted as canonical**, per Julia's instruction. The working-tree copy in `K2-Produktivitas/M07-Dokumen-Riset/K2-M07-Dokumen-Riset.pptx` had diverged from the last sandbox-built/pushed version (different file size/hash, most likely from PowerPoint recompacting the file when opened locally). Extracted and checked all 9 slides' text via python-pptx to confirm the content is identical to what was built in checkpoint 29 (includes "Perkuat Riset dengan Web Search" and "SWOT → Slide Presentasi" in the correct order) — no content was lost. This local version is now committed as the source of truth going forward; the sandbox `outputs/k2build/` copy is no longer authoritative for M7.
 
 **Commits this checkpoint**: one commit covering `CONTEXT.md` and the M7 PPTX (local version). The PDF-source fixes live only in the sandbox working directory per established convention and aren't tracked in git.
+
+---
+
+## Checkpoint 31 (July 23, 2026) — CONTEXT.md accuracy pass
+
+Julia asked for the overall CONTEXT.md to be brought up to date. Did a targeted pass rather than a full rewrite (the file is a chronological log — old checkpoints stay as accurate records of their own time, not something to retroactively rewrite):
+
+- **Fixed genuinely stale "current state" references** (as opposed to dated historical narrative): the "Pages & Their Purpose" table's entries for `produktivitas.html` and `produktivitas-content.html` still said "8 modules" with no date qualifier — these read as living reference docs, not history, so they were wrong as of today. Updated both to "7 modules" with a pointer to Checkpoint 25 (the M8 archival).
+- **Added a superseded-notice banner** to the original "produktivitas-content.html — K2 course (July 14, 2026)" section, which documents the course's original 8-module build in detail (`TOTAL=9`/`CONTENT_MODULES=8` constants, full module list) — left the historical content intact (accurate for July 14) but flagged at the top that it's superseded by Checkpoint 25, so a future reader doesn't mistake it for current state.
+- **Left dated historical mentions of "8 modules" alone** (checkpoints 7, 14, 16, 22, and the artifact-assessment note) — each is clearly timestamped narrative describing what was true *at that point in the project*, and checkpoint 25 already documents the change; adding a correction footnote to every single one would clutter the log without adding real accuracy, since the chronological structure itself makes clear which checkpoint is most recent.
+- **Verified `index.html` has no stale module-count text** — checkpoint 12 already removed the modul-count/duration meta row from all course cards site-wide, so there was nothing to fix there.
+- **Confirmed all of this session's checkpoints (24–30) are present and in order** in the log, covering: M6 intro rewrite, the M8 archival, three rounds of M7 additions (SWOT→Slide, HTML/PDF harmonization, the web-browsing-claim fix, the web-search section), and the Pro-plan/PDF-sync/design-audit/PPTX-adoption pass.
+
+No code files changed this checkpoint — CONTEXT.md only.
+
+**Commits this checkpoint**: one commit covering `CONTEXT.md`.
