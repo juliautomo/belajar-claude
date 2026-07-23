@@ -156,9 +156,11 @@
     <div class="cta-box">
       <div style="font-size:10px;font-weight:700;letter-spacing:2px;color:var(--accent);text-transform:uppercase;margin-bottom:8px;font-family:monospace;">All Access</div>
       <div style="font-family:var(--serif);font-size:24px;font-weight:400;letter-spacing:-0.5px;color:var(--ink);line-height:1.15;margin-bottom:16px;">Semua Kursus Belajar Claude</div>
-      <div class="cta-price">Rp 399K</div>
-      <div class="cta-price-sub">Satu kali bayar · Akses seumur hidup ke semua kursus, termasuk yang akan datang</div>
-      <a class="btn-primary" onclick="buyCourse()" href="#" style="margin-top:18px;">Beli All Access — Rp 399K →</a>
+      <div id="discountBadge" style="display:none;font-size:11px;font-weight:700;background:var(--green-dim);color:var(--green);border:1px solid var(--green-border);padding:3px 10px;border-radius:100px;margin-bottom:8px;"></div>
+      <div id="ctaOriginalPrice" style="display:none;font-size:16px;color:var(--ink-3);text-decoration:line-through;margin-bottom:2px;"></div>
+      <div class="cta-price" id="ctaPrice">Rp 399K</div>
+      <div class="cta-price-sub" id="ctaPriceSub">Satu kali bayar · Akses seumur hidup ke semua kursus, termasuk yang akan datang</div>
+      <a class="btn-primary" onclick="buyCourse()" href="#" style="margin-top:18px;" id="ctaBuyBtn">Beli All Access — Rp 399K →</a>
       <p class="cta-note">🔒 Pembayaran aman. Akses langsung setelah bayar.</p>
     </div>
   </div>
@@ -289,7 +291,40 @@
   })();
 </script>
 <script>
+  // Live price: falls back to the static Rp 399K shown in the HTML if the
+  // course_pricing row doesn't exist yet or the fetch fails.
+  let effectiveAmount = 399000;
+  function formatRupiah(n) { return 'Rp ' + Number(n).toLocaleString('id-ID'); }
+  function formatRupiahShort(n) { return 'Rp ' + Math.round(n / 1000) + 'K'; }
+
+  async function loadPricing() {
+    try {
+      const { data } = await sbClient.from('course_pricing').select('*').eq('course_slug', 'all-access').maybeSingle();
+      if (!data) return;
+      const now = new Date();
+      const discountActive = data.discount_price != null
+        && (!data.discount_start || new Date(data.discount_start) <= now)
+        && (!data.discount_end || new Date(data.discount_end) >= now);
+      effectiveAmount = discountActive ? data.discount_price : (data.base_price != null ? data.base_price : effectiveAmount);
+      if (discountActive) {
+        const badge = document.getElementById('discountBadge');
+        const orig = document.getElementById('ctaOriginalPrice');
+        badge.style.display = 'inline-block';
+        badge.textContent = 'DISKON — Hemat ' + formatRupiahShort(data.base_price - data.discount_price);
+        orig.style.display = 'block';
+        orig.textContent = formatRupiah(data.base_price);
+      }
+    } catch (e) { console.error('Pricing fetch failed, using default price', e); }
+    document.getElementById('ctaPrice').textContent = formatRupiahShort(effectiveAmount);
+    document.getElementById('ctaPriceSub').textContent = 'Satu kali bayar · Akses seumur hidup ke semua kursus, termasuk yang akan datang';
+    document.getElementById('modalPriceLine').textContent = formatRupiah(effectiveAmount) + ' · Akses seumur hidup ke semua kursus';
+  }
+
   (async () => {
+    await loadPricing();
+    const buyBtn = document.getElementById('ctaBuyBtn');
+    if (buyBtn) buyBtn.textContent = 'Beli All Access — ' + formatRupiahShort(effectiveAmount) + ' →';
+
     const { data: { session } } = await sbClient.auth.getSession();
     if (!session) return;
     const { data: enrollments } = await sbClient.from('enrollments').select('course_slug').eq('email', session.user.email);
@@ -362,7 +397,7 @@
     <button onclick="closePaymentModal()" style="position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;background:#F5F5F7;border:none;cursor:pointer;font-size:16px;color:#777;">✕</button>
     <div style="font-size:11px;font-weight:700;color:var(--accent);letter-spacing:1px;margin-bottom:14px;">BELI SEKARANG</div>
     <div style="font-family:var(--serif);font-size:20px;color:var(--ink);margin-bottom:4px;letter-spacing:-0.3px;">All Access — Semua Kursus</div>
-    <div style="font-size:13px;color:var(--ink-2);margin-bottom:24px;">Rp 399.000 · Akses seumur hidup ke semua kursus</div>
+    <div style="font-size:13px;color:var(--ink-2);margin-bottom:24px;" id="modalPriceLine">Rp 399.000 · Akses seumur hidup ke semua kursus</div>
     <label style="display:block;font-size:12px;font-weight:600;color:var(--ink-2);margin-bottom:6px;">Nama lengkap</label>
     <input type="text" id="paymentName" placeholder="Nama lengkap Anda" style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;color:var(--ink);margin-bottom:12px;outline:none;font-family:var(--font);box-sizing:border-box;">
     <label style="display:block;font-size:12px;font-weight:600;color:var(--ink-2);margin-bottom:6px;">Email</label>

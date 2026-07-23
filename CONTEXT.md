@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 23, 2026 (checkpoint 32)_
+_Last updated: July 23, 2026 (checkpoint 33)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -49,6 +49,19 @@ Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign 
 - `paket.html` is a separate, stale, **unwired mockup** (buttons link to `login.html`, no real `/create-payment` call, prices don't match the real `COURSES` catalog at all — e.g. it advertises "All Access — Rp 999K" for a fake "9-course" bundle). It's a different artifact from the 4 real `paket-*` sales pages (`kursus-karyawan.html` etc., which *are* wired to real backend SKUs). Left alone this pass to avoid scope creep; Julia may want to retire/redirect it later so it stops advertising a conflicting All Access price.
 - The 4 real `paket-*` bundle sales pages (`kursus-karyawan.html`, `kursus-mahasiswa.html`, `kursus-ukm.html`, `paket-content-creator.html`) still work as before and were only touched to also recognize `all-access` as granting access — not retired, since they were already unlinked from nav per Checkpoint 12 and retiring them is a separate call.
 - The RLS "Allow all" finding from the original research pass (real tables have `USING (true)` policies, so the anon key could theoretically insert fake enrollments client-side) is still unaddressed — independent of this payment-model work, flagged again here as a follow-up.
+
+## SHIPPED (Checkpoint 33, July 23, 2026): Admin-Controlled Pricing + Scheduled Discount for All Access
+
+**Status: live.** Follow-up to Checkpoint 32. Julia wanted admin.html control over the all-access price, scoped to just the `all-access` SKU (not every course/paket), with a scheduled (start/end date) discount rather than a simple on/off toggle, and sales-page prices that reflect it live rather than staying static text.
+
+**What shipped:**
+- New table `course_pricing` (`sql/course-pricing.sql`, already run against production `ctqtdqbsucbhikwnagvl`): `course_slug` PK, `base_price`, `discount_price`, `discount_start`, `discount_end`, `updated_at`, `updated_by`. RLS: public read, write restricted to the two admin emails (same pattern as `course_resources`). Seeded with `all-access` @ Rp 399,000.
+- `admin.html`: new "Harga All Access" card above the course-tabs section (not tied to the per-course tab system, since only `all-access` has pricing control right now) — inputs for base price, discount price, discount start/end (`datetime-local`), a live indicator showing whether the discount is currently active and what the effective sell price is right now, and a save button that upserts to `course_pricing`.
+- `index.js`: new `supabaseSelect()` GET helper + `getEffectivePrice(slug, fallback)` — computes `discount_price` if `discount_price` is set and `now()` falls inside `[discount_start, discount_end]` (either bound can be null/open-ended), else `base_price`, else the hardcoded catalog price as a last-resort fallback so a pricing-table outage never blocks checkout. `/create-payment` calls this for `courseSlug === 'all-access'` before creating the Duitku invoice, so the actual amount charged is always in sync with the admin panel. The webhook needed no change — it already trusts the `amount` Duitku echoes back from invoice creation, which is already the dynamic value.
+- `all-access.html`: on load, fetches the `course_pricing` row (public read, anon key) and computes the same effective-price logic client-side to update the hero price, a strikethrough original price + "Hemat RpXXK" badge when a discount is active, the price subtext, the buy button label, and the payment modal's price line. Falls back to the static Rp 399K already in the HTML if the row is missing or the fetch fails.
+- Verified the discount-window math (no row / base only / always-on discount / active window / expired window / future window) against the exact formula used in both `index.js` and `admin.html` — all 6 cases pass.
+
+**Deliberately out of scope this pass:** per-course/paket pricing control (only `all-access` is admin-editable), any kind of promo-code system, and automatic email/notification when a discount starts or ends.
 
 **Original architecture notes (still accurate, kept for reference):**
 - Payment gateway: Duitku (not Stripe/Midtrans/Xendit — confirmed from `belajar-claude-backend/index.js`).
@@ -138,7 +151,7 @@ All pages use these CSS variables:
 | `kursus-ukm.html` | Jalur UKM page |
 | `paket.html` | Stale unwired mockup pricing page — not connected to real backend/prices, see Checkpoint 32 |
 | `paket-content-creator.html` | Paket Content Creator page |
-| `all-access.html` | Sales/checkout page for the one-time all-access SKU — Rp 399K, added Checkpoint 32 |
+| `all-access.html` | Sales/checkout page for the one-time all-access SKU, added Checkpoint 32; price/discount fetched live from `course_pricing` as of Checkpoint 33 (default Rp 399K) |
 | `coming-soon.html` | Placeholder for unreleased courses |
 
 ### App

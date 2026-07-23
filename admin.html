@@ -37,10 +37,13 @@ h1.page-title { font-family: var(--serif); font-size: 30px; font-weight: 400; le
 .card .hint { font-size: 12.5px; color: var(--ink-2); margin-bottom: 18px; line-height: 1.5; }
 label { display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 6px; margin-top: 14px; }
 label:first-of-type { margin-top: 0; }
-select, input[type="file"], input[type="text"] {
+select, input[type="file"], input[type="text"], input[type="number"], input[type="datetime-local"] {
   width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 10px;
   font-size: 13.5px; color: var(--ink); font-family: inherit; background: #fff;
 }
+.price-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 480px) { .price-row { grid-template-columns: 1fr; } }
+.current-indicator.discount-active { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-glow); }
 select:focus { outline: none; border-color: var(--accent); }
 .btn { margin-top: 16px; padding: 11px 20px; background: var(--ink); color: #fff; border: none; border-radius: 10px; font-size: 13.5px; font-weight: 700; cursor: pointer; font-family: inherit; transition: background 0.15s; }
 .btn:hover:not(:disabled) { background: #333; }
@@ -132,6 +135,28 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
   <h1 class="page-title">Kelola Konten Kursus</h1>
   <p class="page-sub">Unggah PDF, video, PPT, dan dokumen praktik per modul — tampil langsung di halaman kursus, tidak perlu deploy ulang.</p>
 
+  <div class="card">
+    <h2>Harga All Access</h2>
+    <p class="hint">Atur harga normal dan diskon terjadwal untuk paket All Access (semua kursus, satu kali bayar). Perubahan berlaku langsung di all-access.html dan saat checkout — tidak perlu deploy ulang.</p>
+    <label>Harga Normal (Rp)</label>
+    <input type="number" id="priceBase" min="0" step="1000" placeholder="399000">
+    <label>Harga Diskon (Rp)</label>
+    <input type="number" id="priceDiscount" min="0" step="1000" placeholder="Kosongkan jika tidak ada diskon">
+    <div class="price-row">
+      <div>
+        <label>Diskon Mulai</label>
+        <input type="datetime-local" id="priceDiscountStart">
+      </div>
+      <div>
+        <label>Diskon Berakhir</label>
+        <input type="datetime-local" id="priceDiscountEnd">
+      </div>
+    </div>
+    <button class="btn" id="priceSaveBtn" onclick="savePricing()">Simpan Harga</button>
+    <div class="current-indicator" id="priceIndicator"></div>
+    <div class="status" id="priceStatus"></div>
+  </div>
+
   <div class="course-tabs" id="courseTabs"></div>
 
   <div class="card">
@@ -212,6 +237,7 @@ function moduleLabel(slug, num) {
 let currentSession = null;
 let activeCourse = COURSES[0].slug;
 let dataCache = { resources: [], videos: [], ppts: [], docs: [] };
+let pricingCache = null;
 
 function showState(state) {
   document.getElementById('stateLoggedOut').style.display = state === 'loggedOut' ? 'block' : 'none';
@@ -250,10 +276,12 @@ async function loadAllData() {
   var videosRes = await sbClient.from('module_videos').select('*').order('course_slug').order('module_num');
   var pptsRes = await sbClient.from('module_ppts').select('*').order('course_slug').order('module_num');
   var docsRes = await sbClient.from('module_documents').select('*').order('course_slug').order('module_num').order('created_at');
+  var pricingRes = await sbClient.from('course_pricing').select('*').eq('course_slug', 'all-access').maybeSingle();
   dataCache.resources = resourcesRes.data || [];
   dataCache.videos = videosRes.data || [];
   dataCache.ppts = pptsRes.data || [];
   dataCache.docs = docsRes.data || [];
+  pricingCache = pricingRes.data || null;
 }
 
 async function reloadAndRender() {
@@ -278,9 +306,96 @@ function switchCourse(slug) {
 }
 
 function renderAll() {
+  renderPricing();
   renderCourseTabs();
   renderPdfRow();
   renderMatrix();
+}
+
+// ─── PRICING (All Access — base price + optional scheduled discount) ───────
+
+function toLocalInputValue(iso) {
+  var d = new Date(iso);
+  var pad = function (n) { return String(n).padStart(2, '0'); };
+  return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + 'T' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+}
+
+function renderPricing() {
+  var baseEl = document.getElementById('priceBase');
+  var discEl = document.getElementById('priceDiscount');
+  var startEl = document.getElementById('priceDiscountStart');
+  var endEl = document.getElementById('priceDiscountEnd');
+  var indicator = document.getElementById('priceIndicator');
+
+  var fallback = 399000;
+  baseEl.value = pricingCache && pricingCache.base_price != null ? pricingCache.base_price : fallback;
+  discEl.value = pricingCache && pricingCache.discount_price != null ? pricingCache.discount_price : '';
+  startEl.value = pricingCache && pricingCache.discount_start ? toLocalInputValue(pricingCache.discount_start) : '';
+  endEl.value = pricingCache && pricingCache.discount_end ? toLocalInputValue(pricingCache.discount_end) : '';
+
+  var now = new Date();
+  var discountActive = pricingCache && pricingCache.discount_price != null
+    && (!pricingCache.discount_start || new Date(pricingCache.discount_start) <= now)
+    && (!pricingCache.discount_end || new Date(pricingCache.discount_end) >= now);
+  var effective = discountActive ? pricingCache.discount_price : (pricingCache ? pricingCache.base_price : fallback);
+  var formatted = 'Rp ' + Number(effective).toLocaleString('id-ID');
+
+  indicator.classList.add('show');
+  indicator.classList.remove('has-video', 'no-video', 'discount-active');
+  if (discountActive) {
+    indicator.classList.add('discount-active');
+    indicator.innerHTML = '✓ Diskon AKTIF sekarang — harga jual saat ini: <strong>' + formatted + '</strong>';
+  } else if (pricingCache && pricingCache.discount_price != null) {
+    indicator.classList.add('no-video');
+    indicator.innerHTML = 'Diskon terjadwal tapi belum/tidak aktif — harga jual saat ini: <strong>' + formatted + '</strong>';
+  } else {
+    indicator.classList.add('no-video');
+    indicator.innerHTML = 'Tidak ada diskon aktif — harga jual saat ini: <strong>' + formatted + '</strong>';
+  }
+}
+
+async function savePricing() {
+  var btn = document.getElementById('priceSaveBtn');
+  var statusEl = document.getElementById('priceStatus');
+  var base = parseInt(document.getElementById('priceBase').value, 10);
+  var discRaw = document.getElementById('priceDiscount').value;
+  var disc = discRaw === '' ? null : parseInt(discRaw, 10);
+  var startRaw = document.getElementById('priceDiscountStart').value;
+  var endRaw = document.getElementById('priceDiscountEnd').value;
+
+  statusEl.className = 'status';
+  if (!base || base <= 0) {
+    statusEl.className = 'status show error'; statusEl.textContent = 'Harga normal wajib diisi dan lebih besar dari 0.'; return;
+  }
+  if (disc != null && disc <= 0) {
+    statusEl.className = 'status show error'; statusEl.textContent = 'Harga diskon harus lebih besar dari 0.'; return;
+  }
+  if (disc != null && startRaw && endRaw && new Date(startRaw) >= new Date(endRaw)) {
+    statusEl.className = 'status show error'; statusEl.textContent = 'Tanggal "Diskon Mulai" harus sebelum "Diskon Berakhir".'; return;
+  }
+
+  btn.disabled = true; btn.textContent = 'Menyimpan...';
+  try {
+    var payload = {
+      course_slug: 'all-access',
+      base_price: base,
+      discount_price: disc,
+      discount_start: startRaw ? new Date(startRaw).toISOString() : null,
+      discount_end: endRaw ? new Date(endRaw).toISOString() : null,
+      updated_at: new Date().toISOString(),
+      updated_by: currentSession.user.email,
+    };
+    var res = await sbClient.from('course_pricing').upsert(payload, { onConflict: 'course_slug' });
+    if (res.error) throw res.error;
+    pricingCache = payload;
+    renderPricing();
+    statusEl.className = 'status show success';
+    statusEl.textContent = 'Harga tersimpan ✓ — langsung berlaku di all-access.html dan checkout.';
+  } catch (e) {
+    statusEl.className = 'status show error';
+    statusEl.textContent = 'Gagal menyimpan: ' + e.message;
+  }
+  btn.disabled = false; btn.textContent = 'Simpan Harga';
 }
 
 // ─── PDF ROW (satu file per kursus, bukan per modul) ────────────────────────
