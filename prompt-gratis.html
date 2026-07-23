@@ -263,15 +263,41 @@
 
     try {
       const { data: enrollments } = await sbClient.from('enrollments').select('course_slug').eq('email', session.user.email);
-      const hasAccess = enrollments && enrollments.some(e => e.course_slug === COURSE_SLUG || e.course_slug === 'all-access');
-      if (hasAccess) {
+      const isEnrolled = enrollments && enrollments.some(e => e.course_slug === COURSE_SLUG);
+      const hasAllAccess = enrollments && enrollments.some(e => e.course_slug === 'all-access');
+      if (isEnrolled) {
         document.querySelectorAll('#ctaBtn, #bottomCtaBtn').forEach(btn => {
           btn.textContent = 'Buka Kursus →';
           btn.setAttribute('href', CONTENT_LINK);
         });
+      } else if (hasAllAccess) {
+        document.querySelectorAll('#ctaBtn, #bottomCtaBtn').forEach(btn => {
+          btn.textContent = 'Mulai Kursus →';
+          btn.removeAttribute('href');
+          btn.style.cursor = 'pointer';
+          btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            enrollAndOpen(btn, session.user.email);
+          });
+        });
       }
     } catch (e) {}
   })();
+
+  async function enrollAndOpen(btn, email) {
+    var original = btn.textContent;
+    btn.textContent = 'Memproses...';
+    document.querySelectorAll('#ctaBtn, #bottomCtaBtn').forEach(b => b.style.pointerEvents = 'none');
+    try {
+      const { error } = await sbClient.from('enrollments').insert({ email: email, course_slug: COURSE_SLUG, course_name: '20 Prompt Gratis', type: 'paid', enrolled_at: new Date().toISOString() });
+      if (error) throw error;
+      window.location.href = CONTENT_LINK;
+    } catch (e) {
+      btn.textContent = original;
+      document.querySelectorAll('#ctaBtn, #bottomCtaBtn').forEach(b => b.style.pointerEvents = '');
+      alert('Gagal mendaftar kursus: ' + (e.message || 'Terjadi kesalahan, coba lagi.'));
+    }
+  }
 
   function toggleUserMenu(e) {
     e.stopPropagation();

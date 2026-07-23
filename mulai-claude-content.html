@@ -1016,13 +1016,11 @@ saya export ke Google Docs.<button class="copy-btn" onclick="copyPrompt(this)">S
     if (!session) { window.location.href = 'login.html'; return; }
     const email = session.user.email;
 
-    // 'Mulai dengan Claude AI' is now included in All Access only (previously free
-    // for any logged-in user) — see CONTEXT.md payment restructure notes. Legacy
-    // free 'mulai-claude' enrollment rows from before this change are intentionally
-    // NOT honored here, only a real 'all-access' row grants entry. Admins bypass.
+    // Only grant access if a real 'mulai-claude' enrollment exists - holding all-access alone
+    // is not enough, it only unlocks a free one-click "Mulai Kursus" on the preview page. Admins bypass.
     if (!ADMIN_EMAILS.includes(email)) {
-      const { data: existing } = await sbClient.from('enrollments').select('course_slug').eq('email', email).eq('course_slug', 'all-access');
-      if (!existing || existing.length === 0) { window.location.href = 'all-access.html'; return; }
+      const { data: existing } = await sbClient.from('enrollments').select('course_slug').eq('email', email).eq('course_slug', 'mulai-claude');
+      if (!existing || existing.length === 0) { window.location.href = 'mulai-claude.html'; return; }
     }
 
     document.getElementById('navEmail').textContent = email;

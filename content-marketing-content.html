@@ -1163,9 +1163,10 @@ yang bisa saya buka lagi setiap kali launching produk baru.<button class="copy-b
     const { data: { session } } = await sbClient.auth.getSession();
     if (!session) { window.location.href = 'login.html'; return; }
 
-    // Only grant access if a real enrollment already exists (created by the Duitku payment webhook) - admins bypass
+    // Only grant access if a real enrollment for THIS course exists - holding all-access alone
+    // is not enough, it only unlocks a free one-click "Mulai Kursus" on the preview page - admins bypass
     if (!ADMIN_EMAILS.includes(session.user.email)) {
-      const { data: existing } = await sbClient.from('enrollments').select('course_slug').eq('email', session.user.email).in('course_slug', ['content-marketing', 'all-access']);
+      const { data: existing } = await sbClient.from('enrollments').select('course_slug').eq('email', session.user.email).eq('course_slug', 'content-marketing');
       if (!existing || existing.length === 0) { window.location.href = 'content-marketing.html'; return; }
     }
 

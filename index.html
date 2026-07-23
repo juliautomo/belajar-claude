@@ -331,10 +331,10 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
   // Mirrors dashboard.html's ALL_COURSES, kept lightweight since this view only needs
   // title/icon/desc/module-count, not the full sales-page metadata dashboard.html carries.
   var LIH_COURSES = {
-    'prompt-gratis':     { title: '20 Prompt Gratis',            icon: '📋', desc: 'Prompt siap pakai untuk email, laporan, konten sosmed.', modules: 5, contentLink: 'prompt-gratis-content.html' },
-    'mulai-claude':      { title: 'Dasar Claude AI',             icon: '🤖', desc: 'Dari nol sampai bisa pakai Claude sehari-hari.', modules: 6, contentLink: 'mulai-claude-content.html' },
-    'produktivitas':     { title: 'Produktivitas Kantor',        icon: '💼', desc: 'Hemat 3–5 jam kerja per minggu dengan Claude.', modules: 7, contentLink: 'produktivitas-content.html' },
-    'content-marketing': { title: 'Content & Marketing',         icon: '🏷', desc: 'Positioning, konten, iklan, sampai analisis performa.', modules: 9, contentLink: 'content-marketing-content.html' },
+    'prompt-gratis':     { title: '20 Prompt Gratis',            icon: '📋', desc: 'Prompt siap pakai untuk email, laporan, konten sosmed.', modules: 5, contentLink: 'prompt-gratis-content.html', previewLink: 'prompt-gratis.html' },
+    'mulai-claude':      { title: 'Dasar Claude AI',             icon: '🤖', desc: 'Dari nol sampai bisa pakai Claude sehari-hari.', modules: 6, contentLink: 'mulai-claude-content.html', previewLink: 'mulai-claude.html' },
+    'produktivitas':     { title: 'Produktivitas Kantor',        icon: '💼', desc: 'Hemat 3–5 jam kerja per minggu dengan Claude.', modules: 7, contentLink: 'produktivitas-content.html', previewLink: 'produktivitas.html' },
+    'content-marketing': { title: 'Content & Marketing',         icon: '🏷', desc: 'Positioning, konten, iklan, sampai analisis performa.', modules: 9, contentLink: 'content-marketing-content.html', previewLink: 'content-marketing.html' },
     'analisis-data':     { title: 'Analisis Data & Laporan',     icon: '📊', desc: 'Data mentah jadi insight bisnis.', modules: 6, comingSoon: true },
     'build-automation':  { title: 'Automasi Workflow',           icon: '⚡', desc: 'Automation aktif dengan Zapier, Make.com dan n8n.', modules: 7, comingSoon: true },
     'ai-powered-app':    { title: 'Build AI App Sederhana',      icon: '🚀', desc: 'Web app AI live di GitHub Pages — tanpa backend.', modules: 7, comingSoon: true },
@@ -343,21 +343,9 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
   };
   var LIH_COURSE_ORDER = ['prompt-gratis','mulai-claude','produktivitas','content-marketing','analisis-data','build-automation','ai-powered-app','claude-api-dev','jual-produk-ai'];
 
-  // Clicking "Mulai" on a course the user hasn't enrolled in yet creates the real
-  // enrollment row first (same explicit-enroll pattern as dashboard.html), then opens it.
-  async function lihEnrollAndGo(slug, link, alreadyEnrolled) {
-    if (!alreadyEnrolled) {
-      try {
-        var r = await sbClient.auth.getSession();
-        var email = r.data.session && r.data.session.user.email;
-        var meta = LIH_COURSES[slug];
-        if (email && meta) {
-          await sbClient.from('enrollments').insert({ email: email, course_slug: slug, course_name: meta.title, type: 'paid', enrolled_at: new Date().toISOString() });
-        }
-      } catch (e) {}
-    }
-    window.location.href = link;
-  }
+  // Courses you're not really enrolled in (no real per-course row, even if you hold
+  // all-access) link to the course's own preview page instead of the lesson reader
+  // directly — the preview page is where the actual "Mulai Kursus" enroll click lives.
   (async function() {
     try {
       var r = await sbClient.auth.getSession();
@@ -412,11 +400,13 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
               progressMap[row.course_slug].add(row.module_num);
             });
 
-            // "Continue learning" = whichever course has the most recent module_completions row.
+            // "Continue learning" = whichever course has the most recent module_completions row —
+            // only shown if the user has a real enrollment row for that course (holding all-access
+            // with old/admin-era progress but no real enrollment shouldn't surface a direct-to-lesson card).
             if (progressRows.length) {
               var lastSlug = progressRows[0].course_slug;
               var lastMeta = LIH_COURSES[lastSlug];
-              if (lastMeta) {
+              if (lastMeta && enrolledSlugs.has(lastSlug)) {
                 var lastDone = progressMap[lastSlug] ? progressMap[lastSlug].size : 0;
                 document.getElementById('lihContinueTitle').textContent = lastMeta.title;
                 document.getElementById('lihContinueMeta').textContent = lastDone + ' dari ' + lastMeta.modules + ' modul selesai';
@@ -436,18 +426,25 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
               var isDone = meta.modules > 0 && doneCount >= meta.modules;
 
               var tagText, tagColor, countText, actionHtml;
-              if (isDone) {
+              if (!isEnrolled) {
+                // No real enrollment row (even if all-access is held) — always route to the
+                // preview page, never straight into the lesson reader. The preview page's own
+                // CTA handles the actual "Mulai Kursus" enroll click.
+                tagText = 'BELUM DIMULAI'; tagColor = 'var(--ink-2)';
+                countText = meta.modules + ' modul';
+                actionHtml = '<a href="' + meta.previewLink + '" class="action">Lihat →</a>';
+              } else if (isDone) {
                 tagText = 'SELESAI'; tagColor = 'var(--green)';
                 countText = doneCount + '/' + meta.modules + ' modul';
-                actionHtml = '<a href="javascript:void(0)" class="action" onclick="lihEnrollAndGo(\'' + slug + '\',\'' + meta.contentLink + '\',true)">Ulangi →</a>';
+                actionHtml = '<a href="' + meta.contentLink + '" class="action">Ulangi →</a>';
               } else if (doneCount > 0) {
                 tagText = 'SEDANG KAMU PELAJARI'; tagColor = 'var(--accent)';
                 countText = doneCount + '/' + meta.modules + ' modul';
-                actionHtml = '<a href="javascript:void(0)" class="action" onclick="lihEnrollAndGo(\'' + slug + '\',\'' + meta.contentLink + '\',true)">Lanjutkan →</a>';
+                actionHtml = '<a href="' + meta.contentLink + '" class="action">Lanjutkan →</a>';
               } else {
-                tagText = 'BELUM DIMULAI'; tagColor = isEnrolled ? 'var(--accent)' : 'var(--ink-2)';
+                tagText = 'BELUM DIMULAI'; tagColor = 'var(--accent)';
                 countText = meta.modules + ' modul';
-                actionHtml = '<a href="javascript:void(0)" class="action" onclick="lihEnrollAndGo(\'' + slug + '\',\'' + meta.contentLink + '\',' + isEnrolled + ')">Mulai →</a>';
+                actionHtml = '<a href="' + meta.contentLink + '" class="action">Mulai →</a>';
               }
 
               gridHtml += '<div class="lih-card">' +
