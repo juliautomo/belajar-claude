@@ -133,6 +133,21 @@ section { padding: 88px 0; position: relative; z-index: 1; }
 .ccv2-btn { display: inline-flex; align-items: center; background: var(--ink); color: #fff; text-decoration: none; font-family: var(--font); font-size: 13px; font-weight: 700; padding: 12px 20px; border-radius: 10px; transition: all 0.18s; white-space: nowrap; }
 .ccv2-btn:hover { opacity: 0.85; transform: translateY(-1px); }
 .ccv2-btn.disabled { background: var(--surface-2); color: var(--ink-3); pointer-events: none; }
+#loggedInHome h1 em { font-style: italic; color: var(--accent); }
+.lih-continue { background: var(--ink); border-radius: 16px; padding: 26px 28px; display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
+.lih-continue-title { font-family: var(--serif); font-size: 24px; font-weight: 400; color: #fff; margin-bottom: 6px; }
+.lih-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: all 0.2s; text-decoration: none; }
+.lih-card:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(0,0,0,0.06); border-color: rgba(108,71,255,0.2); }
+.lih-visual { height: 76px; display: flex; align-items: center; padding: 0 18px; }
+.lih-icon { width: 38px; height: 38px; background: #fff; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 3px 10px rgba(0,0,0,0.06); }
+.lih-body { padding: 18px; display: flex; flex-direction: column; flex: 1; }
+.lih-tag { font-size: 10px; letter-spacing: 0.06em; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; }
+.lih-card h3 { font-family: var(--font); font-size: 15px; font-weight: 700; color: var(--ink); margin: 0 0 5px; }
+.lih-card p { font-size: 12.5px; color: var(--ink-2); line-height: 1.5; margin: 0 0 16px; }
+.lih-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid var(--border); font-size: 12px; margin-top: auto; }
+.lih-bottom .count { color: var(--ink-3); }
+.lih-bottom .action { color: var(--accent); font-weight: 700; }
+.lih-bottom .disabled-action { color: var(--ink-3); font-weight: 700; }
 .cta-section { padding: 88px 40px; text-align: center; position: relative; z-index: 1; }
 .cta-card h2 { font-family: var(--serif); font-size: clamp(24px, 3vw, 32px); font-weight: 400; color: #fff; letter-spacing: -1px; margin-bottom: 8px; position: relative; }
 .cta-card h2 em { font-style: italic; color: var(--accent-2); }
@@ -181,6 +196,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     </div>
   </div>
 </nav>
+<div id="marketingHome">
 <div class="hero">
   <div class="hero-grid">
     <div>
@@ -231,6 +247,36 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     </div>
   </div>
 </section>
+</div>
+
+<div id="loggedInHome" style="display:none;">
+  <div class="container" style="padding-top:56px;">
+    <div class="hero-eyebrow"><span class="eyebrow-dot"></span>Selamat Datang Kembali</div>
+    <h1 style="font-family:var(--serif);font-weight:400;font-size:clamp(38px,5vw,58px);letter-spacing:-1.5px;line-height:1.08;color:var(--ink);margin-bottom:18px;max-width:680px;">Selamat datang kembali,<br><em id="lihName">Julia</em> 👋</h1>
+    <p style="font-size:15px;line-height:1.6;color:var(--ink-2);margin-bottom:26px;max-width:520px;">Semua materi sudah siap kamu pelajari. Lanjutkan dari terakhir kamu berhenti, atau pilih topik baru yang relevan dengan pekerjaanmu.</p>
+    <a href="dashboard.html" class="btn-dark" style="display:inline-flex;margin-bottom:8px;">Buka Dashboard →</a>
+  </div>
+
+  <div class="container" id="lihContinueWrap" style="padding-top:40px;display:none;">
+    <div style="font-size:11px;font-weight:700;letter-spacing:0.05em;color:var(--ink-3);margin-bottom:10px;">LANJUT DARI TERAKHIR KAMU BELAJAR</div>
+    <div class="lih-continue">
+      <div>
+        <div style="font-size:10px;letter-spacing:0.06em;color:#9CA3AF;font-weight:700;margin-bottom:8px;">TERAKHIR DIBUKA</div>
+        <div class="lih-continue-title" id="lihContinueTitle"></div>
+        <div style="font-size:12.5px;color:#9CA3AF;" id="lihContinueMeta"></div>
+      </div>
+      <a href="#" id="lihContinueBtn" style="background:#fff;color:var(--ink);font-size:13px;font-weight:700;padding:12px 20px;border-radius:10px;text-decoration:none;white-space:nowrap;">Lanjutkan →</a>
+    </div>
+  </div>
+
+  <div class="container" style="padding:40px 0 64px;">
+    <div style="margin-bottom:18px;">
+      <h2 class="section-title" style="font-size:clamp(24px,3vw,32px);">Pilih apa yang ingin kamu pelajari</h2>
+      <p class="section-sub">Semua kursus sudah termasuk dalam All Access kamu.</p>
+    </div>
+    <div class="course-lib-grid" id="lihCourseGrid"></div>
+  </div>
+</div>
 <section class="cta-section" id="komunitas">
   <div class="cta-card">
     <div>
@@ -280,6 +326,38 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // Course catalog for the logged-in "welcome back" home (loggedInHome section below).
+  // Mirrors dashboard.html's ALL_COURSES, kept lightweight since this view only needs
+  // title/icon/desc/module-count, not the full sales-page metadata dashboard.html carries.
+  var LIH_COURSES = {
+    'prompt-gratis':     { title: '20 Prompt Gratis',            icon: '📋', desc: 'Prompt siap pakai untuk email, laporan, konten sosmed.', modules: 5, contentLink: 'prompt-gratis-content.html' },
+    'mulai-claude':      { title: 'Dasar Claude AI',             icon: '🤖', desc: 'Dari nol sampai bisa pakai Claude sehari-hari.', modules: 6, contentLink: 'mulai-claude-content.html' },
+    'produktivitas':     { title: 'Produktivitas Kantor',        icon: '💼', desc: 'Hemat 3–5 jam kerja per minggu dengan Claude.', modules: 7, contentLink: 'produktivitas-content.html' },
+    'content-marketing': { title: 'Content & Marketing',         icon: '🏷', desc: 'Positioning, konten, iklan, sampai analisis performa.', modules: 9, contentLink: 'content-marketing-content.html' },
+    'analisis-data':     { title: 'Analisis Data & Laporan',     icon: '📊', desc: 'Data mentah jadi insight bisnis.', modules: 6, comingSoon: true },
+    'build-automation':  { title: 'Automasi Workflow',           icon: '⚡', desc: 'Automation aktif dengan Zapier, Make.com dan n8n.', modules: 7, comingSoon: true },
+    'ai-powered-app':    { title: 'Build AI App Sederhana',      icon: '🚀', desc: 'Web app AI live di GitHub Pages — tanpa backend.', modules: 7, comingSoon: true },
+    'claude-api-dev':    { title: 'Claude API untuk Developer',  icon: '🔌', desc: 'Integrasikan Claude ke project nyata.', modules: 7, comingSoon: true },
+    'jual-produk-ai':    { title: 'Build & Monetisasi Produk AI',icon: '💰', desc: 'Dari ide ke produk AI yang menghasilkan uang.', modules: 7, comingSoon: true },
+  };
+  var LIH_COURSE_ORDER = ['prompt-gratis','mulai-claude','produktivitas','content-marketing','analisis-data','build-automation','ai-powered-app','claude-api-dev','jual-produk-ai'];
+
+  // Clicking "Mulai" on a course the user hasn't enrolled in yet creates the real
+  // enrollment row first (same explicit-enroll pattern as dashboard.html), then opens it.
+  async function lihEnrollAndGo(slug, link, alreadyEnrolled) {
+    if (!alreadyEnrolled) {
+      try {
+        var r = await sbClient.auth.getSession();
+        var email = r.data.session && r.data.session.user.email;
+        var meta = LIH_COURSES[slug];
+        if (email && meta) {
+          await sbClient.from('enrollments').insert({ email: email, course_slug: slug, course_name: meta.title, type: 'paid', enrolled_at: new Date().toISOString() });
+        }
+      } catch (e) {}
+    }
+    window.location.href = link;
+  }
   (async function() {
     try {
       var r = await sbClient.auth.getSession();
@@ -313,21 +391,75 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
               ? 'Kamu terdaftar di ' + paid.length + ' kursus — lanjutkan belajarmu sekarang.'
               : 'Kamu sudah mulai belajar — lihat paket untuk lanjut ke kursus berikutnya.';
 
-          // Hero section: swap the purchase pitch for an "already enrolled" state so
-          // logged-in All Access holders aren't shown a price/buy button that doesn't apply.
+          // Logged-in All Access holders get a "welcome back" home instead of the
+          // marketing hero/pricing/course-library pitch, which doesn't apply to them
+          // anymore. Swap the whole block in for #loggedInHome, built from real
+          // enrollment + progress data. Footer stays untouched either way.
           if (hasAllAccess) {
-            var heroActionBtn = document.getElementById('heroActionBtn');
-            if (heroActionBtn) { heroActionBtn.textContent = 'Buka Dashboard →'; heroActionBtn.href = 'dashboard.html'; }
-            var hcTag = document.getElementById('hcTag');
-            if (hcTag) { hcTag.textContent = '✓ ALL ACCESS AKTIF'; hcTag.style.background = 'var(--green-dim)'; hcTag.style.color = 'var(--green)'; }
-            var hcHeadline = document.getElementById('hcHeadline');
-            if (hcHeadline) hcHeadline.textContent = 'Kamu sudah punya semua akses.';
-            var hcSub = document.getElementById('hcSub');
-            if (hcSub) hcSub.textContent = 'Semua kursus sudah terbuka untuk akun ini. Lanjutkan belajarmu dari dashboard kapan saja.';
-            var hcPricingBlock = document.getElementById('hcPricingBlock');
-            if (hcPricingBlock) hcPricingBlock.style.display = 'none';
-            var heroCardBtn = document.getElementById('heroCardBtn');
-            if (heroCardBtn) { heroCardBtn.textContent = 'Buka Dashboard →'; heroCardBtn.href = 'dashboard.html'; }
+            document.getElementById('marketingHome').style.display = 'none';
+            document.getElementById('loggedInHome').style.display = 'block';
+            var lihNameEl = document.getElementById('lihName');
+            if (lihNameEl) lihNameEl.textContent = name.split(' ')[0];
+
+            var enrolledSlugs = new Set((enr.data || []).map(function(e){ return e.course_slug; }));
+            var progRes = await sbClient.from('module_completions').select('course_slug,module_num,completed_at').eq('email', s.user.email).order('completed_at', { ascending: false });
+            var progressRows = progRes.data || [];
+            var progressMap = {};
+            progressRows.forEach(function(row) {
+              if (!progressMap[row.course_slug]) progressMap[row.course_slug] = new Set();
+              progressMap[row.course_slug].add(row.module_num);
+            });
+
+            // "Continue learning" = whichever course has the most recent module_completions row.
+            if (progressRows.length) {
+              var lastSlug = progressRows[0].course_slug;
+              var lastMeta = LIH_COURSES[lastSlug];
+              if (lastMeta) {
+                var lastDone = progressMap[lastSlug] ? progressMap[lastSlug].size : 0;
+                document.getElementById('lihContinueTitle').textContent = lastMeta.title;
+                document.getElementById('lihContinueMeta').textContent = lastDone + ' dari ' + lastMeta.modules + ' modul selesai';
+                document.getElementById('lihContinueBtn').href = lastMeta.contentLink;
+                document.getElementById('lihContinueWrap').style.display = 'block';
+              }
+            }
+
+            var gridHtml = '';
+            LIH_COURSE_ORDER.forEach(function(slug) {
+              var meta = LIH_COURSES[slug];
+              var doneSet = progressMap[slug];
+              var doneCount = doneSet ? doneSet.size : 0;
+              var isEnrolled = enrolledSlugs.has(slug);
+              var isDone = meta.modules > 0 && doneCount >= meta.modules;
+
+              var tagText, tagColor, countText, actionHtml;
+              if (meta.comingSoon) {
+                tagText = 'SEGERA HADIR'; tagColor = 'var(--ink-3)';
+                countText = 'Belum tersedia';
+                actionHtml = '<span class="disabled-action">Segera hadir</span>';
+              } else if (isDone) {
+                tagText = 'SELESAI'; tagColor = 'var(--green)';
+                countText = doneCount + '/' + meta.modules + ' modul';
+                actionHtml = '<a href="javascript:void(0)" class="action" onclick="lihEnrollAndGo(\'' + slug + '\',\'' + meta.contentLink + '\',true)">Ulangi →</a>';
+              } else if (doneCount > 0) {
+                tagText = 'SEDANG KAMU PELAJARI'; tagColor = 'var(--accent)';
+                countText = doneCount + '/' + meta.modules + ' modul';
+                actionHtml = '<a href="javascript:void(0)" class="action" onclick="lihEnrollAndGo(\'' + slug + '\',\'' + meta.contentLink + '\',true)">Lanjutkan →</a>';
+              } else {
+                tagText = 'BELUM DIMULAI'; tagColor = isEnrolled ? 'var(--accent)' : 'var(--ink-2)';
+                countText = meta.modules + ' modul';
+                actionHtml = '<a href="javascript:void(0)" class="action" onclick="lihEnrollAndGo(\'' + slug + '\',\'' + meta.contentLink + '\',' + isEnrolled + ')">Mulai →</a>';
+              }
+
+              gridHtml += '<div class="lih-card">' +
+                '<div class="lih-visual" style="background:var(--accent-dim);"><div class="lih-icon">' + meta.icon + '</div></div>' +
+                '<div class="lih-body">' +
+                '<div class="lih-tag" style="color:' + tagColor + ';">' + tagText + '</div>' +
+                '<h3>' + meta.title + '</h3>' +
+                '<p>' + meta.desc + '</p>' +
+                '<div class="lih-bottom"><span class="count">' + countText + '</span>' + actionHtml + '</div>' +
+                '</div></div>';
+            });
+            document.getElementById('lihCourseGrid').innerHTML = gridHtml;
           }
         } catch(e) {}
         if (btn) { btn.textContent = 'Buka Dashboard →'; btn.href = 'dashboard.html'; btn.style.background = '#6C47FF'; btn.style.color = '#fff'; }
