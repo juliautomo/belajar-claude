@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 22, 2026 (checkpoint 27)_
+_Last updated: July 22, 2026 (checkpoint 28)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -725,3 +725,11 @@ The concrete Kasual Studio-specific worked example was moved out of the abstract
 No PPT changes needed this checkpoint — the two previously PPT-only facts are now also covered in HTML/PDF, and all other wording differences in the PPT were confirmed to be acceptable simplifications of content already present in HTML/PDF, not new information.
 
 **Commits this checkpoint**: one commit covering `produktivitas-content.html` (3 small text additions/fixes). The `k2_full_pdf.html` and `build_m07.js` files live only in the sandbox `outputs/k2build/` working directory (never committed to git, per established project convention), so this checkpoint's PDF/PPT-source fixes aren't tracked in git history beyond this note.
+
+---
+
+## Checkpoint 28 (July 22, 2026)
+
+**Fixed an inaccurate product claim in M7.** The SWOT section's "Yang Perlu Dipahami" tip-box (HTML/PDF) and the PPT's "Riset & SWOT" compare-card both said "Claude tidak punya akses ke data pasar terkini" / "Claude tidak browsing internet real-time" — Julia flagged this is misleading since Claude does have web search capability. Reworded to drop the capability claim entirely and instead make the actually durable teaching point: your own first-hand observations (competitor prices you've seen, customer feedback, market signals specific to your business) produce sharper analysis than generic search results, regardless of what Claude can or can't browse. New wording applied identically to HTML and PDF, and condensed consistently into the PPT card. PPTX rebuilt and visually confirmed clean.
+
+**Commits this checkpoint**: one commit covering `produktivitas-content.html` and `K2-Produktivitas/M07-Dokumen-Riset/K2-M07-Dokumen-Riset.pptx`.
