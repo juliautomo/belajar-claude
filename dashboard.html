@@ -158,27 +158,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 .cnav-btn:hover{border-color:var(--border-strong);}
 .cnav-btn svg{width:12px;height:12px;}
 
-/* PROFILE MODAL */
-.pmodal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);backdrop-filter:blur(6px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;}
-.pmodal{background:#fff;border-radius:20px;padding:40px 36px;max-width:440px;width:100%;box-shadow:0 32px 80px rgba(0,0,0,0.16);position:relative;}
-.pmodal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;border:none;background:var(--surface-2);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink-2);transition:all 0.15s;}
-.pmodal-close:hover{background:var(--border);color:var(--ink);}
-.pmodal-close svg{width:14px;height:14px;}
-.pmodal h2{font-family:var(--serif);font-size:24px;font-weight:400;color:var(--ink);margin-bottom:6px;letter-spacing:-0.3px;}
-.pmodal-sub{font-size:13px;color:var(--ink-2);margin-bottom:28px;line-height:1.6;}
-.pmodal-step{display:none;}
-.pmodal-step.active{display:block;}
-.pmodal-q{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:14px;}
-.pmodal-opts{display:flex;flex-wrap:wrap;gap:8px;}
-.popt{padding:9px 18px;border-radius:10px;border:1.5px solid var(--border);font-size:13px;font-weight:500;color:var(--ink-2);cursor:pointer;background:#fff;transition:all 0.15s;font-family:var(--font);}
-.popt:hover{border-color:var(--accent);color:var(--ink);}
-.popt.selected{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);font-weight:600;}
-.pmodal-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;}
-.pmodal-ind{font-size:12px;color:var(--ink-3);}
-.pmodal-next{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border:none;padding:11px 28px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all 0.18s;box-shadow:0 2px 12px var(--accent-glow);}
-.pmodal-next:hover{transform:translateY(-1px);box-shadow:0 4px 20px var(--accent-glow);}
-.pmodal-next:disabled{opacity:0.3;cursor:default;transform:none;}
-
 @keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:900px){.sidebar{display:none;}.main{padding:24px 20px;}}
 </style>
@@ -206,12 +185,15 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
         </div>
       </div>
       <div class="profile-chip" style="margin-bottom:12px;"><span class="chip-dot"></span><span id="sideSince"></span></div>
-      <button class="btn-accent" style="width:100%;padding:8px 12px;font-size:12.5px;" onclick="openProfileModal(true)">Edit Profil</button>
+      <a class="btn-accent" style="width:100%;display:block;text-align:center;box-sizing:border-box;padding:8px 12px;font-size:12.5px;text-decoration:none;" href="profile.html">Edit Profil</a>
     </div>
     <div class="nav-menu">
       <div class="nav-item active">
         <span class="ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>Dashboard
       </div>
+      <a class="nav-item" href="profile.html">
+        <span class="ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>Profil
+      </a>
       <a class="nav-item" id="adminNavItem" href="admin.html" style="display:none;text-decoration:none;color:inherit;">
         <span class="ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg></span>Admin
       </a>
@@ -254,47 +236,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
   </main>
 </div>
 
-<!-- Profile Modal -->
-<div class="pmodal-overlay" id="profileModal" style="display:none;">
-  <div class="pmodal">
-    <button class="pmodal-close" onclick="document.getElementById('profileModal').style.display='none'">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-    </button>
-    <h2 id="pmodalTitle">Ceritain sedikit tentang kamu</h2>
-    <p class="pmodal-sub" id="pmodalSub">Biar Belajar Claude bisa kasih rekomendasi kursus yang paling relevan buatmu.</p>
-    <div class="pmodal-step active" id="pstep1">
-      <div class="pmodal-q">Kamu saat ini sebagai apa?</div>
-      <div class="pmodal-opts">
-        <button class="popt" data-step="1" data-val="karyawan">Karyawan</button>
-        <button class="popt" data-step="1" data-val="mahasiswa">Mahasiswa</button>
-        <button class="popt" data-step="1" data-val="pemilik-bisnis">Pemilik Bisnis / UKM</button>
-        <button class="popt" data-step="1" data-val="developer">Developer</button>
-        <button class="popt" data-step="1" data-val="kreator">Kreator Konten</button>
-      </div>
-      <div class="pmodal-nav"><span class="pmodal-ind">1 / 3</span><button class="pmodal-next" id="pnext1" onclick="nextStep(1)" disabled>Lanjut</button></div>
-    </div>
-    <div class="pmodal-step" id="pstep2">
-      <div class="pmodal-q">Apa tujuan utama kamu belajar Claude?</div>
-      <div class="pmodal-opts">
-        <button class="popt" data-step="2" data-val="efisiensi-kerja">Hemat waktu kerja</button>
-        <button class="popt" data-step="2" data-val="bisnis">Kembangkan bisnis</button>
-        <button class="popt" data-step="2" data-val="konten">Buat konten lebih cepat</button>
-        <button class="popt" data-step="2" data-val="coding">Build produk / app</button>
-        <button class="popt" data-step="2" data-val="lainnya">Eksplorasi</button>
-      </div>
-      <div class="pmodal-nav"><span class="pmodal-ind">2 / 3</span><button class="pmodal-next" id="pnext2" onclick="nextStep(2)" disabled>Lanjut</button></div>
-    </div>
-    <div class="pmodal-step" id="pstep3">
-      <div class="pmodal-q">Seberapa sering kamu pakai Claude atau AI sekarang?</div>
-      <div class="pmodal-opts">
-        <button class="popt" data-step="3" data-val="belum-pernah">Belum pernah</button>
-        <button class="popt" data-step="3" data-val="sudah-mahir">Sudah pakai rutin</button>
-      </div>
-      <div class="pmodal-nav"><span class="pmodal-ind">3 / 3</span><button class="pmodal-next" id="pnext3" onclick="saveProfile()" disabled>Simpan</button></div>
-    </div>
-  </div>
-</div>
-
 <script>
 const ALL_COURSES = {
   'prompt-gratis':    { title:'📋 20 Prompt Gratis',              icon:'📋', thumb:'et1', contentLink:'prompt-gratis-content.html', salesLink:'prompt-gratis.html', desc:'20 prompt siap pakai dalam Bahasa Indonesia.', price:'Termasuk All Access', level:'Beginner', exThumb:'ex-t1', modules:1 },
@@ -309,41 +250,6 @@ const ALL_COURSES = {
 };
 
 let progressMap = {}, userProfile = null, currentEmail = null;
-let pAnswers = { role:null, goal:null, experience:null };
-
-document.querySelectorAll('.popt').forEach(function(btn) {
-  btn.addEventListener('click', function() {
-    var step = btn.getAttribute('data-step'), val = btn.getAttribute('data-val');
-    document.querySelectorAll('[data-step="'+step+'"]').forEach(function(b){b.classList.remove('selected');});
-    btn.classList.add('selected');
-    if(step==='1'){pAnswers.role=val;document.getElementById('pnext1').disabled=false;}
-    if(step==='2'){pAnswers.goal=val;document.getElementById('pnext2').disabled=false;}
-    if(step==='3'){pAnswers.experience=val;document.getElementById('pnext3').disabled=false;}
-  });
-});
-
-function openProfileModal(editMode) {
-  pAnswers={role:(userProfile&&userProfile.role)||null,goal:(userProfile&&userProfile.goal)||null,experience:(userProfile&&userProfile.experience)||null};
-  document.getElementById('pmodalTitle').textContent=editMode?'Edit Profil Kamu':'Ceritain sedikit tentang kamu';
-  document.getElementById('pmodalSub').textContent=editMode?'Update info kamu di bawah ini.':'Biar Belajar Claude bisa kasih rekomendasi kursus yang paling relevan buatmu.';
-  ['pstep1','pstep2','pstep3'].forEach(function(id,i){document.getElementById(id).classList.toggle('active',i===0);});
-  document.querySelectorAll('[data-step="1"]').forEach(function(b){b.classList.toggle('selected',b.getAttribute('data-val')===pAnswers.role);});
-  document.querySelectorAll('[data-step="2"]').forEach(function(b){b.classList.toggle('selected',b.getAttribute('data-val')===pAnswers.goal);});
-  document.querySelectorAll('[data-step="3"]').forEach(function(b){b.classList.toggle('selected',b.getAttribute('data-val')===pAnswers.experience);});
-  document.getElementById('pnext1').disabled=!pAnswers.role;
-  document.getElementById('pnext2').disabled=!pAnswers.goal;
-  document.getElementById('pnext3').disabled=!pAnswers.experience;
-  document.getElementById('profileModal').style.display='flex';
-}
-function nextStep(n){document.getElementById('pstep'+n).classList.remove('active');document.getElementById('pstep'+(n+1)).classList.add('active');}
-async function saveProfile(){
-  document.getElementById('pnext3').textContent='Menyimpan...';document.getElementById('pnext3').disabled=true;
-  try{
-    await sbClient.from('profiles').upsert({email:currentEmail,full_name:document.getElementById('sideName').textContent,role:pAnswers.role,goal:pAnswers.goal,experience:pAnswers.experience,updated_at:new Date().toISOString()},{onConflict:'email'});
-    userProfile=Object.assign({},userProfile,pAnswers);
-  }catch(e){console.error(e);}
-  document.getElementById('profileModal').style.display='none';
-}
 
 async function loadProgress(email){
   try{
@@ -444,8 +350,6 @@ async function _init(){
   var allAccessRow=rawEnrollments.find(function(e){return e.course_slug==='all-access';});
   var enrollments=paketExpanded.filter(function(e){return ALL_COURSES[e.course_slug];});
   var enrolledSlugs=new Set(enrollments.map(function(e){return e.course_slug;}));
-
-  if(!userProfile||!userProfile.role)setTimeout(function(){openProfileModal(false);},800);
 
   var activeCourses=[],completedCourses=[],totalModules=0;
   Object.keys(progressMap).forEach(function(slug){totalModules+=(progressMap[slug]&&progressMap[slug].size)||0;});
