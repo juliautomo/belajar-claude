@@ -538,15 +538,15 @@ async function _init(){
   });
   if(paketVisible) document.getElementById('paketNavSection').style.display='block';
 
-  var unenrolled=Object.keys(ALL_COURSES).filter(function(slug){return!enrolledSlugs.has(slug);});
+  // Coming-soon (not-yet-launched) courses stay hidden here entirely, even when
+  // unenrolled — same "hidden means hidden" rule as everywhere else on the site.
+  var unenrolled=Object.keys(ALL_COURSES).filter(function(slug){return!enrolledSlugs.has(slug)&&!ALL_COURSES[slug].comingSoon;});
   if(unenrolled.length>0){
     document.getElementById('exploreSection').style.display='block';
     var grid=document.getElementById('exploreGrid');
     unenrolled.forEach(function(slug){
       var meta=ALL_COURSES[slug];
-      var cta=meta.comingSoon
-        ?'<button class="btn-notify" onclick="notifyMe(this,\''+slug+'\')">Beritahu saya</button>'
-        :allAccessRow
+      var cta=allAccessRow
           ?'<button class="btn-view" onclick="enrollCourse(this,\''+slug+'\')">Mulai Kursus &rarr;</button>'
           :'<a href="'+meta.salesLink+'" class="btn-view">Lihat Kursus &rarr;</a>';
       grid.innerHTML+='<div class="explore-card">'
