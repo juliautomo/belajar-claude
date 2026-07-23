@@ -39,7 +39,8 @@ h1.page-title { font-family: var(--serif); font-size: 30px; font-weight: 400; le
 .sidebar-link:hover { background: var(--surface-2); color: var(--ink); }
 .sidebar-link.active { background: var(--accent-dim); color: var(--accent); }
 .sidebar-link .ic { font-size: 15px; width: 18px; text-align: center; }
-.content-area { flex: 1; margin-left: 220px; padding: 32px 32px 64px; max-width: 760px; }
+.content-area { flex: 1; margin-left: 220px; padding: 32px 32px 64px; max-width: 940px; }
+.content-area .panel:not(#panel-content) { max-width: 760px; }
 .panel { display: none; }
 .panel.active { display: block; }
 @media (max-width: 780px) {
@@ -104,10 +105,21 @@ td a:hover { text-decoration: underline; }
 .gate p { font-size: 13.5px; color: var(--ink-2); line-height: 1.6; margin-bottom: 18px; }
 .gate a.btn { display: inline-block; text-decoration: none; text-align: center; }
 
-.course-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-.tab-btn { padding: 9px 16px; border-radius: 10px; border: 1.5px solid var(--border); background: #fff; font-size: 13px; font-weight: 600; color: var(--ink-2); cursor: pointer; font-family: inherit; transition: all 0.15s; }
-.tab-btn:hover { border-color: var(--border-strong); color: var(--ink); }
-.tab-btn.active { background: var(--ink); border-color: var(--ink); color: #fff; }
+.content-split { display: flex; gap: 24px; align-items: flex-start; }
+.course-subnav { width: 210px; flex-shrink: 0; position: sticky; top: 90px; }
+.subnav-group-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--ink-3); margin: 18px 4px 8px; }
+.subnav-group-label:first-child { margin-top: 0; }
+.subnav-item { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 10px; font-size: 13px; font-weight: 600; color: var(--ink-2); cursor: pointer; margin-bottom: 3px; border: none; background: none; width: 100%; text-align: left; font-family: inherit; transition: all 0.15s; }
+.subnav-item:hover { background: var(--surface-2); color: var(--ink); }
+.subnav-item.active { background: var(--ink); color: #fff; }
+.subnav-item .tag-soon { font-size: 9px; font-weight: 700; background: var(--surface-2); color: var(--ink-2); padding: 2px 7px; border-radius: 100px; margin-left: auto; flex-shrink: 0; }
+.subnav-item.active .tag-soon { background: rgba(255,255,255,0.18); color: #fff; }
+.course-detail { flex: 1; min-width: 0; }
+@media (max-width: 860px) {
+  .content-split { flex-direction: column; }
+  .course-subnav { width: 100%; position: static; display: flex; flex-wrap: wrap; gap: 6px; }
+  .subnav-group-label { width: 100%; margin: 8px 4px 4px; }
+}
 .pdf-status { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13.5px; }
 .pdf-status a { color: var(--accent); text-decoration: none; font-weight: 600; }
 .pdf-status a:hover { text-decoration: underline; }
@@ -206,21 +218,25 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
       <h1 class="page-title">Course Content</h1>
       <p class="page-sub">Unggah PDF, video, PPT, dan dokumen praktik per modul — tampil langsung di halaman kursus, tidak perlu deploy ulang.</p>
 
-      <div class="course-tabs" id="courseTabs"></div>
+      <div class="content-split">
+        <div class="course-subnav" id="courseSubnav"></div>
 
-      <div class="card">
-        <h2>PDF Kursus</h2>
-        <p class="hint">Satu PDF untuk keseluruhan kursus ini (mis. panduan/lembar prompt). Mengunggah file baru akan menggantikan yang lama.</p>
-        <div class="pdf-status" id="pdfRow">Memuat...</div>
-      </div>
+        <div class="course-detail">
+          <div class="card">
+            <h2>PDF Kursus</h2>
+            <p class="hint">Satu PDF untuk keseluruhan kursus ini (mis. panduan/lembar prompt). Mengunggah file baru akan menggantikan yang lama.</p>
+            <div class="pdf-status" id="pdfRow">Memuat...</div>
+          </div>
 
-      <div class="card">
-        <h2 id="matrixCourseTitle">Konten per Modul</h2>
-        <p class="hint">Klik sel yang sudah terisi untuk lihat/ganti filenya, atau klik "+ Unggah" untuk yang masih kosong.</p>
-        <table class="matrix-table" id="matrixTable">
-          <thead><tr><th>Modul</th><th>Video</th><th>PPT</th><th>Dokumen</th></tr></thead>
-          <tbody id="matrixBody"><tr><td colspan="4">Memuat...</td></tr></tbody>
-        </table>
+          <div class="card">
+            <h2 id="matrixCourseTitle">Konten per Modul</h2>
+            <p class="hint">Klik sel yang sudah terisi untuk lihat/ganti filenya, atau klik "+ Unggah" untuk yang masih kosong.</p>
+            <table class="matrix-table" id="matrixTable">
+              <thead><tr><th>Modul</th><th>Video</th><th>PPT</th><th>Dokumen</th></tr></thead>
+              <tbody id="matrixBody"><tr><td colspan="4">Memuat...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -322,6 +338,13 @@ const COURSES = [
   { slug: 'mulai-claude',       name: 'Mulai dengan Claude AI',          modules: 6 },
   { slug: 'produktivitas',      name: 'Produktivitas Kantor',            modules: 7 },
   { slug: 'content-marketing',  name: 'Content & Marketing',             modules: 9 },
+  // Coming-soon courses — placeholders so content can be prepped ahead of launch.
+  // Slugs/module counts match ALL_COURSES in dashboard.html.
+  { slug: 'analisis-data',      name: 'Analisis Data & Laporan',         modules: 6, comingSoon: true },
+  { slug: 'build-automation',   name: 'Automasi Workflow',               modules: 7, comingSoon: true },
+  { slug: 'ai-powered-app',     name: 'Build AI App Sederhana',          modules: 7, comingSoon: true },
+  { slug: 'claude-api-dev',     name: 'Claude API untuk Developer',      modules: 7, comingSoon: true },
+  { slug: 'jual-produk-ai',     name: 'Build & Monetisasi Produk AI',    modules: 7, comingSoon: true },
 ];
 
 const MODULE_TITLES = {
@@ -511,13 +534,24 @@ function renderAccessList() {
   }).join('');
 }
 
-// ─── TABS ────────────────────────────────────────────────────────────────────
+// ─── COURSE SUB-NAVIGATION ───────────────────────────────────────────────────
+
+function subnavItemHtml(c) {
+  return '<button class="subnav-item' + (c.slug === activeCourse ? ' active' : '') + '" onclick="switchCourse(\'' + c.slug + '\')">' +
+    '<span>' + escapeHtml(c.name) + '</span>' +
+    (c.comingSoon ? '<span class="tag-soon">Segera Hadir</span>' : '') +
+    '</button>';
+}
 
 function renderCourseTabs() {
-  var el = document.getElementById('courseTabs');
-  el.innerHTML = COURSES.map(function (c) {
-    return '<button class="tab-btn' + (c.slug === activeCourse ? ' active' : '') + '" onclick="switchCourse(\'' + c.slug + '\')">' + escapeHtml(c.name) + '</button>';
-  }).join('');
+  var el = document.getElementById('courseSubnav');
+  var live = COURSES.filter(function (c) { return !c.comingSoon; });
+  var soon = COURSES.filter(function (c) { return c.comingSoon; });
+  var html = '<div class="subnav-group-label">Tersedia</div>' + live.map(subnavItemHtml).join('');
+  if (soon.length) {
+    html += '<div class="subnav-group-label">Segera Hadir</div>' + soon.map(subnavItemHtml).join('');
+  }
+  el.innerHTML = html;
 }
 
 function switchCourse(slug) {
