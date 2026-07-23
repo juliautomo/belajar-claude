@@ -936,20 +936,20 @@ saya export ke Google Docs.<button class="copy-btn" onclick="copyPrompt(this)">S
           </div>
         </div>
 
-        <div class="next-label">Lanjutkan Belajar</div>
-        <a href="produktivitas.html" class="next-card">
+        <div class="next-label">Lanjutkan Belajar (sudah termasuk All Access kamu)</div>
+        <a href="produktivitas-content.html" class="next-card">
           <span class="next-icon">💼</span>
           <div class="next-info">
             <h4>Produktivitas Kantor</h4>
-            <p>Hemat 3–5 jam kerja per minggu · Role Prompting, Gmail, Sheets, Docs · Rp 149K</p>
+            <p>Hemat 3–5 jam kerja per minggu · Role Prompting, Gmail, Sheets, Docs</p>
           </div>
           <span class="next-arrow">→</span>
         </a>
-        <a href="content-marketing.html" class="next-card">
+        <a href="content-marketing-content.html" class="next-card">
           <span class="next-icon">🏪</span>
           <div class="next-info">
             <h4>Content & Marketing</h4>
-            <p>Positioning, konten, iklan, CS WhatsApp, analisis performa · Rp 149K</p>
+            <p>Positioning, konten, iklan, CS WhatsApp, analisis performa</p>
           </div>
           <span class="next-arrow">→</span>
         </a>
@@ -1009,20 +1009,25 @@ saya export ke Google Docs.<button class="copy-btn" onclick="copyPrompt(this)">S
   const TOTAL = 7;
   let current = 1;
   const done = new Set();
+  const ADMIN_EMAILS = ['julia.utomo@gmail.com', 'tiffany.utomo@gmail.com'];
 
   async function init() {
     const { data: { session } } = await sbClient.auth.getSession();
     if (!session) { window.location.href = 'login.html'; return; }
-    document.getElementById('navEmail').textContent = session.user.email;
+    const email = session.user.email;
+
+    // 'Mulai dengan Claude AI' is now included in All Access only (previously free
+    // for any logged-in user) — see CONTEXT.md payment restructure notes. Legacy
+    // free 'mulai-claude' enrollment rows from before this change are intentionally
+    // NOT honored here, only a real 'all-access' row grants entry. Admins bypass.
+    if (!ADMIN_EMAILS.includes(email)) {
+      const { data: existing } = await sbClient.from('enrollments').select('course_slug').eq('email', email).eq('course_slug', 'all-access');
+      if (!existing || existing.length === 0) { window.location.href = 'all-access.html'; return; }
+    }
+
+    document.getElementById('navEmail').textContent = email;
     document.getElementById('loadingScreen').style.display = 'none';
     document.getElementById('mainLayout').style.display = 'flex';
-
-    try {
-      await sbClient.from('enrollments').upsert({
-        email: session.user.email, course_slug: 'mulai-claude',
-        course_name: 'Mulai dengan Claude AI', type: 'free',
-      }, { onConflict: 'email,course_slug', ignoreDuplicates: true });
-    } catch (e) {}
 
     // Restore saved progress from Supabase
     try {

@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 23, 2026 (checkpoint 33)_
+_Last updated: July 23, 2026 (checkpoint 34)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -62,6 +62,23 @@ Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign 
 - Verified the discount-window math (no row / base only / always-on discount / active window / expired window / future window) against the exact formula used in both `index.js` and `admin.html` — all 6 cases pass.
 
 **Deliberately out of scope this pass:** per-course/paket pricing control (only `all-access` is admin-editable), any kind of promo-code system, and automatic email/notification when a discount starts or ends.
+
+## SHIPPED (Checkpoint 34, July 23, 2026): All Access Is Now the Only Paid Path
+
+**Status: live.** Follow-up to Checkpoints 32/33. Julia's direction: "no more single price... the rest should be included in the all course bundle." Single-course and paket purchases are fully retired — **All Access (Rp 399K, admin-editable) is the only thing for sale.** Only "20 Prompt Gratis" stays genuinely free/standalone.
+
+**Key decision: "Dasar Claude AI" (`mulai-claude`) moved from free to All-Access-only.** It was previously open to any logged-in user (auto-enrolled with a free `enrollments` row on first visit). Julia chose to gate it behind All Access rather than keep it as a second free course.
+
+**What shipped:**
+- `index.js`: `/create-payment` now rejects any `courseSlug` other than `'all-access'` (HTTP 410, Indonesian error message pointing to All Access). The `COURSES` catalog object itself is untouched — other slugs stay in it as inert historical metadata (name/price lookups for old enrollment rows), they're just no longer purchasable through the endpoint.
+- `mulai-claude-content.html`: removed the auto free-enrollment upsert in `init()`. Added a real access gate — **checks only for an `all-access` enrollment row**, not the legacy free `mulai-claude` row, so old auto-granted access no longer counts. Admins bypass as usual. Redirects to `all-access.html` if missing.
+- `dashboard.html`: added a filter so a legacy free `mulai-claude` row (from before this change) is dropped from `rawEnrollments` unless the user also has a real `all-access` row — otherwise the dashboard would show "enrolled" for a course the content-page gate now blocks. Real all-access owners still get `mulai-claude` back automatically via the existing all-access expansion. `ALL_COURSES` entries for `mulai-claude`/`produktivitas`/`content-marketing` now have `salesLink: 'all-access.html'` (direct, skips the redirect-stub hop) and `price: 'Termasuk All Access'`; the 5 coming-soon courses got the same price-label treatment for consistency (they were never individually purchasable via the UI, but the explore-card price text was stale).
+- **8 pages replaced with redirect stubs** (`<meta http-equiv="refresh">` + `window.location.replace`, both pointing to `all-access.html`): `mulai-claude.html`, `produktivitas.html`, `content-marketing.html`, `kursus-karyawan.html`, `kursus-mahasiswa.html`, `kursus-ukm.html`, `paket-content-creator.html`, and the stale unwired `paket.html` mockup flagged in Checkpoint 32 (now cleaned up rather than left dangling with a conflicting fake price). Old bookmarked/shared links to any of these still resolve, just via one extra hop.
+- `index.html`: course carousel badges for "Dasar Claude AI" / "Produktivitas Kantor" / "Content & Marketing" changed from FREE/priced to a purple "ALL ACCESS" badge + "✨ Termasuk All Access" footer text, all three linking straight to `all-access.html`. `section-sub` copy rewritten. The All Access promo banner's price (`#allaccessBannerPrice`) now fetches live from `course_pricing` on page load instead of a hardcoded "Rp 399K" string, same discount-window logic as `all-access.html`/`admin.html`.
+- Cross-sell "Lanjutkan Belajar" cards updated across content pages: `prompt-gratis-content.html`'s card to "Mulai dengan Claude AI" now points to `all-access.html` (it's a genuine upsell — most visitors here don't own all-access yet) with copy no longer claiming it's free. `mulai-claude-content.html`'s and `produktivitas-content.html`'s next-course cards now link straight to the *content* pages (`produktivitas-content.html`, `content-marketing-content.html`) instead of sales pages, since anyone reaching those cards already has access (worst case, an unauthorized visitor just bounces through the content page's own gate back to `all-access.html` — no broken state either way).
+- Verified with a repo-wide grep: **zero remaining references** to any of the 8 retired page filenames anywhere in the codebase outside the stubs' own self-referential meta tags, and zero remaining `courseSlug: 'produktivitas'`/`'content-marketing'`/`'mulai-claude'`/`'paket-*'` payment calls.
+
+**Deliberately not done — flagged for Julia:** existing legacy free `mulai-claude` enrollment rows (auto-granted to anyone who ever visited the course before this change) were **not deleted from the database** — they're just no longer honored for access. This is the safer, reversible choice; if Julia wants a full data cleanup (e.g. to keep the `enrollments` table tidy or for reporting accuracy), that's a separate, explicit ask since it touches user data.
 
 **Original architecture notes (still accurate, kept for reference):**
 - Payment gateway: Duitku (not Stripe/Midtrans/Xendit — confirmed from `belajar-claude-backend/index.js`).
@@ -132,6 +149,7 @@ All pages use these CSS variables:
 | `course_resources` | course_slug (PK), pdf_url, pdf_label, updated_by | Admin-managed PDF resource per course |
 | `module_videos` | course_slug, module_num (PK), video_url, updated_by | Admin-managed video per course module |
 | `module_documents` | id (PK), course_slug, module_num, doc_url, doc_path, doc_label | Admin-managed practice-session document(s) per module — multiple allowed |
+| `course_pricing` | course_slug (PK), base_price, discount_price, discount_start, discount_end, updated_by | Admin-editable price/scheduled discount, currently only an `all-access` row — added Checkpoint 33 |
 
 ---
 
@@ -141,17 +159,17 @@ All pages use these CSS variables:
 | File | Purpose |
 |------|---------|
 | `index.html` | Landing page — hero, jalur belajar grid, course carousel, CTA |
-| `mulai-claude.html` | Sales page for "Mulai dengan Claude AI" (free) |
-| `produktivitas.html` | Sales page — K2 · Produktivitas Kantor — Rp 149K (7 modules; M8 Case Study archived, see Checkpoint 25) |
+| `mulai-claude.html` | **Redirect stub → `all-access.html`** as of Checkpoint 34 (was: sales page for the now-retired free "Mulai dengan Claude AI") |
+| `produktivitas.html` | **Redirect stub → `all-access.html`** as of Checkpoint 34 (was: sales page — K2 · Produktivitas Kantor, Rp 149K individually; M8 Case Study archive history still applies to `produktivitas-content.html`, see Checkpoint 25) |
 | `kerja-sehari-hari.html` | DELETED from repo (July 14, 2026) |
-| `content-marketing.html` | Sales page — Content & Marketing — Rp 149K (9 modules; renamed from bisnis-ukm.html checkpoint 11) |
-| `prompt-gratis.html` | Sales page for free prompt guide |
-| `kursus-karyawan.html` | Jalur Profesional page |
-| `kursus-mahasiswa.html` | Jalur Mahasiswa page |
-| `kursus-ukm.html` | Jalur UKM page |
-| `paket.html` | Stale unwired mockup pricing page — not connected to real backend/prices, see Checkpoint 32 |
-| `paket-content-creator.html` | Paket Content Creator page |
-| `all-access.html` | Sales/checkout page for the one-time all-access SKU, added Checkpoint 32; price/discount fetched live from `course_pricing` as of Checkpoint 33 (default Rp 399K) |
+| `content-marketing.html` | **Redirect stub → `all-access.html`** as of Checkpoint 34 (was: sales page — Content & Marketing, Rp 149K individually; renamed from bisnis-ukm.html checkpoint 11) |
+| `prompt-gratis.html` | Sales page for free prompt guide — still genuinely free/standalone, unaffected by Checkpoint 34 |
+| `kursus-karyawan.html` | **Redirect stub → `all-access.html`** as of Checkpoint 34 (was: Jalur Profesional paket page) |
+| `kursus-mahasiswa.html` | **Redirect stub → `all-access.html`** as of Checkpoint 34 (was: Jalur Mahasiswa paket page) |
+| `kursus-ukm.html` | **Redirect stub → `all-access.html`** as of Checkpoint 34 (was: Jalur UKM paket page) |
+| `paket.html` | **Redirect stub → `all-access.html`** as of Checkpoint 34 (was: stale unwired mockup pricing page flagged in Checkpoint 32) |
+| `paket-content-creator.html` | **Redirect stub → `all-access.html`** as of Checkpoint 34 (was: Paket Content Creator page) |
+| `all-access.html` | The only checkout page now — sales/checkout for the one-time all-access SKU, added Checkpoint 32; price/discount fetched live from `course_pricing` as of Checkpoint 33 (default Rp 399K) |
 | `coming-soon.html` | Placeholder for unreleased courses |
 
 ### App
@@ -161,7 +179,7 @@ All pages use these CSS variables:
 | `reset-password.html` | Password recovery page — handles both PKCE (`?code=` in URL) and implicit (`#access_token`) flows. Calls `updateUser({ password })`. Added + fixed July 11, 2026. |
 | `dashboard.html` | Main user dashboard |
 | `prompt-gratis-content.html` | Course reader — 5 modules + feedback panel |
-| `mulai-claude-content.html` | Course reader — 6 modules + feedback panel |
+| `mulai-claude-content.html` | Course reader — 6 modules + feedback panel. **Gated to `all-access` enrollment only as of Checkpoint 34** (previously open to any logged-in user, auto-enrolled free) |
 | `produktivitas-content.html` | Course reader — K2, 7 active modules + feedback panel (COURSE_SLUG='produktivitas'); M8 Case Study content preserved but archived/unreachable, see Checkpoint 25 |
 | `kerja-sehari-hari-content.html` | DELETED from repo (July 14, 2026) |
 | `content-marketing-content.html` | Course reader — 9 modules + feedback panel (COURSE_SLUG='content-marketing'; renamed from bisnis-ukm-content.html checkpoint 11) |
