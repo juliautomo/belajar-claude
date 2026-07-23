@@ -187,12 +187,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 
 <nav>
   <a class="brand" href="index.html">belajar<span>claude</span></a>
-  <div class="nav-right">
-    <div class="nav-avatar" id="navAvatar">—</div>
-    <span class="nav-uname" id="navUname"></span>
-    <button class="btn-nav" onclick="logout()">Keluar</button>
-    <button class="btn-accent" onclick="openProfileModal(true)">Edit Profil</button>
-  </div>
 </nav>
 
 <div id="loadingScreen" class="loading-screen" style="padding-top:120px;">Memuat dashboard...</div>
@@ -201,9 +195,18 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
   <aside class="sidebar">
     <div class="profile-block">
       <div class="profile-sec-label">Akun</div>
-      <div class="profile-name" id="sideName"></div>
-      <div class="profile-email" id="sideEmail"></div>
-      <div class="profile-chip"><span class="chip-dot"></span><span id="sideSince"></span></div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+        <div class="nav-avatar" id="navAvatar" style="width:36px;height:36px;font-size:14px;">—</div>
+        <div style="min-width:0;">
+          <div class="profile-name" id="sideName" style="margin-bottom:0;"></div>
+          <div class="profile-email" id="sideEmail" style="margin-bottom:0;"></div>
+        </div>
+      </div>
+      <div class="profile-chip" style="margin-bottom:12px;"><span class="chip-dot"></span><span id="sideSince"></span></div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-accent" style="flex:1;padding:8px 12px;font-size:12.5px;" onclick="openProfileModal(true)">Edit Profil</button>
+        <button class="btn-nav" style="padding:8px 12px;font-size:12.5px;" onclick="logout()">Keluar</button>
+      </div>
     </div>
     <div class="nav-menu">
       <div class="nav-item active">
@@ -409,7 +412,6 @@ async function _init(){
   var joinDate=new Date(session.user.created_at).toLocaleDateString('id-ID',{month:'long',year:'numeric'});
   var initials=getInitials(name);
   document.getElementById('navAvatar').textContent=initials;
-  document.getElementById('navUname').textContent=name;
   document.getElementById('sideName').textContent=name;
   document.getElementById('sideEmail').textContent=currentEmail;
   document.getElementById('sideSince').textContent='Bergabung '+joinDate;

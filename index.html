@@ -263,6 +263,13 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         <div id="lihContinueLabel" style="font-size:11px;font-weight:700;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:10px;position:relative;">TERAKHIR DIBUKA</div>
         <h2 id="lihContinueHeadline">Nama Kursus</h2>
         <p id="lihContinueSub">Kamu punya akses ke semua kursus — mulai belajar sekarang.</p>
+        <div id="lihContinueProgressWrap" style="display:none;align-items:center;gap:10px;margin-top:12px;max-width:300px;position:relative;">
+          <span id="lihContinueProgressPct" style="font-size:13px;font-weight:700;color:var(--accent-2);white-space:nowrap;min-width:34px;"></span>
+          <div style="flex:1;height:5px;background:rgba(255,255,255,0.15);border-radius:10px;overflow:hidden;">
+            <div id="lihContinueProgressFill" style="height:100%;width:0%;background:var(--accent-2);border-radius:10px;transition:width 0.5s;"></div>
+          </div>
+          <span id="lihContinueProgressCount" style="font-size:12px;color:rgba(255,255,255,0.5);white-space:nowrap;"></span>
+        </div>
       </div>
       <a href="dashboard.html" class="cta-btn" id="lihContinueBtn">Buka Dashboard →</a>
     </div>
@@ -412,15 +419,26 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
             var lihHeadlineEl = document.getElementById('lihContinueHeadline');
             var lihSubEl = document.getElementById('lihContinueSub');
             var lihBtnEl = document.getElementById('lihContinueBtn');
+            var lihProgressWrap = document.getElementById('lihContinueProgressWrap');
+            var lihProgressPct = document.getElementById('lihContinueProgressPct');
+            var lihProgressFill = document.getElementById('lihContinueProgressFill');
+            var lihProgressCount = document.getElementById('lihContinueProgressCount');
             if (lastMeta && enrolledSlugs.has(lastSlug)) {
               var lastDone = progressMap[lastSlug] ? progressMap[lastSlug].size : 0;
+              var lastPct = lastMeta.modules ? Math.round((lastDone / lastMeta.modules) * 100) : 0;
               if (lihLabelEl) lihLabelEl.textContent = 'TERAKHIR DIBUKA';
               if (lihHeadlineEl) lihHeadlineEl.textContent = lastMeta.title;
-              if (lihSubEl) lihSubEl.textContent = lastDone + ' dari ' + lastMeta.modules + ' modul selesai';
+              if (lihSubEl) lihSubEl.style.display = 'none';
+              if (lihProgressWrap) lihProgressWrap.style.display = 'flex';
+              if (lihProgressPct) lihProgressPct.textContent = lastPct + '%';
+              if (lihProgressFill) lihProgressFill.style.width = lastPct + '%';
+              if (lihProgressCount) lihProgressCount.textContent = lastDone + '/' + lastMeta.modules + ' modul';
               if (lihBtnEl) { lihBtnEl.textContent = 'Lanjutkan →'; lihBtnEl.setAttribute('href', lastMeta.contentLink); }
             } else {
               // No real progress/enrollment to continue — suggest the first live course
               // they haven't enrolled in yet instead of a generic "everything's unlocked" line.
+              if (lihSubEl) lihSubEl.style.display = '';
+              if (lihProgressWrap) lihProgressWrap.style.display = 'none';
               var suggestSlug = LIH_COURSE_ORDER.find(function(slug) { return !LIH_COURSES[slug].comingSoon && !enrolledSlugs.has(slug); });
               var suggestMeta = suggestSlug ? LIH_COURSES[suggestSlug] : null;
               if (suggestMeta) {

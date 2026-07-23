@@ -1546,6 +1546,7 @@ yang bisa saya buka lagi setiap hari kerja padat berikutnya.<button class="copy-
   }
 
   function showModule(n) {
+    const from = current;
     document.getElementById('panel' + current).classList.remove('active');
     document.getElementById('nav-mod' + current).classList.remove('active');
     current = n;
@@ -1553,12 +1554,14 @@ yang bisa saya buka lagi setiap hari kerja padat berikutnya.<button class="copy-
     document.getElementById('nav-mod' + n).classList.add('active');
     document.querySelector('.main').scrollTo(0, 0);
 
-    // Mark previous content module done
-    const prev = n - 1;
-    if (prev >= 1 && prev <= CONTENT_MODULES && !done.has(prev)) {
-      done.add(prev);
-      markDone(prev);
-      saveCompletion(prev);
+    // Mark the module you're actually navigating AWAY from as done — not
+    // blindly n-1, which wrongly marks an unvisited module when jumping
+    // ahead multiple modules (e.g. module 1 -> module 7 would falsely mark
+    // module 6 as complete even though it was never opened).
+    if (from >= 1 && from <= CONTENT_MODULES && !done.has(from)) {
+      done.add(from);
+      markDone(from);
+      saveCompletion(from);
       updateProgress();
     }
   }
