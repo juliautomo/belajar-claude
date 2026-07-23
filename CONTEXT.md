@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 23, 2026 (checkpoint 34)_
+_Last updated: July 23, 2026 (checkpoint 35)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -101,6 +101,27 @@ Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign 
 
 ---
 
+## SHIPPED (Checkpoint 35, July 23, 2026): index.html Redesign + "20 Prompt Gratis" Gated Too
+
+**Status: live.** Two changes, previewed as an HTML mockup in-chat before implementation (per Julia's request) and approved before building.
+
+**1. `index.html` hero + course section redesigned.** Replaced the old single-column hero + paginated 2-page course carousel with a new layout (structure borrowed from a reference file Julia provided, reskinned with our actual fonts/colors — Instrument Serif headlines, Geist body, `#6C47FF` purple, existing `--bg`/`--surface`/`--border` variables, no new fonts introduced):
+- Hero is now a 2-column split: headline + actions on the left, an All Access pricing card on the right (price synced live from `course_pricing`, same pattern as the old banner it replaces).
+- New 3-column "value strip" (Semua kursus / Sekali bayar / Kursus baru termasuk) between hero and course library.
+- Course library is now a single non-paginated grid (5 cards: 20 Prompt Gratis, Dasar Claude AI, Produktivitas Kantor, Content & Marketing, all tagged "ALL ACCESS", plus one generic "Kursus Berikutnya" card covering the coming-soon courses **without a specific count** — Julia explicitly didn't want a number like "+4" committed in copy since the coming-soon lineup isn't fixed). The old carousel pagination (`gotoCoursePage`, prev/next buttons, dots, 2-page split) was removed entirely since everything now fits in one grid.
+- Bottom CTA changed from a full-bleed dark section to a contained rounded dark card, plus a new 2-item "reassurance" section beneath it. Personalization JS (logged-in users see "Buka Dashboard" + progress-aware subtext) is unchanged, just re-pointed at the new markup.
+
+**2. "20 Prompt Gratis" (`prompt-gratis`) moved from free to All-Access-only** — the last remaining free course, following the same pattern as `mulai-claude` in Checkpoint 34. The platform now has **zero free course content**; only account creation/signup itself stays free (confirmed with Julia — signup still works via the shared login modal's Daftar tab, independent of any single page).
+- `index.js` `/signup`: removed the auto-enrollment insert into `prompt-gratis` (account creation via `createSupabaseUser` is untouched).
+- `dashboard.html`: removed the per-visit auto-upsert of a free `prompt-gratis` enrollment row that ran in `_init()` on every dashboard load. Extended the "drop legacy free rows unless real all-access" filter (introduced in Checkpoint 34 for `mulai-claude`) to also cover `prompt-gratis` — `LEGACY_FREE_SLUGS = ['mulai-claude', 'prompt-gratis']`. `ALL_COURSES.prompt-gratis` now has `salesLink: 'all-access.html'` and `price: 'Termasuk All Access'`.
+- `prompt-gratis-content.html`: added a real access gate (previously had none beyond requiring login) — checks only for a real `all-access` enrollment row, not legacy free `prompt-gratis` rows, admins bypass. Redirects to `all-access.html` if missing.
+- `prompt-gratis.html` replaced with a redirect stub → `all-access.html`, same pattern as the 8 pages retired in Checkpoint 34.
+- **Admin entry-point check**: `prompt-gratis.html` used to be documented as the site's only path to `admin.html` (hidden nav link, admin-email-gated). Verified before retiring the page that `index.html` already has its own independent, working `navAdminLink` with the same admin-email check — so admin access was not lost. (`dashboard.html` also has its own admin nav item.) This was a stale cross-reference in CONTEXT.md's Pages table, corrected here.
+
+**Deliberately not done — same as Checkpoint 34:** legacy free `prompt-gratis` enrollment rows (and now there could be a lot of them, since the dashboard auto-granted one on every visit for a long time) were **not deleted from the database**, only no longer honored for access. Flagging again in case Julia wants a cleanup pass at some point.
+
+---
+
 ## Design System (as of June 2026)
 All pages use these CSS variables:
 ```css
@@ -142,7 +163,7 @@ All pages use these CSS variables:
 | Table | Key Columns | Notes |
 |-------|-------------|-------|
 | `profiles` | email (PK), full_name, role, goal, experience | Filled via profile modal on dashboard |
-| `enrollments` | email, course_slug, type (free/paid), enrolled_at | Auto-enroll to `prompt-gratis` on login |
+| `enrollments` | email, course_slug, type (free/paid), enrolled_at | No more free auto-enroll as of Checkpoint 35 — only a real `all-access` row grants course access; legacy free `prompt-gratis`/`mulai-claude` rows from before Checkpoints 34/35 still exist but aren't honored |
 | `module_completions` | email, course_slug, module_num | Tracks per-module progress |
 | `course_feedback` | email, course_slug, rating (1-5), comment | Unique per email+course |
 | `waitlist` | email, course_slug | "Beritahu saya" signups for coming-soon courses |
@@ -163,7 +184,7 @@ All pages use these CSS variables:
 | `produktivitas.html` | **Redirect stub → `all-access.html`** as of Checkpoint 34 (was: sales page — K2 · Produktivitas Kantor, Rp 149K individually; M8 Case Study archive history still applies to `produktivitas-content.html`, see Checkpoint 25) |
 | `kerja-sehari-hari.html` | DELETED from repo (July 14, 2026) |
 | `content-marketing.html` | **Redirect stub → `all-access.html`** as of Checkpoint 34 (was: sales page — Content & Marketing, Rp 149K individually; renamed from bisnis-ukm.html checkpoint 11) |
-| `prompt-gratis.html` | Sales page for free prompt guide — still genuinely free/standalone, unaffected by Checkpoint 34 |
+| `prompt-gratis.html` | **Redirect stub → `all-access.html`** as of Checkpoint 35 (was: sales page for the now-retired free "20 Prompt Gratis" guide) |
 | `kursus-karyawan.html` | **Redirect stub → `all-access.html`** as of Checkpoint 34 (was: Jalur Profesional paket page) |
 | `kursus-mahasiswa.html` | **Redirect stub → `all-access.html`** as of Checkpoint 34 (was: Jalur Mahasiswa paket page) |
 | `kursus-ukm.html` | **Redirect stub → `all-access.html`** as of Checkpoint 34 (was: Jalur UKM paket page) |
@@ -178,13 +199,13 @@ All pages use these CSS variables:
 | `login.html` | Auth page — email + password (Masuk / Daftar tabs + Lupa password? view). Replaced magic link July 11, 2026. |
 | `reset-password.html` | Password recovery page — handles both PKCE (`?code=` in URL) and implicit (`#access_token`) flows. Calls `updateUser({ password })`. Added + fixed July 11, 2026. |
 | `dashboard.html` | Main user dashboard |
-| `prompt-gratis-content.html` | Course reader — 5 modules + feedback panel |
+| `prompt-gratis-content.html` | Course reader — 5 modules + feedback panel. **Gated to `all-access` enrollment only as of Checkpoint 35** (previously open to any logged-in user via a now-removed server-side auto-enroll on signup) |
 | `mulai-claude-content.html` | Course reader — 6 modules + feedback panel. **Gated to `all-access` enrollment only as of Checkpoint 34** (previously open to any logged-in user, auto-enrolled free) |
 | `produktivitas-content.html` | Course reader — K2, 7 active modules + feedback panel (COURSE_SLUG='produktivitas'); M8 Case Study content preserved but archived/unreachable, see Checkpoint 25 |
 | `kerja-sehari-hari-content.html` | DELETED from repo (July 14, 2026) |
 | `content-marketing-content.html` | Course reader — 9 modules + feedback panel (COURSE_SLUG='content-marketing'; renamed from bisnis-ukm-content.html checkpoint 11) |
 | `payment-success.html` | Post-payment confirmation |
-| `admin.html` | Admin-only content manager — upload course PDFs + per-module videos to Supabase Storage. Gated to `julia.utomo@gmail.com` / `tiffany.utomo@gmail.com` via session email check. Linked from a hidden "Admin" nav item on `prompt-gratis.html` (shown only to those emails). |
+| `admin.html` | Admin-only content manager — upload course PDFs + per-module videos to Supabase Storage, plus the "Harga All Access" pricing/discount panel (Checkpoint 33). Gated to `julia.utomo@gmail.com` / `tiffany.utomo@gmail.com` via session email check. Entry point: hidden "Admin" nav item on `index.html` and `dashboard.html` (shown only to those emails) — both already existed independently of `prompt-gratis.html`'s old nav link, confirmed working before that page was retired to a redirect stub in Checkpoint 35. |
 
 ### Assets
 | File | Purpose |
@@ -267,8 +288,8 @@ All 6 content panels rewritten to follow the uploaded PDF "K3 · Konten & Pemasa
 ---
 
 ## Admin Content Manager (admin.html) — added July 2026 (live, verified working)
-- **Access**: gated to `julia.utomo@gmail.com` and `tiffany.utomo@gmail.com` only, checked client-side against the Supabase session email (`ADMIN_EMAILS` array in `admin.html` and in the nav script of `prompt-gratis.html`). Not logged in → prompt to log in. Logged in but not an admin email → "Akses ditolak".
-- **Entry point**: hidden "Admin" link in `prompt-gratis.html` nav, shown only when the logged-in session email matches an admin email.
+- **Access**: gated to `julia.utomo@gmail.com` and `tiffany.utomo@gmail.com` only, checked client-side against the Supabase session email (`ADMIN_EMAILS` array in `admin.html`, `index.html`, and `dashboard.html`). Not logged in → prompt to log in. Logged in but not an admin email → "Akses ditolak".
+- **Entry point**: hidden "Admin" link in `index.html`'s and `dashboard.html`'s nav dropdown, shown only when the logged-in session email matches an admin email. (Historically also lived in `prompt-gratis.html`'s nav — that page became a redirect stub in Checkpoint 35, but `index.html`/`dashboard.html` already had their own independent copies of this link, so nothing was lost.)
 - **PDF upload**: pick a course → upload a PDF → stored in the `course-pdfs` Supabase Storage bucket, public URL saved to `course_resources` (one row per `course_slug`, upsert). Content pages show a "📄 Unduh [filename]" link in the sidebar (`#pdf-download-slot`) via `course-video.js` if a resource exists for that course.
 - **Video (YouTube link)**: pick a course + module number → paste a YouTube URL (watch/share/shorts/embed formats all work) → the raw URL is upserted straight into `module_videos` (`course_slug` + `module_num`), no file upload / storage bucket involved. `extractYoutubeId()` (duplicated in `admin.html` and `course-video.js`) pulls the 11-char video ID via regex. Content pages render a responsive 16:9 YouTube `<iframe>` embed at the very top of the matching module panel — above the breadcrumb/title, not after the subtitle — via `#video-slot-N` populated by `course-video.js`. If a saved `video_url` isn't recognizable as YouTube, it falls back to a plain "▶ Tonton Video Modul" link. The `course-videos` storage bucket created earlier is no longer used for anything and can be left empty or removed. Selecting a course/module in the admin video card now shows a live indicator (`#currentVideoInfo`, `checkCurrentVideo()`) — green "✓ Video sudah ada..." with the existing link if one's saved, gray "Belum ada video..." if not, and pre-fills the input with the existing URL so it doubles as an edit field. Runs on page load and on every course/module selection change.
 - **Practice document upload**: pick a course + module number → upload one or more PDF/DOC/DOCX files at once (`docFileInput` now has the `multiple` attribute; `uploadDoc()` loops through `fileInput.files` sequentially, uploading + inserting each and reporting an "N/M berhasil" summary if any fail) → stored in the `course-documents` bucket, rows inserted (not upserted — multiple docs per module allowed) into `module_documents`. Each doc has a "Hapus" delete button in the admin overview table (removes both the storage object and the DB row).
@@ -276,7 +297,7 @@ All 6 content panels rewritten to follow the uploaded PDF "K3 · Konten & Pemasa
 - **Content page layout (both changed July 2026)**: the old `#pdf-banner-slot` (full-width purple PDF banner above the video, at the very top of `.main-inner`) has been **removed** from all 4 content pages and from `course-video.js` — the course-level PDF is still available via the sidebar `#pdf-download-slot` link, just no longer duplicated as a banner. In its place, every module panel now has `#ppt-slot-N` and `#doc-slot-N` positioned **directly below the module title/subtitle** (moved up from the old end-of-module position, right before the Sebelumnya/Selanjutnya nav). Order per module: title → subtitle → PPT link (if any) → Materi Praktik doc list (if any) → rest of module content. `course-video.js` populates `#ppt-slot-N` from `module_ppts` the same way it populates `#video-slot-N` from `module_videos`.
 - **Overview table**: shows current PDF, all module videos, all module PPTs, and all practice documents (with delete) across all 4 courses.
 - **Course/module mapping guarantee**: `COURSES` slug+module-count config is identical across `admin.html` and all 4 content pages' `COURSE_SLUG`/slot IDs (traced July 2026) — upload dropdowns can't produce a course_slug/module_num combination that doesn't map to a real slot, and `onConflict` keys (`course_slug` for PDFs, `course_slug,module_num` for videos and PPTs) match each table's actual primary key.
-- **Setup status**: `sql/admin-content-setup.sql` has been run in the Supabase SQL editor (tables + RLS confirmed in Table Editor), and the `course-pdfs` / `course-videos` public storage buckets have been created. Admin login + nav link confirmed working on `prompt-gratis.html` as of July 7, 2026.
+- **Setup status**: `sql/admin-content-setup.sql` has been run in the Supabase SQL editor (tables + RLS confirmed in Table Editor), and the `course-pdfs` / `course-videos` public storage buckets have been created. Admin login + nav link confirmed working as of July 7, 2026 (originally on `prompt-gratis.html`, now via `index.html`/`dashboard.html` per Checkpoint 35).
 - **RLS fix + PPT feature (July 11, 2026) — RESOLVED**: the "Dokumen Praktik" upload was failing with "new row violates row-level security policy" because the `course-documents` storage bucket had never been created in the *correct* Supabase project. Root cause turned out to be a **two-project mix-up**: Julia had been running SQL/creating buckets in an unrelated Supabase project (`pyuvofppbfuytkcazgwh`), while `supabase-config.js` actually points the live site at `ctqtdqbsucbhikwnagvl` ("Belajar-Claude"). Artifacts created in the wrong project (a `module_ppts` table, `course-documents`/`course-ppts` buckets) were left in place there since they're inert and don't affect the live site — cleanup is optional, not required. Fix: ran `sql/admin-content-setup.sql` + `sql/module-ppts-and-fix-uploads.sql` (concatenated as `run-this-in-belajar-claude-project.sql`, given directly to Julia) in the correct project `ctqtdqbsucbhikwnagvl`. **Confirmed working as of this checkpoint** — PDF, PPT, and multi-file Dokumen Praktik uploads all succeed in production.
 - **Practice document file types (July 11, 2026)**: `docFileInput` now also accepts `.md` in addition to PDF/DOC/DOCX (`accept` attribute + the extension whitelist in `uploadDoc()`).
 - **Multi-file upload success message (July 11, 2026)**: `uploadDoc()` now lists the uploaded filenames in the success status when more than one file is uploaded in a batch, e.g. "2 dokumen berhasil diunggah untuk ... ✓ (a.pdf, b.pdf)" — purely cosmetic, the underlying count (`okCount`) was already accurate.
@@ -302,7 +323,7 @@ Hosted on Railway (`https://klaud-backend-production.up.railway.app`). Handles p
 | Method | Path | Purpose |
 |--------|------|---------|
 | `GET` | `/` | Health check |
-| `POST` | `/signup` | Free signup — adds to ConvertKit, Google Sheets, creates Supabase user, enrolls in `prompt-gratis`, sends welcome email |
+| `POST` | `/signup` | Free account creation — adds to ConvertKit, Google Sheets, creates Supabase user, sends welcome email. No longer auto-enrolls into `prompt-gratis` as of Checkpoint 35 — course content is gated behind `all-access` regardless of how the account was created |
 | `POST` | `/create-payment` | Creates Duitku invoice, returns `reference` + `orderId` |
 | `POST` | `/webhook/duitku` | Payment confirmation — saves enrollment to Supabase + Google Sheets, adds ConvertKit tag, sends access email |
 

@@ -671,11 +671,23 @@ Tolong bantu saya dengan: outline struktur yang kuat, poin-poin kunci yang perlu
   const TOTAL = 6;
   let current = 1;
   const done = new Set();
+  const ADMIN_EMAILS = ['julia.utomo@gmail.com', 'tiffany.utomo@gmail.com'];
 
   async function init() {
     const { data: { session } } = await sbClient.auth.getSession();
     if (!session) { window.location.href = 'login.html'; return; }
-    document.getElementById('navEmail').textContent = session.user.email;
+    const email = session.user.email;
+
+    // '20 Prompt Gratis' is now included in All Access only (previously free for any
+    // logged-in user via a server-side auto-enroll on signup) — see CONTEXT.md payment
+    // restructure notes. Legacy free 'prompt-gratis' rows are intentionally NOT
+    // honored here, only a real 'all-access' row grants entry. Admins bypass.
+    if (!ADMIN_EMAILS.includes(email)) {
+      const { data: existing } = await sbClient.from('enrollments').select('course_slug').eq('email', email).eq('course_slug', 'all-access');
+      if (!existing || existing.length === 0) { window.location.href = 'all-access.html'; return; }
+    }
+
+    document.getElementById('navEmail').textContent = email;
 
     // Load existing progress from Supabase
     try {

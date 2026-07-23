@@ -55,7 +55,18 @@ nav {
 .nav-user-dropdown a:hover, .nav-user-dropdown button:hover { background: var(--surface-2, #F5F5F7); }
 .nav-user-dropdown .dropdown-divider { height: 1px; background: var(--border, #E8E8E8); margin: 4px 0; }
 .nav-user-dropdown .dropdown-signout { color: #DC2626 !important; }
-.hero { padding: 144px 40px 96px; max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+.hero { padding: 144px 40px 0; max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+.hero-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 56px; align-items: center; }
+.hero-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 30px; box-shadow: 0 16px 44px rgba(0,0,0,0.07); position: relative; overflow: hidden; }
+.hero-card::before { content: ''; position: absolute; width: 160px; height: 160px; border-radius: 50%; background: var(--accent-dim); right: -55px; top: -55px; }
+.hc-tag { display: inline-flex; padding: 6px 12px; background: var(--accent-dim); color: var(--accent); border-radius: 100px; font-size: 11px; font-weight: 800; letter-spacing: 0.6px; position: relative; }
+.hero-card h2 { font-family: var(--serif); font-size: 26px; font-weight: 400; letter-spacing: -0.6px; line-height: 1.15; margin: 16px 0 8px; position: relative; }
+.hero-card p { color: var(--ink-2); font-size: 13.5px; line-height: 1.6; margin-bottom: 20px; position: relative; }
+.hc-price { font-size: 30px; font-weight: 800; letter-spacing: -1px; position: relative; }
+.hc-price span { font-size: 12px; font-weight: 500; color: var(--ink-3); letter-spacing: 0; }
+.hc-price-note { color: var(--ink-3); font-size: 11.5px; margin-top: 4px; position: relative; }
+.hero-card .btn-dark { width: 100%; justify-content: center; margin-top: 20px; position: relative; }
+@media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } }
 .hero-eyebrow { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 600; color: var(--accent); background: var(--accent-dim); border: 1px solid rgba(108,71,255,0.18); padding: 5px 12px; border-radius: 100px; margin-bottom: 28px; letter-spacing: 0.02em; }
 .eyebrow-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
@@ -79,14 +90,22 @@ section { padding: 88px 0; position: relative; z-index: 1; }
 .section-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 14px; }
 .section-title { font-family: var(--serif); font-size: clamp(30px, 3.5vw, 46px); font-weight: 400; letter-spacing: -1.5px; color: var(--ink); margin-bottom: 12px; line-height: 1.1; }
 .section-sub { font-size: 14px; color: var(--ink-2); line-height: 1.75; max-width: 440px; }
+.value-strip { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.value-item { padding: 24px 26px; border-right: 1px solid var(--border); }
+.value-item:last-child { border-right: 0; }
+.value-item strong { display: block; font-size: 14.5px; margin-bottom: 5px; }
+.value-item span { font-size: 13px; color: var(--ink-2); line-height: 1.5; }
+@media (max-width: 640px) { .value-strip { grid-template-columns: 1fr; } .value-item { border-right: 0; border-bottom: 1px solid var(--border); } .value-item:last-child { border-bottom: 0; } }
 .course-grid-wrap { margin-top: 52px; }
-.allaccess-banner { margin-top: 24px; background: var(--ink); border-radius: 16px; padding: 22px 28px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
-.allaccess-banner-text strong { display: block; color: #fff; font-size: 15px; font-weight: 700; margin-bottom: 3px; }
-.allaccess-banner-text span { color: rgba(255,255,255,0.65); font-size: 13px; line-height: 1.6; }
-.allaccess-btn { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; background: #fff; color: var(--ink); font-size: 13px; font-weight: 700; padding: 11px 20px; border-radius: 9px; text-decoration: none; transition: transform 0.15s; }
-.allaccess-btn:hover { transform: translateY(-1px); }
-.course-page { display: none; grid-template-columns: repeat(3, 1fr); gap: 22px; }
-.course-page.active { display: grid; }
+.course-lib-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.cta-card { max-width: 1100px; margin: 0 auto; background: var(--ink); border-radius: 20px; padding: 44px 48px; display: flex; justify-content: space-between; align-items: center; gap: 32px; flex-wrap: wrap; position: relative; overflow: hidden; }
+.cta-card::before { content: ''; position: absolute; top: -100px; left: -60px; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(108,71,255,0.25), transparent 65%); pointer-events: none; }
+.reassurance { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 0 40px; }
+.reassurance-item { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; }
+.reassurance-item strong { display: block; font-size: 14px; margin-bottom: 6px; }
+.reassurance-item span { font-size: 13px; color: var(--ink-2); line-height: 1.6; }
+@media (max-width: 900px) { .course-lib-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .course-lib-grid { grid-template-columns: 1fr; } .cta-card { flex-direction: column; align-items: flex-start; padding: 32px; } .reassurance { grid-template-columns: 1fr; padding: 0 20px; } }
 .course-card-v2 { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; transition: all 0.2s; }
 .course-card-v2:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,0.08); border-color: rgba(108,71,255,0.2); }
 .ccv2-banner { height: 168px; display: flex; align-items: center; justify-content: center; }
@@ -114,28 +133,13 @@ section { padding: 88px 0; position: relative; z-index: 1; }
 .ccv2-btn { display: inline-flex; align-items: center; background: var(--ink); color: #fff; text-decoration: none; font-family: var(--font); font-size: 13px; font-weight: 700; padding: 12px 20px; border-radius: 10px; transition: all 0.18s; white-space: nowrap; }
 .ccv2-btn:hover { opacity: 0.85; transform: translateY(-1px); }
 .ccv2-btn.disabled { background: var(--surface-2); color: var(--ink-3); pointer-events: none; }
-.course-page-nav { display: flex; align-items: center; gap: 14px; margin-top: 24px; }
-.carousel-btn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s; color: var(--ink); }
-.carousel-btn:hover { border-color: var(--border-strong); box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
-.carousel-btn:disabled { opacity: 0.35; pointer-events: none; }
-.carousel-btn svg { width: 14px; height: 14px; }
-.course-page-dots { display: flex; gap: 6px; }
-.course-page-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border-strong); transition: all 0.2s; }
-.course-page-dot.active { background: var(--ink); width: 18px; border-radius: 4px; }
-@media (max-width: 900px) {
-  .course-page { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 640px) {
-  .course-page { grid-template-columns: 1fr; }
-}
-.cta-section { background: var(--ink); padding: 88px 40px; text-align: center; position: relative; overflow: hidden; z-index: 1; }
-.cta-section::before { content: ''; position: absolute; top: -100px; left: 50%; transform: translateX(-50%); width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(108,71,255,0.25), transparent 65%); pointer-events: none; }
-.cta-section h2 { font-family: var(--serif); font-size: clamp(30px, 4vw, 50px); font-weight: 400; color: #fff; letter-spacing: -1.5px; margin-bottom: 14px; position: relative; }
-.cta-section h2 em { font-style: italic; color: var(--accent-2); }
-.cta-section > p { font-size: 14px; color: rgba(255,255,255,0.4); line-height: 1.7; margin-bottom: 36px; position: relative; }
-.cta-btn { display: inline-flex; align-items: center; gap: 8px; background: #fff; color: var(--ink); font-family: var(--font); font-size: 13px; font-weight: 700; padding: 13px 26px; border-radius: 10px; text-decoration: none; transition: all 0.18s; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.25); }
-.cta-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(0,0,0,0.3); }
-.cta-sub { font-size: 11px; color: rgba(255,255,255,0.2); margin-top: 16px; position: relative; }
+.cta-section { padding: 88px 40px; text-align: center; position: relative; z-index: 1; }
+.cta-card h2 { font-family: var(--serif); font-size: clamp(24px, 3vw, 32px); font-weight: 400; color: #fff; letter-spacing: -1px; margin-bottom: 8px; position: relative; }
+.cta-card h2 em { font-style: italic; color: var(--accent-2); }
+.cta-card > div > p { font-size: 13.5px; color: rgba(255,255,255,0.55); line-height: 1.65; position: relative; max-width: 440px; }
+.cta-btn { display: inline-flex; align-items: center; gap: 8px; background: #fff; color: var(--ink); font-family: var(--font); font-size: 13px; font-weight: 700; padding: 13px 26px; border-radius: 10px; text-decoration: none; transition: all 0.18s; position: relative; white-space: nowrap; }
+.cta-btn:hover { transform: translateY(-1px); }
+.cta-sub { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 10px; position: relative; }
 footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); padding: 48px 40px 28px; position: relative; z-index: 1; }
 .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 32px; }
 .footer-brand .logo { color: #fff; font-size: 17px;  letter-spacing: -0.4px; }
@@ -178,52 +182,66 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
   </div>
 </nav>
 <div class="hero">
-  <div class="hero-eyebrow"><span class="eyebrow-dot"></span>Platform Claude AI · Bahasa Indonesia</div>
-  <h1>Kuasai Claude AI,<br><em>tingkatkan karir</em></h1>
-  <p class="hero-sub">Kursus dan panduan Claude AI yang praktis — sepenuhnya dalam Bahasa Indonesia, untuk profesional, UKM, dan mahasiswa.</p>
-  <div class="hero-actions">
-    <a href="#kursus" class="btn-dark">Lihat Kursus →</a>
-    <a href="login.html" class="btn-outline" id="heroGabungBtn">Gabung Gratis</a>
-  </div>
-  <div class="hero-proof" style="display:none;">
-    <div class="proof-avatars">
-      <div class="proof-av pa1">A</div><div class="proof-av pa2">B</div>
-      <div class="proof-av pa3">C</div><div class="proof-av pa4">D</div>
+  <div class="hero-grid">
+    <div>
+      <div class="hero-eyebrow"><span class="eyebrow-dot"></span>Belajar Claude untuk Kerja & Bisnis</div>
+      <h1>Kuasai Claude AI,<br><em>tingkatkan karir</em></h1>
+      <p class="hero-sub">Kursus dan panduan Claude AI yang praktis — sepenuhnya dalam Bahasa Indonesia, untuk profesional, UKM, dan mahasiswa.</p>
+      <div class="hero-actions">
+        <a href="all-access.html" class="btn-dark">Dapatkan All Access →</a>
+        <a href="#kursus" class="btn-outline">Lihat Semua Kursus</a>
+      </div>
     </div>
-    <p class="proof-text"><strong>2.000+</strong> pelajar sudah bergabung · Gratis selamanya</p>
+    <div class="hero-card">
+      <span class="hc-tag">ALL ACCESS</span>
+      <h2>Satu akses untuk semua kursus.</h2>
+      <p>Belajar dengan materi terstruktur yang langsung bisa dipraktikkan untuk kerja dan bisnis.</p>
+      <div class="hc-price" id="heroPrice">Rp 399K <span>sekali bayar</span></div>
+      <div class="hc-price-note">Akses selamanya · Bukan langganan bulanan</div>
+      <a href="all-access.html" class="btn-dark">Dapatkan All Access →</a>
+    </div>
   </div>
 </div>
-<div class="divider"></div>
+<section style="padding: 56px 0 0;">
+  <div class="value-strip reveal">
+    <div class="value-item"><strong>✓ Semua kursus</strong><span>Akses semua materi yang tersedia dalam satu pembelian.</span></div>
+    <div class="value-item"><strong>✓ Sekali bayar</strong><span>Tidak ada biaya bulanan atau langganan berulang.</span></div>
+    <div class="value-item"><strong>✓ Kursus baru termasuk</strong><span>Kursus baru yang ditambahkan ke library juga termasuk.</span></div>
+  </div>
+</section>
 <section id="kursus">
   <div class="container">
     <div class="reveal">
-      <div class="section-eyebrow">Kurikulum</div>
-      <h2 class="section-title">Semua kursus</h2>
-      <p class="section-sub">Satu kursus gratis untuk mulai — semua kursus lainnya termasuk dalam All Access, satu kali bayar.</p>
-      <div class="allaccess-banner">
-        <div class="allaccess-banner-text"><strong>Mau semua kursus?</strong><span>All Access — satu kali bayar <span id="allaccessBannerPrice">Rp 399K</span>, akses semua kursus sekarang dan yang akan datang.</span></div>
-        <a href="all-access.html" class="allaccess-btn">Lihat All Access →</a>
-      </div>
+      <div class="section-eyebrow">Course Library</div>
+      <h2 class="section-title">Semua kursus yang kamu dapatkan</h2>
+      <p class="section-sub">Satu pembelian All Access membuka seluruh course library — sekarang dan yang akan datang.</p>
     </div>
     <div class="course-grid-wrap reveal">
-      <div class="course-page active" id="coursePage0"><div class="course-card-v2"><div class="ccv2-banner bnr-1"><div class="ccv2-icon">📋</div></div><div class="ccv2-body"><span class="ccv2-badge badge-green">FREE</span><h3>Panduan: 20 Prompt Terbaik</h3><p>Prompt siap pakai untuk email, laporan, konten sosmed — langsung copy-paste.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-price free-price">Gratis</div><div class="ccv2-pricesub">Mulai sekarang</div></div><a href="prompt-gratis.html" class="ccv2-btn">Pelajari →</a></div></div></div><div class="course-card-v2"><div class="ccv2-banner bnr-1"><div class="ccv2-icon">🤖</div></div><div class="ccv2-body"><span class="ccv2-badge badge-b">ALL ACCESS</span><h3>Dasar Claude AI</h3><p>Dari nol sampai bisa pakai Claude untuk kebutuhan sehari-hari — dalam 1 jam.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><a href="all-access.html" class="ccv2-btn">Lihat →</a></div></div></div><div class="course-card-v2"><div class="ccv2-banner bnr-2"><div class="ccv2-icon">💼</div></div><div class="ccv2-body"><span class="ccv2-badge badge-b">ALL ACCESS</span><h3>Produktivitas Kantor</h3><p>Hemat 3–5 jam kerja per minggu. Gmail, Sheets, Docs, Claude Projects.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><a href="all-access.html" class="ccv2-btn">Lihat →</a></div></div></div><div class="course-card-v2"><div class="ccv2-banner bnr-3"><div class="ccv2-icon">🏷</div></div><div class="ccv2-body"><span class="ccv2-badge badge-b">ALL ACCESS</span><h3>Content & Marketing</h3><p>Positioning, konten, iklan, CS WhatsApp, sampai analisis performa — sistem pemasaran end-to-end.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><a href="all-access.html" class="ccv2-btn">Lihat →</a></div></div></div><div class="course-card-v2"><div class="ccv2-banner bnr-4"><div class="ccv2-icon">📊</div></div><div class="ccv2-body"><span class="ccv2-badge badge-i">INTERMEDIATE</span><h3>Analisis Data & Laporan</h3><p>Data mentah jadi insight. Google Sheets, Forms, Claude Artifacts.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><a href="#" class="ccv2-btn disabled" style="width:100%;justify-content:center;">Segera Hadir</a></div></div></div><div class="course-card-v2"><div class="ccv2-banner bnr-5"><div class="ccv2-icon">⚡</div></div><div class="ccv2-body"><span class="ccv2-badge badge-i">INTERMEDIATE</span><h3>Automasi Workflow</h3><p>3 automation aktif dengan Zapier, Make, n8n yang jalan 24/7.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><a href="#" class="ccv2-btn disabled" style="width:100%;justify-content:center;">Segera Hadir</a></div></div></div></div>
-      <div class="course-page" id="coursePage1"><div class="course-card-v2"><div class="ccv2-banner bnr-6"><div class="ccv2-icon">🚀</div></div><div class="ccv2-body"><span class="ccv2-badge badge-adv">ADVANCED</span><h3>Build AI App Sederhana</h3><p>Web app AI live di GitHub Pages. Claude API + HTML/JS — dari ide ke deploy.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><a href="#" class="ccv2-btn disabled" style="width:100%;justify-content:center;">Segera Hadir</a></div></div></div><div class="course-card-v2"><div class="ccv2-banner bnr-1"><div class="ccv2-icon">🔌</div></div><div class="ccv2-body"><span class="ccv2-badge badge-adv">ADVANCED</span><h3>Claude API untuk Developer</h3><p>Streaming, tool use, caching, Railway deploy. Integrasikan Claude ke project nyata.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><a href="#" class="ccv2-btn disabled" style="width:100%;justify-content:center;">Segera Hadir</a></div></div></div><div class="course-card-v2"><div class="ccv2-banner bnr-2"><div class="ccv2-icon">💰</div></div><div class="ccv2-body"><span class="ccv2-badge badge-adv">ADVANCED</span><h3>Build & Monetisasi Produk AI</h3><p>Dari ide ke produk AI yang menghasilkan uang. Framer, Midtrans, WhatsApp.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><a href="#" class="ccv2-btn disabled" style="width:100%;justify-content:center;">Segera Hadir</a></div></div></div></div>
-      <div class="course-page-nav">
-        <button class="carousel-btn" id="coursePrevBtn" onclick="gotoCoursePage(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></button>
-        <button class="carousel-btn" id="courseNextBtn" onclick="gotoCoursePage(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
-        <div class="course-page-dots">
-          <div class="course-page-dot active" id="courseDot0"></div>
-          <div class="course-page-dot" id="courseDot1"></div>
-        </div>
+      <div class="course-lib-grid">
+        <div class="course-card-v2"><div class="ccv2-banner bnr-1"><div class="ccv2-icon">📋</div></div><div class="ccv2-body"><span class="ccv2-badge badge-b">ALL ACCESS</span><h3>20 Prompt Gratis</h3><p>Prompt siap pakai untuk email, laporan, konten sosmed — langsung copy-paste.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><a href="all-access.html" class="ccv2-btn">Lihat →</a></div></div></div>
+        <div class="course-card-v2"><div class="ccv2-banner bnr-1"><div class="ccv2-icon">🤖</div></div><div class="ccv2-body"><span class="ccv2-badge badge-b">ALL ACCESS</span><h3>Dasar Claude AI</h3><p>Dari nol sampai bisa pakai Claude untuk kebutuhan sehari-hari — dalam 1 jam.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><a href="all-access.html" class="ccv2-btn">Lihat →</a></div></div></div>
+        <div class="course-card-v2"><div class="ccv2-banner bnr-2"><div class="ccv2-icon">💼</div></div><div class="ccv2-body"><span class="ccv2-badge badge-b">ALL ACCESS</span><h3>Produktivitas Kantor</h3><p>Hemat 3–5 jam kerja per minggu. Gmail, Sheets, Docs, Claude Projects.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><a href="all-access.html" class="ccv2-btn">Lihat →</a></div></div></div>
+        <div class="course-card-v2"><div class="ccv2-banner bnr-3"><div class="ccv2-icon">🏷</div></div><div class="ccv2-body"><span class="ccv2-badge badge-b">ALL ACCESS</span><h3>Content & Marketing</h3><p>Positioning, konten, iklan, CS WhatsApp, sampai analisis performa.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><a href="all-access.html" class="ccv2-btn">Lihat →</a></div></div></div>
+        <div class="course-card-v2"><div class="ccv2-banner bnr-4"><div class="ccv2-icon">✨</div></div><div class="ccv2-body"><span class="ccv2-badge badge-b">ALL ACCESS</span><h3>Kursus Berikutnya</h3><p>Analisis Data, Automasi Workflow, dan lainnya — otomatis termasuk saat rilis.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><span class="ccv2-btn disabled">Segera Hadir</span></div></div></div>
       </div>
     </div>
   </div>
 </section>
 <section class="cta-section" id="komunitas">
-  <h2 id="ctaHeadline">Mulai gratis <em>hari ini</em></h2>
-  <p id="ctaSubtext">Gabung dan dapatkan 20 prompt Claude gratis — langsung bisa dipakai sekarang.</p>
-  <a href="login.html" class="cta-btn" id="ctaBtn">Gabung Komunitas Gratis →</a>
-  <p class="cta-sub" id="ctaNote">Gratis selamanya · Tanpa kartu kredit</p>
+  <div class="cta-card">
+    <div>
+      <h2 id="ctaHeadline">Mulai belajar Claude <em>hari ini</em></h2>
+      <p id="ctaSubtext">Satu kali bayar. Akses semua kursus yang tersedia sekarang dan yang akan datang.</p>
+    </div>
+    <a href="all-access.html" class="cta-btn" id="ctaBtn">Dapatkan All Access →</a>
+  </div>
+  <p class="cta-sub" id="ctaNote" style="max-width:1100px;margin:16px auto 0;">Sekali bayar · Bukan langganan</p>
+</section>
+<section style="padding: 0 0 88px;">
+  <div class="reassurance reveal">
+    <div class="reassurance-item"><strong>Sekali bayar, bukan langganan.</strong><span>Satu kali pembayaran untuk mendapatkan akses ke seluruh course library.</span></div>
+    <div class="reassurance-item"><strong>Belajar sesuai kebutuhanmu.</strong><span>Pilih kursus yang paling relevan untuk pekerjaan atau bisnis kamu.</span></div>
+  </div>
 </section>
 <footer>
   <div class="footer-inner">
@@ -248,21 +266,6 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
 <script src="supabase-config.js"></script>
 <script src="login-modal.js"></script>
 <script>
-  var courseCurrentPage = 0;
-  var courseTotalPages = 2;
-  function gotoCoursePage(dir) {
-    var next = courseCurrentPage + dir;
-    if (next < 0 || next >= courseTotalPages) return;
-    document.getElementById('coursePage' + courseCurrentPage).classList.remove('active');
-    document.getElementById('courseDot' + courseCurrentPage).classList.remove('active');
-    courseCurrentPage = next;
-    document.getElementById('coursePage' + courseCurrentPage).classList.add('active');
-    document.getElementById('courseDot' + courseCurrentPage).classList.add('active');
-    document.getElementById('coursePrevBtn').disabled = (courseCurrentPage === 0);
-    document.getElementById('courseNextBtn').disabled = (courseCurrentPage === courseTotalPages - 1);
-    document.getElementById('kursus').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-  document.getElementById('coursePrevBtn').disabled = true;
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
   }, { threshold: 0.1 });
@@ -283,7 +286,6 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         var lb = document.getElementById('navLoginBtn');
         lb.textContent = 'Dashboard'; lb.href = 'dashboard.html';
         document.getElementById('navCtaBtn').style.display = 'none';
-        var hgb = document.getElementById('heroGabungBtn'); if (hgb) hgb.style.display = 'none';
         // Personalize bottom CTA
         var headline = document.getElementById('ctaHeadline');
         var subtext  = document.getElementById('ctaSubtext');
@@ -307,7 +309,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     } catch(e) {}
   })();
 
-  // Keep the All Access banner price in sync with admin.html's course_pricing panel
+  // Keep the hero price card in sync with admin.html's course_pricing panel
   // (falls back to the static Rp 399K already in the HTML if the fetch fails).
   (async function() {
     try {
@@ -319,8 +321,8 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         && (!row.discount_start || new Date(row.discount_start) <= now)
         && (!row.discount_end || new Date(row.discount_end) >= now);
       var amount = discountActive ? row.discount_price : (row.base_price != null ? row.base_price : 399000);
-      var el = document.getElementById('allaccessBannerPrice');
-      if (el) el.textContent = 'Rp ' + Math.round(amount / 1000) + 'K';
+      var el = document.getElementById('heroPrice');
+      if (el) el.innerHTML = 'Rp ' + Math.round(amount / 1000) + 'K <span>sekali bayar</span>';
     } catch (e) {}
   })();
 
