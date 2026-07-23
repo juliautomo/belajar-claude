@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 22, 2026 (checkpoint 28)_
+_Last updated: July 22, 2026 (checkpoint 29)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -731,5 +731,17 @@ No PPT changes needed this checkpoint — the two previously PPT-only facts are 
 ## Checkpoint 28 (July 22, 2026)
 
 **Fixed an inaccurate product claim in M7.** The SWOT section's "Yang Perlu Dipahami" tip-box (HTML/PDF) and the PPT's "Riset & SWOT" compare-card both said "Claude tidak punya akses ke data pasar terkini" / "Claude tidak browsing internet real-time" — Julia flagged this is misleading since Claude does have web search capability. Reworded to drop the capability claim entirely and instead make the actually durable teaching point: your own first-hand observations (competitor prices you've seen, customer feedback, market signals specific to your business) produce sharper analysis than generic search results, regardless of what Claude can or can't browse. New wording applied identically to HTML and PDF, and condensed consistently into the PPT card. PPTX rebuilt and visually confirmed clean.
+
+**Commits this checkpoint**: one commit covering `produktivitas-content.html` and `K2-Produktivitas/M07-Dokumen-Riset/K2-M07-Dokumen-Riset.pptx`.
+
+---
+
+## Checkpoint 29 (July 22, 2026)
+
+**Added a new "Perkuat Riset dengan Web Search" section to M7**, following directly from the prior checkpoint's fix (removing the inaccurate "Claude can't browse the internet" claim) — Julia asked to also show what Claude *can* do for research now that the module is specifically about Dokumen & Riset. Positioned between the SWOT sub-skill and the "SWOT → Slide Presentasi" section, so the flow is: bring your own observations → optionally enrich with web search → turn the finished SWOT into slides.
+
+Content: a "Kapan Dipakai" tip (your own observations are still sharpest for business-specific detail, web search fills in general market/competitor context you might not have), a worked prompt reusing the same "tas kanvas" / "Kanvas Kita" / "Totewear.id" example already established in the module and its supporting file, a caveat tip (web search complements but doesn't replace direct observation, with a manual-search fallback for accounts without web search), and an output description. Added identically to HTML and PDF (verified via script — 7 key phrases present in both), plus a matching new PPT slide (now 9 slides, was 8) — visually confirmed clean via LibreOffice render. Learn-grid card 03 and the module time estimate (18→20 menit) updated in both HTML and PDF to reflect the addition. Div balance verified (541/541).
+
+**Supporting file checked, no changes needed**: `k2-m7-contoh-dokumen.txt`'s Bagian 3 (SWOT observations) already contains the exact competitor names ("Kanvas Kita," "Totewear.id") the new prompt references — the web-search step builds directly on existing file content rather than requiring new data.
 
 **Commits this checkpoint**: one commit covering `produktivitas-content.html` and `K2-Produktivitas/M07-Dokumen-Riset/K2-M07-Dokumen-Riset.pptx`.
