@@ -181,7 +181,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
 <nav>
   <a href="index.html" class="logo">belajar<span>claude</span></a>
   <div class="nav-links">
-    <a href="#kursus">Kursus</a>
+    <a href="#kursus" id="navKursusLink">Kursus</a>
     <a href="login.html" id="navLoginBtn">Masuk</a>
     <a href="login.html" id="navCtaBtn" class="nav-cta" style="display:none">Gabung Gratis</a>
     <div class="nav-user-pill" id="navUserPill" onclick="toggleUserMenu(event)">
@@ -394,6 +394,19 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
             document.getElementById('loggedInHome').style.display = 'block';
             var reassuranceEl = document.getElementById('reassuranceSection');
             if (reassuranceEl) reassuranceEl.style.display = 'none';
+            // #kursus lives inside marketingHome, which is now hidden — retarget
+            // the nav "Kursus" link to the course grid that's actually visible
+            // in loggedInHome, otherwise the link silently does nothing.
+            var navKursusEl = document.getElementById('navKursusLink');
+            if (navKursusEl) navKursusEl.setAttribute('href', '#lihCourseGrid');
+            // Other pages (produktivitas.html, mulai-claude.html, etc.) still link
+            // to "index.html#kursus" — the browser's native anchor-scroll fires
+            // before this script hides #kursus, landing nowhere useful. Redirect
+            // that scroll to the course grid that's actually visible now.
+            if (window.location.hash === '#kursus') {
+              var lihGridEl = document.getElementById('lihCourseGrid');
+              if (lihGridEl) setTimeout(function () { lihGridEl.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+            }
             var lihNameEl = document.getElementById('lihName');
             if (lihNameEl) lihNameEl.textContent = name.split(' ')[0];
 
