@@ -1165,8 +1165,8 @@ yang bisa saya buka lagi setiap kali launching produk baru.<button class="copy-b
 
     // Only grant access if a real enrollment already exists (created by the Duitku payment webhook) - admins bypass
     if (!ADMIN_EMAILS.includes(session.user.email)) {
-      const { data: existing } = await sbClient.from('enrollments').select('course_slug').eq('email', session.user.email).eq('course_slug', 'content-marketing').maybeSingle();
-      if (!existing) { window.location.href = 'content-marketing.html'; return; }
+      const { data: existing } = await sbClient.from('enrollments').select('course_slug').eq('email', session.user.email).in('course_slug', ['content-marketing', 'all-access']);
+      if (!existing || existing.length === 0) { window.location.href = 'content-marketing.html'; return; }
     }
 
     document.getElementById('navEmail').textContent = session.user.email;

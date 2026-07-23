@@ -80,6 +80,11 @@ section { padding: 88px 0; position: relative; z-index: 1; }
 .section-title { font-family: var(--serif); font-size: clamp(30px, 3.5vw, 46px); font-weight: 400; letter-spacing: -1.5px; color: var(--ink); margin-bottom: 12px; line-height: 1.1; }
 .section-sub { font-size: 14px; color: var(--ink-2); line-height: 1.75; max-width: 440px; }
 .course-grid-wrap { margin-top: 52px; }
+.allaccess-banner { margin-top: 24px; background: var(--ink); border-radius: 16px; padding: 22px 28px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+.allaccess-banner-text strong { display: block; color: #fff; font-size: 15px; font-weight: 700; margin-bottom: 3px; }
+.allaccess-banner-text span { color: rgba(255,255,255,0.65); font-size: 13px; line-height: 1.6; }
+.allaccess-btn { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; background: #fff; color: var(--ink); font-size: 13px; font-weight: 700; padding: 11px 20px; border-radius: 9px; text-decoration: none; transition: transform 0.15s; }
+.allaccess-btn:hover { transform: translateY(-1px); }
 .course-page { display: none; grid-template-columns: repeat(3, 1fr); gap: 22px; }
 .course-page.active { display: grid; }
 .course-card-v2 { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; transition: all 0.2s; }
@@ -194,6 +199,10 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
       <div class="section-eyebrow">Kurikulum</div>
       <h2 class="section-title">Semua kursus</h2>
       <p class="section-sub">Pilih kursus satuan — beli satu, akses selamanya.</p>
+      <div class="allaccess-banner">
+        <div class="allaccess-banner-text"><strong>Mau semua kursus?</strong><span>All Access — satu kali bayar Rp 399K, akses semua kursus sekarang dan yang akan datang.</span></div>
+        <a href="all-access.html" class="allaccess-btn">Lihat All Access →</a>
+      </div>
     </div>
     <div class="course-grid-wrap reveal">
       <div class="course-page active" id="coursePage0"><div class="course-card-v2"><div class="ccv2-banner bnr-1"><div class="ccv2-icon">📋</div></div><div class="ccv2-body"><span class="ccv2-badge badge-green">FREE</span><h3>Panduan: 20 Prompt Terbaik</h3><p>Prompt siap pakai untuk email, laporan, konten sosmed — langsung copy-paste.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-price free-price">Gratis</div><div class="ccv2-pricesub">Mulai sekarang</div></div><a href="prompt-gratis.html" class="ccv2-btn">Pelajari →</a></div></div></div><div class="course-card-v2"><div class="ccv2-banner bnr-1"><div class="ccv2-icon">🤖</div></div><div class="ccv2-body"><span class="ccv2-badge badge-green">FREE</span><h3>Dasar Claude AI</h3><p>Dari nol sampai bisa pakai Claude untuk kebutuhan sehari-hari — dalam 1 jam.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-price free-price">Gratis</div><div class="ccv2-pricesub">Mulai sekarang</div></div><a href="mulai-claude.html" class="ccv2-btn">Pelajari →</a></div></div></div><div class="course-card-v2"><div class="ccv2-banner bnr-2"><div class="ccv2-icon">💼</div></div><div class="ccv2-body"><span class="ccv2-badge badge-b">BEGINNER</span><h3>Produktivitas Kantor</h3><p>Hemat 3–5 jam kerja per minggu. Gmail, Sheets, Docs, Claude Projects.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-price">Rp 149K</div><div class="ccv2-pricesub">Lifetime access</div></div><a href="produktivitas.html" class="ccv2-btn">Pelajari →</a></div></div></div><div class="course-card-v2"><div class="ccv2-banner bnr-3"><div class="ccv2-icon">🏷</div></div><div class="ccv2-body"><span class="ccv2-badge badge-b">BEGINNER</span><h3>Content & Marketing</h3><p>Positioning, konten, iklan, CS WhatsApp, sampai analisis performa — sistem pemasaran end-to-end.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-price">Rp 149K</div><div class="ccv2-pricesub">Lifetime access</div></div><a href="content-marketing.html" class="ccv2-btn">Pelajari →</a></div></div></div><div class="course-card-v2"><div class="ccv2-banner bnr-4"><div class="ccv2-icon">📊</div></div><div class="ccv2-body"><span class="ccv2-badge badge-i">INTERMEDIATE</span><h3>Analisis Data & Laporan</h3><p>Data mentah jadi insight. Google Sheets, Forms, Claude Artifacts.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><a href="#" class="ccv2-btn disabled" style="width:100%;justify-content:center;">Segera Hadir</a></div></div></div><div class="course-card-v2"><div class="ccv2-banner bnr-5"><div class="ccv2-icon">⚡</div></div><div class="ccv2-body"><span class="ccv2-badge badge-i">INTERMEDIATE</span><h3>Automasi Workflow</h3><p>3 automation aktif dengan Zapier, Make, n8n yang jalan 24/7.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><a href="#" class="ccv2-btn disabled" style="width:100%;justify-content:center;">Segera Hadir</a></div></div></div></div>
@@ -284,9 +293,12 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         try {
           var enr = await sbClient.from('enrollments').select('course_slug,course_name').eq('email', s.user.email);
           var paid = (enr.data || []).filter(function(e){ return e.course_slug !== 'prompt-gratis'; });
-          if (subtext) subtext.textContent = paid.length > 0
-            ? 'Kamu terdaftar di ' + paid.length + ' kursus — lanjutkan belajarmu sekarang.'
-            : 'Kamu sudah mulai belajar — lihat paket untuk lanjut ke kursus berikutnya.';
+          var hasAllAccess = paid.some(function(e){ return e.course_slug === 'all-access'; });
+          if (subtext) subtext.textContent = hasAllAccess
+            ? 'Kamu punya akses ke semua kursus — lanjutkan belajarmu sekarang.'
+            : paid.length > 0
+              ? 'Kamu terdaftar di ' + paid.length + ' kursus — lanjutkan belajarmu sekarang.'
+              : 'Kamu sudah mulai belajar — lihat paket untuk lanjut ke kursus berikutnya.';
         } catch(e) {}
         if (btn) { btn.textContent = 'Buka Dashboard →'; btn.href = 'dashboard.html'; btn.style.background = '#6C47FF'; btn.style.color = '#fff'; }
         if (note) note.style.display = 'none';

@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 23, 2026 (checkpoint 31)_
+_Last updated: July 23, 2026 (checkpoint 32)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -30,16 +30,27 @@ Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign 
 
 ---
 
-## PLANNED: Restructure Payment — Per-Course → One-Time Platform-Wide Access
+## SHIPPED (Checkpoint 32, July 23, 2026): Payment Restructure — Per-Course → One-Time Platform-Wide Access
 
-**Status: not started, planning only.** Julia is considering moving from per-course payment to a single one-time payment that grants access to every course on the platform. This section is the plan to execute once she confirms pricing/timing — do not build this without her explicit go-ahead.
+**Status: live.** Julia decided: all-access price **Rp 399,000**, launch immediately (only `produktivitas` + `content-marketing` are actually built, rest are "coming soon" — sentinel-row design means they auto-unlock later with no backfill), and **grandfather existing paying customers** in free.
 
-**Business decisions Julia needs to make first (not code):**
-- The single all-access price.
-- Whether to launch now — only 2 of ~8 courses (`produktivitas`, `content-marketing`) are actually built, rest are "coming soon" placeholders — or wait until more courses ship.
-- Whether existing paying customers get grandfathered into all-access for free, or keep only what they already paid for. Current footprint is tiny (4 real rows in the live `enrollments` table as of this writing), so migration risk either way is low.
+**What actually shipped:**
+- Backend `index.js`: added `'all-access'` SKU (Rp 399,000) to `COURSES`. No expansion logic needed in the webhook — `all-access` is deliberately *not* listed in `PAKET_COURSES`, so a purchase inserts exactly one sentinel `enrollments` row (`course_slug: 'all-access'`). Comment added in the code explaining why, for future maintainers.
+- `mailer.js`: `sendAccessEmail()` takes a new `isAllAccess` flag (set from `courseSlug === 'all-access'` in the webhook call) and swaps in generic "semua kursus" copy for subject line, hero text, and intro line instead of naming one course.
+- `sheets.js`: no code change needed — it already took `course` as a passthrough string, so All Access purchases log as their own "All Access — Semua Kursus" line in the Pembeli tab automatically.
+- Access gates updated to accept **`all-access` OR the specific course slug** in: `produktivitas-content.html`, `content-marketing-content.html` (the hard redirect-if-not-enrolled checks), plus the softer "already own this, show Buka Kursus button" checks on `produktivitas.html`, `content-marketing.html`, `mulai-claude.html`, `kursus-karyawan.html`, `kursus-mahasiswa.html`, `kursus-ukm.html`, `paket-content-creator.html`, and the returning-user subtext on `index.html`.
+- `dashboard.html`: added an all-access expansion block right after the existing `PAKET_COURSES` expansion — if the user has an `all-access` row, every slug in `ALL_COURSES` not already present gets synthesized into their enrollment list (same pattern/precedent as paket expansion, which already did this for `comingSoon` slugs like `analisis-data`). This makes "has all-access" behave as "enrolled in everything," automatically covering courses added later since it re-derives from `ALL_COURSES` on every page load rather than snapshotting at purchase time.
+- New page **`all-access.html`** — dedicated sales/checkout page for the SKU, same visual template as `produktivitas.html`, wired to real `/create-payment` with `courseSlug: 'all-access'`. Lists all courses (live + coming soon) with status tags, a value/FAQ section, and the standard Duitku payment modal.
+- `index.html`: added a dark promo banner inside the `#kursus` section ("Mau semua kursus?") linking to `all-access.html`, plus `.allaccess-banner`/`.allaccess-btn` CSS.
+- `sql/grandfather-all-access.sql`: idempotent migration (safe to re-run) that gives every email with an existing `type = 'paid'` enrollment a free `all-access` sentinel row. **Already run against production** `ctqtdqbsucbhikwnagvl` this checkpoint — at run time there was exactly one distinct paying email (`julia.utomo@gmail.com`, 3 paid rows), now also has an `all-access` row (`reference: 'GRANDFATHERED'`, `amount: 0`).
+- No database schema migration — reuses the existing `enrollments` table as planned.
 
-**Current architecture (confirmed against the real production Supabase project `ctqtdqbsucbhikwnagvl` / "Belajar-Claude", same org as the "Personal" project, and against the backend code):**
+**Deliberately not touched / flagged for a future pass:**
+- `paket.html` is a separate, stale, **unwired mockup** (buttons link to `login.html`, no real `/create-payment` call, prices don't match the real `COURSES` catalog at all — e.g. it advertises "All Access — Rp 999K" for a fake "9-course" bundle). It's a different artifact from the 4 real `paket-*` sales pages (`kursus-karyawan.html` etc., which *are* wired to real backend SKUs). Left alone this pass to avoid scope creep; Julia may want to retire/redirect it later so it stops advertising a conflicting All Access price.
+- The 4 real `paket-*` bundle sales pages (`kursus-karyawan.html`, `kursus-mahasiswa.html`, `kursus-ukm.html`, `paket-content-creator.html`) still work as before and were only touched to also recognize `all-access` as granting access — not retired, since they were already unlinked from nav per Checkpoint 12 and retiring them is a separate call.
+- The RLS "Allow all" finding from the original research pass (real tables have `USING (true)` policies, so the anon key could theoretically insert fake enrollments client-side) is still unaddressed — independent of this payment-model work, flagged again here as a follow-up.
+
+**Original architecture notes (still accurate, kept for reference):**
 - Payment gateway: Duitku (not Stripe/Midtrans/Xendit — confirmed from `belajar-claude-backend/index.js`).
 - Backend `COURSES` catalog (slug → name/price/link/tag) in `index.js` is the single source of truth for what's purchasable.
 - `POST /create-payment` takes a `courseSlug`; the Duitku webhook (`/webhook/duitku`) grants access by inserting a row into Supabase `enrollments` (columns: `email, course_slug, course_name, type, amount, reference, enrolled_at, name`).
@@ -125,8 +136,9 @@ All pages use these CSS variables:
 | `kursus-karyawan.html` | Jalur Profesional page |
 | `kursus-mahasiswa.html` | Jalur Mahasiswa page |
 | `kursus-ukm.html` | Jalur UKM page |
-| `paket.html` | Pricing/packages page |
+| `paket.html` | Stale unwired mockup pricing page — not connected to real backend/prices, see Checkpoint 32 |
 | `paket-content-creator.html` | Paket Content Creator page |
+| `all-access.html` | Sales/checkout page for the one-time all-access SKU — Rp 399K, added Checkpoint 32 |
 | `coming-soon.html` | Placeholder for unreleased courses |
 
 ### App
@@ -264,10 +276,11 @@ Hosted on Railway (`https://klaud-backend-production.up.railway.app`). Handles p
 | `POST` | `/webhook/duitku` | Payment confirmation — saves enrollment to Supabase + Google Sheets, adds ConvertKit tag, sends access email |
 
 ### Course Catalog (COURSES in index.js)
-Updated July 14, 2026 — `kerja-sehari-hari` fully replaced with `produktivitas`.
+Updated July 14, 2026 — `kerja-sehari-hari` fully replaced with `produktivitas`. `all-access` added Checkpoint 32 (July 23, 2026).
 
 | Slug | Name | Price |
 |------|------|-------|
+| `all-access` | All Access — Semua Kursus | Rp 399,000 |
 | `produktivitas` | Produktivitas Kantor | Rp 149,000 |
 | `content-marketing` | Content & Marketing | Rp 149,000 |
 | `konten-copywriting` | Copywriting & Konten Digital | Rp 199,000 |

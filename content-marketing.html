@@ -344,7 +344,7 @@
     const { data: { session } } = await sbClient.auth.getSession();
     if (!session) return;
     const { data: enrollments } = await sbClient.from('enrollments').select('course_slug').eq('email', session.user.email);
-    if (enrollments && enrollments.some(e => e.course_slug === 'content-marketing')) {
+    if (enrollments && enrollments.some(e => e.course_slug === 'content-marketing' || e.course_slug === 'all-access')) {
       document.querySelectorAll('.btn-primary').forEach(btn => {
         btn.textContent = 'Buka Kursus →';
         btn.removeAttribute('onclick');

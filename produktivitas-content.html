@@ -1518,8 +1518,8 @@ yang bisa saya buka lagi setiap hari kerja padat berikutnya.<button class="copy-
 
     // Only grant access if a real enrollment already exists (created by the Duitku payment webhook) - admins bypass
     if (!ADMIN_EMAILS.includes(email)) {
-      const { data: existing } = await sb.from('enrollments').select('course_slug').eq('email', email).eq('course_slug', COURSE_SLUG).maybeSingle();
-      if (!existing) { window.location.href = 'produktivitas.html'; return; }
+      const { data: existing } = await sb.from('enrollments').select('course_slug').eq('email', email).in('course_slug', [COURSE_SLUG, 'all-access']);
+      if (!existing || existing.length === 0) { window.location.href = 'produktivitas.html'; return; }
     }
 
     document.getElementById('navEmail').textContent = email;
