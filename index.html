@@ -196,8 +196,11 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
       <span class="hc-tag">ALL ACCESS</span>
       <h2>Satu akses untuk semua kursus.</h2>
       <p>Belajar dengan materi terstruktur yang langsung bisa dipraktikkan untuk kerja dan bisnis.</p>
+      <div id="hcDiscountBadge" style="display:none;font-size:11px;font-weight:800;background:var(--green-dim);color:var(--green);border:1px solid var(--green-border);padding:4px 11px;border-radius:100px;margin-bottom:10px;position:relative;"></div>
+      <div id="hcOriginalPrice" style="display:none;font-size:17px;color:var(--ink-3);text-decoration:line-through;margin-bottom:2px;position:relative;"></div>
       <div class="hc-price" id="heroPrice">Rp 399K <span>sekali bayar</span></div>
       <div class="hc-price-note">Akses selamanya · Bukan langganan bulanan</div>
+      <div id="hcDiscountEnd" style="display:none;font-size:11.5px;color:var(--accent);font-weight:600;margin-top:6px;position:relative;"></div>
       <a href="all-access.html" class="btn-dark">Dapatkan All Access →</a>
     </div>
   </div>
@@ -311,6 +314,8 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
 
   // Keep the hero price card in sync with admin.html's course_pricing panel
   // (falls back to the static Rp 399K already in the HTML if the fetch fails).
+  // When a discount is active, also show the slashed original price, a savings
+  // badge, and the discount's end date so the deal is obvious, not just implied.
   (async function() {
     try {
       var res = await sbClient.from('course_pricing').select('*').eq('course_slug', 'all-access').maybeSingle();
@@ -323,6 +328,22 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
       var amount = discountActive ? row.discount_price : (row.base_price != null ? row.base_price : 399000);
       var el = document.getElementById('heroPrice');
       if (el) el.innerHTML = 'Rp ' + Math.round(amount / 1000) + 'K <span>sekali bayar</span>';
+
+      if (discountActive && row.base_price != null) {
+        var pct = Math.round((1 - row.discount_price / row.base_price) * 100);
+        var badge = document.getElementById('hcDiscountBadge');
+        if (badge) { badge.style.display = 'inline-block'; badge.textContent = 'HEMAT ' + pct + '% · Rp ' + Math.round((row.base_price - row.discount_price) / 1000) + 'K'; }
+        var orig = document.getElementById('hcOriginalPrice');
+        if (orig) { orig.style.display = 'block'; orig.textContent = 'Rp ' + Math.round(row.base_price / 1000) + 'K'; }
+        if (row.discount_end) {
+          var endEl = document.getElementById('hcDiscountEnd');
+          if (endEl) {
+            var endDate = new Date(row.discount_end).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            endEl.style.display = 'block';
+            endEl.textContent = '⏳ Diskon berakhir ' + endDate;
+          }
+        }
+      }
     } catch (e) {}
   })();
 

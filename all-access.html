@@ -160,6 +160,7 @@
       <div id="ctaOriginalPrice" style="display:none;font-size:16px;color:var(--ink-3);text-decoration:line-through;margin-bottom:2px;"></div>
       <div class="cta-price" id="ctaPrice">Rp 399K</div>
       <div class="cta-price-sub" id="ctaPriceSub">Satu kali bayar · Akses seumur hidup ke semua kursus, termasuk yang akan datang</div>
+      <div id="discountEnd" style="display:none;font-size:12px;color:var(--accent);font-weight:600;margin-top:8px;"></div>
       <a class="btn-primary" onclick="buyCourse()" href="#" style="margin-top:18px;" id="ctaBuyBtn">Beli All Access — Rp 399K →</a>
       <p class="cta-note">🔒 Pembayaran aman. Akses langsung setelah bayar.</p>
     </div>
@@ -309,10 +310,17 @@
       if (discountActive) {
         const badge = document.getElementById('discountBadge');
         const orig = document.getElementById('ctaOriginalPrice');
+        const pct = data.base_price ? Math.round((1 - data.discount_price / data.base_price) * 100) : null;
         badge.style.display = 'inline-block';
-        badge.textContent = 'DISKON — Hemat ' + formatRupiahShort(data.base_price - data.discount_price);
+        badge.textContent = (pct != null ? 'HEMAT ' + pct + '% · ' : 'DISKON — Hemat ') + formatRupiahShort(data.base_price - data.discount_price);
         orig.style.display = 'block';
         orig.textContent = formatRupiah(data.base_price);
+        if (data.discount_end) {
+          const endEl = document.getElementById('discountEnd');
+          const endDate = new Date(data.discount_end).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+          endEl.style.display = 'block';
+          endEl.textContent = '⏳ Diskon berakhir ' + endDate;
+        }
       }
     } catch (e) { console.error('Pricing fetch failed, using default price', e); }
     document.getElementById('ctaPrice').textContent = formatRupiahShort(effectiveAmount);
