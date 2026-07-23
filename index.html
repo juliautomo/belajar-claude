@@ -292,7 +292,6 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     </div>
     <a href="all-access.html" class="cta-btn" id="ctaBtn">Mulai Belajar Sekarang →</a>
   </div>
-  <p class="cta-sub" id="ctaNote" style="max-width:1100px;margin:16px auto 0;">Sekali bayar · Bukan langganan</p>
 </section>
 <section style="padding: 0 0 88px;" id="reassuranceSection">
   <div class="reassurance reveal">
@@ -373,7 +372,6 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         var headline = document.getElementById('ctaHeadline');
         var subtext  = document.getElementById('ctaSubtext');
         var btn      = document.getElementById('ctaBtn');
-        var note     = document.getElementById('ctaNote');
         if (headline) headline.innerHTML = 'Selamat datang kembali, <em>' + name + '</em>';
         // Check enrollment for subtext
         try {
@@ -518,7 +516,6 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
           }
         } catch(e) {}
         if (btn) { btn.textContent = 'Buka Dashboard →'; btn.href = 'dashboard.html'; btn.style.background = '#6C47FF'; btn.style.color = '#fff'; }
-        if (note) note.style.display = 'none';
       }
     } catch(e) {}
   })();
