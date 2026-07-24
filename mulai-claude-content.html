@@ -937,6 +937,10 @@ saya export ke Google Docs.<button class="copy-btn" onclick="copyPrompt(this)">S
         .eq('email', session.user.email).eq('course_slug', 'mulai-claude');
       if (completions && completions.length > 0) {
         completions.forEach(function(row) {
+          // Skip stale module_num values from before the course was restructured to fewer
+          // modules (Checkpoint 45 dropped Claude Projects, renumbering 6 modules down to 5)
+          // - otherwise old completion rows inflate progress past 100%.
+          if (row.module_num > TOTAL) return;
           done.add(row.module_num);
           var checkEl = document.getElementById('check' + row.module_num);
           var navEl = document.getElementById('nav-mod' + row.module_num);
@@ -986,7 +990,7 @@ saya export ke Google Docs.<button class="copy-btn" onclick="copyPrompt(this)">S
   function prevModule() { if (current > 1) showModule(current - 1); }
 
   function updateProgress() {
-    const pct = Math.round((done.size / TOTAL) * 100);
+    const pct = Math.min(100, Math.round((done.size / TOTAL) * 100));
     document.getElementById('progressFill').style.width = pct + '%';
     document.getElementById('progressLabel').textContent = `${done.size}/${TOTAL}`;
   }

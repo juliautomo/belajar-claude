@@ -538,8 +538,12 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
             var lihProgressFill = document.getElementById('lihContinueProgressFill');
             var lihProgressCount = document.getElementById('lihContinueProgressCount');
             if (lastMeta && enrolledSlugs.has(lastSlug)) {
-              var lastDone = progressMap[lastSlug] ? progressMap[lastSlug].size : 0;
-              var lastPct = lastMeta.modules ? Math.round((lastDone / lastMeta.modules) * 100) : 0;
+              // Clamp to the course's current module count — module_completions can hold
+              // stale rows from before a course was restructured down to fewer modules
+              // (e.g. mulai-claude's old module 6 after Checkpoint 45's renumbering to 5),
+              // which would otherwise overcount progress past 100%.
+              var lastDone = progressMap[lastSlug] ? Math.min(progressMap[lastSlug].size, lastMeta.modules) : 0;
+              var lastPct = lastMeta.modules ? Math.min(100, Math.round((lastDone / lastMeta.modules) * 100)) : 0;
               if (lihLabelEl) lihLabelEl.textContent = 'TERAKHIR DIBUKA';
               if (lihHeadlineEl) lihHeadlineEl.textContent = lastMeta.title;
               if (lihSubEl) lihSubEl.style.display = 'none';
@@ -579,7 +583,9 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
             LIH_COURSE_ORDER.filter(function(slug) { return !LIH_COURSES[slug].comingSoon; }).forEach(function(slug) {
               var meta = LIH_COURSES[slug];
               var doneSet = progressMap[slug];
-              var doneCount = doneSet ? doneSet.size : 0;
+              // Same clamp as the "last opened" banner above — never let stale module_completions
+              // rows from a since-shrunk course push the count past the course's current total.
+              var doneCount = doneSet ? Math.min(doneSet.size, meta.modules) : 0;
               var isEnrolled = enrolledSlugs.has(slug);
               var isDone = meta.modules > 0 && doneCount >= meta.modules;
 

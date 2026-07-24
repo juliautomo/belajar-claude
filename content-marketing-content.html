@@ -1155,6 +1155,9 @@ yang bisa saya buka lagi setiap kali launching produk baru.<button class="copy-b
         .eq('email', session.user.email).eq('course_slug', 'content-marketing');
       if (completions && completions.length > 0) {
         completions.forEach(function(row) {
+          // Skip stale module_num values from before Checkpoint 42 restructured this course
+          // from 9 modules down to 7 - otherwise old completion rows inflate progress past 100%.
+          if (row.module_num > TOTAL) return;
           done.add(row.module_num);
           var checkEl = document.getElementById('check' + row.module_num);
           var navEl = document.getElementById('nav-mod' + row.module_num);
@@ -1196,7 +1199,7 @@ yang bisa saya buka lagi setiap kali launching produk baru.<button class="copy-b
   function prevModule() { if (current > 1) showModule(current - 1); }
 
   function updateProgress() {
-    const pct = Math.round((done.size / TOTAL) * 100);
+    const pct = Math.min(100, Math.round((done.size / TOTAL) * 100));
     document.getElementById('progressFill').style.width = pct + '%';
     document.getElementById('progressLabel').textContent = `${done.size}/${TOTAL}`;
   }

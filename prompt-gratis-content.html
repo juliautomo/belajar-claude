@@ -696,6 +696,11 @@ Tolong bantu saya dengan: outline struktur yang kuat, poin-poin kunci yang perlu
         .eq('course_slug', 'prompt-gratis');
       if (data) {
         data.forEach(r => {
+          // Skip stale module_num values beyond the current module count - prevents both a
+          // missing-element error and progress being inflated past 100% if this course is
+          // ever restructured down to fewer modules (mirrors the fix applied to mulai-claude
+          // and content-marketing after their own module-count reductions).
+          if (r.module_num > TOTAL) return;
           done.add(r.module_num);
           document.getElementById(`check${r.module_num}`).textContent = '✓';
           document.getElementById(`nav-mod${r.module_num}`).classList.add('done');
@@ -739,7 +744,7 @@ Tolong bantu saya dengan: outline struktur yang kuat, poin-poin kunci yang perlu
   function prevModule() { if (current > 1) showModule(current - 1); }
 
   function updateProgress() {
-    const pct = Math.round((done.size / TOTAL) * 100);
+    const pct = Math.min(100, Math.round((done.size / TOTAL) * 100));
     document.getElementById('progressFill').style.width = pct + '%';
     document.getElementById('progressLabel').textContent = `${done.size}/${TOTAL}`;
   }

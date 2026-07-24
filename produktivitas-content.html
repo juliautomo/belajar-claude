@@ -1530,7 +1530,9 @@ yang bisa saya buka lagi setiap hari kerja padat berikutnya.<button class="copy-
       .select('module_num')
       .eq('email', email)
       .eq('course_slug', COURSE_SLUG);
-    if (data) data.forEach(r => { done.add(r.module_num); markDone(r.module_num); });
+    // Skip any stale module_num beyond the current module count, so a course that's ever
+    // restructured down to fewer modules can't inflate progress past 100%.
+    if (data) data.forEach(r => { if (r.module_num > CONTENT_MODULES) return; done.add(r.module_num); markDone(r.module_num); });
     updateProgress();
 
     // Check existing feedback
@@ -1577,7 +1579,7 @@ yang bisa saya buka lagi setiap hari kerja padat berikutnya.<button class="copy-
   }
 
   function updateProgress() {
-    const pct = Math.round((done.size / CONTENT_MODULES) * 100);
+    const pct = Math.min(100, Math.round((done.size / CONTENT_MODULES) * 100));
     document.getElementById('progressFill').style.width = pct + '%';
     document.getElementById('progressLabel').textContent = done.size + '/' + CONTENT_MODULES;
   }
