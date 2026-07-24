@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 24, 2026 (checkpoint 46)_
+_Last updated: July 24, 2026 (checkpoint 47)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -315,13 +315,7 @@ Confirmed via grep that supporting-file names only ever appear as plain text in 
 
 **Follow-up found, not a migration blocker, flagged for later**: all of the test emails (SendGrid welcome email + Supabase's own confirm-signup and reset-password emails) landed in Gmail's **Spam** folder, not the inbox — confirmed via screenshot. Likely cause: SendGrid's sender (`belajarclaude.id@gmail.com`) isn't domain-authenticated (SPF/DKIM), and Supabase Auth is presumably still on its default/shared sending domain rather than custom SMTP — both classic spam triggers when sending "from" a Gmail-style address via a third-party API. Sensible to bundle with whatever domain gets registered next, since proper SPF/DKIM setup wants a real custom domain to attach to. Not yet scheduled — Julia said "put in plan," not "do now."
 
-**Explicitly deferred by Julia ("I will update later")**: registering `belajarclaude.id`. Confirmed via DNS lookup the domain currently doesn't resolve at all (NXDOMAIN — not registered, or registered with zero DNS configured). Confirmed via Cloudflare's docs search that Cloudflare Registrar doesn't list `.id` among supported TLDs — Indonesian ccTLDs need a PANDI-accredited local registrar (KTP/NPWP verification), so this isn't a Cloudflare-side task regardless. `workers.dev` is the production URL indefinitely until this is decided.
-
-**What's left, whenever Julia is ready (no blocker, all optional/future):**
-1. Register `belajarclaude.id` via a PANDI-accredited registrar (Julia's call, deferred) — or decide to just keep `workers.dev` permanently.
-2. If a domain is registered: point it at Cloudflare (nameservers or DNS + add as custom domain on the Worker), then repeat the URL-swap pass (5+ spots, same list as this checkpoint) from `workers.dev` to the final domain.
-3. Flip Supabase's Site URL to the final domain at that point.
-4. SendGrid domain authentication + Supabase custom SMTP to fix the spam-folder deliverability issue — sensible to bundle with step 2 since it also wants a real domain attached.
+**Update (Checkpoint 47, July 24, 2026): `belajarclaude.id` registered, Cloudflare cutover in progress** — see Checkpoint 47 below for the full domain-migration writeup. The "explicitly deferred" note above is now historical; superseded.
 
 ---
 
@@ -363,6 +357,32 @@ Confirmed via grep that supporting-file names only ever appear as plain text in 
 **Follow-up cleanup (same day)**: queried `module_completions` for any row exceeding its course's current module count — only 2 existed in the whole table, both `mulai-claude` / `module_num: 6` (Julia's and Tiffany's admin accounts, the only ones old enough to have finished the pre-Checkpoint-45 6-module version). No real customer data was affected. Both rows deleted directly in Supabase.
 
 **Second follow-up (same day)**: a full table scan turned up 6 more `module_completions` rows under the legacy slug `bisnis-ukm` (the pre-Checkpoint-11 name for `content-marketing`) — all Julia's own admin test-completion data from July 16, orphaned since `bisnis-ukm` isn't referenced anywhere in the live codebase. Confirmed no other tables (`enrollments`, `course_feedback`, `waitlist`) had matching `bisnis-ukm` rows, then deleted all 6. `module_completions` is now fully clean — every row belongs to a real, currently-existing course_slug and sits within that course's module count.
+
+---
+
+## IN PROGRESS (Checkpoint 47, July 24, 2026): Custom Domain — `belajarclaude.id` Registered, Cloudflare Cutover Underway
+
+**Status: in progress — domain registered and DNS cutover started, Worker custom-domain step and codebase URL swap not yet done.**
+
+**Domain research + purchase:**
+- Recommended `belajarclaude.id` (exact brand match) over `.com`/`.co.id`. Corrected an earlier assumption from Checkpoint 43-44: a plain `.id` domain does **not** require KTP/NPWP verification (only `.co.id` does, since it requires proof of a registered Indonesian business entity) — Cloudflare Registrar still doesn't support `.id` at all, so a PANDI-accredited registrar is required regardless.
+- Compared Rumahweb (flat Rp 250,000/year, no renewal surprise) vs Niagahoster (~Rp 80,000 first year, renewal typically higher — check before buying) vs Hostinger. Julia registered through **Hostinger**: `belajarclaude.id`, Rp 210,900 first year + Rp 23,199 tax = **Rp 234,099 total**, renews at Rp 252,900/year, auto-renewal on, expires 2027-07-25.
+- Registrant contact: Julia Utomo, julia.utomo@gmail.com, +62 822-8737-0081.
+
+**Cloudflare cutover, step by step (guided live via screenshots, Julia executing each step herself):**
+1. Added `belajarclaude.id` to Cloudflare via **"Connect a domain"** (not Transfer, not Buy) on Julia's existing Cloudflare account (the one already running the `belajar-claude` Worker).
+2. Kept default AI Crawl Control settings (Search: Allow, Agent: Allow, Training: Block on pages with ads) and default "Import DNS records: Automatic."
+3. Cloudflare's scan found 2 leftover Hostinger parking-page records (`A` record → `2.57.91.91`, `www` CNAME → `belajarclaude.id`) — both deleted, since they'd conflict with routing traffic to the Worker instead.
+4. Cloudflare assigned nameservers **`addyson.ns.cloudflare.com`** / **`amir.ns.cloudflare.com`**. Julia replaced Hostinger's default `apollo.dns-parking.com` / `athena.dns-parking.com` with these two in Hostinger's DNS/Nameserver panel and saved.
+5. Cloudflare zone status as of this checkpoint: **"Waiting for your registrar to propagate your new nameservers"** (typically 1-2 hours, up to 24h). Zone ID: `f156890566...` (Account ID `69df085c1fedb98f4db9de70e7e1eed2`), confirmed via screenshot — this is a *different* Cloudflare account/zone context than the one referenced in Checkpoint 43-44's migration (`belajarclaude.id@gmail.com` account), consistent with that same account owning the Worker.
+
+**Remaining steps once the zone goes Active (tracked as open tasks, not yet done):**
+1. Add `belajarclaude.id` and `www.belajarclaude.id` as **custom domains** on the `belajar-claude` Worker (Workers & Pages → belajar-claude → Settings → Domains & Routes → Add Custom Domain). No Cloudflare MCP tool exists for zone/DNS/custom-domain management (only Workers/D1/R2/KV/Hyperdrive tools are available) — this step is dashboard-only, same constraint noted for the original Vercel→Cloudflare Git-connect step in Checkpoint 43-44.
+2. Update the same 5+ hardcoded URL spots from Checkpoint 43-44 (`login-modal.js`, `login.html`, backend `index.js` COURSES links, Duitku `returnUrl`, `sendAccessEmail` fallback) from `workers.dev` to `belajarclaude.id`.
+3. Flip Supabase Site URL + Redirect URLs from `workers.dev` to `belajarclaude.id`.
+4. Set up SendGrid domain authentication (SPF/DKIM) for `belajarclaude.id` and add the resulting DNS records in Cloudflare — this is the fix for the spam-folder deliverability issue flagged in Checkpoint 43-44, and needs a real domain attached, which now exists.
+
+**Separate topic raised same session — ConvertKit alternative (not yet decided, no action taken):** ConvertKit rebranded to "Kit" and raised its Creator plan from $15/mo to $39/mo in September 2025. Julia's usage is simple (tag-on-signup + tag-on-purchase via `addToConvertKit()` in backend `index.js`, no complex funnels), so recommended **Brevo** as a replacement if she's paying the new rate — free tier covers 100,000 contacts / ~9,000 emails per month, straightforward REST API for contacts/tags, would be a near drop-in replacement for the two existing `addToConvertKit()` call sites. MailerLite considered and rejected for this use case (free tier caps at only 250 subscribers). **Not scheduled** — Julia hasn't decided whether/when to switch.
 
 ---
 
