@@ -270,7 +270,16 @@
     if (res.error) {
       mShowMsg(msg, 'error', res.error.message);
       btn.disabled = false; btn.textContent = 'Daftar →';
-    } else if (res.data.session) {
+      return;
+    }
+
+    // Fire-and-forget: trigger welcome email + ConvertKit/Sheets logging (non-blocking, no name field on this form)
+    fetch('https://klaud-backend-production.up.railway.app/signup', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: email.split('@')[0], email: email, source: 'signup-modal' })
+    }).catch(function() {});
+
+    if (res.data.session) {
       btn.textContent = 'Berhasil!';
       window.location.href = 'dashboard.html';
     } else {
