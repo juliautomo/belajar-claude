@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 24, 2026 (checkpoint 42)_
+_Last updated: July 24, 2026 (checkpoint 43)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -293,6 +293,35 @@ Confirmed via grep that supporting-file names only ever appear as plain text in 
 **Commits this checkpoint**: `0ddc92e` (folder reorg corrected to 7-module target structure), `8ce9d0b` (HTML restructure to 7 modules + PDF markdown content for Modules 2-7 + cross-file module-count fixes in `index.html`/`dashboard.html`/`admin.html`/`content-marketing.html`).
 
 **Not yet done, explicitly deferred by Julia**: PPTX decks for Modules 2-7, and generating the actual rendered PDF file from the now-complete markdown draft ("ppt and pdf generator comes later").
+
+---
+
+## IN PROGRESS (Checkpoint 43, July 24, 2026): Vercel → Cloudflare Migration (Frontend Only)
+
+**Status: staging verified, not yet cut over.** Julia wants to migrate hosting off Vercel onto Cloudflare. Scoped to frontend only — the Node/Express backend stays on Railway untouched.
+
+**What shipped:**
+- Connected Julia's separate Cloudflare account (`belajarclaude.id@gmail.com`, distinct from the `julia.utomo@gmail.com` account that owns GitHub/Vercel/this Claude session — confirmed no conflict, since Cloudflare's Git-connect flow authenticates to GitHub independently of which account owns the Cloudflare side) to the `mcp__cloudflare` connector.
+- Cloudflare's dashboard has unified "Pages" into "Workers with static assets" — no separate Pages product anymore, and the Git-repo-connect step is dashboard-only (no API/MCP tool exists for it), so Julia did that part herself: **Workers & Pages → Create application → Import a repository → `juliautomo/belajar-claude`**, framework preset None, build command empty, deploy command `npx wrangler deploy` (auto-filled by Cloudflare's new unified flow).
+- Added `wrangler.jsonc` to the repo root (`{"name":"belajar-claude","compatibility_date":"2025-06-05","assets":{"directory":"."}}`) — required because the deploy command assumes a Wrangler project; Worker name must exactly match this dashboard project name or the build fails.
+- Result: **`https://belajar-claude.belajarclaude-id.workers.dev`** — live, auto-deploys on every push to `main`, confirmed serving the full site correctly (verified via direct fetch: nav, course content, all pages render).
+- **5+ hardcoded `vercel.app` URLs updated to the new `workers.dev` domain** (frontend commits `394d813`→`7ed47f7`, backend commits `ca32e79`→`045b823`): `login-modal.js` + `login.html` password-reset redirect; backend `index.js`'s 3 course access-link fields in `COURSES`, the Duitku `returnUrl` (post-payment redirect), and the `sendAccessEmail` fallback link.
+- **2 even-older dead links found and fixed while auditing** — `mailer.js`'s welcome email and the Duitku `returnUrl` were pointing at `juliautomo.github.io/belajar-claude`, the pre-Vercel GitHub Pages URL, apparently broken since that migration and unrelated to today's Cloudflare work. Both now point to `workers.dev`.
+- **Welcome email content rewrite** (`mailer.js`): the "Download 20 Prompt Gratis" hook and dead-link CTA replaced with an All Access pitch + working link; the stale 4-course/old-price list (referencing courses/prices that don't exist anymore, e.g. "Claude untuk Karyawan Indonesia Rp 299K") replaced with the real current catalog (20 Prompt Gratis / Dasar Claude AI / Produktivitas Kantor / Content & Marketing, each "✓ Termasuk" under All Access rather than priced individually).
+- **Discovered `sendWelcomeEmail`'s only trigger (`coming-soon.html`'s "notify me" waitlist form) is orphaned** — `dashboard.html` line ~416 filters `comingSoon` courses out of "Jelajahi Kursus" entirely, so nothing in the live product links to `coming-soon.html` anymore. Meanwhile the actual signup path (login modal's "Daftar" tab, real `sbClient.auth.signUp()`) never fired the branded welcome email at all — only Supabase's bare default "Confirm sign up" template. Fixed by wiring a fire-and-forget `POST /signup` call into both `login-modal.js` and `login.html`'s register handlers, right after a successful `signUp()` — reuses the existing backend `/signup` logic (ConvertKit tag, Sheets log, `sendWelcomeEmail`) rather than a new endpoint. No name field exists on the register form, so the email's name is derived from the email's local-part (`email.split('@')[0]`), same fallback the coming-soon form already used.
+- **Supabase config**: added `https://belajar-claude.belajarclaude-id.workers.dev/**` to Authentication → URL Configuration → Redirect URLs (confirmed via screenshot, saved). **Site URL deliberately left unchanged** at `https://belajar-claude.vercel.app` — it's only the fallback for auth emails without an explicit redirect, and changing it before Vercel is actually decommissioned would misdirect real users' confirmation emails for no benefit. Confirmed via screenshot that both the "Confirm sign up" and "Reset password" Supabase email templates use the dynamic `{{ .ConfirmationURL }}` variable, not a hardcoded domain — no edits needed there.
+- **End-to-end tested on the live `workers.dev` URL via Claude-in-Chrome** (not just code review): (1) real signup through the actual register form — created a real Supabase user (`julia.utomo+cftest@gmail.com`, confirmed via direct SQL query against `auth.users`), and confirmed via network inspection that the new fire-and-forget `POST /signup` call returned `200 OK`; (2) real password-reset request through the actual forgot-password form — succeeded with no "redirect not allowed" error, confirming the Supabase Redirect URLs change took effect; (3) called `/create-payment` directly for `all-access` — returned `200 OK` with a real Duitku order ID + reference, confirming the catalog lookup, admin-configurable pricing, and Duitku invoice creation (with the updated `returnUrl`) all still work; deliberately did not complete the actual payment.
+
+**Follow-up found, not a migration blocker, flagged for later**: all of the test emails (SendGrid welcome email + Supabase's own confirm-signup and reset-password emails) landed in Gmail's **Spam** folder, not the inbox — confirmed via screenshot. Likely cause: SendGrid's sender (`belajarclaude.id@gmail.com`) isn't domain-authenticated (SPF/DKIM), and Supabase Auth is presumably still on its default/shared sending domain rather than custom SMTP — both classic spam triggers when sending "from" a Gmail-style address via a third-party API. This predates and is independent of the Cloudflare migration, but affects every real user's first-touch email. Sensible to bundle with whatever domain gets registered next, since proper SPF/DKIM setup wants a real custom domain to attach to. Not yet scheduled — Julia said "put in plan," not "do now."
+
+**Explicitly deferred by Julia ("we'll decide later")**: registering `belajarclaude.id`. Confirmed via DNS lookup the domain currently doesn't resolve at all (NXDOMAIN — not registered, or registered with zero DNS configured). Confirmed via Cloudflare's docs search that Cloudflare Registrar doesn't list `.id` among supported TLDs — Indonesian ccTLDs need a PANDI-accredited local registrar (KTP/NPWP verification), so this isn't a Cloudflare-side task regardless.
+
+**What's actually left on this migration:**
+1. Register `belajarclaude.id` (or decide to skip a custom domain and keep `workers.dev` as permanent) — Julia's call, deferred.
+2. Once decided: point the domain at Cloudflare (nameservers or DNS records + add as custom domain on the Worker), then repeat the same URL-swap pass (5+ spots) from `workers.dev` to the final domain if it's not staying on `workers.dev`.
+3. Flip Supabase's Site URL to the final domain at that point (not before).
+4. Decommission Vercel — only after the final domain (whatever it ends up being) passes the same signup/reset/payment tests that already passed on `workers.dev`.
+5. (Separate, non-blocking) SendGrid domain authentication + Supabase custom SMTP, to fix the spam-folder issue — sensible to do alongside step 2 since it also wants a real domain.
 
 ---
 
