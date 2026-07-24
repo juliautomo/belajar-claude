@@ -362,6 +362,8 @@ Confirmed via grep that supporting-file names only ever appear as plain text in 
 
 **Follow-up cleanup (same day)**: queried `module_completions` for any row exceeding its course's current module count — only 2 existed in the whole table, both `mulai-claude` / `module_num: 6` (Julia's and Tiffany's admin accounts, the only ones old enough to have finished the pre-Checkpoint-45 6-module version). No real customer data was affected. Both rows deleted directly in Supabase.
 
+**Second follow-up (same day)**: a full table scan turned up 6 more `module_completions` rows under the legacy slug `bisnis-ukm` (the pre-Checkpoint-11 name for `content-marketing`) — all Julia's own admin test-completion data from July 16, orphaned since `bisnis-ukm` isn't referenced anywhere in the live codebase. Confirmed no other tables (`enrollments`, `course_feedback`, `waitlist`) had matching `bisnis-ukm` rows, then deleted all 6. `module_completions` is now fully clean — every row belongs to a real, currently-existing course_slug and sits within that course's module count.
+
 ---
 
 ## Design System (as of June 2026)
