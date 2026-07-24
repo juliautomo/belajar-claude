@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 24, 2026 (checkpoint 45)_
+_Last updated: July 24, 2026 (checkpoint 46)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -348,6 +348,19 @@ Confirmed via grep that supporting-file names only ever appear as plain text in 
 **5. Missing Module 5 supporting file added (July 24, 2026 follow-up).** The HTML lesson's Module 5 exercise (`panel5`) references a fallback practice file for students without their own real meeting notes — `contoh-catatan-meeting-berantakan.txt` — but the file didn't actually exist anywhere in the repo. Created it at `K1-Mulai-Claude/M05-Praktek-End-to-End/contoh-catatan-meeting-berantakan.txt`: a deliberately messy, unstructured Indonesian marketing-team meeting-notes text (stream-of-consciousness style, no headers/bullets) covering Instagram engagement, ad budget, testimonial content, content calendar gaps, a customer complaint, a giveaway, and a weekly report ask — written so it maps cleanly onto the module's R-K-T-F exercise (raw input → structured summary + action-items table via one prompt). Pushed alongside the rest of this checkpoint's K1 work.
 
 **Not done / explicitly out of scope this checkpoint**: Module 1 PPT's missing Cowork/Claude Code slide (flagged above, Julia hasn't said whether to fix it yet).
+
+---
+
+## SHIPPED (Checkpoint 46, July 24, 2026): Progress-Percentage Overcounting Fixed Course-Wide
+
+**Status: live** (commit `487a44e`). Julia spotted her own "Terakhir Dibuka" card on `index.html` showing **"120%" / "6/5 modul"** for `mulai-claude`. Root cause: `module_completions` rows are keyed by `module_num` and never cleaned up when a course is restructured to fewer modules — Julia (an admin, so bypasses the enrollment gate) had completed all 6 modules of the *old* `mulai-claude` course before Checkpoint 45 dropped it to 5, leaving a stale `module_num: 6` row that `index.html` counted toward her progress against the new 5-module total (6/5 = 120%). Same latent bug exists for `content-marketing`, restructured 9→7 modules in Checkpoint 42.
+
+**Fix applied in two layers, across every course-reader page:**
+- **`index.html`**: both the "last opened" banner and the course-grid cards now clamp `doneCount` to `Math.min(rawCount, meta.modules)` before computing the percentage, so it can never read above 100%/`modules`-of-`modules`.
+- **`mulai-claude-content.html`, `content-marketing-content.html`, `produktivitas-content.html`, `prompt-gratis-content.html`**: when restoring progress from Supabase on load, any `module_num` greater than that course's current total (`TOTAL` / `CONTENT_MODULES`) is now skipped entirely (not added to the `done` set, no stale checkmark rendered) — this also prevents a latent `getElementById(...).textContent` crash in `prompt-gratis-content.html`, which had no null-check and would have thrown on a stale out-of-range module number. `updateProgress()` in all four also now clamps `pct` to `Math.min(100, ...)` as a defensive floor, so any future course restructure can't reintroduce this class of bug even if the load-time filter is ever bypassed.
+- `dashboard.html` was already safe — `getProgress()` clamps `pct` and the card label separately clamps `done` with `Math.min(done, total)`. No changes needed there.
+
+**Not done**: stale `module_completions` rows themselves aren't deleted (same "flag, don't backfill" approach as legacy free-enrollment rows in Checkpoints 34/35) — they're just no longer counted. Julia's own account still has that extra `mulai-claude` row sitting in the table; harmless now, but flagged in case she wants a cleanup pass across admin/legacy data at some point.
 
 ---
 
