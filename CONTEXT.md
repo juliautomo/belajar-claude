@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 23, 2026 (checkpoint 41)_
+_Last updated: July 24, 2026 (checkpoint 42)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Being migrated from GitHub Pages to **Vercel** (belajarclaude.id).
@@ -252,6 +252,50 @@ Verified with the standard syntax check (`new Function()` over every inline `<sc
 
 ---
 
+## SHIPPED (Checkpoint 42, July 24, 2026): Content & Marketing (K3) — Full Restructure to 7 Modules, Design-System Refresh, New Image-Gen + Multi-Platform-Ads Content
+
+**Status: live.** Multi-session piece of work, planned across several turns before any implementation: reviewed the existing 9-module K3 course, discussed combining modules, researched image-generation options (Nano Banana Pro vs ChatGPT — concluded ChatGPT Free is sufficient, no Plus needed), designed a "Prompt Enhancer" teaching pattern, scoped what Claude can/can't do for Meta/TikTok/Google Ads, produced a full target-structure table, then implemented module-by-module.
+
+**1. Course restructured from 9 modules to 7** (`content-marketing-content.html`):
+- Old M5 (WhatsApp Business CS) + old M6 (Email & Promosi) **merged** into one new Modul 5, "Template Komunikasi Pelanggan (WhatsApp + Email)" — shared info-grid/mistake-list, two side-by-side "Contoh Prompt" blocks (one per channel), two "Cara Kerja" step-rows, one combined Latihan + output-box referencing both `cm-template-wa.txt` and `cm-template-email.txt`.
+- Old M8 (Content OS / Notion) + old M9 (Case Study capstone) **merged** into one new Modul 7, "Content OS + Peluncuran Produk (Capstone)" — "Bagian 1 — Bangun Content OS" (system-building, framed as "· Persiapan Sistem" rather than a numbered day) followed by "Bagian 2 — Peluncuran Garang Asem Frozen: 1 Minggu Kerja Nyata" (the original 5-day launch scenario, day-block labels/rekap table renumbered to match the new module numbers).
+- Old M7 (Performance Marketing) renumbered down to Modul 6 with no content change beyond ID/breadcrumb/nav-counter updates and a continuity note pointing back at the (now-merged) Modul 4 ad campaigns.
+- Full sidebar (7 `nav-mod` items + feedback), panel IDs (`panel1`-`panel8`, 8th = feedback), video/ppt/doc-slot IDs (1-7), `check1`-`check8`, and JS `TOTAL` constant (10 → 8) all renumbered sequentially — verified via grep with zero gaps/duplicates, plus a script-syntax check (`new Function()` over every inline `<script>` block, 2/2 passed) and a div/section open-close tag-balance check (451/451, 0/0).
+- **Safety-checked before renumbering**: queried Supabase `module_completions` directly — only `julia.utomo@gmail.com` had rows for `content-marketing` (module_num 1 and 2), both unaffected by the merge, so zero data-migration risk.
+
+**2. Whole-course design-system refresh** — `content-marketing-content.html`'s CSS was fully replaced with the newer, more polished system already live on `produktivitas-content.html` (`:root` variables, `.hero`, `.module-desc-box`, `.prompt-section`/`.prompt-box`/`.copy-btn`, `.case-box` + new `.persona` modifier, `.output-box`, `.tip-box` + `.warn`/`.bonus`/`.connector` variants, `.mistake-list`, `.step-row`/`.step-card`, `.two-col`/`.col-card`, `.info-grid`/`.info-card`, `.section-heading`, `.nav-bottom`/`.nav-btn`/`.nav-counter`) — while keeping/restyling K3-specific extras (`.metric-table` for ROAS tables, `.day-block`/`.day-label` for the capstone's day-by-day scenario, `.mod-feedback`). Font import switched from Instrument Serif + Geist to Inter (400–800 weights), matching produktivitas' body font.
+
+**3. New content added, not just reorganized:**
+- **Modul 3 (Konten Instagram)**: new "Level Up: Foto Produk dengan AI Image Generator" section teaching a **Prompt Enhancer** pattern — Claude can't generate/edit images directly, but turns a rough student description into a detailed, ready-to-paste prompt for **Nano Banana Pro** (Gemini, free 3 images/day) or **ChatGPT** (free plan sufficient, confirmed with Julia no Plus needed) — with a worked example prompt.
+- **Modul 4 (renamed "Copy Iklan Multi-Platform + Canva Connector")**: new "Copy Beda Platform, Bukan Copy-Paste yang Sama" section — a 3-column breakdown (Meta/Instagram, TikTok, Google Search Ads) explaining why each platform needs differently-written copy, plus a "📋 Bonus: Targeting Brief" tip-box where Claude drafts a plain-language targeting brief (age/interest/location/lookalike ideas) for the student to manually enter into each platform's own Ads Manager — with an explicit "Claude tidak punya koneksi ke Meta/TikTok/Google Ads" caveat built into the copy itself, not just discussed with Julia.
+- **Modul 6 (Performance Marketing)**: continuity note added explicitly linking the ad campaigns being analyzed back to the ones written/launched in Modul 4.
+
+**4. PDF markdown draft content written for all 7 modules** (`Content-Marketing/Course-Level/content-marketing-improved-content.md`) — Module 1 was drafted first (own pass), Modules 2-7 added this checkpoint, transcribed to match each module's final HTML wording exactly (per the standing "HTML and PDF must be consistent, more depth than PPT" rule) rather than paraphrased. Actual rendered PDF and additional PPTX decks for Modules 2-7 explicitly deferred to a later pass per Julia ("ppt and pdf generator comes later") — only Module 1 has a built PPTX so far (`K3-M01-Positioning-Kompetitor.pptx`, 4 slides, terracotta/amber palette, passed the standard `validate.py` + `markitdown` + LibreOffice visual-QA pipeline).
+
+**5. `Content-Marketing/` folder reorganized into per-module subfolders**, mirroring `K2-Produktivitas/`'s structure — first pass mistakenly mirrored the *old* 9-module layout, caught by Julia ("wait we only have 7 modules right?") and corrected to match the *target* 7-module structure:
+```
+Content-Marketing/
+  Course-Level/                    — Content-Marketing-Panduan-Belajar.pdf, content-marketing-improved-content.md
+  M01-Positioning-Kompetitor/       — cm-template-kompetitor.txt, K3-M01-Positioning-Kompetitor.pptx
+  M02-Deskripsi-Produk/             — cm-data-produk.csv
+  M03-Konten-Instagram/             — cm-kalender-konten.csv
+  M04-Iklan-Canva/                  — (no file — Canva Connector only)
+  M05-Komunikasi-Pelanggan/         — cm-template-wa.txt, cm-template-email.txt (merged M5+M6)
+  M06-Performance-Marketing/        — cm-performance-ads.xlsx
+  M07-Content-OS-Capstone/          — cm-m9-starter-peluncuran.txt (merged M8+M9)
+```
+Confirmed via grep that supporting-file names only ever appear as plain text in lesson copy (never a hardcoded `<a href>` download link), so the folder move couldn't break any live download functionality.
+
+**6. Four other files fixed for consistency with the new 7-module count** (not explicitly requested, flagged as necessary side effects and fixed proactively): `index.html`'s `LIH_COURSES['content-marketing'].modules` and `dashboard.html`'s `ALL_COURSES['content-marketing'].modules` both changed 9→7 (both feed progress-percentage math); `admin.html`'s `COURSES` array `modules: 9→7` plus its per-module title array trimmed/renamed from 9 titles to 7; `content-marketing.html` (the preview/sales page) — "9 Modul" → "7 Modul" in the hero tag and section title, a dangling "Modul 9" hero-sub reference removed, and its 9 `.module-item` curriculum blocks merged/renumbered down to 7 to match. Left `content-marketing.html`'s unrelated "9 Skill Pemasaran dengan Claude" skills-grid (9 skill chips) untouched — skill count is independent of module count.
+
+**Verified live** after push: fetched `content-marketing-content.html` with a cache-busting query param — confirmed 7 module panels + feedback (`8/8` counter), correct titles in the sidebar, and the merged Modul 5 (WA+Email) and Modul 7 (Content OS+Capstone) sections both render with all their sub-sections intact.
+
+**Commits this checkpoint**: `0ddc92e` (folder reorg corrected to 7-module target structure), `8ce9d0b` (HTML restructure to 7 modules + PDF markdown content for Modules 2-7 + cross-file module-count fixes in `index.html`/`dashboard.html`/`admin.html`/`content-marketing.html`).
+
+**Not yet done, explicitly deferred by Julia**: PPTX decks for Modules 2-7, and generating the actual rendered PDF file from the now-complete markdown draft ("ppt and pdf generator comes later").
+
+---
+
 ## Design System (as of June 2026)
 All pages use these CSS variables:
 ```css
@@ -334,7 +378,7 @@ All pages use these CSS variables:
 | `mulai-claude-content.html` | Course reader — 6 modules + feedback panel. **Gated to `all-access` enrollment only as of Checkpoint 34** (previously open to any logged-in user, auto-enrolled free) |
 | `produktivitas-content.html` | Course reader — K2, 7 active modules + feedback panel (COURSE_SLUG='produktivitas'); M8 Case Study content preserved but archived/unreachable, see Checkpoint 25 |
 | `kerja-sehari-hari-content.html` | DELETED from repo (July 14, 2026) |
-| `content-marketing-content.html` | Course reader — 9 modules + feedback panel (COURSE_SLUG='content-marketing'; renamed from bisnis-ukm-content.html checkpoint 11) |
+| `content-marketing-content.html` | Course reader — **7 modules + feedback panel as of Checkpoint 42** (was 9; M5+M6 merged into "Template Komunikasi Pelanggan (WhatsApp + Email)", old M8+M9 merged into "Content OS + Peluncuran Produk (Capstone)") (COURSE_SLUG='content-marketing'; renamed from bisnis-ukm-content.html checkpoint 11) |
 | `payment-success.html` | Post-payment confirmation |
 | `admin.html` | Admin-only content manager — upload course PDFs + per-module videos to Supabase Storage, plus the "Harga All Access" pricing/discount panel (Checkpoint 33). Gated to `julia.utomo@gmail.com` / `tiffany.utomo@gmail.com` via session email check. Entry point: hidden "Admin" nav item on `index.html` and `dashboard.html` (shown only to those emails) — both already existed independently of `prompt-gratis.html`'s old nav link, confirmed working before that page was retired to a redirect stub in Checkpoint 35. |
 
@@ -631,6 +675,8 @@ Updated July 14, 2026 — fully in sync with frontend.
 ---
 
 ## Checkpoint 14 (July 18, 2026) — Content & Marketing (K3) module plan documented, "build something real" artifact bonuses added to M3/M7/M9, Canva Connector scoped away from photo editing, Claude Free plan compatibility highlighted
+
+> **⚠️ Superseded July 24, 2026 (Checkpoint 42)**: the course was restructured from 9 modules down to **7** — old M5 (WhatsApp) + M6 (Email) merged into one module, old M8 (Content OS) + M9 (Case Study capstone) merged into one module. The table below is the original 9-module plan, kept for historical record; see Checkpoint 42 for the current 7-module structure and mapping.
 
 **Full 9-module structure of `content-marketing-content.html` (Content & Marketing / K3) recapped and documented** — persona "Dapur Rara" (fictional frozen-food UMKM) runs through all 9 modules + a feedback panel (10 total). Module-by-module plan:
 
