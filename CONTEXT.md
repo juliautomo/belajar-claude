@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 25, 2026 (checkpoint 52)_
+_Last updated: July 25, 2026 (checkpoint 53)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -467,6 +467,19 @@ Julia ran the pending password-reset test and the email landed in Gmail's Spam f
 **5. workers.dev Redirect URL removed.** The `https://belajar-claude.belajarclaude-id.workers.dev/**` fallback kept in Supabase's Redirect URLs allow-list since the Checkpoint 47 domain cutover (Julia's call to remove "after a week or two of confirmed stability") is now removed — Redirect URLs contains only `https://belajarclaude.id/**`.
 
 **Not done:** storage bucket listing policy and leaked-password-protection (Pro plan) — both flagged above, neither actioned pending Julia's input.
+
+## SHIPPED (Checkpoint 53, July 25, 2026): Legal Pages Added for Duitku Production KYC
+
+**Status: live** (commit `7c821ea`). Julia is registering for Duitku production (moving off sandbox), and their merchant onboarding flagged `belajarclaude.id` with "Url website Anda belum valid" during KYC review. Root cause: Duitku's KYC validation checks for standard e-commerce legal/policy pages (terms, privacy, refund policy) — belajarclaude.id had none; the footer only had social links and a contact email.
+
+**What shipped — 3 new standalone pages, matching the site's design system (Instrument Serif + Geist, `#6C47FF` purple accent, same CSS variable palette):**
+- **`syarat-ketentuan.html`** (Terms & Conditions) — covers account terms, digital-product nature of the courses, All Access sekali-bayar model, payment via Duitku, IP/licensing restrictions (no reselling/sharing access), liability limits, governing law (Indonesia).
+- **`kebijakan-privasi.html`** (Privacy Policy) — table of exactly what data is collected (name, email, transaction history, learning progress, optional profile fields) and a table naming every third party involved and why: Duitku (payments), Supabase (database/auth), SendGrid (transactional email), Kit/ConvertKit (marketing email), Cloudflare (hosting). Explicitly states card/payment credentials are never stored by us directly. Covers user rights (access/correction/deletion/unsubscribe) and cookie usage.
+- **`kebijakan-pengembalian.html`** (Refund Policy) — drafted with concrete, reasonable defaults since none existed before: **7-day refund window**, capped at **under 20% course progress** to qualify, refund requested via email, reviewed in 1–3 business days, funds returned via Duitku in 5–14 business days. **Flagged for Julia to review/adjust** — the 7-day/20% numbers are a sensible starting point, not a business decision Claude should finalize unilaterally.
+
+**Linked in the footer of every public-facing sales page** — `index.html` (added a 4th "Legal" footer-links column matching the existing Ikuti Kami/Hubungi Kami pattern) and `all-access.html`, `mulai-claude.html`, `produktivitas.html`, `content-marketing.html`, `prompt-gratis.html` (added a small `.footer-legal` link row under the existing one-line copyright footer on each, since those pages share an identical minimal footer pattern).
+
+**Not done — the rest of Duitku's KYC form is Julia's to complete, not Claude's.** The registration flow also has "Identitas & Informasi Bank" (ID number, bank account) and "Verifikasi Wajah" (biometric face verification) steps — entering identity documents, bank account numbers, or completing biometric verification is out of bounds for Claude regardless of request (financial/ID credential handling is a hard restriction), and face verification requires the actual person physically present. Julia needs to complete those steps herself in the Duitku dashboard. Once the legal pages are live (they are, as of this checkpoint), the next step is to go back to the "Informasi Usaha" tab and re-trigger the URL validation — if it still fails, the actual failure reason should be visible in Duitku's dashboard or support chat, since "belum valid" alone doesn't specify which requirement is missing.
 
 ---
 
