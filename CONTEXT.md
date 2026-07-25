@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 25, 2026 (checkpoint 56)_
+_Last updated: July 25, 2026 (checkpoint 57)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -514,6 +514,26 @@ Replaced all 8 with an exact copy of `index.html`'s footer markup, CSS, and the 
 All 9 pages (8 changed + index.html itself as the reference) now share identical footer HTML structure, verified via `grep -c "footer-brand"` returning the same count on every page.
 
 **Commits this checkpoint**: `belajar-claude`: `5daab38` (all 8 footers).
+
+---
+
+## FIXED (Checkpoint 57, July 25, 2026): Guest-checkout "set password" link didn't reach reset-password.html
+
+**Status: fix pushed** (`belajar-claude-backend` commit `d61efe1`), Railway auto-deploys on push. Not yet re-verified end-to-end against a live purchase (see below).
+
+**Bug**: Julia reported that after a guest-checkout purchase, the access email's "Buat Password & Mulai Belajar →" button didn't land on the set-password form — it dropped the buyer on the normal login page instead.
+
+**Root cause**: `generatePasswordSetLink()` in `index.js` calls GoTrue's admin `generate_link` endpoint via a raw `https.request` POST — it does not go through the `supabase-js` admin SDK. The code was sending `options: { redirectTo: 'https://belajarclaude.id/reset-password.html' }`, which is the **JS SDK's** convenience parameter shape. The raw REST API doesn't recognize `options` at all — it expects a **top-level `redirect_to`** field. GoTrue's Go-based JSON binding silently ignores unrecognized fields rather than erroring, so the call still "succeeded," but `redirect_to` silently fell back to the project's Site URL (`https://belajarclaude.id`, the bare homepage) instead of `reset-password.html`. The homepage has no password-recovery UI, so buyers landed somewhere with no way to set a password — consistent with what Julia saw.
+
+**Confirmed against a real case, not just code review**: queried `auth.users` for `maggieshung@gmail.com` (a genuine guest-checkout purchase, Rp 299,000, from Checkpoint prior to this session's test-data cleanup) — `recovery_sent_at` was `null`, meaning no recovery-token generation had ever actually reached her account despite the purchase completing normally. That's the fingerprint of this exact bug.
+
+**Fix**: changed the request body to `redirect_to: 'https://belajarclaude.id/reset-password.html'` at the top level (removed the `options` wrapper). Verified the correct raw-API shape against Supabase's own docs before changing it, rather than guessing.
+
+**Not affected by this bug — confirmed separately**: the self-service "Lupa Password" flow on `login.html`/`login-modal.js` uses `sbClient.auth.resetPasswordForEmail(email, { redirectTo })` — the real client-side SDK method, which does its own correct internal mapping. That path was never broken, so anyone stuck from a purchase made before this fix can recover access right now via "Lupa Password" on the login page without waiting on anything.
+
+**Deliberately not done**: didn't fabricate a test Duitku webhook call to verify end-to-end, since that would require the production `DUITKU_API_KEY`/`DUITKU_MERCHANT_CODE` (Railway-only secrets I don't have and shouldn't try to obtain) and would write a fake payment record into live `enrollments`/Sheets/ConvertKit either way. **Recommend Julia do one real (or sandbox) guest-checkout test purchase to confirm the email's set-password link now lands correctly on `reset-password.html` and shows the password form** — this checkpoint should be marked fully verified once that's done.
+
+**Commits this checkpoint**: `belajar-claude-backend`: `d61efe1`.
 
 ---
 
