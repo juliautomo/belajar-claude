@@ -123,6 +123,14 @@
       color: #94A3B8; text-align: center; line-height: 1.6;
     }
 
+    #klaud-modal .m-context {
+      display: none;
+      background: #F5F3FF; border: 1px solid #E4DEFF;
+      border-radius: 10px; padding: 11px 14px;
+      font-size: 12.5px; color: #5B3FD1; line-height: 1.55;
+      text-align: center; margin-bottom: 20px;
+    }
+
     #klaud-modal .m-view { display: none; }
     #klaud-modal .m-view.active { display: block; }
   `;
@@ -135,6 +143,7 @@
     <div id="klaud-modal">
       <button id="klaud-modal-close" aria-label="Tutup">✕</button>
       <div class="m-logo">belajar<span>claude</span></div>
+      <div class="m-context" id="m-context"></div>
 
       <div class="m-tabs" id="m-tabs">
         <button class="m-tab active" data-tab="login">Masuk</button>
@@ -327,7 +336,11 @@
   });
 
   // ── Public API ───────────────────────────────────────────────────────────────
-  window.openLoginModal = function(defaultTab) {
+  // contextMsg (optional): short explanatory line shown above the tabs, for when the
+  // modal is triggered by an action other than a plain "Masuk"/"Daftar" nav click
+  // (e.g. clicking "Beli All Access" while logged out) so it's clear why a login/signup
+  // prompt just interrupted them instead of it feeling like a random popup.
+  window.openLoginModal = function(defaultTab, contextMsg) {
     overlay.classList.add('open');
     // Reset all forms
     overlay.querySelectorAll('input').forEach(function(i) { i.value = ''; });
@@ -336,6 +349,10 @@
     overlay.querySelector('#m-login-btn').textContent = 'Masuk →';
     overlay.querySelector('#m-reg-btn').textContent = 'Daftar →';
     overlay.querySelector('#m-forgot-btn').textContent = 'Kirim Link Reset →';
+    // Context banner
+    var ctxEl = overlay.querySelector('#m-context');
+    if (contextMsg) { ctxEl.textContent = contextMsg; ctxEl.style.display = 'block'; }
+    else { ctxEl.textContent = ''; ctxEl.style.display = 'none'; }
     // Show tabs, go to requested tab (default: login)
     overlay.querySelector('#m-tabs').style.display = 'flex';
     mSwitchTab(defaultTab || 'login');
