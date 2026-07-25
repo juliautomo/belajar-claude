@@ -597,6 +597,20 @@ Julia asked for a consistency audit across the "20 Prompt Dasar" course's four r
 
 ---
 
+## SHIPPED (Checkpoint 62, July 25, 2026): Local folder housekeeping + Mulai Claude PDF audit (no drift found)
+
+**Status: verified**, no site-facing commit needed for the PDF check; local-clone repair is metadata-only (not deployable).
+
+Julia asked to "organize the folder" (following up on the Checkpoint 61 note about the stale local clone) and to check whether the Mulai Claude PDF needed the same regeneration treatment as the 20-Prompt PDF.
+
+**1. Local clone partially repaired.** Root cause of the "70 commits behind" state: the local `.git` on the mounted working directory has an intermittent OS-level file-locking issue specific to this sandbox's mount (`Operation not permitted` on unlinking files mid-write, including plain non-git files) — not a real divergence in content. Confirmed the actual on-disk files already matched `origin/main` exactly (only 2 untracked logo PNGs differed, harmless). Fixed the stale ref directly (`git update-ref refs/heads/main` to `origin/main`'s commit), so `git status`/`git log` in that folder now correctly reports up to date with no ahead/behind drift. **Limitation**: git *write* operations (commit, add, checkout) still fail intermittently from within this sandbox against that specific mount — pushes for this and the prior checkpoint were done via a scratch clone instead. This isn't expected to affect Julia working from her own machine directly (the lock issue appears specific to the sandbox's remote-mount driver, not the repo itself) — a normal `git pull` from her side should now fast-forward cleanly since the ref is no longer stale.
+
+**2. Mulai Claude PDF checked — already current, no regeneration needed.** Unlike the 20-Prompt PDF (Checkpoint 61), `K1-Mulai-Claude/belajarclaude - Mulai dengan Claude AI (Modul 1-5).pdf` was recently rebuilt as part of the K1 folder reorg (Checkpoint 45) and matches the live lesson (`mulai-claude-content.html`) closely: correct 5 modules in the correct order and titles (Setup Akun, Anatomi Prompt, Role Prompting, Claude Artifacts, Praktek End-to-End), same R-K-T-F framework content, same worked examples, no stale references to the removed "Module 5 Claude Projects" content. Verified via full-text extraction and side-by-side comparison rather than title/date alone. One accepted difference: the PDF omits per-module minute estimates that the HTML sidebar shows — a design/density choice, not missing or wrong information, same precedent as prior PDF audits.
+
+**Commits this checkpoint**: none (local-clone fix is metadata-only; PDF confirmed to need no changes).
+
+---
+
 ## Design System (as of June 2026)
 All pages use these CSS variables:
 ```css
