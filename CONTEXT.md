@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 25, 2026 (checkpoint 58)_
+_Last updated: July 25, 2026 (checkpoint 59)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -550,6 +550,18 @@ Julia shared a mockup (dark card: "ALL ACCESS" badge, "Satu akses, semua kursus.
 **3. Preview-card overlap bug fixed.** The `.lock-overlay` ("🔒 Buka kursus untuk lihat lengkap") label was absolutely positioned directly on top of the truncated prompt text with an insufficient fade gradient, so the label visually collided with real text underneath. Fixed by reserving bottom padding for the label, extending the fade gradient to fully obscure the text before it reaches the label, and giving the label its own z-index layer.
 
 **Commits this checkpoint**: `belajar-claude`: `eb895cb`.
+
+---
+
+## SHIPPED (Checkpoint 59, July 25, 2026): Finish "Dasar" rename + mulai-claude skills chips
+
+**Status: live** (commit `83889f8`), verified via direct fetch.
+
+**1. Remaining "20 Prompt Terbaik" references renamed.** Checkpoint 55 renamed the course's display title from "20 Prompt Gratis" to "20 Prompt Dasar" in the cta-box/card/dashboard spots, but missed the hero — the actual `<h1>` and `<title>` on `prompt-gratis.html` still read "20 Prompt Claude AI Terbaik untuk Indonesia", and `prompt-gratis-content.html` (title, sidebar course name, nav breadcrumb ×5, completion message) plus `admin.html`'s course list still said "20 Prompt Claude Terbaik" / "20 Prompt Terbaik". Julia caught the hero mismatch from a screenshot; swept the rest via grep to catch it everywhere rather than just the one spot shown. New hero: "20 Prompt **Dasar** Claude AI untuk Indonesia".
+
+**2. `mulai-claude.html` skills section fixed.** Julia asked to drop the hardcoded "5" from "5 Skill Claude Inti" (now just "Skill Claude Inti") — matching `produktivitas.html`'s pattern of not baking a count into the heading — and to add more chips, consistent with how much more populated the equivalent section is on `produktivitas.html` (8 chips) and `content-marketing.html` (9 chips). Rather than padding with invented skills, checked `mulai-claude-content.html` for tools genuinely taught and added the two real ones that weren't already chips: `Claude.ai` and `Google Docs` (both confirmed via the lesson's own module list and hero tool-tags) — bringing the original 5 to 7.
+
+**Commits this checkpoint**: `belajar-claude`: `83889f8`.
 
 ---
 
