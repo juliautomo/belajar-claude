@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 24, 2026 (checkpoint 48)_
+_Last updated: July 25, 2026 (checkpoint 49)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -326,7 +326,7 @@ Confirmed via grep that supporting-file names only ever appear as plain text in 
 **1. `K1-Mulai-Claude/` reorganized into per-module subfolders**, mirroring the `K2-Produktivitas/`/`Content-Marketing/` pattern (the 5 loose `K1_ModulN_*.pptx` files at the folder root, plus the pre-existing `M02-Anatomi-Prompt/` subfolder, were the trigger — Julia had just added the missing module PPTs and asked for them organized to match). Created `M01-Apa-itu-Claude-dan-Setup-Akun/`, `M03-Role-Prompting/`, `M04-Claude-Artifacts/`, `M05-Praktek-End-to-End/` (originally `M06-...`, see below), each holding its renamed `K1-M0X-...pptx`. Verified each pptx's title slide text actually matches its corresponding module in `mulai-claude-content.html` before filing it (all 6 matched at the time).
 
 **2. HTML↔PPT↔PDF consistency audit, two real issues found:**
-- **Module 1 PPT** is missing the "Cowork & Claude Code" slide/section that HTML has (both mention Cowork/Claude Code as bonus areas beyond the core 4 Claude.ai features) — flagged to Julia, not fixed this checkpoint (everything else in Modul 1–6 checked out consistent across HTML/PPT).
+- **Module 1 PPT** is missing the "Cowork & Claude Code" slide/section that HTML has (both mention Cowork/Claude Code as bonus areas beyond the core 4 Claude.ai features) — flagged to Julia; she confirmed "it's fine for that" (see Checkpoint 49), so this is resolved as intentionally deferred and no longer tracked.
 - **The whole-course PDF** (`belajarclaude - Mulai dengan Claude AI (Modul 1-6).pdf`, 16 pages, no source file existed anywhere in the repo/sandbox) still taught the *old, retired* prompt framework in its Module 2 section — **K-I-F (Konteks → Instruksi → Format)** with a "Konteks, Peran, Tugas, Format" (K-P-T-F) element list — while the HTML lesson, Module 2's standalone PPT, and Module 2's standalone PDF panduan (`M02-Anatomi-Prompt/K1-M02-Anatomi-Prompt-Panduan.pdf`) had all already been fixed to the canonical **R-K-T-F (Role → Konteks → Tugas → Format)** framework back in Checkpoint 12. This 16-page course guide was evidently never regenerated after that fix. Found via a full page-by-page `pdftotext` extraction and side-by-side comparison against the live HTML.
 
 **3. Whole-course PDF rebuilt from scratch with WeasyPrint** (HTML/CSS → PDF), reverse-engineering the house style from screenshots of the existing Module 2 standalone PDF and the (stale) whole-course PDF itself — navy cover/header (`#0D1321`/`#6849F6` purple accent), purple-pill module badges, left-purple-border section headings, color-coded callout boxes (green Exercise, purple Output, yellow Tips/Kesalahan Umum, dark "digabung jadi satu prompt" boxes), matching the palette already documented in `belajarclaude-pptx-style-spec.md`. Fixed the K-I-F→R-K-T-F issue in 4 spots (TOC "Fokus" column, Module 2's element list/framework-callout/summary/exercise/output-box, closing recap card). All pages rendered to image and visually inspected for overflow/clipping — clean.
@@ -341,7 +341,7 @@ Confirmed via grep that supporting-file names only ever appear as plain text in 
 
 **5. Missing Module 5 supporting file added (July 24, 2026 follow-up).** The HTML lesson's Module 5 exercise (`panel5`) references a fallback practice file for students without their own real meeting notes — `contoh-catatan-meeting-berantakan.txt` — but the file didn't actually exist anywhere in the repo. Created it at `K1-Mulai-Claude/M05-Praktek-End-to-End/contoh-catatan-meeting-berantakan.txt`: a deliberately messy, unstructured Indonesian marketing-team meeting-notes text (stream-of-consciousness style, no headers/bullets) covering Instagram engagement, ad budget, testimonial content, content calendar gaps, a customer complaint, a giveaway, and a weekly report ask — written so it maps cleanly onto the module's R-K-T-F exercise (raw input → structured summary + action-items table via one prompt). Pushed alongside the rest of this checkpoint's K1 work.
 
-**Not done / explicitly out of scope this checkpoint**: Module 1 PPT's missing Cowork/Claude Code slide (flagged above, Julia hasn't said whether to fix it yet).
+**Not done / explicitly out of scope this checkpoint**: Module 1 PPT's missing Cowork/Claude Code slide (flagged above) — resolved as intentionally deferred, see Checkpoint 49.
 
 ---
 
@@ -405,6 +405,22 @@ Confirmed via grep that supporting-file names only ever appear as plain text in 
 **3. Footer copyright year.** All 6 instances of "© 2025" (`index.html`, `all-access.html`, `mulai-claude.html`, `produktivitas.html`, `content-marketing.html`, `prompt-gratis.html`) updated to "© 2026".
 
 **Not done — pending Julia**: live password-reset test to confirm SendGrid's SPF/DKIM authentication (Checkpoint 47) actually lands mail in the inbox rather than spam. Attempted to trigger this directly via Supabase's `/auth/v1/recover` endpoint from the sandbox but blocked by the sandbox's own outbound network allowlist (same restriction that blocks direct `curl` access to the live site) — needs Julia to click "Lupa password?" on the live site herself and report back what she sees.
+
+## SHIPPED (Checkpoint 49, July 25, 2026): Guest Checkout — Payment Before Account Setup
+
+**Status: live** (frontend `07bc940`, backend `d657acd`). Julia felt the old flow (create account → then pay) was too many steps and asked for payment → account setup instead, so a logged-out visitor can buy All Access without signing up first.
+
+**What shipped:**
+- `all-access.html`'s `buyCourse()` no longer gates on a Supabase session. It always opens the payment modal directly — prefilling name/email from the session if one exists, otherwise leaving the fields blank for the visitor to fill in themselves. The old behavior (silently popping the login modal) is gone; `submitPayment()` and `/create-payment` already worked without auth, so no backend change was needed here.
+- Backend `index.js`: the Duitku webhook now attempts `createSupabaseUser(email, name)` (pre-confirmed, no email-verification step) right before sending the access email. If the account is brand new, it also calls a new `generatePasswordSetLink(email)` helper — Supabase's admin `generate_link` endpoint (`type: recovery`) — and passes the resulting one-click link into `sendAccessEmail()` as `setPasswordLink`. If the account already existed (returning customer), `setPasswordLink` stays `null` and the flow is unchanged. Chose `generate_link` over triggering `/auth/v1/recover` because the latter is rate-limited to 2 emails/hour per Supabase project (even with custom SMTP) — `generate_link` is an admin-only call that doesn't send mail itself, so we control delivery entirely through our own SendGrid email.
+- New helper `supabaseAdminPost()` added alongside the existing `supabaseRequest()` — needed because `generate_link` returns a JSON body (`action_link`) that has to be read, unlike the fire-and-forget admin calls `supabaseRequest` was built for.
+- `mailer.js`'s `sendAccessEmail()` gained a `setPasswordLink` param. When present, the primary CTA swaps from "Mulai Belajar Sekarang →" (→ `accessLink`) to "Buat Password & Mulai Belajar →" (→ `setPasswordLink`), with a short explanatory line and adjusted intro copy. `reset-password.html` needed no changes — it already handles recovery-type magic links generically.
+- `payment-success.html`: step 1 copy tweaked to cover both cases ("Akun baru? Ada link sekali klik buat set password juga.") without needing to know at page-load time which case applies.
+- Also fixed 2 stray "© 2025" instances in `mailer.js` (missed by Checkpoint 48's frontend-only footer sweep) → "© 2026".
+
+**Not done / explicitly resolved without a fix:** Module 1 PPT's missing Cowork/Claude Code slide (flagged Checkpoint 45, tracked as open since) — Julia confirmed "it's fine for that" and asked it be removed from the plan. No longer tracked as an open item.
+
+**Not done — still pending Julia**: the live password-reset/deliverability test from Checkpoint 47/48 hasn't been confirmed done yet either.
 
 ---
 
