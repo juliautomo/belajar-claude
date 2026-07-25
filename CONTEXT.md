@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 25, 2026 (checkpoint 55)_
+_Last updated: July 25, 2026 (checkpoint 56)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -500,6 +500,20 @@ Julia ran the pending password-reset test and the email landed in Gmail's Spam f
 **2. "Gabung Gratis" nav button removed from all course preview pages.** Julia asked why logged-out visitors on lesson/preview pages still saw a "Gabung Gratis" (Join Free) button in the header next to "Masuk" — same root issue, implies a free signup path that no longer exists (accounts are now created automatically at checkout via guest-checkout, not via a separate free-signup button). Removed the `#navCtaBtn` anchor from the nav markup in all 6 pages that had it: `all-access.html`, `content-marketing.html`, `index.html`, `mulai-claude.html`, `produktivitas.html`, `prompt-gratis.html`. Also cleaned up the now-dead JS that toggled its visibility. One thing caught during cleanup: the JS line being removed in 5 of the 6 files (`all-access`, `content-marketing`, `mulai-claude`, `produktivitas`, `prompt-gratis`) doubled as the `if (!session) { ...; return; }` early-return guard for the nav auth script — deleting it wholesale would have let anonymous visitors hit `session.user.email` on a null session and throw. Caught this before pushing and restored a plain `if (!session) return;` in its place in all 5 files. `index.html`'s reference was inside an existing `if (s) { ... }` block with no return semantics, so no equivalent fix was needed there.
 
 **Commits this checkpoint**: `belajar-claude`: `1dadb46`.
+
+---
+
+## SHIPPED (Checkpoint 56, July 25, 2026): Footer standardized across every page
+
+**Status: live** (commits `5daab38`, `5accaf5`), verified via direct fetch.
+
+Julia noticed the homepage footer (rich 4-column: brand+tagline, "Ikuti Kami", "Hubungi Kami", "Legal", bottom bar with admin-managed social/contact links pulled live from the `social_links` table) didn't match the plain single-line footers on every other page. Two different "plain" footer patterns existed before this: the 5 course preview pages (`all-access.html`, `content-marketing.html`, `mulai-claude.html`, `produktivitas.html`, `prompt-gratis.html`) had a dark centered one-liner + legal links row (added Checkpoint 53), and the 3 legal pages (`syarat-ketentuan.html`, `kebijakan-privasi.html`, `kebijakan-pengembalian.html`) had a simpler 2-column logo+legal-links footer with no dynamic content at all.
+
+Replaced all 8 with an exact copy of `index.html`'s footer markup, CSS, and the `social_links`-populating JS block (same `#footerSocialLinks`/`#footerContactLinks`/`#liTiktok` etc. element IDs and the same admin-managed Supabase query — so toggling a link visible/hidden in `admin.html`'s Social Media Links panel now applies site-wide automatically, not just on the homepage). The 3 legal pages didn't load `supabase-js`/`supabase-config.js` at all before (they're static informational pages) — added both script tags so the same footer JS works there too; this is the only page category that gained a new external dependency as part of this change.
+
+All 9 pages (8 changed + index.html itself as the reference) now share identical footer HTML structure, verified via `grep -c "footer-brand"` returning the same count on every page.
+
+**Commits this checkpoint**: `belajar-claude`: `5daab38` (all 8 footers).
 
 ---
 
