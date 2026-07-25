@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 24, 2026 (checkpoint 47)_
+_Last updated: July 24, 2026 (checkpoint 48)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -389,6 +389,22 @@ Confirmed via grep that supporting-file names only ever appear as plain text in 
 **Separate topic raised same session — ConvertKit alternative (not yet decided, no action taken):** ConvertKit rebranded to "Kit" and raised its Creator plan from $15/mo to $39/mo in September 2025. Julia's usage is simple (tag-on-signup + tag-on-purchase via `addToConvertKit()` in backend `index.js`, no complex funnels), so recommended **Brevo** as a replacement if she's paying the new rate — free tier covers 100,000 contacts / ~9,000 emails per month, straightforward REST API for contacts/tags, would be a near drop-in replacement for the two existing `addToConvertKit()` call sites. MailerLite considered and rejected for this use case (free tier caps at only 250 subscribers). **Not scheduled** — Julia hasn't decided whether/when to switch.
 
 **Not yet done**: actually sending a live test email (signup or password-reset) to confirm SPF/DKIM pass and mail lands in inbox rather than spam — discussed, not executed yet this session. Also flagged: Supabase's auth email templates (Confirm signup, Reset Password, etc.) haven't been reviewed for content/branding quality this session — only confirmed back in Checkpoint 43-44 that they use the dynamic `{{ .ConfirmationURL }}` variable rather than a hardcoded domain, so no template edit should be *required* by the domain change itself.
+
+---
+
+## SHIPPED (Checkpoint 48, July 24, 2026): Post-Migration Cleanup — Login-Modal UX Fix, Dead Links, Copyright Year
+
+**Status: live.** Follow-up polish after Checkpoint 47's domain cutover, three unrelated small fixes bundled together.
+
+**1. "Beli All Access" login-modal UX fix.** Julia flagged that clicking "Beli All Access — Rp 399K" while logged out just silently opened the login modal defaulted to the **Masuk** (login) tab with no explanation — confusing for a new visitor who has no account yet and doesn't know why a login prompt just interrupted their purchase. `login-modal.js`'s `openLoginModal(defaultTab)` already supported a tab argument but `all-access.html`'s `buyCourse()` was calling it with no arguments. Fixed two ways:
+- `buyCourse()` now calls `window.openLoginModal('register', 'Buat akun dulu (gratis) untuk melanjutkan pembelian All Access — cuma butuh email & password.')` — opens straight to **Daftar** instead of Masuk, since a logged-out visitor clicking buy is far more likely to need an account than to have forgotten their password.
+- `openLoginModal()` signature extended to accept a second `contextMsg` param — new `#m-context` banner div (light purple, above the tabs) shows/hides based on whether a message was passed. Confirmed via grep this is the only call site of `openLoginModal()` outside `login-modal.js` itself, so no other flow needed updating.
+
+**2. Backend catalog dead-link cleanup.** The 9 `juliautomo.github.io` links flagged (not fixed) during Checkpoint 47's recheck — pre-dates the Vercel era entirely, on `COURSES` entries with no live purchase path (`/create-payment` locked to `all-access` only since Checkpoint 34) — swapped to `belajarclaude.id`: the 5 unreleased "coming soon" courses (`analisis-data`, `build-automation`, `ai-powered-app`, `claude-api-dev`, `jual-produk-ai`) now point at `belajarclaude.id/coming-soon.html`; the 4 retired `paket-*` bundle SKUs now point straight at `belajarclaude.id/all-access.html` (skipping the redirect-stub hop those pages would otherwise bounce through).
+
+**3. Footer copyright year.** All 6 instances of "© 2025" (`index.html`, `all-access.html`, `mulai-claude.html`, `produktivitas.html`, `content-marketing.html`, `prompt-gratis.html`) updated to "© 2026".
+
+**Not done — pending Julia**: live password-reset test to confirm SendGrid's SPF/DKIM authentication (Checkpoint 47) actually lands mail in the inbox rather than spam. Attempted to trigger this directly via Supabase's `/auth/v1/recover` endpoint from the sandbox but blocked by the sandbox's own outbound network allowlist (same restriction that blocks direct `curl` access to the live site) — needs Julia to click "Lupa password?" on the live site herself and report back what she sees.
 
 ---
 
