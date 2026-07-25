@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 25, 2026 (checkpoint 57)_
+_Last updated: July 25, 2026 (checkpoint 58)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -534,6 +534,22 @@ All 9 pages (8 changed + index.html itself as the reference) now share identical
 **Deliberately not done**: didn't fabricate a test Duitku webhook call to verify end-to-end, since that would require the production `DUITKU_API_KEY`/`DUITKU_MERCHANT_CODE` (Railway-only secrets I don't have and shouldn't try to obtain) and would write a fake payment record into live `enrollments`/Sheets/ConvertKit either way. **Recommend Julia do one real (or sandbox) guest-checkout test purchase to confirm the email's set-password link now lands correctly on `reset-password.html` and shows the password form** — this checkpoint should be marked fully verified once that's done.
 
 **Commits this checkpoint**: `belajar-claude-backend`: `d61efe1`.
+
+---
+
+## SHIPPED (Checkpoint 58, July 25, 2026): All Access CTA redesign + prompt-gratis preview fixes
+
+**Status: live** (commit `eb895cb`), verified via direct fetch.
+
+Julia shared a mockup (dark card: "ALL ACCESS" badge, "Satu akses, semua kursus." headline, price, 3-item checklist, CTA button) and asked to redesign the "Termasuk dalam All Access" bottom section on the 4 course preview pages (`mulai-claude.html`, `produktivitas.html`, `content-marketing.html`, `prompt-gratis.html`) to match, then asked whether `prompt-gratis.html`'s content is aligned with the real lesson and to fix a UI issue in its preview cards.
+
+**1. New All Access card.** Replaced the old plain centered dark section (`<h2>Termasuk dalam All Access</h2>` + one paragraph + button) with a contained rounded card (`#14141C` bg, subtle purple radial glow, 24px radius) split into two columns: left has the "All Access" badge, serif headline, description, live price + "sekali bayar" + note, and CTA button; right has a 3-item checklist (Semua kursus / Sekali bayar / Kursus baru termasuk). Applied identically to all 4 preview pages. Price is fetched live from `course_pricing` (same logic as `all-access.html`'s `loadPricing()`, simplified to just update the price text) rather than hardcoded — good timing, since there's an active discount right now (`Rp 149K`, live through July 31) that a static "Rp 399K" would have gotten wrong immediately.
+
+**2. Content-alignment check on `prompt-gratis.html`.** Compared the sales page against the actual lesson (`prompt-gratis-content.html`): the "5 Kategori · 20 Prompt" curriculum breakdown (category names and per-category counts) matches exactly. But the 3 example prompts shown in the "Intip Dulu Isinya" preview section did not — "01 · Tulis Email Profesional", "07 · Caption Instagram Bisnis", and "11 · Buat Job Description" don't correspond to the real prompts at those numbers (real #1 is "Rangkum Dokumen Panjang", real #7 is "Deskripsi Produk yang Menjual", real #11 is "Latihan Interview"), and "Caption Instagram Bisnis" / "Buat Job Description" don't exist anywhere in the lesson at all — these looked like placeholder copy that was never swapped for real content. Replaced with 3 real prompts and their actual preview text: #1 Rangkum Dokumen Panjang, #7 Deskripsi Produk yang Menjual, #14 Draft Email Profesional.
+
+**3. Preview-card overlap bug fixed.** The `.lock-overlay` ("🔒 Buka kursus untuk lihat lengkap") label was absolutely positioned directly on top of the truncated prompt text with an insufficient fade gradient, so the label visually collided with real text underneath. Fixed by reserving bottom padding for the label, extending the fade gradient to fully obscure the text before it reaches the label, and giving the label its own z-index layer.
+
+**Commits this checkpoint**: `belajar-claude`: `eb895cb`.
 
 ---
 
