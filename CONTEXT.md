@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 25, 2026 (checkpoint 51)_
+_Last updated: July 25, 2026 (checkpoint 52)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -48,7 +48,7 @@ Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign 
 **Deliberately not touched / flagged for a future pass:**
 - `paket.html` is a separate, stale, **unwired mockup** (buttons link to `login.html`, no real `/create-payment` call, prices don't match the real `COURSES` catalog at all — e.g. it advertises "All Access — Rp 999K" for a fake "9-course" bundle). It's a different artifact from the 4 real `paket-*` sales pages (`kursus-karyawan.html` etc., which *are* wired to real backend SKUs). Left alone this pass to avoid scope creep; Julia may want to retire/redirect it later so it stops advertising a conflicting All Access price.
 - The 4 real `paket-*` bundle sales pages (`kursus-karyawan.html`, `kursus-mahasiswa.html`, `kursus-ukm.html`, `paket-content-creator.html`) still work as before and were only touched to also recognize `all-access` as granting access — not retired, since they were already unlinked from nav per Checkpoint 12 and retiring them is a separate call.
-- The RLS "Allow all" finding from the original research pass (real tables have `USING (true)` policies, so the anon key could theoretically insert fake enrollments client-side) is still unaddressed — independent of this payment-model work, flagged again here as a follow-up.
+- The RLS "Allow all" finding from the original research pass (real tables have `USING (true)` policies, so the anon key could theoretically insert fake enrollments client-side) — **fixed in Checkpoint 52.**
 
 ## SHIPPED (Checkpoint 33, July 23, 2026): Admin-Controlled Pricing + Scheduled Discount for All Access
 
@@ -447,6 +447,26 @@ Julia ran the pending password-reset test and the email landed in Gmail's Spam f
 **4. Verified live, twice.** First test (triggered via `sbClient.auth.resetPasswordForEmail()` in-browser before the SMTP sender fix) landed in Spam with the old plain template — confirmed the SMTP setting was the missing piece. Second test (after the SMTP fix) landed directly in **Primary inbox**, sender showing as `no-reply@belajarclaude.id` with no "via sendgrid.net" tag, full purple-branded content rendering correctly (checked both header and footer/CTA sections in Gmail).
 
 **Not done:** no further action needed on email deliverability or branding — this closes the thread. If Julia wants, the remaining Supabase auth templates (Confirm signup, Magic Link, Invite user, Change email) could get the same purple rebrand treatment, but none of those are currently in active use (guest checkout auto-confirms emails; no invite/magic-link flows exist on the site).
+
+## SHIPPED (Checkpoint 52, July 25, 2026): RLS Security Fix (Real Exploit Closed) + workers.dev Redirect URL Cleanup
+
+**Status: live and verified.** Closes the long-standing "RLS Allow all" flag first raised at Checkpoint 32, plus a routine cleanup item from the domain migration.
+
+**1. Real exploit found and closed, not just a theoretical RLS gap.** Ran Supabase's security advisor (`get_advisors`) against the live project and traced actual app code before touching anything. Found: `enrollments`, `module_completions`, `profiles`, and `waitlist` all had a blanket `"Allow all"` policy (`USING (true)`, `WITH CHECK (true)` for every command), and `course_feedback` had policies literally named "own" that actually checked `true`. Tracing the frontend confirmed this was **exploitable, not just sloppy**: `dashboard.html`'s `enrollCourse()` and the `enrollAndOpen()` helper on `produktivitas.html`/`mulai-claude.html`/`content-marketing.html`/`prompt-gratis.html` all do a raw `sbClient.from('enrollments').insert({course_slug, type:'paid', ...})` once the page's own JS has confirmed the visitor holds `all-access` — but that check only ever ran client-side. Nothing stopped anyone from opening devtools and calling `sbClient.from('enrollments').insert({course_slug:'all-access', ...})` directly, granting themselves free access to everything, All Access included, with zero payment.
+
+**2. Fix — migration `tighten_rls_policies_replace_allow_all`, applied directly to production (`ctqtdqbsucbhikwnagvl`):**
+- `enrollments`: SELECT scoped to own email; INSERT requires own email **and** a real EXISTS-subquery check that the caller already holds an `all-access` row (this is what actually closes the exploit — it runs server-side in Postgres, so it can't be spoofed by the client). No UPDATE/DELETE policy for any client role.
+- `module_completions`, `profiles`, `course_feedback`: SELECT/INSERT (and UPDATE for `profiles`/`course_feedback`, since both use `.upsert()` without `ignoreDuplicates`) scoped to own email via the same `auth.jwt() ->> 'email' = email` pattern already used elsewhere in the schema (`course_pricing`, `module_videos`, etc. — not a new pattern, just applied consistently now).
+- `waitlist`: INSERT scoped to own email; deliberately **no** SELECT policy at all, so no client can list every visitor's waitlist email (the old "Allow all" let anyone do this).
+- **Backend (`index.js`) needed zero changes** — confirmed it writes through `SUPABASE_SECRET_KEY` (service role) everywhere, which bypasses RLS entirely, so none of this touches the payment/webhook flow.
+
+**3. Verified, not just applied.** Used `SET LOCAL ROLE authenticated` + `SET LOCAL request.jwt.claims` in the SQL editor to simulate real authenticated requests (both legitimate and adversarial) directly against Postgres: confirmed Julia's own reads/writes still work exactly as before, confirmed a simulated user with **no** `all-access` row gets a hard RLS rejection (`new row violates row-level security policy`) when attempting the exact exploit insert described above, and confirmed cross-user reads return nothing. One rabbit hole along the way: an early waitlist test kept failing even with `WITH CHECK (true)` — turned out to be an artifact of using `RETURNING` in the test itself (which needs SELECT visibility, and `waitlist` intentionally has none) rather than a real bug; the actual app never calls `.select()` after its `.upsert()`, so it was never affected. `get_advisors` re-run after the fix shows all 5 "RLS Policy Always True" warnings gone.
+
+**4. Also reviewed, not fixed:** `get_advisors` also flags 4 storage buckets (`course-documents`, `course-pdfs`, `course-ppts`, `course-videos`) allowing directory listing, and "Leaked Password Protection" being disabled. Storage bucket listing needs a product decision (would course files need to become enrollment-gated at the storage layer, or is public-by-URL fine?) rather than a quick policy tweak, so left alone. Leaked password protection turned out to be a **Pro-plan-only** feature — the project is on Free tier, so this needs a plan upgrade decision from Julia, not something to flip silently.
+
+**5. workers.dev Redirect URL removed.** The `https://belajar-claude.belajarclaude-id.workers.dev/**` fallback kept in Supabase's Redirect URLs allow-list since the Checkpoint 47 domain cutover (Julia's call to remove "after a week or two of confirmed stability") is now removed — Redirect URLs contains only `https://belajarclaude.id/**`.
+
+**Not done:** storage bucket listing policy and leaked-password-protection (Pro plan) — both flagged above, neither actioned pending Julia's input.
 
 ---
 
