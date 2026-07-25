@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 25, 2026 (checkpoint 53)_
+_Last updated: July 25, 2026 (checkpoint 54)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -480,6 +480,14 @@ Julia ran the pending password-reset test and the email landed in Gmail's Spam f
 **Linked in the footer of every public-facing sales page** — `index.html` (added a 4th "Legal" footer-links column matching the existing Ikuti Kami/Hubungi Kami pattern) and `all-access.html`, `mulai-claude.html`, `produktivitas.html`, `content-marketing.html`, `prompt-gratis.html` (added a small `.footer-legal` link row under the existing one-line copyright footer on each, since those pages share an identical minimal footer pattern).
 
 **Not done — the rest of Duitku's KYC form is Julia's to complete, not Claude's.** The registration flow also has "Identitas & Informasi Bank" (ID number, bank account) and "Verifikasi Wajah" (biometric face verification) steps — entering identity documents, bank account numbers, or completing biometric verification is out of bounds for Claude regardless of request (financial/ID credential handling is a hard restriction), and face verification requires the actual person physically present. Julia needs to complete those steps herself in the Duitku dashboard. Once the legal pages are live (they are, as of this checkpoint), the next step is to go back to the "Informasi Usaha" tab and re-trigger the URL validation — if it still fails, the actual failure reason should be visible in Duitku's dashboard or support chat, since "belum valid" alone doesn't specify which requirement is missing.
+
+## SHIPPED (Checkpoint 54, July 25, 2026): CTA Consistency + Font Mismatch Fix
+
+**Status: live** (commit `07c33d7`), verified via direct fetch.
+
+**1. CTA copy unified.** Julia noticed the 4 course preview/sales pages (`mulai-claude.html`, `produktivitas.html`, `content-marketing.html`, `prompt-gratis.html`) used "Dapatkan All Access →" for their primary CTA, while the homepage and `all-access.html` use "Mulai Belajar Sekarang →". Changed both CTA buttons (top + bottom of page) on all 4 preview pages to match. The other JS-driven button states (`Buka Kursus →` for already-enrolled, `Mulai Kursus →` for all-access holders who haven't self-enrolled in that specific course yet) were left as-is — those are distinct states with their own correct wording, not part of this inconsistency.
+
+**2. Font mismatch found and fixed while auditing.** Julia asked whether fonts are consistent site-wide — repo-wide grep of every Google Fonts `<link>` found `produktivitas-content.html` and `content-marketing-content.html` were loading **Inter** instead of the site-wide Instrument Serif + Geist pair (both `--serif` and `--font` CSS variables pointed at `'Inter'`). This is a real, visible bug, not just a stray unused import — confirmed `var(--serif)` is actually applied to the "Kursus Selesai!" completion-badge heading on both pages, so it was rendering in the wrong typeface. Root cause unclear (likely copy-pasted from a different template during one of the K3/Produktivitas restructures), but the fix was a clean 2-line swap per file (Google Fonts link + CSS variable declaration) since both files already reference fonts via `var(--font)`/`var(--serif)` everywhere rather than hardcoding `'Inter'` directly — grepped both files to confirm zero other stray references before touching anything.
 
 ---
 
