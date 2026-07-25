@@ -299,7 +299,7 @@
     msg.className = 'm-msg';
 
     var res = await sbClient.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://belajar-claude.belajarclaude-id.workers.dev/reset-password.html'
+      redirectTo: 'https://belajarclaude.id/reset-password.html'
     });
     if (res.error) {
       mShowMsg(msg, 'error', res.error.message);
