@@ -109,14 +109,16 @@
   .output-box h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
   .output-box p { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.6; }
 
-  .bottom-cta { padding: 72px 24px; }
-  .aa-card { max-width: 920px; margin: 0 auto; background: #14141C; border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; padding: 48px 44px; position: relative; overflow: hidden; display: grid; grid-template-columns: 1.15fr 1fr; gap: 40px; align-items: center; }
+  .bottom-cta { padding: 40px 0 72px; }
+  .aa-card { background: #14141C; border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; padding: 48px 44px; position: relative; overflow: hidden; display: grid; grid-template-columns: 1.15fr 1fr; gap: 40px; align-items: center; }
   .aa-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 88% 105%, rgba(108,71,255,0.35), transparent 60%); pointer-events: none; }
   .aa-left, .aa-right { position: relative; z-index: 1; }
   .aa-badge { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent-2); background: rgba(108,71,255,0.15); border: 1px solid rgba(108,71,255,0.3); padding: 5px 12px; border-radius: 100px; margin-bottom: 18px; }
   .aa-headline { font-family: var(--serif); font-size: clamp(26px, 3.2vw, 36px); font-weight: 400; color: #fff; letter-spacing: -0.5px; line-height: 1.2; margin-bottom: 14px; }
   .aa-desc { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.7; margin-bottom: 24px; max-width: 400px; }
+  .aa-discount-badge { display: none; font-size: 11px; font-weight: 700; background: rgba(34,197,94,0.15); color: #4ADE80; border: 1px solid rgba(34,197,94,0.3); padding: 3px 10px; border-radius: 100px; margin-bottom: 10px; }
   .aa-price-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px; }
+  .aa-price-original { display: none; font-size: 16px; color: rgba(255,255,255,0.35); text-decoration: line-through; }
   .aa-price { font-size: 38px; font-weight: 800; color: #fff; letter-spacing: -1px; }
   .aa-price-sub { font-size: 13px; color: rgba(255,255,255,0.45); }
   .aa-note { font-size: 12px; color: rgba(255,255,255,0.35); margin-bottom: 22px; }
@@ -316,12 +318,14 @@
 </section>
 
 <section class="bottom-cta">
+  <div class="container">
   <div class="aa-card">
     <div class="aa-left">
       <span class="aa-badge">All Access</span>
       <h2 class="aa-headline">Satu akses, semua kursus.</h2>
       <p class="aa-desc">Satu kali pembayaran membuka seluruh course library — sekarang dan setiap kursus baru yang ditambahkan nanti.</p>
-      <div class="aa-price-row"><span class="aa-price" id="aaPrice">Rp 399K</span><span class="aa-price-sub">sekali bayar</span></div>
+      <div class="aa-discount-badge" id="aaDiscountBadge"></div>
+      <div class="aa-price-row"><span class="aa-price-original" id="aaPriceOriginal"></span><span class="aa-price" id="aaPrice">Rp 399K</span><span class="aa-price-sub">sekali bayar</span></div>
       <p class="aa-note">Akses selamanya · Bukan langganan bulanan</p>
       <a class="aa-btn" id="bottomCtaBtn" href="all-access.html">Mulai Belajar Sekarang →</a>
     </div>
@@ -332,6 +336,7 @@
         <div class="aa-check-item"><div class="aa-check-icon">✓</div><div><div class="aa-check-title">Kursus baru termasuk</div><div class="aa-check-desc">Kursus baru yang ditambahkan ke library juga termasuk.</div></div></div>
       </div>
     </div>
+  </div>
   </div>
 </section>
 
@@ -488,6 +493,13 @@
       const amount = discountActive ? data.discount_price : (data.base_price != null ? data.base_price : 399000);
       var el = document.getElementById('aaPrice');
       if (el) el.textContent = 'Rp ' + Math.round(amount / 1000) + 'K';
+      if (discountActive && data.base_price) {
+        var orig = document.getElementById('aaPriceOriginal');
+        var badge = document.getElementById('aaDiscountBadge');
+        var pct = Math.round((1 - data.discount_price / data.base_price) * 100);
+        if (orig) { orig.style.display = 'inline'; orig.textContent = 'Rp ' + Math.round(data.base_price / 1000) + 'K'; }
+        if (badge) { badge.style.display = 'inline-block'; badge.textContent = 'HEMAT ' + pct + '%'; }
+      }
     } catch (e) {}
   })();
 </script>
