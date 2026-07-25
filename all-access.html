@@ -131,7 +131,6 @@
   <div class="nav-links">
     <a href="index.html#kursus">Kursus</a>
     <a href="login.html" id="navLoginBtn">Masuk</a>
-    <a href="login.html" id="navCtaBtn" class="nav-cta" style="display:none">Gabung Gratis</a>
     <div class="nav-user-pill" id="navUserPill" onclick="toggleUserMenu(event)">
       <div><span class="nav-uname" id="navUname"></span><span class="nav-uemail" id="navUemail"></span></div>
       <span class="nav-user-chevron">▾</span>
@@ -179,7 +178,7 @@
     <div class="courses-grid">
       <div class="incl-card">
         <div class="incl-icon">📋</div>
-        <div class="incl-body"><h5>20 Prompt Gratis <span class="live-tag">Tersedia</span></h5><p>Prompt siap pakai untuk email, laporan, konten sosmed — langsung copy-paste.</p></div>
+        <div class="incl-body"><h5>20 Prompt Dasar <span class="live-tag">Tersedia</span></h5><p>Prompt siap pakai untuk email, laporan, konten sosmed — langsung copy-paste.</p></div>
       </div>
       <div class="incl-card">
         <div class="incl-icon">🤖</div>
@@ -269,7 +268,7 @@
   // Nav auth
   (async () => {
     const { data: { session } } = await sbClient.auth.getSession();
-    if (!session) { var cb2=document.getElementById('navCtaBtn'); if(cb2) cb2.style.display=''; return; }
+    if (!session) return;
     const name = session.user.user_metadata?.full_name || session.user.email.split('@')[0];
     const pill = document.getElementById('navUserPill');
     if (pill) pill.style.display = 'flex';
@@ -277,7 +276,6 @@
     const ue = document.getElementById('navUemail'); if (ue) ue.textContent = session.user.email;
     const lb = document.getElementById('navLoginBtn');
     if (lb) { lb.textContent = 'Dashboard'; lb.href = 'dashboard.html'; }
-    const cb = document.getElementById('navCtaBtn'); if (cb) cb.style.display = 'none';
   })();
 </script>
 <script>
