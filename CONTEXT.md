@@ -583,6 +583,20 @@ Applied identically across all 4 preview pages.
 
 ---
 
+## SHIPPED (Checkpoint 61, July 25, 2026): 20-Prompt PDF regenerated to match live lesson content
+
+**Status: live** (commit `de77e6a`), verified via extracted PDF text.
+
+Julia asked for a consistency audit across the "20 Prompt Dasar" course's four representations (lesson page, HTML content, PDF, sales-page preview). Nav/title/hero naming was already fixed in Checkpoints 55/59; sales-page preview cards were already fixed in Checkpoint 58. The one holdout: `20-prompt-claude-terbaik.pdf` at the repo root was a completely stale artifact — still branded "GRATIS · KLAUD.ID" (pre-rebrand name, free-tier framing we no longer use), organized under 8+ mismatched categories instead of the real 5, and all 20 prompts had different titles/content than the live lesson entirely. Confirmed via `course_resources` that nothing currently links to this file, so it wasn't live-facing, but Julia chose to regenerate it to match rather than delete or leave it dormant.
+
+**Rebuilt from scratch**, sourcing all 20 prompts' exact titles, prompt text, and tips verbatim from `prompt-gratis-content.html` (the real lesson content), organized under the actual 5 categories (Produktivitas Kerja, Bisnis & Marketing, Karir & CV, Komunikasi Profesional, Belajar & Riset). New design matches current site branding: Instrument Serif + Geist fonts, `#6C47FF` purple accent, dark-purple-gradient cover page with stats (20 prompt / 5 kategori / 100% Bahasa Indonesia) and a "Cara Pakai" 3-step box, "Termasuk All Access · Belajar Claude" framing (no free-tier language). Built as HTML/CSS and rendered via `weasyprint` — 11 pages total. Verified by extracting text from every page (all 20 prompts present, correctly grouped) and visually rendering the cover + a content page to confirm layout holds up.
+
+**Note on tooling**: the local working-directory clone at `C:\Users\julia\GitHub\belajar-claude` was found to be ~70 commits behind `origin/main` (a stale `origin/main` tracking ref — actual GitHub history was current) with git lock/permission issues on that mount preventing normal commits. Worked around by cloning fresh into a scratch directory, committing and pushing from there instead of touching the stale local working tree.
+
+**Commits this checkpoint**: `belajar-claude`: `de77e6a`.
+
+---
+
 ## Design System (as of June 2026)
 All pages use these CSS variables:
 ```css
