@@ -115,13 +115,18 @@
   .bottom-cta .btn-primary { max-width: 320px; margin: 0 auto; background: #fff; color: var(--ink); }
   .bottom-cta .btn-primary:hover { background: var(--accent); color: #fff; }
 
-  footer { background: #0D1030; padding: 28px 24px; text-align: center; border-top: 1px solid rgba(108,71,255,0.1); }
-  footer p { font-size: 12px; color: rgba(255,255,255,0.35); }
-  footer .footer-legal { margin-top: 8px; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
-  footer .footer-legal a { font-size: 11px; color: rgba(255,255,255,0.3); text-decoration: none; }
-  footer .footer-legal a:hover { color: rgba(255,255,255,0.6); }
-  footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
-  footer a:hover { color: #fff; }
+  footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); padding: 48px 40px 28px; position: relative; z-index: 1; }
+  .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 32px; }
+  .footer-brand .logo { color: #fff; font-size: 17px; letter-spacing: -0.4px; }
+  .footer-brand .logo span { color: var(--accent); }
+  .footer-brand p { font-size: 12px; color: rgba(255,255,255,0.3); margin-top: 10px; max-width: 200px; line-height: 1.75; }
+  .footer-links h4 { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 14px; }
+  .footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .footer-links ul a { font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.15s; }
+  .footer-links ul a:hover { color: #fff; }
+  .footer-bottom { max-width: 1100px; margin: 28px auto 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .footer-bottom p { font-size: 11px; color: rgba(255,255,255,0.18); }
+  @media (max-width: 640px) { footer { padding: 40px 20px 24px; } .footer-inner { flex-direction: column; gap: 24px; } }
 
   @media (max-width: 768px) { nav { padding: 0 20px; } .module-item { grid-template-columns: 36px 1fr; } .tool-chip { display: none; } .output-box { flex-direction: column; } }
 </style>
@@ -303,11 +308,36 @@
 </section>
 
 <footer>
-  <p>© 2026 <a href="index.html">Belajar Claude</a> — Platform Belajar Claude AI #1 dalam Bahasa Indonesia</p>
-  <div class="footer-legal">
-    <a href="syarat-ketentuan.html">Syarat & Ketentuan</a>
-    <a href="kebijakan-privasi.html">Kebijakan Privasi</a>
-    <a href="kebijakan-pengembalian.html">Kebijakan Pengembalian Dana</a>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="logo">belajar<span>claude</span></a>
+      <p>Platform belajar Claude AI dalam Bahasa Indonesia — untuk profesional, UKM, dan mahasiswa.</p>
+    </div>
+    <div class="footer-links" id="footerSocialLinks" style="display:none;">
+      <h4>Ikuti Kami</h4>
+      <ul>
+        <li id="liTiktok" style="display:none;"><a href="#" id="linkTiktok" target="_blank" rel="noopener">TikTok</a></li><li id="liYoutube" style="display:none;"><a href="#" id="linkYoutube" target="_blank" rel="noopener">YouTube</a></li>
+        <li id="liInstagram" style="display:none;"><a href="#" id="linkInstagram" target="_blank" rel="noopener">Instagram</a></li><li id="liWhatsapp" style="display:none;"><a href="#" id="linkWhatsapp" target="_blank" rel="noopener">WhatsApp Community</a></li>
+      </ul>
+    </div>
+    <div class="footer-links" id="footerContactLinks" style="display:none;">
+      <h4>Hubungi Kami</h4>
+      <ul>
+        <li id="liEmail" style="display:none;"><a href="#" id="linkEmail">Email</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="syarat-ketentuan.html">Syarat & Ketentuan</a></li>
+        <li><a href="kebijakan-privasi.html">Kebijakan Privasi</a></li>
+        <li><a href="kebijakan-pengembalian.html">Kebijakan Pengembalian Dana</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Belajar Claude</p>
+    <p>Dibuat untuk Indonesia</p>
   </div>
 </footer>
 
@@ -381,6 +411,41 @@
     var pill = document.getElementById('navUserPill');
     if (pill) pill.classList.remove('open');
   });
+
+  // Populate footer social links from admin-managed social_links table.
+  // Each link stays hidden unless the admin has filled in a URL for it.
+  (async function() {
+    try {
+      var res = await sbClient.from('social_links').select('*').eq('id', 'main').maybeSingle();
+      var row = res.data;
+      if (!row) return;
+      var map = [
+        ['tiktok_url', 'tiktok_visible', 'liTiktok', 'linkTiktok'],
+        ['youtube_url', 'youtube_visible', 'liYoutube', 'linkYoutube'],
+        ['instagram_url', 'instagram_visible', 'liInstagram', 'linkInstagram'],
+        ['whatsapp_url', 'whatsapp_visible', 'liWhatsapp', 'linkWhatsapp'],
+      ];
+      var anySocialShown = false;
+      map.forEach(function(m) {
+        var url = row[m[0]];
+        var visible = row[m[1]] !== false;
+        if (url && visible) {
+          document.getElementById(m[2]).style.display = 'block';
+          document.getElementById(m[3]).href = url;
+          anySocialShown = true;
+        }
+      });
+      if (anySocialShown) document.getElementById('footerSocialLinks').style.display = 'block';
+
+      var email = row.contact_email;
+      var emailVisible = row.contact_email_visible !== false;
+      if (email && emailVisible) {
+        document.getElementById('liEmail').style.display = 'block';
+        document.getElementById('linkEmail').href = 'mailto:' + email;
+        document.getElementById('footerContactLinks').style.display = 'block';
+      }
+    } catch (e) {}
+  })();
 </script>
 </body>
 </html>
