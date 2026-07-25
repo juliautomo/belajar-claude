@@ -84,11 +84,25 @@
   .output-icon { font-size: 36px; flex-shrink: 0; }
   .output-box h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
   .output-box p { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.6; }
-  .bottom-cta { background: var(--ink); padding: 72px 24px; text-align: center; }
-  .bottom-cta h2 { font-family: var(--serif); font-size: clamp(24px, 3.5vw, 34px); font-weight: 400; color: #fff; letter-spacing: -0.8px; margin-bottom: 10px; }
-  .bottom-cta p { font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 26px; }
-  .bottom-cta .btn-primary { max-width: 320px; margin: 0 auto; background: #fff; color: var(--ink); }
-  .bottom-cta .btn-primary:hover { background: var(--accent); color: #fff; }
+  .bottom-cta { padding: 72px 24px; }
+  .aa-card { max-width: 920px; margin: 0 auto; background: #14141C; border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; padding: 48px 44px; position: relative; overflow: hidden; display: grid; grid-template-columns: 1.15fr 1fr; gap: 40px; align-items: center; }
+  .aa-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 88% 105%, rgba(108,71,255,0.35), transparent 60%); pointer-events: none; }
+  .aa-left, .aa-right { position: relative; z-index: 1; }
+  .aa-badge { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent-2); background: rgba(108,71,255,0.15); border: 1px solid rgba(108,71,255,0.3); padding: 5px 12px; border-radius: 100px; margin-bottom: 18px; }
+  .aa-headline { font-family: var(--serif); font-size: clamp(26px, 3.2vw, 36px); font-weight: 400; color: #fff; letter-spacing: -0.5px; line-height: 1.2; margin-bottom: 14px; }
+  .aa-desc { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.7; margin-bottom: 24px; max-width: 400px; }
+  .aa-price-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px; }
+  .aa-price { font-size: 38px; font-weight: 800; color: #fff; letter-spacing: -1px; }
+  .aa-price-sub { font-size: 13px; color: rgba(255,255,255,0.45); }
+  .aa-note { font-size: 12px; color: rgba(255,255,255,0.35); margin-bottom: 22px; }
+  .aa-btn { display: inline-block; background: #fff; color: var(--ink); font-weight: 700; font-size: 14px; padding: 14px 28px; border-radius: 10px; text-decoration: none; transition: all 0.18s; }
+  .aa-btn:hover { background: var(--accent); color: #fff; transform: translateY(-1px); }
+  .aa-checklist { display: flex; flex-direction: column; gap: 18px; }
+  .aa-check-item { display: flex; align-items: flex-start; gap: 14px; }
+  .aa-check-icon { width: 32px; height: 32px; flex-shrink: 0; border-radius: 9px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 13px; color: #fff; }
+  .aa-check-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+  .aa-check-desc { font-size: 12.5px; color: rgba(255,255,255,0.45); line-height: 1.5; }
+  @media (max-width: 768px) { .aa-card { grid-template-columns: 1fr; padding: 36px 28px; } }
   footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); padding: 48px 40px 28px; position: relative; z-index: 1; }
   .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 32px; }
   .footer-brand .logo { color: #fff; font-size: 17px; letter-spacing: -0.4px; }
@@ -253,9 +267,23 @@
 </section>
 
 <section class="bottom-cta">
-  <h2>Termasuk dalam <em style="font-style:italic;color:var(--accent-2);">All Access</em></h2>
-  <p>Satu kali bayar. Akses kursus ini dan semua kursus lainnya — sekarang dan yang akan datang.</p>
-  <a class="btn-primary" id="bottomCtaBtn" href="all-access.html">Mulai Belajar Sekarang →</a>
+  <div class="aa-card">
+    <div class="aa-left">
+      <span class="aa-badge">All Access</span>
+      <h2 class="aa-headline">Satu akses, semua kursus.</h2>
+      <p class="aa-desc">Satu kali pembayaran membuka seluruh course library — sekarang dan setiap kursus baru yang ditambahkan nanti.</p>
+      <div class="aa-price-row"><span class="aa-price" id="aaPrice">Rp 399K</span><span class="aa-price-sub">sekali bayar</span></div>
+      <p class="aa-note">Akses selamanya · Bukan langganan bulanan</p>
+      <a class="aa-btn" id="bottomCtaBtn" href="all-access.html">Mulai Belajar Sekarang →</a>
+    </div>
+    <div class="aa-right">
+      <div class="aa-checklist">
+        <div class="aa-check-item"><div class="aa-check-icon">✓</div><div><div class="aa-check-title">Semua kursus</div><div class="aa-check-desc">Akses semua materi yang tersedia dalam satu pembelian.</div></div></div>
+        <div class="aa-check-item"><div class="aa-check-icon">✓</div><div><div class="aa-check-title">Sekali bayar</div><div class="aa-check-desc">Tidak ada biaya bulanan atau langganan berulang.</div></div></div>
+        <div class="aa-check-item"><div class="aa-check-icon">✓</div><div><div class="aa-check-title">Kursus baru termasuk</div><div class="aa-check-desc">Kursus baru yang ditambahkan ke library juga termasuk.</div></div></div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <footer>
@@ -394,6 +422,22 @@
         document.getElementById('linkEmail').href = 'mailto:' + email;
         document.getElementById('footerContactLinks').style.display = 'block';
       }
+    } catch (e) {}
+  })();
+
+  // Live All Access price for the bottom CTA card — falls back to the static
+  // Rp 399K shown in the HTML if the course_pricing row is missing or the fetch fails.
+  (async function() {
+    try {
+      const { data } = await sbClient.from('course_pricing').select('*').eq('course_slug', 'all-access').maybeSingle();
+      if (!data) return;
+      const now = new Date();
+      const discountActive = data.discount_price != null
+        && (!data.discount_start || new Date(data.discount_start) <= now)
+        && (!data.discount_end || new Date(data.discount_end) >= now);
+      const amount = discountActive ? data.discount_price : (data.base_price != null ? data.base_price : 399000);
+      var el = document.getElementById('aaPrice');
+      if (el) el.textContent = 'Rp ' + Math.round(amount / 1000) + 'K';
     } catch (e) {}
   })();
 </script>
