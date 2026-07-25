@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 25, 2026 (checkpoint 59)_
+_Last updated: July 25, 2026 (checkpoint 60)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -562,6 +562,24 @@ Julia shared a mockup (dark card: "ALL ACCESS" badge, "Satu akses, semua kursus.
 **2. `mulai-claude.html` skills section fixed.** Julia asked to drop the hardcoded "5" from "5 Skill Claude Inti" (now just "Skill Claude Inti") — matching `produktivitas.html`'s pattern of not baking a count into the heading — and to add more chips, consistent with how much more populated the equivalent section is on `produktivitas.html` (8 chips) and `content-marketing.html` (9 chips). Rather than padding with invented skills, checked `mulai-claude-content.html` for tools genuinely taught and added the two real ones that weren't already chips: `Claude.ai` and `Google Docs` (both confirmed via the lesson's own module list and hero tool-tags) — bringing the original 5 to 7.
 
 **Commits this checkpoint**: `belajar-claude`: `83889f8`.
+
+---
+
+## SHIPPED (Checkpoint 60, July 25, 2026): All Access card width/spacing fix + original price display
+
+**Status: live** (commit `b38ddaf`), verified via direct fetch.
+
+Julia flagged from a screenshot that the "Output yang Kamu Bawa Pulang" box and the All Access card below it had visibly different widths and too much vertical gap between them.
+
+**Root cause**: `.output-box` sits inside `.container` (`max-width: 1000px`), while `.aa-card` (added Checkpoint 58) had its own independent `max-width: 920px; margin: 0 auto;` — two different centering contexts, so their edges didn't line up. Fixed by wrapping `.aa-card` in the same `.container` div used everywhere else on the page and dropping its own max-width/margin, so both elements are now governed by the exact same width rule instead of two similar-but-different ones.
+
+**Spacing**: `.bottom-cta`'s padding was `72px 24px`, stacked on top of the preceding section's own `80px` bottom padding, for a ~152px gap. Reduced to `40px 0 72px` (horizontal padding now comes from the wrapping `.container` instead of being duplicated), cutting the visual gap without losing separation from the footer below.
+
+**Also added while in there** (Julia's follow-up mid-task): the card was only showing the current effective price, silently applying the active discount with no visual cue that it *was* a discount. Added `.aa-discount-badge` ("HEMAT N%") and a struck-through original price next to the current one — same treatment `all-access.html`'s own hero already has — wired through the existing live-price fetch so it only shows when `course_pricing.discount_price` is actually active.
+
+Applied identically across all 4 preview pages.
+
+**Commits this checkpoint**: `belajar-claude`: `b38ddaf`.
 
 ---
 
