@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kebijakan Privasi — Belajar Claude</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+:root {
+  --bg: #FAFAFA; --surface: #FFFFFF; --surface-2: #F5F5F7;
+  --border: #E8E8E8; --border-strong: #D0D0D0;
+  --ink: #111111; --ink-2: #555555; --ink-3: #999999;
+  --accent: #6C47FF; --accent-2: #9B7DFF; --accent-dim: rgba(108,71,255,0.08);
+  --serif: 'Instrument Serif', Georgia, serif; --font: 'Geist', sans-serif;
+}
+body { font-family: var(--font); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; }
+nav {
+  position: sticky; top: 0; z-index: 100; height: 58px; padding: 0 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(250,250,250,0.92); backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.logo { font-family: var(--font); font-size: 17px; font-weight: 700; color: var(--ink); text-decoration: none; letter-spacing: -0.4px; }
+.logo span { color: var(--accent); }
+.nav-back { font-size: 13px; font-weight: 500; color: var(--ink-2); text-decoration: none; }
+.nav-back:hover { color: var(--ink); }
+.wrap { max-width: 760px; margin: 0 auto; padding: 64px 24px 96px; }
+.doc-header { margin-bottom: 40px; }
+.doc-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+h1 { font-family: var(--serif); font-size: 40px; font-weight: 400; letter-spacing: -0.5px; margin-bottom: 10px; }
+.doc-updated { font-size: 13px; color: var(--ink-3); }
+.doc-body h2 { font-family: var(--serif); font-size: 24px; font-weight: 400; margin: 36px 0 12px; letter-spacing: -0.3px; }
+.doc-body h2:first-child { margin-top: 0; }
+.doc-body p { font-size: 15px; line-height: 1.8; color: var(--ink-2); margin-bottom: 14px; }
+.doc-body ul, .doc-body ol { padding-left: 22px; margin-bottom: 14px; }
+.doc-body li { font-size: 15px; line-height: 1.8; color: var(--ink-2); margin-bottom: 6px; }
+.doc-body strong { color: var(--ink); font-weight: 600; }
+.doc-body a { color: var(--accent); text-decoration: none; }
+.doc-body a:hover { text-decoration: underline; }
+.table-wrap { overflow-x: auto; margin-bottom: 18px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
+td { color: var(--ink-2); line-height: 1.6; }
+.contact-box { margin-top: 40px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px 26px; }
+.contact-box p { margin: 0; font-size: 14px; }
+footer { background: var(--ink); padding: 40px; margin-top: 40px; }
+.footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+.footer-inner .logo { color: #fff; }
+.footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+.footer-links a { font-size: 13px; color: rgba(255,255,255,0.45); text-decoration: none; }
+.footer-links a:hover { color: #fff; }
+@media (max-width: 640px) {
+  nav, .wrap { padding-left: 20px; padding-right: 20px; }
+  h1 { font-size: 32px; }
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">belajar<span>claude</span></a>
+  <a href="index.html" class="nav-back">← Kembali ke Beranda</a>
+</nav>
+
+<div class="wrap">
+  <div class="doc-header">
+    <div class="doc-eyebrow">Dokumen Legal</div>
+    <h1>Kebijakan Privasi</h1>
+    <p class="doc-updated">Terakhir diperbarui: 25 Juli 2026</p>
+  </div>
+
+  <div class="doc-body">
+    <h2>1. Ringkasan</h2>
+    <p>Belajar Claude (<strong>belajarclaude.id</strong>) menghargai privasi Anda. Kebijakan ini menjelaskan data pribadi apa saja yang kami kumpulkan, bagaimana kami menggunakannya, dengan siapa kami membagikannya, dan hak yang Anda miliki atas data tersebut.</p>
+
+    <h2>2. Data yang Kami Kumpulkan</h2>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Jenis Data</th><th>Kapan Dikumpulkan</th></tr>
+        <tr><td>Nama lengkap, alamat email</td><td>Saat mendaftar akun atau melakukan pembelian</td></tr>
+        <tr><td>Kata sandi (dalam bentuk terenkripsi)</td><td>Saat membuat akun</td></tr>
+        <tr><td>Riwayat transaksi (kursus dibeli, nominal, status pembayaran)</td><td>Saat melakukan pembelian melalui payment gateway</td></tr>
+        <tr><td>Progres belajar (modul yang diselesaikan, rating & ulasan kursus)</td><td>Selama Anda menggunakan platform</td></tr>
+        <tr><td>Profil opsional (peran/role, tujuan belajar, tingkat pengalaman)</td><td>Jika Anda mengisi formulir profil</td></tr>
+      </table>
+    </div>
+    <p>Kami <strong>tidak pernah</strong> menyimpan nomor kartu kredit/debit atau kredensial pembayaran Anda secara langsung — seluruh proses pembayaran ditangani oleh mitra payment gateway kami sesuai standar keamanan industri.</p>
+
+    <h2>3. Bagaimana Kami Menggunakan Data Anda</h2>
+    <ul>
+      <li>Menyediakan dan mengelola akses ke akun serta materi kursus yang Anda beli</li>
+      <li>Memproses pembayaran dan mengirimkan konfirmasi transaksi</li>
+      <li>Mengirimkan email transaksional (konfirmasi akses, pengaturan kata sandi, pengingat)</li>
+      <li>Mengirimkan informasi produk, tips, atau promosi — hanya jika Anda tidak berhenti berlangganan (unsubscribe)</li>
+      <li>Meningkatkan kualitas platform berdasarkan data penggunaan dan umpan balik</li>
+      <li>Mencegah penyalahgunaan dan menjaga keamanan sistem</li>
+    </ul>
+
+    <h2>4. Pihak Ketiga yang Kami Gunakan</h2>
+    <p>Untuk mengoperasikan layanan, kami bekerja sama dengan penyedia layanan pihak ketiga tepercaya berikut, yang masing-masing memiliki kebijakan privasi sendiri:</p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Penyedia</th><th>Fungsi</th></tr>
+        <tr><td><strong>Duitku</strong></td><td>Payment gateway — memproses seluruh transaksi pembayaran</td></tr>
+        <tr><td><strong>Supabase</strong></td><td>Basis data & autentikasi akun (hosting data di server cloud terenkripsi)</td></tr>
+        <tr><td><strong>SendGrid</strong></td><td>Pengiriman email transaksional (konfirmasi akses, atur ulang kata sandi)</td></tr>
+        <tr><td><strong>Kit (ConvertKit)</strong></td><td>Pengelolaan komunikasi email pemasaran, jika Anda berlangganan</td></tr>
+        <tr><td><strong>Cloudflare</strong></td><td>Hosting infrastruktur & keamanan jaringan situs</td></tr>
+      </table>
+    </div>
+    <p>Kami tidak menjual data pribadi Anda kepada pihak ketiga mana pun untuk tujuan pemasaran mereka sendiri.</p>
+
+    <h2>5. Penyimpanan & Keamanan Data</h2>
+    <p>Data Anda disimpan pada server Supabase dengan akses dibatasi melalui kontrol keamanan tingkat basis data (row-level security), memastikan setiap pengguna hanya dapat mengakses datanya sendiri. Kami menerapkan enkripsi HTTPS/TLS di seluruh koneksi antara perangkat Anda dan server kami.</p>
+
+    <h2>6. Hak Anda atas Data Pribadi</h2>
+    <p>Anda berhak untuk:</p>
+    <ul>
+      <li>Mengakses dan meninjau data pribadi yang kami simpan tentang Anda</li>
+      <li>Meminta koreksi atas data yang tidak akurat</li>
+      <li>Meminta penghapusan akun beserta data pribadi terkait, kecuali data yang wajib disimpan untuk kepatuhan hukum atau keperluan pembukuan transaksi</li>
+      <li>Berhenti berlangganan dari email pemasaran kapan pun melalui tautan unsubscribe di setiap email</li>
+    </ul>
+    <p>Untuk mengajukan permintaan di atas, silakan hubungi kami melalui email pada bagian bawah halaman ini.</p>
+
+    <h2>7. Cookie</h2>
+    <p>Situs kami menggunakan cookie/local storage seperlunya untuk menjaga sesi login Anda tetap aktif dan mengingat preferensi tampilan. Kami tidak menggunakan cookie pelacakan iklan pihak ketiga.</p>
+
+    <h2>8. Perubahan Kebijakan</h2>
+    <p>Kami dapat memperbarui Kebijakan Privasi ini dari waktu ke waktu. Perubahan material akan diinformasikan melalui email terdaftar atau pengumuman di situs.</p>
+
+    <h2>9. Hubungi Kami</h2>
+    <p>Untuk pertanyaan seputar privasi data Anda, silakan hubungi kami:</p>
+
+    <div class="contact-box">
+      <p>📧 <strong>belajarclaude.id@gmail.com</strong></p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="logo">belajar<span>claude</span></a>
+    <div class="footer-links">
+      <a href="syarat-ketentuan.html">Syarat & Ketentuan</a>
+      <a href="kebijakan-privasi.html">Kebijakan Privasi</a>
+      <a href="kebijakan-pengembalian.html">Kebijakan Pengembalian Dana</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

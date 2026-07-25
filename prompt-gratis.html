@@ -91,6 +91,9 @@
   .bottom-cta .btn-primary:hover { background: var(--accent); color: #fff; }
   footer { background: #0D1030; padding: 28px 24px; text-align: center; border-top: 1px solid rgba(108,71,255,0.1); }
   footer p { font-size: 12px; color: rgba(255,255,255,0.35); }
+  footer .footer-legal { margin-top: 8px; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+  footer .footer-legal a { font-size: 11px; color: rgba(255,255,255,0.3); text-decoration: none; }
+  footer .footer-legal a:hover { color: rgba(255,255,255,0.6); }
   footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
   footer a:hover { color: #fff; }
   @media (max-width: 768px) { nav { padding: 0 20px; } .module-item { grid-template-columns: 36px 1fr; } .tool-chip { display: none; } .output-box { flex-direction: column; } }
@@ -240,6 +243,11 @@
 
 <footer>
   <p>© 2026 <a href="index.html">Belajar Claude</a> — Platform Belajar Claude AI #1 dalam Bahasa Indonesia</p>
+  <div class="footer-legal">
+    <a href="syarat-ketentuan.html">Syarat & Ketentuan</a>
+    <a href="kebijakan-privasi.html">Kebijakan Privasi</a>
+    <a href="kebijakan-pengembalian.html">Kebijakan Pengembalian Dana</a>
+  </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
