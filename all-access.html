@@ -328,17 +328,19 @@
   })();
 
   async function buyCourse() {
+    // Guest checkout: no login required to pay. If a session already exists, prefill
+    // name/email for convenience; otherwise leave the fields blank for the visitor to
+    // fill in — an account is created automatically after payment succeeds (see backend
+    // webhook), with a one-click "set your password" link sent in the access email.
     const { data: { session } } = await sbClient.auth.getSession();
     if (session) {
       const name = session.user.user_metadata?.full_name || session.user.email.split('@')[0];
       document.getElementById('paymentName').value = name;
       document.getElementById('paymentEmail').value = session.user.email;
-      document.getElementById('paymentSubmitBtn').disabled = false;
-      document.getElementById('paymentSubmitBtn').textContent = 'Lanjutkan Pembayaran →';
-      document.getElementById('paymentModal').style.display = 'flex';
-    } else {
-      window.openLoginModal('register', 'Buat akun dulu (gratis) untuk melanjutkan pembelian All Access — cuma butuh email & password.');
     }
+    document.getElementById('paymentSubmitBtn').disabled = false;
+    document.getElementById('paymentSubmitBtn').textContent = 'Lanjutkan Pembayaran →';
+    document.getElementById('paymentModal').style.display = 'flex';
   }
 
   function closePaymentModal() {
