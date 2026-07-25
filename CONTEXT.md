@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 25, 2026 (checkpoint 54)_
+_Last updated: July 25, 2026 (checkpoint 55)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -488,6 +488,18 @@ Julia ran the pending password-reset test and the email landed in Gmail's Spam f
 **1. CTA copy unified.** Julia noticed the 4 course preview/sales pages (`mulai-claude.html`, `produktivitas.html`, `content-marketing.html`, `prompt-gratis.html`) used "Dapatkan All Access →" for their primary CTA, while the homepage and `all-access.html` use "Mulai Belajar Sekarang →". Changed both CTA buttons (top + bottom of page) on all 4 preview pages to match. The other JS-driven button states (`Buka Kursus →` for already-enrolled, `Mulai Kursus →` for all-access holders who haven't self-enrolled in that specific course yet) were left as-is — those are distinct states with their own correct wording, not part of this inconsistency.
 
 **2. Font mismatch found and fixed while auditing.** Julia asked whether fonts are consistent site-wide — repo-wide grep of every Google Fonts `<link>` found `produktivitas-content.html` and `content-marketing-content.html` were loading **Inter** instead of the site-wide Instrument Serif + Geist pair (both `--serif` and `--font` CSS variables pointed at `'Inter'`). This is a real, visible bug, not just a stray unused import — confirmed `var(--serif)` is actually applied to the "Kursus Selesai!" completion-badge heading on both pages, so it was rendering in the wrong typeface. Root cause unclear (likely copy-pasted from a different template during one of the K3/Produktivitas restructures), but the fix was a clean 2-line swap per file (Google Fonts link + CSS variable declaration) since both files already reference fonts via `var(--font)`/`var(--serif)` everywhere rather than hardcoding `'Inter'` directly — grepped both files to confirm zero other stray references before touching anything.
+
+---
+
+## SHIPPED (Checkpoint 55, July 25, 2026): "20 Prompt Gratis" rename + stray "Gabung Gratis" nav CTA removed
+
+**Status: live** (commit `1dadb46`).
+
+**1. "20 Prompt Gratis" renamed to "20 Prompt Dasar".** Julia flagged that the course still reads "Gratis" (free) even though single-course purchases were retired and it's now only obtainable via paid All Access — confusing given the site no longer offers any free course. Renamed the display title everywhere it appears: `all-access.html` (included-courses list), `index.html` (course card + the `LIH_COURSE_TITLES` JS lookup used for the "Kursus Kamu" personalized subtext), `dashboard.html` (`ALL_COURSES` title), and `prompt-gratis.html` (the CTA-box name shown on the page itself, plus the `course_name` value written into the `enrollments` row on purchase, so future purchase records also say "Dasar" not "Gratis"). Deliberately left the `prompt-gratis` URL slug/filenames and `COURSE_SLUG` constant untouched — renaming those would break existing enrollment rows, bookmarks, and the content page's slug-matching logic for no user-facing benefit; only the human-readable label changed. Double-checked for any other "free course" leftovers: no `type: 'free'` enrollment inserts exist anywhere in the codebase, and `dashboard.html`'s `LEGACY_FREE_SLUGS` logic already correctly strips old free-tier `prompt-gratis`/`mulai-claude` rows from the dashboard unless the user holds a real `all-access` row — access gating was already accurate, only the label text was stale.
+
+**2. "Gabung Gratis" nav button removed from all course preview pages.** Julia asked why logged-out visitors on lesson/preview pages still saw a "Gabung Gratis" (Join Free) button in the header next to "Masuk" — same root issue, implies a free signup path that no longer exists (accounts are now created automatically at checkout via guest-checkout, not via a separate free-signup button). Removed the `#navCtaBtn` anchor from the nav markup in all 6 pages that had it: `all-access.html`, `content-marketing.html`, `index.html`, `mulai-claude.html`, `produktivitas.html`, `prompt-gratis.html`. Also cleaned up the now-dead JS that toggled its visibility. One thing caught during cleanup: the JS line being removed in 5 of the 6 files (`all-access`, `content-marketing`, `mulai-claude`, `produktivitas`, `prompt-gratis`) doubled as the `if (!session) { ...; return; }` early-return guard for the nav auth script — deleting it wholesale would have let anonymous visitors hit `session.user.email` on a null session and throw. Caught this before pushing and restored a plain `if (!session) return;` in its place in all 5 files. `index.html`'s reference was inside an existing `if (s) { ... }` block with no return semantics, so no equivalent fix was needed there.
+
+**Commits this checkpoint**: `belajar-claude`: `1dadb46`.
 
 ---
 
