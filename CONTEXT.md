@@ -611,6 +611,20 @@ Julia asked to "organize the folder" (following up on the Checkpoint 61 note abo
 
 ---
 
+## SHIPPED (Checkpoint 63, July 27, 2026): Produktivitas Kantor PDF regenerated (was badly stale)
+
+**Status: live** (commit `7545ab4`), verified via full-text extraction against `produktivitas-content.html`.
+
+Follow-up to Checkpoint 62's audit: `K2-Produktivitas/Course-Level/K2-Produktivitas-Kantor.pdf` was dated July 20 and predated nearly all of the July 22-23 M6/M7 work. Confirmed stale via three concrete gaps: it still listed "M08 Case Study" as an active 8th module in the intro/TOC (archived out of the active flow back in Checkpoint 25), it was missing the "Perkuat Riset dengan Web Search" section added to Module 7 (Checkpoint 29), and missing the SWOT → Slide Presentasi section (Checkpoint 26/27).
+
+**Rebuilt from scratch** using `produktivitas-content.html` as the sole source of truth — read the file in full and transcribed all 7 active modules (Role Prompting, Claude Projects, Gmail + Claude, Spreadsheet & Claude, Batch Prompting, Prompt Chaining, Dokumen & Riset) faithfully: every framework/comparison grid, prompt, tip box, bonus/Level Up section, and output box. The archived Case Study module was deliberately left out of the PDF, consistent with it no longer being part of the active 7-module course. Built as HTML/CSS (same cover-page branding pattern as the 20-Prompt PDF from Checkpoint 61: Instrument Serif + Geist, purple gradient cover, module list) and rendered via `weasyprint` — 16 pages.
+
+**Found and worked around a real WeasyPrint rendering bug**: color/multi-codepoint emoji glyphs (✅, 🛠️, ⚠️, etc.) used as standalone icon content, when followed by any sibling block, caused WeasyPrint to silently drop large amounts of subsequent page content during pagination (first render came out at 16 pages but only ~12K of an expected ~29K characters — most section headings, tip boxes, and grids were missing, leaving only prompt-code blocks). Root-caused by bisection (isolating single blocks, then a single emoji character) down to the `.output-box`'s ✅ icon specifically. Fix: stripped all emoji icons from labels/icons in favor of plain text and safe symbols (e.g. plain "✓" checkmark, which does not trigger the bug) — re-rendered and verified all 7 modules' content is fully present (28,922 characters extracted across 16 pages, no drop-offs), with no stale Case Study/M08 references.
+
+**Commits this checkpoint**: `belajar-claude`: `7545ab4`.
+
+---
+
 ## Design System (as of June 2026)
 All pages use these CSS variables:
 ```css
