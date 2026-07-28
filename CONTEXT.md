@@ -637,6 +637,25 @@ Follow-up to Checkpoint 62's audit: `K2-Produktivitas/Course-Level/K2-Produktivi
 
 ---
 
+## SHIPPED (Checkpoint 65, July 28, 2026): Content & Marketing content pass — fixed 3 bugs, implemented 4 agreed content changes
+
+**Two more stale pre-restructure references found and fixed**, in addition to the "Modul 2-9" text bug fixed earlier this session: Module 1's exercise text also said "Modul 2 sampai 9" (now "sampai 7"). More significantly, `Content-Marketing/M07-Content-OS-Capstone/cm-m9-starter-peluncuran.txt` — a real downloadable file, correctly referenced by filename in the capstone's exercise text — still had *internal* content describing the old pre-restructure numbering (Day 4 labeled "M05 WhatsApp CS, M06 Email & Promosi" as two separate modules, Day 5 labeled "M07 Performance Ads, M08 Content OS" as two separate modules). Rewrote the file's internal module references to match the current 7-module structure and renamed it to `cm-starter-peluncuran.txt` (dropped the module number from the filename entirely so it can't go stale again the next time the course gets restructured), updating the one HTML reference to match. Git recognized this as a clean rename (90% similarity). The old `cm-m9-starter-peluncuran.txt` could not be deleted from the Windows-mounted folder (same FUSE/lock limitation documented in Checkpoint 63/64) — it's cleanly removed on GitHub via the rename, but Julia will need to delete the orphaned duplicate from her local folder herself.
+
+**Implemented four content changes to `content-marketing-content.html`, discussed and explicitly approved across several rounds before any generation**, per Julia's standing preference to review before building:
+
+1. **Canva Connector moved from Module 4 to Module 3.** Organic Instagram content needs visual design at least as much as paid ads do, and connector setup is one-time — so it's taught once where it's first needed (Module 3), and Module 4 now just confirms it's still active and reuses it, instead of re-teaching setup.
+2. **Image generation split into two paths in Module 3**, following a live capability check (confirmed via web search: Claude still has no native photorealistic image generation as of mid-2026 — deliberate product decision, not a gap that's closing soon). New "Level Up: Bikin Grafis Sederhana Langsung dari Claude" section teaches Claude generating simple flat-design graphics (quote cards, promo tiles) directly as artifacts — a real capability that was previously untaught. The existing Prompt Enhancer → Nano Banana Pro/ChatGPT path for photorealistic photos stays, but its example prompt is now shorter, since brand color/mood no longer needs to be retyped (see next point).
+3. **Claude Project extended to carry visual brand identity, not just positioning.** `cm-template-kompetitor.txt`'s Bagian 1 gained two fields (Palet Warna, Mood/Gaya). Module 1 now explicitly saves this to the Project and explains why (so Module 3's image prompts can inherit it automatically). New file `cm-profil-dapur-rara.txt` created — a ready-to-paste sample business profile (positioning + visual identity + brand voice) for students without their own business yet, modeled on Produktivitas Kantor Module 2's reference-project pattern. Module 5 no longer tells students to create a second Claude Project for brand voice — it now explicitly extends the same Project from Module 1.
+4. **New "Anatomi Caption yang Engaging" framework added to Module 3** (Hook → Value/Cerita → CTA), mirroring Module 4's ad-copy framework structure but with organic-appropriate tone — captions were previously generated in bulk with no explicit craft framework of their own.
+
+Updated the affected step-rows, "Yang Kamu Butuhkan" lines, Latihan exercises, and output-box summaries in Modules 1, 3, 4, and 5 to stay consistent with all of the above. Verified afterward: div tag balance (466 open / 466 close), no remaining references to the old filename or the fixed bugs, and the pushed commit is byte-identical to the mounted working copy.
+
+**Explicitly out of scope this checkpoint** (discussed with Julia but deliberately not built yet, pending their own dedicated draft-review pass): the proposed 8th module ("Strategi & Alokasi Budget Iklan," with an optional GA4 bonus) — this needs new panel HTML, sidebar nav entry, renumbered capstone (7→8), updated nav-counters, and a new `cm-alokasi-budget.xlsx` supporting file, none of which have drafted copy yet. PPTX/PDF regeneration for Content & Marketing remains deferred per Checkpoint 42, per Julia's explicit "before ppt/pdf" sequencing this session.
+
+**Commits this checkpoint**: two commits — one on `content-marketing-content.html` fixing the second stale "Modul 2-9" instance, one covering all four content changes plus the capstone starter-file rename across `content-marketing-content.html`, `cm-template-kompetitor.txt`, `cm-profil-dapur-rara.txt` (new), and `cm-starter-peluncuran.txt` (renamed from `cm-m9-starter-peluncuran.txt`).
+
+---
+
 ## Design System (as of June 2026)
 All pages use these CSS variables:
 ```css
