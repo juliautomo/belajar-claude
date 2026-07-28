@@ -114,7 +114,11 @@ CARA PAKAI DI CLAUDE PROJECTS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 1. Jalankan prompt di atas dulu (pakai data Dapur Rara, atau data bisnismu sendiri)
 2. Buat 1 Claude Project baru — nama "Bisnis Saya" (atau "Dapur Rara" untuk latihan)
-3. Simpan ke Project Instructions: Data Bisnis + Identitas Visual + hasil positioning
-   dari Claude + Brand Voice di atas
+3. Simpan ke Project Instructions — copy-paste 3 bagian ini:
+   a. BAGIAN 1 — DATA BISNIS di atas apa adanya (baris Palet Warna & Mood/Gaya di
+      dalamnya SUDAH menghitung sebagai "identitas visual" — tidak ada bagian
+      terpisah untuk itu, jangan dicari di tempat lain)
+   b. Jawaban Claude tadi (SWOT + gap + kalimat positioning yang kamu pilih)
+   c. BRAND VOICE di atas (dipakai nanti di Modul 5, tapi simpan sekarang sekalian)
 4. Semua modul berikutnya (Modul 2 sampai 5) otomatis pakai konteks ini — tidak perlu
    jelaskan ulang bisnismu tiap kali buka chat baru
