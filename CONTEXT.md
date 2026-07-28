@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 28, 2026 (checkpoint 69)_
+_Last updated: July 28, 2026 (checkpoint 70)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -728,6 +728,20 @@ Julia flagged two things from a screenshot: step 5 of Module 1's "Cara Kerja Ste
 - Regenerated `K3-M01-Positioning-Kompetitor.pptx` and `Content-Marketing-Course-Outline.xlsx` from the updated build scripts; re-ran visual QA on slides 4–5 (clean, no overflow) plus `markitdown`/`validate.py` (both pass).
 - Verified div balance 320/320 on `content-marketing-content.html` before pushing.
 - Commit: `e52da1e`.
+
+---
+
+## SHIPPED (Checkpoint 70, July 28, 2026): Module 2 PPTX built for Kreasi Konten Pemasaran (Deskripsi Produk Marketplace)
+
+**Status: live**, commit `19f5d24`. Continuing the deferred PPTX build-out from Checkpoint 67 (which only covered Module 1) — Julia asked for Module 2 specifically, aligned with `content-marketing-content.html`'s panel2 and the module's supporting file `cm-data-produk.csv`, with the explicit instruction that the HTML stays the deeper-context source and the PPT is a condensed companion (not a 1:1 transcript).
+
+**Built using the documented house style** (`belajarclaude-pptx-style-spec.md`) rather than re-deriving it from scratch — inspected `K3-M01-Positioning-Kompetitor.pptx`'s actual shape/color/font values via `python-pptx` to confirm the spec matches the shipped reference deck (it does: `0D1321`/`141D33`/`6849F6` navy-purple palette, Helvetica, same header-bar and cover-slide patterns) before writing the generator. 5 slides via `pptxgenjs`: cover, Struktur Deskripsi Produk (4-card icon grid + kesalahan-umum row + a "Yang Kamu Butuhkan" note box, condensing two HTML sections onto one slide), Contoh Prompt Buruk vs Baik (2-up compare cards), Cara Kerja 5 Langkah (numbered step rows + a condensed "kenapa satu prompt saja cukup" note), Latihan & Output.
+
+**Two real spacing bugs caught by the visual QA render** (LibreOffice → PDF → JPEG per the skill's process), both instances of the style spec's own documented failure modes: (1) the Buruk/Baik compare cards on slide 3 were given a uniform fixed height (3.35in) sized for the longer card, leaving the shorter "Prompt Buruk" card with a large dead gap between its short quote and its footer text — refactored to size each card to its own actual content (left 1.95in, right 2.8in), per the spec's explicit "don't force uniform card heights" rule. (2) The bottom tip-box on slide 4 was allocated 0.85in but its two-line wrapped text rendered past the box's bottom border — bumped to 1.05in and reconfirmed clean.
+
+**QA**: `validate.py` (schema/relationships) passed, `markitdown` placeholder-text sweep clean, full 5-slide visual render reviewed twice (before and after the spacing fixes).
+
+**Commits this checkpoint**: `belajar-claude`: `19f5d24` (pushed via scratch-clone workaround — same local `.git` FUSE-lock limitation as Checkpoints 63/64/66, confirmed unchanged: `index.lock` still can't be removed from within the sandbox against this mount).
 
 ---
 
