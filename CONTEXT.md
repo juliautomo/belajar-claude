@@ -625,6 +625,18 @@ Follow-up to Checkpoint 62's audit: `K2-Produktivitas/Course-Level/K2-Produktivi
 
 ---
 
+## SHIPPED (Checkpoint 64, July 28, 2026): Sync verification before starting Content & Marketing PPTX/PDF work
+
+**Status: verified, no code changes.** Julia asked to confirm everything's in sync before starting the next piece of work (building the deferred Modules 2-7 PPTX decks + rendering the Content & Marketing PDF, per Checkpoint 42's "ppt and pdf generator comes later").
+
+**Confirmed GitHub is authoritative and current** at `7e71e91` (Checkpoint 63). Diffed the actual file contents of the local mounted working directory against a fresh GitHub clone (not git's own status/ahead-behind reporting, which is unreliable here — see below) — every file matches exactly, with one expected exception: `Content-Marketing/Course-Level/Content-Marketing-Course-Outline.xlsx`, a reference spreadsheet generated this session for Julia's own use (module/tools/Free-Pro breakdown), not yet pushed since it's a planning artifact rather than site content.
+
+**Local git ref lag is unchanged and still not fixable from this sandbox**: `refs/heads/main` is still pinned at `e343472` (Checkpoint 62) because two stray lock files inside `.git/refs/heads/` (`main.lock`, `main.lock.stale.1784967027`) continue to return `Operation not permitted` on every deletion attempt (rm, mv, chmod 777 + rm, Python `os.remove` — all retried again this checkpoint, same result). This is a sandbox/FUSE-mount-level restriction, not a real permissions problem — confirmed the mount is `fuse` type bridging to Julia's actual Windows filesystem, so something on her machine (or Windows' own file-locking semantics) is holding those two files. Doesn't affect the live site or the actual file content Julia sees; only affects git commands run *from within this sandbox* against that specific local folder. Standing workaround unchanged: push through a scratch clone, then mirror file contents into the mounted folder via plain copy/Edit (not git) so what Julia sees on disk always matches GitHub even when the local `.git` bookkeeping lags.
+
+**Commits this checkpoint**: none.
+
+---
+
 ## Design System (as of June 2026)
 All pages use these CSS variables:
 ```css
