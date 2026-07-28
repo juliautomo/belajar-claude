@@ -2,14 +2,21 @@
 # Course: Kreasi Konten Pemasaran — Modul 1
 #
 # Cara pakai:
-# - Belum punya bisnis siap pakai? File ini sudah lengkap terisi dengan contoh
-#   Dapur Rara — tinggal paste apa adanya ke Claude pakai prompt di bagian bawah,
-#   tidak perlu isi apapun.
-# - Punya bisnis sendiri? Ganti semua data di bawah (Data Bisnis + 3 Data
-#   Kompetitor) dengan data bisnismu, baru paste ke Claude.
+# - Belum punya bisnis siap pakai? Bagian yang ditandai "PASTE KE CLAUDE" di bawah
+#   sudah lengkap terisi contoh Dapur Rara — copy bagian itu saja apa adanya ke
+#   Claude, tidak perlu isi apapun.
+# - Punya bisnis sendiri? Ganti data di BAGIAN 1 dan BAGIAN 2 (masih di dalam
+#   area "PASTE KE CLAUDE") dengan data bisnismu, baru copy ke Claude.
+# - Bagian di BAWAH area "PASTE KE CLAUDE" (Contoh Hasil, Brand Voice, Cara
+#   Pakai di Claude Projects) adalah catatan untuk KAMU baca sendiri — JANGAN
+#   ikut di-paste ke Claude, itu bukan bagian dari datanya.
 #
 # File ini dipakai lagi di Modul 2 sampai 5 — simpan hasil positioning &
 # identitas visualnya di Claude Projects setelah menjalankan prompt di bawah.
+
+════════════════════════════════════════════════════════
+▼▼▼  PASTE KE CLAUDE — MULAI DARI SINI  ▼▼▼
+════════════════════════════════════════════════════════
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BAGIAN 1 — DATA BISNIS (contoh: Dapur Rara)
@@ -61,10 +68,8 @@ Yang kurang    : "Stok sering habis, susah repeat order" — "belum ada varian m
 dari review      daerah spesifik, semua terasa masakan Jawa umum" — belum ada spesialisasi daerah tertentu
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PROMPT YANG SUDAH DISIAPKAN — Copy & Paste ke Claude
+PROMPT (sudah disiapkan — bagian ini ikut di-paste)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Paste isi file ini di atas prompt berikut:
-
 "Berdasarkan data di atas, tolong buatkan:
 1. SWOT sederhana untuk bisnisku (maks 4 poin per kuadran)
 2. Gap yang belum diisi kompetitor manapun — peluang yang bisa aku ambil
@@ -73,6 +78,11 @@ Paste isi file ini di atas prompt berikut:
 4. 3 rekomendasi konten yang bisa langsung membedakan brandku dari kompetitor
 
 Format: gunakan heading yang jelas, jawaban ringkas dan actionable."
+
+════════════════════════════════════════════════════════
+▲▲▲  PASTE KE CLAUDE — SAMPAI SINI  ▲▲▲
+(Bagian di bawah ini untuk referensimu sendiri — JANGAN di-paste ke Claude)
+════════════════════════════════════════════════════════
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 CONTOH HASIL (kalau pakai data Dapur Rara di atas apa adanya)
@@ -95,6 +105,9 @@ BRAND VOICE (dipakai lagi di Modul 5 — WhatsApp & Email)
 Tone           : Hangat, santai tapi sopan — seperti bicara dengan tetangga
 Sapaan         : "Kak"
 Batasan        : Tidak pakai bahasa terlalu formal/korporat, emoji secukupnya (1-2 per pesan)
+
+Catatan: bagian ini tidak perlu di-paste sekarang untuk Latihan Modul 1 — simpan ke
+Claude Project-mu nanti (lihat langkah di bawah), baru benar-benar dipakai di Modul 5.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 CARA PAKAI DI CLAUDE PROJECTS
