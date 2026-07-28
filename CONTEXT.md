@@ -787,6 +787,8 @@ Julia then asked whether M02's product catalog (`cm-data-produk.csv`) should als
 
 **Commits this checkpoint**: `belajar-claude`: `75e89b5` (scratch-clone workaround, same as prior checkpoints).
 
+**Follow-up same session**: Julia asked what the `[Project ini sudah punya positioning dan data produk...]` bracket text inside the new prompt-boxes actually meant — a fair question, since it exposed a real bug. That bracket notation is used elsewhere in the course purely as an *illustrative* annotation inside the non-copyable "Contoh Prompt: Buruk vs Baik" comparison cards (explaining to the reader why a shorter prompt works), never inside an actual copy-to-clipboard `prompt-box`. The 3 new Latihan prompt-boxes (M02, M03, M05) had copied that bracket phrasing into a literal copy-paste element, creating genuine ambiguity about whether it should be typed. Fixed by removing the bracket entirely from all 3 — it serves no functional purpose (Claude already has the Project context automatically; stating it isn't a command Claude needs), and the reassurance-for-the-reader purpose it was serving is already covered by the case-box prose directly above each prompt-box. The two remaining bracket instances in the file (lines 390, 490) are correctly left alone — both are the illustrative, non-copyable col-card examples. Julia is updating the M02 PPTX's equivalent text manually herself rather than having it regenerated. Verified div balance unchanged (326/326). Commit: `160c225`.
+
 ---
 
 ## Design System (as of June 2026)
