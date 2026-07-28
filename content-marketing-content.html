@@ -344,7 +344,7 @@
         <div class="doc-slot" id="doc-slot-2"></div>
 
         <div class="module-desc-box">
-          Deskripsi produk yang bagus harus mengandung keyword pencarian, benefit yang jelas, dan CTA yang mendorong pembelian. Claude bisa generate puluhan deskripsi sekaligus dari data produk yang kamu siapkan dalam file CSV.
+          Deskripsi produk yang bagus harus mengandung keyword pencarian, benefit yang jelas, dan CTA yang mendorong pembelian. Upload data produkmu ke Project Knowledge dari Modul 1 sekali saja — Claude generate puluhan deskripsi sekaligus, dan produk-produk ini otomatis tersedia lagi di Modul 3-5 tanpa upload ulang.
         </div>
 
         <div class="case-box persona">
@@ -371,7 +371,12 @@
           </ul>
         </div>
 
-        <p class="body-text"><strong>Yang kamu butuhkan:</strong> file cm-data-produk.csv (isi minimal 5 produk: nama, kategori, harga, keunggulan, target pembeli, keyword), kalimat positioning dari Modul 1, dan akun Tokopedia/Shopee aktif.</p>
+        <p class="body-text"><strong>Yang kamu butuhkan:</strong> file cm-data-produk.csv (isi minimal 5 produk: nama, kategori, harga, keunggulan, target pembeli, keyword) dan akun Tokopedia/Shopee aktif. Positioning dari Modul 1 sudah otomatis tersedia kalau kamu masih di Claude Project yang sama — tidak perlu ditulis ulang.</p>
+
+        <div class="tip-box connector">
+          <div class="tip-label">🔌 Simpan Juga ke Project Knowledge</div>
+          <p>Selain upload ke chat, upload juga cm-data-produk.csv ke <strong>Project Knowledge</strong> (beda dari Project Instructions yang menyimpan positioning) — ini area khusus untuk file, dan otomatis tersedia di semua chat dalam Project yang sama. Efeknya: Modul 3-5 tidak perlu upload ulang CSV ini untuk tahu produk apa saja yang kamu punya. Kalau produkmu berubah (harga naik, produk baru), upload ulang versi terbaru untuk menggantikan yang lama.</p>
+        </div>
 
         <div class="section-heading">Contoh Prompt: Buruk vs Baik</div>
         <div class="two-col">
@@ -382,16 +387,16 @@
           </div>
           <div class="col-card highlight">
             <h4>Prompt Baik</h4>
-            <p>"Ini data produkku [upload cm-data-produk.csv]. Positioning: Untuk keluarga muda yang ingin masakan daerah otentik tanpa masak lama. Buatkan deskripsi Tokopedia untuk tiap produk: hook 2 kalimat, keyword, benefit, spesifikasi, CTA. Maks 200 kata per produk."</p>
-            <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> upload CSV + positioning = semua produk selesai dalam 1 prompt, siap paste.</p>
+            <p>"[Project ini sudah punya positioning dan data produk dari cm-data-produk.csv di Project Knowledge] Buatkan deskripsi Tokopedia untuk tiap produk: hook 2 kalimat, keyword, benefit, spesifikasi, CTA. Maks 200 kata per produk."</p>
+            <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> Project sudah tahu positioning dan semua data produk — tidak perlu ditulis ulang, semua produk selesai dalam 1 prompt, siap paste.</p>
           </div>
         </div>
 
         <div class="section-heading">Cara Kerja Step-by-Step</div>
         <div class="step-row">
           <div class="step-card"><div class="step-num">1</div><p>Isi cm-data-produk.csv — kolom terpenting: Keunggulan 1-3 dan Keyword Pencarian</p></div>
-          <div class="step-card"><div class="step-num">2</div><p>Upload file CSV ke Claude chat (klik ikon lampiran)</p></div>
-          <div class="step-card"><div class="step-num">3</div><p>Tambahkan positioning dari Modul 1 + instruksi format, maks 200 kata/produk</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Upload CSV ke Project Knowledge (bukan cuma chat) — supaya dipakai lagi di Modul 3-5</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Minta generate langsung — positioning dan data produk otomatis terbaca dari Project, tinggal kasih instruksi format (maks 200 kata/produk)</p></div>
           <div class="step-card"><div class="step-num">4</div><p>Review tiap deskripsi — pastikan keyword terasa natural, tidak dipaksakan</p></div>
           <div class="step-card"><div class="step-num">5</div><p>Paste ke Tokopedia/Shopee, catat posisi ranking setelah 7 hari</p></div>
         </div>
@@ -399,7 +404,7 @@
         <div class="prompt-section">
           <div class="prompt-label">📝 Latihan</div>
           <div class="case-box">
-            <p>Isi cm-data-produk.csv dengan minimal 5 produk bisnismu (atau produk Dapur Rara sebagai latihan). Upload ke Claude dan generate semua deskripsi sekaligus. Paste 1 deskripsi terbaik ke listing-mu, catat posisi ranking-nya setelah 7 hari.</p>
+            <p>Isi cm-data-produk.csv dengan minimal 5 produk bisnismu (atau produk Dapur Rara sebagai latihan). Upload ke Project Knowledge dari Project yang sama dengan Modul 1, lalu generate semua deskripsi sekaligus — tanpa perlu ketik ulang positioning. Paste 1 deskripsi terbaik ke listing-mu, catat posisi ranking-nya setelah 7 hari.</p>
           </div>
         </div>
 
@@ -407,7 +412,7 @@
           <div class="output-icon">✅</div>
           <div>
             <h3>Output yang Diharapkan</h3>
-            <p>Minimal 5 deskripsi produk lengkap (hook + keyword + benefit + spesifikasi + CTA), siap dipaste langsung ke marketplace — waktu yang dihemat: sekitar 45 menit. File pendukung: cm-data-produk.csv</p>
+            <p>Minimal 5 deskripsi produk lengkap (hook + keyword + benefit + spesifikasi + CTA), siap dipaste langsung ke marketplace — waktu yang dihemat: sekitar 45 menit. File pendukung: cm-data-produk.csv, sekarang juga tersimpan di Project Knowledge untuk dipakai lagi di Modul 3-5.</p>
           </div>
         </div>
 
@@ -468,7 +473,7 @@
           </ul>
         </div>
 
-        <p class="body-text"><strong>Yang kamu butuhkan:</strong> positioning dari Modul 1 + daftar produk dari Modul 2, file cm-kalender-konten.csv (template 16 slot posting per bulan), akun Instagram bisnis aktif + 5-10 foto produk, dan Canva Connector aktif (opsional tapi disarankan).</p>
+        <p class="body-text"><strong>Yang kamu butuhkan:</strong> file cm-kalender-konten.csv (template 16 slot posting per bulan), akun Instagram bisnis aktif + 5-10 foto produk, dan Canva Connector aktif (opsional tapi disarankan). Positioning dan katalog produk dari Modul 1-2 sudah otomatis tersedia kalau kamu masih di Project yang sama.</p>
 
         <div class="section-heading">Contoh Prompt: Buruk vs Baik</div>
         <div class="two-col">
@@ -479,14 +484,14 @@
           </div>
           <div class="col-card highlight">
             <h4>Prompt Baik</h4>
-            <p>"Bisnis: frozen food halal. Target: keluarga muda 25-35. Buatkan kalender Instagram Juli — 16 post (4/minggu): 1 produk, 1 edukasi, 1 BTS, 1 testimoni. Tiap post: tema, caption maks 80 kata, 8 hashtag. Format tabel."</p>
+            <p>"[Project ini sudah tahu positioning dan produk-produkku] Buatkan kalender Instagram Juli — 16 post (4/minggu): 1 produk, 1 edukasi, 1 BTS, 1 testimoni. Tiap post: tema, caption maks 80 kata, 8 hashtag. Format tabel."</p>
             <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> 1 prompt = 16 caption terstruktur siap isi ke kalender.</p>
           </div>
         </div>
 
         <div class="section-heading">Cara Kerja Step-by-Step</div>
         <div class="step-row">
-          <div class="step-card"><div class="step-num">1</div><p>Siapkan bahan: produk bulan ini, promo yang ada, momen spesial</p></div>
+          <div class="step-card"><div class="step-num">1</div><p>Siapkan bahan tambahan: promo bulan ini, momen spesial (produk sudah diketahui Claude dari Project)</p></div>
           <div class="step-card"><div class="step-num">2</div><p>Generate kalender 30 hari dalam format tabel: Minggu | Hari | Tema | Caption | Hashtag</p></div>
           <div class="step-card"><div class="step-num">3</div><p>Review dan personalisasi — tambahkan cerita atau info promo spesifik</p></div>
           <div class="step-card"><div class="step-num">4</div><p>Import ke Google Sheets atau tool scheduling (Later, Buffer)</p></div>
