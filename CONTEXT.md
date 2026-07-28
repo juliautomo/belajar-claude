@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 28, 2026 (checkpoint 72)_
+_Last updated: July 28, 2026 (checkpoint 73)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -770,6 +770,22 @@ Julia then asked whether M02's product catalog (`cm-data-produk.csv`) should als
 **Verified**: div balance 322/322 on `content-marketing-content.html`, `validate.py` clean on both the pptx and xlsx.
 
 **Commits this checkpoint**: `belajar-claude`: `ab1d6aa` (scratch-clone workaround, same as prior checkpoints).
+
+---
+
+## SHIPPED (Checkpoint 73, July 28, 2026): Copy-paste prompt-box added to Latihan sections in M02-M05
+
+**Status: live**, commit `75e89b5`. Julia asked why the Latihan (exercise) sections had no copy-paste prompt, unlike the "Contoh Prompt" and "Level Up" sections elsewhere in each module. Checked all 5 modules — confirmed this was a consistent pattern across the whole course (every Latihan used only `case-box`, a plain-prose container, never `prompt-box`, the monospace container with the "Salin" copy button), not an isolated gap.
+
+**Deliberate exception: M01 was left unchanged.** Its Latihan already works via a different, arguably better mechanism — the real prompt lives inside `cm-template-kompetitor.txt`'s own "PASTE KE CLAUDE" marked section, which the student copies directly from the file (positioning + competitor data + prompt bundled together). Adding a duplicate prompt-box in the HTML would create two copies of the same prompt that could drift out of sync — the same class of inconsistency this project has repeatedly caught and fixed in past checkpoints (PPT/HTML/PDF harmonization work). Drafted this reasoning for Julia before implementing and she confirmed.
+
+**M02-M05 each got a new `prompt-box`** added directly after the existing case-box instructions, using the exact validated prompt pattern already shown earlier in that module's "Contoh Prompt: Buruk vs Baik" (M02, M03) or a newly-drafted placeholder-based prompt for modules where Latihan covers a different scenario each time (M04's ad copy uses `[nama produk/promo]`/`[diskon]`/`[tanggal]`/`[target]` placeholders since it's inherently per-campaign; M05's CS template prompt uses the same tone/sapaan values already established in `cm-template-kompetitor.txt`'s Brand Voice section). Each module's case-box was trimmed to remove the description text that's now redundant with the prompt itself, while keeping the file/setup instructions (e.g., "isi CSV dulu," "kirim ke minimal 10 kontak").
+
+**Downstream artifacts updated to match**: `K3-M02-Deskripsi-Produk.pptx` slide 5's Latihan box was resized (green container 1.55in → 1.95in) to fit a new white inset prompt box, re-QA'd (validate.py, markitdown sweep, visual render — clean, no overflow). `Content-Marketing-Course-Outline.xlsx`'s Latihan column (G) updated for Modul 2-5 to note the ready-to-use prompt is now on the page, formatting verified intact.
+
+**Verified**: div balance 326/326 (up from 322, exactly +4 for the 4 new prompt-box divs), 7 `prompt-box` elements total (3 pre-existing Level-Up boxes + 4 new), each with exactly one working `copyPrompt(this)` button — confirmed the button-copy JS function is generic and needed no changes.
+
+**Commits this checkpoint**: `belajar-claude`: `75e89b5` (scratch-clone workaround, same as prior checkpoints).
 
 ---
 
