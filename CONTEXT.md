@@ -743,6 +743,8 @@ Julia flagged two things from a screenshot: step 5 of Module 1's "Cara Kerja Ste
 
 **Commits this checkpoint**: `belajar-claude`: `19f5d24` (pushed via scratch-clone workaround — same local `.git` FUSE-lock limitation as Checkpoints 63/64/66, confirmed unchanged: `index.lock` still can't be removed from within the sandbox against this mount).
 
+**Follow-up same session**: Julia asked to double-check the new deck against `cm-data-produk.csv` — confirmed the PPT's "Keunggulan 1-3 dan Keyword Pencarian" column callout and every "minimal 5 produk" reference matched the CSV's actual header row. But the CSV itself only had 1 filled example row (Frozen Rendang Sapi) plus 9 blank `[ISIAN]` placeholder rows, so "atau produk Dapur Rara sebagai latihan" wasn't actually true yet — a student without their own 5 products would still hit mostly-blank rows. Added 4 more filled example rows in the same Dapur Rara product line already established in the course narrative (rendang, soto, garang asem — per `cm-template-kompetitor.txt`'s Bagian 1 and the M3/M4/M5 case-study mentions of "Frozen Soto" and "Garang Asem Frozen"): Frozen Rendang Ayam, Frozen Soto Betawi, Frozen Soto Padang, Frozen Garang Asem Ayam — prices kept inside the profile's stated Rp 35.000-55.000 range. Trimmed back down to 5 blank template rows (10 data rows total, same as before) so students filling in their own business aren't left with an oversized template. Commit: `f514e9a`.
+
 ---
 
 ## Design System (as of June 2026)
