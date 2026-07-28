@@ -143,7 +143,7 @@
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-content">
-    <span class="level-tag">Intermediate · 1.5 Jam · 3 Modul</span>
+    <span class="level-tag" style="background:#F4F4F5;color:#71717A;">Segera Hadir · Intermediate · 1.5 Jam · 3 Modul</span>
     <h1>Claude untuk <span class="accent">Strategi & Analisis Marketing</span></h1>
     <p class="hero-sub">Lanjutan dari Kreasi Konten Pemasaran — analisis performa iklan berbasis data, susun alokasi budget bulan depan, dan bangun 1 Strategi Command Center yang terus jalan lewat Notion, Google Sheets, Gmail, dan Calendar.</p>
     <div class="hero-meta">
@@ -154,10 +154,10 @@
       <span>🎨 Canva</span>
     </div>
     <div class="cta-box">
-      <div class="cta-tag">Termasuk All Access</div>
+      <div class="cta-tag">Segera Hadir</div>
       <div class="cta-name">Strategi & Analisis Marketing</div>
-      <p class="cta-desc">Satu kali bayar untuk akses kursus ini dan semua kursus lainnya — sekarang dan yang akan datang.</p>
-      <a class="btn-primary" id="ctaBtn" href="all-access.html">Mulai Belajar Sekarang →</a>
+      <p class="cta-desc">Kursus ini sedang disiapkan dan akan otomatis termasuk dalam All Access begitu diluncurkan — tanpa perlu bayar lagi.</p>
+      <span class="btn-primary" id="ctaBtn" style="background:#E4E4E7;color:#A1A1AA;cursor:default;pointer-events:none;">Segera Hadir</span>
       <p class="cta-note">Akses selamanya · Bukan langganan bulanan</p>
     </div>
   </div>
@@ -318,6 +318,10 @@
 <script>
   const COURSE_SLUG = 'strategi-marketing';
   const CONTENT_LINK = 'strategi-marketing-content.html';
+  // Course is built but paused pre-launch. Keep the enrollment/CTA logic below
+  // inert while this is true so no one — including existing All Access holders —
+  // can self-enroll before the course officially goes live. Flip to false to launch.
+  const COMING_SOON = true;
 
   (async () => {
     const { data: { session } } = await sbClient.auth.getSession();
@@ -330,6 +334,7 @@
     const lb = document.getElementById('navLoginBtn');
     if (lb) { lb.textContent = 'Dashboard'; lb.href = 'dashboard.html'; }
 
+    if (COMING_SOON) return;
     try {
       const { data: enrollments } = await sbClient.from('enrollments').select('course_slug').eq('email', session.user.email);
       const isEnrolled = enrollments && enrollments.some(e => e.course_slug === COURSE_SLUG);
@@ -354,6 +359,7 @@
   })();
 
   async function enrollAndOpen(btn, email) {
+    if (COMING_SOON) return;
     var original = btn.textContent;
     btn.textContent = 'Memproses...';
     document.querySelectorAll('#ctaBtn, #bottomCtaBtn').forEach(b => b.style.pointerEvents = 'none');
