@@ -1,21 +1,21 @@
-STARTER PACK — MODUL 09: PELUNCURAN PRODUK BARU
+STARTER PACK — MODUL 7 (CAPSTONE): PELUNCURAN PRODUK BARU
 Case Study — Dapur Rara meluncurkan Garang Asem Frozen
 =================================================
 
-File ini berisi semua bahan latihan untuk Case Study Modul 09.
+File ini berisi semua bahan latihan untuk Case Study Modul 7 (Capstone).
 Gunakan sebagai pengganti data nyata jika kamu belum punya produk baru untuk
 diluncurkan. Atau jadikan referensi format saat kamu pakai data bisnismu sendiri.
 
-Konteks: Dapur Rara (lihat Modul 1-8) sudah punya positioning, sistem konten,
+Konteks: Dapur Rara (lihat Modul 1-6) sudah punya positioning, sistem konten,
 dan tracking iklan yang jalan. Sekarang mereka meluncurkan produk baru —
-Garang Asem Frozen — dan harus jalankan seluruh sistem dari Modul 1-8 dalam
+Garang Asem Frozen — dan harus jalankan seluruh sistem dari Modul 1-6 dalam
 1 minggu kerja, dari riset sampai produk live dan iklannya dioptimasi.
 
 Urutan pengerjaan: Hari 1 -> Hari 5 (ikuti urutan di modul, 1 hari = 1-2 modul)
 
 ===========================================
 HARI 1 (Senin) — CEK POSITIONING + LISTING
-Modul yang dipakai: M01 Positioning, M02 Deskripsi Produk
+Modul yang dipakai: Modul 1 Positioning, Modul 2 Deskripsi Produk
 ===========================================
 
 Positioning Dapur Rara (hasil Modul 1, dipakai sebagai acuan):
@@ -47,7 +47,7 @@ spesifikasi, dan CTA. Maks 200 kata.
 
 ===========================================
 HARI 2 (Selasa) — KONTEN INSTAGRAM PELUNCURAN
-Modul yang dipakai: M03 Konten Instagram
+Modul yang dipakai: Modul 3 Konten Instagram
 ===========================================
 
 Info untuk kalender launch week (5 hari, bukan kalender bulanan penuh):
@@ -68,7 +68,7 @@ pertama, 5 hashtag relevan. Format tabel: Hari | Tema | Caption | Hashtag.
 
 ===========================================
 HARI 3 (Rabu) — IKLAN LAUNCH + DESAIN CANVA
-Modul yang dipakai: M04 Iklan + Canva
+Modul yang dipakai: Modul 4 Iklan + Canva
 ===========================================
 
 Brief iklan:
@@ -86,14 +86,14 @@ Jumat-Minggu. Target: ibu rumah tangga & keluarga muda 25-40 tahun.
 Format tiap variasi: headline (maks 7 kata) + body (maks 30 kata) + CTA.
 Variasi tone: urgensi, emosional, fungsional.
 
-Lalu (jika Canva Connector aktif): buatkan desain Instagram Post
+Lalu (jika Canva Connector aktif dari Modul 3): buatkan desain Instagram Post
 (1080x1080px) untuk variasi terbaik di Canva, warna hijau tua dan putih,
 font bold untuk headline.
 ---
 
 ===========================================
 HARI 4 (Kamis) — SIAPKAN CS + EMAIL LAUNCH
-Modul yang dipakai: M05 WhatsApp CS, M06 Email & Promosi
+Modul yang dipakai: Modul 5 WhatsApp + Email
 ===========================================
 
 3 skenario CS baru khusus produk baru (tambahan dari 10 template yang sudah
@@ -130,7 +130,7 @@ Simpan sebagai draft di Gmail saya.
 
 ===========================================
 HARI 5 (Jumat) — LAUNCH DAY: PANTAU IKLAN + LOG KE CONTENT OS
-Modul yang dipakai: M07 Performance Ads, M08 Content OS
+Modul yang dipakai: Modul 6 Performance Marketing, Modul 7 Content OS
 ===========================================
 
 Data performa iklan 3 jam pertama setelah launch (isi ke Sheet 1
@@ -165,9 +165,9 @@ Tugas                          | Modul      | Biasa    | Dengan Claude
 Cek positioning + listing      | M01+M02    | 1 jam    | ...
 5 caption launch week          | M03        | 90 menit | ...
 Copy iklan + desain Canva      | M04        | 2 jam    | ...
-3 template CS + email launch   | M05+M06    | 1 jam    | ...
-Analisis performa + log OS     | M07+M08    | 45 menit | ...
+3 template CS + email launch   | M05        | 1 jam    | ...
+Analisis performa + log OS     | M06+M07    | 45 menit | ...
 Total                          |            | ~6,25 jam| ...
 
 Isi kolom "Dengan Claude" setelah kamu benar-benar kerjakan setiap step —
-ini jadi output akhir Modul 09.
+ini jadi output akhir Modul 7 (Capstone).

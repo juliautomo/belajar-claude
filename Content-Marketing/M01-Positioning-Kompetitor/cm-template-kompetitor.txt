@@ -12,6 +12,9 @@ Harga Produk   : [ISIAN]
 Target Pembeli : [ISIAN — contoh: ibu rumah tangga 25-40 tahun di Jabodetabek]
 Keunggulan yg  : [ISIAN — apa yang menurutmu bisnismu lebih baik dari kompetitor?]
 kamu rasa ada
+Palet Warna    : [ISIAN — 2-3 warna utama brand kamu, misal: coklat tua, krem, hijau tua]
+Mood/Gaya      : [ISIAN — 3-4 kata yang gambarkan visual brand kamu, misal: hangat,
+                  rumahan, otentik daerah, natural]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BAGIAN 2 — DATA KOMPETITOR (isi 3 kompetitor)

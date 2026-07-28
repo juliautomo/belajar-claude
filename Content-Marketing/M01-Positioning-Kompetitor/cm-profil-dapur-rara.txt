@@ -1,0 +1,47 @@
+# PROFIL BISNIS CONTOH — DAPUR RARA
+# Course: Content & Marketing — Modul 1
+# Belum punya bisnis siap pakai? Copy seluruh isi file ini ke Claude Project-mu
+# sebagai pengganti data nyata, atau jadikan referensi format saat kamu isi
+# data bisnismu sendiri di cm-template-kompetitor.txt.
+#
+# Profil ini dipakai lagi di Modul 2 sampai 7 — termasuk jadi skenario utama
+# di Modul 7 (Capstone: Peluncuran Produk).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATA BISNIS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Nama Bisnis    : Dapur Rara
+Produk Utama   : Frozen food masakan daerah (rendang, soto, garang asem) — siap kukus/goreng
+Platform Jual  : Tokopedia, Shopee, Instagram (@dapurrara)
+Harga Produk   : Rp 35.000 - 55.000 per porsi (300-500g)
+Target Pembeli : Keluarga muda 25-40 tahun, suka masakan tradisional tapi tidak sempat masak
+Keunggulan     : Resep rumahan asli daerah (bukan versi restoran yang dimodifikasi),
+                 bahan lokal, tanpa pengawet, tinggal kukus 15 menit
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+IDENTITAS VISUAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Palet Warna    : Coklat tua, krem, hijau tua
+Mood/Gaya      : Hangat, rumahan, otentik daerah, natural — bukan modern/minimalis
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+POSITIONING (hasil analisis Modul 1)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+"Untuk keluarga muda yang ingin makan masakan daerah otentik tanpa masak lama,
+Dapur Rara adalah frozen food yang dibuat dari resep rumahan asli daerah,
+bukan resep restoran yang dimodifikasi."
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRAND VOICE (dipakai di Modul 5 — WA & Email)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Tone           : Hangat, santai tapi sopan — seperti bicara dengan tetangga
+Sapaan         : "Kak"
+Batasan        : Tidak pakai bahasa terlalu formal/korporat, emoji secukupnya (1-2 per pesan)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CARA PAKAI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Copy seluruh isi file ini
+2. Buat 1 Claude Project baru, nama "Bisnis Saya" (atau "Dapur Rara" untuk latihan)
+3. Paste isi file ini ke Project Instructions atau Project Knowledge
+4. Mulai dari Modul 1 — semua modul berikutnya akan otomatis pakai konteks ini

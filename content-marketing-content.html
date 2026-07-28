@@ -289,7 +289,7 @@
         </div>
 
         <div class="section-heading">Yang Kamu Butuhkan Sebelum Mulai</div>
-        <p class="body-text">Data 3 kompetitor (nama toko, produk, harga, rating, ulasan positif + negatif), data bisnismu sendiri (produk, harga, siapa pembeli saat ini, apa yang paling sering dipuji), dan file <strong>cm-template-kompetitor.txt</strong> — isi terlebih dahulu sebelum mulai prompting.</p>
+        <p class="body-text">Data 3 kompetitor (nama toko, produk, harga, rating, ulasan positif + negatif), data bisnismu sendiri (produk, harga, siapa pembeli saat ini, apa yang paling sering dipuji, palet warna, mood/gaya visual), dan file <strong>cm-template-kompetitor.txt</strong> — isi terlebih dahulu sebelum mulai prompting. Belum punya bisnis siap pakai? Pakai <strong>cm-profil-dapur-rara.txt</strong> sebagai contoh.</p>
 
         <div class="section-heading">Contoh Prompt: Buruk vs Baik</div>
         <div class="two-col">
@@ -311,13 +311,18 @@
           <div class="step-card"><div class="step-num">2</div><p>Isi bagian "data bisnismu" — tanya 3 pelanggan lama kenapa mereka beli dari kamu</p></div>
           <div class="step-card"><div class="step-num">3</div><p>Paste seluruh template ke Claude dengan prompt di atas</p></div>
           <div class="step-card"><div class="step-num">4</div><p>Minta 3 variasi kalimat positioning: formal, santai untuk caption, emosional untuk iklan</p></div>
-          <div class="step-card"><div class="step-num">5</div><p>Simpan positioning final di Claude Projects — jadi acuan Modul 2-7</p></div>
+          <div class="step-card"><div class="step-num">5</div><p>Simpan profil bisnis lengkap (positioning + palet warna + mood visual) di Claude Projects — jadi acuan Modul 2-7</p></div>
+        </div>
+
+        <div class="tip-box connector">
+          <div class="tip-label">🎨 Kenapa Warna dan Mood Juga Disimpan?</div>
+          <p>Selain positioning, Claude Project kamu juga menyimpan identitas visual bisnismu — palet warna dan mood/gaya. Ini akan otomatis dipakai Claude nanti waktu kamu minta bantuan bikin grafis atau foto produk di Modul 3, tanpa perlu jelaskan ulang tiap kali.</p>
         </div>
 
         <div class="prompt-section">
           <div class="prompt-label">📝 Latihan</div>
           <div class="case-box">
-            <p>Download dan isi cm-template-kompetitor.txt dengan data 3 kompetitor nyata bisnismu. Paste ke Claude dan minta analisis SWOT + gap + 3 variasi kalimat positioning. Pilih satu, simpan di Claude Projects — ini akan dipakai di Modul 2 sampai 7.</p>
+            <p>Download dan isi cm-template-kompetitor.txt dengan data 3 kompetitor nyata bisnismu, termasuk palet warna dan mood/gaya visual. Paste ke Claude dan minta analisis SWOT + gap + 3 variasi kalimat positioning. Pilih satu, simpan profil lengkap di Claude Projects — ini akan dipakai di Modul 2 sampai 7.</p>
           </div>
         </div>
 
@@ -325,7 +330,7 @@
           <div class="output-icon">✅</div>
           <div>
             <h3>Output yang Diharapkan</h3>
-            <p>SWOT singkat (4 poin per kuadran), 1 gap peluang yang konkret, dan 1 kalimat positioning final yang bisa langsung dipakai di bio Instagram, deskripsi toko Tokopedia, dan iklan. File pendukung: cm-template-kompetitor.txt</p>
+            <p>SWOT singkat (4 poin per kuadran), 1 gap peluang yang konkret, 1 kalimat positioning final yang bisa langsung dipakai di bio Instagram, deskripsi toko Tokopedia, dan iklan, plus 1 Claude Project aktif berisi profil bisnis lengkap (positioning + identitas visual). File pendukung: cm-template-kompetitor.txt (atau cm-profil-dapur-rara.txt sebagai contoh)</p>
           </div>
         </div>
 
@@ -440,6 +445,11 @@
           <p><strong>Dari "bingung mau post apa" ke 30 hari konten siap dalam 2 jam.</strong> Rara biasa habis 30 menit tiap hari hanya untuk mikir "mau post apa hari ini." Dengan sistem kalender konten Claude, dia duduk 2 jam di awal bulan: generate tema dan caption 30 hari, isi ke spreadsheet, set jadwal di Later. Sisanya tinggal foto produk dan klik publish. <em>Positioning dari Modul 1 dan daftar produk dari Modul 2 langsung dipakai sebagai bahan kalender ini.</em></p>
         </div>
 
+        <div class="tip-box connector">
+          <div class="tip-label">🔌 Integrasi: Canva Connector</div>
+          <p>Level: Connector (gratis) · Setup: 60 detik di Settings > Connectors > Canva. Konten organik butuh visual sesering iklan — jadi ini titik paling tepat untuk setup Canva Connector, bukan nanti di modul iklan. Setelah aktif, Claude bisa langsung membuat desain di Canva: "Buat desain Instagram Story untuk post edukasi ini, ukuran 1080x1920px, sesuai warna brand di Project-ku" — Claude akan buka Canva, pilih template, masukkan teks, hasilkan desain siap download. Tanpa setup ini, kamu tetap bisa ikuti modul ini dengan workflow copy-paste manual ke Canva. Tersedia juga di paket <strong>Claude Free</strong>. Connector ini akan kamu pakai lagi di Modul 4 — tidak perlu setup ulang.</p>
+        </div>
+
         <div class="section-heading">Sistem Konten yang Sustainable</div>
         <div class="info-grid">
           <div class="info-card"><strong>4 tema rotasi per minggu</strong><span>Produk, edukasi/tips, behind the scene, testimoni</span></div>
@@ -447,6 +457,14 @@
           <div class="info-card"><strong>Format output CSV</strong><span>Langsung import ke Google Sheets atau tool scheduling</span></div>
           <div class="info-card"><strong>Review dan personalisasi</strong><span>Claude buat draft, kamu tambahkan detail spesifik yang hanya kamu tahu</span></div>
         </div>
+
+        <div class="section-heading">Framework Caption yang Engaging</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Hook (baris pertama)</strong><span>Berhenti scroll dalam 1 baris — pertanyaan, angka, atau pernyataan yang relate ke audiens</span></div>
+          <div class="info-card"><strong>Value atau cerita</strong><span>Manfaat produk atau cerita singkat di baliknya — bukan sekadar deskripsi fitur</span></div>
+          <div class="info-card"><strong>CTA yang jelas</strong><span>Ajakan spesifik — "DM untuk pesan", "link di bio" — bukan cuma "cek produk kami"</span></div>
+        </div>
+        <p class="body-text">Pola ini sama dengan framework iklan di Modul 4 — bedanya, di sini nadanya lebih santai dan personal karena ini konten organik, bukan iklan berbayar.</p>
 
         <div class="tip-box warn">
           <div class="tip-label">⚠️ Kesalahan Umum</div>
@@ -458,7 +476,7 @@
           </ul>
         </div>
 
-        <p class="body-text"><strong>Yang kamu butuhkan:</strong> positioning dari Modul 1 + daftar produk dari Modul 2, file cm-kalender-konten.csv (template 16 slot posting per bulan), akun Instagram bisnis aktif + 5-10 foto produk.</p>
+        <p class="body-text"><strong>Yang kamu butuhkan:</strong> positioning dari Modul 1 + daftar produk dari Modul 2, file cm-kalender-konten.csv (template 16 slot posting per bulan), akun Instagram bisnis aktif + 5-10 foto produk, dan Canva Connector aktif (opsional tapi disarankan).</p>
 
         <div class="section-heading">Contoh Prompt: Buruk vs Baik</div>
         <div class="two-col">
@@ -497,25 +515,36 @@ tema (produk/edukasi/BTS/testimoni). Simpan sebagai 1 file HTML
 yang bisa saya buka langsung di browser, tidak perlu internet.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
 
+        <div class="section-heading">Level Up: Bikin Grafis Sederhana Langsung dari Claude</div>
+        <div class="tip-box connector">
+          <div class="tip-label">🖼️ Claude Bisa Bikin Grafis Sendiri — Tanpa Tool Lain</div>
+          <p>Untuk visual yang tidak butuh foto realistis — quote card, price tag, tile pengumuman promo — Claude bisa langsung membuat desainnya sendiri, tersimpan sebagai 1 file yang bisa kamu screenshot atau export. Karena warna dan mood brand kamu sudah tersimpan di Claude Project dari Modul 1, kamu tidak perlu sebutkan ulang setiap kali minta grafis baru.</p>
+        </div>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Contoh Prompt</div>
+          <div class="prompt-box">Buatkan quote card untuk promo Flash Sale Frozen Soto,
+diskon 25% kode SOTO25. Format 1:1 untuk Instagram feed.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
         <div class="section-heading">Level Up: Foto Produk dengan AI Image Generator</div>
         <div class="tip-box connector">
           <div class="tip-label">🎨 Prompt Enhancer — Nano Banana Pro / ChatGPT</div>
-          <p>Claude tidak bisa membuat atau mengedit gambar secara langsung — tapi Claude bisa jadi "prompt enhancer": kamu jelaskan ide fotomu dengan bahasa santai, Claude ubah jadi prompt gambar yang detail dan siap paste ke <strong>Nano Banana Pro</strong> (Gemini, gratis 3 gambar/hari) atau <strong>ChatGPT</strong> (paket gratis sudah cukup). Kalau hasil gambarnya belum pas, kasih tahu apa yang mau diubah — Claude revisi promptnya, bukan mulai dari nol.</p>
+          <p>Untuk foto produk yang perlu terlihat realistis, Claude tidak bisa membuat atau mengedit gambar secara langsung — tapi Claude bisa jadi "prompt enhancer": kamu jelaskan ide fotomu dengan bahasa santai, Claude ubah jadi prompt gambar yang detail dan siap paste ke <strong>Nano Banana Pro</strong> (Gemini, gratis 3 gambar/hari) atau <strong>ChatGPT</strong> (paket gratis sudah cukup). Kalau hasil gambarnya belum pas, kasih tahu apa yang mau diubah — Claude revisi promptnya, bukan mulai dari nol.</p>
         </div>
         <div class="prompt-section">
           <div class="prompt-label">📝 Contoh Prompt</div>
           <div class="prompt-box">Saya mau foto produk untuk Garang Asem Frozen, buat post
-Instagram feed. Brand saya: hangat, rumahan, autentik daerah,
-warna coklat-krem-hijau tua. Buatkan prompt gambar detail untuk
-Nano Banana Pro: makanan siap saji di piring, uap hangat
-mengepul, disajikan di meja kayu dengan taplak batik, cahaya
-alami siang hari, tanpa clutter. Format 1:1.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+Instagram feed. Buatkan prompt gambar detail untuk Nano
+Banana Pro: makanan siap saji di piring, uap hangat mengepul,
+disajikan di meja kayu dengan taplak batik, cahaya alami
+siang hari, tanpa clutter. Format 1:1.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
+        <p class="body-text" style="font-style:italic;">Kenapa lebih pendek dari biasanya: warna dan mood brand tidak perlu ditulis ulang — Claude Project sudah tahu dari Modul 1.</p>
 
         <div class="prompt-section">
           <div class="prompt-label">📝 Latihan</div>
           <div class="case-box">
-            <p>Generate kalender konten Instagram bulan depan — 16 post (4/minggu) — dalam 1 prompt. Isi hasilnya ke cm-kalender-konten.csv. Pilih 3 caption terbaik, personalisasi, dan jadwalkan di Instagram. Bonus: minta Claude ubah kalender ini jadi 1 halaman HTML visual yang bisa kamu buka tiap hari, dan buat 1 foto produk dengan Prompt Enhancer di atas.</p>
+            <p>Generate kalender konten Instagram bulan depan — 16 post (4/minggu) — dalam 1 prompt, terapkan framework caption di atas. Isi hasilnya ke cm-kalender-konten.csv. Pilih 3 caption terbaik, personalisasi, dan jadwalkan di Instagram. Bonus: minta Claude ubah kalender ini jadi 1 halaman HTML visual, buat 1 grafis (quote card/tile promo) langsung dari Claude, dan 1 foto produk dengan Prompt Enhancer di atas.</p>
           </div>
         </div>
 
@@ -523,7 +552,7 @@ alami siang hari, tanpa clutter. Format 1:1.<button class="copy-btn" onclick="co
           <div class="output-icon">✅</div>
           <div>
             <h3>Output yang Diharapkan</h3>
-            <p>Kalender konten 1 bulan (16 post) dalam spreadsheet — tema, caption, dan hashtag terisi — siap dijadwalkan. Waktu yang dihemat: ~8 jam per bulan. File pendukung: cm-kalender-konten.csv. Bonus: 1 dashboard kalender HTML sendiri, tidak perlu tool berbayar.</p>
+            <p>Kalender konten 1 bulan (16 post) dalam spreadsheet — tema, caption (pakai framework Hook-Value-CTA), dan hashtag terisi — siap dijadwalkan. Canva Connector aktif untuk dipakai lagi di Modul 4. Waktu yang dihemat: ~8 jam per bulan. File pendukung: cm-kalender-konten.csv. Bonus: 1 dashboard kalender HTML, 1 grafis buatan Claude langsung, dan 1 foto produk via Prompt Enhancer.</p>
           </div>
         </div>
 
@@ -536,7 +565,7 @@ alami siang hari, tanpa clutter. Format 1:1.<button class="copy-btn" onclick="co
       <div class="module-panel" id="panel4">
         <div class="breadcrumb"><span>Content & Marketing</span><span>›</span><strong>Modul 4</strong></div>
         <div class="hero">
-          <h1 class="module-title">Copy Iklan Multi-Platform + Canva Connector</h1>
+          <h1 class="module-title">Copy Iklan Multi-Platform + Desain Canva</h1>
           <p class="module-subtitle">Claude tulis copy per platform, Canva bikin desain — 14 menit</p>
           <div class="video-slot" data-placeholder="true" id="video-slot-4"></div>
         </div>
@@ -544,8 +573,8 @@ alami siang hari, tanpa clutter. Format 1:1.<button class="copy-btn" onclick="co
         <div class="doc-slot" id="doc-slot-4"></div>
 
         <div class="tip-box connector">
-          <div class="tip-label">🔌 Integrasi: Canva Connector</div>
-          <p>Level: Connector (gratis) · Setup: 60 detik di Settings > Connectors > Canva. Dengan Canva Connector aktif, Claude tidak hanya menulis copy iklan — Claude bisa langsung membuat desain di Canva. Instruksikan: "Buat desain Instagram Story iklan produk ini di Canva, ukuran 1080x1920px, warna hijau tua dan putih" — Claude akan buka Canva, pilih template, masukkan teks, hasilkan desain siap download. Tanpa setup ini, kamu tetap bisa ikuti modul ini dengan workflow copy-paste manual ke Canva. Tersedia juga di paket <strong>Claude Free</strong> — hanya limit pemakaian hariannya lebih ketat dibanding Pro.</p>
+          <div class="tip-label">🔌 Canva Connector — Reuse dari Modul 3</div>
+          <p>Sudah setup Canva Connector di Modul 3? Tinggal dipakai lagi di sini, tidak perlu setup ulang. Instruksikan: "Buat desain Instagram Story iklan produk ini di Canva, ukuran 1080x1920px, sesuai warna brand di Project-ku" — Claude akan buka Canva, pilih template, masukkan teks, hasilkan desain siap download. Belum sempat setup di Modul 3? Balik ke sana dulu (60 detik di Settings > Connectors > Canva) — atau tetap ikuti modul ini dengan workflow copy-paste manual ke Canva.</p>
         </div>
 
         <div class="tip-box">
@@ -593,7 +622,7 @@ alami siang hari, tanpa clutter. Format 1:1.<button class="copy-btn" onclick="co
 
         <div class="section-heading">Cara Kerja Step-by-Step</div>
         <div class="step-row">
-          <div class="step-card"><div class="step-num">1</div><p>Setup Canva Connector: Settings > Connectors > Canva > Connect</p></div>
+          <div class="step-card"><div class="step-num">1</div><p>Pastikan Canva Connector dari Modul 3 masih aktif (Settings > Connectors > Canva)</p></div>
           <div class="step-card"><div class="step-num">2</div><p>Instruksikan Claude buat 3 variasi copy sesuai framework, spesifik platform + target + promo</p></div>
           <div class="step-card"><div class="step-num">3</div><p>Pilih variasi terbaik, minta Claude buat desain Canva (ukuran + warna + font)</p></div>
           <div class="step-card"><div class="step-num">4</div><p>Review desain, sesuaikan warna/foto brand kamu</p></div>
@@ -646,7 +675,7 @@ alami siang hari, tanpa clutter. Format 1:1.<button class="copy-btn" onclick="co
         <div class="doc-slot" id="doc-slot-5"></div>
 
         <div class="module-desc-box">
-          WhatsApp dan Email sama-sama butuh hal yang sama: brand voice yang konsisten, tanpa harus briefing ulang tiap kali. Setup 1 Claude Project sekali dengan profil bisnismu, lalu generate template untuk kedua kanal — WA via Claude Projects, Email langsung jadi draft via Gmail Connector.
+          WhatsApp dan Email sama-sama butuh hal yang sama: brand voice yang konsisten, tanpa harus briefing ulang tiap kali. Buka Claude Project yang sudah kamu buat di Modul 1, tambahkan brand voice untuk komunikasi pelanggan (tone, sapaan) ke situ — bukan bikin Project baru — lalu generate template untuk kedua kanal — WA via Claude Projects, Email langsung jadi draft via Gmail Connector.
         </div>
 
         <div class="case-box persona">
@@ -656,7 +685,7 @@ alami siang hari, tanpa clutter. Format 1:1.<button class="copy-btn" onclick="co
 
         <div class="tip-box connector">
           <div class="tip-label">🔌 Integrasi: Claude Projects + Gmail Connector</div>
-          <p>Level: Claude Projects (tersedia di semua plan termasuk Free) · Setup: 5 menit sekali. Setup 1 Claude Project dengan brand voice bisnismu — nama bisnis, tone, sapaan. Untuk WhatsApp, generate template lalu copy-paste manual. Untuk Email, aktifkan juga <strong>Gmail Connector</strong> (gratis, 60 detik di Settings > Connectors > Gmail) — Claude bisa langsung membuat draft di inbox Gmail-mu, kamu tinggal review dan klik Send.</p>
+          <p>Level: Claude Projects (tersedia di semua plan termasuk Free) · Setup: 5 menit sekali. Tambahkan brand voice khusus komunikasi pelanggan — sapaan, batasan, tone untuk CS — ke Claude Project dari Modul 1, yang sudah punya positioning dan identitas visual bisnismu. Untuk WhatsApp, generate template lalu copy-paste manual. Untuk Email, aktifkan juga <strong>Gmail Connector</strong> (gratis, 60 detik di Settings > Connectors > Gmail) — Claude bisa langsung membuat draft di inbox Gmail-mu, kamu tinggal review dan klik Send.</p>
         </div>
 
         <div class="section-heading">Mengapa Template On-Brand Penting</div>
@@ -718,7 +747,7 @@ alami siang hari, tanpa clutter. Format 1:1.<button class="copy-btn" onclick="co
 
         <div class="section-heading">Cara Kerja: WhatsApp CS</div>
         <div class="step-row">
-          <div class="step-card"><div class="step-num">1</div><p>Setup Claude Project khusus CS WA — isi nama bisnis, tone, sapaan, batasan</p></div>
+          <div class="step-card"><div class="step-num">1</div><p>Buka Claude Project dari Modul 1, tambahkan tone, sapaan, dan batasan khusus CS WA</p></div>
           <div class="step-card"><div class="step-num">2</div><p>Buka cm-template-wa.txt, pilih 5 skenario paling sering: harga, konfirmasi order, komplain, follow-up bayar, minta review</p></div>
           <div class="step-card"><div class="step-num">3</div><p>Generate template untuk tiap skenario — Claude sudah tahu konteks bisnis</p></div>
           <div class="step-card"><div class="step-num">4</div><p>Test tiap template — kirim ke diri sendiri, pastikan terasa natural</p></div>
@@ -737,7 +766,7 @@ alami siang hari, tanpa clutter. Format 1:1.<button class="copy-btn" onclick="co
         <div class="prompt-section">
           <div class="prompt-label">📝 Latihan</div>
           <div class="case-box">
-            <p>Setup 1 Claude Project dengan brand voice bisnismu. Generate 10 template WA menggunakan skenario di cm-template-wa.txt, gunakan minimal 5 kali dalam 1 minggu. Lalu isi cm-template-email.txt untuk 2 jenis email (launch produk baru + flash sale), generate keduanya dan simpan sebagai draft Gmail. Kirim ke minimal 10 kontak, catat open rate dan respons.</p>
+            <p>Tambahkan brand voice komunikasi pelanggan ke Claude Project dari Modul 1. Generate 10 template WA menggunakan skenario di cm-template-wa.txt, gunakan minimal 5 kali dalam 1 minggu. Lalu isi cm-template-email.txt untuk 2 jenis email (launch produk baru + flash sale), generate keduanya dan simpan sebagai draft Gmail. Kirim ke minimal 10 kontak, catat open rate dan respons.</p>
           </div>
         </div>
 
@@ -1058,7 +1087,7 @@ yang bisa saya buka lagi setiap kali launching produk baru.<button class="copy-b
         <div class="prompt-section">
           <div class="prompt-label">📝 Latihan</div>
           <div class="case-box">
-            <p>Bagian 1: bangun Content OS di Notion dengan 5 sub-halaman dasar, isi Brand Guide dengan positioning dari Modul 1. Bagian 2: pilih produk baru dari bisnismu sendiri (atau pakai Garang Asem Frozen sebagai latihan, dengan file cm-m9-starter-peluncuran.txt). Jalankan kelima hari di atas dalam 1 minggu kerja nyata. Catat waktu aktual yang kamu habiskan di tiap hari, bandingkan dengan kolom "Biasa" di tabel. Terakhir, minta Claude gabungkan semuanya jadi 1 Launch Command Center HTML — ini jadi output akhir kursus.</p>
+            <p>Bagian 1: bangun Content OS di Notion dengan 5 sub-halaman dasar, isi Brand Guide dengan positioning dari Modul 1. Bagian 2: pilih produk baru dari bisnismu sendiri (atau pakai Garang Asem Frozen sebagai latihan, dengan file cm-starter-peluncuran.txt). Jalankan kelima hari di atas dalam 1 minggu kerja nyata. Catat waktu aktual yang kamu habiskan di tiap hari, bandingkan dengan kolom "Biasa" di tabel. Terakhir, minta Claude gabungkan semuanya jadi 1 Launch Command Center HTML — ini jadi output akhir kursus.</p>
           </div>
         </div>
 
