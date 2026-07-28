@@ -1,56 +1,64 @@
-# TEMPLATE ANALISIS KOMPETITOR
-# Course: Content & Marketing — Modul 1
-# Cara pakai: Isi kolom [ISIAN] dengan data bisnismu dan kompetitor, lalu paste ke Claude
+# TEMPLATE ANALISIS KOMPETITOR — sudah terisi contoh Dapur Rara
+# Course: Kreasi Konten Pemasaran — Modul 1
+#
+# Cara pakai:
+# - Belum punya bisnis siap pakai? File ini sudah lengkap terisi dengan contoh
+#   Dapur Rara — tinggal paste apa adanya ke Claude pakai prompt di bagian bawah,
+#   tidak perlu isi apapun.
+# - Punya bisnis sendiri? Ganti semua data di bawah (Data Bisnis + 3 Data
+#   Kompetitor) dengan data bisnismu, baru paste ke Claude.
+#
+# File ini dipakai lagi di Modul 2 sampai 5 — simpan hasil positioning &
+# identitas visualnya di Claude Projects setelah menjalankan prompt di bawah.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-BAGIAN 1 — DATA BISNISMU
+BAGIAN 1 — DATA BISNIS (contoh: Dapur Rara)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Nama Bisnis    : [ISIAN]
-Produk Utama   : [ISIAN]
-Platform Jual  : [Tokopedia / Shopee / Instagram / WhatsApp / Toko Fisik]
-Harga Produk   : [ISIAN]
-Target Pembeli : [ISIAN — contoh: ibu rumah tangga 25-40 tahun di Jabodetabek]
-Keunggulan yg  : [ISIAN — apa yang menurutmu bisnismu lebih baik dari kompetitor?]
-kamu rasa ada
-Palet Warna    : [ISIAN — 2-3 warna utama brand kamu, misal: coklat tua, krem, hijau tua]
-Mood/Gaya      : [ISIAN — 3-4 kata yang gambarkan visual brand kamu, misal: hangat,
-                  rumahan, otentik daerah, natural]
+Nama Bisnis    : Dapur Rara
+Produk Utama   : Frozen food masakan daerah (rendang, soto, garang asem) — siap kukus/goreng
+Platform Jual  : Tokopedia, Shopee, Instagram (@dapurrara)
+Harga Produk   : Rp 35.000 - 55.000 per porsi (300-500g)
+Target Pembeli : Keluarga muda 25-40 tahun, suka masakan tradisional tapi tidak sempat masak
+Keunggulan yg  : Resep rumahan asli daerah (bukan versi restoran yang dimodifikasi),
+kamu rasa ada    bahan lokal, tanpa pengawet, tinggal kukus 15 menit
+Palet Warna    : Coklat tua, krem, hijau tua
+Mood/Gaya      : Hangat, rumahan, otentik daerah, natural — bukan modern/minimalis
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-BAGIAN 2 — DATA KOMPETITOR (isi 3 kompetitor)
+BAGIAN 2 — DATA KOMPETITOR (contoh: 3 kompetitor Dapur Rara)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 KOMPETITOR 1
-Nama/Toko      : [ISIAN]
-Platform       : [ISIAN]
-Produk         : [ISIAN]
-Harga          : [ISIAN]
-Rating/Review  : [ISIAN — contoh: 4.8 bintang, 2.300 ulasan]
-Yang mereka    : [ISIAN — apa yang kelihatan jadi kelebihan mereka?]
+Nama/Toko      : Rasa Nusantara Frozen
+Platform       : Tokopedia, Shopee
+Produk         : Frozen food nusantara lengkap (rendang, gulai, opor, sambal goreng — 15+ varian)
+Harga          : Rp 45.000 - 65.000 per porsi
+Rating/Review  : 4.7 bintang, 3.400 ulasan
+Yang mereka    : Varian produk sangat banyak, kemasan rapi, pengiriman cepat ke luar kota
 lakukan bagus
-Yang kurang    : [ISIAN — lihat review negatif, apa keluhan pembeli mereka?]
-dari review
+Yang kurang    : "Rasa kurang konsisten tiap beli, kadang terlalu asin kadang hambar" —
+dari review      "porsi kecil untuk harga segini" — terasa seperti dibuat pabrik, bukan rumahan
 
 KOMPETITOR 2
-Nama/Toko      : [ISIAN]
-Platform       : [ISIAN]
-Produk         : [ISIAN]
-Harga          : [ISIAN]
-Rating/Review  : [ISIAN]
-Yang mereka    : [ISIAN]
+Nama/Toko      : Frozen Kita
+Platform       : Shopee, Instagram
+Produk         : Frozen food harga hemat (ayam, bakso, nugget rumahan)
+Harga          : Rp 20.000 - 35.000 per porsi
+Rating/Review  : 4.3 bintang, 5.100 ulasan
+Yang mereka    : Harga paling murah di kategori, sering promo dan gratis ongkir
 lakukan bagus
-Yang kurang    : [ISIAN]
-dari review
+Yang kurang    : "Bumbu terlalu standar, tidak ada ciri khas daerah tertentu" —
+dari review      "kemasan kadang bocor pas sampai" — dianggap generik, tidak ada cerita di baliknya
 
 KOMPETITOR 3
-Nama/Toko      : [ISIAN]
-Platform       : [ISIAN]
-Produk         : [ISIAN]
-Harga          : [ISIAN]
-Rating/Review  : [ISIAN]
-Yang mereka    : [ISIAN]
+Nama/Toko      : Dapur Ibu Frozen Food
+Platform       : Tokopedia, Instagram
+Produk         : Frozen food masakan rumahan (semur, opor, rendang)
+Harga          : Rp 38.000 - 50.000 per porsi
+Rating/Review  : 4.8 bintang, 1.200 ulasan
+Yang mereka    : Nama dan story "masakan rumahan" kuat, foto produk menarik
 lakukan bagus
-Yang kurang    : [ISIAN]
-dari review
+Yang kurang    : "Stok sering habis, susah repeat order" — "belum ada varian masakan
+dari review      daerah spesifik, semua terasa masakan Jawa umum" — belum ada spesialisasi daerah tertentu
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 PROMPT YANG SUDAH DISIAPKAN — Copy & Paste ke Claude
@@ -65,3 +73,35 @@ Paste isi file ini di atas prompt berikut:
 4. 3 rekomendasi konten yang bisa langsung membedakan brandku dari kompetitor
 
 Format: gunakan heading yang jelas, jawaban ringkas dan actionable."
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CONTOH HASIL (kalau pakai data Dapur Rara di atas apa adanya)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Positioning: "Untuk keluarga muda yang ingin makan masakan daerah otentik tanpa masak
+lama, Dapur Rara adalah frozen food yang dibuat dari resep rumahan asli daerah — bukan
+resep restoran yang dimodifikasi seperti kompetitor lain, dan lebih spesifik ke masakan
+daerah dibanding 'masakan rumahan' generik."
+
+Gap: belum ada kompetitor yang secara spesifik menyasar keluarga muda dengan masakan
+daerah otentik (bukan masakan rumahan umum) — sebagian besar kompetitor generik lintas
+daerah atau fokus ke harga murah.
+
+Catatan: hasil dari Claude bisa sedikit berbeda tiap kali dijalankan — ini contoh arah
+jawabannya, bukan jawaban pasti yang harus sama persis.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRAND VOICE (dipakai lagi di Modul 5 — WhatsApp & Email)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Tone           : Hangat, santai tapi sopan — seperti bicara dengan tetangga
+Sapaan         : "Kak"
+Batasan        : Tidak pakai bahasa terlalu formal/korporat, emoji secukupnya (1-2 per pesan)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CARA PAKAI DI CLAUDE PROJECTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Jalankan prompt di atas dulu (pakai data Dapur Rara, atau data bisnismu sendiri)
+2. Buat 1 Claude Project baru — nama "Bisnis Saya" (atau "Dapur Rara" untuk latihan)
+3. Simpan ke Project Instructions: Data Bisnis + Identitas Visual + hasil positioning
+   dari Claude + Brand Voice di atas
+4. Semua modul berikutnya (Modul 2 sampai 5) otomatis pakai konteks ini — tidak perlu
+   jelaskan ulang bisnismu tiap kali buka chat baru
