@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 28, 2026 (checkpoint 75)_
+_Last updated: July 28, 2026 (checkpoint 76)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -830,6 +830,33 @@ Julia flagged (with a PPTX screenshot) that every module's "Cara Kerja" was exac
 **Blocked mid-task**: `K3-M02-Deskripsi-Produk.pptx` was open in PowerPoint on Julia's machine (Office lock file present), so the write was held until she confirmed she'd closed it.
 
 **Commits**: `belajar-claude`: `fd422e4` (M02 HTML + PPTX), `7ea30cd` (M03 HTML + PPTX) — both via scratch-clone workaround, both diff-verified against the mounted repo after push.
+
+---
+
+## SHIPPED (Checkpoint 76, July 28, 2026): M04 + M05 PPTX built from scratch, each with its own visual identity
+
+Continuation of Checkpoint 75's principle — apply "natural complexity, not a reused template" from the start rather than retrofitting, since M04 and M05 had no PPTX yet.
+
+**HTML**: dropped the "— X menit" cover duration text from M04 and M05's `module-subtitle` (same cleanup as M02/M03 in Checkpoint 75).
+
+**M04 (Copy Iklan Multi-Platform + Canva) — 7 slides, built via new `build_m04.js`**:
+- Cover; Canva Connector reuse tip + Prompt Enhancer tip (two stacked boxes, tinted vs neutral); Framework Copy Iklan + Kesalahan Umum; Contoh Prompt Buruk vs Baik; Cara Kerja (4 steps); Copy Beda Platform + Targeting Brief bonus; Latihan & Output.
+- **Framework Copy Iklan (Hook → Problem/Pain → Solution+Proof → CTA) rendered as a horizontal left-to-right flow with arrow connectors between 4 chips**, instead of a generic card grid — since this framework is genuinely sequential (unlike parallel/independent feature lists elsewhere), a connected flow communicates that better than a grid, and it's visually distinct from M02's vertical anatomy-flow while using the same underlying idea (numbered/ordered content deserves a sequential layout, not a grid).
+- **Kesalahan Umum** uses the same red warning panel established in Checkpoint 75 (`WARN_BG`/`WARN_BORDER`/`WARN_TEXT`).
+- **Copy Beda Platform (Meta/TikTok/Google) gets its own visual identity**: each of the 3 cards has a thin colored top accent bar and a small colored platform tag (Meta blue `1877F2`, TikTok near-black `111827`, Google amber `F4B400`) — distinct from the plain gray cards used for Framework Copy Iklan on an earlier slide, so two grids of "3-4 things" in the same deck don't look identical.
+- No new supporting file needed — M04 never referenced one in the HTML (ad copy doesn't need a CSV/txt template the way M02/M03/M05 do); confirmed this is intentional, not a gap.
+
+**M05 (Template Komunikasi Pelanggan: WhatsApp + Email) — 7 slides, built via new `build_m05.js`**:
+- Cover; Mengapa Template On-Brand Penting (4-card grid) + Claude Projects/Gmail Connector integration tip; Kesalahan Umum (red warning panel, 5 items this time — WA+Email combined has one more pitfall than other modules' 4, left at its natural count rather than trimmed or padded); **Prompt Siap Pakai per Kanal** (WA "Prompt Baik" example in a green-tinted card, Email's in a new blue-tinted card, side by side); **Cara Kerja per Kanal** (WA's 3 steps and Email's 4 steps rendered as two independent numbered columns side by side, WA in green circles, Email in blue circles); 6 Jenis Email Bisnis (3×2 grid, blue-tinted — Email-only content, no WA equivalent); Latihan & Output.
+- **The split-by-channel layout is the deck's core visual idea**: WhatsApp and Email are genuinely different channels with genuinely different-length workflows (3 steps vs 4, because Email needs an extra one-time Gmail Connector setup step WA doesn't). Instead of two near-duplicate slides, they're shown side by side so the asymmetry itself becomes visible and legible in one glance — new `BLUE_BG`/`BLUE_BORDER`/`BLUE_TEXT` (`EFF6FF`/`BFDBFE`/`1D4ED8`) constants added alongside the existing `GREEN_*` set for this purpose.
+- Cover slide needed a layout fix mid-build: the 2-line title ("Template Komunikasi Pelanggan") and the "WhatsApp + Email" sub-heading initially overlapped because the sub-heading's `y` didn't account for the title box's full 2-line height — fixed by pushing the sub-heading and subtitle down to start after the title's actual rendered height, matching the vertical rhythm M02/M03's covers already used successfully.
+- No new supporting files needed — `cm-template-wa.txt` and `cm-template-email.txt` already existed from before this session and match the deck's content.
+
+**QA**: both decks rendered via LibreOffice + `pdftoppm`, all 14 slides (7+7) visually reviewed — no overflow, arrow-flow and split-panel layouts render cleanly, no emoji-fallback issues (no emoji used in either script, per the established safe-glyph precedent).
+
+**Commits**: `belajar-claude`: `456a791` (M04 PPTX + HTML duration cleanup), `da6bdbc` (M05 PPTX) — both via scratch-clone workaround, diff-verified against the mounted repo after push.
+
+**Course status**: all 5 modules of Kreasi Konten Pemasaran now have PPTX decks, each with a visual treatment shaped by its own content rather than one template stamped 5 times.
 
 ---
 
