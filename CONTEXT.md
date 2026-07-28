@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 28, 2026 (checkpoint 70)_
+_Last updated: July 28, 2026 (checkpoint 71)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -744,6 +744,16 @@ Julia flagged two things from a screenshot: step 5 of Module 1's "Cara Kerja Ste
 **Commits this checkpoint**: `belajar-claude`: `19f5d24` (pushed via scratch-clone workaround — same local `.git` FUSE-lock limitation as Checkpoints 63/64/66, confirmed unchanged: `index.lock` still can't be removed from within the sandbox against this mount).
 
 **Follow-up same session**: Julia asked to double-check the new deck against `cm-data-produk.csv` — confirmed the PPT's "Keunggulan 1-3 dan Keyword Pencarian" column callout and every "minimal 5 produk" reference matched the CSV's actual header row. But the CSV itself only had 1 filled example row (Frozen Rendang Sapi) plus 9 blank `[ISIAN]` placeholder rows, so "atau produk Dapur Rara sebagai latihan" wasn't actually true yet — a student without their own 5 products would still hit mostly-blank rows. Added 4 more filled example rows in the same Dapur Rara product line already established in the course narrative (rendang, soto, garang asem — per `cm-template-kompetitor.txt`'s Bagian 1 and the M3/M4/M5 case-study mentions of "Frozen Soto" and "Garang Asem Frozen"): Frozen Rendang Ayam, Frozen Soto Betawi, Frozen Soto Padang, Frozen Garang Asem Ayam — prices kept inside the profile's stated Rp 35.000-55.000 range. Trimmed back down to 5 blank template rows (10 data rows total, same as before) so students filling in their own business aren't left with an oversized template. Commit: `f514e9a`.
+
+---
+
+## SHIPPED (Checkpoint 71, July 28, 2026): Course outline table built for Strategi & Analisis Marketing (Course B had none since the Checkpoint 66 split)
+
+**Status: live**, commit `32d0559`. Julia asked to "bring back" the module-by-module outline table for both courses — the Kreasi Konten Pemasaran (Course A) version already existed (`Content-Marketing/Course-Level/Content-Marketing-Course-Outline.xlsx`, built Checkpoint 67, kept current through Checkpoint 69's Module 1 changes — verified still accurate, no edits needed). Course B (Strategi & Analisis Marketing) never had one: it didn't exist yet at Checkpoint 67, and the Checkpoint 66 split that created it didn't include a Course-Level outline.
+
+**Built `Strategi-Marketing/Course-Level/Strategi-Marketing-Course-Outline.xlsx`** — new `Course-Level` folder, mirroring the convention already used by both other courses. Same exact format as Course A's outline (verified column-by-column via `openpyxl` before writing, rather than re-guessing the style): identical 9 columns (Modul, Judul, Durasi, Ringkasan, Outline/Topik Utama, File Pendukung, Latihan/Exercise, Tools yang Dipakai, Free/Pro Plan), same purple header fill (`6C47FF`), Arial 11 bold white header / Arial 10.5 body with bold Modul+Judul columns, wrap-text top-aligned cells, frozen header row, same column widths. All 3 rows (Performance Marketing, Strategi & Alokasi Budget Iklan, Content OS + Peluncuran Produk Capstone) transcribed directly from `strategi-marketing-content.html` — read the file in full first rather than summarizing from memory — including each module's connector integrations (Notion, Google Sheets, Gmail reuse, Google Calendar, Canva), supporting file names (`cm-performance-ads.xlsx`, `cm-alokasi-budget.xlsx`, `cm-starter-peluncuran.txt`), and the Capstone's full 5-day launch-week breakdown.
+
+**Commits this checkpoint**: `belajar-claude`: `32d0559` (scratch-clone workaround, same as prior checkpoints).
 
 ---
 
