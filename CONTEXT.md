@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 28, 2026 (checkpoint 71)_
+_Last updated: July 28, 2026 (checkpoint 72)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -754,6 +754,22 @@ Julia flagged two things from a screenshot: step 5 of Module 1's "Cara Kerja Ste
 **Built `Strategi-Marketing/Course-Level/Strategi-Marketing-Course-Outline.xlsx`** — new `Course-Level` folder, mirroring the convention already used by both other courses. Same exact format as Course A's outline (verified column-by-column via `openpyxl` before writing, rather than re-guessing the style): identical 9 columns (Modul, Judul, Durasi, Ringkasan, Outline/Topik Utama, File Pendukung, Latihan/Exercise, Tools yang Dipakai, Free/Pro Plan), same purple header fill (`6C47FF`), Arial 11 bold white header / Arial 10.5 body with bold Modul+Judul columns, wrap-text top-aligned cells, frozen header row, same column widths. All 3 rows (Performance Marketing, Strategi & Alokasi Budget Iklan, Content OS + Peluncuran Produk Capstone) transcribed directly from `strategi-marketing-content.html` — read the file in full first rather than summarizing from memory — including each module's connector integrations (Notion, Google Sheets, Gmail reuse, Google Calendar, Canva), supporting file names (`cm-performance-ads.xlsx`, `cm-alokasi-budget.xlsx`, `cm-starter-peluncuran.txt`), and the Capstone's full 5-day launch-week breakdown.
 
 **Commits this checkpoint**: `belajar-claude`: `32d0559` (scratch-clone workaround, same as prior checkpoints).
+
+---
+
+## SHIPPED (Checkpoint 72, July 28, 2026): M02 fixed to actually continue the Claude Project from M01 (via Project Knowledge, not retyped positioning); M03 ripple fix
+
+**Status: live**, commit `ab1d6aa`. Follow-up to a question Julia asked about whether M02 mechanically continues the Claude Project set up in M01. It didn't: M01 saves positioning + visual identity to **Project Instructions** and explicitly promises "ini akan dipakai di Modul 2 sampai 5," and M03/M5 both honor that (M3: "Claude Project sudah tahu dari Modul 1"; M5: "Buka Claude Project yang sudah kamu buat di Modul 1... bukan bikin Project baru") — but M02's actual prompt example retyped the positioning sentence inline instead of relying on the Project, and treated "kalimat positioning dari Modul 1" as a bring-your-own input.
+
+Julia then asked whether M02's product catalog (`cm-data-produk.csv`) should also be folded into the Project. Verified via web search against current Anthropic documentation before answering: Claude Projects has a distinct **Project Knowledge** area (separate from Project Instructions) for uploaded files, which "are used across all of your chats within that project" without re-attaching — confirmed available on the Free plan (5-project cap), files up to 30MB, CSV explicitly supported. This gave an accurate, product-grounded fix rather than a course-only workaround.
+
+**Fix implemented** (drafted and approved with Julia before touching any file, per her standing preference): M02 now instructs uploading `cm-data-produk.csv` to the same Project's **Project Knowledge** (new tip-box explaining the Instructions-vs-Knowledge distinction and that catalog updates require re-uploading the file), and its prompt example/step-by-step/latihan/output-box no longer retype positioning — they reference "Project ini sudah punya positioning dan data produk" instead. M03 ripple: its "Yang kamu butuhkan" line and prompt example previously also retyped business/positioning info manually — updated to reference the Project the same way. M4 and M5 needed no changes (M4's Canva prompt already says "sesuai warna brand di Project-ku"; M5 already explicitly reopens the M1 Project).
+
+**Downstream artifacts updated to match**: `K3-M02-Deskripsi-Produk.pptx` slides 2-5 (Yang Kamu Butuhkan box, Prompt Baik, 5-langkah steps, Latihan, Output) rebuilt via the same `pptxgenjs` script and re-QA'd (validate.py, markitdown sweep, full visual render — all clean, no overflow). `Content-Marketing-Course-Outline.xlsx` Modul 2 (Ringkasan/Outline/Latihan/Tools) and Modul 3 (Ringkasan/Tools) cells updated to match, formatting (fonts/fills/wrap/freeze pane) verified intact after the openpyxl edit.
+
+**Verified**: div balance 322/322 on `content-marketing-content.html`, `validate.py` clean on both the pptx and xlsx.
+
+**Commits this checkpoint**: `belajar-claude`: `ab1d6aa` (scratch-clone workaround, same as prior checkpoints).
 
 ---
 
