@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 28, 2026 (checkpoint 74)_
+_Last updated: July 28, 2026 (checkpoint 75)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -804,6 +804,32 @@ Julia then asked whether M02's product catalog (`cm-data-produk.csv`) should als
 **QA**: `validate.py` passed, `markitdown` placeholder sweep clean, all 7 slides visually reviewed (before and after the emoji fix) — no overflow, no dead space beyond the style spec's recommended bottom-of-slide margin.
 
 **Commits this checkpoint**: `belajar-claude`: `e693c24` (Julia's M02 manual edits, pushed), `76a30ae` (M03 PPTX) — both via scratch-clone workaround.
+
+---
+
+## SHIPPED (Checkpoint 75, July 28, 2026): M02 + M03 restructured for natural complexity, not forced templates
+
+Julia flagged (with a PPTX screenshot) that every module's "Cara Kerja" was exactly 5 steps, and that within a single slide, unrelated content blocks (a feature grid and a mistakes list) were rendered as visually identical purple card grids — a template being reused regardless of what each module's actual content needed, both in step-count and in visual styling.
+
+**Root cause confirmed**: every one of the 6 "Cara Kerja" sections across M01-M05 (M05 has two, WA + Email) had exactly 5 steps — not derived from real workflow complexity. Separately, the PPTX build scripts had been flattening genuinely different content types (a parallel-items feature grid vs. a "things to avoid" warning list) into the same purple/lavender card-grid treatment, even though the HTML source already correctly styled "Kesalahan Umum" as a distinct red `tip-box.warn` — the decks just weren't honoring that distinction.
+
+**HTML changes (M02-M05, M01 untouched since Julia already recorded its video)**:
+- Cara Kerja step counts now match real complexity instead of being padded/merged to hit 5: M02 4 steps, M03 4 steps (dropped "ulangi tiap bulan" as a step — it's a cadence reminder, moved into the Output box as closing prose instead), M04 4 steps (dropped "pastikan connector aktif" as a step — it's a precondition, already covered by the connector tip-box above), M05 WA 3 steps / Email 4 steps (asymmetric on purpose — email has an extra one-time connector-setup step WA doesn't need).
+- M02's "Struktur Deskripsi Produk" changed from a 4-card grid + orphaned trailing CTA sentence into a new `.anatomy-flow` component: a sequential numbered list (5 items including CTA) with a connecting line between numbers, since these parts genuinely have to be read in order (hook → keyword → spec → benefit → CTA) — a grid of independent cards was never the right shape for ordered content. New CSS: `.anatomy-flow`, `.anatomy-item`, `.anatomy-num`.
+- Dropped "— X menit" duration text from M03's `module-subtitle` (cover slide time estimates are being removed per Julia's instruction; M04/M05 still need this pass since their PPTX hasn't been built yet).
+- Div balance verified after each edit (320/320 after M02, unaffected by M03/M04's text-only changes).
+
+**PPTX changes — both decks rebuilt from their `build_m0X.js` sources, not hand-patched**:
+- **M02**: slide 2 now shows the anatomy as a sequential numbered-and-connected flow (square purple number badges + vertical connector line) instead of a 4-card grid; "Kesalahan Umum" is now a true red warning panel (`WARN_BG`/`WARN_BORDER`/`WARN_TEXT` = `FFF6F6`/`F3C6C6`/`DC2626`, × bullet glyphs) instead of a purple pill-grid that looked identical to the section above it. "Yang Kamu Butuhkan" moved to the Contoh Prompt slide's footer to make room. Cover duration text dropped. Cara Kerja trimmed to 4 steps.
+- **M03**: same "Kesalahan Umum" fix (red warning panel replacing the purple pill-grid), same "Yang Kamu Butuhkan" relocation to the Contoh Prompt slide footer, Cara Kerja trimmed to 4 steps with the title de-numbered ("Cara Kerja" instead of "Cara Kerja: 5 Langkah" — avoids the title drifting out of sync with content next time step count changes), cover duration dropped, Output box absorbed the "ulangi tiap bulan" note.
+- Both rebuilds discovered that `build_m02.js`'s Latihan slide still had the bracket-annotation text Julia had manually removed from the shipped PPTX in Checkpoint 74 (the build script was never updated to match her manual fix) — corrected in the regenerated script so future rebuilds don't reintroduce that bug.
+- Noted for M04/M05 (not yet built): apply the same principles from the start rather than retrofitting — vary step counts to actual complexity, and don't reuse one box style for conceptually different content.
+
+**QA**: both decks re-rendered via LibreOffice + `pdftoppm`, all slides (5 for M02, 7 for M03) visually reviewed — no overflow, no dead space, connecting lines and warning panels render correctly.
+
+**Blocked mid-task**: `K3-M02-Deskripsi-Produk.pptx` was open in PowerPoint on Julia's machine (Office lock file present), so the write was held until she confirmed she'd closed it.
+
+**Commits**: `belajar-claude`: `fd422e4` (M02 HTML + PPTX), `7ea30cd` (M03 HTML + PPTX) — both via scratch-clone workaround, both diff-verified against the mounted repo after push.
 
 ---
 
