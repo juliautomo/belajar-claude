@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 28, 2026 (checkpoint 73)_
+_Last updated: July 28, 2026 (checkpoint 74)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -788,6 +788,22 @@ Julia then asked whether M02's product catalog (`cm-data-produk.csv`) should als
 **Commits this checkpoint**: `belajar-claude`: `75e89b5` (scratch-clone workaround, same as prior checkpoints).
 
 **Follow-up same session**: Julia asked what the `[Project ini sudah punya positioning dan data produk...]` bracket text inside the new prompt-boxes actually meant — a fair question, since it exposed a real bug. That bracket notation is used elsewhere in the course purely as an *illustrative* annotation inside the non-copyable "Contoh Prompt: Buruk vs Baik" comparison cards (explaining to the reader why a shorter prompt works), never inside an actual copy-to-clipboard `prompt-box`. The 3 new Latihan prompt-boxes (M02, M03, M05) had copied that bracket phrasing into a literal copy-paste element, creating genuine ambiguity about whether it should be typed. Fixed by removing the bracket entirely from all 3 — it serves no functional purpose (Claude already has the Project context automatically; stating it isn't a command Claude needs), and the reassurance-for-the-reader purpose it was serving is already covered by the case-box prose directly above each prompt-box. The two remaining bracket instances in the file (lines 390, 490) are correctly left alone — both are the illustrative, non-copyable col-card examples. Julia is updating the M02 PPTX's equivalent text manually herself rather than having it regenerated. Verified div balance unchanged (326/326). Commit: `160c225`.
+
+---
+
+## SHIPPED (Checkpoint 74, July 28, 2026): M02 recheck after Julia's manual edits; Module 3 PPTX built
+
+**M02 recheck (no code changes needed to HTML/outline).** Julia manually edited the M02 PPTX herself (fixing slide 5's Latihan prompt-box to drop the bracket annotation, matching the HTML fix from earlier this session) and asked for a full consistency recheck treating her local files as the source of truth. Extracted the PPTX's actual text via `python-pptx`/`markitdown` and diffed line-by-line against the current `content-marketing-content.html` M02 panel — no inconsistencies found; her manual fix matches the HTML wording exactly. One initial false alarm during the check: `markitdown`'s flattened text dump made slide 4's numbered steps look misaligned (text appearing to not match its number), but inspecting actual shape positions via `python-pptx` confirmed the 5 steps and their number-circles are correctly paired — the dump's reading order just doesn't reflect spatial layout, not a real bug.
+
+**One real (intentional, not a bug) file difference found**: `cm-data-produk.csv` had been trimmed locally from 10 rows (5 filled Dapur Rara + 5 blank `[ISIAN]`) down to 6 rows (header + 5 filled only) — Julia's own edit. Left as-is: this actually brings M02's supporting file in line with the single-file "pre-filled, edit in place" pattern already established for M01's `cm-template-kompetitor.txt` (Checkpoint 68), rather than the hybrid template+example approach. Both this file and the PPTX were only present as local changes (not yet on GitHub) — pushed both as commit `e693c24`.
+
+**Module 3 (Sistem Konten Instagram) PPTX built from scratch** — 7 slides (more than M01/M02's 5, reflecting M03's richer content: 2 info-grids, a connector integration, a compare-prompt section, 5-step workflow, and 3 distinct "Level Up" bonus capabilities that don't fit as an afterthought note). Read `content-marketing-content.html`'s M03 panel in full plus `cm-kalender-konten.csv`'s actual columns (Minggu, Hari, Tanggal, Tema Konten, Format, Caption, Hashtag, Waktu Post, Status) before writing content. Slide breakdown: cover; Sistem Konten Sustainable (4-card grid) + condensed Canva Connector tip; Framework Caption Engaging (3-card grid) + Kesalahan Umum + Yang Kamu Butuhkan; Contoh Prompt Buruk vs Baik; Cara Kerja 5 Langkah; Level Up — 3 Kemampuan Bonus (Dashboard HTML, Grafis Langsung, Foto Produk via Prompt Enhancer); Latihan & Output.
+
+**Found and fixed a real rendering bug during QA**: emoji icons (🔌 for the Canva tip, 🛠️/🖼️/🎨 for the 3 Level Up bonus cards) rendered as completely invisible/blank in the LibreOffice-based visual QA render — same class of font-fallback issue documented in Checkpoint 63 (WeasyPrint) and Checkpoint 67 (this same PPTX pipeline). Fixed per the established precedent: replaced the header emoji with the safe `◆` glyph, and replaced the 3 bonus-card icon circles with bold single-letter glyphs (D/G/F) in solid purple circles instead of emoji-in-tinted-circle — re-rendered and confirmed all 3 render correctly.
+
+**QA**: `validate.py` passed, `markitdown` placeholder sweep clean, all 7 slides visually reviewed (before and after the emoji fix) — no overflow, no dead space beyond the style spec's recommended bottom-of-slide margin.
+
+**Commits this checkpoint**: `belajar-claude`: `e693c24` (Julia's M02 manual edits, pushed), `76a30ae` (M03 PPTX) — both via scratch-clone workaround.
 
 ---
 
