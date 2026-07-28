@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 28, 2026 (checkpoint 67)_
+_Last updated: July 28, 2026 (checkpoint 68)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -701,6 +701,19 @@ Updated the affected step-rows, "Yang Kamu Butuhkan" lines, Latihan exercises, a
 - `Content-Marketing/Course-Level/Content-Marketing-Course-Outline.xlsx` was found to be stale in the same way (8-module structure, old course name) — regenerated with the current 5-module table (module, judul, durasi, ringkasan, outline, file pendukung, latihan, tools, free/pro plan), matching the existing sheet's exact formatting (purple header fill, Arial, frozen header row, same column widths). Turned out this file had never actually been committed to git before (confirmed via `git log`) — pushed as a newly-tracked file rather than a modification.
 - **Flagged to Julia, not touched:** `Content-Marketing-Panduan-Belajar.pdf` (19-page course guide) and `content-marketing-improved-content.md` (prose draft) in the same `Course-Level` folder are both significantly more stale than the outline xlsx was — they still describe the old *8-module* pre-restructure course (separate WhatsApp/Email and Performance/Content-OS modules), predating even the Checkpoint 65 content pass. Regenerating the PDF guide is comparable in scope to the earlier standalone "Regenerate Produktivitas Kantor PDF" task and wasn't part of this "Module 1 PPTX" ask — left as a follow-up decision for Julia rather than silently expanded into or silently ignored.
 - Commit: `764ae84`.
+
+---
+
+## SHIPPED (Checkpoint 68, July 28, 2026): Module 1 supporting file consolidated — one self-contained, pre-filled Dapur Rara example instead of a blank template + separate profile file
+
+Julia flagged a real usability gap right after Checkpoint 67: `cm-profil-dapur-rara.txt` gave Rara's business profile but had **zero competitor data**, so a student without their own business would still hit Module 1's exercise and face a blank `cm-template-kompetitor.txt` asking them to invent three fictional competitors from scratch — friction nobody was going to push through. Julia's fix direction: collapse to **one file**, fully filled with the Dapur Rara example, and let students edit it in place for their own business instead of juggling a template + a separate profile file.
+
+**What shipped:**
+- `cm-profil-dapur-rara.txt` deleted; `cm-template-kompetitor.txt` rewritten as the single surviving supporting file for Module 1 — now ships pre-filled with the complete Dapur Rara example (Data Bisnis + Identitas Visual, unchanged from the old profile file) **plus a new Data Kompetitor section with 3 invented-but-realistic fictional competitors** (Rasa Nusantara Frozen, Frozen Kita, Dapur Ibu Frozen Food — each with platform, price range, rating/review count, and specific negative-review quotes consistent with the course's "200+ toko frozen food" narrative), the same ready-to-paste Claude prompt, a labeled "Contoh Hasil" reference section (expected positioning + gap output, explicitly caveated that Claude's actual output may vary — self-check, not something to copy verbatim), and the Brand Voice block (still needed for Modul 5). Header comment now gives two explicit paths: use the Dapur Rara data as-is (paste, no editing), or replace all the values with your own business + competitor research before pasting.
+- Fixed two stale references discovered in the old profile file while rewriting it: "dipakai lagi di Modul 2 sampai 7" → "Modul 2 sampai 5", and the "Modul 7 (Capstone)" mention (both leftover from before the two-course split — Course A now ends at Modul 5, and the capstone lives in Strategi & Analisis Marketing instead).
+- Updated every place that referenced the old two-file setup to match: `content-marketing-content.html` Module 1's "Yang Kamu Butuhkan" paragraph, its 5-step `step-row` (step 1 now branches — skip straight to step 3 if using the Dapur Rara example as-is), the Latihan text, and the Output box's "File pendukung" line. Regenerated the `K3-M01-Positioning-Kompetitor.pptx` deck's slides 4 (Cara Kerja) and 5 (Latihan & Output) to match, and re-ran visual QA (no overflow from the now-longer step 1 text) plus `markitdown`/`validate.py` — both clean. Updated the Modul 1 row's "File Pendukung" and "Latihan" columns in `Content-Marketing-Course-Outline.xlsx` the same way.
+- Verified: div balance 320/320 on the HTML, zero remaining `cm-profil-dapur-rara` references anywhere in the repo, `cm-profil-dapur-rara.txt` cleanly removed from git (not just the local mount).
+- Commit: `69df0d7`.
 
 ---
 
