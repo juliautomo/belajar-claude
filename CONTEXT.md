@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 28, 2026 (checkpoint 68)_
+_Last updated: July 28, 2026 (checkpoint 69)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -714,6 +714,20 @@ Julia flagged a real usability gap right after Checkpoint 67: `cm-profil-dapur-r
 - Updated every place that referenced the old two-file setup to match: `content-marketing-content.html` Module 1's "Yang Kamu Butuhkan" paragraph, its 5-step `step-row` (step 1 now branches — skip straight to step 3 if using the Dapur Rara example as-is), the Latihan text, and the Output box's "File pendukung" line. Regenerated the `K3-M01-Positioning-Kompetitor.pptx` deck's slides 4 (Cara Kerja) and 5 (Latihan & Output) to match, and re-ran visual QA (no overflow from the now-longer step 1 text) plus `markitdown`/`validate.py` — both clean. Updated the Modul 1 row's "File Pendukung" and "Latihan" columns in `Content-Marketing-Course-Outline.xlsx` the same way.
 - Verified: div balance 320/320 on the HTML, zero remaining `cm-profil-dapur-rara` references anywhere in the repo, `cm-profil-dapur-rara.txt` cleanly removed from git (not just the local mount).
 - Commit: `69df0d7`.
+
+---
+
+## SHIPPED (Checkpoint 69, July 28, 2026): Fixed step-card layout bug (3 pages) + made paste-boundary explicit in Module 1 competitor template
+
+Julia flagged two things from a screenshot: step 5 of Module 1's "Cara Kerja Step-by-Step" row rendered as an ugly lone full-width box, and it wasn't clear whether the file's own "Cara Pakai di Claude Projects" section was meant to be pasted into Claude along with the rest of `cm-template-kompetitor.txt`.
+
+**What shipped:**
+- **CSS bug fix**: `.step-card{flex:1;min-width:150px;...}` inside a `flex-wrap` row stretches any lone wrapped item (e.g. item 5 of 5, alone on its own row) to fill the entire row width — that's what made step 5 look broken. Fixed to `.step-card{flex:0 1 220px;min-width:150px;max-width:260px;...}` so cards keep a consistent width regardless of how many end up on the last row. Applied to `content-marketing-content.html` (where it was reported) and also to `strategi-marketing-content.html` and `produktivitas-content.html`, which share the identical rule and would have hit the same bug.
+- **Paste-boundary clarity**: added explicit `▼▼▼ PASTE KE CLAUDE — MULAI DARI SINI ▼▼▼` / `▲▲▲ PASTE KE CLAUDE — SAMPAI SINI ▲▲▲` markers inside `cm-template-kompetitor.txt`, wrapping exactly Data Bisnis + Data Kompetitor + Prompt. Everything below the closing marker (Contoh Hasil, Brand Voice, Cara Pakai di Claude Projects) is now explicitly labeled as reference-only, not part of what gets pasted. This travels with the file itself rather than relying only on external instructions.
+- Reworded every "paste seluruh file" instruction to instead point at the marked section: `content-marketing-content.html`'s step 3 and Latihan paragraph, `build_m01_pptx.js` slide 4 step 3 + slide 5 Latihan body + slide 3's example prompt, and `build_outline_xlsx.py`'s Modul 1 Latihan column. Also reordered Module 1's HTML so the "Kenapa Warna dan Mood Juga Disimpan?" tip-box appears before the step-by-step section instead of after (reads more naturally — tip informs the steps you're about to read, not restates them).
+- Regenerated `K3-M01-Positioning-Kompetitor.pptx` and `Content-Marketing-Course-Outline.xlsx` from the updated build scripts; re-ran visual QA on slides 4–5 (clean, no overflow) plus `markitdown`/`validate.py` (both pass).
+- Verified div balance 320/320 on `content-marketing-content.html` before pushing.
+- Commit: `e52da1e`.
 
 ---
 
