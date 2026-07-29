@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 29, 2026 (checkpoint 88)_
+_Last updated: July 29, 2026 (checkpoint 89)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1035,6 +1035,20 @@ Verified: HTML div-balance held through both edits (322 → 326 after the M04 an
 **Scope note**: this pass covers only `content-marketing-content.html` (Kreasi Konten Pemasaran). Julia's instruction was "make it more natural for all courses" — the other 4 course files (`produktivitas-content.html`, `strategi-marketing-content.html`, `mulai-claude-content.html`, `prompt-gratis-content.html`) have not been audited for the same forced-template pattern yet. Flagged to her as a follow-up rather than doing a rushed blind pass across ~20 more modules in the same turn.
 
 **Commit**: `belajar-claude`: `5dc6039`.
+
+---
+
+## SHIPPED (Checkpoint 89, July 29, 2026): Audited M03-M05 for the same forced-template pattern — found and fixed one internal repeat in M03, M05 already natural
+
+Julia scoped the "make it natural" ask to just this course, module by module: "check from m03-m05." M04 was already fixed in Checkpoint 88; this pass audited M03 and M05 specifically (not a re-litigation of M04).
+
+**M05** (WhatsApp + Email templates): already naturally varied from earlier checkpoints — 2 separate "Cara Kerja" blocks with different step counts (3 for WhatsApp, 4 for Email), 2 separate Buruk-vs-Baik comparisons (one per channel), and 2 info-grids that serve genuinely different purposes (a 4-card "why templates matter" definitional grid vs. a 6-card "types of business email" taxonomy — different counts, different jobs). No changes made.
+
+**M03**: found one real internal repeat — two `info-grid` card blocks stacked back-to-back ("Sistem Konten yang Sustainable," 4 cards, immediately followed by "Framework Caption yang Engaging," 3 cards) — same box styling twice in a row reads as templated even within a single module, independent of the M03-vs-M04 comparison already fixed. Folded the smaller "Framework Caption" grid (Hook/Value/CTA, 3 items) into inline prose with bolded terms instead of a second identical card grid — it's a short enough concept that a grid was overkill anyway. Left the rest of M03 untouched: its "Level Up" bonus sections (dashboard/grafis/foto) are genuinely distinct extra content, not template repetition.
+
+Verified: HTML div-balance held (324 → 320, consistent with one 3-card `info-grid` removed); diff-verified against a fresh clone post-push.
+
+**Commit**: `belajar-claude`: `0d7c673`.
 
 ---
 
