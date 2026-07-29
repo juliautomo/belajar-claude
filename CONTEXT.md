@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 29, 2026 (checkpoint 77)_
+_Last updated: July 29, 2026 (checkpoint 78)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -879,6 +879,26 @@ Julia asked a routing question ("are you clear enough on what to put in Context,
 Div balance unchanged (320/320, text-only edits). PPTX re-rendered and visually confirmed no overflow on the 3 affected slides (Integrasi tip-box, Cara Kerja split, Latihan).
 
 **Commit**: `belajar-claude`: `c91d197` (HTML + PPTX), via scratch-clone workaround, diff-verified against mounted repo after push.
+
+---
+
+## SHIPPED (Checkpoint 78, July 29, 2026): Feedback UX + progress-bar 100%-cap bug fixed across all 5 course pages
+
+Julia asked to make the course-completion/feedback flow consistent site-wide and confirm it actually saves to Supabase. Audit turned up a real bug, not just a styling inconsistency:
+
+- **Progress-bar bug (4 of 5 pages affected)**: the sidebar's "Feedback" nav item is counted in `TOTAL`, but `showModule()` only ever marks the module being navigated *away from* as done. Since the feedback panel's "Ke Dashboard" control is a plain link (not a JS call), its index could never be added to `done` — capping visible progress at `(TOTAL-1)/TOTAL` forever (e.g. 5/6 ≈ 83% max on content-marketing). `produktivitas-content.html` already avoided this via a separate `CONTENT_MODULES` constant used as the progress denominator, plus a safety-net in `submitFeedback()` that force-marks the last content module done.
+- **Feedback read-back missing (4 of 5 pages)**: revisiting the feedback panel after already submitting showed a blank form instead of the existing rating/comment — `produktivitas` was the only page that read back prior feedback on load.
+
+**Fix — ported in both directions**: `CONTENT_MODULES`/safety-net/read-back logic went from `produktivitas` into `content-marketing`, `strategi-marketing`, `mulai-claude`, `prompt-gratis`; `produktivitas`'s own markup/CSS/JS naming (`.stars`/`.star`/`setStar`/`.submit-feedback-btn`/`.feedback-thanks`) was converted to match the other 4's shared convention (`.feedback-card`/`.star-row`/`.star-btn` with `data-val`/`setRating`/`.feedback-submit`/`.feedback-done`), so all 5 pages now share one implementation:
+- `updateProgress()` divides by `CONTENT_MODULES`, not `TOTAL`.
+- `loadExistingFeedback()` (or equivalent block in `init()`) pre-fills star rating + comment and switches the button to "Perbarui Feedback →" if a row already exists.
+- `submitFeedback()` upserts into `course_feedback` (`email`, `course_slug`, `rating`, `comment`, `submitted_at`, `onConflict: 'email,course_slug'`), force-marks the last content module + the Feedback nav item done as a safety net, then swaps `#feedbackForm` for `#feedbackDone`.
+
+Confirmed `course_feedback` table (Supabase project `Belajar-Claude`, id `ctqtdqbsucbhikwnagvl`) already has the right schema, RLS policies (insert/select/update own feedback by email), and a unique index on `(email, course_slug)` matching the upsert's `onConflict` — no migration needed.
+
+Verified: div-balance and `node --check` clean on all 5 files (content-marketing 320/320, strategi-marketing 249/249, mulai-claude 264/264, prompt-gratis 233/233, produktivitas 543/543); diffed all 5 against a fresh clone post-push — exact match.
+
+**Commit**: `belajar-claude`: `2a535ca`, via scratch-clone workaround, diff-verified against mounted repo after push.
 
 ---
 
