@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 29, 2026 (checkpoint 78)_
+_Last updated: July 29, 2026 (checkpoint 81)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -899,6 +899,36 @@ Confirmed `course_feedback` table (Supabase project `Belajar-Claude`, id `ctqtdq
 Verified: div-balance and `node --check` clean on all 5 files (content-marketing 320/320, strategi-marketing 249/249, mulai-claude 264/264, prompt-gratis 233/233, produktivitas 543/543); diffed all 5 against a fresh clone post-push — exact match.
 
 **Commit**: `belajar-claude`: `2a535ca`, via scratch-clone workaround, diff-verified against mounted repo after push.
+
+---
+
+## SHIPPED (Checkpoint 79, July 29, 2026): Bottom nav-counter also excluded the Feedback panel
+
+Julia caught it live from a screenshot: the sidebar progress bar correctly read 5/5 after Checkpoint 78's fix, but the bottom page-position counter still read "5 / 6" on the last content module — inconsistent, and confusing right next to a bar that says something different. Root cause: `produktivitas-content.html` already used `CONTENT_MODULES` as the nav-counter denominator (and a blank counter on its Feedback panel), but the other 4 pages hardcoded `N / TOTAL` on every panel including Feedback. Fixed by rewriting every panel's `<span class="nav-counter">` across all 5 pages to `N / CONTENT_MODULES` on content panels and an empty span on the Feedback panel — matching produktivitas's existing convention exactly. Text-only change, div-balance unchanged on all 4 touched files, diff-verified post-push.
+
+**Commit**: `belajar-claude`: `1cbf0f7`.
+
+---
+
+## SHIPPED (Checkpoint 80, July 29, 2026): Ambiguous bracket notes in example prompts clarified (M02/M03/M05)
+
+Julia asked whether she should literally copy the `"[Project ini sudah tahu positioning dan produk-produkku]"` bracket shown inside a "Prompt Baik" example — a legitimate question, because the course used bracket syntax two contradictory ways: as a literal fill-in instruction in M01 (`[paste isi cm-template-kompetitor.txt]`, meant to be replaced with real content) and as an explanatory aside in M02/M03/M05 (context already loaded via Project Knowledge, not meant to be typed). Same syntax, opposite meaning. Fixed the 3 ambiguous instances by moving the aside out of the quoted prompt into a new `.context-note` (small italic line above the quote), so the quote itself is always exactly what to type. M01's genuine fill-in bracket was left untouched. Div-balance unchanged (320/320).
+
+**Commit**: `belajar-claude`: `0bbe9fb`.
+
+---
+
+## SHIPPED (Checkpoint 81, July 29, 2026): M03 content-calendar supporting file upgraded from flat CSV to a formatted spreadsheet planner
+
+Julia asked whether the M03 content calendar could be a better format than a plain table — specifically suggested something closer to a real Google Sheet template. `cm-kalender-konten.csv` (9 bare columns, no formatting, `[GENERATE CLAUDE]` placeholders) replaced with `cm-kalender-konten.xlsx`, built with `openpyxl` per the xlsx skill:
+
+- **"Kalender Konten" tab**: live summary dashboard (Total Post / Produk / Edukasi / BTS / Testimoni / Sudah Posting) computed with `COUNTA`/`COUNTIF` formulas, not hardcoded — recalculates if rows change. New `Kategori` column (dropdown: Produk/Edukasi/BTS/Testimoni) drives row color-coding via conditional formatting (purple/blue/green/amber tints), independent of the existing free-text `Tema Konten` column. `Status` column (dropdown: Draft/Siap Posting/Sudah Posting) is separately color-coded gray/amber/green. Row 9 is a fully realistic filled example (Dapur Rara persona, real caption + hashtags) instead of a placeholder, modeling the expected output; rows 10-24 keep the original 16-slot monthly structure with `[GENERATE CLAUDE]` placeholders in Caption/Hashtag. Header frozen at row 9.
+- **"Cara Pakai" tab**: short numbered guide (what to edit, the exact Claude prompt to run, color legend) so the file is self-explanatory without needing the course page open.
+- Verified with `recalc.py` (0 errors, 6 formulas, values checked: Total 16 / Produk 5 / Edukasi 5 / BTS 4 / Testimoni 2 / Sudah Posting 1) and a rendered-PDF visual pass (2 row-height overlap bugs found and fixed — the realistic example row's wrapped caption, and 4 long lines on the guide tab — before shipping).
+- Old `.csv` deleted (required `allow_cowork_file_delete` — direct `rm` on the mounted workspace folder is blocked). All 4 HTML mentions of the filename updated from `.csv` to `.xlsx`; the "Format output CSV" info-card rewritten to describe the actual new format ("Template spreadsheet siap pakai — warna otomatis per tema, dropdown status, ringkasan real-time").
+- Note for Julia: `module_documents` has zero rows for `content-marketing` in Supabase, so this file isn't currently served via any DB-driven download link on the course page — it's referenced by filename in the lesson text only. Not fixed here since it's a pre-existing, unrelated gap (same status for every module's supporting file), but worth knowing if students are asking where to actually download it from.
+
+**Commit**: `belajar-claude`: (pushed in this session).
 
 ---
 
