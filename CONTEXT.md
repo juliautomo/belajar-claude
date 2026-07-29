@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 29, 2026 (checkpoint 89)_
+_Last updated: July 29, 2026 (checkpoint 90)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1049,6 +1049,22 @@ Julia scoped the "make it natural" ask to just this course, module by module: "c
 Verified: HTML div-balance held (324 → 320, consistent with one 3-card `info-grid` removed); diff-verified against a fresh clone post-push.
 
 **Commit**: `belajar-claude`: `0d7c673`.
+
+---
+
+## SHIPPED (Checkpoint 90, July 29, 2026): M04 folder + PPTX filename renamed away from old Canva branding
+
+Julia noticed the M04 title was renamed in Checkpoint 85 ("Copy Iklan Canva" → "Ads Copywriting Multi-Platform") but the folder and PPTX filename on disk still said the old name — asked why. Checkpoint 85 had deliberately left them untouched at the time ("renaming risks breaking existing links and wasn't asked for"). Now explicitly asked to fix it.
+
+Before renaming, checked repo-wide for anything that would break: `content-marketing-content.html` and friends load PPT/doc slots at runtime from Supabase tables (`module_ppts`/`module_documents`) keyed by module number, not by a hardcoded filename string or path — confirmed via grep that no HTML/JS/SQL file in this repo references `M04-Iklan-Canva` or `K3-M04-Copy-Iklan-Canva.pptx` as a literal string. Only `CONTEXT.md`'s own historical log mentioned the old name.
+
+Renamed: `Content-Marketing/M04-Iklan-Canva/K3-M04-Copy-Iklan-Canva.pptx` → `Content-Marketing/M04-Ads-Copywriting/K3-M04-Ads-Copywriting.pptx` — now matches the `M0N-<ThematicName>/K3-M0N-<ThematicName>.pptx` convention used by M01/M02/M03/M05. Also removed a stale `.gitkeep` left in the old folder from before the PPTX existed there.
+
+Verified: pptx content unchanged (md5 `5d70f086a3f707c86e3b9ac8d2a17392` identical before/after the move — pure rename, no content touched), mounted folder and fresh clone diff-match.
+
+**Open risk, not verifiable from this session**: this repo has no reference to the old filename, but the *live* Supabase `module_ppts` row for Modul 4 may still store a path/filename pointing at the old name if it was ever uploaded through `admin.html`'s upload UI (separate from this git repo, and this session has no Supabase connector attached to check). If the live site's Modul 4 PPT download 404s after this rename, re-upload the renamed file through `admin.html` or update that Supabase row directly — flagged to Julia, not yet confirmed either way.
+
+**Commit**: `belajar-claude`: `20545ce`, `b51f504`.
 
 ---
 
