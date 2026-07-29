@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 29, 2026 (checkpoint 84)_
+_Last updated: July 29, 2026 (checkpoint 85)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -965,6 +965,20 @@ Julia asked directly: "have you verified the prompt will actually produce the sa
 Verified: xlsx `recalc.py` clean (0 errors), PPTX `office/validate.py` clean, full visual QA pass on all touched slides, HTML div-balance unchanged (322/322), all 3 files diff-verified against a fresh clone post-push.
 
 **Commit**: `belajar-claude`: `8f08467`.
+
+---
+
+## SHIPPED (Checkpoint 85, July 29, 2026): M04 retitled away from Canva-specific branding
+
+Julia wanted M04's title to not be Canva-branded — the module teaches ad copy for Meta/TikTok/Google plus turning it into a finished design, and Canva is just the design tool used, not the subject. Asked for options, she asked to work in the word "Ads" specifically. New title: **"Ads Copywriting Multi-Platform + Desain Siap Pakai"** (subtitle: "Claude tulis ads copy per platform, desain tinggal susun").
+
+Updated everywhere the old title ("Copy Iklan Multi-Platform + Desain Canva") appeared: HTML `h1` + subtitle + sidebar nav label ("Ads Copywriting Multi-Platform" / "Modul 4 · Ads Copy + Desain"), PPTX cover slide + subtitle + running header on slides 2-7 (caught and fixed the cover subtitle on a second pass — missed it the first time, visual QA on the title slide caught it), and the course outline xlsx (cell B5).
+
+**Deliberately not changed**: body content inside the module still names Canva explicitly wherever it's factually the tool being taught (e.g. "Canva Connector — Reuse dari Modul 3") — only the title-level branding changed, not the accurate tool references. Also left the folder name (`M04-Iklan-Canva`) and PPTX filename (`K3-M04-Copy-Iklan-Canva.pptx`) untouched since renaming those risks breaking existing links and wasn't asked for.
+
+Verified: HTML div-balance unchanged (322/322), xlsx recalc clean, PPTX validator clean, visual QA on the PPTX title slide (2-line wrap, no overflow) and running header, all 3 files diff-verified against a fresh clone post-push.
+
+**Commit**: `belajar-claude`: `9461d8b`.
 
 ---
 
