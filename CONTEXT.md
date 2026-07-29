@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 28, 2026 (checkpoint 76)_
+_Last updated: July 29, 2026 (checkpoint 77)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -857,6 +857,28 @@ Continuation of Checkpoint 75's principle — apply "natural complexity, not a r
 **Commits**: `belajar-claude`: `456a791` (M04 PPTX + HTML duration cleanup), `da6bdbc` (M05 PPTX) — both via scratch-clone workaround, diff-verified against the mounted repo after push.
 
 **Course status**: all 5 modules of Kreasi Konten Pemasaran now have PPTX decks, each with a visual treatment shaped by its own content rather than one template stamped 5 times.
+
+---
+
+## SHIPPED (Checkpoint 77, July 29, 2026): M05 Project Knowledge continuity gap found and fixed
+
+Julia asked a routing question ("are you clear enough on what to put in Context, or which file to drag/drop") that prompted an actual audit rather than a reassurance. Checked every module's instructions for whether a file the prompts depend on is ever actually told to be uploaded:
+
+- **M01**: `cm-template-kompetitor.txt` is pasted directly into chat (the "PASTE KE CLAUDE" section), never uploaded — correct, it's a one-time input, not something later modules need Claude to keep reading.
+- **M02**: `cm-data-produk.csv` — explicitly instructed to upload to Project Knowledge before the prompt references it. Correct (this was the Checkpoint 72 fix).
+- **M03**: `cm-kalender-konten.csv` is filled in *after* Claude generates content — an output destination, not an upload input. No upload needed, none given. Correct.
+- **M04**: no file at all. Correct.
+- **M05**: **gap found.** The WhatsApp and Email prompts reference files by name — `"Skenario 1 dari cm-template-wa.txt"`, `"cm-template-email.txt Email 2 sudah saya lengkapi"` — as if Claude could already read them, but the module never once instructed uploading `cm-template-wa.txt` or `cm-template-email.txt` to Project Knowledge. Same class of bug M02 had before Checkpoint 72's fix, just never ported over when M05 was written.
+
+**Fix applied in 4 places, HTML + PPTX (matching M02's established pattern)**:
+1. `module-desc-box` intro — added one sentence mentioning the upload.
+2. The existing "Integrasi: Claude Projects + Gmail Connector" tip-box — added the deeper explanation (why upload matters: so "Skenario 1"/"Email 2" resolve without re-pasting file contents).
+3. Cara Kerja steps — WA step 1 and Email step 2 now explicitly say "upload ke Project Knowledge" as part of the action, not just implied.
+4. Latihan case-box — added a reminder sentence to upload both files before running the exercise prompt.
+
+Div balance unchanged (320/320, text-only edits). PPTX re-rendered and visually confirmed no overflow on the 3 affected slides (Integrasi tip-box, Cara Kerja split, Latihan).
+
+**Commit**: `belajar-claude`: `c91d197` (HTML + PPTX), via scratch-clone workaround, diff-verified against mounted repo after push.
 
 ---
 
