@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 29, 2026 (checkpoint 83)_
+_Last updated: July 29, 2026 (checkpoint 84)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -951,6 +951,20 @@ Added a tip-box to `content-marketing-content.html` M03 (after the caption frame
 Julia said "ok clean up" — closing out the one item Checkpoint 82 deliberately left open. Slide 4's "PROMPT BAIK" example still had the same bracket pattern Checkpoint 80 fixed in HTML (`"[Project ini sudah tahu positioning...]"`). Fixed with the same technique as Checkpoint 82's new note box: deep-copied the quote shape to create a separate context-note line above it ("Project sudah tahu positioning & produk-produkmu — tidak perlu ditulis ulang", styled like the deck's existing muted-gray CATATAN convention), shifted the quote down, stripped the bracket out of the quote text. Validated (`office/validate.py` passed) and visually confirmed no overlap — quote now wraps to 3 lines instead of 4, comfortable gap before "Kenapa berhasil."
 
 **Commit**: `belajar-claude`: `2a6cd0b`.
+
+---
+
+## SHIPPED (Checkpoint 84, July 29, 2026): M03 — real row-alignment bug found and fixed between exercise prompt and xlsx template
+
+Julia asked directly: "have you verified the prompt will actually produce the same as our csv template" — the honest answer was no, and checking turned up a genuine bug, not a nitpick. The Latihan prompt asked Claude to invent its own theme/day assignment ("16 post (4/minggu): 1 produk, 1 edukasi, 1 BTS, 1 testimoni" with no fixed order), but `cm-kalender-konten.xlsx` has 16 rows with *specific* pre-filled themes per specific day (row 6 locked to Rabu/Week 2/"FAQ Pelanggan", etc.). Pasting Claude's free-form output back into the template row-by-row would misalign captions to the wrong theme — a column-count mismatch (5 vs. 11 columns) was the visible symptom, but the real problem was row order never being guaranteed to match.
+
+**Fix**: the prompt now references the template's existing structure instead of reinventing it — copy columns No–Format (A:G) from the template into the prompt, Claude fills only Caption + Hashtag matched by the `No` column, paste back by row number. Applied in lockstep across all 3 places that had a version of this prompt: `content-marketing-content.html` (illustrative Prompt Baik example, Cara Kerja steps, Latihan prompt-box, Output text), `cm-kalender-konten.xlsx` ("Cara Pakai" tab steps 3-5), and `K3-M03-Sistem-Konten-Instagram.pptx` (slides 4, 5, 7 — condensed to match each slide's existing text-length budget so nothing needed resizing).
+
+**Bug caught mid-fix**: slide 5's 4 step shapes each split their text into 2 runs (bold title + plain description) — first editing pass only touched run 0, leaving the old run 1 text concatenated directly onto the new text on-slide (visually broken, caught on the QA render before shipping, fixed by editing both runs).
+
+Verified: xlsx `recalc.py` clean (0 errors), PPTX `office/validate.py` clean, full visual QA pass on all touched slides, HTML div-balance unchanged (322/322), all 3 files diff-verified against a fresh clone post-push.
+
+**Commit**: `belajar-claude`: `8f08467`.
 
 ---
 
