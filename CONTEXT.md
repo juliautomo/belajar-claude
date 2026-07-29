@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 29, 2026 (checkpoint 86)_
+_Last updated: July 29, 2026 (checkpoint 87)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -997,6 +997,22 @@ Updated in lockstep across all 3 places again: `content-marketing-content.html` 
 Verified: xlsx `recalc.py` clean (0 errors; category counts still correct 16/5/5/4/2/1 after the column reorder), PPTX `validate.py` clean, full visual QA on every touched slide/sheet, HTML div-balance unchanged (322/322), all 3 files diff-verified against a fresh clone post-push.
 
 **Commit**: `belajar-claude`: `f8d4426`.
+
+---
+
+## SHIPPED (Checkpoint 87, July 29, 2026): M03 — fixed HTML/PPTX prompt mismatch, switched to drag-and-drop xlsx workflow, made Latihan header prominent site-wide
+
+Julia caught three things after Checkpoint 86 shipped: (1) the illustrative "Prompt Baik" quote differed between HTML (6 columns, 15-row bracket, "16 ide konten" typo) and the PPTX (only 4 columns, no bracket) — a real drift, not a false alarm; (2) copy-pasting a specific 6-column range out of Excel into a chat box is a fiddly, error-prone step — she asked whether dragging the whole xlsx file into Claude instead would work better; (3) the HTML "Latihan" section didn't stand out from the several "Contoh Prompt" mini-boxes immediately above it, despite already having a "📝 Latihan" label in code — visually it blended in.
+
+Agreed the drag-and-drop idea was the right fix for both problems 1 and 2 at once: attaching the whole file removes the need to enumerate exact columns/rows in the prompt (the file carries that), removes the miscount, and removes the manual-copy-range error class entirely.
+
+- **Workflow change** (HTML + `cm-kalender-konten.xlsx` "Cara Pakai" tab + PPTX slides 2/4/5/7): replaced "copy kolom A:F, paste as text" with "lampirkan/drag & drop file xlsx ke Claude." Cara Kerja steps, Latihan case-box + prompt-box, the Prompt Baik illustrative quote, and the xlsx's own 7-step tab all rewritten around attaching the file rather than pasting a range. The literal `[paste kolom A-F...]` placeholder is gone since there's nothing left to paste in.
+- **Count/column fix**: rewrote the Prompt Baik quote and "kenapa berhasil" line to say "15 ide konten lengkap" (matching the actual 15 generated rows, 10-24) instead of the old inconsistent "16"; made HTML and PPTX identical in substance (PPTX kept slightly shorter for its fixed-size text boxes — caught 2 overflow regressions via visual QA render and shortened further until clean).
+- **Latihan prominence** (all 5 modules, not just M03): added `.prompt-section.latihan` CSS — accent-purple border + solid accent-purple label bar (white text, bigger font) — so it visually breaks from the plain gray "📝 Contoh Prompt" labels. Icon changed from 📝 to 🎯 for the Latihan-only variant. Applied identically to all 5 existing "Latihan" blocks across the whole course for design-system consistency, not just M03.
+
+Verified: `recalc.py` clean (0 errors, xlsx Cara Pakai tab has no formulas so this was a pure safety check); PPTX `validate.py --original` passed; visual QA render on slides 2/4/5/7 caught two text-overflow regressions from the first (too-verbose) rewrite pass, fixed by shortening, re-rendered clean; HTML div-balance unchanged (322/322); all 3 files diff-verified against a fresh clone post-push.
+
+**Commit**: `belajar-claude`: `7ff8a29`.
 
 ---
 
