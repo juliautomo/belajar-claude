@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 29, 2026 (checkpoint 85)_
+_Last updated: July 29, 2026 (checkpoint 86)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -979,6 +979,24 @@ Updated everywhere the old title ("Copy Iklan Multi-Platform + Desain Canva") ap
 Verified: HTML div-balance unchanged (322/322), xlsx recalc clean, PPTX validator clean, visual QA on the PPTX title slide (2-line wrap, no overflow) and running header, all 3 files diff-verified against a fresh clone post-push.
 
 **Commit**: `belajar-claude`: `9461d8b`.
+
+---
+
+## SHIPPED (Checkpoint 86, July 29, 2026): M03 redesigned into a real campaign planner — Claude now generates theme + format, not just caption/hashtag
+
+Julia's follow-up after Checkpoint 84: the row-alignment fix was correct but had a side effect — it made Claude just a copywriter for ideas already decided in the template, when the module's own info-grid card had always claimed "Claude generate sekaligus: tema + caption + hashtag." She asked to restore that, extended to post format too, "like a campaign planner."
+
+Redesigned the fixed-vs-generated split to get real planning value from Claude without reopening the row-alignment bug:
+- **Fixed/mechanical** (pre-filled, now columns A-F): No, Minggu, Hari, Tanggal, Jam Post, Kategori. Kategori is the one deliberate constraint kept — guarantees the 4-theme weekly rotation stays balanced without relying on Claude to track it across 16 rows.
+- **Claude-generated** (columns G-J, the actual planning work): Tema Konten (specific idea, not generic), Format (Foto Produk/Carousel/Reels/Story/Quote), Caption, Hashtag.
+- Reordered `cm-kalender-konten.xlsx` columns so both zones are contiguous (A:F fixed, G:J generated) instead of interleaved like before — "copy A:F, paste results into G:J" is now a clean instruction instead of skipping columns.
+- Cleared the previously pre-written Tema/Format text from rows 10-24 (too prescriptive) — now `[GENERATE CLAUDE]` placeholders, matching Caption/Hashtag's existing convention. Conditional formatting and summary formulas updated for Kategori's new column position (F).
+
+Updated in lockstep across all 3 places again: `content-marketing-content.html` (info-grid card, illustrative Prompt Baik example, Cara Kerja steps, Latihan + Output text), `cm-kalender-konten.xlsx` ("Cara Pakai" tab), `K3-M03-Sistem-Konten-Instagram.pptx` (slides 2, 4, 5, 7).
+
+Verified: xlsx `recalc.py` clean (0 errors; category counts still correct 16/5/5/4/2/1 after the column reorder), PPTX `validate.py` clean, full visual QA on every touched slide/sheet, HTML div-balance unchanged (322/322), all 3 files diff-verified against a fresh clone post-push.
+
+**Commit**: `belajar-claude`: `f8d4426`.
 
 ---
 
