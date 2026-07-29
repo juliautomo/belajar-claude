@@ -461,7 +461,7 @@ per produk.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></d
         <div class="section-heading">Sistem Konten yang Sustainable</div>
         <div class="info-grid">
           <div class="info-card"><strong>4 tema rotasi per minggu</strong><span>Produk, edukasi/tips, behind the scene, testimoni</span></div>
-          <div class="info-card"><strong>Claude generate sekaligus</strong><span>Tema + caption + hashtag untuk 30 hari dalam 1 prompt terstruktur</span></div>
+          <div class="info-card"><strong>Claude generate sekaligus</strong><span>Ide tema + format post + caption + hashtag untuk 30 hari dalam 1 prompt terstruktur</span></div>
           <div class="info-card"><strong>Template spreadsheet siap pakai</strong><span>Warna otomatis per tema, dropdown status, ringkasan real-time — buka langsung di Google Sheets atau Excel</span></div>
           <div class="info-card"><strong>Review dan personalisasi</strong><span>Claude buat draft, kamu tambahkan detail spesifik yang hanya kamu tahu</span></div>
         </div>
@@ -501,16 +501,16 @@ per produk.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></d
           <div class="col-card highlight">
             <h4>Prompt Baik</h4>
             <p class="context-note">Project sudah tahu positioning &amp; produk-produkmu — tidak perlu ditulis ulang</p>
-            <p>"Ini kalender bulan Juli saya (No | Minggu | Hari | Tanggal | Kategori | Tema | Format): [15 baris ter-paste dari spreadsheet]. Buatkan Caption maks 80 kata dan 8 Hashtag untuk tiap baris, sesuai tema yang sudah ada — jangan ubah urutan atau temanya."</p>
-            <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> 1 prompt = 16 caption+hashtag yang otomatis sejajar dengan baris kalendermu — tinggal paste balik, tidak perlu disortir manual.</p>
+            <p>"Ini kerangka kalender bulan Juli saya (No | Minggu | Hari | Tanggal | Jam Post | Kategori): [15 baris ter-paste dari spreadsheet]. Untuk tiap baris, sesuai Kategori yang sudah ada, buatkan ide Tema yang spesifik, Format post yang cocok, Caption maks 80 kata, dan 8 Hashtag."</p>
+            <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> 1 prompt = 16 ide konten lengkap (tema, format, caption, hashtag) — bukan cuma caption untuk ide yang sudah ditentukan.</p>
           </div>
         </div>
 
         <div class="section-heading">Cara Kerja Step-by-Step</div>
         <div class="step-row">
-          <div class="step-card"><div class="step-num">1</div><p>Copy kolom No–Format dari cm-kalender-konten.xlsx (baris 10-24), siapkan juga promo bulan ini/momen spesial (produk sudah diketahui Claude dari Project)</p></div>
-          <div class="step-card"><div class="step-num">2</div><p>Paste ke Claude, generate Caption &amp; Hashtag tiap baris — cocokkan lewat kolom No supaya urutan tidak tertukar</p></div>
-          <div class="step-card"><div class="step-num">3</div><p>Paste balik ke kolom Caption &amp; Hashtag sesuai nomornya, lalu review dan personalisasi</p></div>
+          <div class="step-card"><div class="step-num">1</div><p>Copy kolom No–Jam Post (A:F) dari cm-kalender-konten.xlsx (baris 10-24) — kerangka rotasi 4 tema sudah ada, siapkan juga promo bulan ini/momen spesial</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Paste ke Claude, minta ide Tema + Format post + Caption + Hashtag tiap baris sesuai Kategori — cocokkan lewat kolom No</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Paste balik ke kolom Tema, Format, Caption &amp; Hashtag sesuai nomornya, lalu review dan personalisasi</p></div>
           <div class="step-card"><div class="step-num">4</div><p>Buka di Google Sheets (atau tetap di Excel), jadwalkan ke Later/Buffer/Instagram</p></div>
         </div>
 
@@ -557,23 +557,25 @@ siang hari, tanpa clutter. Format 1:1.<button class="copy-btn" onclick="copyProm
         <div class="prompt-section">
           <div class="prompt-label">📝 Latihan</div>
           <div class="case-box">
-            <p>Buka cm-kalender-konten.xlsx, tab Kalender Konten. Copy kolom No sampai Format (A:G) dari baris 10-24 — jangan kolom Caption/Hashtag/Status. Paste ke bagian yang ditandai di prompt ini, lalu jalankan. Paste hasil Claude ke kolom Caption dan Hashtag sesuai nomor barisnya, pilih 3 caption terbaik, personalisasi, dan jadwalkan di Instagram. Bonus: minta Claude ubah kalender ini jadi 1 halaman HTML visual, buat 1 grafis (quote card/tile promo) langsung dari Claude, dan 1 foto produk dengan Prompt Enhancer di atas.</p>
+            <p>Buka cm-kalender-konten.xlsx, tab Kalender Konten. Copy kolom No sampai Jam Post (A:F) dari baris 10-24 — 6 kolom ini kerangka kalendermu, bukan yang mau digenerate. Paste ke bagian yang ditandai di prompt ini, lalu jalankan. Paste hasil Claude ke kolom Tema, Format, Caption, dan Hashtag sesuai nomor barisnya. Review tiap ide, ganti yang kurang cocok, lalu jadwalkan di Instagram. Bonus: minta Claude ubah kalender ini jadi 1 halaman HTML visual, buat 1 grafis (quote card/tile promo) langsung dari Claude, dan 1 foto produk dengan Prompt Enhancer di atas.</p>
           </div>
-          <div class="prompt-box">Ini kalender bulan Agustus saya (No | Minggu | Hari |
-Tanggal | Kategori | Tema | Format):
-[paste kolom A-G dari baris 10-24 di sini]
+          <div class="prompt-box">Ini kerangka kalender bulan Agustus saya (No | Minggu |
+Hari | Tanggal | Jam Post | Kategori):
+[paste kolom A-F dari baris 10-24 di sini]
 
-Buatkan Caption (maks 80 kata, Hook-Value/Cerita-CTA) dan
-Hashtag (8 hashtag) untuk tiap baris — cocokkan lewat kolom
-No, jangan ubah urutan atau temanya. Output tabel: No |
-Caption | Hashtag saja.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+Untuk tiap baris, sesuai Kategori yang sudah ada, buatkan:
+ide Tema yang spesifik dan menarik, Format post yang paling
+cocok (Foto Produk/Carousel/Reels/Story/Quote), Caption
+(maks 80 kata, Hook-Value/Cerita-CTA), dan 8 Hashtag.
+Cocokkan lewat kolom No, jangan ubah urutan. Output tabel:
+No | Tema | Format | Caption | Hashtag.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
 
         <div class="output-box">
           <div class="output-icon">✅</div>
           <div>
             <h3>Output yang Diharapkan</h3>
-            <p>Kalender konten 1 bulan (16 post) dalam spreadsheet — caption (framework Hook-Value-CTA) dan hashtag terisi persis sesuai tema &amp; urutan yang sudah ada, siap dijadwalkan. Canva Connector aktif untuk dipakai lagi di Modul 4. Waktu yang dihemat: ~8 jam per bulan. File pendukung: cm-kalender-konten.xlsx. Bonus: 1 dashboard kalender HTML, 1 grafis buatan Claude langsung, dan 1 foto produk via Prompt Enhancer. Ulangi tiap awal bulan — simpan prompt terbaik sebagai template sendiri.</p>
+            <p>Kalender konten 1 bulan (16 post) dalam spreadsheet — ide tema, format post, caption (framework Hook-Value-CTA), dan hashtag lengkap digenerate Claude sesuai kerangka kategori yang sudah ada, siap dijadwalkan. Canva Connector aktif untuk dipakai lagi di Modul 4. Waktu yang dihemat: ~8 jam per bulan. File pendukung: cm-kalender-konten.xlsx. Bonus: 1 dashboard kalender HTML, 1 grafis buatan Claude langsung, dan 1 foto produk via Prompt Enhancer. Ulangi tiap awal bulan — simpan prompt terbaik sebagai template sendiri.</p>
           </div>
         </div>
 
