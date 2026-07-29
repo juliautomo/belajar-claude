@@ -928,7 +928,7 @@ Julia asked whether the M03 content calendar could be a better format than a pla
 - Old `.csv` deleted (required `allow_cowork_file_delete` — direct `rm` on the mounted workspace folder is blocked). All 4 HTML mentions of the filename updated from `.csv` to `.xlsx`; the "Format output CSV" info-card rewritten to describe the actual new format ("Template spreadsheet siap pakai — warna otomatis per tema, dropdown status, ringkasan real-time").
 - Note for Julia: `module_documents` has zero rows for `content-marketing` in Supabase, so this file isn't currently served via any DB-driven download link on the course page — it's referenced by filename in the lesson text only. Not fixed here since it's a pre-existing, unrelated gap (same status for every module's supporting file), but worth knowing if students are asking where to actually download it from.
 
-**Commit**: `belajar-claude`: (pushed in this session).
+**Commit**: `belajar-claude`: `83f2ccf`.
 
 ---
 
