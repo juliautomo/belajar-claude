@@ -74,6 +74,8 @@
   .module-desc-box strong{color:var(--ink);}
   .prompt-section{background:#fff;border:1px solid var(--border);border-radius:var(--r);margin-bottom:18px;overflow:hidden;}
   .prompt-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.4px;color:#777;margin:0;font-family:var(--font);display:flex;align-items:center;gap:6px;padding:13px 18px;background:#fafafa;border-bottom:1px solid var(--border);}
+  .prompt-section.latihan{border:1.5px solid var(--accent);}
+  .prompt-section.latihan .prompt-label{font-size:13px;color:#fff;background:var(--accent);border-bottom:none;padding:14px 18px;}
   .prompt-box{background:transparent;border:0;border-radius:0;padding:20px 52px 20px 20px;font-size:13px;color:var(--ink);line-height:1.8;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;position:relative;}
   .copy-btn{position:absolute;top:16px;right:16px;background:#171717;color:#fff;border:none;border-radius:7px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font);transition:background 0.2s;}
   .copy-btn:hover{background:var(--accent);}
@@ -318,8 +320,8 @@
           <div class="step-card"><div class="step-num">5</div><p>Simpan profil bisnis lengkap (positioning + palet warna + mood visual) di Claude Projects — jadi acuan Modul 2-5</p></div>
         </div>
 
-        <div class="prompt-section">
-          <div class="prompt-label">📝 Latihan</div>
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
           <div class="case-box">
             <p>Buka cm-template-kompetitor.txt — sudah terisi contoh Dapur Rara. Punya bisnis sendiri? Ganti dulu Data Bisnis dan Data Kompetitor di dalamnya (termasuk palet warna dan mood/gaya visual). Copy bagian yang ditandai "PASTE KE CLAUDE" saja (bukan seluruh file — bagian Contoh Hasil dan Cara Pakai di bawahnya hanya untuk referensimu) ke Claude. Minta analisis SWOT + gap + 3 variasi kalimat positioning. Pilih satu, simpan profil lengkap di Claude Projects — ini akan dipakai di Modul 2 sampai 5.</p>
           </div>
@@ -409,8 +411,8 @@
           <div class="step-card"><div class="step-num">4</div><p>Paste ke Tokopedia/Shopee, catat posisi ranking setelah 7 hari</p></div>
         </div>
 
-        <div class="prompt-section">
-          <div class="prompt-label">📝 Latihan</div>
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
           <div class="case-box">
             <p>Isi cm-data-produk.csv dengan minimal 5 produk bisnismu (atau produk Dapur Rara sebagai latihan). Upload ke Project Knowledge dari Project yang sama dengan Modul 1, lalu jalankan prompt ini. Paste 1 deskripsi terbaik ke listing-mu, catat posisi ranking-nya setelah 7 hari.</p>
           </div>
@@ -461,7 +463,7 @@ per produk.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></d
         <div class="section-heading">Sistem Konten yang Sustainable</div>
         <div class="info-grid">
           <div class="info-card"><strong>4 tema rotasi per minggu</strong><span>Produk, edukasi/tips, behind the scene, testimoni</span></div>
-          <div class="info-card"><strong>Claude generate sekaligus</strong><span>Ide tema + format post + caption + hashtag untuk 30 hari dalam 1 prompt terstruktur</span></div>
+          <div class="info-card"><strong>Claude generate sekaligus</strong><span>Ide tema, format, caption &amp; hashtag — tinggal lampirkan file, bukan copy-paste manual</span></div>
           <div class="info-card"><strong>Template spreadsheet siap pakai</strong><span>Warna otomatis per tema, dropdown status, ringkasan real-time — buka langsung di Google Sheets atau Excel</span></div>
           <div class="info-card"><strong>Review dan personalisasi</strong><span>Claude buat draft, kamu tambahkan detail spesifik yang hanya kamu tahu</span></div>
         </div>
@@ -501,15 +503,15 @@ per produk.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></d
           <div class="col-card highlight">
             <h4>Prompt Baik</h4>
             <p class="context-note">Project sudah tahu positioning &amp; produk-produkmu — tidak perlu ditulis ulang</p>
-            <p>"Ini kerangka kalender bulan Juli saya (No | Minggu | Hari | Tanggal | Jam Post | Kategori): [15 baris ter-paste dari spreadsheet]. Untuk tiap baris, sesuai Kategori yang sudah ada, buatkan ide Tema yang spesifik, Format post yang cocok, Caption maks 80 kata, dan 8 Hashtag."</p>
-            <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> 1 prompt = 16 ide konten lengkap (tema, format, caption, hashtag) — bukan cuma caption untuk ide yang sudah ditentukan.</p>
+            <p>"Ini file kalender kontenku (cm-kalender-konten.xlsx) — untuk baris 10-24, sesuai Kategori yang sudah ada, buatkan ide Tema, Format post, Caption maks 80 kata, dan 8 Hashtag."</p>
+            <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> 1 file lampiran = 15 ide konten lengkap (tema, format, caption, hashtag) — tidak perlu copy-paste kolom manual, tidak ada risiko baris ketuker.</p>
           </div>
         </div>
 
         <div class="section-heading">Cara Kerja Step-by-Step</div>
         <div class="step-row">
-          <div class="step-card"><div class="step-num">1</div><p>Copy kolom No–Jam Post (A:F) dari cm-kalender-konten.xlsx (baris 10-24) — kerangka rotasi 4 tema sudah ada, siapkan juga promo bulan ini/momen spesial</p></div>
-          <div class="step-card"><div class="step-num">2</div><p>Paste ke Claude, minta ide Tema + Format post + Caption + Hashtag tiap baris sesuai Kategori — cocokkan lewat kolom No</p></div>
+          <div class="step-card"><div class="step-num">1</div><p>Cek kerangka kalender di cm-kalender-konten.xlsx (baris 10-24) — sesuaikan tanggal, promo bulan ini/momen spesial, rotasi 4 tema sudah ada</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Lampirkan (drag &amp; drop) file xlsx ke Claude, minta ide Tema + Format post + Caption + Hashtag tiap baris sesuai Kategori</p></div>
           <div class="step-card"><div class="step-num">3</div><p>Paste balik ke kolom Tema, Format, Caption &amp; Hashtag sesuai nomornya, lalu review dan personalisasi</p></div>
           <div class="step-card"><div class="step-num">4</div><p>Buka di Google Sheets (atau tetap di Excel), jadwalkan ke Later/Buffer/Instagram</p></div>
         </div>
@@ -554,20 +556,18 @@ siang hari, tanpa clutter. Format 1:1.<button class="copy-btn" onclick="copyProm
         </div>
         <p class="body-text" style="font-style:italic;">Kenapa lebih pendek dari biasanya: warna dan mood brand tidak perlu ditulis ulang — Claude Project sudah tahu dari Modul 1.</p>
 
-        <div class="prompt-section">
-          <div class="prompt-label">📝 Latihan</div>
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
           <div class="case-box">
-            <p>Buka cm-kalender-konten.xlsx, tab Kalender Konten. Copy kolom No sampai Jam Post (A:F) dari baris 10-24 — 6 kolom ini kerangka kalendermu, bukan yang mau digenerate. Paste ke bagian yang ditandai di prompt ini, lalu jalankan. Paste hasil Claude ke kolom Tema, Format, Caption, dan Hashtag sesuai nomor barisnya. Review tiap ide, ganti yang kurang cocok, lalu jadwalkan di Instagram. Bonus: minta Claude ubah kalender ini jadi 1 halaman HTML visual, buat 1 grafis (quote card/tile promo) langsung dari Claude, dan 1 foto produk dengan Prompt Enhancer di atas.</p>
+            <p>Lampirkan file cm-kalender-konten.xlsx ke chat Claude (drag &amp; drop) — tidak perlu copy-paste kolom manual. Jalankan prompt di bawah ini untuk baris 10-24. Paste hasil Claude ke kolom Tema, Format, Caption, dan Hashtag sesuai nomor barisnya. Review tiap ide, ganti yang kurang cocok, lalu jadwalkan di Instagram. Bonus: minta Claude ubah kalender ini jadi 1 halaman HTML visual, buat 1 grafis (quote card/tile promo) langsung dari Claude, dan 1 foto produk dengan Prompt Enhancer di atas.</p>
           </div>
-          <div class="prompt-box">Ini kerangka kalender bulan Agustus saya (No | Minggu |
-Hari | Tanggal | Jam Post | Kategori):
-[paste kolom A-F dari baris 10-24 di sini]
-
-Untuk tiap baris, sesuai Kategori yang sudah ada, buatkan:
-ide Tema yang spesifik dan menarik, Format post yang paling
-cocok (Foto Produk/Carousel/Reels/Story/Quote), Caption
-(maks 80 kata, Hook-Value/Cerita-CTA), dan 8 Hashtag.
-Cocokkan lewat kolom No, jangan ubah urutan. Output tabel:
+          <div class="prompt-box">Ini file kalender kontenku (terlampir), tab Kalender
+Konten. Untuk baris 10-24, sesuai Kategori yang sudah
+ada di tiap baris, buatkan: ide Tema yang spesifik dan
+menarik, Format post yang paling cocok (Foto Produk/
+Carousel/Reels/Story/Quote), Caption (maks 80 kata,
+Hook-Value/Cerita-CTA), dan 8 Hashtag. Cocokkan lewat
+kolom No, jangan ubah urutan. Output tabel:
 No | Tema | Format | Caption | Hashtag.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
 
@@ -664,8 +664,8 @@ No | Tema | Format | Caption | Hashtag.<button class="copy-btn" onclick="copyPro
           <p>Selain copy, minta Claude tulis <strong>targeting brief</strong> dalam bahasa biasa — umur, minat, lokasi, ide lookalike audience — untuk kamu masukkan manual ke Ads Manager masing-masing platform. <strong>Penting:</strong> Claude tidak punya koneksi ke Meta/TikTok/Google Ads — Claude membantu menulis dan merencanakan, kamu tetap yang setup dan menjalankan campaign-nya sendiri di platform masing-masing.</p>
         </div>
 
-        <div class="prompt-section">
-          <div class="prompt-label">📝 Latihan</div>
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
           <div class="case-box">
             <p>Jalankan prompt ini untuk 1 produk unggulan atau promo yang berjalan. Jika Canva Connector aktif: instruksikan Claude buat desain untuk variasi terbaik langsung di Canva (pakai Prompt Enhancer di atas kalau butuh visual baru). Jalankan iklan 3 hari, catat CTR dan konversi.</p>
           </div>
@@ -789,8 +789,8 @@ singkat (usia, minat, lokasi).<button class="copy-btn" onclick="copyPrompt(this)
           <div class="step-card"><div class="step-num">4</div><p>Buka Gmail, review draft, lalu kirim dan pantau open rate untuk email berikutnya</p></div>
         </div>
 
-        <div class="prompt-section">
-          <div class="prompt-label">📝 Latihan</div>
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
           <div class="case-box">
             <p>Pastikan cm-template-wa.txt dan cm-template-email.txt sudah diupload ke Project Knowledge dari Project yang sama dengan Modul 1. Jalankan prompt ini untuk generate template WA (pakai skenario di cm-template-wa.txt, gunakan minimal 5 kali dalam 1 minggu) dan 2 draft email (dari cm-template-email.txt). Kirim ke minimal 10 kontak, catat open rate dan respons.</p>
           </div>
