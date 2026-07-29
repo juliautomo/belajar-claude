@@ -120,6 +120,7 @@
   .two-col .col-card li{font-size:12.5px;color:#777;line-height:1.7;padding-left:14px;position:relative;margin-bottom:3px;}
   .two-col .col-card li::before{content:"\2013";position:absolute;left:0;}
   .two-col .col-card p{font-size:12.5px;color:#777;line-height:1.7;}
+  .two-col .col-card .context-note{font-size:11.5px;color:var(--accent-2);font-style:italic;margin-bottom:6px;}
   .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;}
   .info-card{background:#fff;border:1px solid var(--border);padding:16px 18px;border-radius:13px;min-width:0;overflow-wrap:break-word;}
   .info-card strong{font-size:13px;color:var(--ink);display:block;margin-bottom:5px;}
@@ -394,7 +395,8 @@
           </div>
           <div class="col-card highlight">
             <h4>Prompt Baik</h4>
-            <p>"[Project ini sudah punya positioning dan data produk dari cm-data-produk.csv di Project Knowledge] Buatkan deskripsi Tokopedia untuk tiap produk: hook 2 kalimat, keyword, benefit, spesifikasi, CTA. Maks 200 kata per produk."</p>
+            <p class="context-note">Project sudah tahu positioning &amp; data produk dari cm-data-produk.csv — tidak perlu ditulis ulang</p>
+            <p>"Buatkan deskripsi Tokopedia untuk tiap produk: hook 2 kalimat, keyword, benefit, spesifikasi, CTA. Maks 200 kata per produk."</p>
             <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> Project sudah tahu positioning dan semua data produk — tidak perlu ditulis ulang, semua produk selesai dalam 1 prompt, siap paste.</p>
           </div>
         </div>
@@ -493,7 +495,8 @@ per produk.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></d
           </div>
           <div class="col-card highlight">
             <h4>Prompt Baik</h4>
-            <p>"[Project ini sudah tahu positioning dan produk-produkku] Buatkan kalender Instagram Juli — 16 post (4/minggu): 1 produk, 1 edukasi, 1 BTS, 1 testimoni. Tiap post: tema, caption maks 80 kata, 8 hashtag. Format tabel."</p>
+            <p class="context-note">Project sudah tahu positioning &amp; produk-produkmu — tidak perlu ditulis ulang</p>
+            <p>"Buatkan kalender Instagram Juli — 16 post (4/minggu): 1 produk, 1 edukasi, 1 BTS, 1 testimoni. Tiap post: tema, caption maks 80 kata, 8 hashtag. Format tabel."</p>
             <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> 1 prompt = 16 caption terstruktur siap isi ke kalender.</p>
           </div>
         </div>
@@ -730,7 +733,8 @@ singkat (usia, minat, lokasi).<button class="copy-btn" onclick="copyPrompt(this)
           </div>
           <div class="col-card highlight">
             <h4>Prompt Baik</h4>
-            <p>"[Claude Project sudah punya profil bisnis, tone santai-hangat, sapaan 'Kak'] Buatkan template WA untuk Skenario 1 dari cm-template-wa.txt: calon pembeli tanya harga pertama kali. Maks 4 baris, emoji 1-2, ada CTA ke katalog."</p>
+            <p class="context-note">Project sudah punya profil bisnis, tone santai-hangat, sapaan "Kak" — tidak perlu ditulis ulang</p>
+            <p>"Buatkan template WA untuk Skenario 1 dari cm-template-wa.txt: calon pembeli tanya harga pertama kali. Maks 4 baris, emoji 1-2, ada CTA ke katalog."</p>
             <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> dengan Projects aktif, 1 kalimat instruksi sudah cukup — konteks bisnis sudah tersimpan.</p>
           </div>
         </div>
