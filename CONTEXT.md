@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 29, 2026 (checkpoint 82)_
+_Last updated: July 29, 2026 (checkpoint 83)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -943,6 +943,14 @@ Added a tip-box to `content-marketing-content.html` M03 (after the caption frame
 **Known follow-up, not fixed here**: the PPTX still has the same bracket-ambiguity pattern in its "Prompt Baik" example on slide 4 (`"[Project ini sudah tahu positioning...]"`) that Checkpoint 80 fixed in the HTML. Left alone this time — fixing it means restructuring that text box's layout (splitting one italic run into a separate context-note line + clean quote, which needs more vertical space), a more invasive change than was asked for. Flagged for Julia to decide on later.
 
 **Commit**: `belajar-claude`: HTML `765792e`, PPTX `57ba0f6`.
+
+---
+
+## SHIPPED (Checkpoint 83, July 29, 2026): M03 PPTX bracket-ambiguity cleanup (deferred item from Checkpoint 82, now done)
+
+Julia said "ok clean up" — closing out the one item Checkpoint 82 deliberately left open. Slide 4's "PROMPT BAIK" example still had the same bracket pattern Checkpoint 80 fixed in HTML (`"[Project ini sudah tahu positioning...]"`). Fixed with the same technique as Checkpoint 82's new note box: deep-copied the quote shape to create a separate context-note line above it ("Project sudah tahu positioning & produk-produkmu — tidak perlu ditulis ulang", styled like the deck's existing muted-gray CATATAN convention), shifted the quote down, stripped the bracket out of the quote text. Validated (`office/validate.py` passed) and visually confirmed no overlap — quote now wraps to 3 lines instead of 4, comfortable gap before "Kenapa berhasil."
+
+**Commit**: `belajar-claude`: `2a6cd0b`.
 
 ---
 
