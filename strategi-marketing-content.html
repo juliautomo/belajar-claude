@@ -762,6 +762,7 @@ yang bisa saya buka lagi setiap kali launching produk baru.<button class="copy-b
 
 <script>
   const TOTAL = 4;
+  const CONTENT_MODULES = 3;
   let current = 1;
   const done = new Set();
 
@@ -789,7 +790,7 @@ yang bisa saya buka lagi setiap kali launching produk baru.<button class="copy-b
         .eq('email', session.user.email).eq('course_slug', 'strategi-marketing');
       if (completions && completions.length > 0) {
         completions.forEach(function(row) {
-          if (row.module_num > TOTAL) return;
+          if (row.module_num > CONTENT_MODULES) return;
           done.add(row.module_num);
           var checkEl = document.getElementById('check' + row.module_num);
           var navEl = document.getElementById('nav-mod' + row.module_num);
@@ -799,6 +800,8 @@ yang bisa saya buka lagi setiap kali launching produk baru.<button class="copy-b
         updateProgress();
       }
     } catch(e) {}
+
+    loadExistingFeedback(session.user.email);
   }
 
   async function saveProgress(moduleNum) {
@@ -831,9 +834,9 @@ yang bisa saya buka lagi setiap kali launching produk baru.<button class="copy-b
   function prevModule() { if (current > 1) showModule(current - 1); }
 
   function updateProgress() {
-    const pct = Math.min(100, Math.round((done.size / TOTAL) * 100));
+    const pct = Math.min(100, Math.round((done.size / CONTENT_MODULES) * 100));
     document.getElementById('progressFill').style.width = pct + '%';
-    document.getElementById('progressLabel').textContent = `${done.size}/${TOTAL}`;
+    document.getElementById('progressLabel').textContent = `${done.size}/${CONTENT_MODULES}`;
   }
 
   async function logout() { await sbClient.auth.signOut(); window.location.href = 'index.html'; }
@@ -860,7 +863,22 @@ yang bisa saya buka lagi setiap kali launching produk baru.<button class="copy-b
     });
   }
 
+  async function loadExistingFeedback(email) {
+    try {
+      const { data: fb } = await sbClient.from('course_feedback')
+        .select('rating, comment')
+        .eq('email', email).eq('course_slug', 'strategi-marketing')
+        .maybeSingle();
+      if (fb) {
+        setRating(fb.rating || 0);
+        if (fb.comment) document.getElementById('feedbackComment').value = fb.comment;
+        document.getElementById('feedbackSubmit').textContent = 'Perbarui Feedback →';
+      }
+    } catch (e) {}
+  }
+
   async function submitFeedback() {
+    if (!currentRating) { alert('Pilih dulu bintang penilaian kamu.'); return; }
     const btn = document.getElementById('feedbackSubmit');
     btn.disabled = true;
     btn.textContent = 'Menyimpan...';
@@ -872,10 +890,27 @@ yang bisa saya buka lagi setiap kali launching produk baru.<button class="copy-b
         await sbClient.from('course_feedback').upsert({
           email: session.user.email,
           course_slug: 'strategi-marketing',
-          rating: currentRating || null,
+          rating: currentRating,
           comment: comment || null,
           submitted_at: new Date().toISOString()
         }, { onConflict: 'email,course_slug' });
+
+        // Safety net: progress is measured against CONTENT_MODULES (this feedback
+        // panel isn't counted in it), so make sure the last content module is
+        // marked done here too, and give the Feedback nav item its own checkmark.
+        if (!done.has(CONTENT_MODULES)) {
+          done.add(CONTENT_MODULES);
+          var checkEl = document.getElementById('check' + CONTENT_MODULES);
+          var navEl = document.getElementById('nav-mod' + CONTENT_MODULES);
+          if (checkEl) checkEl.textContent = '✓';
+          if (navEl) navEl.classList.add('done');
+          saveProgress(CONTENT_MODULES);
+          updateProgress();
+        }
+        var fbCheck = document.getElementById('check' + TOTAL);
+        if (fbCheck) fbCheck.textContent = '✓';
+        var fbNav = document.getElementById('nav-mod' + TOTAL);
+        if (fbNav) fbNav.classList.add('done');
       }
     } catch(e) { console.error(e); }
     document.getElementById('feedbackForm').style.display = 'none';

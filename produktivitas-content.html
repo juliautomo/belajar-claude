@@ -182,14 +182,22 @@
   .completion-badge .badge-check svg{width:26px;height:26px;color:#fff;}
   .completion-badge h2{font-family:var(--serif);font-weight:800;letter-spacing:-.5px;font-size:24px;color:var(--ink);margin-bottom:9px;}
   .completion-badge p{font-size:14px;color:#777;line-height:1.65;}
-  .stars{display:flex;gap:8px;justify-content:center;margin:18px 0;}
-  .star{font-size:28px;cursor:pointer;transition:transform 0.15s;color:var(--border-strong);}
-  .star:hover,.star.active{color:var(--gold);transform:scale(1.15);}
+  .feedback-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;box-shadow:0 1px 3px rgba(0,0,0,0.05),0 2px 8px rgba(0,0,0,0.04);}
+  .feedback-card h3{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+  .feedback-card .feedback-sub{font-size:13px;color:var(--ink-2);margin-bottom:24px;}
+  .feedback-label{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px;}
+  .star-row{display:flex;gap:8px;justify-content:center;margin:18px 0;}
+  .star-btn{background:none;border:none;font-size:28px;cursor:pointer;transition:transform 0.15s;color:var(--border-strong);padding:4px;line-height:1;}
+  .star-btn:hover,.star-btn.active{color:var(--gold);transform:scale(1.15);}
   .feedback-textarea{width:100%;border:1px solid var(--border);border-radius:12px;padding:14px 16px;font-size:13px;font-family:var(--font);color:var(--ink);resize:vertical;min-height:100px;outline:none;transition:border-color 0.2s;}
   .feedback-textarea:focus{border-color:var(--accent);}
-  .submit-feedback-btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);transition:background 0.2s;margin-top:16px;}
-  .submit-feedback-btn:hover{background:#5b3fe0;}
-  .feedback-thanks{display:none;text-align:center;padding:20px;color:var(--green);font-weight:650;}
+  .feedback-submit{display:block;width:100%;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);transition:background 0.2s;margin-top:16px;}
+  .feedback-submit:hover{background:#5b3fe0;}
+  .feedback-submit:disabled{opacity:0.5;cursor:default;}
+  .feedback-done{display:none;text-align:center;padding:24px;}
+  .feedback-done p{font-size:14px;color:var(--ink-2);margin-bottom:16px;font-weight:650;}
+  .feedback-done a{display:inline-block;background:var(--ink);color:#fff;text-decoration:none;font-size:14px;font-weight:700;padding:12px 28px;border-radius:10px;transition:background 0.2s;}
+  .feedback-done a:hover{background:var(--accent);}
   @media(max-width:900px){.two-col,.info-grid,.learn-grid,.learn-grid.cols-4,.install-grid,.pro-tip-grid{grid-template-columns:1fr;}}
   @media(max-width:900px) and (min-width:601px){.learn-grid.cols-4{grid-template-columns:1fr 1fr;}}
   @media(max-width:768px){.sidebar{display:none;}.main-inner{padding:26px 18px 52px;}.module-title{font-size:26px;}.hero{padding:24px 22px;}}
@@ -1478,17 +1486,26 @@ yang bisa saya buka lagi setiap hari kerja padat berikutnya.<button class="copy-
             <h2>Kursus Selesai!</h2>
             <p>Bagaimana pengalamanmu belajar Produktivitas Kantor dengan Claude?<br>Feedback kamu membantu kami terus memperbaiki kursus ini.</p>
           </div>
-          <p style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:12px;">Beri nilai kursus ini</p>
-          <div class="stars">
-            <span class="star" onclick="setStar(1)" id="star1">★</span>
-            <span class="star" onclick="setStar(2)" id="star2">★</span>
-            <span class="star" onclick="setStar(3)" id="star3">★</span>
-            <span class="star" onclick="setStar(4)" id="star4">★</span>
-            <span class="star" onclick="setStar(5)" id="star5">★</span>
+
+          <div class="feedback-card" id="feedbackForm">
+            <h3>Beri nilai kursus ini</h3>
+            <p class="feedback-sub">Feedback kamu membantu kami bikin kursus yang lebih baik.</p>
+            <div class="star-row" id="starRow">
+              <button class="star-btn" data-val="1" onclick="setRating(1)">★</button>
+              <button class="star-btn" data-val="2" onclick="setRating(2)">★</button>
+              <button class="star-btn" data-val="3" onclick="setRating(3)">★</button>
+              <button class="star-btn" data-val="4" onclick="setRating(4)">★</button>
+              <button class="star-btn" data-val="5" onclick="setRating(5)">★</button>
+            </div>
+            <div class="feedback-label">Komentar (opsional)</div>
+            <textarea class="feedback-textarea" id="feedbackComment" placeholder="Ada yang ingin kamu sampaikan?"></textarea>
+            <button class="feedback-submit" id="feedbackSubmit" onclick="submitFeedback()">Kirim Feedback →</button>
           </div>
-          <textarea class="feedback-textarea" id="feedbackText" placeholder="Ada yang ingin kamu sampaikan? (opsional)"></textarea>
-          <button class="submit-feedback-btn" onclick="submitFeedback()">Kirim Feedback</button>
-          <div class="feedback-thanks" id="feedbackThanks">Terima kasih atas feedbackmu! 🙏</div>
+
+          <div class="feedback-done" id="feedbackDone">
+            <p>Terima kasih atas feedbackmu! 🙏</p>
+            <a href="dashboard.html">Ke Dashboard →</a>
+          </div>
         </div>
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
@@ -1537,13 +1554,14 @@ yang bisa saya buka lagi setiap hari kerja padat berikutnya.<button class="copy-
 
     // Check existing feedback
     const { data: fb } = await sb.from('course_feedback')
-      .select('rating')
+      .select('rating, comment')
       .eq('email', email)
       .eq('course_slug', COURSE_SLUG)
-      .single();
+      .maybeSingle();
     if (fb) {
-      document.getElementById('feedbackThanks').style.display = 'block';
-      setStar(fb.rating);
+      setRating(fb.rating || 0);
+      if (fb.comment) document.getElementById('feedbackComment').value = fb.comment;
+      document.getElementById('feedbackSubmit').textContent = 'Perbarui Feedback →';
     }
   }
 
@@ -1605,31 +1623,40 @@ yang bisa saya buka lagi setiap hari kerja padat berikutnya.<button class="copy-
     });
   }
 
-  function setStar(n) {
-    starRating = n;
-    for (let i = 1; i <= 5; i++) {
-      const s = document.getElementById('star' + i);
-      s.classList.toggle('active', i <= n);
-    }
+  function setRating(val) {
+    starRating = val;
+    document.querySelectorAll('.star-btn').forEach(function(btn) {
+      btn.classList.toggle('active', parseInt(btn.getAttribute('data-val')) <= val);
+    });
   }
 
   async function submitFeedback() {
     if (!starRating) { alert('Pilih dulu bintang penilaian kamu.'); return; }
-    const { data: { session } } = await sb.auth.getSession();
-    if (!session) return;
-    const comment = document.getElementById('feedbackText').value.trim();
-    await sb.from('course_feedback').upsert({
-      email: session.user.email,
-      course_slug: COURSE_SLUG,
-      rating: starRating,
-      comment: comment || null
-    }, { onConflict: 'email,course_slug' });
+    const btn = document.getElementById('feedbackSubmit');
+    btn.disabled = true;
+    btn.textContent = 'Menyimpan...';
+    const comment = document.getElementById('feedbackComment').value.trim();
+    try {
+      const { data: { session } } = await sb.auth.getSession();
+      if (session) {
+        await sb.from('course_feedback').upsert({
+          email: session.user.email,
+          course_slug: COURSE_SLUG,
+          rating: starRating,
+          comment: comment || null,
+          submitted_at: new Date().toISOString()
+        }, { onConflict: 'email,course_slug' });
 
-    // Mark last content module done on feedback submission (safety net)
-    if (!done.has(CONTENT_MODULES)) { done.add(CONTENT_MODULES); markDone(CONTENT_MODULES); saveCompletion(CONTENT_MODULES); updateProgress(); }
-
-    document.querySelector('.submit-feedback-btn').style.display = 'none';
-    document.getElementById('feedbackThanks').style.display = 'block';
+        // Mark last content module done on feedback submission (safety net)
+        if (!done.has(CONTENT_MODULES)) { done.add(CONTENT_MODULES); markDone(CONTENT_MODULES); saveCompletion(CONTENT_MODULES); updateProgress(); }
+        var fbCheck = document.getElementById('check' + TOTAL);
+        var fbNav = document.getElementById('nav-mod' + TOTAL);
+        if (fbCheck) fbCheck.textContent = '✓';
+        if (fbNav) fbNav.classList.add('done');
+      }
+    } catch (e) { console.error(e); }
+    document.getElementById('feedbackForm').style.display = 'none';
+    document.getElementById('feedbackDone').style.display = 'block';
   }
 
   async function doLogout() {

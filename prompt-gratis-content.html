@@ -669,6 +669,7 @@ Tolong bantu saya dengan: outline struktur yang kuat, poin-poin kunci yang perlu
 
 <script>
   const TOTAL = 6;
+  const CONTENT_MODULES = 5;
   let current = 1;
   const done = new Set();
   const ADMIN_EMAILS = ['julia.utomo@gmail.com', 'tiffany.utomo@gmail.com'];
@@ -700,7 +701,7 @@ Tolong bantu saya dengan: outline struktur yang kuat, poin-poin kunci yang perlu
           // missing-element error and progress being inflated past 100% if this course is
           // ever restructured down to fewer modules (mirrors the fix applied to mulai-claude
           // and content-marketing after their own module-count reductions).
-          if (r.module_num > TOTAL) return;
+          if (r.module_num > CONTENT_MODULES) return;
           done.add(r.module_num);
           document.getElementById(`check${r.module_num}`).textContent = '✓';
           document.getElementById(`nav-mod${r.module_num}`).classList.add('done');
@@ -709,6 +710,8 @@ Tolong bantu saya dengan: outline struktur yang kuat, poin-poin kunci yang perlu
         updateProgress();
       }
     } catch (e) {}
+
+    loadExistingFeedback(email);
 
     document.getElementById('loadingScreen').style.display = 'none';
     document.getElementById('mainLayout').style.display   = 'flex';
@@ -744,9 +747,9 @@ Tolong bantu saya dengan: outline struktur yang kuat, poin-poin kunci yang perlu
   function prevModule() { if (current > 1) showModule(current - 1); }
 
   function updateProgress() {
-    const pct = Math.min(100, Math.round((done.size / TOTAL) * 100));
+    const pct = Math.min(100, Math.round((done.size / CONTENT_MODULES) * 100));
     document.getElementById('progressFill').style.width = pct + '%';
-    document.getElementById('progressLabel').textContent = `${done.size}/${TOTAL}`;
+    document.getElementById('progressLabel').textContent = `${done.size}/${CONTENT_MODULES}`;
   }
 
   async function logout() { await sbClient.auth.signOut(); window.location.href = 'index.html'; }
@@ -772,7 +775,22 @@ Tolong bantu saya dengan: outline struktur yang kuat, poin-poin kunci yang perlu
     });
   }
 
+  async function loadExistingFeedback(email) {
+    try {
+      const { data: fb } = await sbClient.from('course_feedback')
+        .select('rating, comment')
+        .eq('email', email).eq('course_slug', 'prompt-gratis')
+        .maybeSingle();
+      if (fb) {
+        setRating(fb.rating || 0);
+        if (fb.comment) document.getElementById('feedbackComment').value = fb.comment;
+        document.getElementById('feedbackSubmit').textContent = 'Perbarui Feedback →';
+      }
+    } catch (e) {}
+  }
+
   async function submitFeedback() {
+    if (!currentRating) { alert('Pilih dulu bintang penilaian kamu.'); return; }
     const btn = document.getElementById('feedbackSubmit');
     btn.disabled = true;
     btn.textContent = 'Menyimpan...';
@@ -784,10 +802,27 @@ Tolong bantu saya dengan: outline struktur yang kuat, poin-poin kunci yang perlu
         await sbClient.from('course_feedback').upsert({
           email: session.user.email,
           course_slug: 'prompt-gratis',
-          rating: currentRating || null,
+          rating: currentRating,
           comment: comment || null,
           submitted_at: new Date().toISOString()
         }, { onConflict: 'email,course_slug' });
+
+        // Safety net: progress is measured against CONTENT_MODULES (this feedback
+        // panel isn't counted in it), so make sure the last content module is
+        // marked done here too, and give the Feedback nav item its own checkmark.
+        if (!done.has(CONTENT_MODULES)) {
+          done.add(CONTENT_MODULES);
+          var checkEl = document.getElementById('check' + CONTENT_MODULES);
+          var navEl = document.getElementById('nav-mod' + CONTENT_MODULES);
+          if (checkEl) checkEl.textContent = '✓';
+          if (navEl) navEl.classList.add('done');
+          saveProgress(CONTENT_MODULES);
+          updateProgress();
+        }
+        var fbCheck = document.getElementById('check' + TOTAL);
+        if (fbCheck) fbCheck.textContent = '✓';
+        var fbNav = document.getElementById('nav-mod' + TOTAL);
+        if (fbNav) fbNav.classList.add('done');
       }
     } catch(e) { console.error(e); }
     document.getElementById('feedbackForm').style.display = 'none';
