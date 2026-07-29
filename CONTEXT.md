@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 29, 2026 (checkpoint 81)_
+_Last updated: July 29, 2026 (checkpoint 82)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -929,6 +929,20 @@ Julia asked whether the M03 content calendar could be a better format than a pla
 - Note for Julia: `module_documents` has zero rows for `content-marketing` in Supabase, so this file isn't currently served via any DB-driven download link on the course page — it's referenced by filename in the lesson text only. Not fixed here since it's a pre-existing, unrelated gap (same status for every module's supporting file), but worth knowing if students are asking where to actually download it from.
 
 **Commit**: `belajar-claude`: `83f2ccf`.
+
+---
+
+## SHIPPED (Checkpoint 82, July 29, 2026): M03 — multi-platform note added to HTML + PPTX, xlsx filename synced in PPTX
+
+Two follow-up questions from Julia: (1) why Canva Connector appears in both M03 and M04 — confirmed intentional, not a duplication bug (M03 sets it up + uses it for organic visuals, M04 reuses the same connector for paid ad creative, both slides already cross-reference each other); (2) whether the M03 content-calendar system could be flagged as usable beyond Instagram (TikTok, Facebook, etc.).
+
+Added a tip-box to `content-marketing-content.html` M03 (after the caption framework) noting the 4-theme rotation + Hook-Value-CTA structure isn't Instagram-exclusive — same system, different output format per platform via a one-line prompt addition. Julia confirmed HTML + PPTX now (course PDF study guide regeneration deferred — it predates the Checkpoint 66 course split and needs a full rebuild, not a one-line patch).
+
+**PPTX**: no build script survived from the original M03 generation, so edited `K3-M03-Sistem-Konten-Instagram.pptx` directly via `python-pptx` (deep-copied the existing "CATATAN" note-box shape pair from slide 2, repositioned onto slide 3, retexted — preserves exact house styling without reconstructing it from scratch). Also caught and fixed 3 stray `cm-kalender-konten.csv` mentions across slides 2/4/7 that Checkpoint 81's file-format swap had missed (PPTX wasn't in scope of that commit). Validated with `office/validate.py` (all passed) and a full visual QA pass on all 4 touched slides — no overlap/overflow.
+
+**Known follow-up, not fixed here**: the PPTX still has the same bracket-ambiguity pattern in its "Prompt Baik" example on slide 4 (`"[Project ini sudah tahu positioning...]"`) that Checkpoint 80 fixed in the HTML. Left alone this time — fixing it means restructuring that text box's layout (splitting one italic run into a separate context-note line + clean quote, which needs more vertical space), a more invasive change than was asked for. Flagged for Julia to decide on later.
+
+**Commit**: `belajar-claude`: HTML `765792e`, PPTX `57ba0f6`.
 
 ---
 
