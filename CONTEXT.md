@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 29, 2026 (checkpoint 87)_
+_Last updated: July 29, 2026 (checkpoint 88)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1013,6 +1013,28 @@ Agreed the drag-and-drop idea was the right fix for both problems 1 and 2 at onc
 Verified: `recalc.py` clean (0 errors, xlsx Cara Pakai tab has no formulas so this was a pure safety check); PPTX `validate.py --original` passed; visual QA render on slides 2/4/5/7 caught two text-overflow regressions from the first (too-verbose) rewrite pass, fixed by shortening, re-rendered clean; HTML div-balance unchanged (322/322); all 3 files diff-verified against a fresh clone post-push.
 
 **Commit**: `belajar-claude`: `7ff8a29`.
+
+---
+
+## SHIPPED (Checkpoint 88, July 29, 2026): M04 restructured to break the shared M03 skeleton — "natural complexity" principle re-applied to HTML, not just PPTX
+
+Julia looked at M03 and M04 side by side and flagged that they "look very similar" — structurally true: M01-M04 all shared the identical chassis (framework info-grid → "Contoh Prompt: Buruk vs Baik" two-col → "Cara Kerja Step-by-Step" 4-step-row → Latihan → Output, in that exact order), first identified as a problem in Checkpoint 75 but that fix mostly landed on the PPTX decks and M02's HTML (which got the `anatomy-flow` numbered-flow treatment instead of a card grid). M03 and M04's HTML never got the same treatment — same box types, same step count, same order. She asked to fix it without preserving "the exact same steps, boxes, sections" — make it natural per module, not templated.
+
+Restructured M04 specifically (the direct complaint) rather than touching M03, since M03 is already the most differentiated module (3 extra "Level Up" bonus sections):
+- Reordered to lead with the case-study (Dapur Rara Hari 3) right after the hero, matching M01-M03's narrative opening — previously buried after two tip-boxes.
+- Replaced the "Framework Copy Iklan" `info-grid` (4 isolated cards, visually identical to M03's Hook-Value-CTA grid) with the `anatomy-flow` numbered/connected-dot component M02 already introduced in Checkpoint 75 — a sequential Hook→Problem→Solution→CTA build, which suits ad copy's actual line-by-line construction better than an unordered card grid anyway.
+- Expanded "Cara Kerja" from a generic 4-step-row (identical count to M03) to a real 5-step ad lifecycle: brief → variants → targeting brief → Canva design → manual Ads Manager setup → A/B test → revise. Folded the standalone "Bonus: Targeting Brief" tip-box into step 2 instead of repeating it as a separate box.
+- Output box now mentions the CTR/ROAS revision loop, matching the new step 5.
+
+Also trimmed M02's "Cara Kerja" from 4 steps to 3 (its real workflow — fill CSV, upload, generate in one motion; review; paste — doesn't need 4 beats), so step counts across the course now vary naturally (M01: 5, M02: 3, M03: 4, M04: 5, M05: 3+4 split by channel) instead of defaulting to 4 everywhere.
+
+M01, M03, and M05 were left untouched — M01 and M05 already had natural variation from earlier checkpoints, and M03 already carries its own bonus-section richness that differentiates it from M04's new shape.
+
+Verified: HTML div-balance held through both edits (322 → 326 after the M04 anatomy-flow swap, consistent with its added markup → 324 after the M02 step trim, consistent with one fewer step-card); full re-read of the new M04 section end-to-end to confirm the flow reads naturally; diff-verified against a fresh clone post-push.
+
+**Scope note**: this pass covers only `content-marketing-content.html` (Kreasi Konten Pemasaran). Julia's instruction was "make it more natural for all courses" — the other 4 course files (`produktivitas-content.html`, `strategi-marketing-content.html`, `mulai-claude-content.html`, `prompt-gratis-content.html`) have not been audited for the same forced-template pattern yet. Flagged to her as a follow-up rather than doing a rushed blind pass across ~20 more modules in the same turn.
+
+**Commit**: `belajar-claude`: `5dc6039`.
 
 ---
 
