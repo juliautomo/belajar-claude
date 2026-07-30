@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 100)_
+_Last updated: July 30, 2026 (checkpoint 101)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1255,6 +1255,22 @@ A final consolidated "Output Modul (Keseluruhan)" box still closes out the modul
 **Verified**: div-balance held on `content-marketing-content.html` (341/341). All 8 PPTX slides re-rendered via LibreOffice + `pdftoppm` and visually reviewed — slides 4, 5, 7, 8 (the ones touched) show no overflow or clipping; confirmed no hardcoded slide-count references anywhere in the deck that the 7→8 slide change would break.
 
 **Commit**: `belajar-claude`: `945042d`.
+
+---
+
+## SHIPPED (Checkpoint 101, July 30, 2026): M05 exercise scoped to WhatsApp only — Email demoted to optional/bonus, and a real scenario-mismatch bug fixed along the way
+
+Asked for an exact step-by-step trace of both supporting files, which surfaced two real gaps: the Latihan 3 example prompt ("pembeli nanya kenapa belum dikirim...") didn't match any of the 10 scenarios in `cm-template-wa.txt` (closest ones — Skenario 3 "sudah dikirim" and Skenario 5 "komplain produk rusak" — are both about different situations), and Latihan 3 never actually told students to send the 2 email drafts from Latihan 2 to real contacts despite the tracking requirement mentioning "kirim email ke minimal 10 kontak."
+
+Rather than patch both individually, Julia decided to simplify: drop `cm-template-email.txt` from the required exercise entirely. Asked whether Email teaching content (prompt examples, Cara Kerja: Email, 6 Jenis Email cards, Gmail Connector tip-box) should also be stripped from the module or kept as optional reference — she chose to keep it as reference material, just not required for module completion.
+
+**What changed**: Latihan 2 now only generates the 10 WhatsApp templates (email upload/fill instructions removed from the required prompt). Latihan 3's tracking requirement dropped to "5x/minggu, catat respons" (email's "10 kontak, catat open rate" removed), and its example prompt swapped to "pembeli minta diskon tambahan karena mau beli 5 pcs sekaligus" — which cleanly matches Skenario 8 (Balas negosiasi harga), fixing the mismatch bug as a side effect. Final "Output Modul" box now states the WhatsApp-only required deliverable, with an explicit "mau coba Email juga? (opsional)" pointer to `cm-template-email.txt` and the existing Email prompt examples/Cara Kerja section, so the reference content stays reachable rather than orphaned. Module intro, connector tip-box, and PPTX slides 2/5/7/8 all reworded to match — "EMAIL VIA GMAIL CONNECTOR" column header on slide 5 retitled to "EMAIL (OPSIONAL)" for the same clarity.
+
+Nothing needed backing out from Checkpoint 100's Hari-numbering or slide-8 split — this round only touched exercise-scope wording in the same files.
+
+**Verified**: div-balance held on `content-marketing-content.html` (341/341). All touched PPTX slides re-rendered and reviewed — no overflow; Latihan 2's box on slide 7 had visible empty space after the email content was removed, tightened from 2.85in to 1.90in height for a cleaner fit rather than leaving dead whitespace.
+
+**Commit**: `belajar-claude`: `b49398a`.
 
 ---
 
