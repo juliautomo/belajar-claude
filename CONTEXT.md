@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 109)_
+_Last updated: July 30, 2026 (checkpoint 110)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1397,6 +1397,24 @@ Julia flagged a screenshot showing Prompt #20's card getting split awkwardly acr
 **Verified**: rendered all pages to PNG and visually inspected each one (cover + all 5 category transitions + the final page containing Prompt #20), confirmed via text extraction that all 20 prompt numbers appear exactly once with no duplication/truncation. Final PDF is 8 pages (down from 11 in Checkpoint 61's version, denser without feeling cramped).
 
 **Commit**: `belajar-claude`: `96447f6`.
+
+---
+
+## SHIPPED (Checkpoint 110, July 30, 2026): Produktivitas (K2) PDF regenerated in the 20-Prompt PDF's style, module durations removed
+
+Julia asked for the same treatment as Checkpoint 109's 20-Prompt PDF fix — same visual style/color/theme — applied to `K2-Produktivitas-Kantor.pdf`, plus removal of all "— N menit" module-duration labels (didn't want duration shown in the PDF).
+
+**Approach**: rather than hand-transcribing, parsed `produktivitas-content.html` directly with BeautifulSoup — pulled the 7 active module panels (`panel1`-`panel7`; the archived case-study panel and the feedback panel are correctly excluded, same precedent as the original Checkpoint 25/62 builds), stripped only the trailing "— N menit" suffix from each module's subtitle via regex anchored to the end of string (left every in-content time-savings mention alone — e.g. "Hemat 18 menit per caption," the before/after comparison tables — since those are substantive case-study content, not duration metadata). Removed video/ppt/doc slots, breadcrumbs, nav buttons, and copy-paste buttons from the scraped markup, then re-skinned the surviving component markup (`info-grid`, `two-col`, `step-row`, `prompt-section`, `tip-box`, `case-box`, `output-box`, `learn-grid`, `install-grid`, `bonus`, `pro-tip-section`, `details`/`summary`) with print CSS matching the 20-Prompt PDF's cover template, Instrument Serif + Geist branding, and purple accent.
+
+**Two real bugs found and fixed along the way**:
+1. **Missing color-emoji font in this sandbox** — this environment has no emoji font installed (confirmed via direct render test), so pictograph emoji (📋💡🛠️✅📌✏️💾💳🌐🖥️❌🎉, etc.) would have rendered as black tofu boxes throughout the PDF. Tested every special character actually used in the 7 modules individually and built a precise strip list (characters outside the Basic Multilingual Plane, plus two BMP outliers ✅/❌ that also don't render here) — kept the ones that do render correctly (①②③④☐⚠✏✦), stripped the rest, leaving clean plain-text labels.
+2. **Weasyprint flexbox bug**: `flex: 1 1 46%`-style grids (info-grid, two-col, step-row, learn-grid, install-grid, pro-tip-grid) were silently collapsing to one column per row instead of 2-3, because a `<strong display:block>` child inside a flex item breaks weasyprint's flex-basis percentage calculation. Isolated via a series of minimal repro tests; fixed by dropping the `flex` shorthand entirely and using explicit `width: calc(N% - gap)` + `box-sizing: border-box` on every grid item instead — restored proper 2 and 3-column layouts across all of it.
+
+Also styled the module 7 closing "Kursus Selesai!" badge and "Lanjutkan Belajar" cross-sell card, which had been using the live site's CSS custom properties (`var(--green)`, `var(--serif)`, etc.) inline — added a small `:root` block with matching literal values so these resolve instead of falling back to unstyled/invisible.
+
+**Verified**: rendered all 17 pages to PNG and visually reviewed cover, every module transition, all grid types (2-col and 3-col), the dark `pro-tip-section` boxes, and the final completion/cross-sell page. Confirmed via text extraction that no module subtitle retains a trailing duration tag, while in-content time-savings mentions remain untouched.
+
+**Commit**: `belajar-claude`: `ca189ec`.
 
 ---
 
