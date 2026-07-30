@@ -725,7 +725,7 @@ Project-ku.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></d
         <div class="doc-slot" id="doc-slot-5"></div>
 
         <div class="module-desc-box">
-          Komunikasi pelanggan lewat WhatsApp butuh satu hal utama: brand voice yang konsisten, tanpa harus briefing ulang tiap kali. Buka Claude Project yang sudah kamu buat di Modul 1, tambahkan brand voice untuk komunikasi pelanggan (tone, sapaan, batasan emoji) ke situ — bukan bikin Project baru. Upload cm-template-wa.txt ke Project Knowledge, generate 10 template dasar, lalu reuse untuk kasus nyata kapanpun ada pembeli chat.
+          Komunikasi pelanggan lewat WhatsApp butuh satu hal utama: brand voice yang konsisten, tanpa harus briefing ulang tiap kali. Buka Claude Project yang sudah kamu buat di Modul 1, tambahkan brand voice untuk komunikasi pelanggan (tone, sapaan, batasan emoji) ke situ — bukan bikin Project baru. Upload cm-template-wa.txt ke Project Knowledge, generate 10 template dasar, simpan hasilnya balik ke Project Knowledge (menggantikan file skenario mentah), lalu setiap ada pembeli chat beneran, minta Claude cocokkan ke salah satu dari 10 template itu.
         </div>
 
         <div class="case-box persona">
@@ -735,7 +735,7 @@ Project-ku.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></d
 
         <div class="tip-box connector">
           <div class="tip-label">🔌 Claude Projects — Satu-Satunya yang Kamu Butuhkan</div>
-          <p>Level: Claude Projects (tersedia di semua plan termasuk Free) · Setup: 5 menit sekali. Tambahkan brand voice khusus komunikasi pelanggan — sapaan, batasan, tone untuk CS — ke Claude Project dari Modul 1, yang sudah punya positioning dan identitas visual bisnismu. Upload <strong>cm-template-wa.txt</strong> ke <strong>Project Knowledge</strong> (beda dari Project Instructions yang menyimpan brand voice) — file ini sengaja tidak berisi info bisnis lagi, cuma 10 skenario, supaya prompt yang menyebut "Skenario 1" langsung terbaca Claude tanpa kamu paste ulang isi filenya. Belum ada WA Connector — jadi generate di chat, lalu copy-paste manual ke WhatsApp-mu, selalu begitu.</p>
+          <p>Level: Claude Projects (tersedia di semua plan termasuk Free) · Setup: 5 menit sekali. Tambahkan brand voice khusus komunikasi pelanggan — sapaan, batasan, tone untuk CS — ke Claude Project dari Modul 1, yang sudah punya positioning dan identitas visual bisnismu. Upload <strong>cm-template-wa.txt</strong> ke <strong>Project Knowledge</strong> (beda dari Project Instructions yang menyimpan brand voice) — file ini isinya cuma 10 skenario mentah, belum ada teks balasannya. Setelah Claude generate 10 template dari skenario itu (Latihan 2), simpan hasilnya sebagai file baru dan upload lagi ke Project Knowledge — jadi yang tersimpan permanen bukan cuma daftar skenario, tapi 10 template jadi yang siap dipakai ulang kapan saja, di chat manapun. Belum ada WA Connector — jadi generate di chat, lalu copy-paste manual ke WhatsApp-mu, selalu begitu.</p>
         </div>
 
         <div class="section-heading">Mengapa Template On-Brand Penting</div>
@@ -774,8 +774,8 @@ Project-ku.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></d
         <div class="section-heading">Cara Kerja Step-by-Step</div>
         <div class="step-row">
           <div class="step-card"><div class="step-num">1</div><p>Tambahkan brand voice CS (tone, sapaan, batasan) ke Claude Project dari Modul 1, lalu upload cm-template-wa.txt ke Project Knowledge</p></div>
-          <div class="step-card"><div class="step-num">2</div><p>Generate 10 template dasar (satu per skenario) sekali di awal — Claude sudah tahu konteks bisnis, ini pola balasan yang bisa kamu adaptasi</p></div>
-          <div class="step-card"><div class="step-num">3</div><p>Pas ada pembeli beneran chat: ketik situasinya ke Claude (bukan buka file template), mis. "balas pembeli yang nanya kenapa belum dikirim" — Claude cocokkan ke skenario yang sesuai dan generate balasan siap pakai</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Generate 10 template dasar (satu per skenario) sekali di awal, lalu simpan hasilnya sebagai file baru dan upload lagi ke Project Knowledge — sekarang yang tersimpan adalah template jadi, bukan cuma daftar skenario</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Pas ada pembeli beneran chat: paste pesannya ke Claude, minta cocokkan ke salah satu dari 10 template yang sudah diupload, lalu sesuaikan untuk situasi spesifik ini</p></div>
           <div class="step-card"><div class="step-num">4</div><p>Copy-paste balasan itu ke WhatsApp, kirim. Simpan 10 template dasar di catatan WA/Google Keep sebagai referensi cepat kalau Claude tidak di tangan</p></div>
         </div>
 
@@ -794,31 +794,36 @@ Rara".<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         <div class="prompt-section latihan">
           <div class="prompt-label">🎯 Latihan 2 — Generate Template Dasar</div>
           <div class="case-box">
-            <p>Upload cm-template-wa.txt ke Project Knowledge — sudah siap pakai, tidak perlu diisi apapun.</p>
+            <p><strong>Langkah 1 — Upload:</strong> Upload cm-template-wa.txt ke Project Knowledge — sudah siap pakai, tidak perlu diisi apapun.</p>
           </div>
           <div class="prompt-box">Buatkan 10 template WhatsApp untuk skenario di
 cm-template-wa.txt.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-          <div class="mini-output">✅ Output: <span>10 template WhatsApp dasar tersimpan — otomatis pakai tone & signature dari Latihan 1. Contoh salah satu hasil: "Halo Kak! Estimasi tiba 2-3 hari ya, kalau ada kendala chat aku lagi 😊 Salam hangat, Dapur Rara." Ini pola balasan yang jadi acuan di Latihan 3 — bukan hasil akhir yang langsung dipakai.</span></div>
+          <div class="mini-output">✅ Output: <span>10 template WhatsApp dasar — otomatis pakai tone & signature dari Latihan 1. Contoh salah satu hasil: "Halo Kak! Estimasi tiba 2-3 hari ya, kalau ada kendala chat aku lagi 😊 Salam hangat, Dapur Rara."</span></div>
+          <div class="case-box" style="margin-top:10px;">
+            <p><strong>Langkah 2 — Simpan Permanen:</strong> Select all hasil 10 template di atas, paste ke Notepad/TextEdit, save sebagai file .txt baru (misal cm-template-wa-hasil.txt). Upload file ini ke Project Knowledge, menggantikan cm-template-wa.txt yang lama. Sekarang yang tersimpan di Project adalah 10 template jadi — bukan cuma daftar skenario — siap dipakai di Latihan 3, kapanpun, tanpa generate ulang.</p>
+          </div>
         </div>
 
         <div class="prompt-section latihan">
-          <div class="prompt-label">🎯 Latihan 3 — Reuse untuk Kasus Nyata</div>
+          <div class="prompt-label">🎯 Latihan 3 — Cocokkan ke Salah Satu Skenario</div>
           <div class="case-box">
-            <p>Begitu ada pembeli chat beneran, jangan buka-buka file template. Contoh chat masuk dari pembeli:</p>
+            <p>Begitu ada pembeli chat beneran, jangan buka-buka file template manual. Contoh chat masuk dari pembeli — ini cocok dengan Skenario 8 (negosiasi harga) dari 10 template yang sudah kamu upload di Latihan 2:</p>
             <p style="margin-top:8px;font-style:italic;color:#444;">"Kak, boleh kurang lagi ga harganya kalau aku ambil 5 pcs sekaligus? 🙏"</p>
-            <p style="margin-top:8px;">Copy chat itu ke prompt di bawah — Claude otomatis cocokkan ke skenario yang paling sesuai dan generate balasan personal siap pakai, memakai brand voice dari Latihan 1.</p>
+            <p style="margin-top:8px;">Copy chat itu ke prompt di bawah — Claude cek 10 template yang sudah tersimpan di Project Knowledge, cocokkan ke skenario yang paling sesuai, lalu sesuaikan template itu untuk situasi spesifik ini (bukan generate dari nol).</p>
           </div>
-          <div class="prompt-box">Balas chat WA ini pakai brand voice dari
-Project-ku: "Kak, boleh kurang lagi ga harganya
-kalau aku ambil 5 pcs sekaligus? 🙏"<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-          <div class="mini-output">✅ Output: <span>Balasan personal siap pakai, on-the-spot. Copy-paste ke WhatsApp, kirim. Ulangi minimal 5 kali dalam 1 minggu untuk situasi berbeda, catat respons pelanggan.</span></div>
+          <div class="prompt-box">Ada pembeli chat: "Kak, boleh kurang lagi ga
+harganya kalau aku ambil 5 pcs sekaligus? 🙏"
+Cocokkan ke salah satu dari 10 template yang
+sudah aku upload, lalu sesuaikan untuk situasi
+ini.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="mini-output">✅ Output: <span>Balasan personal siap pakai, hasil adaptasi dari Skenario 8 (negosiasi harga) — bukan generate dari nol. Copy-paste ke WhatsApp, kirim. Ulangi minimal 5 kali dalam 1 minggu untuk situasi berbeda, catat respons pelanggan.</span></div>
         </div>
 
         <div class="output-box">
           <div class="output-icon">✅</div>
           <div>
             <h3>Output Modul (Keseluruhan)</h3>
-            <p>1 Claude Project dengan brand voice CS aktif (Latihan 1) + 10 template WhatsApp dasar (Latihan 2) + kemampuan generate balasan personal on-the-spot untuk kasus baru kapanpun (Latihan 3). File pendukung: cm-template-wa.txt.</p>
+            <p>1 Claude Project dengan brand voice CS aktif (Latihan 1) + 10 template WhatsApp jadi tersimpan permanen di Project Knowledge (Latihan 2) + kemampuan mencocokkan pesan pembeli asli ke salah satu dari 10 template itu kapanpun (Latihan 3). File pendukung: cm-template-wa.txt (skenario awal).</p>
           </div>
         </div>
 
