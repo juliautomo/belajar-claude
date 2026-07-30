@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 110)_
+_Last updated: July 30, 2026 (checkpoint 111)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1415,6 +1415,22 @@ Also styled the module 7 closing "Kursus Selesai!" badge and "Lanjutkan Belajar"
 **Verified**: rendered all 17 pages to PNG and visually reviewed cover, every module transition, all grid types (2-col and 3-col), the dark `pro-tip-section` boxes, and the final completion/cross-sell page. Confirmed via text extraction that no module subtitle retains a trailing duration tag, while in-content time-savings mentions remain untouched.
 
 **Commit**: `belajar-claude`: `ca189ec`.
+
+---
+
+## SHIPPED (Checkpoint 111, July 30, 2026): M05 — Latihan 2/3 restructured so the "reference template" claim is actually true
+
+Julia caught a real logic gap through a chain of questions (not from a screenshot bug this time, from reasoning about the lesson design): "why upload the txt to project knowledge?" → led to discovering Latihan 2 (generate 10 templates) and Latihan 3 (reply to a real message) were mechanically identical — both just "generate a WA reply using brand voice" — and the module's claim that Latihan 2's templates become "acuan" (reference) for Latihan 3 wasn't actually true, since Latihan 3's prompt never referenced the file or the generated templates at all.
+
+Julia's fix, in her own words: "latihan 1 set the tone / latihan 2, upload scenario, and you generate the template, which then uploaded again / latihan 3, use case based on 1 of the scenarios."
+
+**What shipped in `content-marketing-content.html`**: Latihan 2 now has two explicit labeled steps — Langkah 1 (upload `cm-template-wa.txt`, generate the 10 templates) and a new Langkah 2 (copy Claude's output into a new .txt file, upload that back to Project Knowledge in place of the original scenario file). Latihan 3's prompt changed from "balas chat ini pakai brand voice" (which needed nothing from Latihan 2) to explicitly asking Claude to match the real incoming message against the 10 uploaded templates and adapt the matching one — demonstrated concretely against Skenario 8 (negosiasi harga) rather than a generic claim. Updated in lockstep: module-desc-box, the "Claude Projects" tip-box, the 4-step Cara Kerja row, both Latihan boxes' output lines, and the overall module output-box.
+
+**PPTX synced** (`K3-M05-Komunikasi-Pelanggan.pptx`, slides 4/6/7) with the same wording changes, edited directly via python-pptx (single-run paragraphs, straightforward text swaps) and visually verified via a LibreOffice-rendered PDF — all text fits within its existing box at the new (slightly longer) lengths, no overflow.
+
+**Verified**: div-tag balance on the HTML (328/328, unchanged from before edits — edits were text-only, no structural changes), and all 7 PPTX slides rendered clean with no overlap.
+
+**Commits**: `belajar-claude`: `13bf013`.
 
 ---
 
