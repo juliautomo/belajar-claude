@@ -85,6 +85,8 @@
   .case-box p{font-size:13.5px;color:#666;line-height:1.75;}
   .prompt-section .case-box{background:transparent;border:0;border-radius:0;margin-top:0;padding:20px;}
   .step-divider{padding:4px 20px 0;font-size:12px;font-weight:750;color:var(--ink);border-top:1px solid var(--border);padding-top:14px;}
+  .mini-output{padding:0 20px 18px;font-size:12px;color:#1A7A44;font-weight:700;}
+  .mini-output span{font-weight:400;color:#3a6b4d;}
   .case-box.persona{background:var(--gold-pale);border:1px solid #ead9a8;border-left:3px solid var(--gold);border-radius:15px;padding:22px;}
   .case-box.persona .case-role{color:#A0650A;}
   .output-box{background:var(--green-dim);border:1px solid var(--green-border);border-radius:15px;padding:20px 24px;margin-top:18px;display:flex;gap:14px;align-items:flex-start;}
@@ -368,8 +370,8 @@
         </div>
 
         <div class="case-box persona">
-          <div class="case-role">Case Study — Dapur Rara · Hari 1</div>
-          <p><strong>10 produk ter-listing dalam 30 menit — semuanya SEO-ready.</strong> Rara biasanya habis 1 jam untuk tulis 1 deskripsi produk. Dengan file cm-data-produk.csv, dia isi data 10 produk, upload ke Claude, dan dapat 10 deskripsi lengkap dalam 1 respons — tinggal paste ke Tokopedia. Dalam 2 minggu, 3 produk masuk halaman 1 hasil pencarian untuk keyword utamanya. <em>Masih hari yang sama dengan Modul 1 — positioning yang baru disusun langsung dipakai di sini, tanpa jeda.</em></p>
+          <div class="case-role">Case Study — Dapur Rara · Hari 2</div>
+          <p><strong>10 produk ter-listing dalam 30 menit — semuanya SEO-ready.</strong> Rara biasanya habis 1 jam untuk tulis 1 deskripsi produk. Dengan file cm-data-produk.csv, dia isi data 10 produk, upload ke Claude, dan dapat 10 deskripsi lengkap dalam 1 respons — tinggal paste ke Tokopedia. Dalam 2 minggu, 3 produk masuk halaman 1 hasil pencarian untuk keyword utamanya. <em>Lanjut dari Modul 1 kemarin — positioning yang baru disusun langsung dipakai di sini, tanpa perlu dijelaskan ulang.</em></p>
         </div>
 
         <div class="section-heading">Struktur Deskripsi Produk yang Menjual</div>
@@ -461,7 +463,7 @@ per produk.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></d
         </div>
 
         <div class="case-box persona">
-          <div class="case-role">Case Study — Dapur Rara · Hari 2</div>
+          <div class="case-role">Case Study — Dapur Rara · Hari 3</div>
           <p><strong>Dari "bingung mau post apa" ke 30 hari konten siap dalam 2 jam.</strong> Rara biasa habis 30 menit tiap hari hanya untuk mikir "mau post apa hari ini." Dengan sistem kalender konten Claude, dia duduk 2 jam di awal bulan: generate tema dan caption 30 hari, isi ke spreadsheet, set jadwal di Later. Sisanya tinggal foto produk dan klik publish. <em>Positioning dari Modul 1 dan daftar produk dari Modul 2 langsung dipakai sebagai bahan kalender ini.</em></p>
         </div>
 
@@ -601,7 +603,7 @@ No | Tema | Format | Caption | Hashtag.<button class="copy-btn" onclick="copyPro
         <div class="doc-slot" id="doc-slot-4"></div>
 
         <div class="case-box persona">
-          <div class="case-role">Case Study — Dapur Rara · Hari 3</div>
+          <div class="case-role">Case Study — Dapur Rara · Hari 4</div>
           <p><strong>Iklan Flash Sale selesai dalam 20 menit — desain sudah jadi.</strong> Rara mau jalankan flash sale weekend. Biasanya dia habis 2 jam untuk tulis copy dan susun desainnya manual. Kali ini dia instruksikan Claude: buat 3 variasi copy iklan Flash Sale Frozen Soto — lalu pakai Canva Connector yang sudah aktif dari Modul 3 untuk langsung generate desain Instagram Post-nya. 20 menit kemudian, 3 desain iklan siap didownload.</p>
         </div>
 
@@ -728,7 +730,7 @@ Project-ku.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></d
         </div>
 
         <div class="case-box persona">
-          <div class="case-role">Case Study — Dapur Rara · Hari 4</div>
+          <div class="case-role">Case Study — Dapur Rara · Hari 5</div>
           <p><strong>CS WA dari 45 menit per hari jadi 10 menit</strong> — dengan 10 template siap pakai. Rara habis 45 menit sehari balas WA pelanggan — kebanyakan pertanyaan yang sama berulang. Setelah buat 10 template dengan Claude Projects, dia tinggal copy-paste, edit nama pelanggan, kirim. Dari 45 menit jadi 10 menit, dan semua balasan terasa on-brand.</p>
         </div>
 
@@ -813,32 +815,45 @@ Project-ku.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></d
         </div>
 
         <div class="prompt-section latihan">
-          <div class="prompt-label">🎯 Latihan</div>
+          <div class="prompt-label">🎯 Latihan 1 — Setup Brand Voice CS</div>
           <div class="case-box">
-            <p><strong>1.</strong> Upload cm-template-wa.txt dan cm-template-email.txt sekarang ke Project Knowledge — ke Project yang sama yang kamu buat di Modul 1 (bukan bikin Project baru, dan bukan sesuatu yang harusnya sudah kamu lakukan sejak Modul 1 — filenya baru ada di modul ini).</p>
-            <p><strong>2.</strong> Jalankan Prompt 1 di bawah untuk generate 10 template WhatsApp dasar (satu per skenario di cm-template-wa.txt) dan 2 draft email (launch + flash sale, dari cm-template-email.txt). Ini bukan hasil akhir yang langsung dipakai — ini pola balasan yang jadi acuan Claude.</p>
-            <p><strong>3.</strong> Tes di kasus nyata: begitu ada pembeli chat beneran, jangan buka-buka file template. Cukup ketik situasinya ke Claude seperti Prompt 2 di bawah — Claude otomatis cocokkan ke skenario yang paling sesuai di cm-template-wa.txt dan generate balasan personal yang siap pakai, memakai brand voice dari Project.</p>
-            <p><strong>4.</strong> Copy-paste balasan itu ke WhatsApp (selalu manual, belum ada WA Connector), atau review + kirim draft Gmail (kalau Gmail Connector aktif) / copy-paste manual (kalau tidak). Lakukan Langkah 3 minimal 5 kali dalam 1 minggu untuk WA, kirim email ke minimal 10 kontak, catat open rate dan respons.</p>
+            <p>Buka Claude Project yang sama dari Modul 1 (bukan bikin Project baru) → Project Instructions → tambahkan teks di bawah ini sebagai baris baru, jangan hapus positioning yang sudah ada.</p>
           </div>
-          <div class="step-divider">Prompt 1 — Generate template dasar (dijalankan sekali di awal)</div>
-          <div class="prompt-box">Tambahkan brand voice untuk komunikasi pelanggan: tone
-santai-hangat, sapaan "Kak", batasan emoji 1-2 per pesan,
-nama pengirim dan jabatan untuk tanda tangan email.
-Lalu buatkan 10 template WhatsApp untuk skenario di
-cm-template-wa.txt, dan 2 draft email (launch produk baru +
-flash sale) dari cm-template-email.txt — simpan sebagai draft
-di Gmail saya.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-          <div class="step-divider">Prompt 2 — Pakai untuk kasus nyata (diulang tiap ada situasi baru)</div>
+          <div class="prompt-box">Brand voice untuk komunikasi pelanggan: tone
+santai-hangat, sapaan "Kak", batasan emoji 1-2 per
+pesan. Untuk email: nama pengirim [nama kamu],
+jabatan [Owner/Founder/Customer Service].<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="mini-output">✅ Output: <span>Project Instructions ter-update — brand voice ini otomatis dipakai di semua chat WA & Email berikutnya, termasuk Latihan 2 dan 3 di bawah. Dilakukan sekali saja.</span></div>
+        </div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan 2 — Generate Template Dasar</div>
+          <div class="case-box">
+            <p>Upload cm-template-wa.txt (sudah siap pakai, tidak perlu diisi) dan cm-template-email.txt ke Project Knowledge. Sebelum generate, isi dulu bagian EMAIL 1 (Launch) dan EMAIL 2 (Flash Sale) di cm-template-email.txt — nama produk, harga promo, tanggal, dan kode diskon ini spesifik untuk campaign kamu saat ini, jadi belum ada di Project manapun dan tidak bisa diambil otomatis, harus diisi manual.</p>
+          </div>
+          <div class="prompt-box">Buatkan 10 template WhatsApp untuk skenario di
+cm-template-wa.txt, dan 2 draft email (launch produk
+baru + flash sale) dari cm-template-email.txt — simpan
+sebagai draft di Gmail saya.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="mini-output">✅ Output: <span>10 template WhatsApp dasar + 2 email draft (launch + flash sale) tersimpan sebagai draft Gmail. Ini pola balasan yang jadi acuan di Latihan 3 — bukan hasil akhir yang langsung dipakai.</span></div>
+        </div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan 3 — Reuse untuk Kasus Nyata</div>
+          <div class="case-box">
+            <p>Begitu ada pembeli chat beneran, jangan buka-buka file template. Ketik situasinya langsung ke Claude seperti contoh di bawah — Claude otomatis cocokkan ke skenario yang paling sesuai dan generate balasan personal siap pakai, memakai brand voice dari Latihan 1. Copy-paste ke WhatsApp (selalu manual), atau review + kirim draft Gmail. Ulangi minimal 5 kali dalam 1 minggu untuk WA, kirim email ke minimal 10 kontak, catat open rate dan respons.</p>
+          </div>
           <div class="prompt-box">Balas WA: pembeli nanya kenapa pesanannya belum
 dikirim padahal sudah pesan dari 2 hari lalu, nadanya
 agak kesal.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="mini-output">✅ Output: <span>Balasan personal siap pakai, on-the-spot, untuk kasus baru kapanpun — tanpa buka-buka file template lagi. Diulang terus tiap ada situasi baru.</span></div>
         </div>
 
         <div class="output-box">
           <div class="output-icon">✅</div>
           <div>
-            <h3>Output yang Diharapkan</h3>
-            <p>10 template WhatsApp dasar + 2 email bisnis siap kirim (launch + promo) tersimpan sebagai draft Gmail. 1 Claude Project aktif yang generate balasan personal on-the-spot untuk kasus baru kapanpun — bukan cuma copy-paste template mentah, tapi hasil yang sudah disesuaikan situasi. File pendukung: cm-template-wa.txt, cm-template-email.txt</p>
+            <h3>Output Modul (Keseluruhan)</h3>
+            <p>1 Claude Project dengan brand voice CS aktif (Latihan 1) + 10 template WhatsApp dasar dan 2 email draft di Gmail (Latihan 2) + kemampuan generate balasan personal on-the-spot untuk kasus baru kapanpun (Latihan 3). File pendukung: cm-template-wa.txt, cm-template-email.txt</p>
           </div>
         </div>
 
