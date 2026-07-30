@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 102)_
+_Last updated: July 30, 2026 (checkpoint 103)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1281,6 +1281,22 @@ Follow-on from Checkpoint 101 (Email demoted to optional/bonus): the "6 Jenis Em
 **Verified**: div-balance held (341/341, text-only edit). PPTX slide 6 re-rendered — "UPDATE/CERITA BERKALA" is longer than the original "NEWSLETTER BULANAN" but still fits the card without wrapping or overflow.
 
 **Commit**: `belajar-claude`: `ba5280a`.
+
+---
+
+## SHIPPED (Checkpoint 103, July 30, 2026): full consistency audit after the Checkpoint 96-102 M04/M05 rework — found and fixed two stale customer-facing previews
+
+Asked to "check consistencies" after the run of M05 changes (Hari numbering, per-Kanal removal, 3-phase exercise, Email demoted to optional, 6-types grid generalized). Verified clean: `content-marketing-content.html` div-balance (341/341), no "per Kanal" anywhere in HTML or any PPTX, Hari 1-5 sequential across all 5 modules, no stale "2 draft email" required-output language left in HTML or the 8-slide PPTX, both `cm-template-wa.txt`/`cm-template-email.txt` still correctly say "Modul 5" with no brand-info fields. Cross-checked all 8 PPTX slides against the HTML — content matches in substance everywhere.
+
+Found two real staleness bugs outside the files touched so far, both on customer-facing preview surfaces that never got updated when their source modules changed in earlier checkpoints:
+- `content-marketing.html` (the public course-preview/landing page, shown before purchase) still had M04 titled "Copy Iklan Multi-Platform + Desain Canva" with copy implying Canva Connector is mandatory — stale since Checkpoint 85/88 de-Canva'd the actual module (`content-marketing-content.html` panel4 h1 is "Ads Copywriting Multi-Platform + Desain Siap Pakai", Canva reframed as one optional path). Same page's M05 entry still promised "template balas WA... plus draft email promosi langsung ke Gmail" as if both were equally required — stale since this session's Checkpoint 101 made Email optional. Fixed both entries' titles/copy/tool-chips to match current reality (M04 tool-chip "Canva" → "Multi-Platform"; M05 tool-chip "WA + Gmail" → "WhatsApp").
+- `admin.html`'s hardcoded module-label array (used for the "Konten per Modul" content-manager table) still had the old M04 title `'Copy Iklan Multi-Platform + Desain Canva'` — updated to match.
+
+Checked and ruled out as false alarms: `index.html` and `dashboard.html` don't hardcode per-module descriptions (course-level cards only, no drift possible there); `strategi-marketing-content.html`'s own "Iklan Launch + Desain Canva" module belongs to the separate, paused "Strategi & Analisis Marketing" course (Checkpoint 66/67) and wasn't touched by any of this session's edits, left as-is.
+
+**Verified**: div-balance held on both edited files (`content-marketing.html` 79/79). No PPTX involved in this round — pure text/label fixes on two files.
+
+**Commit**: `belajar-claude`: `0fc8c03`.
 
 ---
 
