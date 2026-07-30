@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 29, 2026 (checkpoint 92)_
+_Last updated: July 29, 2026 (checkpoint 93)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1097,6 +1097,20 @@ Implemented via a new `visible:true` flag (added to `analisis-data` only, in bot
 Verified: HTML div-balance unchanged on both files (dashboard.html 41/41, admin.html 59/59 — no new `<div>` markup, only a ternary/ `<span>` CTA swap and a JS `forEach` injection); diff-verified against a fresh clone post-push.
 
 **Commit**: `belajar-claude`: `2a66820`.
+
+---
+
+## SHIPPED (Checkpoint 93, July 29, 2026): admin.html — widened "Konten per Modul" container and columns
+
+Julia sent a screenshot showing a lot of unused white space to the right of the Konten per Modul card on a wide browser window, and asked to widen both the container and the columns.
+
+- `.content-area` max-width: `940px` → `1400px` (this is the wrapper the whole "Course Content" panel — matrix table included — sits in; other admin panels stay capped at 760px via the existing `:not(#panel-content)` exception, untouched).
+- Table header given explicit column-width hints (`Modul` 16%, `Video` 16%, `PPT` 38%, `Dokumen` 30%) instead of pure browser auto-layout, so the extra width goes to the two columns that actually need it (filenames) rather than being distributed evenly or absorbed by the short Video column.
+- `.cell-link` truncation cap (added in Checkpoint 91) raised from `190px` → `340px`, so filenames now show meaningfully more before the ellipsis kicks in, on top of the wider column itself.
+
+Verified: div/table/tr tag counts balanced (59/59, 1/1, 4/4); diff-verified against a fresh clone post-push. Same caveat as Checkpoint 91 — no headless browser available in this sandbox to pixel-verify, this is CSS-logic verified only.
+
+**Commit**: `belajar-claude`: `676aa13`.
 
 ---
 
