@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 29, 2026 (checkpoint 93)_
+_Last updated: July 29, 2026 (checkpoint 94)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1111,6 +1111,22 @@ Julia sent a screenshot showing a lot of unused white space to the right of the 
 Verified: div/table/tr tag counts balanced (59/59, 1/1, 4/4); diff-verified against a fresh clone post-push. Same caveat as Checkpoint 91 — no headless browser available in this sandbox to pixel-verify, this is CSS-logic verified only.
 
 **Commit**: `belajar-claude`: `676aa13`.
+
+---
+
+## SHIPPED (Checkpoint 94, July 29, 2026): coming-soon teaser fixes — dashboard.html looked like a real enrollment, index.html's separate course grid was missing it entirely
+
+Julia sent two screenshots back after Checkpoint 92 shipped, with two pointed questions: "why julia is enrolled?" (dashboard.html's "Kursus Kamu") and "why no coming soon here" (a different-looking course grid reached via the "Kursus" nav tab).
+
+**Bug 1 — dashboard.html's teaser card read as a real enrollment.** `renderEnrolledCard()` is shared between real enrollments and the injected `visible:true` teaser, and always rendered the progress row — so Analisis Data & Laporan showed a literal "0% ... 0/6" progress bar sitting right below Produktivitas Kantor's real "86% ... 6/7," indistinguishable in weight/format from genuine progress tracking despite the "Segera Hadir" tag next to it. Fixed by branching the progress row: `isComingSoon` now renders a plain "Belum tersedia — 6 modul direncanakan" note instead of a fake 0% bar.
+
+**Bug 2 — missed a second, separate page entirely.** The "Kursus" nav tab (screenshot 2) isn't `dashboard.html`'s explore section — it's `index.html`'s own independent `lihCourseGrid`, built from a second, parallel `LIH_COURSES` object that duplicates `ALL_COURSES` (explicit comment: "Mirrors dashboard.html's ALL_COURSES... kept lightweight"). Checkpoint 92 only touched `dashboard.html` and `admin.html` — `index.html`'s copy was never updated, so its own `!LIH_COURSES[slug].comingSoon` filter kept excluding Analisis Data & Laporan completely, with no `visible` flag to check. Fixed the same way: added `visible:true` to `index.html`'s `analisis-data` entry, updated the filter to `!comingSoon || visible`, and added a `meta.comingSoon` branch (checked first, before the `isEnrolled` check, since coming-soon entries have no `previewLink`/`contentLink` to avoid an undefined-href bug) rendering a "SEGERA HADIR" tag + disabled action span, reusing the grid's existing tag/count/action pattern rather than inventing a new one.
+
+**Lesson for future course-visibility changes**: this site has at least 3 independent, hand-maintained copies of the course catalog (`ALL_COURSES` in `dashboard.html`, `COURSES` in `admin.html`, `LIH_COURSES` in `index.html`) plus `all-access.html`'s own course list — a visibility flag has to be checked/updated in all of them, not just the two that were top-of-mind. Worth a repo-wide grep for `comingSoon` before calling any future course-visibility change complete.
+
+Verified: div-balance held on both files (dashboard.html 41→42, consistent — the progress-row ternary duplicated one `<div class="prog-row">` pair in source, still balanced; index.html 92/92 unchanged, no markup added, only JS branching); traced the new index.html branch order by hand to confirm `meta.comingSoon` is checked before any code path that reads `meta.previewLink`/`meta.contentLink`; diff-verified against a fresh clone post-push.
+
+**Commit**: `belajar-claude`: `07e79a9`.
 
 ---
 
