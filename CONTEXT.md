@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 99)_
+_Last updated: July 30, 2026 (checkpoint 100)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1228,6 +1228,33 @@ Also fixed everywhere the pattern touched:
 **Verified**: div-balance held on `content-marketing-content.html` (333/333, +5 from the two new `step-divider` elements and prompt-box). All 4 touched PPTX slides (2, 4, 5, 7) re-rendered and visually reviewed after every change — final versions have no overflow, no clipping, no stale callouts left behind. No lock file present on the PPTX at any point this round.
 
 **Commit**: `belajar-claude`: `0c63928`.
+
+---
+
+## SHIPPED (Checkpoint 100, July 30, 2026): course-wide Hari numbering bug fixed + M05 exercise restructured into 3 explicit phases with individual outputs
+
+Julia raised four things off a screenshot of the PPTX Cara Kerja slide: (1) drop "per Kanal" from slide titles, (2) is CS brand voice already covered by Modul 1 or new to this module, (3) the "Hari 1/Hari 2" case-study labels looked inconsistent across modules, (4) do the email template fields need manual filling or can they come from Project context.
+
+**"per Kanal" removed**: this phrase only ever existed in the PPTX (slide titles "Prompt Siap Pakai per Kanal" and "Cara Kerja per Kanal") — the HTML site never had it. Both retitled to just "Prompt Siap Pakai" and "Cara Kerja."
+
+**Brand voice question answered, not a bug**: general positioning/visual identity is from Modul 1 and doesn't need redoing. But CS-specific tone, sapaan, and email sender name/jabatan were never set up anywhere before — Modul 5 is where they're added to the Project for the first time. Not redundant, a genuine extension.
+
+**Hari numbering — confirmed a real course-wide bug and fixed it**: case-study labels read M01=Hari 1, M02=Hari 1 (again), M03=Hari 2, M04=Hari 3, M05=Hari 4 — M02 repeating "Hari 1" instead of advancing threw off every module after it by one. Renumbered to one module = one day: M01=Hari 1, M02=Hari 2, M03=Hari 3, M04=Hari 4, M05=Hari 5. M02's case-study prose also referenced "Masih hari yang sama dengan Modul 1, tanpa jeda" (same day, no gap) — since M02 is now a new day, reworded to "Lanjut dari Modul 1 kemarin" (continuing from yesterday) so the story still holds together. Checked all 5 PPTX decks for matching "Hari X" text — none exists there, so this was an HTML-only fix.
+
+**Email template fields — answered directly**: no, most of the `[ISIAN]` fields in `cm-template-email.txt` (new product name, promo discount, dates, CTA link) genuinely cannot be pulled from Project context — they're per-campaign facts that don't exist anywhere yet, the student is the only source. This is different from the brand-identity fields fixed in Checkpoint 98, which really were duplicated data. Made this explicit in the exercise itself rather than just answering in chat (see below).
+
+**Latihan restructured into 3 distinct phases, each with its own goal and output** — this was the substantive ask ("create brand voice into 1 separate exercise, then template, then reuse the template, so there are clear output/goal"). Previously the module's entire exercise was one case-box with 4 numbered instructions and one combined output box at the end. Rebuilt as three separate accent-bordered exercise blocks in `content-marketing-content.html`, each with its own `🎯 Latihan N` label, instructions, prompt-box, and a small green "✅ Output:" line (new `.mini-output` CSS class):
+- **Latihan 1 — Setup Brand Voice CS**: paste the CS tone/sapaan/sender-info text directly into Project Instructions (framed correctly as a one-time Project setting, not a chat prompt). Output: Project updated, reused automatically by Latihan 2 and 3.
+- **Latihan 2 — Generate Template Dasar**: upload both txt files, but now explicitly instructs filling in EMAIL 1 (Launch) and EMAIL 2 (Flash Sale)'s `[ISIAN]` fields first, with the reasoning stated inline (these are per-campaign specifics, not in Project). Output: 10 WA templates + 2 email drafts in Gmail.
+- **Latihan 3 — Reuse untuk Kasus Nyata**: the on-the-spot real-case generation from Checkpoint 99, unchanged in substance. Output: ready replies for any new situation.
+
+A final consolidated "Output Modul (Keseluruhan)" box still closes out the module, now explicitly citing which Latihan produced which piece.
+
+**PPTX**: slide 7 could not fit three full exercise blocks (measured: ~1.9-2.2in per block × 3 ≈ 6-6.6in, more than the ~5.2in available under the title). Rather than compress everything unreadably, split into two slides — added an 8th slide to the deck via a slide-duplication helper (`deepcopy` the slide's XML shape tree onto a newly added slide using the same layout, since python-pptx has no native duplicate-slide API), giving this module 8 slides where every other module in the course has 5 or 7 — confirmed via checking all 5 decks that slide count already varies by content (5/5/7/7/7), so this isn't a new pattern. Slide 7 now holds Latihan 1 + 2, slide 8 holds Latihan 3 + the consolidated Output Modul box. Rebuilt using the deck's existing green accent-box/white-prompt-box/dark-output-box component styles (colors and fonts sampled from the shapes being replaced, not guessed). No lock file present at any point.
+
+**Verified**: div-balance held on `content-marketing-content.html` (341/341). All 8 PPTX slides re-rendered via LibreOffice + `pdftoppm` and visually reviewed — slides 4, 5, 7, 8 (the ones touched) show no overflow or clipping; confirmed no hardcoded slide-count references anywhere in the deck that the 7→8 slide change would break.
+
+**Commit**: `belajar-claude`: `945042d`.
 
 ---
 
