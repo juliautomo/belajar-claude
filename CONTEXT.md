@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 103)_
+_Last updated: July 30, 2026 (checkpoint 104)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1297,6 +1297,23 @@ Checked and ruled out as false alarms: `index.html` and `dashboard.html` don't h
 **Verified**: div-balance held on both edited files (`content-marketing.html` 79/79). No PPTX involved in this round — pure text/label fixes on two files.
 
 **Commit**: `belajar-claude`: `0fc8c03`.
+
+---
+
+## SHIPPED (Checkpoint 104, July 30, 2026): M05 — Email removed entirely, module is now WhatsApp-only
+
+Follow-up to Checkpoint 101-103's "keep Email as optional reference" decision. Julia flagged the generalized "6 Situasi Komunikasi Pelanggan" grid didn't reflect real WA breadth (missing complaint handling specifically), asked to remove the "Cara Kerja: Email" step-row, and then decided to go further: drop Email from Module 5 entirely rather than keep it as an optional path, leaving `cm-template-wa.txt` as the module's sole supporting file.
+
+**What shipped:**
+- `content-marketing-content.html` panel5: module title `Template Komunikasi Pelanggan (WhatsApp)` (dropped "+ Email"); subtitle and desc-box rewritten to describe one Claude Project + one file, no channel choice. Connector tip-box retitled "Claude Projects — Satu-Satunya yang Kamu Butuhkan", all Gmail Connector language removed. "Kesalahan Umum" trimmed to 5 WA-only items (dropped the email-subject-line item, replaced with "Respon terlalu lambat"). Deleted the "Contoh Prompt: Email" two-col block and the entire "Cara Kerja: Email (Opsional — Bonus, Tidak Wajib)" step-row. Replaced the old 6-card info-grid with a new 10-card grid sourced directly 1:1 from `cm-template-wa.txt`'s 10 real scenarios (inquiry, konfirmasi pesanan, info pengiriman, follow-up pembayaran, **balas komplain**, minta testimoni, broadcast promo, negosiasi harga, stok habis, ucapan terima kasih) — this directly answers "what about handling complaints" since complaint handling is now an explicit card. Latihan 1 prompt-box and mini-output, and the final Output Modul box, trimmed of all Email/"per kanal" references. Sidebar nav sub-label and the "Tools yang dipakai" Gmail chip both removed.
+- `content-marketing.html` (public preview page): M05 title/description updated to drop "WA + Email" framing.
+- `admin.html`: hardcoded M05 module-label updated to match.
+- `Content-Marketing/M05-Komunikasi-Pelanggan/cm-template-email.txt` **deleted** — `cm-template-wa.txt` is now the module's only supporting file.
+- `K3-M05-Komunikasi-Pelanggan.pptx` (8 slides) reworked to match: slide 1 title/subtitle de-Email'd; slides 2-8 header renamed "Komunikasi Pelanggan (WhatsApp)"; slide 2 tip-box rewritten (Claude Projects only, no Gmail Connector); slide 3 Kesalahan Umum reduced to the same 5 WA-only items; slide 4's Email column deleted and the WA card widened to full-page width; slide 5's Email column and "kenapa WA manual, Email otomatis" callout deleted, WA's 4-step column widened; slide 6 fully rebuilt from a 3×2 six-card grid into a 5×2 ten-card grid mirroring the new HTML scenarios (colors/fills sampled from the original cards for visual consistency); slide 7's Latihan 1 prompt-box trimmed of the email sender/jabatan fields; slide 8's Output Modul line trimmed to reference only `cm-template-wa.txt`.
+
+**Verified**: `content-marketing-content.html` div-balance 331/331 (down from 341 — net content removed). Grepped for `Gmail`, `cm-template-email`, `per Kanal`, `terutama di WA` — zero remaining hits anywhere in the file. `content-marketing.html` div-balance 79/79. All 8 PPTX slides re-rendered via `soffice`+`pdftoppm` and visually inspected after every edit, including two follow-up fixes caught only during visual QA (slide 3's redundant "terutama di WA" clause, slide 4's leftover whitespace after widening) — both re-rendered and confirmed clean on the second pass.
+
+**Commit**: `belajar-claude`: pending.
 
 ---
 
