@@ -1335,7 +1335,7 @@ Julia flagged that "Contoh Prompt: Buruk vs Baik" sat *before* Latihan 1 but its
 
 **Verified**: `content-marketing-content.html` div-balance 327/327. All 7 PPTX slides re-rendered via `soffice`+`pdftoppm` and visually inspected post-edit, including two extra passes to catch the emoji-rendering issue and the stale slide-4 eyebrow.
 
-**Commit**: `belajar-claude`: pending.
+**Commit**: `belajar-claude`: `5514950`.
 
 ---
 
