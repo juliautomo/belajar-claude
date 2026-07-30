@@ -384,7 +384,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     'produktivitas':     { title: 'Produktivitas Kantor',        icon: '💼', desc: 'Hemat 3–5 jam kerja per minggu dengan Claude.', modules: 7, contentLink: 'produktivitas-content.html', previewLink: 'produktivitas.html' },
     'content-marketing': { title: 'Kreasi Konten Pemasaran',     icon: '🏷', desc: 'Positioning, konten Instagram, copy iklan, komunikasi pelanggan.', modules: 5, contentLink: 'content-marketing-content.html', previewLink: 'content-marketing.html' },
     'strategi-marketing':{ title: 'Strategi & Analisis Marketing',icon: '📈', desc: 'Analisis performa iklan, alokasi budget, Strategi Command Center.', modules: 3, contentLink: 'strategi-marketing-content.html', previewLink: 'strategi-marketing.html', comingSoon: true },
-    'analisis-data':     { title: 'Analisis Data & Laporan',     icon: '📊', desc: 'Data mentah jadi insight bisnis.', modules: 6, comingSoon: true },
+    'analisis-data':     { title: 'Analisis Data & Laporan',     icon: '📊', desc: 'Data mentah jadi insight bisnis.', modules: 6, comingSoon: true, visible: true },
     'build-automation':  { title: 'Automasi Workflow',           icon: '⚡', desc: 'Automation aktif dengan Zapier, Make.com dan n8n.', modules: 7, comingSoon: true },
     'ai-powered-app':    { title: 'Build AI App Sederhana',      icon: '🚀', desc: 'Web app AI live di GitHub Pages — tanpa backend.', modules: 7, comingSoon: true },
     'claude-api-dev':    { title: 'Claude API untuk Developer',  icon: '🔌', desc: 'Integrasikan Claude ke project nyata.', modules: 7, comingSoon: true },
@@ -598,8 +598,10 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
 
             var gridHtml = '';
             // Coming-soon courses stay hidden here too, same rule as all-access.html's
-            // course grid (Checkpoint 36) — only live courses show on this grid.
-            LIH_COURSE_ORDER.filter(function(slug) { return !LIH_COURSES[slug].comingSoon; }).forEach(function(slug) {
+            // course grid (Checkpoint 36) — only live courses show on this grid, UNLESS
+            // explicitly marked `visible:true` (mirrors dashboard.html/admin.html), which
+            // shows it greyed/disabled as a "Segera Hadir" preview instead of hiding it.
+            LIH_COURSE_ORDER.filter(function(slug) { return !LIH_COURSES[slug].comingSoon || LIH_COURSES[slug].visible; }).forEach(function(slug) {
               var meta = LIH_COURSES[slug];
               var doneSet = progressMap[slug];
               // Same clamp as the "last opened" banner above — never let stale module_completions
@@ -609,7 +611,13 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
               var isDone = meta.modules > 0 && doneCount >= meta.modules;
 
               var tagText, tagColor, tagBg, tagBorder, countText, actionHtml;
-              if (!isEnrolled) {
+              if (meta.comingSoon) {
+                // Not-yet-launched preview — no enrollment/progress concept applies, so
+                // skip straight past the enrolled/done checks below.
+                tagText = 'SEGERA HADIR'; tagColor = 'var(--ink-2)'; tagBg = 'var(--border)'; tagBorder = 'var(--border-strong)';
+                countText = meta.modules + ' modul direncanakan';
+                actionHtml = '<span class="action" style="opacity:.5;cursor:default;pointer-events:none;">Segera Hadir</span>';
+              } else if (!isEnrolled) {
                 // No real enrollment row (even if all-access is held) — always route to the
                 // preview page, never straight into the lesson reader. The preview page's own
                 // CTA handles the actual "Mulai Kursus" enroll click.

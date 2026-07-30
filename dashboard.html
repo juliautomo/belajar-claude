@@ -401,12 +401,18 @@ async function _init(){
     var actionBtn=isComingSoon
       ?'<span class="resume-btn" style="background:#F4F4F5;color:#9CA3AF;cursor:default;pointer-events:none;">Segera Hadir</span>'
       :'<a href="'+meta.contentLink+'" class="resume-btn" onclick="event.stopPropagation()">'+btnLabel+' &rarr;</a>';
+    // Coming-soon preview cards aren't real enrollments — no progress to show, so skip
+    // the 0%/0-of-N progress bar entirely (it read as "you're enrolled" otherwise) and
+    // show a plain module-count note instead.
+    var progRow=isComingSoon
+      ?'<div class="prog-row"><span class="prog-lbl" style="color:#9CA3AF;">Belum tersedia — '+prog.total+' modul direncanakan</span></div>'
+      :'<div class="prog-row"><span class="prog-pct">'+prog.pct+'%</span><div class="prog-bar"><div class="prog-fill" style="width:'+prog.pct+'%"></div></div>'
+      +'<span class="prog-lbl">'+Math.min(prog.done,prog.total)+'/'+prog.total+'</span></div>';
     list.innerHTML+='<div class="enrolled-card"'+cardClick+'>'
       +'<span class="enrolled-idx">'+String(i+1).padStart(2,'0')+'</span>'
       +'<div class="enrolled-thumb '+thumbs[i%4]+'">'+meta.icon+'</div>'
       +'<div class="enrolled-info"><h3>'+meta.title+statusTag+'</h3>'
-      +'<div class="prog-row"><span class="prog-pct">'+prog.pct+'%</span><div class="prog-bar"><div class="prog-fill" style="width:'+prog.pct+'%"></div></div>'
-      +'<span class="prog-lbl">'+Math.min(prog.done,prog.total)+'/'+prog.total+'</span></div></div>'
+      +progRow+'</div>'
       +actionBtn
       +'</div>';
   }
