@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 98)_
+_Last updated: July 30, 2026 (checkpoint 99)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1200,6 +1200,34 @@ Mirrored in `content-marketing-content.html`: module-desc-box and connector tip-
 Verified: div-balance held on `content-marketing-content.html` (328/328, unchanged). No PPTX lock file present this time (Checkpoint 77's M05 fix had also touched this file previously).
 
 **Commits**: `belajar-claude`: `7fb5f5e`.
+
+---
+
+## SHIPPED (Checkpoint 99, July 30, 2026): M05 — clarified copy-paste mechanic for both channels, fixed a real exercise-instruction bug, made the two-phase workflow explicit
+
+After Checkpoint 98's fix, Julia reviewed M05 again (site screenshot of the Prompt Siap Pakai slide + PPTX screenshot of Latihan) and raised four points, all substantive:
+
+1. **"also add, without connector also works fine, copy paste as normally"** and **"same as WA, it's still copy paste right for now? be clear about this"** — the Email prompt example and its surrounding copy read as if Gmail Connector were required. It isn't — Email works exactly like WhatsApp (generate then copy-paste) with the Connector as a pure convenience layer on top. Neither the HTML nor the PPTX said this outright anywhere near the example itself.
+2. **"how come we upload in module 1 since we only provide this template in module 05"** — a real bug, not a misunderstanding. The Latihan case-box (both HTML and PPTX) said "sudah diupload ke Project Knowledge dari Project Modul 1," which reads as an instruction to have done this back in Module 1 — but `cm-template-wa.txt`/`cm-template-email.txt` are only introduced in M05. Nothing was ever uploaded in Module 1.
+3. **Asked for the exact exercise steps.**
+4. **Described her own understanding of the intended mechanic and asked for confirmation**: generate the templates once, then for a new real case just describe the situation and Claude generates a matching reply — and asked for this to be reflected as the actual Latihan content, not just described in prose.
+
+Point 4 confirmed a real gap: every previous version of the Latihan treated "generate 10 templates" as the entire exercise, with no instruction for how those templates get used against a real, non-scripted customer message. Fixed by rebuilding the exercise as two explicit phases in both `content-marketing-content.html` and `K3-M05-Komunikasi-Pelanggan.pptx`:
+
+- **Prompt 1 — generate template dasar** (once, at the start): unchanged content, still produces 10 WA templates + 2 email drafts.
+- **Prompt 2 — pakai untuk kasus nyata** (repeated per real situation): new example prompt — `"Balas WA: pembeli nanya kenapa pesanannya belum dikirim padahal sudah pesan dari 2 hari lalu, nadanya agak kesal."` — demonstrating that a real case is handled by describing the situation directly, not by hand-copying a template and editing it.
+
+Also fixed everywhere the pattern touched:
+- Module intro, connector tip-box, both Cara Kerja step-rows, and both prompt-example cards now state plainly: WA is always copy-paste (no WA Connector exists), Email is copy-paste by default with Gmail Connector as an optional upgrade to auto-drafting — not a requirement.
+- WhatsApp Cara Kerja expanded from 3 steps to 4 to include the live on-the-spot generation step explicitly (matching Email's existing 4).
+- Latihan case-box rewritten as 4 numbered steps ending with the corrected upload instruction ("upload sekarang, ke Project yang sama dari Modul 1 — bukan bikin baru, dan bukan something that should've happened back in Modul 1").
+- Output box reworded to describe the on-the-spot generation capability as the actual deliverable, not just "10 templates."
+
+**PPTX-specific work**: slide 7's Latihan box only had room for one prompt example before hitting the Output box below it. Solved by measuring exact available vertical space (slide is 13.33×7.5in; existing content left ~1.5in of slack between the Latihan and Output boxes), then growing the Latihan container, adding two small green "PROMPT 1" / "PROMPT 2" divider labels (new textboxes, no fill/border, matching the deck's label typography), and adding a second white prompt-box (cloned styling: rounded rect, `#FFFFFF` fill, `#B8E6C9` border, 9.5pt italic green text) beneath it — then shifting the Output box down to compensate, shrinking its text slightly to keep it from clipping the slide's bottom edge. Iterated 3 times via LibreOffice + `pdftoppm` render checks: v1 had the case-box paragraph running into the "PROMPT 1" divider (fixed by shortening the paragraph to fit 2 lines instead of 3), v2 was clean. Slide 5 (Cara Kerja) got a matching 4th WhatsApp step added as new shapes (circle + number + description, cloned from the existing step styling) to mirror Email's now-identical step count — this also broke the slide's old "◆ KENAPA EMAIL 1 LANGKAH LEBIH PANJANG?" callout, since the premise (different step counts) was no longer true; replaced with "◆ KENAPA WA SELALU MANUAL, EMAIL BISA OTOMATIS?" which is now the actually-relevant distinction. That callout box also needed a height increase (0.85in → 1.05in) once its new text wrapped to 2 lines.
+
+**Verified**: div-balance held on `content-marketing-content.html` (333/333, +5 from the two new `step-divider` elements and prompt-box). All 4 touched PPTX slides (2, 4, 5, 7) re-rendered and visually reviewed after every change — final versions have no overflow, no clipping, no stale callouts left behind. No lock file present on the PPTX at any point this round.
+
+**Commit**: `belajar-claude`: `0c63928`.
 
 ---
 
