@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 95)_
+_Last updated: July 30, 2026 (checkpoint 96)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1147,6 +1147,25 @@ Julia's follow-up after Checkpoint 94: "i dont see the toggle for hide show, and
 Verified: div-balance held on all three files (index.html 92/92, dashboard.html 42/42, admin.html 67/67); `course_visibility` reads confirmed present in all three files' JS; `get_advisors` on the new table came back clean.
 
 **Commit**: `belajar-claude`: `89cd736`.
+
+---
+
+## SHIPPED (Checkpoint 96, July 30, 2026): M04 (Ads Copywriting) — de-Canva'd, fixed image-capability framing, closed the "how does this become an ad" gap, tied Latihan back to Modul 3
+
+Julia reviewed M04 in both the site and PowerPoint (screenshots of both) and raised four rounds of feedback in sequence, all addressed in `content-marketing-content.html` + `K3-M04-Ads-Copywriting.pptx`:
+
+1. **Canva de-emphasized.** The case study, the connector tip-box, Cara Kerja step 2, the Latihan, and the Output box all previously read as if Canva Connector were the only path from copy to finished ad visual. Reworded all five to "Canva Connector kalau aktif, atau tool/desainer lain kalau tidak" — Canva is now explicitly one option, not the default. PPTX slide 2's eyebrow changed from "REUSE DARI MODUL 3, TIDAK SETUP ULANG" to "COPY DULU, DESAIN CARA APA SAJA" to signal this up front.
+2. **Fixed the Claude image-capability line.** "Claude tidak bisa mengedit atau membuat foto langsung" opened with a flat no. Reframed to lead with the Prompt Enhancer capability first (same pattern M03 already established), limitation folded in afterward instead of leading the paragraph.
+3. **Closed the "how does the ad relate to the image" gap.** Cara Kerja used to jump from "buat desain" straight to "setup campaign di Ads Manager" without ever saying the design gets uploaded *as* the ad's creative alongside the copy and targeting brief — genuinely unclear how the pieces fit together, confirmed via a few rounds of Julia asking clarifying questions (targeting brief, image handoff, then "how does the ad relate to the image"). Consolidated HTML Cara Kerja from 5 steps to 4 (folded the targeting brief into step 1) and added an explicit "Rakit iklannya di Ads Manager: upload desain sebagai creative, tempel copy dan targeting brief" step. PPTX slide 5's filler "Review Desain" step replaced with the same "Rakit di Ads Manager" step.
+4. **Added a "1 package" illustration + tied the exercise back to Modul 3.** New "Satu Paket, Bukan Potongan Terpisah" section (HTML) with a `package-flow` diagram — 3 input chips (Copy Iklan, Targeting Brief, Visual/Desain) converging into an accent pill "1 Paket Iklan Siap Jalan," then into "Upload sebagai 1 campaign ke Ads Manager." Same diagram rebuilt as native PPTX shapes on slide 7, in the empty space below the Output box. Latihan now opens with "Ambil 1 baris dari kalender konten Modul 3 (cm-kalender-konten.xlsx) yang paling potensial dijadikan iklan berbayar" instead of a generic, unrelated product prompt — reuses a content idea students already built in M03 rather than starting from scratch, and explicitly states the generated image is made outside Claude (Nano Banana Pro/ChatGPT) and never uploaded back into the chat.
+
+**PPTX build note**: no PPTX-builder script exists in the repo for this deck (matches the pattern noted in earlier checkpoints — PPTs are either hand-built once and committed, or uploaded directly via admin.html, with no persisted generator script). Edited the existing `K3-M04-Ads-Copywriting.pptx` directly via `python-pptx`, setting text on existing runs to preserve formatting, and adding new native shapes (rounded rectangles + textboxes, colors sampled from the deck's own existing shapes: accent `#6849F6`, tip-box bg `#F3F0FF`/border `#DCD3FB`, dark navy `#0D1321`/`#141D33`) for the new diagram. Icons on the new diagram chips use the deck's existing "◆" symbol rather than color emoji — this sandbox's LibreOffice has no emoji font installed, so emoji chips rendered blank in QA; switched to match the deck's own established icon language rather than risk it, which also reads more consistent with the rest of the deck's minimal symbol-based icons anyway.
+
+**Mid-session file-lock hiccup**: the PPTX briefly couldn't be overwritten (`~$K3-M04-Ads-Copywriting.pptx` lock file present — file was open in PowerPoint on Julia's machine). Asked her to close it, retried successfully once the lock file was gone.
+
+**Verified**: div-balance held on `content-marketing-content.html` across all edits (320→318→328, each delta traced to the specific markup added/removed); all edited PPTX slides (2, 5, 7) re-rendered via LibreOffice + `pdftoppm` after every text/shape change and visually reviewed — no overflow, no clipping, no missing glyphs in the final version; cross-checked HTML vs PPTX text for all 7 slides after the fact — content matches in substance everywhere (PPTX is intentionally more condensed given slide space), no stale Canva-only phrasing or pre-restructure step counts left in either file; confirmed no other module (M03, M05) or sidebar nav references M04 content that would now be stale.
+
+**Commits**: `belajar-claude`: `7a18b09`, `325c7f4`, `a2805cc`.
 
 ---
 
