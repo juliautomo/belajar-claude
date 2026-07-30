@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 108)_
+_Last updated: July 30, 2026 (checkpoint 109)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1385,6 +1385,18 @@ Julia asked to confirm nothing local was uncommitted and local fully matched Git
 Follow-up to Checkpoint 107's finding. Per Julia's correction ("local is the source of truth going forward, not GitHub"), pushed local's current copies of `K3-M01-Positioning-Kompetitor.pptx` and `K3-M05-Komunikasi-Pelanggan.pptx` up to GitHub as-is (Julia had made some manual edits locally), rather than reconciling content first. M01's local copy already had the "— 10 menit" subtitle suffix restored (fixed earlier this session to match the live HTML). Local and GitHub are now confirmed in sync for both files.
 
 **Commit**: `belajar-claude`: `b24a5d6`.
+
+---
+
+## SHIPPED (Checkpoint 109, July 30, 2026): 20-Prompt PDF regenerated to fix page-break overlap bug
+
+Julia flagged a screenshot showing Prompt #20's card getting split awkwardly across a page boundary in `20-prompt-claude-terbaik.pdf`, with visible overlap/margin issues. The prior version (Checkpoint 61) had no surviving HTML source, so rebuilt from scratch — content transcribed verbatim from `prompt-gratis-content.html` (all 20 prompts, 5 categories), rendered via `weasyprint`.
+
+**Root cause**: no print-CSS rules protecting card boundaries — content just flowed and got cut wherever the page ended. Fixed with `break-inside: avoid` on every `.prompt-card` (a card never splits across pages) and `break-after: avoid-page` + `break-before: avoid-page` pairing a category header to its first card (a header never gets stranded alone at the bottom of a page). First pass over-corrected with a forced page-break before every category (`break-before: page`), which fixed the overlap but produced several near-empty pages (e.g. one page with a single card and mostly white space) — replaced with natural flow instead, letting categories continue on the same page when they fit. Also caught and fixed the cover page's footer/page-number strip bleeding onto the purple gradient background (page-margin boxes need to be explicitly cleared on a named `@page` variant, not just given `margin: 0`).
+
+**Verified**: rendered all pages to PNG and visually inspected each one (cover + all 5 category transitions + the final page containing Prompt #20), confirmed via text extraction that all 20 prompt numbers appear exactly once with no duplication/truncation. Final PDF is 8 pages (down from 11 in Checkpoint 61's version, denser without feeling cramped).
+
+**Commit**: `belajar-claude`: `96447f6`.
 
 ---
 
