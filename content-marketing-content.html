@@ -133,6 +133,16 @@
   .anatomy-item:not(:last-child) .anatomy-num::after{content:"";position:absolute;top:26px;left:50%;width:1.5px;height:calc(100% + 9px);background:var(--border-strong);transform:translateX(-50%);}
   .anatomy-item strong{display:block;color:var(--ink);margin-bottom:2px;font-size:13.5px;}
   .anatomy-item p{margin:0;font-size:12.5px;color:#777;line-height:1.6;}
+  .package-flow{margin:18px 0;text-align:center;}
+  .package-inputs{display:flex;align-items:stretch;justify-content:center;gap:10px;flex-wrap:wrap;}
+  .package-item{flex:0 1 160px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px 12px;}
+  .package-item .package-icon{font-size:22px;display:block;margin-bottom:6px;}
+  .package-item strong{display:block;font-size:12.5px;color:var(--ink);margin-bottom:3px;}
+  .package-item span{font-size:11px;color:#777;line-height:1.4;}
+  .package-plus{align-self:center;font-size:18px;font-weight:750;color:var(--ink-3);}
+  .package-arrow{font-size:16px;color:var(--border-strong);margin:8px 0;}
+  .package-result{display:inline-block;background:var(--accent);color:#fff;font-weight:750;font-size:13.5px;padding:10px 24px;border-radius:100px;}
+  .package-final{font-size:12.5px;color:#777;margin-top:8px;}
   .section-heading{font-size:20px;font-weight:800;letter-spacing:-.4px;color:var(--ink);margin:36px 0 14px;padding-bottom:12px;border-bottom:1px solid var(--border);}
   .body-text{font-size:13.5px;color:#777;line-height:1.8;margin-bottom:10px;}
   .metric-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:12.5px;border:1px solid var(--border);border-radius:15px;overflow:hidden;}
@@ -654,10 +664,26 @@ No | Tema | Format | Caption | Hashtag.<button class="copy-btn" onclick="copyPro
           <div class="step-card"><div class="step-num">4</div><p>Jalankan A/B test 3 hari, catat CTR & ROAS, lalu minta Claude revisi copy yang paling lemah performanya</p></div>
         </div>
 
+        <div class="section-heading">Satu Paket, Bukan Potongan Terpisah</div>
+        <p class="body-text">Copy, targeting brief, dan visual bukan 3 tugas terpisah — ketiganya dirakit jadi 1 iklan yang sama saat kamu upload ke Ads Manager. Kalau visualnya butuh foto baru, foto itu digenerate di luar Claude (Nano Banana Pro/ChatGPT via Prompt Enhancer), baru disusun jadi desain — bukan sesuatu yang perlu diupload balik ke chat Claude.</p>
+        <div class="package-flow">
+          <div class="package-inputs">
+            <div class="package-item"><span class="package-icon">✍️</span><strong>Copy Iklan</strong><span>Headline + body + CTA (Claude)</span></div>
+            <span class="package-plus">+</span>
+            <div class="package-item"><span class="package-icon">🎯</span><strong>Targeting Brief</strong><span>Usia, minat, lokasi (Claude)</span></div>
+            <span class="package-plus">+</span>
+            <div class="package-item"><span class="package-icon">🖼️</span><strong>Visual/Desain</strong><span>Foto (Nano Banana Pro/ChatGPT) + layout (Canva/tool lain)</span></div>
+          </div>
+          <div class="package-arrow">↓</div>
+          <div class="package-result">1 Paket Iklan Siap Jalan</div>
+          <div class="package-arrow">↓</div>
+          <div class="package-final">Upload sebagai 1 campaign ke Ads Manager (Meta/TikTok/Google)</div>
+        </div>
+
         <div class="prompt-section latihan">
           <div class="prompt-label">🎯 Latihan</div>
           <div class="case-box">
-            <p>Jalankan prompt ini untuk 1 produk unggulan atau promo yang berjalan. Ambil variasi copy terbaik, lalu buat desainnya — kalau Canva Connector aktif, instruksikan Claude buat desainnya langsung di Canva (pakai Prompt Enhancer di atas kalau butuh visual baru); kalau tidak, pakai brief yang sama untuk desain manual di tool pilihanmu. Rakit di Ads Manager: upload desain itu sebagai creative, tempel copy dan targeting brief-nya, lalu jalankan iklan 3 hari, catat CTR dan konversi — balik ke Claude dengan angkanya untuk minta revisi.</p>
+            <p>Ambil 1 baris dari kalender konten Modul 3 (cm-kalender-konten.xlsx) yang paling potensial dijadikan iklan berbayar — tema dan idenya sudah ada, tinggal diubah jadi format ads. Jalankan prompt ini untuk produk/promo dari baris itu (atau produk unggulan lain yang berjalan). Ambil variasi copy terbaik. Kalau butuh visual baru, generate dulu fotonya di luar Claude (Nano Banana Pro/ChatGPT, pakai Prompt Enhancer di atas), baru susun jadi desain — Canva Connector kalau aktif, atau tool pilihanmu. Rakit semuanya di Ads Manager: upload desain sebagai creative, tempel copy dan targeting brief — 1 paket, bukan potongan terpisah. Jalankan iklan 3 hari, catat CTR dan konversi — balik ke Claude dengan angkanya untuk minta revisi.</p>
           </div>
           <div class="prompt-box">Buat 3 variasi copy iklan (Meta, TikTok, Google Ads) untuk
 [nama produk/promo], diskon [%], berlaku [tanggal]. Target:
@@ -671,7 +697,7 @@ singkat (usia, minat, lokasi).<button class="copy-btn" onclick="copyPrompt(this)
           <div class="output-icon">✅</div>
           <div>
             <h3>Output yang Diharapkan</h3>
-            <p>3 variasi copy iklan per platform (Meta, TikTok, Google) siap pakai + 1 targeting brief + minimal 1 desain iklan siap pakai (Canva Connector, tool desain lain, atau desainer) + iklan aktif berjalan dengan tracking A/B test, plus 1 putaran revisi copy berdasarkan CTR/ROAS nyata.</p>
+            <p>1 paket iklan siap jalan — bukan potongan terpisah: 3 variasi copy per platform (Meta, TikTok, Google) + 1 targeting brief + 1 desain/visual iklan (Canva Connector, tool desain lain, atau desainer), dirakit jadi 1 campaign aktif di Ads Manager dengan tracking A/B test, plus 1 putaran revisi copy berdasarkan CTR/ROAS nyata.</p>
           </div>
         </div>
 
