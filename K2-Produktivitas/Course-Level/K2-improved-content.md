@@ -1,6 +1,10 @@
 # K2 · Produktivitas Kantor — Improved Content Draft
-> **Persona konsisten:** Rina, owner UMKM fashion online "Kasual Studio" — jual pakaian kasual wanita via Instagram & Tokopedia, tim 2 orang, sehari-hari: balas pesan pelanggan, buat konten, analisis penjualan, koordinasi supplier.
-> 
+> **Persona ilustratif:** Rina, owner UMKM fashion online "Kasual Studio" — jual pakaian kasual wanita via Instagram & Tokopedia, tim 2 orang, sehari-hari: balas pesan pelanggan, buat konten, analisis penjualan, koordinasi supplier. Dipakai sebagai contoh berjalan di sebagian besar modul.
+>
+> **Persona file latihan Modul 2:** file `k2-m2-referensi-project.txt` yang didownload siswa memakai profil **PT Kreatif Digital** (agensi digital marketing) — sengaja beda dari Kasual Studio, supaya siswa yang belum punya data bisnis sendiri tetap bisa langsung praktik dengan Claude Project yang sudah terisi penuh.
+>
+> **Struktur kursus: 7 modul aktif** (Modul 1–7, diakhiri di Modul 7 "Dokumen & Riset" lalu form feedback). **Catatan penting:** ada 1 panel "Case Study: Satu Hari Kerja Penuh" (2 skenario — Rina/Kasual Studio dan Budi/Konsultan Freelance) yang masih ada di HTML tapi **sudah di-archive dari alur pembelajaran aktif** (ditandai `ARCHIVED` di kode, disimpan untuk kemungkinan dipakai lagi di section studi-kasus terpisah nanti). Draft ini hanya mencakup 7 modul yang benar-benar live.
+>
 > **Review notes:** Tandai bagian yang perlu diubah dengan `[REVISI: ...]`
 
 ---
@@ -13,21 +17,21 @@ Intermediate
 **Tagline:** Kurangi 2 jam kerja harianmu — tanpa tools baru, tanpa kursus coding.
 
 **7 Modul:**
-01 Role Prompting — prompt yang langsung menghasilkan output bagus
-02 Claude Projects — asisten yang ingat bisnismu
-03 Gmail + Claude — inbox bersih, email cepat
-04 Google Sheets — data jadi insight dalam menit
-05 Batch Prompting — kerjakan 20 hal dalam satu prompt
+01 Role Prompting — framework 4 elemen yang jadi dasar semua modul berikutnya
+02 Claude Projects — setup sekali, Claude ingat bisnismu selamanya
+03 Gmail + Claude — dari 15 email, 12 selesai dalam 10 menit
+04 Spreadsheet & Claude — laporan 2 jam jadi 15 menit
+05 Batch Prompting — 20 output dari 1 prompt
 06 Prompt Chaining — output kompleks dari langkah sederhana
-07 Case Study — semua modul dalam satu hari kerja nyata
+07 Dokumen & Riset — meeting notes, ringkasan, SWOT, SOP, semua 3× lebih cepat
 
 ---
 
-## PENGANTAR (½ halaman — diperpendek dari versi lama)
+## PENGANTAR
 
 Kamu tidak perlu belajar tools baru untuk produktif dengan Claude. Semua yang ada di modul ini bekerja dengan apps yang sudah kamu pakai setiap hari — email, spreadsheet, dokumen.
 
-Modul 1 mengajarkan satu framework yang jadi dasar semua modul berikutnya. Modul 2–4 aplikasikan ke tools sehari-hari. Modul 5–6 mengalikan hasilnya.
+Modul 1 mengajarkan satu framework yang jadi dasar semua modul berikutnya. Modul 2 memperkenalkan Claude Projects supaya kamu tidak perlu briefing ulang tiap sesi. Modul 3–4 aplikasikan ke tools sehari-hari (email, spreadsheet). Modul 5–6 mengalikan hasilnya (batch, chaining). Modul 7 menutup dengan kategori kerja "berpikir" — meeting notes, ringkasan, riset, SOP.
 
 Ikuti urutan modul. Setiap latihan dirancang untuk langsung pakai di kerjaan nyata — bukan contoh fiktif.
 
@@ -37,67 +41,41 @@ Ikuti urutan modul. Setiap latihan dirancang untuk langsung pakai di kerjaan nya
 
 ### Masalah yang Diselesaikan
 
-Rina menghabiskan 45 menit setiap pagi untuk balas email dan buat caption. Hasilnya sering tidak sesuai ekspektasi dan harus diedit ulang.
-
-Setelah modul ini: waktu yang sama, output 3x lebih baik — karena Claude tahu persis apa yang dibutuhkan.
+Prompt singkat seperti "buatkan caption" memaksa Claude menebak-nebak konteks yang sebenarnya cuma kamu yang tahu — hasilnya sering generik dan perlu ditulis ulang. Role prompting menyelesaikan ini dengan memberi Claude peran, konteks, dan instruksi yang jelas sejak awal, mirip briefing ke rekan kerja baru: makin spesifik briefing-nya, makin sedikit revisi yang dibutuhkan. **Setelah modul ini:** kamu punya framework 4 elemen yang jadi dasar untuk hampir semua modul berikutnya.
 
 ### Framework: 4 Elemen Prompt
 
-> [VISUAL: Diagram horizontal → ROLE → KONTEKS → TUGAS → FORMAT → OUTPUT]
-
-**ROLE** — Siapa Claude dalam situasi ini?
-*"Kamu adalah copywriter fashion yang paham pasar Gen Z Indonesia."*
-
-**KONTEKS** — Situasi, latar, info relevan
-*"Toko saya jual pakaian kasual wanita, harga Rp 150–350rb, beli lewat DM Instagram."*
-
-**TUGAS** — Satu instruksi utama yang jelas
-*"Tulis caption Instagram untuk koleksi baru: kemeja linen putih."*
-
-**FORMAT** — Panjang, struktur, tone, bahasa
-*"Maks 80 kata, 1 hook kuat di baris pertama, 3 hashtag relevan, bahasa Indonesia santai."*
+- **ROLE — Siapa Claude dalam situasi ini?** *"Kamu adalah copywriter fashion yang paham pasar Gen Z Indonesia."*
+- **KONTEKS — Situasi, latar, info relevan** *"Toko saya jual pakaian kasual wanita, harga Rp 150–350rb, beli lewat DM Instagram."*
+- **TUGAS — Satu instruksi utama yang jelas** *"Tulis caption Instagram untuk koleksi baru: kemeja linen putih."*
+- **FORMAT — Panjang, struktur, tone, bahasa** *"Maks 80 kata, 1 hook kuat di baris pertama, 3 hashtag relevan, bahasa Indonesia santai."*
 
 ### Sebelum vs. Sesudah
 
-> [VISUAL: Dua kotak berdampingan — SEBELUM (kiri, merah) dan SESUDAH (kanan, hijau)]
+**❌ SEBELUM (prompt lama):** "Buatkan caption Instagram untuk baju baru saya"
+Hasil: caption generik, tidak ada hook, hashtag tidak relevan, harus ditulis ulang. Waktu terbuang: 20 menit edit.
 
-**SEBELUM (prompt lama Rina):**
-> "Buatkan caption Instagram untuk baju baru saya"
+**✅ SESUDAH (4-elemen prompt):** "Kamu adalah copywriter fashion Gen Z Indonesia. Toko saya jual baju kasual wanita harga Rp 150–350rb via DM Instagram. Tulis caption untuk kemeja linen putih — koleksi summer. Maks 80 kata, hook kuat, 3 hashtag, bahasa santai."
+Hasil: caption siap posting dalam 30 detik. Hemat 18 menit per caption.
 
-Hasil: caption generik, tidak ada hook, hashtag tidak relevan, harus ditulis ulang.
-Waktu terbuang: 20 menit edit.
-
-**SESUDAH (4-elemen prompt):**
-> "Kamu adalah copywriter fashion yang paham pasar Gen Z Indonesia. Toko saya jual pakaian kasual wanita harga Rp 150–350rb via DM Instagram. Tulis caption untuk kemeja linen putih baru — koleksi summer. Maks 80 kata, hook kuat di baris pertama, 3 hashtag relevan, bahasa santai."
-
-Hasil: caption siap posting dalam 30 detik.
-Waktu yang dihemat: 18 menit per caption.
-
-### Cheat Sheet — Framework 4 Elemen
-
-> [VISUAL: Kotak referensi — desain seperti sticky note atau kartu, bisa di-screenshot]
+### Cheat Sheet — Copy dan Simpan
 
 ```
 ROLE:    "Kamu adalah [jabatan/keahlian] yang [spesialisasi]."
-KONTEKS: "[Situasi saat ini / info tentang bisnis / latar penerima]"
+KONTEKS: "[Situasi saat ini / info bisnis / latar penerima]"
 TUGAS:   "[Satu instruksi utama — buat / tulis / analisis / ringkas]"
 FORMAT:  "[Panjang] · [Struktur] · [Tone] · [Bahasa]"
 ```
 
-**Tips:** Tidak perlu urutan persis. Yang penting 4 elemen hadir.
-**Kalau hasilnya kurang tepat:** identifikasi elemen yang hilang — lalu tambahkan. Jangan ganti prompt dari nol.
+**Tips Perbaikan:** Tidak perlu urutan persis. Yang penting 4 elemen hadir. Kalau hasilnya kurang tepat: identifikasi elemen yang hilang — lalu tambahkan. Jangan ganti prompt dari nol.
 
 ### ■ LATIHAN
 
-Pilih 1 pesan atau dokumen yang perlu kamu buat hari ini — bisa email, caption, balasan komplain, atau laporan singkat.
-
-Tulis prompt menggunakan 4 elemen. Kirim ke Claude.
-
-Kalau hasilnya belum tepat, tanya diri sendiri: *elemen mana yang kurang spesifik?* Tambahkan info itu dan coba lagi.
+**Contoh skenario** (kalau belum ada tugas mendesak): Kasual Studio dapat DM Instagram — *"Kak, badan aku agak berisi, kemeja linen size M kira-kira muat gak ya? Terus warna apa yang gak gampang keliatan kotor?"* Pakai skenario ini, atau pilih 1 pesan/dokumen lain yang perlu kamu buat hari ini — bisa email, caption, balasan komplain, atau laporan singkat. Tulis prompt menggunakan 4 elemen. Kirim ke Claude. Kalau hasilnya belum tepat, tanya diri sendiri: *elemen mana yang kurang spesifik?* Tambahkan info itu dan coba lagi.
 
 ### ■ OUTPUT YANG DIHARAPKAN
 
-1 draft siap pakai. Simpan promptnya — kamu akan pakai lagi di modul berikutnya.
+1 draft pesan siap kirim — kalau kamu pakai skenario di atas, artinya 1 balasan DM Instagram yang menjawab pertanyaan pelanggan dan mengarahkan ke pembelian, tanpa perlu diedit ulang.
 
 ---
 
@@ -105,39 +83,43 @@ Kalau hasilnya belum tepat, tanya diri sendiri: *elemen mana yang kurang spesifi
 
 ### Masalah yang Diselesaikan
 
-Setiap kali Rina buka chat baru, dia harus briefing ulang — tulis nama toko, jelaskan produk, tentukan tone. Ini buang waktu 5 menit per sesi, belum termasuk kalau Claude salah tone karena lupa konteks.
+Chat biasa di Claude tidak menyimpan konteks — tiap sesi baru berarti mulai dari nol lagi: jelaskan bisnismu, tentukan tone, jelaskan produk, dari awal. Claude Projects menyimpan semua itu sekali, lalu otomatis aktif di setiap chat baru dalam project yang sama. **Setelah modul ini:** kamu setup 1 project sekali, dan setiap chat berikutnya langsung "ngerti" konteks bisnismu tanpa briefing ulang.
 
-Setelah modul ini: setup Claude Projects sekali — Claude ingat semua konteks bisnismu selamanya.
+### Chat Biasa vs. Claude Projects
 
-### Apa itu Claude Projects?
+**Chat Biasa**
+- Memori direset setiap sesi baru
+- Harus briefing ulang setiap kali buka chat
+- Claude tidak ingat nama toko, produk, atau tone
+- Tidak bisa simpan file referensi secara permanen
 
-> [VISUAL: Diagram — Chat Biasa (lupa setiap sesi) vs. Claude Project (ingat konteks permanen)]
+**Claude Projects**
+- Memori permanen — ingat semua konteks bisnismu
+- Sekali setup, selamanya aktif di semua sesi
+- Bisa simpan tone, format, dan file referensi
+- Langsung kerja tanpa briefing ulang
 
-Chat biasa = memori yang direset setiap sesi.
-Claude Project = memori permanen yang bisa dikonfigurasi.
+### Contoh yang Bisa Disimpan di Project
 
-Kamu bisa simpan:
-- Informasi bisnis (nama toko, produk, target market)
-- Tone dan gaya bahasa yang diinginkan
-- Format output favorit
-- File referensi (price list, template, SOP)
+Nama & info bisnis · Tone bahasa · Format output · Price list · Template SOP
 
-### Cara Setup Project (3 Langkah)
+### Cara Setup Project — 3 Langkah
 
-> [VISUAL: Screenshot langkah 1 — tombol "New Project" di sidebar Claude]
-> [VISUAL: Screenshot langkah 2 — kolom "Project Instructions"]
-> [VISUAL: Screenshot langkah 3 — hasil chat dengan konteks aktif]
+1. Klik "New Project" di sidebar kiri Claude → beri nama (misal "Latihan Modul 2")
+2. Download **k2-m2-referensi-project.txt** dari halaman materi → paste seluruh isinya ke "Project Instructions"
+3. Mulai chat. Tidak perlu briefing ulang lagi.
 
-**Langkah 1:** Klik "New Project" di sidebar kiri Claude → beri nama project (contoh: "Kasual Studio")
+### ■ LATIHAN
 
-**Langkah 2:** Isi "Project Instructions" — ini yang Claude baca setiap kali kamu chat di project ini
+Setup Claude Project pertamamu sekarang pakai **k2-m2-referensi-project.txt** — sudah berisi profil lengkap PT Kreatif Digital (agensi digital marketing), jadi kamu tidak perlu punya data bisnis sendiri dulu untuk mulai latihan. Download file-nya, paste ke "Project Instructions", lalu coba 3 prompt pendek tanpa briefing, misalnya: *"Tulis caption promo diskon 20% untuk klien F&B"*, *"Balas email klien yang komplain laporan bulanan terlalu teknis"*, atau *"Buatkan 3 poin highlight untuk laporan bulanan klien fashion"*. Perhatikan: Claude langsung paham konteks PT Kreatif Digital tanpa kamu jelaskan ulang.
 
-**Langkah 3:** Mulai chat. Tidak perlu briefing ulang.
+### ■ OUTPUT YANG DIHARAPKAN
 
-### Template System Instructions — Copy & Pakai
+1 Claude Project aktif dengan System Instructions dari k2-m2-referensi-project.txt. Sudah coba minimal 3 prompt pendek dan Claude merespons sesuai konteks PT Kreatif Digital tanpa briefing ulang.
 
-> [VISUAL: Kotak kode / text box dengan border, bisa di-copy]
+### Selanjutnya: Bikin Versi Bisnismu Sendiri
 
+**Template (isi sesuai bisnismu):**
 ```
 # Tentang Bisnis
 Nama: [nama toko/perusahaan kamu]
@@ -148,7 +130,7 @@ Channel penjualan: [Instagram / Tokopedia / WhatsApp / dll]
 
 # Tone & Bahasa
 - Bahasa Indonesia [formal / semi-formal / santai]
-- Gunakan "kamu" bukan "Anda"  
+- Gunakan "kamu" bukan "Anda"
 - [tambahkan gaya unik bisnismu]
 
 # Format Output Default
@@ -157,48 +139,24 @@ Channel penjualan: [Instagram / Tokopedia / WhatsApp / dll]
 - Balas komplain: empati dulu, solusi kedua
 ```
 
-**Contoh Rina (Kasual Studio):**
+**Contoh Rina — Kasual Studio:**
 ```
 # Tentang Bisnis
-Nama: Kasual Studio
-Produk: pakaian kasual wanita, basic & trendy
+Nama: Kasual Studio — pakaian kasual wanita, basic & trendy
 Target: wanita 20–32 tahun, Gen Z & Millennial
-Harga: Rp 150.000–350.000
-Channel: Instagram DM & Tokopedia
+Harga: Rp 150.000–350.000 | Channel: Instagram DM & Tokopedia
 
-# Tone & Bahasa
-- Bahasa Indonesia santai, hangat, relatable
-- Pakai "kamu" bukan "Anda"
-- Hindari kata "terbaik" atau "termurah" tanpa data
-
-# Format Default
-- Caption IG: maks 80 kata + 5 hashtag relevan
-- Balasan DM: ramah, to the point, maks 3 kalimat
-- Balasan komplain: mulai dengan maaf/empati, beri solusi konkret
+# Tone: Bahasa Indonesia santai, hangat, relatable. Pakai "kamu" bukan "Anda".
+# Format: Caption IG maks 80 kata + 5 hashtag. Balasan komplain: mulai dengan empati, lalu solusi konkret.
 ```
 
-### Sebelum vs. Sesudah
+### Dengan Project, Prompt Jadi Super Pendek
 
-**Tanpa Project:**
-> "Kamu adalah copywriter fashion. Toko saya namanya Kasual Studio, jual baju kasual wanita, target Gen Z, harga 150–350rb. Tulis caption untuk..."
+**Tanpa Project:** "Kamu adalah copywriter fashion. Toko saya namanya Kasual Studio, jual baju kasual wanita, target Gen Z, harga 150–350rb. Tulis caption untuk..."
 
-**Dengan Project:**
-> "Tulis caption untuk kemeja linen putih baru — koleksi summer."
+**Dengan Project:** "Tulis caption untuk kemeja linen putih baru — koleksi summer." Sama hasilnya. Hemat 3–5 menit briefing setiap sesi.
 
-Sama hasilnya. Hemat 3–5 menit briefing setiap sesi.
-
-### ■ LATIHAN
-
-Setup Claude Project pertamamu sekarang.
-
-1. Buka Claude → klik "New Project"
-2. Salin template System Instructions di atas
-3. Isi dengan info bisnismu sendiri
-4. Test dengan prompt pendek — lihat apakah Claude langsung "ngerti" tanpa briefing
-
-### ■ OUTPUT YANG DIHARAPKAN
-
-1 Claude Project aktif dengan System Instructions terisi. Coba minimal 3 prompt berbeda tanpa briefing ulang.
+> **📎 Ganti ke Data Bisnismu:** Setelah terbiasa lewat latihan k2-m2-referensi-project.txt di atas, ganti isi Project Instructions dengan data bisnismu sendiri — pakai template di atas sebagai kerangka. Project ini yang akan kamu pakai terus di modul-modul berikutnya.
 
 ---
 
@@ -206,184 +164,127 @@ Setup Claude Project pertamamu sekarang.
 
 ### Masalah yang Diselesaikan
 
-Rata-rata orang menghabiskan 2,5 jam sehari untuk email. Sebagian besar terbuang untuk memikirkan kata-kata yang tepat — bukan untuk benar-benar bekerja.
+Menulis balasan email yang tepat — nada yang pas, informasi lengkap, tidak bertele-tele — biasanya makan waktu lebih lama dari yang seharusnya. Claude bisa bantu susun draft balasan dalam hitungan detik: kamu kasih konteks singkat soal email dan tujuan balasannya, Claude yang menyusun kalimatnya. **Setelah modul ini:** email yang biasanya kamu tulis dari nol selesai dalam hitungan menit — kamu tetap yang menentukan isi dan nadanya, bukan Claude.
 
-Rina punya 15 email yang perlu dibalas setiap hari: komplain pelanggan, pertanyaan reseller, konfirmasi supplier, follow-up pembayaran.
+### Workflow Email dengan Claude — 4 Langkah dari Inbox ke Terkirim
 
-Setelah modul ini: dari 15 email, 12 bisa diselesaikan dalam 10 menit.
+1. **Baca Email** — Buka email masuk. Pahami inti pesan: apa yang diminta, siapa pengirimnya, seberapa urgent.
+2. **Tulis Prompt** — Ceritakan konteks ke Claude: email dari siapa, isinya apa, tone yang diinginkan. Pakai 3 Elemen Wajib.
+3. **Baca & Edit** — Baca output Claude. Tambahkan info personal atau detail spesifik yang hanya kamu tahu. Sesuaikan jika perlu.
+4. **Kirim** — Lakukan checklist sebelum kirim. Pastikan nama, detail, dan tone sudah sesuai. Baru tekan "Send".
 
-### Workflow: Email → Claude → Review → Kirim
+### 3 Elemen Wajib Prompt Email
 
-> [VISUAL: Diagram alur 4 langkah horizontal dengan ikon]
-> Email masuk → Copy ke Claude → Dapat draft → Edit & kirim
+- **A. Konteks Penerima** — Siapa yang menerima? Hubungan apa (klien baru, supplier lama, pelanggan kecewa)? Tingkat formalitas yang sesuai?
+- **B. Inti Pesan** — Apa yang ingin disampaikan? Satu kalimat yang merangkum tujuan email ini.
+- **C. Tone & Panjang** — Formal / santai / tegas / empati? Maks berapa kata? Ada CTA atau tidak?
 
-Claude tidak bisa masuk ke Gmail langsung. Tapi workflownya tetap cepat:
+### 4 Tipe Email yang Sering Ditulis
 
-1. **Buka email** yang perlu dibalas
-2. **Copy isi email** → paste ke Claude
-3. **Tambahkan konteks 1–2 kalimat** (hubungan, tujuan balasan, tone)
-4. **Minta draft** → review → kirim
+**① Balas Pertanyaan / Inquiry**
+"[paste email inquiry] Balas email dari [nama] yang tanya tentang [topik]. Berikan info lengkap tapi singkat. Tone: ramah-profesional. Maks 80 kata."
 
-### 3 Elemen Wajib Saat Prompt Email
+**② Menangani Komplain**
+"[paste email komplain] Balas komplain dari [nama] soal [masalah]. Mulai dengan empati, akui masalahnya, tawarkan solusi [sebutkan]. Tone: hangat, tidak defensif."
 
-> [VISUAL: 3 kotak horizontal]
+**③ Follow-up & Pengingat**
+"[paste email atau catatan follow-up] Kirim follow-up ke [nama] soal [topik] yang belum direspons sejak [tanggal]. Tone: sopan, gentle reminder. Jangan terkesan mendesak."
 
-**1. Teks email asli** — paste seluruhnya, jangan ringkas
-**2. Konteks hubungan** — pelanggan baru? supplier lama? reseller potensial?
-**3. Tujuan balasan** — konfirmasi, tolak, klarifikasi, follow-up, atau tawaran?
-
-### Contoh Nyata: 4 Tipe Email Rina
-
-> [VISUAL: 4 kartu/tab dengan contoh masing-masing]
-
-**① Komplain pelanggan (paling sering)**
-```
-[paste email komplain]
-
-Ini pelanggan yang sudah beli 3x. Dia komplain baju yang diterima warnanya 
-beda dari foto. Tulis balasan yang: (1) minta maaf tulus, (2) tawarkan tukar 
-atau refund, (3) minta foto bukti. Tone: hangat dan profesional. Maks 5 kalimat.
-```
-
-**② Pertanyaan reseller**
-```
-[paste email tanya-tanya reseller]
-
-Ini calon reseller dari Surabaya. Dia tanya soal harga grosir dan minimum order. 
-Kita belum punya program reseller formal. Tulis balasan yang: informatif, 
-tidak menutup pintu, dan minta nomor WA untuk diskusi lebih lanjut.
-```
-
-**③ Follow-up supplier yang tidak balas**
-```
-Saya perlu follow-up supplier kain yang belum balas email saya dari 3 hari lalu 
-soal pesanan 50 meter kain linen. Tulis follow-up yang: singkat, sopan, 
-ada sense of urgency ringan. Maks 3 kalimat.
-```
-
-**④ Konfirmasi pembayaran**
-```
-[paste bukti transfer pelanggan]
-
-Pelanggan sudah transfer. Tulis konfirmasi yang: akui pembayaran, sebutkan 
-estimasi pengiriman 1–2 hari kerja, dan ucapkan terima kasih. Maks 3 kalimat.
-```
+**④ Konfirmasi & Informasi**
+"[paste bukti/detail terkait] Tulis konfirmasi ke [nama] bahwa [detail pesanan/meeting/keputusan] sudah diterima. Sertakan ringkasan poin penting. Singkat, maks 60 kata."
 
 ### Checklist Sebelum Kirim
 
-> [VISUAL: Checklist kotak centang — desain simpel]
-
-☐ Nama penerima sudah benar (bukan "[Nama]")
-☐ Tone sesuai dengan hubungan (formal / santai)
-☐ Tidak ada info yang salah atau perlu dicek ulang
-☐ CTA atau next step jelas (kalau dibutuhkan)
-☐ Panjang email sesuai (tidak terlalu panjang untuk hal sederhana)
+☐ Nama penerima benar (bukan placeholder [nama]) · ☐ Isi email akurat, bukan halusinasi Claude · ☐ Ada CTA yang jelas jika diperlukan · ☐ Tone sudah sesuai: formal / santai / tegas? · ☐ Tidak ada info sensitif yang ikut di-paste ke Claude · ☐ Panjang sudah sesuai, tidak bertele-tele
 
 ### ■ LATIHAN
 
-Buka inbox kamu sekarang. Pilih 3 email yang perlu dibalas.
-
-Untuk masing-masing:
-- Paste isi email ke Claude
-- Tambahkan konteks 1–2 kalimat
-- Minta draft
-- Hitung waktu yang dibutuhkan vs. menulis dari nol
+Download file latihan **k2-m3-contoh-inbox.txt** dari halaman materi — isinya 12 email contoh inbox Kasual Studio. Pilih 1 email: (1) identifikasi tipenya — inquiry / komplain / follow-up / konfirmasi, (2) pilih template yang sesuai dari atas dan isi [placeholder] dengan info dari email, (3) paste ke Claude, baca draft, edit seperlunya. Lanjutkan dengan email asli dari inbox kamu sendiri.
 
 ### ■ OUTPUT YANG DIHARAPKAN
 
-3 draft balasan email siap kirim. Target: rata-rata di bawah 3 menit per email.
+1 draft balasan email siap kirim. Target: di bawah 3 menit.
+
+> **✏️ Lanjutan — Coba Inbox Kamu Sendiri:** Setelah lancar dengan data contoh, ulangi pola yang sama dengan email asli dari inbox kamu. Ini yang bakal jadi rutinitas harianmu, bukan cuma latihan sekali jalan.
+
+### Level Up: Inbox Triage Board
+
+**🛠️ Bonus: Papan Prioritas, Bukan Cuma Draft Balasan.** Kalau inbox-mu sering menumpuk, minta Claude susun dulu papan prioritasnya sebelum kamu mulai membalas: kolom Urgent, Perlu Dibalas, dan Sekadar Info. Belum sempat connect Gmail? Pakai file contoh **k2-m3-contoh-inbox.txt** untuk latihan.
+
+**Contoh Prompt:** "[paste isi inbox] Kelompokkan semua email ini ke 3 kategori: URGENT (perlu dibalas hari ini), PERLU DIBALAS (bisa besok), SEKADAR INFO (tidak perlu balasan). Buatkan sebagai 1 halaman HTML dengan 3 kolom berwarna berbeda, supaya saya bisa lihat sekilas mana yang harus dikerjakan duluan."
+
+> **✦ TIP — Gmail Langsung dari Claude (MCP Connector):** Selain copy-paste manual, Claude juga bisa terhubung langsung ke inbox Gmail-mu lewat Connector — baca dan susun draft tanpa copy-paste sama sekali. Cara setup dan pemakaiannya dibahas lengkap di modul lain.
 
 ---
 
-## MODUL 04 · Google Sheets + Claude
+## MODUL 04 · Spreadsheet & Claude
 
 ### Masalah yang Diselesaikan
 
-Rina punya data penjualan di Google Sheets — 6 bulan, 12 produk, 300+ transaksi. Setiap minggu dia butuh 2 jam untuk bikin laporan manual.
+Spreadsheet — Google Sheets atau Excel, sama saja — menyimpan datamu, tapi menganalisisnya masih manual: bikin formula, cari pola, susun laporan, semua makan waktu. Claude bisa bantu di ketiga langkah itu sekaligus, dan cara promptingnya sama persis di kedua tools: tulis formula dari deskripsi biasa, temukan pola dari data yang kamu paste, dan kasih rekomendasi bisnis konkret. Modul ini pakai Google Sheets sebagai contoh (termasuk 1 bonus otomasi khusus Sheets), tapi kalau kamu di Excel, tinggal sebutkan itu ke Claude dan hasilnya tetap relevan. **Setelah modul ini:** laporan yang biasanya makan waktu berjam-jam selesai dalam hitungan menit — dan kamu tetap yang pegang kendali datanya, bukan Claude.
 
-Setelah modul ini: laporan yang sama selesai dalam 15 menit — dan hasilnya lebih akurat.
+### Yang Bisa Claude Bantu di Spreadsheet
 
-### Yang Bisa Claude Bantu di Sheets
+- **01 Formula** — Claude menulis formula dari deskripsi biasa, menjelaskan formula yang membingungkan, dan membantu debug formula yang error
+- **02 Analisis** — Temukan pola dari data penjualan, bandingkan performa antar produk atau periode, dan identifikasi anomali yang mudah terlewat
+- **03 Rekomendasi** — Dari data ke keputusan bisnis konkret — produk mana yang perlu direstock, dipromosikan, atau dihentikan
 
-> [VISUAL: 3 kolom dengan ikon]
+### Data Aman vs. Data Sensitif
 
-**Formula** — buat, jelaskan, debug formula yang error
-**Analisis** — temukan pola, bandingkan performa, identifikasi anomali
-**Rekomendasi** — dari data ke keputusan bisnis konkret
+**✅ AMAN Dibagikan:** Nama produk, kategori, harga · Jumlah penjualan per periode · Data performa (tanpa nama pelanggan) · Struktur kolom dan formula
 
-### Data yang Aman vs. Tidak untuk Dibagikan ke Claude
+**⚠️ HINDARI Dibagikan:** Nama lengkap + nomor telepon pelanggan · Nomor kartu kredit / rekening · Password atau API key · Data karyawan dengan info personal
 
-> [VISUAL: Dua kotak — AMAN (hijau) dan HINDARI (merah)]
+### Latihan — Langkah demi Langkah (Praktik dengan Data Kasual Studio)
 
-**AMAN dibagikan:**
-- Nama produk, kategori, harga
-- Jumlah penjualan per periode
-- Data performa (tanpa nama pelanggan)
-- Struktur kolom dan formula
+1. **Download file-nya.** Download **k2-data-latihan-sheets.csv** dari halaman materi — data transaksi Kasual Studio (April–Juli 2026, ~180 baris: Tanggal, Order ID, Produk, Region, Sales, Qty, Harga Satuan, Total).
+2. **Upload ke Claude.** Buka claude.ai, mulai chat baru. Drag & drop file CSV tadi ke jendela chat (atau klik ikon 📎 attach di kolom chat untuk upload manual).
+3. **Kirim 3 prompt di bawah, satu per satu.** Tetap di chat yang sama — Claude tetap "ingat" datamu sepanjang percakapan, tidak perlu upload ulang.
 
-**HINDARI dibagikan:**
-- Nama lengkap + nomor telepon pelanggan
-- Nomor kartu kredit / rekening
-- Password atau API key
-- Data karyawan dengan info personal
+**Prompt 1 — Formula:** "Data saya di spreadsheet punya kolom: Tanggal, Order ID, Produk, Region, Sales, Qty, Harga Satuan, Total. Buatkan formula SUMIF untuk hitung total revenue per Produk, dan total revenue per Region. Saya pakai Google Sheets (sebutkan kalau kamu pakai Excel)."
 
-### Cara Prompt yang Benar untuk Sheets
+**Prompt 2 — Analisis & Rekomendasi:** "Dari data transaksi yang saya kasih tadi: produk dan region mana yang paling laris? Ada tren naik atau turun? Sales mana yang paling produktif? Kasih rekomendasi langkah berikutnya."
 
-**Selalu sebutkan struktur data dulu:**
+**Prompt 3 — File Excel Ringkasan:** "Dari analisis dan rekomendasi tadi, buatkan saya file Excel ringkasan yang bisa saya bagikan ke tim: sheet 1 ringkasan per Produk (qty + revenue), sheet 2 ringkasan per Region, sheet 3 insight & rekomendasi dalam poin-poin. Format rapi."
 
-```
-Saya punya sheet dengan kolom:
-A: Nama Produk | B: Kategori | C: Jan | D: Feb | E: Mar
-F: Target Bulanan | G: Harga | H: Stok
+> **📌 Tips:** Prompt 1 hasilnya formula — kamu salin manual ke sheet-mu sendiri. Prompt 3 beda: Claude langsung generate file **.xlsx** yang muncul sebagai lampiran di chat, tinggal klik download — tidak perlu disalin manual.
 
-[pertanyaan atau permintaan spesifik]
-```
-
-**Contoh Rina — Alur Lengkap:**
-
-*Step 1 — Minta formula:*
-```
-Sheet saya punya kolom: A=Nama Produk, B=Jan, C=Feb, D=Mar, E=Target.
-Buatkan formula di F2 untuk hitung total penjualan Jan–Mar, 
-dan G2 untuk hitung % pencapaian target. Saya pakai Google Sheets.
-```
-
-*Step 2 — Minta analisis (paste 5–10 baris hasil):*
-```
-Ini data penjualan Kasual Studio 3 bulan terakhir:
-[paste data]
-
-Analisis: produk mana yang performa paling konsisten? 
-Mana yang tren naik vs. turun? Rekomendasikan 2 produk yang perlu 
-ditingkatkan stok bulan depan.
-```
-
-*Step 3 — Keputusan bisnis:*
-```
-Dari analisis tadi, saya punya budget restock Rp 5 juta. 
-Sarankan alokasi yang paling optimal berdasarkan data performa.
-```
-
-> [VISUAL: Diagram alur — Data → Formula → Insight → Keputusan]
-
-### ■ BONUS: Google Apps Script
-
-> [VISUAL: Kotak dengan label "BONUS — Untuk yang Ingin Lanjut"]
-
-Untuk pengguna yang lebih teknis: Claude bisa bantu tulis Google Apps Script untuk otomatisasi berulang (laporan otomatis, notifikasi email, dll). Ini bukan bagian wajib modul — pelajari kalau kamu sudah nyaman dengan workflow dasar.
-
-### ■ LATIHAN
-
-Download file latihan `k2-data-penjualan.csv` dari halaman materi.
-
-1. Import ke Google Sheets
-2. Minta Claude buat 3 formula dasar (total, rata-rata, % target)
-3. Paste 5 baris data ke Claude dan minta analisis pola
-4. Tanya Claude: *"Dari data ini, produk mana yang harus saya prioritaskan bulan depan?"*
+> **💾 Sudah Connect Google Drive ke Claude?** Kalau Google Drive sudah terhubung ke akun Claude-mu (dan fitur "Code execution and file creation" aktif di Settings → Capabilities — nyala secara default di paket Free/Pro/Max), kamu tidak harus download file Excel dari Prompt 3. Minta langsung: *"Simpan file ringkasan ini ke Google Drive saya sebagai Google Sheet."* Claude akan menyimpannya langsung ke Drive-mu, dan otomatis jadi Google Sheet asli — bukan cuma file .xlsx yang perlu kamu convert manual.
 
 ### ■ OUTPUT YANG DIHARAPKAN
 
-Sheet dengan 3 formula berjalan + 1 paragraf analisis dari Claude tentang pola performa berdasarkan data kamu.
+Formula SUMIF yang siap kamu paste ke sheet-mu sendiri, insight & rekomendasi dari Claude di chat, dan 1 file Excel ringkasan (bisa langsung didownload) yang dibuatkan Claude dari hasil analisis.
+
+### 🛠️ Bonus — Automasi Workflow: Menu "Export PDF" di Google Sheets
+
+Google Apps Script yang menambahkan menu "Export PDF" ke Sheets-mu — cuma 2 klik: **"1. Update Formatting"** untuk otomatis menambah judul laporan, merapikan kolom Total jadi format Rupiah, dan memberi conditional formatting, lalu **"2. Export ke PDF"** untuk langsung export sheet aktif jadi PDF rapi ke Drive. Dibuat dengan memprompt Claude langsung — tidak ada API key atau paket Pro yang dibutuhkan.
+
+Bukan Claude yang jalan di dalam Sheets-mu — tapi Claude yang menulis automasinya untukmu. Script ini awalnya dibuat dengan cara memprompt Claude langsung, lalu tinggal di-paste ke Apps Script sekali. **Catatan:** ini otomasi khusus Google Sheets. Kalau kamu di Excel, konsepnya sama tapi toolnya beda — minta Claude tulis versi VBA macro dengan prompt yang serupa.
+
+**Prompt yang Dipakai untuk Generate Script Ini:** "Buatkan saya Google Apps Script untuk Google Sheets dengan menu custom "Export PDF" berisi 2 menu saja: (1) "Update Formatting" — otomatis deteksi tabel data (cari kolom bernama "Total" dan "Harga Satuan" di header, tidak perlu select range manual), tambahkan 1 baris judul laporan (nama sheet + tanggal hari ini, diberi warna dan bold) di paling atas, rapikan kolom Total/Harga Satuan jadi format Rupiah, dan beri conditional formatting warna skala pada kolom Total; (2) "Export ke PDF" — export sheet aktif jadi 1 file PDF rapi (tanpa gridlines, fit ke lebar halaman), disimpan ke folder khusus di Drive dengan link untuk membukanya. Tidak boleh pakai API key eksternal apapun — cukup fitur bawaan Apps Script dan Drive."
+
+> **✏️ Mau Versimu Sendiri?** Kamu tidak harus pakai script k2-pdf-export-helper.txt persis apa adanya — paste prompt di atas ke Claude dan minta modifikasi sesuai kebutuhanmu. Contoh: *"tambahkan nama toko di judul PDF-nya"*, *"ubah warna grafik jadi hijau"*, atau *"export ke folder Drive tertentu, bukan folder baru"*. Claude akan tulis ulang scriptnya untukmu — kamu tinggal paste versi barunya ke Apps Script.
+
+**Cara Install — 6 Langkah** (file k2-pdf-export-helper.txt cuma teks biasa, buka dengan Notepad/TextEdit — tidak perlu software tambahan):
+1. Download k2-pdf-export-helper.txt dari halaman materi (atau pakai versi hasil promptmu sendiri ke Claude)
+2. Klik kanan file-nya → Open with → pilih Notepad (Windows) atau TextEdit (Mac)
+3. Select All (Ctrl+A / Cmd+A) lalu Copy (Ctrl+C / Cmd+C) seluruh isinya
+4. Buka Google Sheets-mu → Extensions → Apps Script → hapus kode default → Paste isi yang tadi di-copy
+5. Klik Save (ikon disket atau Ctrl+S), lalu tutup tab Apps Script
+6. Refresh halaman Google Sheets → menu "Export PDF" muncul di menu bar. Saat pertama dipakai, klik Allow saat Google minta izin akses (normal, script perlu izin baca sheet & simpan ke Drive-mu)
+
+**Cara Pakai — 2 Langkah Sebelum Export:**
+1. *Update Formatting* — Klik sel mana saja di dalam tabel data kamu (tidak perlu select range manual) → jalankan "1. Update Formatting". Script otomatis mendeteksi kolom Total & Harga Satuan, menambah judul laporan, merapikan angka jadi Rupiah, dan memberi conditional formatting pada kolom Total.
+2. *Export ke PDF* — Jalankan "2. Export ke PDF" — judul dan formatting dari langkah 1 ikut ter-export karena semuanya bagian dari tampilan sheet
+
+> **👀 Contoh Hasil:** Kalau kamu jalankan alur ini pakai k2-data-latihan-sheets.csv, hasil PDF-nya berupa: judul "Kasual Studio — Laporan [tanggal]" dengan latar ungu, dan kolom Total dengan angka Rupiah rapi (Rp 12.375.000, bukan 12375000 — total revenue produk terlaris di data latihan) plus conditional formatting warna skala.
+
+> **💳 Soal Biaya:** Beda dengan bonus versi sebelumnya (yang butuh API key berbayar dari console.anthropic.com), script ini tidak memanggil Claude API sama sekali — cuma pakai fitur bawaan Google Apps Script dan Google Drive. 100% gratis, tidak butuh paket Claude Pro, dan tidak ada biaya pemakaian apapun di luar akun Google-mu sendiri.
+
+### ✦ TIP — Claude di Sheets, Excel Online, & Excel Desktop
+
+- **🌐 Claude in Chrome** — Bisa baca & isi formula langsung di Google Sheets atau Excel Online (versi browser) tanpa copy-paste. **Butuh paket Pro atau lebih tinggi — tidak tersedia di paket Free.** Setup: Chrome Web Store → cari "Claude" → install "Claude for Chrome" (dari Anthropic) → login → buka Sheets/Excel Online → klik ikon Claude di toolbar → panel Claude muncul di sisi kanan. Setelah setup: *"Lihat sheet yang terbuka. Buatkan formula total revenue per produk di kolom yang saya tunjuk."*
+- **🖥️ Claude for Excel** — Pakai Excel Desktop (Windows atau Mac)? Itu tool yang beda — ada add-in terpisah bernama "Claude for Excel", diinstall langsung dari Microsoft Marketplace, yang kerja di dalam Excel-nya sendiri (bukan lewat browser). Juga khusus paket Pro ke atas.
 
 ---
 
@@ -391,17 +292,7 @@ Sheet dengan 3 formula berjalan + 1 paragraf analisis dari Claude tentang pola p
 
 ### Masalah yang Diselesaikan
 
-Rina punya 20 produk baru yang perlu deskripsi untuk Tokopedia. Dengan cara biasa: 20 prompt terpisah, 20 copy-paste, 40 menit.
-
-Dengan batch prompting: 1 prompt, 20 deskripsi, 5 menit.
-
-### Apa itu Batch Prompting?
-
-> [VISUAL: Diagram — 1 Prompt masuk → Claude memproses → 20 Output keluar (fan out)]
-
-Kamu berikan Claude satu set instruksi + daftar item → Claude proses semua sekaligus.
-
-Berlaku untuk item apapun yang membutuhkan **perlakuan sama**: deskripsi produk, ringkasan review, balasan template, kategori data, dll.
+Batch prompting adalah cara memberi Claude satu set instruksi + daftar item sekaligus, supaya semuanya diproses dalam satu kali jalan — bukan satu per satu secara manual. Cocok untuk pekerjaan apapun yang butuh **perlakuan sama** di banyak item: deskripsi produk, ringkasan review, balasan template, kategori data, dan sejenisnya. **Contohnya:** 20 item yang butuh diproses satu-satu — dengan cara biasa: 20 prompt terpisah, 20 copy-paste, 40 menit. Dengan batch prompting: 1 prompt, 20 hasil, 5 menit.
 
 ### Struktur Prompt Batch
 
@@ -418,59 +309,17 @@ Daftar item:
 ...
 ```
 
-### 4 Contoh Nyata yang Bisa Kamu Pakai Sekarang
+### 4 Contoh Langsung Pakai
 
-> [VISUAL: 4 kartu — satu per kasus]
+**① Deskripsi Produk Tokopedia:** "Tulis deskripsi produk Tokopedia untuk setiap item berikut. Format per produk: Nama, Deskripsi (2 kalimat manfaat + 1 kalimat CTA, maks 50 kata), Highlight (3 bullet point keunggulan). Produk: 1. Kemeja linen putih... [lanjutkan sampai semua produk]"
 
-**① Deskripsi produk Tokopedia (Rina)**
-```
-Tulis deskripsi produk Tokopedia untuk setiap item berikut.
-Format per produk:
-- Nama: [nama produk]
-- Deskripsi: 2 kalimat manfaat + 1 kalimat CTA, maks 50 kata
-- Highlight: 3 bullet point keunggulan
+**② Klasifikasi Pesan (DM/WA):** "Klasifikasikan setiap pesan berikut ke dalam salah satu kategori: KOMPLAIN / PERTANYAAN / PUJIAN / PERMINTAAN. Format: Nomor | Kategori | Tingkat urgensi (Segera/Normal/Rendah). Pesan: 1. ... [lanjutkan]"
 
-Produk:
-1. Kemeja linen putih, bahan adem, cocok kerja & kasual
-2. Celana kulot hitam, pinggang elastis, all size S–XL
-3. Dress midi floral, bahan katun, tersedia 4 warna
-[lanjutkan sampai 20 produk]
-```
+**③ Ringkasan Email Masuk:** "Ringkas setiap email berikut dalam 1 kalimat. Sebutkan: siapa pengirim + apa yang mereka minta/sampaikan. Email 1: [paste email] ..."
 
-**② Kategori review pelanggan**
-```
-Kategorikan setiap review berikut sebagai: POSITIF / NEGATIF / NETRAL
-Lalu ekstrak: poin utama yang disebut pelanggan (maks 5 kata)
+**④ 5 Variasi Caption dari 1 Konsep:** "Buat 5 variasi caption Instagram untuk produk yang sama. Tiap variasi: hook berbeda, tone berbeda (santai/inspiratif/edukatif/FOMO/relatable). Semua: maks 60 kata + 3 hashtag."
 
-Review:
-1. "Baju bagus, jahitan rapi, tapi pengiriman lama"
-2. "Warna persis seperti foto, puas!"
-3. "Ukuran kebesaran dari yang tertera"
-[lanjutkan]
-```
-
-**③ Ringkasan email masuk**
-```
-Ringkas setiap email berikut dalam 1 kalimat. 
-Sebutkan: siapa pengirim + apa yang mereka minta/sampaikan.
-
-Email 1: [paste email]
-Email 2: [paste email]
-[lanjutkan]
-```
-
-**④ Buat variasi caption dari 1 konsep**
-```
-Buat 5 variasi caption Instagram untuk produk yang sama.
-Tiap variasi: hook berbeda, tone berbeda (santai / inspiratif / edukatif / FOMO / relatable).
-Semua: maks 60 kata + 3 hashtag.
-
-Produk: Kemeja linen putih, koleksi summer, harga Rp 189.000
-```
-
-### Kapan TIDAK Pakai Batch Prompting
-
-> [VISUAL: Kotak peringatan / warning box]
+### ⚠️ Kapan TIDAK Pakai Batch Prompting
 
 - Kalau setiap item butuh konteks yang sangat berbeda satu sama lain
 - Kalau output satu item bergantung pada output item lain
@@ -479,15 +328,17 @@ Produk: Kemeja linen putih, koleksi summer, harga Rp 189.000
 
 ### ■ LATIHAN
 
-Pilih 5–10 item sejenis dari pekerjaanmu: deskripsi produk, email template, ringkasan, atau apapun.
-
-Tulis satu batch prompt dengan instruksi + format + semua item. Proses sekaligus.
-
-Simpan prompt tersebut sebagai template — pakai lagi kapanpun perlu.
+Pilih 5–10 item sejenis dari pekerjaanmu: deskripsi produk, email template, ringkasan, atau apapun. Belum ada bahan sendiri? Pakai **k2-m5-latihan-batch.txt** dari halaman materi (4 set latihan: deskripsi produk, ringkasan email, klasifikasi pesan DM/WA, variasi caption). Tulis satu batch prompt dengan instruksi + format + semua item. Proses sekaligus. Simpan prompt tersebut sebagai template — pakai lagi kapanpun perlu.
 
 ### ■ OUTPUT YANG DIHARAPKAN
 
-5–10 output terproses sekaligus. 1 template prompt tersimpan.
+5–10 output terproses sekaligus. 1 template prompt tersimpan untuk dipakai lagi.
+
+### Level Up: Batch Output Tracker
+
+**🛠️ Bonus: Jangan Cuma Scroll 20 Hasil.** Batch prompting menghasilkan banyak output sekaligus — tapi kalau cuma jadi teks panjang, gampang lupa mana yang sudah diproses. Minta Claude susun hasilnya sebagai daftar tercentang, supaya kamu bisa pantau progres saat menindaklanjuti satu per satu (kirim, posting, atau balas).
+
+**Contoh Prompt:** "Dari hasil klasifikasi 10 pesan tadi (Latihan C di k2-m5-latihan-batch.txt), buatkan saya 1 halaman HTML: daftar tercentang per pesan, dengan kategori dan urgensi sebagai label warna, dan checkbox 'sudah ditindaklanjuti'. Simpan sebagai 1 file yang bisa saya buka sambil kerja menyelesaikan satu per satu."
 
 ---
 
@@ -495,326 +346,139 @@ Simpan prompt tersebut sebagai template — pakai lagi kapanpun perlu.
 
 ### Masalah yang Diselesaikan
 
-Rina perlu buat proposal kerjasama untuk reseller potensial di Bandung. Kalau satu prompt: hasilnya generik dan dangkal. Kalau dicicil: setiap step membangun di atas yang sebelumnya.
+Prompt chaining adalah cara memecah tugas kompleks jadi beberapa step berurutan dalam satu chat yang sama — output dari satu prompt jadi input untuk prompt berikutnya, dan setiap step membangun di atas konteks yang sudah ada. Cocok untuk output yang terlalu kompleks untuk 1 prompt, tugas yang punya tahapan logis (riset → draft → review → finalisasi), atau saat 1 prompt langsung menghasilkan hasil yang dangkal dan generik. **Contohnya:** mau buat proposal kerjasama untuk reseller potensial — dengan 1 prompt langsung, hasilnya generik dan dangkal. Dicicil jadi chain 4 step, setiap step membangun di atas yang sebelumnya — hasilnya jauh lebih kuat.
 
-Setelah modul ini: output kompleks yang biasanya butuh 2 jam, selesai dalam 25 menit.
+### Contoh Nyata: Proposal Reseller — Chain 4 Step
 
-### Apa itu Prompt Chaining?
+**Step 1 — Riset & Profil Calon Reseller:** "Saya akan buat proposal kerjasama reseller untuk Kasual Studio (brand fashion kasual wanita, harga Rp 150–350rb). Calon reseller: toko fashion di Bandung, sudah 2 tahun berjualan, follower IG 8.000, fokus ke pasar mahasiswi. Buat: (1) profil calon reseller berdasarkan info ini, (2) apa yang kemungkinan mereka cari dari kerjasama, (3) kekhawatiran yang mungkin mereka punya."
 
-> [VISUAL: Diagram alur → Prompt 1 → Output 1 → Prompt 2 → Output 2 → Prompt 3 → Output final]
+**Step 2 — Kerangka Proposal (gunakan output Step 1):** "Berdasarkan profil dan kebutuhan reseller tadi, buat kerangka proposal kerjasama yang menjawab kekhawatiran mereka. Sertakan: penawaran harga grosir, minimum order, keuntungan eksklusif reseller, dan cara mulai. Formatnya: 5 section dengan heading."
 
-Satu prompt menghasilkan output.
-Output itu jadi input untuk prompt berikutnya.
-Setiap step membangun di atas konteks yang sudah ada.
+**Step 3 — Tulis Proposal Lengkap:** "Tulis proposal lengkap berdasarkan kerangka tadi. Tone: profesional tapi hangat. Panjang: 400–500 kata. Bahasa Indonesia formal."
 
-**Kapan dibutuhkan:**
-- Output yang terlalu kompleks untuk 1 prompt
-- Tugas yang punya tahapan logis (riset → draft → review → finalisasi)
-- Kalau satu prompt menghasilkan hasil yang dangkal atau generik
+**Step 4 — Review & Perkuat:** "Identifikasi 3 bagian paling lemah dari proposal ini dan tulis ulang agar lebih meyakinkan. Fokus pada bagian yang bisa membuat reseller ragu."
 
-### Contoh Nyata: Rina Buat Proposal Reseller
-
-> [VISUAL: Timeline/flowchart 4 step dengan konten singkat per step]
-
-**Step 1 — Riset & Profil (Prompt pertama)**
-```
-Saya akan buat proposal kerjasama reseller untuk Kasual Studio 
-(brand fashion kasual wanita, harga Rp 150–350rb).
-
-Calon reseller: toko fashion di Bandung, sudah 2 tahun berjualan, 
-follower IG 8.000, fokus ke pasar mahasiswi.
-
-Buat: (1) profil calon reseller berdasarkan info ini, 
-(2) apa yang kemungkinan mereka cari dari kerjasama, 
-(3) kekhawatiran yang mungkin mereka punya.
-```
-
-**Step 2 — Struktur Proposal (Gunakan output Step 1)**
-```
-Berdasarkan profil dan kebutuhan reseller tadi, 
-buat kerangka proposal kerjasama yang menjawab kekhawatiran mereka.
-
-Sertakan: penawaran harga grosir, minimum order, keuntungan eksklusif reseller, 
-dan cara mulai. Formatnya: 5 section dengan heading.
-```
-
-**Step 3 — Tulis Proposal Lengkap**
-```
-Tulis proposal lengkap berdasarkan kerangka tadi.
-Tone: profesional tapi hangat. Panjang: 400–500 kata.
-Bahasa Indonesia formal.
-```
-
-**Step 4 — Review & Perkuat**
-```
-Identifikasi 3 bagian paling lemah dari proposal ini dan tulis ulang 
-agar lebih meyakinkan. Fokus pada bagian yang bisa membuat reseller ragu.
-```
-
-### 5 Aturan Prompt Chaining yang Efektif
-
-> [VISUAL: 5 poin dengan ikon nomor]
+### 5 Aturan Chain yang Efektif
 
 1. **Tetap di satu chat** — jangan buka chat baru di tengah chain
-2. **Review output di setiap step** sebelum lanjut
+2. **Review output di setiap step** sebelum lanjut ke step berikutnya
 3. **Mulai dari yang luas, semakin spesifik** setiap step
 4. **Gunakan "dari hasil tadi..."** untuk merujuk ke output sebelumnya
 5. **Step terakhir selalu review** — "identifikasi 3 bagian paling lemah dan perbaiki"
 
 ### Ide Chain untuk Bisnismu
 
-> [VISUAL: 3 kartu contoh use case]
-
-- **Konten bulanan:** Riset trend → Kalender konten → Draft caption → Review
-- **Laporan performa:** Analisis data → Temukan insight → Buat narasi → Slide summary
-- **Onboarding karyawan baru:** Buat checklist → Tulis SOP → Buat template pertanyaan
+- **Konten Bulanan** — Riset trend → Kalender konten → Draft caption → Review & finalisasi
+- **Laporan Performa** — Analisis data → Temukan insight → Buat narasi → Slide summary
+- **Onboarding Karyawan** — Buat checklist → Tulis SOP → Buat template pertanyaan
+- **Pitch atau Proposal** — Riset klien → Kerangka → Draft lengkap → Identifikasi kelemahan
 
 ### ■ LATIHAN
 
-Pilih satu tugas yang biasanya kamu kerjakan dalam beberapa langkah terpisah.
-
-Buat chain minimal 3 step. Kerjakan dalam satu chat yang sama. Review output di setiap step sebelum lanjut.
+Pilih satu tugas yang biasanya kamu kerjakan dalam beberapa langkah terpisah. Buat chain minimal 3 step. Kerjakan dalam satu chat yang sama. Review output di setiap step sebelum lanjut. Bandingkan hasilnya dengan satu prompt langsung — mana yang lebih baik?
 
 ### ■ OUTPUT YANG DIHARAPKAN
 
-1 output final dari chain minimal 3 step. Bandingkan hasilnya dengan satu prompt langsung — mana yang lebih baik?
+1 output final dari chain minimal 3 step yang lebih baik dari yang dihasilkan 1 prompt langsung.
+
+### Level Up: Dokumen Jadi, Bukan Cuma Teks Chat
+
+**🛠️ Bonus: Hasil Akhir Chain Bisa Langsung Jadi File.** Proposal hasil chain 4 step di atas masih berupa teks di chat — masih perlu disalin manual ke Word. Langkah terakhir yang sering kelewat: minta Claude langsung hasilkan filenya. Claude bisa membuat Word (.docx) atau PDF asli, lengkap dengan heading dan format rapi, siap dilampirkan ke email tanpa kamu susun ulang.
+
+**Contoh Prompt:** "Dari proposal yang sudah kita perkuat tadi, buatkan sebagai dokumen Word (.docx) yang rapi: judul, heading per section, paragraf yang sudah diformat, dan siap saya lampirkan langsung ke email tanpa perlu saya susun ulang di Word."
 
 ---
 
-## MODUL 07 · Case Study: Senin Pagi di Kasual Studio
+## MODUL 07 · Dokumen & Riset
 
-### Setup Skenario
+### Masalah yang Diselesaikan
 
-Rina baru pulang dari liburan 3 hari. Senin pagi, dia buka laptop dan langsung dihadapkan dengan:
+Ada satu kategori kerja yang menyita waktu tapi jarang disadari: membaca, meringkas, dan memikirkan sesuatu. Rapat 1 jam yang tidak menghasilkan action items jelas. Dokumen 15 halaman yang harus dibaca sebelum meeting besok. SOP yang tidak pernah sempat ditulis. **Setelah modul ini:** semua pekerjaan "berpikir" ini selesai 3× lebih cepat — bukan karena Claude berpikir untuk kamu, tapi karena Claude membantu menstrukturkan dan mengeksekusi prosesnya.
 
-- 23 email belum dibalas
-- Koleksi baru (10 produk linen summer) yang belum punya deskripsi Tokopedia
-- Data penjualan bulan lalu yang belum dianalisis
-- 1 calon reseller dari Yogyakarta yang minta proposal kerjasama
-- Deadline posting konten Instagram: hari ini
+> **📎 Bahan Latihan:** Belum punya catatan meeting, dokumen, atau proses sendiri untuk dicoba? Download **k2-m7-contoh-dokumen.txt** dari halaman materi — berisi 4 bagian yang cocok untuk masing-masing sub-skill di bawah: catatan meeting, dokumen proposal, bahan SWOT, dan deskripsi proses untuk SOP.
 
-Tanpa Claude: setidaknya 5 jam kerja.
-Dengan semua yang sudah dipelajari di K2: selesai sebelum makan siang.
+4 sub-skill modul ini: **Meeting Notes** (catatan berantakan → action items terstruktur dalam 2 menit) · **Summarizing** (dokumen 10 halaman → ringkasan 1 halaman untuk ambil keputusan) · **Riset & SWOT** (observasimu + web search + analisis Claude = framework keputusan bisnis, siap jadi slide presentasi) · **SOP Writing** (ceritakan prosesnya → Claude tulis SOP-nya siap pakai).
 
-Ikuti Rina step by step — dan perhatikan modul mana yang dipakai di setiap langkah.
+### 01 — Meeting Notes → Action Items
 
----
+**Prompt:** "Ini catatan meeting saya dengan supplier kain tadi: [paste catatan — boleh berantakan, boleh campur bahasa]. Tolong buat: 1. Ringkasan keputusan yang disepakati (maks 5 poin), 2. Action items dalam format tabel: Siapa | Apa | Deadline, 3. Pertanyaan yang belum terjawab dan perlu di-follow-up."
 
-### Step 1 — Buka Claude Project, Langsung Kerja
-*Modul yang dipakai: M02 Claude Projects*
+> **💡 Tips:** Tidak perlu catatan yang rapi — poin acak, singkatan, bahkan typo tetap bisa diproses. Kalau rapat direkam: transkrip audio dulu, lalu paste hasilnya ke Claude. Minta Claude kirim ulang dalam format "siap dishare ke tim" kalau perlu.
 
-Rina tidak perlu briefing ulang. Project "Kasual Studio" sudah dikonfigurasi. Claude sudah tahu nama toko, produk, tone, dan format yang diinginkan.
+Output: Tabel action items siap dishare ke peserta rapat, dalam waktu di bawah 5 menit sejak rapat selesai.
 
-Prompt pertama Rina hari ini:
+### 02 — Summarizing Dokumen
 
-```
-Bantu saya prioritaskan pekerjaan hari ini. Saya punya:
-- 23 email belum dibalas (campuran komplain, inquiry, konfirmasi)
-- 10 deskripsi produk baru untuk Tokopedia
-- Analisis data penjualan bulan lalu
-- 1 proposal reseller yang perlu dibuat
-- 1 post Instagram hari ini
+**Prompt:** "Ini proposal kerjasama yang saya terima: [paste dokumen]. Saya perlu memutuskan apakah mau lanjut atau tidak. Ringkas dalam format: Apa yang mereka tawarkan (3 poin konkret), Apa yang mereka minta dari saya (3 poin konkret), Hal yang perlu saya perhatikan sebelum setuju, Pertanyaan yang perlu saya tanyakan sebelum tanda tangan."
 
-Urutkan dari yang paling urgent ke yang bisa ditunda.
-```
+**4 Variasi Siap Pakai:**
+- **Laporan keuangan** — "Highlight 3 angka paling penting dan jelaskan artinya untuk kondisi bisnis saya."
+- **Kontrak/perjanjian** — "Apa klausul yang tidak biasa atau perlu saya perhatikan sebelum tanda tangan?"
+- **Artikel atau riset panjang** — "Ringkas ide utamanya dalam 5 kalimat. Apa yang relevan untuk bisnis saya?"
+- **Email thread panjang** — "Apa inti permasalahan dalam thread ini dan keputusan apa yang sudah disepakati?"
 
-Claude langsung menjawab dengan urutan yang logis — karena sudah tahu konteks bisnis Rina.
+Output: Ringkasan 1 halaman atau kurang — cukup untuk ambil keputusan atau membalas dengan percaya diri.
 
----
+### 03 — Riset & Analisis (SWOT)
 
-### Step 2 — Bersihkan 23 Email dalam 30 Menit
-*Modul yang dipakai: M01 Role Prompting + M03 Gmail + Claude*
+> **📌 Yang Perlu Dipahami:** Analisis paling tajam datang dari observasi langsungmu — harga kompetitor yang kamu lihat sendiri, tren dari pelanggan, atau hal spesifik di lapangan yang tidak akan muncul dari pencarian umum. Riset terbaik terjadi ketika **kamu yang membawa observasi** → Claude yang membantu **menganalisis dan menyusunnya**. Selain SWOT, observasi yang sama juga bisa diminta sebagai competitive brief kalau kamu punya deskripsi kompetitor yang kamu lihat langsung.
 
-Rina buka inbox, sort by sender type. Dia kelompokkan email jadi 4 tipe:
+**Prompt SWOT:** "Saya mau masuk ke kategori tas kanvas untuk pasar yang sama (wanita 20–32 tahun, harga Rp 150–350rb, Instagram & Tokopedia). Yang sudah saya observasi: [kompetitor yang kamu lihat dan harga mereka], [tren yang kamu tangkap dari Instagram atau pelanggan], [modal dan kapasitas yang kamu miliki], [kekhawatiran yang kamu punya]. Buatkan SWOT analysis untuk keputusan ini. Setiap kuadran: 3–4 poin yang konkret dan spesifik — bukan generik."
 
-**Komplain (5 email)** — pakai template prompt komplain dari M03, tambahkan konteks per email:
-```
-[paste email komplain]
-Pelanggan ini beli pertama kali. Komplain soal ukuran yang kebesaran.
-Balas: empati, tawarkan tukar ukuran gratis ongkir, minta foto produk.
-```
+Output: SWOT analysis 1 halaman siap dijadikan bahan diskusi atau dasar keputusan bisnis.
 
-**Inquiry reseller (3 email)** — pakai batch prompting (M05) untuk ringkas semua inquiry dulu:
-```
-Ringkas 3 email inquiry reseller berikut dalam 1 kalimat masing-masing.
-Sebutkan: kota asal + apa yang mereka tanyakan.
+**Perkuat Riset dengan Web Search** — Observasi langsungmu tetap yang paling tajam untuk detail spesifik bisnismu, tapi kalau Claude-mu punya fitur web search aktif, kamu bisa minta Claude mencari info terkini untuk melengkapi: tren pasar terbaru, berita industri, atau data publik tentang kompetitor yang belum kamu tahu.
 
-Email 1: [paste]
-Email 2: [paste]
-Email 3: [paste]
-```
-Setelah tahu isinya, Rina balas satu per satu pakai Role Prompting.
+**Prompt:** "Cari informasi terbaru soal tren pasar tas kanvas casual di Indonesia tahun ini, dan kalau ada, data publik tentang kompetitor seperti Kanvas Kita atau Totewear.id. Bandingkan temuanmu dengan observasiku di SWOT tadi — ada yang perlu ditambahkan atau diperbarui?"
 
-**Konfirmasi pembayaran (12 email)** — ini yang paling cepat. Rina pakai batch prompting:
-```
-Tulis 12 balasan konfirmasi pembayaran. Setiap balasan: akui transfer,
-sebutkan estimasi kirim 1-2 hari kerja, ucapkan terima kasih.
-Format: singkat, maks 3 kalimat, bahasa santai.
+> **📎 Perhatikan Ini:** Hasil web search bantu melengkapi gambaran besar, tapi belum tentu setepat observasi langsungmu soal detail spesifik bisnis (harga real yang kamu lihat, komentar pelanggan langsung). Pakai web search untuk konteks tambahan, bukan pengganti observasi lapanganmu. Kalau Claude-mu belum punya fitur web search, cari sendiri di Google lalu paste hasil relevannya ke Claude untuk dianalisis bersama observasimu.
 
-Nama pembeli:
-1. Dinda - transfer Rp 189.000 - Kemeja Linen Putih
-2. Sarah - transfer Rp 245.000 - Dress Midi Floral
-[lanjut sampai 12]
-```
+Output: SWOT yang lebih lengkap — gabungan observasi lapanganmu dan konteks pasar terkini dari web search.
 
-**Lain-lain (3 email)** — dibalas manual, tidak butuh Claude.
+**SWOT → Slide Presentasi** — SWOT atau riset yang sudah kamu buat biasanya perlu dipresentasikan — ke partner bisnis, calon investor, atau tim internal. Daripada mengetik ulang manual di PowerPoint, minta Claude langsung susun jadi slide.
 
-Total waktu: 28 menit untuk 23 email.
+**Prompt:** "Dari SWOT tas kanvas yang sudah kita buat tadi, buatkan sebagai file presentasi (.pptx): 1 slide judul, lalu 1 slide per kuadran (Strengths, Weaknesses, Opportunities, Threats) dengan judul singkat dan 3-4 bullet point per slide, dan 1 slide kesimpulan dengan rekomendasi. Desain simpel dan rapi, siap dipakai presentasi atau dipoles lebih lanjut di PowerPoint atau Google Slides."
 
----
+> **📎 Belum Bisa Bikin File Langsung?** Kalau akun Claude-mu belum bisa langsung membuat file .pptx, prompt yang sama tetap menghasilkan teks terstruktur per slide — tinggal copy-paste manual ke PowerPoint atau Google Slides, judul dan bullet-nya sudah siap pakai.
 
-### Step 3 — 10 Deskripsi Produk Sekaligus
-*Modul yang dipakai: M05 Batch Prompting*
+Output: 1 slide deck ringkas (5–6 slide) siap presentasi, dari riset yang tadinya cuma catatan observasi.
 
-```
-Tulis deskripsi produk Tokopedia untuk 10 produk berikut.
-Format per produk:
-- Judul listing: maks 60 karakter, sertakan kata kunci pencarian
-- Deskripsi: 3 kalimat — bahan, kecocokan, dan keunggulan produk
-- Highlight: 4 bullet point singkat
+### 04 — SOP Writing
 
-Produk koleksi Summer Linen Kasual Studio:
-1. Kemeja linen putih, bahan 100% linen, adem, cocok kerja & weekend
-2. Celana kulot krem, pinggang elastis, all size S–XL
-3. Dress midi sage green, lengan panjang, bahan linen mix
-4. Blouse off-white, kerah V, bahan linen ringan
-5. Co-ord set linen hitam (atasan + celana), tersedia 3 warna
-6. Jumpsuit linen dusty pink, tali adjustable, one size
-7. Rok midi linen stripe, zipper belakang, panjang di bawah lutut
-8. Kemeja oversized linen biru muda, fit boxy, cocok jadi outer
-9. Set piyama linen krem, nyaman untuk tidur & santai di rumah
-10. Dress mini linen terracotta, lengan balon, cocok acara kasual
-```
+**Prompt:** "Saya mau dokumentasikan proses packing pesanan di toko saya. Prosesnya kira-kira: cek pesanan masuk dari Tokopedia, siapkan produk dari rak, cek kondisi produk (tidak ada cacat, warna sesuai), lipat dengan benar, bungkus bubble wrap untuk produk yang mudah kusut, masukkan nota pembelian dan kartu ucapan kecil, seal packaging dengan lakban bening, tempel label pengiriman, foto produk yang sudah di-pack sebelum diserahkan ke kurir. Tulis ini sebagai SOP yang bisa dibaca pegawai baru. Formatnya: Judul dan tujuan SOP, Alat/bahan yang dibutuhkan, Langkah-langkah bernomor (detail cukup untuk diikuti tanpa penjelasan lisan), Checklist verifikasi di akhir, Kesalahan umum yang harus dihindari."
 
-10 deskripsi siap upload dalam 4 menit.
-
----
-
-### Step 4 — Analisis Data Penjualan Bulan Lalu
-*Modul yang dipakai: M04 Google Sheets + Claude*
-
-Rina buka Sheets, copy 10 baris data penjualan terlaris:
-
-```
-Ini data penjualan Kasual Studio bulan Juni:
-[paste data: nama produk, jumlah terjual, revenue, stok tersisa]
-
-Analisis:
-1. Produk mana yang paling cepat habis (perlu restock segera)?
-2. Produk mana yang stagnan (perlu promosi atau diskon)?
-3. Berdasarkan tren ini, koleksi warna apa yang sebaiknya saya tambah bulan depan?
-```
-
-Claude memberikan analisis + 3 rekomendasi konkret. Total waktu: 8 menit termasuk copy-paste data.
-
----
-
-### Step 5 — Proposal Reseller Yogyakarta
-*Modul yang dipakai: M06 Prompt Chaining*
-
-Ini yang paling kompleks — Rina pakai chain 4 step (persis seperti yang dipelajari di M06):
-
-**Step 1:** Profil calon reseller berdasarkan email mereka
-**Step 2:** Kerangka proposal yang menjawab kekhawatiran mereka
-**Step 3:** Tulis proposal lengkap
-**Step 4:** Review — identifikasi 3 bagian lemah dan perkuat
-
-Total waktu: 22 menit untuk proposal yang biasanya butuh 2 jam.
-
----
-
-### Step 6 — Konten Instagram Hari Ini
-*Modul yang dipakai: M01 Role Prompting (via Claude Project)*
-
-Karena Project sudah terkonfigurasi, prompt-nya pendek:
-
-```
-Tulis caption Instagram untuk kemeja linen putih dari koleksi summer baru.
-Hook tentang "senin yang adem". Sertakan CTA untuk DM.
-```
-
-Done. 45 detik.
-
----
-
-### Rekap: Apa yang Baru Saja Terjadi
-
-> [VISUAL: Tabel ringkasan — 6 kolom: Tugas | Modul | Waktu Biasa | Waktu dengan Claude | Hemat]
-
-| Tugas | Modul | Biasa | Dengan Claude |
-|-------|-------|-------|---------------|
-| 23 email | M01 + M03 + M05 | 2 jam | 28 menit |
-| 10 deskripsi produk | M05 | 40 menit | 4 menit |
-| Analisis penjualan | M04 | 45 menit | 8 menit |
-| Proposal reseller | M06 | 2 jam | 22 menit |
-| Caption Instagram | M01 + M02 | 15 menit | 2 menit |
-| **Total** | | **~5,5 jam** | **~64 menit** |
-
-Bukan sihir. Bukan otomasi penuh. Rina tetap yang memutuskan, mereview, dan mengirim semua output.
-
-Yang berubah: Claude mengerjakan bagian yang selama ini memakan waktu paling banyak — memikirkan kata-kata, menyusun struktur, memformat output. Rina fokus ke keputusan dan judgement yang hanya bisa dia yang buat.
-
----
-
-### ■ TANTANGAN AKHIR
-
-Coba simulasi "Senin Rina" versimu sendiri.
-
-Pilih satu hari kerja sibuk yang akan datang. Sebelum mulai, list semua tugas yang perlu diselesaikan hari itu. Tandai mana yang bisa dibantu Claude (pakai modul mana) dan mana yang tidak.
-
-Kerjakan semua tugas Claude-nya — catat waktu aktual.
+**Proses Lain yang Bisa Didokumentasikan:**
+- **Penanganan Komplain** — Alur dari komplain masuk sampai resolusi dan follow-up
+- **Onboarding Reseller** — Proses menerima, verifikasi, dan orientasi reseller baru
+- **Konten Instagram** — Cara membuat, review, schedule, dan posting konten harian
+- **Cek Stok & Restock** — Prosedur audit stok mingguan dan pemesanan ulang ke supplier
 
 ### ■ OUTPUT YANG DIHARAPKAN
 
-Satu hari kerja selesai lebih awal dari biasanya. Catat berapa jam yang berhasil kamu hemat.
+1 SOP siap pakai yang bisa langsung diberikan ke pegawai baru atau disimpan sebagai dokumentasi bisnis.
+
+### Level Up: Team Wiki
+
+**🛠️ Bonus: 4 Dokumen Terpisah Jadi 1 Halaman yang Bisa Dibuka Tim.** Meeting notes, ringkasan, SWOT, dan SOP di atas biasanya berakhir sebagai 4 chat terpisah yang gampang hilang. Minta Claude satu langkah lagi: satukan jadi 1 halaman HTML dengan navigasi sederhana — team wiki kecil yang bisa kamu tambah isinya setiap kali menjalankan modul ini lagi.
+
+**Contoh Prompt:** "Dari 4 hasil tadi — ringkasan meeting supplier, ringkasan proposal, SWOT tas kanvas, dan SOP packing — buatkan saya 1 halaman HTML 'Team Wiki' dengan sidebar navigasi ke 4 bagian tersebut. Setiap bagian tampil rapi dengan heading. Simpan sebagai 1 file HTML yang bisa saya buka lagi dan tambahkan dokumen baru tiap minggu."
 
 ---
 
-## PENUTUP & CHECKLIST PENGUASAAN
+## Kursus Selesai!
 
-Kamu sudah selesaikan 6 modul K2. Gunakan checklist ini untuk memastikan kamu benar-benar bisa — bukan sekadar sudah nonton.
+Kamu sudah menguasai 7 modul produktivitas. Kurangi 2 jam kerja harianmu — tanpa tools baru, tanpa kursus coding.
 
-**01 Role Prompting**
-☐ Bisa tulis prompt dengan 4 elemen tanpa melihat contoh
-☐ Punya 1 template prompt yang sudah terbukti bekerja untuk tugasmu
-☐ Kalau output kurang tepat, tahu cara perbaiki prompt (bukan ganti baru)
-
-**02 Claude Projects**
-☐ Punya minimal 1 Project aktif dengan System Instructions terisi
-☐ Sudah test 3+ prompt di project tanpa briefing ulang
-☐ Bisa jelaskan bedanya chat biasa vs. project ke orang lain
-
-**03 Gmail + Claude**
-☐ Bisa proses 3 email dalam 10 menit (rata-rata)
-☐ Punya template prompt untuk tipe email yang paling sering kamu tulis
-☐ Selalu pakai checklist sebelum kirim
-
-**04 Google Sheets**
-☐ Bisa minta Claude buat formula dari deskripsi data
-☐ Pernah paste data ke Claude dan dapat insight bisnis dari sana
-☐ Tahu data apa yang aman vs. tidak untuk dibagikan
-
-**05 Batch Prompting**
-☐ Sudah proses minimal 5 item sekaligus dengan 1 prompt
-☐ Punya minimal 1 template batch prompt yang tersimpan
-☐ Tahu kapan batch prompting tidak cocok dipakai
-
-**06 Prompt Chaining**
-☐ Sudah buat chain minimal 3 step dalam satu chat
-☐ Bisa identifikasi kapan 1 prompt tidak cukup dan chain diperlukan
-☐ Output dari chain lebih baik dari 1 prompt langsung
+**Lanjutkan Belajar:** Kreasi Konten Pemasaran — Positioning, deskripsi produk, konten Instagram, dan copy iklan dengan Claude.
 
 ---
 
-**07 Case Study**
-☐ Sudah simulasi "hari kerja sibuk" dengan Claude
-☐ Bisa identifikasi tugas mana yang cocok untuk modul mana
-☐ Catat waktu aktual yang dihemat dibanding biasanya
+## LAMPIRAN (Arsip, Tidak Aktif): Case Study — Satu Hari Kerja Penuh
+
+Panel ini masih ada di `produktivitas-content.html` (id `panel-casestudy-archived`, ditandai `ARCHIVED — removed from active lesson flow` di komentar kode) tapi **tidak lagi bisa diakses lewat alur belajar normal** — sidebar dan tombol "Selanjutnya" di Modul 7 langsung menuju form feedback, bukan ke sini. Dicatat di sini sebagai referensi kalau suatu saat mau diaktifkan lagi sebagai section studi-kasus terpisah, bukan bagian dari 7 modul yang di-generate ke PDF.
+
+Isinya singkat: 2 skenario pilihan (Skenario A — Rina/Kasual Studio: 23 email + 10 deskripsi produk + analisis penjualan + proposal reseller + konten IG dalam 1 hari; Skenario B — Budi/Konsultan Freelance: riset kompetitor + proposal + deck 8 slide + follow-up klien untuk pitching besok pagi), masing-masing berjalan step-by-step lewat semua modul di atas, ditutup rekap waktu "Biasa vs Dengan Claude" dan bonus "Level Up: Daily Command Center" (dashboard HTML gabungan).
 
 ---
 
-Setelah semua checklist ini selesai, kamu siap lanjut ke **K3 — Content & Marketing**, di mana kamu akan pakai Claude untuk strategi konten, iklan, dan pemasaran bisnis.
-
----
-*Draft v1 — untuk review sebelum generate PDF*
-*Tandai revisi dengan: `[REVISI: tulis perbaikannya di sini]`*
+*(Draft ini konsisten dengan HTML final di produktivitas-content.html per audit 30 Juli 2026 — mencakup 7 modul yang benar-benar live. Perbedaan utama dari draft v1 sebelumnya: M04 berganti nama dari "Google Sheets" jadi "Spreadsheet & Claude" dan mendapat bonus Apps Script PDF-export + Claude in Chrome/Claude for Excel (Pro-only); M05 dan M06 masing-masing dapat 1 section "Level Up" baru; M07 "Dokumen & Riset" adalah modul baru yang sama sekali tidak ada di draft v1; dan Case Study lama (yang di draft v1 jadi M07) sekarang berstatus archived, dipindah ke lampiran non-aktif di atas. PDF hasil render akan dibuat ulang dari draft ini pada tahap berikutnya.)*

@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 105)_
+_Last updated: July 30, 2026 (checkpoint 106)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1336,6 +1336,27 @@ Julia flagged that "Contoh Prompt: Buruk vs Baik" sat *before* Latihan 1 but its
 **Verified**: `content-marketing-content.html` div-balance 327/327. All 7 PPTX slides re-rendered via `soffice`+`pdftoppm` and visually inspected post-edit, including two extra passes to catch the emoji-rendering issue and the stale slide-4 eyebrow.
 
 **Commit**: `belajar-claude`: `5514950`.
+
+---
+
+## SHIPPED (Checkpoint 106, July 30, 2026): audited all 4 course PDFs' source content against live HTML
+
+Julia asked to make sure all PDF-source content (20 Prompt, K1 Mulai dengan Claude, K2 Produktivitas, K3 Content Marketing) is aligned with HTML before any PDF regeneration. K3 was already fixed in Checkpoint 105. This round covered the other three.
+
+**Findings:**
+- `20-prompt-claude-terbaik.pdf` vs `prompt-gratis-content.html`: fully aligned already — all 20 prompt titles, bodies, and tips match word-for-word. No action needed.
+- `K1-Mulai-Claude` (`belajarclaude - Mulai dengan Claude AI (Modul 1-5).pdf` + the standalone `K1-M02-Anatomi-Prompt-Panduan.pdf`): mostly aligned. Two gaps found — the full-course PDF's Gratis vs Pro table listed extra Pro-only perks (Cowork, Claude Code access) not present in the HTML's simpler 3-bullet comparison, and PDF Modul 5 was missing the "Contoh Skenario Berdasarkan Profesi" (Manajer/HRD/Mahasiswa) section that exists in HTML. K1 had no editable source doc, so created one.
+- `K2-Produktivitas` (`K2-improved-content.md` + `K2-Produktivitas-Kantor.pdf`): **significantly stale** — the existing `.md` was an early draft (persona "Rina/Kasual Studio", 7 modules ending in a single-scenario Case Study). Live HTML has grown well past it: M04 renamed "Google Sheets" → "Spreadsheet & Claude" and gained a full Google Apps Script PDF-export bonus plus Claude in Chrome / Claude for Excel sections (Pro-plan-gated — this is where "Claude Pro" actually gets mentioned in this course); M05 and M06 each gained a "Level Up" bonus section; **M07 "Dokumen & Riset" is an entirely new module** (meeting notes, summarizing, SWOT + web search, SOP writing) not in the old draft at all. Also discovered the old draft's "Case Study" module is now `<!-- MODULE 8 (ARCHIVED — removed from active lesson flow...) -->` in the HTML — a 2-scenario case study (Rina/Kasual Studio + a new Budi/Konsultan Freelance scenario) that still exists in the DOM but is disconnected from the sidebar nav and the Modul 7 "next" button, which now goes straight to the feedback form. So the live course is actually 7 modules, not 8.
+
+**What shipped:**
+- `K1-Mulai-Claude/Course-Level/K1-improved-content.md` — new file (no prior source existed), mirrors the live 5-module HTML exactly, with the Gratis/Pro table simplified to match HTML and the missing "Contoh Skenario Berdasarkan Profesi" section added back into Modul 5.
+- `K2-Produktivitas/Course-Level/K2-improved-content.md` — fully rewritten to match the live 7-module HTML: all "Level Up" bonus sections, the new M04 Apps Script/Chrome/Excel content, and the new M07 "Dokumen & Riset" module written out in full. The old Case Study content is preserved as a clearly-labeled non-active appendix ("LAMPIRAN — Arsip, Tidak Aktif") rather than folded back in as a live module, since it isn't reachable in the actual course flow.
+- `Content-Marketing/Course-Level/content-marketing-improved-content.md` — already fixed in Checkpoint 105, no further changes this round.
+- No PDFs were regenerated in this round, per instruction — this was source-content alignment only, prep work for a future regeneration pass.
+
+**Verified**: module titles/counts cross-checked against HTML `nav-counter` and sidebar entries for all 4 courses; K2's archived-module discovery confirmed via the literal `ARCHIVED` HTML comment and by tracing the Modul 7 "next" button destination.
+
+**Commit**: `belajar-claude`: pending.
 
 ---
 
