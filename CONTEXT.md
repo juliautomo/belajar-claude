@@ -1313,7 +1313,7 @@ Follow-up to Checkpoint 101-103's "keep Email as optional reference" decision. J
 
 **Verified**: `content-marketing-content.html` div-balance 331/331 (down from 341 — net content removed). Grepped for `Gmail`, `cm-template-email`, `per Kanal`, `terutama di WA` — zero remaining hits anywhere in the file. `content-marketing.html` div-balance 79/79. All 8 PPTX slides re-rendered via `soffice`+`pdftoppm` and visually inspected after every edit, including two follow-up fixes caught only during visual QA (slide 3's redundant "terutama di WA" clause, slide 4's leftover whitespace after widening) — both re-rendered and confirmed clean on the second pass.
 
-**Commit**: `belajar-claude`: pending.
+**Commit**: `belajar-claude`: `a72a94e`.
 
 ---
 
