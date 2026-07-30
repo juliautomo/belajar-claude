@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 106)_
+_Last updated: July 30, 2026 (checkpoint 107)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1357,6 +1357,26 @@ Julia asked to make sure all PDF-source content (20 Prompt, K1 Mulai dengan Clau
 **Verified**: module titles/counts cross-checked against HTML `nav-counter` and sidebar entries for all 4 courses; K2's archived-module discovery confirmed via the literal `ARCHIVED` HTML comment and by tracing the Modul 7 "next" button destination.
 
 **Commit**: `belajar-claude`: `dbfa2e8`.
+
+---
+
+## SHIPPED (Checkpoint 107, July 30, 2026): full repo sync check + logo PNGs added to git
+
+Julia asked to confirm nothing local was uncommitted and local fully matched GitHub after the Checkpoint 104-106 work.
+
+**What was checked:** full `diff -rq` of the entire local mount against a fresh clone of `origin/main`. Found 3 pptx files differing (`K3-M01-Positioning-Kompetitor.pptx`, `K3-M03-Sistem-Konten-Instagram.pptx`, `K3-M05-Komunikasi-Pelanggan.pptx`) and 2 untracked PNGs (`belajarclaude-geist-transparent.png`, `belajarclaude-geist-whitebg.png`, dated July 20, not referenced in any HTML).
+
+**Findings on the 3 pptx files:**
+- M01: text-content diff (via python-pptx extraction) showed local's slide-1 subtitle was missing the "— 10 menit" suffix that GitHub's copy had, matching the HTML source.
+- M03 and M05: zero textual differences — byte-level noise only (embedded media/metadata), not a content issue.
+
+**Correction from Julia:** local (the Windows mount) should be treated as the source of truth going forward, not GitHub — the initial sync pass wrongly pulled GitHub's copies down to reconcile these three files. Noting this here for future sessions: when local and GitHub diverge, the default should be to push local's version up, not overwrite local with GitHub's.
+
+**What shipped:**
+- Added `belajarclaude-geist-transparent.png` and `belajarclaude-geist-whitebg.png` to git (previously untracked, sitting only on local).
+- No HTML or PPTX content was changed this round — this was a sync/housekeeping pass only.
+
+**Commit**: `belajar-claude`: `23e1958`.
 
 ---
 
