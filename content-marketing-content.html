@@ -726,7 +726,7 @@ Project-ku.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></d
         <div class="doc-slot" id="doc-slot-5"></div>
 
         <div class="module-desc-box">
-          WhatsApp dan Email sama-sama butuh hal yang sama: brand voice yang konsisten, tanpa harus briefing ulang tiap kali. Buka Claude Project yang sudah kamu buat di Modul 1, tambahkan brand voice untuk komunikasi pelanggan (tone, sapaan, nama pengirim + jabatan untuk email) ke situ — bukan bikin Project baru — lalu generate template untuk kedua kanal via Claude Projects. Untuk kedua kanal, dasarnya sama: generate di chat, lalu copy-paste manual ke WhatsApp atau email-mu — belum ada WA Connector, jadi WA selalu manual; untuk Email, Gmail Connector (opsional) bisa langsung menyimpan hasilnya sebagai draft supaya kamu tidak perlu copy-paste sendiri. Upload juga cm-template-wa.txt dan cm-template-email.txt ke Project Knowledge sekali saja — dua file ini isinya cuma skenario dan detail per email (bukan info bisnis, itu sudah di Project), jadi Claude langsung baca skenario atau nomor email yang kamu maksud tanpa perlu paste ulang.
+          WhatsApp dan Email sama-sama butuh hal yang sama: brand voice yang konsisten, tanpa harus briefing ulang tiap kali. Buka Claude Project yang sudah kamu buat di Modul 1, tambahkan brand voice untuk komunikasi pelanggan (tone, sapaan, nama pengirim + jabatan untuk email) ke situ — bukan bikin Project baru. Latihan wajib di modul ini fokus ke WhatsApp: upload cm-template-wa.txt ke Project Knowledge, generate template, lalu reuse untuk kasus nyata. Email dijelaskan lengkap di bawah kalau kamu mau coba juga (opsional, pakai cm-template-email.txt) — mekanismenya sama persis, cuma tidak wajib untuk menyelesaikan modul ini.
         </div>
 
         <div class="case-box persona">
@@ -736,7 +736,7 @@ Project-ku.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></d
 
         <div class="tip-box connector">
           <div class="tip-label">🔌 Claude Projects (wajib) + Gmail Connector (opsional)</div>
-          <p>Level: Claude Projects (tersedia di semua plan termasuk Free) · Setup: 5 menit sekali. Tambahkan brand voice khusus komunikasi pelanggan — sapaan, batasan, tone untuk CS, plus nama pengirim dan jabatan untuk tanda tangan email — ke Claude Project dari Modul 1, yang sudah punya positioning dan identitas visual bisnismu. Upload juga <strong>cm-template-wa.txt</strong> dan <strong>cm-template-email.txt</strong> ke <strong>Project Knowledge</strong> (beda dari Project Instructions yang menyimpan brand voice) — kedua file ini sengaja tidak berisi info bisnis lagi, cuma skenario dan detail per email, supaya prompt yang menyebut "Skenario 1" atau "Email 2" langsung terbaca Claude tanpa kamu paste ulang isi filenya. Untuk WhatsApp, belum ada WA Connector — jadi generate di chat, lalu copy-paste manual ke WhatsApp-mu, selalu begitu. Untuk Email, dasarnya sama (generate lalu copy-paste manual) — tapi kalau mau, aktifkan <strong>Gmail Connector</strong> (gratis, 60 detik di Settings > Connectors > Gmail) supaya Claude langsung membuat draft di inbox Gmail-mu, kamu tinggal review dan klik Send. Belum mau connect? Copy-paste manual tetap jalan sempurna.</p>
+          <p>Level: Claude Projects (tersedia di semua plan termasuk Free) · Setup: 5 menit sekali. Tambahkan brand voice khusus komunikasi pelanggan — sapaan, batasan, tone untuk CS, plus nama pengirim dan jabatan untuk tanda tangan email — ke Claude Project dari Modul 1, yang sudah punya positioning dan identitas visual bisnismu. Upload <strong>cm-template-wa.txt</strong> ke <strong>Project Knowledge</strong> (beda dari Project Instructions yang menyimpan brand voice) — file ini sengaja tidak berisi info bisnis lagi, cuma 10 skenario, supaya prompt yang menyebut "Skenario 1" langsung terbaca Claude tanpa kamu paste ulang isi filenya. Belum ada WA Connector — jadi generate di chat, lalu copy-paste manual ke WhatsApp-mu, selalu begitu. Mau coba Email juga (opsional, tidak wajib)? <strong>cm-template-email.txt</strong> dipakai dengan cara yang sama, dan kalau mau, aktifkan <strong>Gmail Connector</strong> (gratis, 60 detik di Settings > Connectors > Gmail) supaya Claude langsung membuat draft di inbox Gmail-mu.</p>
         </div>
 
         <div class="section-heading">Mengapa Template On-Brand Penting</div>
@@ -806,7 +806,7 @@ Project-ku.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></d
           <div class="step-card"><div class="step-num">4</div><p>Copy-paste balasan itu ke WhatsApp, kirim. Simpan 10 template dasar di catatan WA/Google Keep sebagai referensi cepat kalau Claude tidak di tangan</p></div>
         </div>
 
-        <div class="section-heading">Cara Kerja: Email (Gmail Connector opsional)</div>
+        <div class="section-heading">Cara Kerja: Email (Opsional — Bonus, Tidak Wajib)</div>
         <div class="step-row">
           <div class="step-card"><div class="step-num">1</div><p>(Opsional) Setup Gmail Connector — izinkan akses "read" dan "draft" (Claude tidak bisa kirim). Lewati langkah ini kalau belum mau connect, tinggal copy-paste manual nanti</p></div>
           <div class="step-card"><div class="step-num">2</div><p>Isi cm-template-email.txt bagian yang relevan (nama produk, harga promo, tanggal, CTA — info bisnis sudah ada di Project, tidak perlu diulang), lalu upload ke Project Knowledge</p></div>
@@ -829,23 +829,20 @@ jabatan [Owner/Founder/Customer Service].<button class="copy-btn" onclick="copyP
         <div class="prompt-section latihan">
           <div class="prompt-label">🎯 Latihan 2 — Generate Template Dasar</div>
           <div class="case-box">
-            <p>Upload cm-template-wa.txt (sudah siap pakai, tidak perlu diisi) dan cm-template-email.txt ke Project Knowledge. Sebelum generate, isi dulu bagian EMAIL 1 (Launch) dan EMAIL 2 (Flash Sale) di cm-template-email.txt — nama produk, harga promo, tanggal, dan kode diskon ini spesifik untuk campaign kamu saat ini, jadi belum ada di Project manapun dan tidak bisa diambil otomatis, harus diisi manual.</p>
+            <p>Upload cm-template-wa.txt ke Project Knowledge — sudah siap pakai, tidak perlu diisi apapun.</p>
           </div>
           <div class="prompt-box">Buatkan 10 template WhatsApp untuk skenario di
-cm-template-wa.txt, dan 2 draft email (launch produk
-baru + flash sale) dari cm-template-email.txt — simpan
-sebagai draft di Gmail saya.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-          <div class="mini-output">✅ Output: <span>10 template WhatsApp dasar + 2 email draft (launch + flash sale) tersimpan sebagai draft Gmail. Ini pola balasan yang jadi acuan di Latihan 3 — bukan hasil akhir yang langsung dipakai.</span></div>
+cm-template-wa.txt.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="mini-output">✅ Output: <span>10 template WhatsApp dasar tersimpan. Ini pola balasan yang jadi acuan di Latihan 3 — bukan hasil akhir yang langsung dipakai.</span></div>
         </div>
 
         <div class="prompt-section latihan">
           <div class="prompt-label">🎯 Latihan 3 — Reuse untuk Kasus Nyata</div>
           <div class="case-box">
-            <p>Begitu ada pembeli chat beneran, jangan buka-buka file template. Ketik situasinya langsung ke Claude seperti contoh di bawah — Claude otomatis cocokkan ke skenario yang paling sesuai dan generate balasan personal siap pakai, memakai brand voice dari Latihan 1. Copy-paste ke WhatsApp (selalu manual), atau review + kirim draft Gmail. Ulangi minimal 5 kali dalam 1 minggu untuk WA, kirim email ke minimal 10 kontak, catat open rate dan respons.</p>
+            <p>Begitu ada pembeli chat beneran, jangan buka-buka file template. Ketik situasinya langsung ke Claude seperti contoh di bawah — Claude otomatis cocokkan ke skenario yang paling sesuai dan generate balasan personal siap pakai, memakai brand voice dari Latihan 1. Copy-paste ke WhatsApp (selalu manual). Ulangi minimal 5 kali dalam 1 minggu, catat respons pelanggan.</p>
           </div>
-          <div class="prompt-box">Balas WA: pembeli nanya kenapa pesanannya belum
-dikirim padahal sudah pesan dari 2 hari lalu, nadanya
-agak kesal.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="prompt-box">Balas WA: pembeli minta diskon tambahan karena mau
+beli 5 pcs sekaligus.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
           <div class="mini-output">✅ Output: <span>Balasan personal siap pakai, on-the-spot, untuk kasus baru kapanpun — tanpa buka-buka file template lagi. Diulang terus tiap ada situasi baru.</span></div>
         </div>
 
@@ -853,7 +850,7 @@ agak kesal.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></d
           <div class="output-icon">✅</div>
           <div>
             <h3>Output Modul (Keseluruhan)</h3>
-            <p>1 Claude Project dengan brand voice CS aktif (Latihan 1) + 10 template WhatsApp dasar dan 2 email draft di Gmail (Latihan 2) + kemampuan generate balasan personal on-the-spot untuk kasus baru kapanpun (Latihan 3). File pendukung: cm-template-wa.txt, cm-template-email.txt</p>
+            <p>1 Claude Project dengan brand voice CS aktif (Latihan 1) + 10 template WhatsApp dasar (Latihan 2) + kemampuan generate balasan personal on-the-spot untuk kasus baru kapanpun (Latihan 3). File pendukung: cm-template-wa.txt. Mau lanjut coba Email juga? cm-template-email.txt dan Contoh Prompt Email di atas siap dipakai (opsional, tidak wajib).</p>
           </div>
         </div>
 
