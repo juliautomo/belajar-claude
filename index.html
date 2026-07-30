@@ -141,6 +141,10 @@ section { padding: 88px 0; position: relative; z-index: 1; }
 .lih-continue-title { font-family: var(--serif); font-size: 24px; font-weight: 400; color: #fff; margin-bottom: 6px; }
 .lih-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: all 0.2s; text-decoration: none; }
 .lih-card:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(0,0,0,0.06); border-color: rgba(108,71,255,0.2); }
+/* Same dimmed treatment as .course-card-v2.card-soon on the logged-out marketing grid, so
+   "Segera Hadir" reads consistently as not-yet-available across both logged-out and
+   logged-in/enrolled views on this page. */
+.lih-card.lih-card-soon { filter: grayscale(0.6); opacity: 0.6; }
 .lih-visual { height: 96px; padding: 0; overflow: hidden; position: relative; }
 .lih-icon { width: 38px; height: 38px; background: #fff; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 3px 10px rgba(0,0,0,0.06); margin: 0 18px; }
 .lih-illustration { width: 100%; height: 100%; display: block; }
@@ -664,7 +668,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
                 // skip straight past the enrolled/done checks below.
                 tagText = 'SEGERA HADIR'; tagColor = 'var(--ink-2)'; tagBg = 'var(--border)'; tagBorder = 'var(--border-strong)';
                 countText = meta.modules + ' modul direncanakan';
-                actionHtml = '<span class="action" style="opacity:.5;cursor:default;pointer-events:none;">Segera Hadir</span>';
+                actionHtml = '<span class="disabled-action" style="cursor:default;pointer-events:none;">Segera Hadir</span>';
               } else if (!isEnrolled) {
                 // No real enrollment row (even if all-access is held) — always route to the
                 // preview page, never straight into the lesson reader. The preview page's own
@@ -684,7 +688,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
 
               var visualContent = LIH_ILLUSTRATIONS[slug] || ('<div class="lih-icon">' + meta.icon + '</div>');
               var visualBg = LIH_BG[slug] || 'var(--accent-dim)';
-              gridHtml += '<div class="lih-card">' +
+              gridHtml += '<div class="lih-card' + (meta.comingSoon ? ' lih-card-soon' : '') + '">' +
                 '<div class="lih-visual" style="background:' + visualBg + ';">' + visualContent + '</div>' +
                 '<div class="lih-body">' +
                 '<div class="lih-tag" style="color:' + tagColor + ';background:' + tagBg + ';border-color:' + tagBorder + ';">' + tagText + '</div>' +

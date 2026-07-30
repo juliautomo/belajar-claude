@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 115)_
+_Last updated: July 30, 2026 (checkpoint 116)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1498,6 +1498,22 @@ After regenerating four course PDFs this session (20-Prompt: Checkpoint 109, K2 
 Covers: the parse → build → render → verify → ship pipeline; canonical design tokens (`--accent:#6C47FF` normalized across all PDFs regardless of each course's slightly different live-site accent) and `@page`/cover-page setup; the emoji-strip rule and its exact safe/unsafe character findings; three documented weasyprint bugs and their fixes (flex-shorthand-collapses-to-one-column, cover-page footer bleed, forced-page-break waste) plus the newer `display:grid` → `.grid3` rewrite rule and `.step-row[data-cols]` variable-column-count fix (both first needed for K3); the full canonical component CSS list (`.info-grid`, `.two-col`, `.step-row`, `.prompt-section`, `.case-box`, `.output-box`, `.tip-box` + variants, `.mistake-list`, `.summary-box`, `.compare-table`, `.anatomy-flow`, `.package-flow`, `.completion-badge`, etc.) with notes on where each was first introduced and any course-specific quirks (e.g. completion badge sometimes lives inline in the last module, sometimes in a separate feedback panel); and file/push conventions (never rename target PDFs, scratch files stay out of git, PAT never committed).
 
 **File**: `PDF-Style-Guide.md` (new file, repo root).
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 116, July 30, 2026): index.html — dimmed "Segera Hadir" cards in the logged-in/enrolled course grid to match the logged-out marketing grid
+
+Julia flagged that the "Segera Hadir" (coming-soon) cards for Strategi & Analisis Marketing and Analisis Data & Laporan looked visually inconsistent between two views on the same page: the logged-out marketing grid (`.course-card-v2.card-soon`, `#kursusComingSoonSlot`) already applies `filter: grayscale(0.6); opacity: 0.6;` to clearly read as "not available yet," but the logged-in/enrolled view's course grid (a completely separate component, `.lih-card`, populated in the `renderKursusComingSoon`-adjacent enrolled-grid logic around line 652) only greyed the small status pill/tag, leaving the card itself full-color and its "Segera Hadir" action text tinted `var(--accent)` purple at 50% opacity — reading more like a dim active link than a disabled one.
+
+Root-caused via full-repo search: `course-card-v2`/`card-soon` only exists in `index.html`'s logged-out grid, so the vivid version Julia saw had to be a different code path on the same page rather than a different file — confirmed with her to be the enrolled view.
+
+**Fix**: added `.lih-card.lih-card-soon { filter: grayscale(0.6); opacity: 0.6; }` (mirrors `.course-card-v2.card-soon` exactly), added `lih-card-soon` to the card's class list only when `meta.comingSoon` is true, and swapped the comingSoon action span from `class="action"` (accent purple, meant for live links) to the pre-existing but previously-unused `class="disabled-action"` (`var(--ink-3)`, neutral grey) — removing the redundant inline `opacity:.5` now that the whole card dims via the filter.
+
+**Verified**: JS syntax-checked via `node --check` after extracting all `<script>` blocks; visual verification of the actual logged-in dashboard render requires an authenticated Supabase session so wasn't screenshot-tested this pass — worth a manual check next login.
+
+**File**: `index.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
