@@ -1,14 +1,10 @@
 # TEMPLATE WHATSAPP BUSINESS — 10 SKENARIO
 # Course: Content & Marketing — Modul 5
 # Cara pakai: Paste skenario yang kamu butuhkan ke Claude, minta tulis template sesuai brand voice kamu
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-INFO BRAND (isi dulu sebelum generate)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Nama Bisnis  : [ISIAN]
-Produk/Jasa  : [ISIAN]
-Tone         : [Formal / Semi-formal / Santai]
-Nama Sapaan  : [Kak / Bapak/Ibu / nama pembeli]
+#
+# Nama bisnis, produk, tone, dan sapaan TIDAK perlu diisi di sini — itu sudah
+# ada di Claude Project-mu (positioning dari Modul 1 + brand voice yang kamu
+# tambahkan di setup Modul 5). File ini isinya cuma skenario yang butuh dibalas.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 10 SKENARIO TEMPLATE
@@ -57,9 +53,7 @@ Template yang dibutuhkan: Terima kasih + undang kembali + hint produk lain yang 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 PROMPT SIAP PAKAI
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-"Bisnisku: [nama bisnis], jual [produk], tone [formal/santai], sapaan '[Kak/nama]'.
-
-Buatkan template WhatsApp untuk skenario berikut:
+"Buatkan template WhatsApp untuk skenario berikut, pakai brand voice dan sapaan dari Project-ku:
 [tempel skenario yang kamu butuhkan]
 
 Setiap template: maks 5 baris, ada emoji 1-2 yang sesuai, ada CTA yang jelas.

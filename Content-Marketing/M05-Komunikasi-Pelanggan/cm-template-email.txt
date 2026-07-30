@@ -1,15 +1,11 @@
 # TEMPLATE EMAIL BISNIS — 6 JENIS EMAIL
-# Course: Content & Marketing — Modul 6
-# Cara pakai: Isi [ISIAN], paste ke Claude, minta generate email lengkap
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PROFIL BISNIS (isi sekali, berlaku untuk semua template)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Nama Bisnis     : [ISIAN]
-Produk/Jasa     : [ISIAN]
-Tone Email      : [Formal / Semi-formal]
-Nama Pengirim   : [ISIAN]
-Jabatan         : [Owner / Founder / Customer Service]
+# Course: Content & Marketing — Modul 5
+# Cara pakai: Isi [ISIAN] di bawah, paste ke Claude, minta generate email lengkap
+#
+# Nama bisnis, produk, tone, nama pengirim, dan jabatan TIDAK perlu diisi di sini
+# — tambahkan sekali ke Claude Project-mu (bareng brand voice dari setup Modul 5)
+# supaya kepakai otomatis di semua email tanpa perlu diketik ulang tiap kali.
+# File ini isinya cuma detail yang beda-beda per email (promo, tanggal, dll).
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EMAIL 1 — LAUNCH PRODUK BARU
@@ -67,12 +63,11 @@ Keuntungan      : [ISIAN — support marketing, ready stock, dll]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 PROMPT SIAP PAKAI
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-"Berdasarkan data berikut, tulis email [nomor + jenis email] untuk bisnisku:
+"Tulis email [nomor + jenis email], pakai brand voice dan tone dari Project-ku:
 [tempel bagian yang relevan di atas]
 
 Ketentuan:
 - Subjek email: menarik, tidak lebih dari 9 kata
 - Isi: maks 200 kata
-- Tone: [formal/semi-formal]
 - Ada CTA yang jelas di akhir
 - Bahasa Indonesia yang natural, tidak kaku"
