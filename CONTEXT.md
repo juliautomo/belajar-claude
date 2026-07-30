@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 113)_
+_Last updated: July 30, 2026 (checkpoint 114)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1466,6 +1466,26 @@ Reused as-is from the K2 build: cover page template, `.info-grid`/`.info-card`, 
 **Output**: 9 pages (1 cover + 5 modules). All pages rendered to PNG via pdf2image and visually reviewed page-by-page — no overlaps, no orphaned headers, compare-table and mistake-list both render cleanly, Kursus Selesai box picks up the correct purple styling.
 
 **File**: `K1-Mulai-Claude/belajarclaude - Mulai dengan Claude AI (Modul 1-5).pdf` overwritten in place.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 114, July 30, 2026): K3 "Kreasi Konten Pemasaran" PDF regenerated in the established style
+
+Same treatment as Checkpoints 109/110/113. Parsed `content-marketing-content.html`'s 5 module panels (panel1–panel5; panel6/feedback excluded except for its `completion-badge` block, appended as a closing section) via BeautifulSoup — this course does use a `.hero` wrapper (like K2), so title/subtitle were extracted from inside it before decomposing the whole hero div. Same emoji-strip rule as before (codepoint > 0xFFFF, plus ✅/❌/variation-selector), duration suffixes stripped from subtitles.
+
+New component CSS beyond the K1/K2 stylesheet, all specific to this course's content:
+- `.anatomy-flow`/`.anatomy-item`/`.anatomy-num` — numbered vertical breakdown (used in Modul 2 and 4 for "Struktur Deskripsi"/"Anatomi Copy Iklan"). Simplified from the live site's version by dropping the connecting vertical line (an absolutely-positioned `::after` pseudo-element) since it added no informational value and risked weasyprint positioning quirks — kept the numbered-circle + text layout.
+- `.package-flow`/`.package-inputs`/`.package-item`/`.package-plus`/`.package-arrow`/`.package-result`/`.package-final` — the "Satu Paket, Bukan Potongan Terpisah" ad-assembly diagram in Modul 4. Followed the established anti-flex-shorthand rule: package items use fixed `width` with no `flex` property at all, avoiding the same weasyprint bug documented in Checkpoint 110.
+- `.completion-badge`/`.badge-check` — the "Kursus Selesai!" block, which in this course's HTML lives in the feedback panel (panel6) rather than inline in Modul 5's body like K1. Extracted separately and appended after Modul 5 in the PDF. Its inline SVG checkmark (`<polyline>` in a circle) rendered correctly with no changes needed — first confirmation this sandbox's weasyprint handles simple inline SVG.
+- `.grid3` — a new class introduced by the parser itself: one section (Modul 4's Meta/TikTok/Google Ads comparison) used a raw inline `style="display:grid;grid-template-columns:repeat(3,1fr)"` div in the source HTML rather than a named class. The parser now detects any `div[style*="display:grid"]` and rewrites it to `class="grid3"` with the inline style stripped, sidestepping any weasyprint CSS Grid quirks by reusing the same flex + explicit-`calc()`-width pattern as every other multi-column grid in these PDFs.
+- `.step-row[data-cols]` — this course's five modules have step-rows of varying length (5, 3, 4, 4, 3 steps), unlike K1/K2 where 5-column was the only case seen. Parser now counts each `.step-row`'s direct `.step-card` children and stamps `data-cols` when it isn't 5, with matching CSS (`calc((100% - gap)/3)`, `/4`) so 3- and 4-step rows size their cards proportionally instead of staying cramped at a 5-column width.
+- `.col-card` also had to work standalone (inside `.grid3`) as well as inside `.two-col` — split into a base rule (border/padding/radius, no width) plus context-specific width rules (`.two-col .col-card` = 50%, `.grid3 .col-card` = 33%).
+
+**Output**: 12 pages (1 cover + 5 modules + 1 closing completion page). All pages rendered to PNG and visually reviewed — no overlaps, the 3- and 4-column step-rows size correctly, the anatomy-flow and package-flow diagrams read cleanly, and the completion badge's checkmark icon renders as expected.
+
+**File**: `Content-Marketing/Course-Level/Content-Marketing-Panduan-Belajar.pdf` overwritten in place.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
