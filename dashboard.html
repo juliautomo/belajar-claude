@@ -385,19 +385,11 @@ async function _init(){
   }
   document.getElementById('greetSub').textContent=statC>0?statC+' kursus selesai — luar biasa!':activeCourses.length>0?'Lanjutkan perjalanan belajarmu.':'Mulai kursus pertamamu hari ini.';
 
-  // Public teaser for not-yet-launched courses marked `visible:true` (see explore-grid
-  // comment below) — shows as a disabled "Segera Hadir" card in Kursus Kamu, for users
-  // who already have at least one real course, not brand-new/unenrolled visitors (who'd
-  // otherwise see a "Kursus Kamu" section appear containing nothing but a teaser card).
-  // Added after the stats/greeting above are computed so it doesn't inflate "X kursus
-  // terdaftar" or change the "mulai kursus pertamamu" empty-state message.
-  if(enrollments.length>0){
-    Object.keys(ALL_COURSES).forEach(function(slug){
-      if(!ALL_COURSES[slug].hidden&&ALL_COURSES[slug].comingSoon&&ALL_COURSES[slug].visible&&!enrolledSlugs.has(slug)){
-        activeCourses.push({course_slug:slug,type:'teaser'});
-      }
-    });
-  }
+  // Coming-soon courses are NOT injected into "Kursus Kamu" — even with All Access,
+  // a course only becomes "yours" once you explicitly enroll (click "Mulai Kursus" in
+  // Jelajahi Kursus below, which inserts a real per-course enrollment row). A coming-soon
+  // course can't be enrolled in yet, so it doesn't belong here; it still surfaces as a
+  // disabled "Segera Hadir" card in the explore/Jelajahi Kursus grid further down.
 
   var COURSE_ORDER={'prompt-gratis':0,'mulai-claude':1,'produktivitas':2,'content-marketing':3,'strategi-marketing':4,'analisis-data':5,'build-automation':6,'ai-powered-app':7,'claude-api-dev':8,'jual-produk-ai':9};
   function courseSort(a,b){return (COURSE_ORDER[a.course_slug]||99)-(COURSE_ORDER[b.course_slug]||99);}
