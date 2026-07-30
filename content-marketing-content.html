@@ -634,17 +634,20 @@ No | Tema | Format | Caption | Hashtag.<button class="copy-btn" onclick="copyPro
           <p>Untuk visual iklan yang butuh foto produk realistis, Claude bisa jadi <strong>Prompt Enhancer</strong> — pola yang sama seperti di Modul 3: jelaskan ide iklanmu ke Claude, Claude tulis prompt detail siap pakai untuk <strong>Nano Banana Pro</strong> atau <strong>ChatGPT</strong>, lalu hasil gambarnya tinggal kamu susun jadi desain final di tool desain pilihanmu (Canva salah satu opsi paling praktis kalau Connector-nya aktif). Untuk foto yang sudah ada dan cuma perlu diedit (crop, retouch, hapus background), pakai editor bawaan Canva, <strong>remove.bg</strong>, atau tool edit foto lain. Peran Claude di modul ini tetap arahan kreatif + copy + prompt, bukan generate atau edit file gambar langsung.</p>
         </div>
 
+        <p class="body-text"><strong>Yang kamu butuhkan:</strong> brief produk/promo yang mau diiklankan (nama, diskon, tanggal berlaku). Positioning dan target pembeli dari Modul 1 sudah otomatis tersedia kalau kamu masih di Claude Project yang sama — tidak perlu ditulis ulang, Claude langsung pakai itu untuk nulis copy dan targeting brief yang sesuai.</p>
+
         <div class="section-heading">Contoh Prompt: Buruk vs Baik</div>
         <div class="two-col">
           <div class="col-card">
             <h4>Prompt Buruk</h4>
             <p>"Buatkan copy iklan untuk frozen rendang saya"</p>
-            <p style="margin-top:8px;"><strong>Masalah:</strong> Claude tidak tahu tujuan, platform, target, promo. Hasilnya tidak bisa langsung dipakai.</p>
+            <p style="margin-top:8px;"><strong>Masalah:</strong> Claude tidak tahu tujuan, platform, promo, dan siapa target pembelinya — kalau belum pernah diisi di Project, ini semua harus ditulis manual tiap kali.</p>
           </div>
           <div class="col-card highlight">
             <h4>Prompt Baik</h4>
-            <p>"Buat 3 variasi copy iklan Meta Ads untuk Flash Sale Frozen Rendang Sapi, diskon 30%, stok 50 pcs, Sabtu-Minggu. Target: ibu rumah tangga 28-40 di Jabodetabek. Format: headline (maks 7 kata) + body (maks 30 kata) + CTA. Variasi tone: urgensi, emosional, fungsional."</p>
-            <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> 3 variasi siap langsung ditest — tinggal pilih mana untuk A/B test.</p>
+            <p class="context-note">Project sudah tahu target pembelimu dari positioning Modul 1 — tidak perlu ditulis ulang</p>
+            <p>"Buat 3 variasi copy iklan Meta Ads untuk Flash Sale Frozen Rendang Sapi, diskon 30%, stok 50 pcs, Sabtu-Minggu. Format: headline (maks 7 kata) + body (maks 30 kata) + CTA. Variasi tone: urgensi, emosional, fungsional. Tambahkan juga 1 targeting brief singkat (usia, minat, lokasi) untuk Ads Manager, sesuai target pembeli di Project-ku."</p>
+            <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> 3 variasi siap langsung ditest, dan targeting brief-nya otomatis nyambung dengan positioning — tidak perlu describe ulang target pembeli dari nol.</p>
           </div>
         </div>
 
@@ -686,11 +689,12 @@ No | Tema | Format | Caption | Hashtag.<button class="copy-btn" onclick="copyPro
             <p>Ambil 1 baris dari kalender konten Modul 3 (cm-kalender-konten.xlsx) yang paling potensial dijadikan iklan berbayar — tema dan idenya sudah ada, tinggal diubah jadi format ads. Jalankan prompt ini untuk produk/promo dari baris itu (atau produk unggulan lain yang berjalan). Ambil variasi copy terbaik. Kalau butuh visual baru, generate dulu fotonya di luar Claude (Nano Banana Pro/ChatGPT, pakai Prompt Enhancer di atas), baru susun jadi desain — Canva Connector kalau aktif, atau tool pilihanmu. Rakit semuanya di Ads Manager: upload desain sebagai creative, tempel copy dan targeting brief — 1 paket, bukan potongan terpisah. Jalankan iklan 3 hari, catat CTR dan konversi — balik ke Claude dengan angkanya untuk minta revisi.</p>
           </div>
           <div class="prompt-box">Buat 3 variasi copy iklan (Meta, TikTok, Google Ads) untuk
-[nama produk/promo], diskon [%], berlaku [tanggal]. Target:
-[deskripsi target]. Format: headline (maks 7 kata) + body
-(maks 30 kata) + CTA per platform. Variasi tone: urgensi,
-emosional, fungsional. Tambahkan juga 1 targeting brief
-singkat (usia, minat, lokasi).<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+[nama produk/promo], diskon [%], berlaku [tanggal]. Format:
+headline (maks 7 kata) + body (maks 30 kata) + CTA per
+platform. Variasi tone: urgensi, emosional, fungsional.
+Tambahkan juga 1 targeting brief singkat (usia, minat,
+lokasi) untuk Ads Manager, sesuai target pembeli di
+Project-ku.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
 
         <div class="output-box">
