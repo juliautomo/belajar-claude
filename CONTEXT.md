@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 29, 2026 (checkpoint 90)_
+_Last updated: July 29, 2026 (checkpoint 91)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1065,6 +1065,20 @@ Verified: pptx content unchanged (md5 `5d70f086a3f707c86e3b9ac8d2a17392` identic
 **Open risk, not verifiable from this session**: this repo has no reference to the old filename, but the *live* Supabase `module_ppts` row for Modul 4 may still store a path/filename pointing at the old name if it was ever uploaded through `admin.html`'s upload UI (separate from this git repo, and this session has no Supabase connector attached to check). If the live site's Modul 4 PPT download 404s after this rename, re-upload the renamed file through `admin.html` or update that Supabase row directly — flagged to Julia, not yet confirmed either way.
 
 **Commit**: `belajar-claude`: `20545ce`, `b51f504`.
+
+---
+
+## SHIPPED (Checkpoint 91, July 29, 2026): admin.html — fixed "Konten per Modul" table row misalignment for long PPT/doc filenames
+
+Julia sent a screenshot of the admin content-management table: for Modul 1 (long PPT filename `K1_Modul1_Apa_itu_Claude_dan_Setup_Akun.pptx`), the "Ganti"/"Hapus" controls sat noticeably lower and to the left compared to Modul 2/3 (shorter filenames), reading as broken alignment row-to-row.
+
+Root cause: `.cell-done` (the wrapper around the filename link + Ganti/Hapus buttons in `renderMatrix()`) used `flex-wrap: wrap` with no width limit on `.cell-link`. A filename long enough to fill the column pushed the two buttons onto a second flex line — shifting them down and left, unlike shorter filenames which stayed on one line. Row height and button position varied per row depending purely on filename length.
+
+Fix: `.cell-done` set to `flex-wrap: nowrap` so buttons can never drop to a second line; `.cell-link` capped at `max-width: 190px` with `overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0` so a long filename truncates instead of expanding the row, and `.btn-mini`/`.del-btn` given `flex-shrink: 0` so the truncation always happens on the filename, never the buttons. Added a `title` attribute on the PPT filename link so the full name is still readable on hover despite the truncation.
+
+Verified: extracted the exact `pptCell` string-building logic from `renderMatrix()` and ran it in Node with the actual long filename from the screenshot — output HTML is well-formed with the new `title` attribute correctly escaped. Could not get a pixel-rendered visual QA in this sandbox (no headless browser available — `puppeteer` install timed out downloading Chromium, no `wkhtmltoimage`/root apt access) — this is a CSS-only fix relying on standard flexbox truncation behavior (`min-width:0` + `text-overflow:ellipsis` on a flex child), not verified by screenshot. Flagged to Julia to confirm visually on the live admin page.
+
+**Commit**: `belajar-claude`: `784271b`.
 
 ---
 
