@@ -1146,7 +1146,7 @@ Julia's follow-up after Checkpoint 94: "i dont see the toggle for hide show, and
 
 Verified: div-balance held on all three files (index.html 92/92, dashboard.html 42/42, admin.html 67/67); `course_visibility` reads confirmed present in all three files' JS; `get_advisors` on the new table came back clean.
 
-**Commit**: `belajar-claude`: `57a8710`.
+**Commit**: `belajar-claude`: `89cd736`.
 
 ---
 
