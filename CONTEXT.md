@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 112)_
+_Last updated: July 30, 2026 (checkpoint 113)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1450,6 +1450,24 @@ Julia's own redesign: "latihan 1 set brand tone / latihan 2 upload the template 
 **Verified**: all 7 slides re-rendered via LibreOffice → PDF → PNG and visually reviewed; no overlapping shapes, no text overflow, no duplicated lines.
 
 **Commit**: `belajar-claude`: `f03c988`.
+
+---
+
+## SHIPPED (Checkpoint 113, July 30, 2026): K1 "Mulai dengan Claude AI" PDF regenerated in the established 20-Prompt/Produktivitas style
+
+Same treatment as Checkpoint 109 (20-Prompt) and Checkpoint 110 (Produktivitas): parsed `mulai-claude-content.html`'s 5 module panels (panel1–panel5; panel6/feedback excluded) via BeautifulSoup, stripped module-duration suffixes ("— N menit") from subtitles, stripped non-rendering emoji (same rule as before: codepoint > 0xFFFF, plus ✅/❌), converted `<details>` blocks, then rebuilt as a standalone HTML/CSS doc rendered with weasyprint.
+
+This course has no `.hero` wrapper (unlike K2) — module title/subtitle sit directly in the panel — so the parser decomposed them individually instead of removing a hero div. Its accent color (`--accent:#6C47FF`) already matches the palette used across the other two PDFs, so no color reconciliation was needed.
+
+New component CSS added beyond the K2 print stylesheet: `.body-text` (plain paragraphs), `.compare-table`/`.compare-table-wrap` (a real 4-column `<table>` used in Module 2's "Prompt Buruk vs Prompt Baik" comparison, with `break-inside: avoid` on `tr` so rows don't split across pages), `.mistake-list` (× red-marker list used inside Module 4's "Kesalahan Umum" warn tip-box), and `.summary-box`/`.summary-label` (the "Ringkasan Modul N" recap boxes at the end of each module). Also added a `:root` block resolving `var(--accent)`, `var(--accent-dim)`, `var(--accent-glow)` used inline in Module 5's "Kursus Selesai!" completion box.
+
+Reused as-is from the K2 build: cover page template, `.info-grid`/`.info-card`, `.two-col`/`.col-card`, `.step-row`/`.step-card` (this course's Module 1 uses a 5-column step-row — `width: calc((100% - gap)/5)` handled it fine), `.prompt-section`/`.prompt-box`, `.case-box`, `.output-box`, `.tip-box` (+ `.warn`/`.connector`), `.next-label`/`.next-card` (Module 5's cross-sell to K2 and K3).
+
+**Output**: 9 pages (1 cover + 5 modules). All pages rendered to PNG via pdf2image and visually reviewed page-by-page — no overlaps, no orphaned headers, compare-table and mistake-list both render cleanly, Kursus Selesai box picks up the correct purple styling.
+
+**File**: `K1-Mulai-Claude/belajarclaude - Mulai dengan Claude AI (Modul 1-5).pdf` overwritten in place.
+
+**Commit**: `belajar-claude`: (pushed same session).
 
 ---
 
