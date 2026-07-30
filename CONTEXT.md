@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 101)_
+_Last updated: July 30, 2026 (checkpoint 102)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1271,6 +1271,16 @@ Nothing needed backing out from Checkpoint 100's Hari-numbering or slide-8 split
 **Verified**: div-balance held on `content-marketing-content.html` (341/341). All touched PPTX slides re-rendered and reviewed — no overflow; Latihan 2's box on slide 7 had visible empty space after the email content was removed, tightened from 2.85in to 1.90in height for a cleaner fit rather than leaving dead whitespace.
 
 **Commit**: `belajar-claude`: `b49398a`.
+
+---
+
+## SHIPPED (Checkpoint 102, July 30, 2026): M05's "6 types" info-grid generalized from email-only to channel-agnostic
+
+Follow-on from Checkpoint 101 (Email demoted to optional/bonus): the "6 Jenis Email Bisnis yang Perlu Kamu Kuasai" info-grid still read as email-specific even though the section sits before both Cara Kerja columns (WA and Email) and the situations it describes — launch, flash sale, follow-up, periodic update, reactivation, reseller outreach — apply to WhatsApp just as much as Email. Retitled to "6 Situasi Komunikasi Pelanggan yang Perlu Kamu Kuasai" in both `content-marketing-content.html` and PPTX slide 6. Two card labels also had email-only language: "Newsletter bulanan" → "Update/cerita berkala" (newsletter is an email-only concept, doesn't apply to WA broadcasts), and "Email B2B untuk ajak kolaborasi" → "B2B untuk ajak kolaborasi" (dropped the channel-specific word). The four other cards' descriptions were already channel-agnostic, no change needed.
+
+**Verified**: div-balance held (341/341, text-only edit). PPTX slide 6 re-rendered — "UPDATE/CERITA BERKALA" is longer than the original "NEWSLETTER BULANAN" but still fits the card without wrapping or overflow.
+
+**Commit**: `belajar-claude`: `ba5280a`.
 
 ---
 
