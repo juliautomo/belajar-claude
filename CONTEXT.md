@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 104)_
+_Last updated: July 30, 2026 (checkpoint 105)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1314,6 +1314,28 @@ Follow-up to Checkpoint 101-103's "keep Email as optional reference" decision. J
 **Verified**: `content-marketing-content.html` div-balance 331/331 (down from 341 — net content removed). Grepped for `Gmail`, `cm-template-email`, `per Kanal`, `terutama di WA` — zero remaining hits anywhere in the file. `content-marketing.html` div-balance 79/79. All 8 PPTX slides re-rendered via `soffice`+`pdftoppm` and visually inspected after every edit, including two follow-up fixes caught only during visual QA (slide 3's redundant "terutama di WA" clause, slide 4's leftover whitespace after widening) — both re-rendered and confirmed clean on the second pass.
 
 **Commit**: `belajar-claude`: `a72a94e`.
+
+---
+
+## SHIPPED (Checkpoint 105, July 30, 2026): M05 — cut the redundant "Buruk vs Baik" section, made Latihan 1-3 demonstrate brand-voice carry-through end to end
+
+Julia flagged that "Contoh Prompt: Buruk vs Baik" sat *before* Latihan 1 but its "Prompt Baik" example assumed the Project already had brand voice saved — which is what Latihan 1 actually sets up. Confusing sequencing, and fully redundant with Latihan 1+2's real walkthrough. She also asked for concrete proof the exercises connect: a signature in Latihan 1, confirmation Latihan 2's templates inherit Latihan 1's tone, and a realistic customer-chat sample for Latihan 3 instead of an abstract instruction.
+
+**What shipped (`content-marketing-content.html`):**
+- Deleted the entire "Contoh Prompt: Buruk vs Baik" section-heading + two-col block. `10 Skenario WhatsApp` now follows directly after the `Kesalahan Umum` tip-box.
+- Latihan 1 prompt-box: added a sign-off instruction — `tutup pesan dengan "Salam hangat, Dapur Rara"` — so the brand-voice setup produces a visibly checkable artifact.
+- Latihan 2 output line: now explicitly says the 10 templates "otomatis pakai tone & signature dari Latihan 1" and shows one worked example ending in "Salam hangat, Dapur Rara" — visible proof the Project Instructions from Latihan 1 actually flow through.
+- Latihan 3: replaced the abstract instruction ("Balas WA: pembeli minta diskon...") with a concrete flow — a quoted "chat masuk dari pembeli" ("Kak, boleh kurang lagi ga harganya kalau aku ambil 5 pcs sekaligus? 🙏"), then a prompt-box that pastes that exact chat into the Claude instruction, mirroring how a student would actually copy a real WA message.
+
+**PPTX (`K3-M05-Komunikasi-Pelanggan.pptx`, 8 → 7 slides):**
+- Deleted old slide 4 ("Prompt Siap Pakai" / WhatsApp-via-Claude-Projects card) — it mirrored the now-removed HTML section. Used the standard `_sldIdLst` remove + `drop_rel` pattern since python-pptx has no native delete-slide API. All subsequent slides renumbered automatically (5→4, 6→5, 7→6, 8→7).
+- Caught and fixed a pre-existing stale bug while re-rendering the renumbered slide 4 ("Cara Kerja"): its eyebrow still read "DUA KANAL, DUA ALUR — PANJANG BERBEDA KARENA SETUP BERBEDA" and label "WHATSAPP CS" — leftover from before Email was removed in Checkpoint 104, missed because that checkpoint only touched the step-cards, not the eyebrow/label shapes. Fixed to "SATU ALUR, EMPAT LANGKAH" / "CARA KERJA STEP-BY-STEP".
+- New slide 6 (Latihan 1&2): prompt-box text and output line updated to match the HTML (signature line + tone-carryover callout).
+- New slide 7 (Latihan 3 + Output Modul): added a new textbox shape for the quoted customer chat, repositioned the prompt-box and output line to make room, updated all three to match HTML. Dropped the 🙏 emoji from the PPTX-only text (kept in HTML) since this deck's font (Helvetica) can't render color emoji — confirmed by a first-pass render showing a blank gap where the emoji should be; the deck's established convention is symbol substitutes (✅/■/◆) instead of emoji, which was followed here.
+
+**Verified**: `content-marketing-content.html` div-balance 327/327. All 7 PPTX slides re-rendered via `soffice`+`pdftoppm` and visually inspected post-edit, including two extra passes to catch the emoji-rendering issue and the stale slide-4 eyebrow.
+
+**Commit**: `belajar-claude`: pending.
 
 ---
 

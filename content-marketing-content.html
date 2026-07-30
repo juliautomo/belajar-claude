@@ -757,21 +757,6 @@ Project-ku.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></d
           </ul>
         </div>
 
-        <div class="section-heading">Contoh Prompt: Buruk vs Baik</div>
-        <div class="two-col">
-          <div class="col-card">
-            <h4>Prompt Buruk</h4>
-            <p>"Buatkan template balas WA untuk toko saya"</p>
-            <p style="margin-top:8px;"><strong>Masalah:</strong> tidak ada info bisnis, tone, atau situasi. Hasilnya generik dan tidak on-brand.</p>
-          </div>
-          <div class="col-card highlight">
-            <h4>Prompt Baik</h4>
-            <p class="context-note">Project sudah punya profil bisnis, tone santai-hangat, sapaan "Kak" — tidak perlu ditulis ulang</p>
-            <p>"Buatkan template WA untuk Skenario 1 dari cm-template-wa.txt: calon pembeli tanya harga pertama kali. Maks 4 baris, emoji 1-2, ada CTA ke katalog."</p>
-            <p style="margin-top:8px;"><strong>Kenapa berhasil:</strong> dengan Projects aktif, 1 kalimat instruksi sudah cukup — konteks bisnis sudah tersimpan. Hasilnya kamu copy-paste manual ke WhatsApp (belum ada WA Connector).</p>
-          </div>
-        </div>
-
         <div class="section-heading">10 Skenario WhatsApp yang Perlu Kamu Kuasai</div>
         <div class="info-grid">
           <div class="info-card"><strong>Inquiry pertama</strong><span>Sambut hangat + arahkan ke katalog/order</span></div>
@@ -801,7 +786,8 @@ Project-ku.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></d
           </div>
           <div class="prompt-box">Brand voice untuk komunikasi pelanggan: tone
 santai-hangat, sapaan "Kak", batasan emoji 1-2 per
-pesan.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+pesan, tutup pesan dengan "Salam hangat, Dapur
+Rara".<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
           <div class="mini-output">✅ Output: <span>Project Instructions ter-update — brand voice ini otomatis dipakai di semua chat WA berikutnya, termasuk Latihan 2 dan 3 di bawah. Dilakukan sekali saja.</span></div>
         </div>
 
@@ -812,17 +798,20 @@ pesan.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
           </div>
           <div class="prompt-box">Buatkan 10 template WhatsApp untuk skenario di
 cm-template-wa.txt.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-          <div class="mini-output">✅ Output: <span>10 template WhatsApp dasar tersimpan. Ini pola balasan yang jadi acuan di Latihan 3 — bukan hasil akhir yang langsung dipakai.</span></div>
+          <div class="mini-output">✅ Output: <span>10 template WhatsApp dasar tersimpan — otomatis pakai tone & signature dari Latihan 1. Contoh salah satu hasil: "Halo Kak! Estimasi tiba 2-3 hari ya, kalau ada kendala chat aku lagi 😊 Salam hangat, Dapur Rara." Ini pola balasan yang jadi acuan di Latihan 3 — bukan hasil akhir yang langsung dipakai.</span></div>
         </div>
 
         <div class="prompt-section latihan">
           <div class="prompt-label">🎯 Latihan 3 — Reuse untuk Kasus Nyata</div>
           <div class="case-box">
-            <p>Begitu ada pembeli chat beneran, jangan buka-buka file template. Ketik situasinya langsung ke Claude seperti contoh di bawah — Claude otomatis cocokkan ke skenario yang paling sesuai dan generate balasan personal siap pakai, memakai brand voice dari Latihan 1. Copy-paste ke WhatsApp (selalu manual). Ulangi minimal 5 kali dalam 1 minggu, catat respons pelanggan.</p>
+            <p>Begitu ada pembeli chat beneran, jangan buka-buka file template. Contoh chat masuk dari pembeli:</p>
+            <p style="margin-top:8px;font-style:italic;color:#444;">"Kak, boleh kurang lagi ga harganya kalau aku ambil 5 pcs sekaligus? 🙏"</p>
+            <p style="margin-top:8px;">Copy chat itu ke prompt di bawah — Claude otomatis cocokkan ke skenario yang paling sesuai dan generate balasan personal siap pakai, memakai brand voice dari Latihan 1.</p>
           </div>
-          <div class="prompt-box">Balas WA: pembeli minta diskon tambahan karena mau
-beli 5 pcs sekaligus.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-          <div class="mini-output">✅ Output: <span>Balasan personal siap pakai, on-the-spot, untuk kasus baru kapanpun — tanpa buka-buka file template lagi. Diulang terus tiap ada situasi baru.</span></div>
+          <div class="prompt-box">Balas chat WA ini pakai brand voice dari
+Project-ku: "Kak, boleh kurang lagi ga harganya
+kalau aku ambil 5 pcs sekaligus? 🙏"<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="mini-output">✅ Output: <span>Balasan personal siap pakai, on-the-spot. Copy-paste ke WhatsApp, kirim. Ulangi minimal 5 kali dalam 1 minggu untuk situasi berbeda, catat respons pelanggan.</span></div>
         </div>
 
         <div class="output-box">
