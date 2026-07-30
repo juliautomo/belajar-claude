@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 111)_
+_Last updated: July 30, 2026 (checkpoint 112)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1431,6 +1431,25 @@ Julia's fix, in her own words: "latihan 1 set the tone / latihan 2, upload scena
 **Verified**: div-tag balance on the HTML (328/328, unchanged from before edits — edits were text-only, no structural changes), and all 7 PPTX slides rendered clean with no overlap.
 
 **Commits**: `belajar-claude`: `13bf013`.
+
+---
+
+## SHIPPED (Checkpoint 112, July 30, 2026): M05 — simplified to Julia's cleaner 3-latihan design, reusing the file's own built-in prompt
+
+Checkpoint 111's fix (generate 10 templates upfront → save output → re-upload) turned out to be over-engineered. Two follow-up observations from Julia collapsed it into something much simpler:
+
+1. She pointed out `cm-template-wa.txt` already has a "Template yang dibutuhkan" field per scenario — prompting a check of whether the whole generate-then-reupload cycle was actually necessary. (Answer: that field is a one-line requirement/spec, not a finished reply — a real distinction — but it raised the right question.)
+2. She then pointed at the file's own bottom section, "PROMPT SIAP PAKAI" (`"Buatkan template WhatsApp untuk skenario berikut, pakai brand voice dan sapaan dari Project-ku: [tempel skenario yang kamu butuhkan]..."`) — already sitting unused in the file — and asked why Checkpoint 111's design didn't just use that.
+
+Julia's own redesign: "latihan 1 set brand tone / latihan 2 upload the template / latihan 3 use case based on the template." This is simpler than Checkpoint 111 in a real way — no intermediate generate/save/re-upload dance. Latihan 2 becomes a pure one-time upload (mirroring Latihan 1's "setup once" framing, no prompt needed at all). Latihan 3 becomes the one real exercise: match a real incoming message to one of the 10 scenarios, then run the file's own built-in "Prompt Siap Pakai" with that message dropped into `[tempel skenario yang kamu butuhkan]` — reusing the file's existing prompt verbatim rather than inventing a new one.
+
+**What shipped in `content-marketing-content.html`**: module-desc-box, the Claude Projects tip-box, Cara Kerja step-row (collapsed from 4 steps to 3, one per latihan), the Dapur Rara case-study persona box (reworded off "10 pre-made templates" framing), Latihan 2 (now just upload + one output line, no prompt-box), and Latihan 3 (prompt-box now literally the file's own "Prompt Siap Pakai" text with the real example message substituted in) — all rewritten in lockstep. Div-tag balance re-verified (324/324) after removing the extra case-boxes Checkpoint 111 had added.
+
+**PPTX synced** (`K3-M05-Komunikasi-Pelanggan.pptx`, slides 2/4/6/7): slide 4's 4th step-card (icon oval + number + text, 3 separate shapes) deleted outright since the flow is down to 3 steps; slide 6's now-unneeded prompt-box shape deleted and the output line's position/container height recalculated to close the gap; slide 7's prompt-box text and height increased to fit the longer reused prompt, with everything below it (output line, then the separate "Output Modul Keseluruhan" card and its two internal text shapes) shifted down by the same delta to avoid overlap — all computed from each shape's actual EMU position/size rather than guessed, then verified against the slide's fixed height so nothing would run off the bottom edge. Caught and fixed one real bug from this arithmetic pass: the "Output Modul (Keseluruhan)" box briefly had "File pendukung: cm-template-wa.txt." appearing twice (a leftover second paragraph in the same text frame that my first edit hadn't touched) — fixed and re-verified via a fresh LibreOffice render.
+
+**Verified**: all 7 slides re-rendered via LibreOffice → PDF → PNG and visually reviewed; no overlapping shapes, no text overflow, no duplicated lines.
+
+**Commit**: `belajar-claude`: `f03c988`.
 
 ---
 
