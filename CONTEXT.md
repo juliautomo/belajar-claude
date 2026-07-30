@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 96)_
+_Last updated: July 30, 2026 (checkpoint 97)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1147,6 +1147,24 @@ Julia's follow-up after Checkpoint 94: "i dont see the toggle for hide show, and
 Verified: div-balance held on all three files (index.html 92/92, dashboard.html 42/42, admin.html 67/67); `course_visibility` reads confirmed present in all three files' JS; `get_advisors` on the new table came back clean.
 
 **Commit**: `belajar-claude`: `89cd736`.
+
+---
+
+## SHIPPED (Checkpoint 97, July 30, 2026): M04 — Project/positioning continuity made explicit, matching M01/M02/M03/M05
+
+Follow-up question from Julia after Checkpoint 96: "do we utilize project context? is it explicitly mentioned or highlighted in the lesson?" — a fair challenge given the whole course is architected around Claude Project continuity (positioning + visual identity from M01, product catalog from M02, both explicitly referenced and reused in M03 and M05 via "Yang kamu butuhkan" notes and `context-note` badges on Prompt Baik examples). Grepped the full file for "Project" by module: M01/M02/M03/M05 each have 4-11 explicit mentions; M04 had exactly one, buried inside an example Canva instruction string ("warna brand di Project-ku"), unexplained.
+
+Worse than just under-explained: M04's own "Prompt Baik" example contradicted the pattern by re-typing target audience info in full ("Target: ibu rumah tangga 28-40 di Jabodetabek") that should already be known from M01's positioning, and the Latihan's copy-paste prompt had a `[deskripsi target]` bracket for the user to fill in manually — the one module acting like it starts from a blank Project.
+
+Fixed in both files:
+- Added a "Yang kamu butuhkan" line before "Contoh Prompt: Buruk vs Baik" (HTML), same placement/pattern M02 and M03 use: positioning from Modul 1 already available in Project, no need to retype.
+- Added a `context-note` badge to the Prompt Baik card ("Project sudah tahu target pembelimu dari positioning Modul 1 — tidak perlu ditulis ulang").
+- Reworked Prompt Buruk/Baik and the Latihan prompt-box so the audience/target line is dropped in favor of "sesuai target pembeli di Project-ku" — Claude now generates the ads-specific targeting brief (age/interest/location, genuinely new output this module produces) informed by positioning already in Project, instead of the user re-describing who their customer is.
+- Mirrored in PPTX slides 4 (Contoh Prompt) and 7 (Latihan), re-rendered via LibreOffice — both boxes auto-grew/fit cleanly with room to spare, no overflow.
+
+Verified: div-balance held on `content-marketing-content.html` (328/328, unchanged — text-only edits); re-checked all "Project" mentions across M01-M05 after the fix to confirm M04 now carries the same density/pattern as its siblings rather than just adding one isolated line.
+
+**Commit**: `belajar-claude`: `faf19c8`.
 
 ---
 
