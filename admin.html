@@ -39,7 +39,7 @@ h1.page-title { font-family: var(--serif); font-size: 30px; font-weight: 400; le
 .sidebar-link:hover { background: var(--surface-2); color: var(--ink); }
 .sidebar-link.active { background: var(--accent-dim); color: var(--accent); }
 .sidebar-link .ic { font-size: 15px; width: 18px; text-align: center; }
-.content-area { flex: 1; margin-left: 220px; padding: 32px 32px 64px; max-width: 940px; }
+.content-area { flex: 1; margin-left: 220px; padding: 32px 32px 64px; max-width: 1400px; }
 .content-area .panel:not(#panel-content) { max-width: 760px; }
 .panel { display: none; }
 .panel.active { display: block; }
@@ -130,7 +130,7 @@ table.matrix-table th, table.matrix-table td { text-align: left; padding: 12px 1
 table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.4px; }
 .mod-sub { display: block; font-size: 11.5px; color: var(--ink-2); font-weight: 400; margin-top: 1px; }
 .cell-done { display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; }
-.cell-link, .cell-link-btn { color: var(--green); text-decoration: none; font-weight: 600; font-size: 12px; background: var(--green-dim); border: 1px solid var(--green-border); padding: 5px 10px; border-radius: 7px; cursor: pointer; font-family: inherit; display: inline-block; max-width: 190px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 1; min-width: 0; }
+.cell-link, .cell-link-btn { color: var(--green); text-decoration: none; font-weight: 600; font-size: 12px; background: var(--green-dim); border: 1px solid var(--green-border); padding: 5px 10px; border-radius: 7px; cursor: pointer; font-family: inherit; display: inline-block; max-width: 340px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 1; min-width: 0; }
 .cell-link:hover, .cell-link-btn:hover { text-decoration: underline; }
 .cell-done .btn-mini, .cell-done .del-btn { flex-shrink: 0; }
 .cell-missing { padding: 6px 12px; background: var(--surface-2); border: 1.5px dashed var(--border-strong); border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--ink-2); cursor: pointer; font-family: inherit; }
@@ -233,7 +233,7 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
             <h2 id="matrixCourseTitle">Konten per Modul</h2>
             <p class="hint">Klik sel yang sudah terisi untuk lihat/ganti filenya, atau klik "+ Unggah" untuk yang masih kosong.</p>
             <table class="matrix-table" id="matrixTable">
-              <thead><tr><th>Modul</th><th>Video</th><th>PPT</th><th>Dokumen</th></tr></thead>
+              <thead><tr><th style="width:16%;">Modul</th><th style="width:16%;">Video</th><th style="width:38%;">PPT</th><th style="width:30%;">Dokumen</th></tr></thead>
               <tbody id="matrixBody"><tr><td colspan="4">Memuat...</td></tr></tbody>
             </table>
           </div>
