@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 114)_
+_Last updated: July 30, 2026 (checkpoint 115)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1486,6 +1486,18 @@ New component CSS beyond the K1/K2 stylesheet, all specific to this course's con
 **Output**: 12 pages (1 cover + 5 modules + 1 closing completion page). All pages rendered to PNG and visually reviewed — no overlaps, the 3- and 4-column step-rows size correctly, the anatomy-flow and package-flow diagrams read cleanly, and the completion badge's checkmark icon renders as expected.
 
 **File**: `Content-Marketing/Course-Level/Content-Marketing-Panduan-Belajar.pdf` overwritten in place.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 115, July 30, 2026): PDF-Style-Guide.md — documented the course-PDF build system
+
+After regenerating four course PDFs this session (20-Prompt: Checkpoint 109, K2 Produktivitas: Checkpoint 110, K1 Mulai Claude: Checkpoint 113, K3 Content Marketing: Checkpoint 114), wrote `PDF-Style-Guide.md` at the repo root so the next PDF regeneration doesn't have to re-derive the same weasyprint quirks and CSS patterns from scratch.
+
+Covers: the parse → build → render → verify → ship pipeline; canonical design tokens (`--accent:#6C47FF` normalized across all PDFs regardless of each course's slightly different live-site accent) and `@page`/cover-page setup; the emoji-strip rule and its exact safe/unsafe character findings; three documented weasyprint bugs and their fixes (flex-shorthand-collapses-to-one-column, cover-page footer bleed, forced-page-break waste) plus the newer `display:grid` → `.grid3` rewrite rule and `.step-row[data-cols]` variable-column-count fix (both first needed for K3); the full canonical component CSS list (`.info-grid`, `.two-col`, `.step-row`, `.prompt-section`, `.case-box`, `.output-box`, `.tip-box` + variants, `.mistake-list`, `.summary-box`, `.compare-table`, `.anatomy-flow`, `.package-flow`, `.completion-badge`, etc.) with notes on where each was first introduced and any course-specific quirks (e.g. completion badge sometimes lives inline in the last module, sometimes in a separate feedback panel); and file/push conventions (never rename target PDFs, scratch files stay out of git, PAT never committed).
+
+**File**: `PDF-Style-Guide.md` (new file, repo root).
 
 **Commit**: `belajar-claude`: (pushed same session).
 
