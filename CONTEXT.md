@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 116)_
+_Last updated: July 30, 2026 (checkpoint 117)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1514,6 +1514,22 @@ Root-caused via full-repo search: `course-card-v2`/`card-soon` only exists in `i
 **Verified**: JS syntax-checked via `node --check` after extracting all `<script>` blocks; visual verification of the actual logged-in dashboard render requires an authenticated Supabase session so wasn't screenshot-tested this pass — worth a manual check next login.
 
 **File**: `index.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 117, July 30, 2026): dashboard.html — same "Segera Hadir" dimming fix, third card component found
+
+Follow-up to Checkpoint 116. Julia's dashboard screenshot (JELAJAHI KURSUS grid) showed the same problem in a third, independent card component: dashboard.html's `.explore-card` (used for the "explore unenrolled courses" strip) also left coming-soon cards full-color, with only the status pill implicitly greyed via inline `opacity:.5` on the button.
+
+**Fix**: same pattern as Checkpoint 116 — added `.explore-card.explore-card-soon { filter: grayscale(0.6); opacity: 0.6; }`, added the `explore-card-soon` class to the card only when `meta.comingSoon` is true, removed the now-redundant inline `opacity:.5` from the disabled CTA span (the card-level filter handles dimming for the whole card, button included).
+
+Site now has three separate "coming soon" card components across two files (`index.html`'s logged-out `.course-card-v2`, `index.html`'s logged-in `.lih-card`, `dashboard.html`'s `.explore-card`) — each maintained independently rather than sharing a component, so this exact inconsistency risk (one styled, others missed) will resurface if a 4th coming-soon course grid is ever added elsewhere. Worth consolidating into one shared card partial in a future pass, but out of scope for this fix.
+
+**Verified**: JS syntax-checked via `node --check` after extracting all `<script>` blocks. Full visual confirmation still pending an authenticated session screenshot (same caveat as Checkpoint 116).
+
+**File**: `dashboard.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 

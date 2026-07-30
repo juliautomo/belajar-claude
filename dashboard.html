@@ -139,6 +139,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 .explore-carousel::-webkit-scrollbar{display:none;}
 .explore-card{min-width:200px;max-width:200px;scroll-snap-align:start;flex-shrink:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:all 0.2s;}
 .explore-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,0.08);border-color:rgba(108,71,255,0.2);}
+/* Same dimmed treatment as index.html's .course-card-v2.card-soon / .lih-card-soon, so
+   "Segera Hadir" reads consistently as not-yet-available across the whole site. */
+.explore-card.explore-card-soon{filter:grayscale(0.6);opacity:0.6;}
 .ex-thumb{height:72px;display:flex;align-items:center;justify-content:center;font-size:22px;}
 .ex-t1{background:linear-gradient(135deg,#EEF0FF,#DDE0FF);}
 .ex-t2{background:linear-gradient(135deg,#FFF7ED,#FDE8C8);}
@@ -449,11 +452,11 @@ async function _init(){
     unenrolled.forEach(function(slug){
       var meta=ALL_COURSES[slug];
       var cta=meta.comingSoon
-          ?'<span class="btn-view" style="opacity:.5;cursor:default;pointer-events:none;">Segera Hadir</span>'
+          ?'<span class="btn-view" style="cursor:default;pointer-events:none;">Segera Hadir</span>'
           :allAccessRow
           ?'<button class="btn-view" onclick="enrollCourse(this,\''+slug+'\')">Mulai Kursus &rarr;</button>'
           :'<a href="'+meta.salesLink+'" class="btn-view">Lihat Kursus &rarr;</a>';
-      grid.innerHTML+='<div class="explore-card">'
+      grid.innerHTML+='<div class="explore-card'+(meta.comingSoon?' explore-card-soon':'')+'">'
         +'<div class="ex-thumb '+meta.exThumb+'">'+meta.icon+'</div>'
         +'<div class="ex-body">'
         +'<div class="ex-lv">'+meta.level+'</div>'
