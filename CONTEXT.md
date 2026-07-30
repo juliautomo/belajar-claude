@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 29, 2026 (checkpoint 94)_
+_Last updated: July 30, 2026 (checkpoint 95)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1127,6 +1127,26 @@ Julia sent two screenshots back after Checkpoint 92 shipped, with two pointed qu
 Verified: div-balance held on both files (dashboard.html 41→42, consistent — the progress-row ternary duplicated one `<div class="prog-row">` pair in source, still balanced; index.html 92/92 unchanged, no markup added, only JS branching); traced the new index.html branch order by hand to confirm `meta.comingSoon` is checked before any code path that reads `meta.previewLink`/`meta.contentLink`; diff-verified against a fresh clone post-push.
 
 **Commit**: `belajar-claude`: `07e79a9`.
+
+---
+
+## SHIPPED (Checkpoint 95, July 30, 2026): real DB-backed course visibility toggle — replaces the static `comingSoon`/`visible` flags that Checkpoint 92-94 patched by hand
+
+Julia's follow-up after Checkpoint 94: "i dont see the toggle for hide show, and coming soon / add the similar animation for analisis data / why strategi marketing is not in the dashboard/enrolled view / all courses should be similar within not enrolled and enrolled view." Four asks, all shipped.
+
+**New Supabase table `course_visibility`** (`course_slug` PK, `hidden` bool, `coming_soon` bool), RLS on: public `SELECT`, write scoped to `julia.utomo@gmail.com`/`tiffany.utomo@gmail.com` (same pattern as `course_pricing`/`social_links`). Seeded with all 10 course slugs — the 4 live courses `hidden=false, coming_soon=false`, the 6 not-yet-launched courses `hidden=false, coming_soon=true`. `hidden` and `coming_soon` are independent: `hidden:true` pulls a course out of every discovery surface entirely (but never hides a real enrollment row someone actually owns — that's an access question, not a marketing one); `coming_soon:true` with `hidden:false` shows it everywhere as a greyed, disabled "Segera Hadir" teaser instead of hiding it.
+
+**admin.html**: new "Visibilitas Kursus" card (between PDF Kursus and Konten per Modul) with two toggle switches — reused the existing `.toggle-switch` component from Social Media Links rather than building new UI. Each toggle upserts straight to `course_visibility` keyed on `course_slug` and shows inline save-status feedback. The static `COURSES` array's `comingSoon`/`visible` flags are now explicitly just the fallback used if the live table is unreachable.
+
+**dashboard.html + index.html**: both now fetch `course_visibility` on load and merge it over the static `ALL_COURSES`/`LIH_COURSES` flags (`hidden`, `comingSoon` from the DB row; `visible` forced true once a DB row exists) before any rendering happens. Both the explore/not-enrolled filter and the Kursus-Kamu/enrolled-view teaser injection now check `!hidden` in addition to the existing `comingSoon`/`visible` logic, so a course's state is consistent across both views and both pages — closing the "why is Strategi Marketing missing from dashboard but Analisis Data isn't" gap, which was really just `visible:true` being set on one course and not the other five. All 6 not-yet-launched courses now carry `visible:true` as their static fallback too, so the DB is the source of truth but the site degrades sanely if Supabase is unreachable.
+
+**index.html illustration**: added a hand-drawn SVG for `analisis-data` to `LIH_ILLUSTRATIONS` (4 ascending bar-chart bars with staggered pulsing dots above the first three, a magnifying glass over the tallest bar, a sparkle accent) plus a teal/mint `LIH_BG` gradient, replacing the plain-emoji fallback it had before — now visually consistent with the other illustrated course cards in `lihCourseGrid`.
+
+**Scope note**: index.html's static `#kursus` marketing-page grid (the pre-login/non-all-access landing section) is genuinely static HTML, not driven by `LIH_COURSES` — it wasn't touched here and still only lists Strategi & Analisis Marketing as a coming-soon card. Flagging as a known gap if full consistency is wanted on that surface too.
+
+Verified: div-balance held on all three files (index.html 92/92, dashboard.html 42/42, admin.html 67/67); `course_visibility` reads confirmed present in all three files' JS; `get_advisors` on the new table came back clean.
+
+**Commit**: `belajar-claude`: `57a8710`.
 
 ---
 

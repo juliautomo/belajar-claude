@@ -230,6 +230,30 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
           </div>
 
           <div class="card">
+            <h2 id="visibilityCourseTitle">Visibilitas Kursus</h2>
+            <p class="hint">Atur apakah kursus ini tampil ke publik — berlaku langsung di seluruh situs (halaman utama, dashboard, dan explore), tidak perlu deploy ulang.</p>
+            <div class="social-field" style="margin-top:0;">
+              <div class="social-label-row">
+                <label>Sembunyikan dari situs</label>
+                <div class="social-toggle-wrap">
+                  <span class="social-toggle-text" id="courseHiddenLabel">Tampil</span>
+                  <label class="toggle-switch"><input type="checkbox" id="courseHiddenToggle" onchange="onCourseVisibilityToggle('hidden')"><span class="toggle-slider"></span></label>
+                </div>
+              </div>
+            </div>
+            <div class="social-field">
+              <div class="social-label-row">
+                <label>Tandai "Segera Hadir"</label>
+                <div class="social-toggle-wrap">
+                  <span class="social-toggle-text" id="courseComingSoonLabel">Live</span>
+                  <label class="toggle-switch"><input type="checkbox" id="courseComingSoonToggle" onchange="onCourseVisibilityToggle('coming_soon')"><span class="toggle-slider"></span></label>
+                </div>
+              </div>
+            </div>
+            <div class="status" id="courseVisibilityStatus"></div>
+          </div>
+
+          <div class="card">
             <h2 id="matrixCourseTitle">Konten per Modul</h2>
             <p class="hint">Klik sel yang sudah terisi untuk lihat/ganti filenya, atau klik "+ Unggah" untuk yang masih kosong.</p>
             <table class="matrix-table" id="matrixTable">
@@ -339,16 +363,17 @@ const COURSES = [
   { slug: 'mulai-claude',       name: 'Mulai dengan Claude AI',          modules: 5 },
   { slug: 'produktivitas',      name: 'Produktivitas Kantor',            modules: 7 },
   { slug: 'content-marketing',  name: 'Kreasi Konten Pemasaran',         modules: 5 },
-  { slug: 'strategi-marketing', name: 'Strategi & Analisis Marketing',   modules: 3, comingSoon: true },
+  { slug: 'strategi-marketing', name: 'Strategi & Analisis Marketing',   modules: 3, comingSoon: true, visible: true },
   // Coming-soon courses — placeholders so content can be prepped ahead of launch.
-  // Slugs/module counts match ALL_COURSES in dashboard.html. `visible: true` (mirrored
-  // in dashboard.html) is the one exception shown publicly as a disabled "Segera Hadir"
-  // teaser instead of staying fully hidden — see dashboard.html's explore-grid comment.
+  // Slugs/module counts match ALL_COURSES in dashboard.html. `comingSoon`/`visible` here
+  // are just the static fallback used if the live `course_visibility` table (Supabase)
+  // can't be reached — the actual on/off state is controlled by the Hide/Segera Hadir
+  // toggles at the top of the "Konten per Modul" card (see renderVisibilityToggles()).
   { slug: 'analisis-data',      name: 'Analisis Data & Laporan',         modules: 6, comingSoon: true, visible: true },
-  { slug: 'build-automation',   name: 'Automasi Workflow',               modules: 7, comingSoon: true },
-  { slug: 'ai-powered-app',     name: 'Build AI App Sederhana',          modules: 7, comingSoon: true },
-  { slug: 'claude-api-dev',     name: 'Claude API untuk Developer',      modules: 7, comingSoon: true },
-  { slug: 'jual-produk-ai',     name: 'Build & Monetisasi Produk AI',    modules: 7, comingSoon: true },
+  { slug: 'build-automation',   name: 'Automasi Workflow',               modules: 7, comingSoon: true, visible: true },
+  { slug: 'ai-powered-app',     name: 'Build AI App Sederhana',          modules: 7, comingSoon: true, visible: true },
+  { slug: 'claude-api-dev',     name: 'Claude API untuk Developer',      modules: 7, comingSoon: true, visible: true },
+  { slug: 'jual-produk-ai',     name: 'Build & Monetisasi Produk AI',    modules: 7, comingSoon: true, visible: true },
 ];
 
 const MODULE_TITLES = {
@@ -394,7 +419,7 @@ function moduleLabel(slug, num) {
 
 let currentSession = null;
 let activeCourse = COURSES[0].slug;
-let dataCache = { resources: [], videos: [], ppts: [], docs: [] };
+let dataCache = { resources: [], videos: [], ppts: [], docs: [], visibility: [] };
 let pricingCache = null;
 let socialCache = null;
 
@@ -448,10 +473,12 @@ async function loadAllData() {
   var docsRes = await sbClient.from('module_documents').select('*').order('course_slug').order('module_num').order('created_at');
   var pricingRes = await sbClient.from('course_pricing').select('*').eq('course_slug', 'all-access').maybeSingle();
   var socialRes = await sbClient.from('social_links').select('*').eq('id', 'main').maybeSingle();
+  var visibilityRes = await sbClient.from('course_visibility').select('*');
   dataCache.resources = resourcesRes.data || [];
   dataCache.videos = videosRes.data || [];
   dataCache.ppts = pptsRes.data || [];
   dataCache.docs = docsRes.data || [];
+  dataCache.visibility = visibilityRes.data || [];
   pricingCache = pricingRes.data || null;
   socialCache = socialRes.data || null;
 }
@@ -563,6 +590,7 @@ function switchCourse(slug) {
   renderCourseTabs();
   renderPdfRow();
   renderMatrix();
+  renderVisibilityToggles();
 }
 
 function renderAll() {
@@ -570,6 +598,7 @@ function renderAll() {
   renderCourseTabs();
   renderPdfRow();
   renderMatrix();
+  renderVisibilityToggles();
   renderSocialLinks();
   renderAccessList();
 }
@@ -745,6 +774,59 @@ function renderMatrix() {
   }
 
   body.innerHTML = rows || '<tr><td colspan="4">Kursus ini belum punya modul.</td></tr>';
+}
+
+// ─── COURSE VISIBILITY (hide / coming-soon toggles) ──────────────────────────
+// Lives in `course_visibility` (course_slug PK, hidden, coming_soon), read publicly
+// by dashboard.html/index.html to decide what to show. Falls back to each file's
+// static `comingSoon`/`visible` defaults if this table can't be reached.
+
+function renderVisibilityToggles() {
+  var course = COURSES.find(function (c) { return c.slug === activeCourse; });
+  document.getElementById('visibilityCourseTitle').textContent = 'Visibilitas Kursus — ' + (course ? course.name : activeCourse);
+
+  var row = dataCache.visibility.find(function (v) { return v.course_slug === activeCourse; });
+  var hidden = row ? !!row.hidden : false;
+  var comingSoon = row ? !!row.coming_soon : !!(course && course.comingSoon);
+
+  document.getElementById('courseHiddenToggle').checked = hidden;
+  document.getElementById('courseHiddenLabel').textContent = hidden ? 'Disembunyikan' : 'Tampil';
+  document.getElementById('courseComingSoonToggle').checked = comingSoon;
+  document.getElementById('courseComingSoonLabel').textContent = comingSoon ? 'Segera Hadir' : 'Live';
+
+  var statusEl = document.getElementById('courseVisibilityStatus');
+  statusEl.className = 'status';
+  statusEl.textContent = '';
+}
+
+async function onCourseVisibilityToggle(changedField) {
+  var hidden = document.getElementById('courseHiddenToggle').checked;
+  var comingSoon = document.getElementById('courseComingSoonToggle').checked;
+  document.getElementById('courseHiddenLabel').textContent = hidden ? 'Disembunyikan' : 'Tampil';
+  document.getElementById('courseComingSoonLabel').textContent = comingSoon ? 'Segera Hadir' : 'Live';
+
+  var statusEl = document.getElementById('courseVisibilityStatus');
+  statusEl.className = 'status show';
+  statusEl.textContent = 'Menyimpan...';
+
+  var payload = {
+    course_slug: activeCourse,
+    hidden: hidden,
+    coming_soon: comingSoon,
+    updated_at: new Date().toISOString(),
+    updated_by: currentSession.user.email,
+  };
+  try {
+    var res = await sbClient.from('course_visibility').upsert(payload, { onConflict: 'course_slug' });
+    if (res.error) throw res.error;
+    var idx = dataCache.visibility.findIndex(function (v) { return v.course_slug === activeCourse; });
+    if (idx === -1) dataCache.visibility.push(payload); else dataCache.visibility[idx] = payload;
+    statusEl.className = 'status show success';
+    statusEl.textContent = 'Tersimpan ✓ — langsung berlaku di seluruh situs.';
+  } catch (e) {
+    statusEl.className = 'status show error';
+    statusEl.textContent = 'Gagal menyimpan: ' + e.message;
+  }
 }
 
 // ─── VIDEO MODAL ─────────────────────────────────────────────────────────────
