@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 97)_
+_Last updated: July 30, 2026 (checkpoint 98)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1184,6 +1184,22 @@ Julia reviewed M04 in both the site and PowerPoint (screenshots of both) and rai
 **Verified**: div-balance held on `content-marketing-content.html` across all edits (320→318→328, each delta traced to the specific markup added/removed); all edited PPTX slides (2, 5, 7) re-rendered via LibreOffice + `pdftoppm` after every text/shape change and visually reviewed — no overflow, no clipping, no missing glyphs in the final version; cross-checked HTML vs PPTX text for all 7 slides after the fact — content matches in substance everywhere (PPTX is intentionally more condensed given slide space), no stale Canva-only phrasing or pre-restructure step counts left in either file; confirmed no other module (M03, M05) or sidebar nav references M04 content that would now be stale.
 
 **Commits**: `belajar-claude`: `7a18b09`, `325c7f4`, `a2805cc`.
+
+---
+
+## SHIPPED (Checkpoint 98, July 30, 2026): M05 — same Project-continuity anti-pattern found and fixed, this time in the supporting txt files themselves
+
+Julia asked whether M05 already used Project context properly (it mostly did — WA example already had a `context-note` badge from Checkpoint 77) and, after seeing screenshots of `cm-template-wa.txt`/`cm-template-email.txt`, flagged that the "INFO BRAND"/"PROFIL BISNIS" fill-in blocks at the top of both files looked like they should come from the Project instead of being retyped. Confirmed: same anti-pattern as Checkpoint 97's M04 fix, just literal fill-in fields instead of prose.
+
+Found on inspection: both files' header blocks asked for Nama Bisnis/Produk/Jasa/Tone/Sapaan — all things M05's own setup instructions already tell students to add to their Claude Project. Worse, the redundancy wasn't just cosmetic — the "PROMPT SIAP PAKAI" master prompt at the bottom of *both* files re-asked for the same info inline (e.g. WA: `"Bisnisku: [nama bisnis], jual [produk], tone [formal/santai]..."`), meaning the actual prompt students were meant to copy-paste contradicted the "Project already knows this" framing taught earlier in the module. Also found a real bug: `cm-template-email.txt` line 2 said "Modul 6" (course only has 5 modules).
+
+Fixed in both txt files: removed the INFO BRAND/PROFIL BISNIS blocks entirely, replaced with a one-line comment pointing to the Project; rewrote both master prompts to reference "brand voice dari Project-ku" instead of restating it; fixed the Modul 6→5 typo. Also decided Nama Pengirim/Jabatan (email sender name/title — not covered by M01 positioning) should move to Project too rather than staying a separate per-file fill-in, since it's a constant like tone/sapaan, not a per-email variable — the 10 WA scenarios and 6 email-type detail blocks (promo name, dates, codes) stayed untouched since those are genuinely situational, not redundant.
+
+Mirrored in `content-marketing-content.html`: module-desc-box and connector tip-box now mention adding nama pengirim/jabatan to Project alongside tone/sapaan; added a `context-note` badge to the Email "Prompt Baik" example (WA already had one) and dropped its redundant "tone hangat" phrase; Cara Kerja Email step 2 now notes the file no longer carries business info; Latihan prompt-box updated to add sender name/jabatan to Project setup. Mirrored in `K3-M05-Komunikasi-Pelanggan.pptx` slides 4, 5, and 7 (same 4 paragraphs), re-rendered via LibreOffice — all fit cleanly with no overflow.
+
+Verified: div-balance held on `content-marketing-content.html` (328/328, unchanged). No PPTX lock file present this time (Checkpoint 77's M05 fix had also touched this file previously).
+
+**Commits**: `belajar-claude`: `7fb5f5e`.
 
 ---
 
