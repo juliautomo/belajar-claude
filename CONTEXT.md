@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 29, 2026 (checkpoint 91)_
+_Last updated: July 29, 2026 (checkpoint 92)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1079,6 +1079,24 @@ Fix: `.cell-done` set to `flex-wrap: nowrap` so buttons can never drop to a seco
 Verified: extracted the exact `pptCell` string-building logic from `renderMatrix()` and ran it in Node with the actual long filename from the screenshot — output HTML is well-formed with the new `title` attribute correctly escaped. Could not get a pixel-rendered visual QA in this sandbox (no headless browser available — `puppeteer` install timed out downloading Chromium, no `wkhtmltoimage`/root apt access) — this is a CSS-only fix relying on standard flexbox truncation behavior (`min-width:0` + `text-overflow:ellipsis` on a flex child), not verified by screenshot. Flagged to Julia to confirm visually on the live admin page.
 
 **Commit**: `belajar-claude`: `784271b`.
+
+---
+
+## SHIPPED (Checkpoint 92, July 29, 2026): "Analisis Data & Laporan" surfaced as a public "Segera Hadir" teaser; admin two-toggle idea flagged as a follow-up
+
+Julia sent a screenshot of her own "Kursus Kamu" dashboard (4 enrolled courses) and asked to add the coming-soon Data Analysis course there too, plus suggested the admin panel could use two toggles per course: "hide" and "coming soon."
+
+Investigated the existing system first rather than guessing: `dashboard.html`'s `ALL_COURSES` already has a `comingSoon` flag on 6 not-yet-launched courses, but the explore/browse grid explicitly excludes every `comingSoon` course ("hidden means hidden — same rule as everywhere else on the site," a deliberate policy from an earlier checkpoint), and "Kursus Kamu" only ever shows a course if a real `enrollments` row exists for it. Also found precedent for exactly this kind of exception: Checkpoint ~66-ish made "Strategi & Analisis Marketing" visible-but-disabled in `all-access.html`'s included-courses list specifically, rather than fully hidden, per Julia's "greyed... unclickable" framing at the time — same pattern requested again here, just extended to the dashboard.
+
+Implemented via a new `visible:true` flag (added to `analisis-data` only, in both `dashboard.html`'s `ALL_COURSES` and `admin.html`'s `COURSES`) rather than inventing a new hide/show mechanism:
+- **Explore grid**: `comingSoon` courses now show (not excluded) if also `visible:true` — rendered with a disabled, greyed "Segera Hadir" span instead of the normal "Mulai Kursus"/"Lihat Kursus" CTA. The other 5 `comingSoon` courses (`strategi-marketing`, `build-automation`, `ai-powered-app`, `claude-api-dev`, `jual-produk-ai`) are unaffected — still fully hidden from browse, exactly as before.
+- **Kursus Kamu**: for any user who already has ≥1 real enrollment, `visible:true` comingSoon courses are injected as a synthetic disabled "Segera Hadir" card (reusing the existing `renderEnrolledCard` comingSoon-rendering path, which was already built for this exact visual state — it just never had anything routed into it before). Injection happens *after* the enrolled/completed stat counts and the empty-state greeting text are computed, so a teaser card never inflates "X kursus terdaftar" or shows "Kursus Kamu" to a brand-new visitor with zero real courses.
+
+**Did not build the "two admin toggles" (hide / coming soon) as live UI controls.** Course visibility across the whole site (`dashboard.html`, `admin.html`, `index.html`, `all-access.html`) is currently hardcoded JS object literals, edited directly in code per request — there's no Supabase `courses` table or admin form driving it. A real self-service toggle would mean moving this into a DB table with admin read/write UI, a bigger architecture change than what was needed to ship this specific ask. Flagged to Julia as an open question rather than silently building (or not building) something she didn't explicitly confirm the scope of.
+
+Verified: HTML div-balance unchanged on both files (dashboard.html 41/41, admin.html 59/59 — no new `<div>` markup, only a ternary/ `<span>` CTA swap and a JS `forEach` injection); diff-verified against a fresh clone post-push.
+
+**Commit**: `belajar-claude`: `2a66820`.
 
 ---
 
