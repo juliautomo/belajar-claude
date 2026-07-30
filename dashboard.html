@@ -242,7 +242,7 @@ const ALL_COURSES = {
   'produktivitas':      { title:'Produktivitas Kantor',          icon:'💼', thumb:'et2', contentLink:'produktivitas-content.html',     salesLink:'produktivitas.html',     desc:'Hemat 3–5 jam kerja per minggu dengan Claude + tools kantor.',    price:'Termasuk All Access', level:'Beginner',     exThumb:'ex-t1', modules:7 },
   'content-marketing':  { title:'Kreasi Konten Pemasaran',      icon:'🏷', thumb:'et3', contentLink:'content-marketing-content.html', salesLink:'content-marketing.html', desc:'Dari positioning sampai konten siap posting: Instagram, copy iklan, dan komunikasi pelanggan.', price:'Termasuk All Access', level:'Beginner',     exThumb:'ex-t1', modules:5 },
   'strategi-marketing': { title:'Strategi & Analisis Marketing', icon:'📈', thumb:'et3', contentLink:'strategi-marketing-content.html', salesLink:'strategi-marketing.html', desc:'Analisis performa iklan, alokasi budget, dan 1 Strategi Command Center yang terus jalan.', price:'Termasuk All Access', level:'Intermediate', exThumb:'ex-t1', modules:3, comingSoon:true },
-  'analisis-data':      { title:'Analisis Data & Laporan',       icon:'📊', thumb:'et4', contentLink:'coming-soon.html',              salesLink:'coming-soon.html',       desc:'Ubah data mentah jadi insight bisnis yang bisa dijadikan keputusan.',price:'Termasuk All Access', level:'Intermediate', exThumb:'ex-t2', modules:6, comingSoon:true },
+  'analisis-data':      { title:'Analisis Data & Laporan',       icon:'📊', thumb:'et4', contentLink:'coming-soon.html',              salesLink:'coming-soon.html',       desc:'Ubah data mentah jadi insight bisnis yang bisa dijadikan keputusan.',price:'Termasuk All Access', level:'Intermediate', exThumb:'ex-t2', modules:6, comingSoon:true, visible:true },
   'build-automation':   { title:'Automasi Workflow',             icon:'⚡', thumb:'et4', contentLink:'coming-soon.html',              salesLink:'coming-soon.html',       desc:'Buat 3 automation aktif dengan Zapier, Make.com & n8n.',          price:'Termasuk All Access', level:'Intermediate', exThumb:'ex-t2', modules:7, comingSoon:true },
   'ai-powered-app':     { title:'Build AI App Sederhana',        icon:'🚀', thumb:'et4', contentLink:'coming-soon.html',              salesLink:'coming-soon.html',       desc:'Buat web app AI live di GitHub Pages — tanpa backend.',           price:'Termasuk All Access', level:'Advanced',     exThumb:'ex-t3', modules:7, comingSoon:true },
   'claude-api-dev':     { title:'Claude API untuk Developer',    icon:'🔌', thumb:'et4', contentLink:'coming-soon.html',              salesLink:'coming-soon.html',       desc:'Integrasikan Claude ke project nyata: streaming, tool use, caching.',price:'Termasuk All Access', level:'Advanced',     exThumb:'ex-t3', modules:7, comingSoon:true },
@@ -372,6 +372,20 @@ async function _init(){
   }
   document.getElementById('greetSub').textContent=statC>0?statC+' kursus selesai — luar biasa!':activeCourses.length>0?'Lanjutkan perjalanan belajarmu.':'Mulai kursus pertamamu hari ini.';
 
+  // Public teaser for not-yet-launched courses marked `visible:true` (see explore-grid
+  // comment below) — shows as a disabled "Segera Hadir" card in Kursus Kamu, for users
+  // who already have at least one real course, not brand-new/unenrolled visitors (who'd
+  // otherwise see a "Kursus Kamu" section appear containing nothing but a teaser card).
+  // Added after the stats/greeting above are computed so it doesn't inflate "X kursus
+  // terdaftar" or change the "mulai kursus pertamamu" empty-state message.
+  if(enrollments.length>0){
+    Object.keys(ALL_COURSES).forEach(function(slug){
+      if(ALL_COURSES[slug].comingSoon&&ALL_COURSES[slug].visible&&!enrolledSlugs.has(slug)){
+        activeCourses.push({course_slug:slug,type:'teaser'});
+      }
+    });
+  }
+
   var COURSE_ORDER={'prompt-gratis':0,'mulai-claude':1,'produktivitas':2,'content-marketing':3,'strategi-marketing':4,'analisis-data':5,'build-automation':6,'ai-powered-app':7,'claude-api-dev':8,'jual-produk-ai':9};
   function courseSort(a,b){return (COURSE_ORDER[a.course_slug]||99)-(COURSE_ORDER[b.course_slug]||99);}
   activeCourses.sort(courseSort);
@@ -413,14 +427,19 @@ async function _init(){
 
 
   // Coming-soon (not-yet-launched) courses stay hidden here entirely, even when
-  // unenrolled — same "hidden means hidden" rule as everywhere else on the site.
-  var unenrolled=Object.keys(ALL_COURSES).filter(function(slug){return!enrolledSlugs.has(slug)&&!ALL_COURSES[slug].comingSoon;});
+  // unenrolled — same "hidden means hidden" rule as everywhere else on the site —
+  // UNLESS explicitly marked `visible:true`, which shows it greyed/disabled instead
+  // of hiding it (same exception pattern used for Strategi & Analisis Marketing
+  // elsewhere on the site: visible-but-unclickable, not a full hide).
+  var unenrolled=Object.keys(ALL_COURSES).filter(function(slug){return!enrolledSlugs.has(slug)&&(!ALL_COURSES[slug].comingSoon||ALL_COURSES[slug].visible);});
   if(unenrolled.length>0){
     document.getElementById('exploreSection').style.display='block';
     var grid=document.getElementById('exploreGrid');
     unenrolled.forEach(function(slug){
       var meta=ALL_COURSES[slug];
-      var cta=allAccessRow
+      var cta=meta.comingSoon
+          ?'<span class="btn-view" style="opacity:.5;cursor:default;pointer-events:none;">Segera Hadir</span>'
+          :allAccessRow
           ?'<button class="btn-view" onclick="enrollCourse(this,\''+slug+'\')">Mulai Kursus &rarr;</button>'
           :'<a href="'+meta.salesLink+'" class="btn-view">Lihat Kursus &rarr;</a>';
       grid.innerHTML+='<div class="explore-card">'
