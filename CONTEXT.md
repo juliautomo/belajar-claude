@@ -1356,7 +1356,7 @@ Julia asked to make sure all PDF-source content (20 Prompt, K1 Mulai dengan Clau
 
 **Verified**: module titles/counts cross-checked against HTML `nav-counter` and sidebar entries for all 4 courses; K2's archived-module discovery confirmed via the literal `ARCHIVED` HTML comment and by tracing the Modul 7 "next" button destination.
 
-**Commit**: `belajar-claude`: pending.
+**Commit**: `belajar-claude`: `dbfa2e8`.
 
 ---
 
