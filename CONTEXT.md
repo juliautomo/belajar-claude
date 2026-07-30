@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 107)_
+_Last updated: July 30, 2026 (checkpoint 108)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1377,6 +1377,14 @@ Julia asked to confirm nothing local was uncommitted and local fully matched Git
 - No HTML or PPTX content was changed this round — this was a sync/housekeeping pass only.
 
 **Commit**: `belajar-claude`: `23e1958`.
+
+---
+
+## SHIPPED (Checkpoint 108, July 30, 2026): M01 + M05 PPTX pushed to GitHub, local confirmed as source of truth
+
+Follow-up to Checkpoint 107's finding. Per Julia's correction ("local is the source of truth going forward, not GitHub"), pushed local's current copies of `K3-M01-Positioning-Kompetitor.pptx` and `K3-M05-Komunikasi-Pelanggan.pptx` up to GitHub as-is (Julia had made some manual edits locally), rather than reconciling content first. M01's local copy already had the "— 10 menit" subtitle suffix restored (fixed earlier this session to match the live HTML). Local and GitHub are now confirmed in sync for both files.
+
+**Commit**: `belajar-claude`: `b24a5d6`.
 
 ---
 
