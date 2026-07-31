@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 134)_
+_Last updated: July 31, 2026 (checkpoint 135)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1808,6 +1808,26 @@ Julia noticed the `#loggedInHome` greeting ("Selamat datang kembali, *julia.utom
 **Verification**: full `html.parser` tag-balance walk, zero errors.
 
 **File**: `index.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 135, July 31, 2026): prompt-gratis-content.html — applied the new lesson-page visual redesign (CSS-only)
+
+Julia asked to roll the visual redesign shown in `_design-previews/lesson-redesign-preview.html` (and the two Modul 4 previews) out to the real lesson pages, starting with `prompt-gratis-content.html`. This page turned out to have a meaningfully different content structure than the preview — it's a flat prompt library (`.prompt-card`/`.prompt-header`/`.prompt-num`/`.prompt-title`/`.prompt-text`/`.prompt-tip`, 4-5 prompts grouped per category panel) rather than the preview's single-narrative-module layout (`.prompt-box`/`.case-box`/`.tip-box` standalone blocks), so the exact preview classes (`.tip-box`, `.case-box`, `.prompt-box`, `.section-heading`) don't exist here at all. Translated the same visual language onto this page's actual class names instead of forcing a structural rewrite:
+
+- **Sidebar**: widened 260px→288px; `.mod-item` switched from a left-border-indicator row to the preview's rounded-card treatment (padding 12px 16px, margin 2px 8px, border-radius 12px, hover `--surface-2`, active `--accent-dim`); `.mod-check` enlarged 20px→24px with the cubic-bezier transition; progress bar thickened to 7px with the accent→accent-2 gradient fill (was solid accent); `.progress-label` and `.sidebar-section-label` de-monospaced and restyled to match the preview's weight/letter-spacing/color.
+- **Header**: `.breadcrumb` turned into the preview's pill tag (was plain "Course › Category" text trail — kept the same two-level text content, just wrapped in the accent pill instead of adding a new element); `.module-title` switched from 22px/800/sans to 34px/400/`var(--serif)` (Instrument Serif); `.module-subtitle` bumped to 14.5px/24px margin per spec.
+- **Prompt cards** (this page's equivalent of the preview's `.prompt-box`): `.prompt-card` restyled with the preview's card-hover lift (border-color + translateY); `.prompt-text` — previously a light-gray monospace box — recolored to the preview's dark `.prompt-box` treatment (`var(--ink)` background, `#f2f2f2` text, SF Mono stack, 14px radius); `.copy-btn` restyled to a clean light-context pill (this page's button sits in a white card header, not floating over a dark box like the preview, so it keeps the preview's color states — accent on hover, green on copied — without copying the preview's dark-overlay positioning) with a `@keyframes btnPop` scale animation on `.copied` (CSS-only "animated copy button," no JS changes since this page's `copyPrompt()` never sets a "bounce" class).
+- **Completion & next-course nudge**: `.output-box`/`.output-icon` updated to the preview's boxed-icon-square treatment (was a bare 28px emoji); `.next-card` got the same border/lift hover as `.prompt-card`; `.next-label` de-monospaced.
+- **Nav buttons**: `.nav-btn` padding/radius/hover matched to the preview (`border-color: var(--border-strong)` hover instead of accent text-color, primary button gets a `translateY(-1px)` lift); also fixed a latent bug — `.logout-btn`, `.copy-btn`, and `.nav-btn` all referenced `'Plus Jakarta Sans'`, a font never loaded on this page (only Instrument Serif + Geist are linked), so they were silently falling back to the browser default; switched to `var(--font)`.
+- **Explicitly left untouched** per the brief: `course-video.js` integration (`.video-slot`/`.ppt-slot`/`.doc-slot`/`#pdf-download-slot` have no CSS rules on this page at all — course-video.js injects fully inline-styled markup into them directly, so there's nothing here to restyle without editing that script, which the brief said not to touch), `showModule()`/`copyPrompt()` JS logic (unchanged), and the entire `.feedback-panel`/`.completion-badge`/`.feedback-card`/`.star-btn`/etc. block (copied verbatim, including its own latent `'Plus Jakarta Sans'` references — left alone since the brief explicitly excluded the feedback panel).
+- **`:root` tokens required zero changes** — this page already defined every token the preview uses (`--accent`, `--accent-2`, `--gold`, `--green`, `--serif: 'Instrument Serif', Georgia, serif`, `--font: 'Geist', sans-serif`, etc.) identically.
+
+**Verification**: full `html.parser` tag-balance walk (zero errors), CSS brace-balance check (107 open / 107 close), `node --check` on both extracted `<script>` blocks (auth/progress logic + feedback logic), and a weasyprint render of the first module panel to sanity-check the sidebar/header/typography visually (rendered correctly: rounded active sidebar item, gradient-ready progress bar, pill breadcrumb, large serif module title).
+
+**File**: `prompt-gratis-content.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
