@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 136)_
+_Last updated: July 31, 2026 (checkpoint 137)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1846,6 +1846,22 @@ Same `'Plus Jakarta Sans'` (never-loaded font) bug fixed on `.logout-btn`/`.copy
 **Verification**: full `html.parser` tag-balance walk (zero errors), CSS brace-balance check (150/150), `node --check` on both extracted scripts, grep sweep for leftover `monospace`/`Plus Jakarta Sans` references (only the untouched feedback panel remains), and a weasyprint render of Module 1 confirming the redesigned sidebar, breadcrumb pill, serif title, tinted `module-desc-box`, and gold `tip-box` all render correctly.
 
 **File**: `mulai-claude-content.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 137, July 31, 2026): produktivitas-content.html — applied the lesson-page visual redesign (CSS-only)
+
+Third of the four lesson pages, mapped against `_design-previews/produktivitas-modul4-redesign.html` (Modul 4 sample). This file's classes already matched the preview almost 1:1, including several component types that only appear here and in the preview (not in the other two lesson pages already shipped): `.learn-grid`/`.learn-card` (numbered feature cards — restyled with serif italic accent numbers, hover lift), `.install-grid`/`.install`/`.install-num` (switched from a bordered 3-col card grid to the preview's flat 2-col row layout with a small dark square number badge), `details`/`summary` accordions (added the preview's custom `▸` marker that rotates on open, replacing the default disclosure triangle), and `.pro-tip-section`/`.pro-tip-grid`/`.pro-tip-card` (simplified the page's own dark box — which had a decorative blob and custom purple border — down to the preview's plain `var(--ink)` panel for consistency with the other two pages' undecorated dark boxes).
+
+Same structural pattern as `mulai-claude-content.html` for the two recurring adaptation calls: `.tip-box` kept as a plain tinted card (no floating icon-square) since every `tip-label` already embeds its emoji as literal text (`📌 Tips`, `💾 Sudah Connect Google Drive...`, etc.), and `.mistake-list`/`.summary-box` markers recreated via `::before` sizing only, no new markup. Two extra cleanups specific to this file: the `.bonus` box's absolute-positioned "BONUS" ribbon (`.bonus:before`) was dropped since every `.bonus h3` already opens with "🛠️ Bonus — ..." in the text itself, making the ribbon redundant once the box switched to the preview's gradient-tinted treatment; and the redundant `.mod-item.active .mod-item-sub` color override was dropped to match the simpler active-state treatment used on the other two pages.
+
+`.prompt-section` here is a bordered card wrapping a header-bar `.prompt-label` above either a `.prompt-box` (code) or a nested `.case-box` (exercise text) — a container pattern unique to this file. Kept the container, changed `.prompt-box` itself to the dark `var(--ink)` background with a translucent-white `.copy-btn`, matching the preview's prompt styling while preserving the light-colored `.case-box` nested variant untouched (via the existing `.prompt-section .case-box` override).
+
+**Verification**: full `html.parser` tag-balance walk (zero errors), CSS brace-balance check (195/195), `node --check` on both extracted scripts (pass), grep sweep confirming no leftover old accent-color hex values or stray `monospace` font-family references, no duplicate ids, and a weasyprint render of both Module 1 (hero, pill breadcrumb, tinted `module-desc-box`) and Module 4 in full (learn-grid, two-col, step-row, dark prompt-box, bonus box, install-grid, details accordion, and dark pro-tip-section) all confirmed rendering correctly.
+
+**File**: `produktivitas-content.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
