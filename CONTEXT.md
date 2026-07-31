@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 137)_
+_Last updated: July 31, 2026 (checkpoint 138)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1862,6 +1862,22 @@ Same structural pattern as `mulai-claude-content.html` for the two recurring ada
 **Verification**: full `html.parser` tag-balance walk (zero errors), CSS brace-balance check (195/195), `node --check` on both extracted scripts (pass), grep sweep confirming no leftover old accent-color hex values or stray `monospace` font-family references, no duplicate ids, and a weasyprint render of both Module 1 (hero, pill breadcrumb, tinted `module-desc-box`) and Module 4 in full (learn-grid, two-col, step-row, dark prompt-box, bonus box, install-grid, details accordion, and dark pro-tip-section) all confirmed rendering correctly.
 
 **File**: `produktivitas-content.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 138, July 31, 2026): content-marketing-content.html — applied the lesson-page visual redesign (CSS-only)
+
+Last of the four lesson pages, mapped against `_design-previews/content-marketing-modul4-redesign.html` (Modul 4 sample). Most classes matched the preview 1:1, plus this file has the richest set of page-specific components of any of the four: `.prompt-section.latihan` (a highlighted-exercise variant of the base prompt card — restyled to the preview's `.latihan-box` treatment: accent-tinted background, thicker accent border, larger radius, accent-colored label, rather than the old inverted white-on-purple label bar), `.case-box.persona` (a gold-tinted case-study variant — overrode the new accent gradient side-bar to gold to keep it visually distinct from the plain accent `.case-box`), `.anatomy-flow`/`.anatomy-item`/`.anatomy-num` (a vertical connected-timeline component unique to this file, conceptually the same as the preview's `.workflow-steps` — modernized with a gradient number badge and lighter connector line rather than renaming classes to match the preview), and `.package-flow`/`.package-inputs`/`.package-item`/`.package-plus`/`.package-arrow`/`.package-result`/`.package-final` (this one matches the preview's diagram almost exactly, ported directly).
+
+Same recurring adaptation calls as the other three files: `.tip-box` stayed a plain tinted card (every `tip-label` already embeds its emoji as text), and `.mistake-list` markers were recreated via `::before` sizing only — notably the preview itself uses explicit `<span class="mistake-x">` markup for this component, but since this production file only has bare `<li>` elements, the `::before`-only approach (already proven on the other three files) was used instead to avoid adding markup. `.metric-table`, `.day-block`, `.summary-box`, and `.step-divider` were also modernized to the new tokens for consistency even though a grep confirmed none of them are actually referenced in this file's HTML (dead CSS carried over from an earlier template) — harmless to restyle, no visual effect.
+
+**Verification**: full `html.parser` tag-balance walk (zero errors), CSS brace-balance check (187/187), `node --check` on both extracted scripts (pass), grep sweep confirming no leftover old accent-color hex values, stray `monospace` font-family references, or `Plus Jakarta Sans`, no duplicate ids, and a weasyprint render of both Module 1 (hero, pill breadcrumb, gold persona case-box) and Module 4 in full (anatomy-flow vertical timeline, warn tip-box with red mistake badges, step-row, package-flow diagram, and the accent-tinted `.prompt-section.latihan` exercise box with dark prompt-box) all confirmed rendering correctly.
+
+This completes the lesson-page redesign across all four content files (`prompt-gratis-content.html`, `mulai-claude-content.html`, `produktivitas-content.html`, `content-marketing-content.html`) — each restyled independently to accommodate its own pre-existing class structure while converging on the same visual language: serif module titles, pill breadcrumbs, gradient sidebar progress, dark code-style prompt boxes with translucent copy buttons, tinted callout boxes, and `::before`-based badge icons wherever the preview's markup wasn't already present.
+
+**File**: `content-marketing-content.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
