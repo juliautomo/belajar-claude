@@ -234,7 +234,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     </div>
   </div>
 </nav>
-<div id="marketingHome">
+<div id="marketingHome" style="display:none;">
 <div class="hero">
   <div class="hero-grid">
     <div>
@@ -510,24 +510,47 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     slot.innerHTML = html;
   }
 
+  // #marketingHome starts hidden (display:none, set inline above) so the logged-out
+  // page never flashes on screen for a returning All Access member before the
+  // session check swaps in #loggedInHome — it only becomes visible once we've
+  // actually decided that's the right thing to show. revealMarketing() is the one
+  // function allowed to un-hide it, from any of the code paths below.
+  var marketingRevealed = false;
+  function revealMarketing() {
+    if (marketingRevealed) return;
+    marketingRevealed = true;
+    var mh = document.getElementById('marketingHome');
+    if (mh) mh.style.display = '';
+  }
+  // Safety net: if the auth check hangs or a script fails to load entirely (ad
+  // blocker, network hiccup, Supabase outage), never leave a real visitor staring
+  // at a blank page — force the marketing page visible after a short timeout
+  // regardless of what happened above.
+  setTimeout(revealMarketing, 2500);
+
   // Courses you're not really enrolled in (no real per-course row, even if you hold
   // all-access) link to the course's own preview page instead of the lesson reader
   // directly — the preview page is where the actual "Mulai Kursus" enroll click lives.
   (async function() {
+    // Live overrides from admin.html's Visibilitas Kursus toggles — fired in parallel
+    // with the session check below instead of awaited first. This used to run before
+    // getSession(), which meant every page load — logged in or not — paid for an
+    // extra network round trip before login state was even checked, and was the main
+    // cause of the logged-out homepage visibly flashing before switching to the
+    // logged-in view. It only affects the below-the-fold "coming soon" teaser cards,
+    // not which home page shows, so it doesn't need to block anything.
     try {
-      // Live overrides from admin.html's Visibilitas Kursus toggles — merged into the
-      // static LIH_COURSES fallback flags before anything below reads comingSoon/visible.
-      // Mirrors dashboard.html's ALL_COURSES merge so both pages agree on course state.
-      try {
-        var vis = await sbClient.from('course_visibility').select('*');
+      sbClient.from('course_visibility').select('*').then(function(vis) {
         (vis.data || []).forEach(function(row) {
           if (!LIH_COURSES[row.course_slug]) return;
           LIH_COURSES[row.course_slug].hidden = !!row.hidden;
           LIH_COURSES[row.course_slug].comingSoon = !!row.coming_soon;
           LIH_COURSES[row.course_slug].visible = true;
         });
-      } catch (e) {}
-      renderKursusComingSoon();
+      }).catch(function(){}).then(renderKursusComingSoon);
+    } catch (e) { renderKursusComingSoon(); }
+
+    try {
       var r = await sbClient.auth.getSession();
       var s = r.data.session;
       if (s) {
@@ -562,7 +585,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
           // anymore. Swap the whole block in for #loggedInHome, built from real
           // enrollment + progress data. Footer stays untouched either way.
           if (hasAllAccess) {
-            document.getElementById('marketingHome').style.display = 'none';
+            marketingRevealed = true; // marketingHome starts hidden — never reveal it for All Access holders
             document.getElementById('loggedInHome').style.display = 'block';
             var reassuranceEl = document.getElementById('reassuranceSection');
             if (reassuranceEl) reassuranceEl.style.display = 'none';
@@ -698,11 +721,15 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
                 '</div></div>';
             });
             document.getElementById('lihCourseGrid').innerHTML = gridHtml;
+          } else {
+            revealMarketing();
           }
-        } catch(e) {}
+        } catch(e) { revealMarketing(); }
         if (btn) { btn.textContent = 'Buka Dashboard →'; btn.href = 'dashboard.html'; btn.style.background = '#6C47FF'; btn.style.color = '#fff'; }
+      } else {
+        revealMarketing();
       }
-    } catch(e) {}
+    } catch(e) { revealMarketing(); }
   })();
 
   // Keep the hero price card in sync with admin.html's course_pricing panel

@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 118)_
+_Last updated: July 30, 2026 (checkpoint 119)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1546,6 +1546,28 @@ Checkpoints 116 and 117 fixed the identical bug twice in two different files bec
 **Verified**: grepped both files to confirm no leftover references to the old three class names; `node --check` on every extracted `<script>` block in both files.
 
 **Files**: `course-card-shared.css` (new), `index.html`, `dashboard.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 119, July 30, 2026): index.html — fixed logged-out-page flash on login, sped up the auth check
+
+Julia reported that on login, index.html briefly showed the logged-out marketing homepage before switching to the logged-in "welcome back" view — not smooth. Root-caused to two compounding issues in the page's init script:
+
+1. **`#marketingHome` had no hiding mechanism at all** — it was plain visible HTML from first paint, so for a returning All Access member it was *always* going to be on screen for however long the async auth/session logic took, no matter how fast that logic ran.
+2. **The auth check itself was needlessly slow**: the script `await`ed a `course_visibility` Supabase query (used only to populate the below-the-fold "coming soon" teaser cards) *before* even calling `getSession()` — meaning every single page load, logged in or not, paid for an unrelated network round trip before login state was checked at all. For logged-in All Access holders, `getSession()` was then followed by a second sequential network call (`enrollments`, needed to determine All Access status) before the page would swap views — so the flash window was roughly the sum of 2 sequential network calls plus render time.
+
+**Fix**:
+- `#marketingHome` now starts with inline `style="display:none;"` (matching the existing pattern already used for `#loggedInHome`). A `revealMarketing()` function is the single place allowed to un-hide it, called from every exit path: no session, session-but-not-all-access, or any error — so it's never permanently stuck hidden.
+- A `setTimeout(revealMarketing, 2500)` safety net runs independently of the async auth logic, so a hung request, blocked script (ad blocker), or Supabase outage still surfaces the marketing page after a short wait rather than leaving a real visitor on a blank screen.
+- The `course_visibility` fetch no longer blocks anything — it's fired and chained with `.then(renderKursusComingSoon)` without being awaited first, so `getSession()` now runs immediately as the first thing the script does.
+- All Access holders now go straight from `getSession()` → one `enrollments` query → reveal `#loggedInHome` (unchanged downstream: the progress/module_completions fetch still happens after the reveal, hydrating stats a moment later, same as before) — cut from 3 sequential network-bound steps before any visible swap down to 2, and `#marketingHome` is never shown for this path at all rather than being shown-then-hidden.
+- Logged-out visitors (the common case) now wait on one fast `getSession()` localStorage read before the page reveals, instead of zero gating — a negligible (sub-tens-of-ms in the typical case) trade-off in exchange for completely removing the flash for the login case Julia flagged.
+
+**Verified**: extracted and `node --check`'d all 4 `<script>` blocks after each edit; grepped for every remaining reference to `marketingHome` to confirm no other code path assumes it's visible by default; traced `doSignOut()` (redirects to a fresh `index.html` load) and the `.reveal`/`IntersectionObserver` fade-in setup to confirm neither breaks with the new hidden-by-default state. Full before/after timing wasn't measured against production (would need real network conditions + an authenticated session), so worth a manual check on the next login.
+
+**File**: `index.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
