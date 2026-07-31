@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 123)_
+_Last updated: July 31, 2026 (checkpoint 124)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1636,6 +1636,20 @@ Follow-up to Checkpoint 122's open item — Julia asked for the two Dapur Rara c
 - **all-access.html**: reworded the "Kenapa Pilih All Access" section per Julia's supplied copy — h2 "Dibuat Untuk yang Serius Belajar Claude" → "Belajar Claude Tanpa Batas", section-sub updated, and all 4 value-card headings/body text replaced with the emoji-prefixed version (💜 Harga Sekali Bayar, ✨ Kursus Baru? Langsung Masuk, ∞ Akses Selamanya, 🎯 Belajar Sesuai Kebutuhan). Existing `.value-grid`/`.value-card` markup and CSS untouched — wording-only change.
 
 **Files**: `content-marketing.html`, `strategi-marketing.html`, `all-access.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 124, July 31, 2026): all-access.html course-inclusion grid restyled to match index.html's course-card-v2 design
+
+Julia flagged that the "Termasuk Dalam All Access" grid (plain icon-row `.incl-card`s) looked inconsistent with the richer gradient-banner course cards on index.html, and asked for the same visual language at a smaller size.
+
+Replaced all 6 `.incl-card` rows with a compact variant of index.html's `.course-card-v2`/`.ccv2-*` pattern — same class names, same gradient-banner-with-icon + badge + title + description structure, reused verbatim so both pages share one visual language, just scaled down (76px banner vs 168px, 36px icon vs 64px, smaller type/padding, no price/CTA footer since these are inclusion cards, not sales cards). Reused index.html's per-course gradient palette (`bnr-1` through `bnr-5`, matching prompt-gratis/mulai-claude/produktivitas/content-marketing/strategi-marketing) and added a new `bnr-7` (soft violet) for the "Semua Kursus Baru" placeholder card, which has no equivalent slug on index.html. Badge colors: green for "Tersedia", gray for "Segera Hadir" (matches `badge-soon` on index.html), and `badge-b` (accent) for "Otomatis" to visually set the future-proofing card apart. Grid changed from `auto-fit minmax(260px,1fr)` to an explicit `repeat(3,1fr)` with 2-col/1-col responsive breakpoints, matching the 3-column layout Julia's screenshot showed.
+
+Verified with a weasyprint render of the isolated section — grid, banners, badges, and card heights all line up correctly (emoji rendered as tofu boxes in that render only, a known weasyprint-sandbox limitation with no color-emoji font documented in PDF-Style-Guide.md — renders fine as real emoji in an actual browser).
+
+**File**: `all-access.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 

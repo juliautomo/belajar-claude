@@ -90,13 +90,30 @@
   .section-title { font-size: clamp(24px, 3.5vw, 34px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 12px; color: var(--ink); }
   .section-sub { font-size: 15px; color: var(--ink-2); line-height: 1.75; margin-bottom: 40px; }
 
-  .courses-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
-  .incl-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; display: flex; align-items: flex-start; gap: 12px; }
-  .incl-icon { font-size: 22px; flex-shrink: 0; line-height: 1; margin-top: 2px; }
-  .incl-body h5 { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 3px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-  .incl-body p { font-size: 12px; color: var(--ink-2); line-height: 1.55; }
-  .soon-tag { font-size: 9px; font-weight: 700; background: rgba(100,116,139,0.08); color: #71717A; padding: 2px 8px; border-radius: 100px; white-space: nowrap; }
-  .live-tag { font-size: 9px; font-weight: 700; background: var(--green-dim); color: var(--green); padding: 2px 8px; border-radius: 100px; white-space: nowrap; }
+  /* Same card language as index.html's .course-card-v2 (gradient banner + icon,
+     badge, title, description) so the All Access page matches the marketing
+     course grid — just scaled down, since these are compact inclusion cards
+     rather than full sales cards with pricing/CTA. */
+  .courses-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .course-card-v2 { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: all 0.2s; }
+  .course-card-v2:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(0,0,0,0.06); border-color: rgba(108,71,255,0.2); }
+  .ccv2-banner { height: 76px; display: flex; align-items: center; justify-content: center; }
+  .ccv2-icon { width: 36px; height: 36px; border-radius: 10px; background: rgba(255,255,255,0.85); display: flex; align-items: center; justify-content: center; font-size: 17px; box-shadow: 0 4px 12px rgba(0,0,0,0.07); }
+  .bnr-1 { background: linear-gradient(135deg,#C7CBFF,#EEF0FF); }
+  .bnr-2 { background: linear-gradient(135deg,#B7F0D6,#E6FBF0); }
+  .bnr-3 { background: linear-gradient(135deg,#FBD98A,#FDF0D5); }
+  .bnr-4 { background: linear-gradient(135deg,#FBC2D9,#FDE9F1); }
+  .bnr-5 { background: linear-gradient(135deg,#A8D8FF,#E3F3FF); }
+  .bnr-7 { background: linear-gradient(135deg,#E5DFFF,#F5F3FF); }
+  .ccv2-body { padding: 15px 17px 17px; display: flex; flex-direction: column; gap: 7px; }
+  .ccv2-badge { display: inline-flex; align-self: flex-start; font-size: 9.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 3px 10px; border-radius: 100px; }
+  .badge-green { color: var(--green); background: var(--green-dim); }
+  .badge-b { color: var(--accent); background: var(--accent-dim); }
+  .badge-soon { color: #71717A; background: #F4F4F5; }
+  .ccv2-body h3 { font-family: var(--font); font-size: 15px; font-weight: 700; color: var(--ink); line-height: 1.25; letter-spacing: -0.2px; }
+  .ccv2-body p { font-size: 12.5px; color: var(--ink-2); line-height: 1.5; }
+  @media (max-width: 900px) { .courses-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px) { .courses-grid { grid-template-columns: 1fr; } }
 
   .compare-box { background: var(--ink); color: #fff; border-radius: 16px; padding: 32px 36px; display: flex; align-items: center; gap: 20px; margin-top: 40px; flex-wrap: wrap; }
   .compare-icon { font-size: 36px; flex-shrink: 0; }
@@ -181,29 +198,29 @@
     <h2 class="section-title">Semua Kursus, Sekarang & Nanti</h2>
     <p class="section-sub">Kursus yang sudah live bisa langsung diakses setelah pembelian. Kursus yang masih dalam pengembangan otomatis terbuka di dashboard kamu begitu dirilis — tanpa perlu bayar lagi.</p>
     <div class="courses-grid">
-      <div class="incl-card">
-        <div class="incl-icon">📋</div>
-        <div class="incl-body"><h5>20 Prompt Dasar <span class="live-tag">Tersedia</span></h5><p>Prompt siap pakai untuk email, laporan, konten sosmed — langsung copy-paste.</p></div>
+      <div class="course-card-v2">
+        <div class="ccv2-banner bnr-1"><div class="ccv2-icon">📋</div></div>
+        <div class="ccv2-body"><span class="ccv2-badge badge-green">Tersedia</span><h3>20 Prompt Dasar</h3><p>Prompt siap pakai untuk email, laporan, konten sosmed — langsung copy-paste.</p></div>
       </div>
-      <div class="incl-card">
-        <div class="incl-icon">🤖</div>
-        <div class="incl-body"><h5>Dasar Claude AI <span class="live-tag">Tersedia</span></h5><p>Dari nol sampai bisa pakai Claude sehari-hari.</p></div>
+      <div class="course-card-v2">
+        <div class="ccv2-banner bnr-2"><div class="ccv2-icon">🤖</div></div>
+        <div class="ccv2-body"><span class="ccv2-badge badge-green">Tersedia</span><h3>Dasar Claude AI</h3><p>Dari nol sampai bisa pakai Claude sehari-hari.</p></div>
       </div>
-      <div class="incl-card">
-        <div class="incl-icon">💼</div>
-        <div class="incl-body"><h5>Produktivitas Kantor <span class="live-tag">Tersedia</span></h5><p>Role prompting, Claude Projects, Gmail, Sheets — hemat 3–5 jam kerja per minggu.</p></div>
+      <div class="course-card-v2">
+        <div class="ccv2-banner bnr-3"><div class="ccv2-icon">💼</div></div>
+        <div class="ccv2-body"><span class="ccv2-badge badge-green">Tersedia</span><h3>Produktivitas Kantor</h3><p>Role prompting, Claude Projects, Gmail, Sheets — hemat 3–5 jam kerja per minggu.</p></div>
       </div>
-      <div class="incl-card">
-        <div class="incl-icon">🏷</div>
-        <div class="incl-body"><h5>Kreasi Konten Pemasaran <span class="live-tag">Tersedia</span></h5><p>Positioning, konten Instagram, copy iklan, sampai komunikasi pelanggan.</p></div>
+      <div class="course-card-v2">
+        <div class="ccv2-banner bnr-4"><div class="ccv2-icon">🏷</div></div>
+        <div class="ccv2-body"><span class="ccv2-badge badge-green">Tersedia</span><h3>Kreasi Konten Pemasaran</h3><p>Positioning, konten Instagram, copy iklan, sampai komunikasi pelanggan.</p></div>
       </div>
-      <div class="incl-card">
-        <div class="incl-icon">📈</div>
-        <div class="incl-body"><h5>Strategi & Analisis Marketing <span class="soon-tag">Segera Hadir</span></h5><p>Analisis performa iklan, alokasi budget, dan 1 Strategi Command Center yang terus jalan.</p></div>
+      <div class="course-card-v2">
+        <div class="ccv2-banner bnr-5"><div class="ccv2-icon">📈</div></div>
+        <div class="ccv2-body"><span class="ccv2-badge badge-soon">Segera Hadir</span><h3>Strategi & Analisis Marketing</h3><p>Analisis performa iklan, alokasi budget, dan 1 Strategi Command Center yang terus jalan.</p></div>
       </div>
-      <div class="incl-card">
-        <div class="incl-icon">✨</div>
-        <div class="incl-body"><h5>Semua Kursus Baru <span class="soon-tag">Otomatis</span></h5><p>Setiap kursus baru yang dirilis di masa depan langsung termasuk — tanpa biaya tambahan.</p></div>
+      <div class="course-card-v2">
+        <div class="ccv2-banner bnr-7"><div class="ccv2-icon">✨</div></div>
+        <div class="ccv2-body"><span class="ccv2-badge badge-b">Otomatis</span><h3>Semua Kursus Baru</h3><p>Setiap kursus baru yang dirilis di masa depan langsung termasuk — tanpa biaya tambahan.</p></div>
       </div>
     </div>
   </div>
