@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 130)_
+_Last updated: July 31, 2026 (checkpoint 131)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1748,6 +1748,22 @@ Two structural changes to `marketingHome` per Julia's review:
 **Verification**: full `html.parser` tag-balance walk (zero unclosed/mismatched tags), `node --check` on the extracted script block, grep confirming zero leftover `value-strip`/`value-item` references.
 
 **File**: `index.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 131, July 31, 2026): discount-end date on pricing badges; deleted the small duplicate cta-box on all 5 course preview pages
+
+**Discount end date**: Julia asked for the discount deadline to show next to the "HEMAT XX%" badge on the homepage pricing card. Added a `.pricing-discount-row`/`.pricing-discount-end` (index.html) — wraps the existing badge and a new adjacent date span, populated from `course_pricing.discount_end` via the same fetch that already reads `discount_price`/`base_price`. Shows "⏳ Berakhir {tanggal}" next to the badge when a `discount_end` is set, same wording/format `all-access.html` already uses for its own countdown line.
+
+**Pricing card size discrepancy — root cause found**: Julia asked why the pricing card looked smaller on lesson pages than the homepage, and asked to align them. Investigating turned up that this wasn't actually a sizing bug to fix by building something new — each of the 5 course preview pages (`prompt-gratis.html`, `mulai-claude.html`, `produktivitas.html`, `content-marketing.html`, `strategi-marketing.html`) already has a full-width dark pricing card near the bottom of the page (`.aa-card`/`.aa-badge`/`.aa-headline`/`.aa-price`/`.aa-checklist`, wired to a live `course_pricing` fetch) — functionally identical to what Checkpoint 129 built for the homepage. The "smaller" card Julia was comparing against was a *second*, redundant CTA: a small `.cta-box` (max-width 440px, no price shown) nested inside each page's narrow 680px-wide centered hero, sitting above the real full-width card further down. Deleted that small embedded `.cta-box` (and its now fully page-local, unused `.cta-tag`/`.cta-name`/`.cta-desc`/`.btn-primary`/`.cta-note` CSS) from all 5 pages' heroes — each page now has exactly one pricing card, the existing full-width `.aa-card`, matching the homepage's card in width and design without needing any new component. Also added the same `.aa-discount-row`/`.aa-discount-end` treatment to all 5 pages' `.aa-card`s so the discount deadline shows consistently everywhere pricing is shown, not just on the homepage.
+
+**Note for future sessions**: the site has two parallel "dark pricing card" naming conventions doing the same job — `.aa-*` (pre-existing, used on the 5 course preview pages) and `.pricing-*` (introduced in Checkpoint 129 for index.html, before this session discovered `.aa-*` already existed). Left as-is rather than renaming index.html's classes purely for consistency, since that would be pure churn with no visible effect — but worth using `.aa-*` naming if index.html's pricing card is rebuilt again.
+
+**Verification**: full `html.parser` tag-balance walk on all 6 touched files (index.html + the 5 course pages) reported zero unclosed/mismatched tags; `node --check` on each file's extracted `<script>` block passed; grep confirmed zero leftover `cta-box`/`cta-tag`/`cta-name`/`cta-desc`/`btn-primary`/`cta-note` references and no duplicate element ids on any of the 5 course pages. Confirmed `#ctaBtn` removal is safe — the enrollment-status JS on each page does `document.querySelectorAll('#ctaBtn, #bottomCtaBtn')`, which simply matches only `#bottomCtaBtn` now that `#ctaBtn` no longer exists (querySelectorAll doesn't error on unmatched selectors in a comma list).
+
+**Files**: `index.html`, `prompt-gratis.html`, `mulai-claude.html`, `produktivitas.html`, `content-marketing.html`, `strategi-marketing.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 

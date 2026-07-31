@@ -123,7 +123,9 @@ section { padding: 88px 0; position: relative; z-index: 1; }
 .pricing-badge { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; color: var(--accent-2); background: rgba(108,71,255,0.15); border: 1px solid rgba(155,125,255,0.3); padding: 5px 14px; border-radius: 100px; margin-bottom: 20px; position: relative; z-index: 1; }
 .pricing-name { font-family: var(--serif); font-size: clamp(28px, 3vw, 38px); font-weight: 400; letter-spacing: -0.5px; color: #fff; line-height: 1.2; margin-bottom: 14px; position: relative; z-index: 1; }
 .pricing-desc { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.55); max-width: 400px; margin-bottom: 22px; position: relative; z-index: 1; }
-.pricing-discount-badge { display: none; font-size: 11px; font-weight: 700; color: #4ADE80; background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3); padding: 4px 12px; border-radius: 100px; margin-bottom: 10px; position: relative; z-index: 1; }
+.pricing-discount-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; position: relative; z-index: 1; }
+.pricing-discount-badge { display: none; font-size: 11px; font-weight: 700; color: #4ADE80; background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3); padding: 4px 12px; border-radius: 100px; }
+.pricing-discount-end { display: none; font-size: 12px; color: rgba(255,255,255,0.45); font-weight: 600; }
 .pricing-price-row { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; position: relative; z-index: 1; }
 .pricing-price-old { display: none; font-size: 16px; color: rgba(255,255,255,0.35); text-decoration: line-through; }
 .pricing-price-big { font-family: var(--font); font-size: 34px; font-weight: 800; color: #fff; }
@@ -367,7 +369,10 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         <span class="pricing-badge">ALL ACCESS</span>
         <h2 class="pricing-name" id="ctaHeadline">Satu akses, semua kursus.</h2>
         <p class="pricing-desc" id="ctaSubtext">Satu kali pembayaran membuka seluruh course library — sekarang dan setiap kursus baru yang ditambahkan nanti.</p>
-        <div class="pricing-discount-badge" id="pricingDiscountBadge"></div>
+        <div class="pricing-discount-row">
+          <div class="pricing-discount-badge" id="pricingDiscountBadge"></div>
+          <span class="pricing-discount-end" id="pricingDiscountEnd"></span>
+        </div>
         <div class="pricing-price-row">
           <span class="pricing-price-old" id="pricingOldPrice"></span>
           <span class="pricing-price-big" id="pricingBigPrice">Rp 399K</span>
@@ -920,6 +925,11 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
       if (badge) { badge.style.display = 'inline-block'; badge.textContent = 'HEMAT ' + (pct != null ? pct + '%' : ''); }
       if (old) { old.style.display = 'inline'; old.textContent = 'Rp ' + Math.round(data.base_price / 1000) + 'K'; }
       if (big) big.textContent = 'Rp ' + Math.round(data.discount_price / 1000) + 'K';
+      if (data.discount_end) {
+        var endEl = document.getElementById('pricingDiscountEnd');
+        var endDate = new Date(data.discount_end).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        if (endEl) { endEl.style.display = 'inline'; endEl.textContent = '⏳ Berakhir ' + endDate; }
+      }
     } catch (e) { console.error('Pricing fetch failed, using default price', e); }
   })();
 </script>
