@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 127)_
+_Last updated: July 31, 2026 (checkpoint 128)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1698,6 +1698,22 @@ Julia supplied a standalone preview file (`hero-redesign-preview.html`, uploaded
 5. **Bottom CTA replaced with a real pricing card** — the old dark `cta-card` ("Mulai belajar Claude hari ini") + the 2 white `reassurance-item` boxes below it are gone, replaced by the reference's dark `.pricing-card`: price display + discount badge + feature checklist in one component. Critically, this reuses the *exact same element IDs* the existing Supabase price-fetch script already targets (`heroPrice`, `hcDiscountBadge`, `hcOriginalPrice`, `hcDiscountEnd`, `ctaHeadline`, `ctaSubtext`, `ctaBtn`, and the section id `komunitas` that the "hide for All Access holders" and "personalize for logged-in enrolled users" logic both check) — so none of that JS needed to change at all, it just now renders into the new markup. Removed the now-dead `reassuranceSection` hide-reference and the unused `.reassurance`/`.reassurance-item` CSS.
 
 **Verification**: no live browser available in this sandbox (playwright install exceeded the tool's process/timeout constraints), so verified via static analysis instead — tag-balance counts, a full Python `html.parser` walk of the entire file confirming zero unclosed/mismatched tags, a `node --check` pass on the extracted `<script>` block, and a grep sweep confirming no orphaned references to the removed `heroCard`/`hcTag`/`hcSub`/`hcPricingBlock`/`heroCardBtn`/`reassurance*` ids remained anywhere in the file. All CSS used (flexbox, grid, keyframes, transitions) is standard and matches what was already rendering correctly in Julia's uploaded reference file.
+
+**File**: `index.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 128, July 31, 2026): index.html — fixed section spacing, swapped homepage pricing card for the same cta-box used on every course page
+
+Two follow-up fixes after Julia reviewed the live Checkpoint 127 redesign.
+
+**Spacing**: the new "Lintas profesi, workflow nyata" section had only 20px of top padding (carried over from the reference file, where it followed the hero directly) — but on the real page it follows the course-library grid, so it looked cramped against the site's usual ~88px section rhythm. Changed `.cases-section` and `.pricing-section` padding from `20px 0 ...` to `88px 0 ...` to match.
+
+**Pricing card**: Julia asked the homepage's closing CTA to follow "the one on lesson page" — clarified via question that she meant the simple `.cta-box` pattern already used on every course preview page (mulai-claude.html, produktivitas.html, content-marketing.html, etc.): a small centered white card with a "Termasuk All Access" tag, course/offer name, one-line description, full-width dark button, and a small note — no price or discount shown (those pages never display the Rp amount either; price only ever shows on all-access.html itself). Replaced the dark two-column `.pricing-card`/feature-list component from Checkpoint 127 with this exact same `.cta-box`/`.cta-tag`/`.cta-name`/`.cta-desc`/`.btn-primary`/`.cta-note` markup and CSS, reusing new class names (not `.cta-card`/`.cta-btn`, which are still needed elsewhere on the page for the logged-in "continue learning" banner). Kept the `ctaHeadline`/`ctaSubtext`/`ctaBtn`/`komunitas` ids so the existing personalization JS (welcome-back headline, enrollment-status subtext, "Buka Dashboard" button swap for logged-in users, hide-for-All-Access-holders) still works untouched. Since price/discount no longer renders anywhere on this page, removed the now-fully-dead `course_pricing` fetch IIFE that used to populate `heroPrice`/`hcDiscountBadge`/`hcOriginalPrice`/`hcDiscountEnd` — those elements don't exist anymore, so the fetch had nothing left to do.
+
+**Verification**: re-ran the same static checks as Checkpoint 127 — full `html.parser` walk (zero unclosed/mismatched tags), `node --check` on the extracted script, grep sweep confirming zero orphaned references to the removed `pricing-*`/`price-*`/`feature-*`/`heroPrice`/`hcDiscountBadge`/`hcOriginalPrice`/`hcDiscountEnd` classes and ids.
 
 **File**: `index.html`.
 
