@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 126)_
+_Last updated: July 31, 2026 (checkpoint 127)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1682,6 +1682,24 @@ Julia asked for a full recheck: do the tools mentioned, course outline, case stu
 **strategi-marketing.html**: fully accurate — every module card (ROAS/CTR/CPC analysis, Notion Command Center, Gmail Connector, Calendar Connector), hero-meta tag, skill-chip (including Gmail and GA4, which are both genuinely used via real Connectors in this course, unlike content-marketing), and the output-box all checked out against the content file.
 
 **Files**: `mulai-claude.html`, `produktivitas.html`, `content-marketing.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 127, July 31, 2026): index.html hero/course-grid/pricing redesign, ported from `hero-redesign-preview.html`
+
+Julia supplied a standalone preview file (`hero-redesign-preview.html`, uploaded — not committed, it's a design reference only) and asked for 5 specific pieces of it to be ported into the real `index.html`:
+
+1. **Hero title animation + fonts** — `<h1>` now reads "Kuasai Claude AI," followed by a rotating second line that cycles every 2.4s through "tingkatkan karir" / "hemat waktu kerja" / "percepat konten" (`.rot-wrap`/`.rot-word` fade+slide transition, JS interval). Switched the h1 to `Inter` (700 weight, smaller/denser clamp size matching the reference) and `.hero-sub` to `Playfair Display` — added both to the Google Fonts link.
+2. **Removed the hero pricing card** — the white "Satu akses untuk semua kursus." box (`#heroCard`) that sat next to the hero text is gone; hero-grid collapsed to a single column.
+3. **"Lihat" button hover animation** — course-card-v2's CTA button (`.ccv2-btn`) changed from an always-expanded "Lihat →" pill to a 36px icon-only circle that expands to reveal the "Lihat" label on card hover (`.course-card-v2:hover .ccv2-btn`), matching the reference's `.lib-arrow-btn` pattern. Updated all 4 hardcoded course cards plus the JS-generated coming-soon card template (`renderKursusComingSoon()`) — its disabled button is now just "→" (status already shown via the SEGERA HADIR badge, so no more redundant "Segera Hadir" text crammed into the button).
+4. **New "Lintas profesi, workflow nyata" section** — added directly below the course library grid (still inside `#marketingHome`, so hidden for All Access holders like the course grid is). 6 clickable profession cards (Freelancer, Content Creator, Operations, Marketing, Business Owner, Sales Manager); clicking one plays a typewriter animation in a terminal-style demo window showing an example Claude output for that role. Ported verbatim from the reference (CASE_DEMOS/CASE_META, `showCaseDemo()`, mouse-tilt hover effect, staggered fade-in).
+5. **Bottom CTA replaced with a real pricing card** — the old dark `cta-card` ("Mulai belajar Claude hari ini") + the 2 white `reassurance-item` boxes below it are gone, replaced by the reference's dark `.pricing-card`: price display + discount badge + feature checklist in one component. Critically, this reuses the *exact same element IDs* the existing Supabase price-fetch script already targets (`heroPrice`, `hcDiscountBadge`, `hcOriginalPrice`, `hcDiscountEnd`, `ctaHeadline`, `ctaSubtext`, `ctaBtn`, and the section id `komunitas` that the "hide for All Access holders" and "personalize for logged-in enrolled users" logic both check) — so none of that JS needed to change at all, it just now renders into the new markup. Removed the now-dead `reassuranceSection` hide-reference and the unused `.reassurance`/`.reassurance-item` CSS.
+
+**Verification**: no live browser available in this sandbox (playwright install exceeded the tool's process/timeout constraints), so verified via static analysis instead — tag-balance counts, a full Python `html.parser` walk of the entire file confirming zero unclosed/mismatched tags, a `node --check` pass on the extracted `<script>` block, and a grep sweep confirming no orphaned references to the removed `heroCard`/`hcTag`/`hcSub`/`hcPricingBlock`/`heroCardBtn`/`reassurance*` ids remained anywhere in the file. All CSS used (flexbox, grid, keyframes, transitions) is standard and matches what was already rendering correctly in Julia's uploaded reference file.
+
+**File**: `index.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 

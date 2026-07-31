@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Belajar Claude — Platform Belajar Claude AI dalam Bahasa Indonesia</title>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="course-card-shared.css">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -57,23 +57,17 @@ nav {
 .nav-user-dropdown .dropdown-divider { height: 1px; background: var(--border, #E8E8E8); margin: 4px 0; }
 .nav-user-dropdown .dropdown-signout { color: #DC2626 !important; }
 .hero { padding: 144px 40px 0; max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
-.hero-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 56px; align-items: center; }
-.hero-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 30px; box-shadow: 0 16px 44px rgba(0,0,0,0.07); position: relative; overflow: hidden; }
-.hero-card::before { content: ''; position: absolute; width: 160px; height: 160px; border-radius: 50%; background: var(--accent-dim); right: -55px; top: -55px; }
-.hc-tag { display: inline-flex; padding: 6px 12px; background: var(--accent-dim); color: var(--accent); border-radius: 100px; font-size: 11px; font-weight: 800; letter-spacing: 0.6px; position: relative; }
-.hero-card h2 { font-family: var(--serif); font-size: 26px; font-weight: 400; letter-spacing: -0.6px; line-height: 1.15; margin: 16px 0 8px; position: relative; }
-.hero-card p { color: var(--ink-2); font-size: 13.5px; line-height: 1.6; margin-bottom: 20px; position: relative; }
-.hc-price { font-size: 30px; font-weight: 800; letter-spacing: -1px; position: relative; }
-.hc-price span { font-size: 12px; font-weight: 500; color: var(--ink-3); letter-spacing: 0; }
-.hc-price-note { color: var(--ink-3); font-size: 11.5px; margin-top: 4px; position: relative; }
-.hero-card .btn-dark { width: 100%; justify-content: center; margin-top: 20px; position: relative; }
-@media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } }
+.hero-grid { display: grid; grid-template-columns: 1fr; gap: 0; align-items: center; }
 .hero-eyebrow { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 600; color: var(--accent); background: var(--accent-dim); border: 1px solid rgba(108,71,255,0.18); padding: 5px 12px; border-radius: 100px; margin-bottom: 28px; letter-spacing: 0.02em; }
 .eyebrow-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
-.hero h1 { font-family: var(--serif); font-size: clamp(50px, 6.5vw, 84px); font-weight: 400; line-height: 1.04; letter-spacing: -2.5px; color: var(--ink); margin-bottom: 24px; max-width: 680px; }
+.hero h1 { font-family: 'Inter', sans-serif; font-size: clamp(38px, 4.4vw, 56px); font-weight: 700; line-height: 1.12; letter-spacing: -1.5px; color: var(--ink); margin-bottom: 22px; max-width: 620px; }
 .hero h1 em { font-style: italic; color: var(--accent); }
-.hero-sub { font-size: 16px; color: var(--ink-2); line-height: 1.75; max-width: 480px; margin-bottom: 40px; font-weight: 400; }
+.rot-wrap { display: inline-grid; position: relative; vertical-align: bottom; }
+.rot-word { grid-area: 1 / 1; font-style: normal; font-weight: 700; color: var(--accent); white-space: nowrap; opacity: 0; transform: translateY(60%); pointer-events: none; transition: opacity 0.4s cubic-bezier(.2,.8,.2,1), transform 0.4s cubic-bezier(.2,.8,.2,1); }
+.rot-word.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.rot-word.leaving { opacity: 0; transform: translateY(-60%); transition: opacity 0.32s cubic-bezier(.4,0,1,.6), transform 0.32s cubic-bezier(.4,0,1,.6); }
+.hero-sub { font-family: 'Playfair Display', Georgia, serif; font-size: 16px; color: var(--ink-2); line-height: 1.75; max-width: 480px; margin-bottom: 40px; font-weight: 400; }
 .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 .btn-dark { display: inline-flex; align-items: center; gap: 8px; background: var(--ink); color: #fff; font-family: var(--font); font-size: 13px; font-weight: 600; padding: 12px 22px; border-radius: 10px; text-decoration: none; transition: all 0.18s; box-shadow: 0 2px 10px rgba(0,0,0,0.15); }
 .btn-dark:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
@@ -102,12 +96,54 @@ section { padding: 88px 0; position: relative; z-index: 1; }
 .cta-card { max-width: 1100px; margin: 0 auto; background: var(--ink); border-radius: 20px; padding: 44px 48px; display: flex; justify-content: space-between; align-items: center; gap: 32px; flex-wrap: wrap; position: relative; overflow: hidden; }
 .cta-card > div { text-align: left; }
 .cta-card::before { content: ''; position: absolute; top: -100px; left: -60px; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(108,71,255,0.25), transparent 65%); pointer-events: none; }
-.reassurance { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 0 40px; }
-.reassurance-item { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; }
-.reassurance-item strong { display: block; font-size: 14px; margin-bottom: 6px; }
-.reassurance-item span { font-size: 13px; color: var(--ink-2); line-height: 1.6; }
 @media (max-width: 900px) { .course-lib-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 640px) { .course-lib-grid { grid-template-columns: 1fr; } .cta-card { flex-direction: column; align-items: flex-start; padding: 32px; } .reassurance { grid-template-columns: 1fr; padding: 0 20px; } }
+@media (max-width: 640px) { .course-lib-grid { grid-template-columns: 1fr; } .cta-card { flex-direction: column; align-items: flex-start; padding: 32px; } }
+
+/* --- Profession workflows section --- */
+.cases-section { padding: 20px 0 88px; position: relative; z-index: 1; }
+.cases-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+@media (max-width: 900px) { .cases-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .cases-grid { grid-template-columns: 1fr; } }
+.case-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 14px; padding: 18px; transition: opacity 0.4s ease, border-color 0.2s, transform 0.12s ease-out; cursor: pointer; transform-style: preserve-3d; opacity: 0; }
+.case-card.show { opacity: 1; }
+.case-card:hover { border-color: rgba(108,71,255,0.25); }
+.case-card.active { border-color: var(--accent); background: var(--accent-dim); }
+.case-icon { width: 32px; height: 32px; border-radius: 9px; background: var(--accent-dim); display: flex; align-items: center; justify-content: center; font-size: 15px; margin-bottom: 10px; }
+.case-role { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 6px; }
+.case-card p { font-size: 13px; color: var(--ink-2); line-height: 1.6; }
+.case-demo-wrap { position: relative; margin-top: 18px; }
+.case-connector { position: absolute; top: -9px; left: 28px; width: 16px; height: 16px; background: var(--accent-dim); border-left: 1.5px solid rgba(108,71,255,0.3); border-top: 1.5px solid rgba(108,71,255,0.3); transform: rotate(45deg); transition: left 0.3s cubic-bezier(.2,.8,.2,1); }
+.case-demo-card { background: var(--accent-dim); border: 1.5px solid rgba(108,71,255,0.22); border-radius: 18px; padding: 22px 24px; position: relative; }
+.case-demo-label { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 700; color: var(--accent); margin-bottom: 12px; }
+.case-demo-label .role-icon { font-size: 15px; }
+.case-window { background: var(--ink); border-radius: 12px; padding: 16px 18px; min-height: 90px; font-family: 'SF Mono', Consolas, monospace; font-size: 12.5px; color: #eee; line-height: 1.7; white-space: pre-wrap; }
+.case-window .caret { display: inline-block; width: 2px; height: 12px; background: var(--accent-2); vertical-align: middle; margin-left: 2px; animation: caretBlink2 0.9s step-end infinite; }
+@keyframes caretBlink2 { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
+
+/* --- Pricing section (dark, matches closing CTA treatment) --- */
+.pricing-section { padding: 20px 0 96px; position: relative; z-index: 1; }
+.pricing-card { max-width: 1100px; margin: 0 auto; background: var(--ink); border-radius: 24px; padding: 48px; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 48px; align-items: center; position: relative; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.18); }
+.pricing-card::before { content: ''; position: absolute; top: -100px; left: -60px; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(108,71,255,0.25), transparent 65%); pointer-events: none; }
+@media (max-width: 900px) { .pricing-card { grid-template-columns: 1fr; padding: 32px; } }
+.pricing-badge { display: inline-flex; padding: 6px 14px; background: rgba(255,255,255,0.1); color: var(--accent-2); border-radius: 100px; font-size: 11px; font-weight: 800; letter-spacing: 0.6px; margin-bottom: 18px; position: relative; }
+.pricing-tagline { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.55); margin-bottom: 10px; position: relative; }
+.pricing-left h2 { font-family: var(--serif); font-size: clamp(28px, 3.2vw, 38px); font-weight: 400; letter-spacing: -1px; margin-bottom: 10px; line-height: 1.15; position: relative; color: #fff; }
+.pricing-left > p { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.7; margin-bottom: 26px; max-width: 400px; position: relative; }
+.price-row { display: flex; align-items: baseline; gap: 10px; position: relative; }
+.price-big { font-size: 44px; font-weight: 800; letter-spacing: -1.5px; color: #fff; }
+.price-big span { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.45); margin-left: 4px; }
+.price-note { font-size: 13px; color: rgba(255,255,255,0.45); font-weight: 500; }
+.price-discount-badge { display: inline-block; padding: 4px 11px; background: rgba(34,197,94,0.15); color: #4ADE80; border: 1px solid rgba(34,197,94,0.3); border-radius: 100px; font-size: 11px; font-weight: 800; margin-bottom: 10px; position: relative; }
+.price-old { display: block; font-size: 17px; color: rgba(255,255,255,0.4); text-decoration: line-through; margin-bottom: 2px; position: relative; }
+.price-sub { font-size: 12.5px; color: rgba(255,255,255,0.4); margin: 4px 0 0; position: relative; }
+.price-deadline { display: block; font-size: 11.5px; font-weight: 600; color: var(--accent-2); margin-top: 6px; margin-bottom: 24px; position: relative; }
+.price-cta { position: relative; display: inline-flex; align-items: center; gap: 8px; background: #fff; color: var(--ink); font-family: var(--font); font-size: 13px; font-weight: 700; padding: 13px 26px; border-radius: 10px; text-decoration: none; transition: all 0.18s; }
+.price-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,255,255,0.18); }
+.feature-list { display: flex; flex-direction: column; gap: 20px; position: relative; }
+.feature-row { display: flex; gap: 14px; align-items: flex-start; }
+.feature-icon { width: 34px; height: 34px; border-radius: 10px; background: rgba(255,255,255,0.1); color: var(--accent-2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 15px; font-weight: 800; }
+.feature-row strong { display: block; font-size: 14px; margin-bottom: 3px; color: #fff; }
+.feature-row span { font-size: 12.5px; color: rgba(255,255,255,0.45); line-height: 1.5; }
 .course-card-v2 { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; transition: all 0.2s; }
 .course-card-v2:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,0.08); border-color: rgba(108,71,255,0.2); }
 .ccv2-banner { height: 168px; display: flex; align-items: center; justify-content: center; }
@@ -135,9 +171,12 @@ section { padding: 88px 0; position: relative; z-index: 1; }
 .ccv2-price.free-price { color: var(--ink); }
 .ccv2-pricesub { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
 .ccv2-included { font-family: var(--font); font-size: 13px; font-weight: 700; color: var(--accent); }
-.ccv2-btn { display: inline-flex; align-items: center; background: var(--ink); color: #fff; text-decoration: none; font-family: var(--font); font-size: 13px; font-weight: 700; padding: 12px 20px; border-radius: 10px; transition: all 0.18s; white-space: nowrap; }
-.ccv2-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+.ccv2-btn { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: var(--ink); color: #fff; text-decoration: none; font-family: var(--font); font-size: 12.5px; font-weight: 700; border-radius: 10px; transition: all 0.2s; white-space: nowrap; flex-shrink: 0; overflow: hidden; position: relative; }
+.ccv2-btn .lbl { max-width: 0; overflow: hidden; white-space: nowrap; transition: max-width 0.25s ease; }
+.course-card-v2:hover .ccv2-btn { width: auto; padding: 0 14px; gap: 6px; }
+.course-card-v2:hover .ccv2-btn .lbl { max-width: 90px; }
 .ccv2-btn.disabled { background: var(--surface-2); color: var(--ink-3); pointer-events: none; }
+.course-card-v2:hover .ccv2-btn.disabled { width: 36px; padding: 0; }
 #loggedInHome h1 em { font-style: italic; color: var(--accent); }
 .lih-continue { background: var(--ink); border-radius: 16px; padding: 26px 28px; display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
 .lih-continue-title { font-family: var(--serif); font-size: 24px; font-weight: 400; color: #fff; margin-bottom: 6px; }
@@ -239,25 +278,16 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
   <div class="hero-grid">
     <div>
       <div class="hero-eyebrow"><span class="eyebrow-dot"></span>Belajar Claude untuk Kerja & Bisnis</div>
-      <h1>Kuasai Claude AI,<br><em>tingkatkan karir</em></h1>
+      <h1>Kuasai Claude AI,<br><span class="rot-wrap" id="rotWrap">
+        <span class="rot-word active" data-i="0">tingkatkan karir</span>
+        <span class="rot-word" data-i="1">hemat waktu kerja</span>
+        <span class="rot-word" data-i="2">percepat konten</span>
+      </span></h1>
       <p class="hero-sub">Kursus dan panduan Claude AI yang praktis — sepenuhnya dalam Bahasa Indonesia, untuk profesional, UKM, dan mahasiswa.</p>
       <div class="hero-actions">
         <a href="all-access.html" class="btn-dark" id="heroActionBtn">Mulai Belajar Sekarang →</a>
         <a href="#kursus" class="btn-outline">Lihat Semua Kursus</a>
       </div>
-    </div>
-    <div class="hero-card" id="heroCard">
-      <span class="hc-tag" id="hcTag">ALL ACCESS</span>
-      <h2 id="hcHeadline">Satu akses untuk semua kursus.</h2>
-      <p id="hcSub">Belajar dengan materi terstruktur yang langsung bisa dipraktikkan untuk kerja dan bisnis.</p>
-      <div id="hcPricingBlock">
-        <div id="hcDiscountBadge" style="display:none;font-size:11px;font-weight:800;background:var(--green-dim);color:var(--green);border:1px solid var(--green-border);padding:4px 11px;border-radius:100px;margin-bottom:10px;position:relative;"></div>
-        <div id="hcOriginalPrice" style="display:none;font-size:17px;color:var(--ink-3);text-decoration:line-through;margin-bottom:2px;position:relative;"></div>
-        <div class="hc-price" id="heroPrice">Rp 399K <span>sekali bayar</span></div>
-        <div class="hc-price-note">Akses selamanya · Bukan langganan bulanan</div>
-        <div id="hcDiscountEnd" style="display:none;font-size:11.5px;color:var(--accent);font-weight:600;margin-top:6px;position:relative;"></div>
-      </div>
-      <a href="all-access.html" class="btn-dark" id="heroCardBtn">Mulai Belajar Sekarang →</a>
     </div>
   </div>
 </div>
@@ -277,11 +307,33 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     </div>
     <div class="course-grid-wrap reveal">
       <div class="course-lib-grid">
-        <div class="course-card-v2"><div class="ccv2-banner" style="background:linear-gradient(135deg,#C7CBFF,#EEF0FF);"><svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg"><line x1="20" y1="82" x2="210" y2="82" stroke="#111" stroke-width="2.5" opacity="0.25"/><rect x="46" y="52" width="30" height="28" rx="10" fill="#fff" stroke="#111" stroke-width="3"/><circle cx="61" cy="38" r="13" fill="#fff" stroke="#111" stroke-width="3"/><path d="M52 34 Q61 22 70 34" fill="none" stroke="#111" stroke-width="2.5"/><g class="lih-pen" style="transform-origin:78px 62px"><line x1="78" y1="62" x2="112" y2="54" stroke="#111" stroke-width="3" stroke-linecap="round"/><circle cx="112" cy="54" r="3.5" fill="#6C47FF"/></g><rect x="100" y="42" width="72" height="46" rx="6" fill="#fff" stroke="#111" stroke-width="2.5"/><line class="lih-scribble" x1="110" y1="55" x2="152" y2="55" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 4" opacity="0.6"/><line class="lih-scribble-2" x1="110" y1="65" x2="160" y2="65" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 4" opacity="0.6"/><line class="lih-scribble-3" x1="110" y1="75" x2="144" y2="75" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 4" opacity="0.6"/><g class="lih-sparkle" style="transform-origin:180px 34px"><path d="M180 26 L183 33 L190 34 L183 35 L180 42 L177 35 L170 34 L177 33 Z" fill="#6C47FF"/></g></svg></div><div class="ccv2-body"><span class="ccv2-badge badge-b">ALL ACCESS</span><h3>20 Prompt Dasar</h3><p>Prompt siap pakai untuk email, laporan, konten sosmed — langsung copy-paste.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><a href="prompt-gratis.html" class="ccv2-btn">Lihat →</a></div></div></div>
-        <div class="course-card-v2"><div class="ccv2-banner" style="background:linear-gradient(135deg,#B7F0D6,#E6FBF0);"><svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg"><line class="lih-ground" x1="0" y1="84" x2="400" y2="84" stroke="#111" stroke-width="3" stroke-dasharray="10 10" opacity="0.25"/><circle cx="368" cy="20" r="11" fill="#FBD98A" stroke="#111" stroke-width="2"/><g stroke="#111" stroke-width="2" opacity="0.5"><line x1="368" y1="4" x2="368" y2="10"/><line x1="384" y1="12" x2="379" y2="16"/><line x1="390" y1="26" x2="383" y2="24"/></g><rect x="24" y="58" width="6" height="24" fill="#111" opacity="0.3"/><circle cx="27" cy="46" r="17" fill="#BFEAD1" stroke="#111" stroke-width="2" opacity="0.9"/><g class="lih-run-a"><rect x="150" y="44" width="34" height="30" rx="8" fill="#fff" stroke="#111" stroke-width="3"/><line x1="167" y1="44" x2="167" y2="34" stroke="#111" stroke-width="2.5"/><circle cx="167" cy="31" r="3.5" fill="#6C47FF"/><circle cx="159" cy="58" r="2.5" fill="#111"/><circle cx="175" cy="58" r="2.5" fill="#111"/><g class="lih-leg-a" style="transform-origin:158px 74px"><line x1="158" y1="74" x2="158" y2="88" stroke="#111" stroke-width="4" stroke-linecap="round"/></g><g class="lih-leg-b" style="transform-origin:176px 74px"><line x1="176" y1="74" x2="176" y2="88" stroke="#111" stroke-width="4" stroke-linecap="round"/></g></g><g class="lih-run-b"><ellipse cx="240" cy="66" rx="24" ry="11" fill="#fff" stroke="#111" stroke-width="3"/><circle cx="265" cy="58" r="10" fill="#fff" stroke="#111" stroke-width="3"/><path d="M260 50 L264 40 L268 50 Z" fill="#fff" stroke="#111" stroke-width="2"/><rect x="255" y="63" width="10" height="5" rx="2" fill="#6C47FF" opacity="0.85"/><g class="lih-tail" style="transform-origin:218px 62px"><path d="M218 62 Q206 50 212 42" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/></g><g class="lih-leg-b" style="transform-origin:228px 76px"><line x1="228" y1="76" x2="228" y2="88" stroke="#111" stroke-width="4" stroke-linecap="round"/></g><g class="lih-leg-a" style="transform-origin:250px 76px"><line x1="250" y1="76" x2="250" y2="88" stroke="#111" stroke-width="4" stroke-linecap="round"/></g></g></svg></div><div class="ccv2-body"><span class="ccv2-badge badge-b">ALL ACCESS</span><h3>Dasar Claude AI</h3><p>Dari nol sampai bisa pakai Claude untuk kebutuhan sehari-hari.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><a href="mulai-claude.html" class="ccv2-btn">Lihat →</a></div></div></div>
-        <div class="course-card-v2"><div class="ccv2-banner" style="background:linear-gradient(135deg,#FBD98A,#FDF0D5);"><svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg"><circle cx="352" cy="22" r="10" fill="none" stroke="#111" stroke-width="2" opacity="0.4"/><line x1="352" y1="22" x2="352" y2="15" stroke="#111" stroke-width="2" opacity="0.4"/><line x1="352" y1="22" x2="357" y2="24" stroke="#111" stroke-width="2" opacity="0.4"/><rect x="120" y="66" width="150" height="10" rx="4" fill="#fff" stroke="#111" stroke-width="2.5"/><line x1="135" y1="76" x2="135" y2="88" stroke="#111" stroke-width="2.5" opacity="0.4"/><line x1="255" y1="76" x2="255" y2="88" stroke="#111" stroke-width="2.5" opacity="0.4"/><circle cx="140" cy="46" r="12" fill="#fff" stroke="#111" stroke-width="2.5"/><path d="M126 66 Q140 54 154 66" fill="#fff" stroke="#111" stroke-width="2.5"/><circle cx="195" cy="40" r="12" fill="#fff" stroke="#111" stroke-width="2.5"/><path d="M181 66 Q195 50 209 66" fill="#fff" stroke="#111" stroke-width="2.5"/><rect x="180" y="55" width="30" height="11" rx="2" fill="#fff" stroke="#111" stroke-width="2"/><line class="lih-cursor" x1="185" y1="60" x2="185" y2="66" stroke="#6C47FF" stroke-width="2"/><line x1="190" y1="60" x2="204" y2="60" stroke="#111" stroke-width="1.5" opacity="0.4"/><circle cx="250" cy="46" r="12" fill="#fff" stroke="#111" stroke-width="2.5"/><path d="M236 66 Q250 54 264 66" fill="#fff" stroke="#111" stroke-width="2.5"/><g class="lih-bubble" style="transform-origin:140px 20px"><rect x="118" y="10" width="44" height="20" rx="8" fill="#fff" stroke="#111" stroke-width="2"/><path d="M134 30 L130 37 L140 30 Z" fill="#fff" stroke="#111" stroke-width="2"/><circle class="lih-dot1" cx="130" cy="20" r="2.2" fill="#6C47FF"/><circle class="lih-dot2" cx="140" cy="20" r="2.2" fill="#6C47FF"/><circle class="lih-dot3" cx="150" cy="20" r="2.2" fill="#6C47FF"/></g></svg></div><div class="ccv2-body"><span class="ccv2-badge badge-b">ALL ACCESS</span><h3>Produktivitas Kantor</h3><p>Hemat 3–5 jam kerja per minggu. Gmail, Sheets, Docs, Claude Projects.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><a href="produktivitas.html" class="ccv2-btn">Lihat →</a></div></div></div>
-        <div class="course-card-v2"><div class="ccv2-banner" style="background:linear-gradient(135deg,#FBC2D9,#FDE9F1);"><svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg"><line x1="60" y1="88" x2="320" y2="88" stroke="#111" stroke-width="2.5" opacity="0.2"/><g class="lih-sparkle" style="transform-origin:150px 24px"><path d="M150 17 L153 23 L159 24 L153 25 L150 31 L147 25 L141 24 L147 23 Z" fill="#6C47FF"/></g><circle cx="118" cy="38" r="12" fill="#fff" stroke="#111" stroke-width="3"/><path d="M107 33 Q118 20 129 33" fill="none" stroke="#111" stroke-width="2.5"/><path d="M100 86 Q100 54 118 50 Q136 54 136 86 Z" fill="#FBC2D9" stroke="#111" stroke-width="2.5"/><path d="M100 66 Q90 72 92 82" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/><circle cx="252" cy="42" r="12" fill="#fff" stroke="#111" stroke-width="3"/><path d="M243 88 Q243 60 252 56 Q261 60 261 88 Z" fill="#fff" stroke="#111" stroke-width="2.5"/><g class="lih-cam" style="transform-origin:280px 58px"><rect x="264" y="48" width="34" height="22" rx="4" fill="#fff" stroke="#111" stroke-width="3"/><rect x="274" y="42" width="10" height="7" rx="2" fill="#fff" stroke="#111" stroke-width="2.5"/><circle cx="281" cy="59" r="8" fill="none" stroke="#111" stroke-width="3"/><circle cx="281" cy="59" r="3.5" fill="#6C47FF"/></g><circle class="lih-flash" cx="281" cy="59" r="16" fill="#FFD84D" opacity="0"/></svg></div><div class="ccv2-body"><span class="ccv2-badge badge-b">ALL ACCESS</span><h3>Kreasi Konten Pemasaran</h3><p>Positioning, konten Instagram, copy iklan, sampai komunikasi pelanggan lewat WhatsApp.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><a href="content-marketing.html" class="ccv2-btn">Lihat →</a></div></div></div>
+        <div class="course-card-v2"><div class="ccv2-banner" style="background:linear-gradient(135deg,#C7CBFF,#EEF0FF);"><svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg"><line x1="20" y1="82" x2="210" y2="82" stroke="#111" stroke-width="2.5" opacity="0.25"/><rect x="46" y="52" width="30" height="28" rx="10" fill="#fff" stroke="#111" stroke-width="3"/><circle cx="61" cy="38" r="13" fill="#fff" stroke="#111" stroke-width="3"/><path d="M52 34 Q61 22 70 34" fill="none" stroke="#111" stroke-width="2.5"/><g class="lih-pen" style="transform-origin:78px 62px"><line x1="78" y1="62" x2="112" y2="54" stroke="#111" stroke-width="3" stroke-linecap="round"/><circle cx="112" cy="54" r="3.5" fill="#6C47FF"/></g><rect x="100" y="42" width="72" height="46" rx="6" fill="#fff" stroke="#111" stroke-width="2.5"/><line class="lih-scribble" x1="110" y1="55" x2="152" y2="55" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 4" opacity="0.6"/><line class="lih-scribble-2" x1="110" y1="65" x2="160" y2="65" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 4" opacity="0.6"/><line class="lih-scribble-3" x1="110" y1="75" x2="144" y2="75" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 4" opacity="0.6"/><g class="lih-sparkle" style="transform-origin:180px 34px"><path d="M180 26 L183 33 L190 34 L183 35 L180 42 L177 35 L170 34 L177 33 Z" fill="#6C47FF"/></g></svg></div><div class="ccv2-body"><span class="ccv2-badge badge-b">ALL ACCESS</span><h3>20 Prompt Dasar</h3><p>Prompt siap pakai untuk email, laporan, konten sosmed — langsung copy-paste.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><a href="prompt-gratis.html" class="ccv2-btn"><span class="lbl">Lihat</span><span>→</span></a></div></div></div>
+        <div class="course-card-v2"><div class="ccv2-banner" style="background:linear-gradient(135deg,#B7F0D6,#E6FBF0);"><svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg"><line class="lih-ground" x1="0" y1="84" x2="400" y2="84" stroke="#111" stroke-width="3" stroke-dasharray="10 10" opacity="0.25"/><circle cx="368" cy="20" r="11" fill="#FBD98A" stroke="#111" stroke-width="2"/><g stroke="#111" stroke-width="2" opacity="0.5"><line x1="368" y1="4" x2="368" y2="10"/><line x1="384" y1="12" x2="379" y2="16"/><line x1="390" y1="26" x2="383" y2="24"/></g><rect x="24" y="58" width="6" height="24" fill="#111" opacity="0.3"/><circle cx="27" cy="46" r="17" fill="#BFEAD1" stroke="#111" stroke-width="2" opacity="0.9"/><g class="lih-run-a"><rect x="150" y="44" width="34" height="30" rx="8" fill="#fff" stroke="#111" stroke-width="3"/><line x1="167" y1="44" x2="167" y2="34" stroke="#111" stroke-width="2.5"/><circle cx="167" cy="31" r="3.5" fill="#6C47FF"/><circle cx="159" cy="58" r="2.5" fill="#111"/><circle cx="175" cy="58" r="2.5" fill="#111"/><g class="lih-leg-a" style="transform-origin:158px 74px"><line x1="158" y1="74" x2="158" y2="88" stroke="#111" stroke-width="4" stroke-linecap="round"/></g><g class="lih-leg-b" style="transform-origin:176px 74px"><line x1="176" y1="74" x2="176" y2="88" stroke="#111" stroke-width="4" stroke-linecap="round"/></g></g><g class="lih-run-b"><ellipse cx="240" cy="66" rx="24" ry="11" fill="#fff" stroke="#111" stroke-width="3"/><circle cx="265" cy="58" r="10" fill="#fff" stroke="#111" stroke-width="3"/><path d="M260 50 L264 40 L268 50 Z" fill="#fff" stroke="#111" stroke-width="2"/><rect x="255" y="63" width="10" height="5" rx="2" fill="#6C47FF" opacity="0.85"/><g class="lih-tail" style="transform-origin:218px 62px"><path d="M218 62 Q206 50 212 42" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/></g><g class="lih-leg-b" style="transform-origin:228px 76px"><line x1="228" y1="76" x2="228" y2="88" stroke="#111" stroke-width="4" stroke-linecap="round"/></g><g class="lih-leg-a" style="transform-origin:250px 76px"><line x1="250" y1="76" x2="250" y2="88" stroke="#111" stroke-width="4" stroke-linecap="round"/></g></g></svg></div><div class="ccv2-body"><span class="ccv2-badge badge-b">ALL ACCESS</span><h3>Dasar Claude AI</h3><p>Dari nol sampai bisa pakai Claude untuk kebutuhan sehari-hari.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><a href="mulai-claude.html" class="ccv2-btn"><span class="lbl">Lihat</span><span>→</span></a></div></div></div>
+        <div class="course-card-v2"><div class="ccv2-banner" style="background:linear-gradient(135deg,#FBD98A,#FDF0D5);"><svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg"><circle cx="352" cy="22" r="10" fill="none" stroke="#111" stroke-width="2" opacity="0.4"/><line x1="352" y1="22" x2="352" y2="15" stroke="#111" stroke-width="2" opacity="0.4"/><line x1="352" y1="22" x2="357" y2="24" stroke="#111" stroke-width="2" opacity="0.4"/><rect x="120" y="66" width="150" height="10" rx="4" fill="#fff" stroke="#111" stroke-width="2.5"/><line x1="135" y1="76" x2="135" y2="88" stroke="#111" stroke-width="2.5" opacity="0.4"/><line x1="255" y1="76" x2="255" y2="88" stroke="#111" stroke-width="2.5" opacity="0.4"/><circle cx="140" cy="46" r="12" fill="#fff" stroke="#111" stroke-width="2.5"/><path d="M126 66 Q140 54 154 66" fill="#fff" stroke="#111" stroke-width="2.5"/><circle cx="195" cy="40" r="12" fill="#fff" stroke="#111" stroke-width="2.5"/><path d="M181 66 Q195 50 209 66" fill="#fff" stroke="#111" stroke-width="2.5"/><rect x="180" y="55" width="30" height="11" rx="2" fill="#fff" stroke="#111" stroke-width="2"/><line class="lih-cursor" x1="185" y1="60" x2="185" y2="66" stroke="#6C47FF" stroke-width="2"/><line x1="190" y1="60" x2="204" y2="60" stroke="#111" stroke-width="1.5" opacity="0.4"/><circle cx="250" cy="46" r="12" fill="#fff" stroke="#111" stroke-width="2.5"/><path d="M236 66 Q250 54 264 66" fill="#fff" stroke="#111" stroke-width="2.5"/><g class="lih-bubble" style="transform-origin:140px 20px"><rect x="118" y="10" width="44" height="20" rx="8" fill="#fff" stroke="#111" stroke-width="2"/><path d="M134 30 L130 37 L140 30 Z" fill="#fff" stroke="#111" stroke-width="2"/><circle class="lih-dot1" cx="130" cy="20" r="2.2" fill="#6C47FF"/><circle class="lih-dot2" cx="140" cy="20" r="2.2" fill="#6C47FF"/><circle class="lih-dot3" cx="150" cy="20" r="2.2" fill="#6C47FF"/></g></svg></div><div class="ccv2-body"><span class="ccv2-badge badge-b">ALL ACCESS</span><h3>Produktivitas Kantor</h3><p>Hemat 3–5 jam kerja per minggu. Gmail, Sheets, Docs, Claude Projects.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><a href="produktivitas.html" class="ccv2-btn"><span class="lbl">Lihat</span><span>→</span></a></div></div></div>
+        <div class="course-card-v2"><div class="ccv2-banner" style="background:linear-gradient(135deg,#FBC2D9,#FDE9F1);"><svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg"><line x1="60" y1="88" x2="320" y2="88" stroke="#111" stroke-width="2.5" opacity="0.2"/><g class="lih-sparkle" style="transform-origin:150px 24px"><path d="M150 17 L153 23 L159 24 L153 25 L150 31 L147 25 L141 24 L147 23 Z" fill="#6C47FF"/></g><circle cx="118" cy="38" r="12" fill="#fff" stroke="#111" stroke-width="3"/><path d="M107 33 Q118 20 129 33" fill="none" stroke="#111" stroke-width="2.5"/><path d="M100 86 Q100 54 118 50 Q136 54 136 86 Z" fill="#FBC2D9" stroke="#111" stroke-width="2.5"/><path d="M100 66 Q90 72 92 82" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/><circle cx="252" cy="42" r="12" fill="#fff" stroke="#111" stroke-width="3"/><path d="M243 88 Q243 60 252 56 Q261 60 261 88 Z" fill="#fff" stroke="#111" stroke-width="2.5"/><g class="lih-cam" style="transform-origin:280px 58px"><rect x="264" y="48" width="34" height="22" rx="4" fill="#fff" stroke="#111" stroke-width="3"/><rect x="274" y="42" width="10" height="7" rx="2" fill="#fff" stroke="#111" stroke-width="2.5"/><circle cx="281" cy="59" r="8" fill="none" stroke="#111" stroke-width="3"/><circle cx="281" cy="59" r="3.5" fill="#6C47FF"/></g><circle class="lih-flash" cx="281" cy="59" r="16" fill="#FFD84D" opacity="0"/></svg></div><div class="ccv2-body"><span class="ccv2-badge badge-b">ALL ACCESS</span><h3>Kreasi Konten Pemasaran</h3><p>Positioning, konten Instagram, copy iklan, sampai komunikasi pelanggan lewat WhatsApp.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><a href="content-marketing.html" class="ccv2-btn"><span class="lbl">Lihat</span><span>→</span></a></div></div></div>
         <div id="kursusComingSoonSlot" style="display:contents;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="cases-section">
+  <div class="container">
+    <div class="section-eyebrow">Contoh Nyata Indonesia</div>
+    <h2 class="section-title">Lintas profesi, workflow nyata</h2>
+    <p class="section-sub">Dari freelancer sampai business owner — lihat langsung bagaimana Claude membantu pekerjaan sehari-hari.</p>
+    <div class="cases-grid" id="casesGrid">
+      <div class="case-card" data-role="freelancer" onclick="showCaseDemo('freelancer', this)"><div class="case-icon">💻</div><div class="case-role">Freelancer</div><p>Brief client yang berantakan lewat WhatsApp — Claude susun jadi scope of work, timeline, dan penawaran harga siap kirim dalam 10 menit.</p></div>
+      <div class="case-card" data-role="creator" onclick="showCaseDemo('creator', this)"><div class="case-icon">🎥</div><div class="case-role">Content Creator</div><p>1 topik jadi 15 ide konten lintas platform — caption Instagram, hook video, dan thread — siap produksi minggu ini.</p></div>
+      <div class="case-card" data-role="ops" onclick="showCaseDemo('ops', this)"><div class="case-icon">⚙️</div><div class="case-role">Operations</div><p>SOP onboarding karyawan baru: dari cerita proses singkat jadi dokumen langkah-demi-langkah siap pakai dalam 1 jam.</p></div>
+      <div class="case-card" data-role="marketing" onclick="showCaseDemo('marketing', this)"><div class="case-icon">📣</div><div class="case-role">Marketing</div><p>30 variasi caption Instagram dengan tone berbeda-beda, siap dijadwalkan untuk 1 bulan lewat batch prompting.</p></div>
+      <div class="case-card" data-role="owner" onclick="showCaseDemo('owner', this)"><div class="case-icon">💼</div><div class="case-role">Business Owner</div><p>Data penjualan, arus kas, dan catatan tim — Claude rangkum jadi health check bisnis singkat plus 3 langkah prioritas.</p></div>
+      <div class="case-card" data-role="sales" onclick="showCaseDemo('sales', this)"><div class="case-icon">🤝</div><div class="case-role">Sales Manager</div><p>Proposal kerjasama custom untuk 5 klien berbeda lewat chain 4 langkah — masing-masing terasa personal, bukan template generik.</p></div>
+    </div>
+    <div class="case-demo-wrap">
+      <div class="case-connector" id="caseConnector"></div>
+      <div class="case-demo-card">
+        <div class="case-demo-label"><span class="role-icon" id="caseDemoIcon">💻</span><span id="caseDemoRole">Freelancer</span> — begini Claude membantu:</div>
+        <div class="case-window" id="caseDemoWindow"></div>
       </div>
     </div>
   </div>
@@ -322,19 +374,29 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     <div class="course-lib-grid" id="lihCourseGrid"></div>
   </div>
 </div>
-<section class="cta-section" id="komunitas">
-  <div class="cta-card">
-    <div>
-      <h2 id="ctaHeadline">Mulai belajar Claude <em>hari ini</em></h2>
-      <p id="ctaSubtext">Satu kali bayar. Akses semua kursus yang tersedia sekarang dan yang akan datang.</p>
+<section class="pricing-section" id="komunitas">
+  <div class="container">
+    <div class="pricing-card">
+      <div class="pricing-left">
+        <span class="pricing-badge">ALL ACCESS</span>
+        <div class="pricing-tagline">Belajar sesuai kebutuhanmu</div>
+        <h2 id="ctaHeadline">Satu akses, semua kursus.</h2>
+        <p id="ctaSubtext">Satu kali pembayaran membuka seluruh course library — sekarang dan setiap kursus baru yang ditambahkan nanti.</p>
+        <span id="hcDiscountBadge" class="price-discount-badge" style="display:none;"></span>
+        <span id="hcOriginalPrice" class="price-old" style="display:none;"></span>
+        <div class="price-row">
+          <span class="price-big" id="heroPrice">Rp 399K <span>sekali bayar</span></span>
+        </div>
+        <div class="price-sub">Akses selamanya · Bukan langganan bulanan</div>
+        <div id="hcDiscountEnd" class="price-deadline" style="display:none;"></div>
+        <a href="all-access.html" class="price-cta" id="ctaBtn">Mulai Belajar Sekarang →</a>
+      </div>
+      <div class="feature-list">
+        <div class="feature-row"><span class="feature-icon">✓</span><div><strong>Semua kursus</strong><span>Akses semua materi yang tersedia dalam satu pembelian.</span></div></div>
+        <div class="feature-row"><span class="feature-icon">✓</span><div><strong>Sekali bayar</strong><span>Tidak ada biaya bulanan atau langganan berulang.</span></div></div>
+        <div class="feature-row"><span class="feature-icon">✓</span><div><strong>Kursus baru termasuk</strong><span>Kursus baru yang ditambahkan ke library juga termasuk.</span></div></div>
+      </div>
     </div>
-    <a href="all-access.html" class="cta-btn" id="ctaBtn">Mulai Belajar Sekarang →</a>
-  </div>
-</section>
-<section style="padding: 0 0 88px;" id="reassuranceSection">
-  <div class="reassurance reveal">
-    <div class="reassurance-item"><strong>Sekali bayar, bukan langganan.</strong><span>Satu kali pembayaran untuk mendapatkan akses ke seluruh course library.</span></div>
-    <div class="reassurance-item"><strong>Belajar sesuai kebutuhanmu.</strong><span>Pilih kursus yang paling relevan untuk pekerjaan atau bisnis kamu.</span></div>
   </div>
 </section>
 <footer>
@@ -378,6 +440,79 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // Rotating hero headline word (tingkatkan karir / hemat waktu kerja / percepat konten)
+  var rotWords = document.querySelectorAll('#rotWrap .rot-word');
+  if (rotWords.length) {
+    var wi = 0;
+    setInterval(function() {
+      rotWords[wi].classList.remove('active');
+      rotWords[wi].classList.add('leaving');
+      var next = (wi + 1) % rotWords.length;
+      rotWords[next].classList.add('active');
+      setTimeout(function() { rotWords[wi].classList.remove('leaving'); }, 340);
+      wi = next;
+    }, 2400);
+  }
+
+  // "Lintas profesi, workflow nyata" section — click a profession card to see a
+  // typed-out example of what Claude generates for that role.
+  var CASE_DEMOS = {
+    freelancer: 'Dari chat WhatsApp client ini, susun jadi scope of\nwork resmi: deliverable, timeline, dan harga total.\n\n→ Scope of Work — Redesign Logo & Brand Kit\n1. Riset & moodboard (3 hari)\n2. 3 konsep awal (5 hari)\n3. Revisi & file final (2 hari)\nTotal: Rp 4.500.000 · Estimasi 10 hari kerja',
+    creator: 'Dari 1 topik "tips produktivitas kerja", buatkan 15 ide\nkonten lintas platform: 5 caption IG, 5 hook video\nReels, 5 thread Twitter.\n\n1. IG: "3 tools yang bikin kerja 2x lebih cepat 👇"\n2. Reels hook: "Kalau kamu masih ngerjain ini manual..."\n3. Thread: "Cara saya hemat 5 jam/minggu pakai AI 🧵"...',
+    ops: 'Ubah cerita proses onboarding ini jadi SOP\nlangkah-demi-langkah, bernomor, dengan PIC di\nsetiap langkah.\n\n1. HR kirim welcome email (H-3)\n2. IT siapkan akun & laptop (H-1)  ...',
+    marketing: 'Buatkan 30 variasi caption Instagram untuk promo\nakhir bulan, tone berbeda-beda (santai, formal,\nFOMO), siap dijadwalkan 1 bulan.\n\n1. "Diskon 20% cuma sampai Minggu ini! 🔥" ...',
+    owner: 'Dari data penjualan, arus kas, dan catatan tim bulan\nini, buatkan ringkasan health check bisnis + 3 hal\nyang perlu diprioritaskan bulan depan.\n\n→ Penjualan naik 12%, tapi margin turun karena biaya\niklan. Prioritas: (1) evaluasi channel iklan termahal\n(2) restock produk terlaris (3) rekrut 1 CS tambahan.',
+    sales: 'Buatkan proposal kerjasama untuk 5 klien berikut.\nLangkah 1: riset singkat tiap klien. Langkah 2:\nkerangka. Langkah 3: draft personal per klien.\n\nKlien 1 — PT Maju Jaya: fokus ke efisiensi biaya...'
+  };
+  var CASE_META = {
+    freelancer: { icon: '💻', label: 'Freelancer' },
+    creator: { icon: '🎥', label: 'Content Creator' },
+    ops: { icon: '⚙️', label: 'Operations' },
+    marketing: { icon: '📣', label: 'Marketing' },
+    owner: { icon: '💼', label: 'Business Owner' },
+    sales: { icon: '🤝', label: 'Sales Manager' }
+  };
+  var caseTypingTimer = null;
+  function showCaseDemo(role, cardEl) {
+    document.querySelectorAll('#casesGrid .case-card').forEach(function(c) { c.classList.remove('active'); });
+    cardEl.classList.add('active');
+
+    var meta = CASE_META[role];
+    document.getElementById('caseDemoIcon').textContent = meta.icon;
+    document.getElementById('caseDemoRole').textContent = meta.label;
+
+    var connector = document.getElementById('caseConnector');
+    var cardCenter = cardEl.offsetLeft + cardEl.offsetWidth / 2 - 8;
+    connector.style.left = cardCenter + 'px';
+
+    clearInterval(caseTypingTimer);
+    var win = document.getElementById('caseDemoWindow');
+    var text = CASE_DEMOS[role];
+    var i = 0;
+    win.innerHTML = '<span class="caret"></span>';
+    caseTypingTimer = setInterval(function() {
+      i += 2;
+      win.innerHTML = text.slice(0, i).replace(/\n/g, '<br>') + '<span class="caret"></span>';
+      if (i >= text.length) clearInterval(caseTypingTimer);
+    }, 10);
+  }
+  document.querySelectorAll('.case-card').forEach(function(card, i) {
+    card.style.transitionDelay = (i * 50) + 'ms';
+    setTimeout(function() { card.classList.add('show'); }, 50);
+  });
+  var firstCase = document.querySelector('#casesGrid .case-card');
+  if (firstCase) showCaseDemo(firstCase.getAttribute('data-role'), firstCase);
+
+  document.querySelectorAll('.case-card').forEach(function(card) {
+    card.addEventListener('mousemove', function(e) {
+      var rect = card.getBoundingClientRect();
+      var px = (e.clientX - rect.left) / rect.width - 0.5;
+      var py = (e.clientY - rect.top) / rect.height - 0.5;
+      card.style.transform = 'perspective(700px) rotateX(' + (py * -5) + 'deg) rotateY(' + (px * 6) + 'deg) translateY(-2px)';
+    });
+    card.addEventListener('mouseleave', function() { card.style.transform = ''; });
+  });
 
   // Course catalog for the logged-in "welcome back" home (loggedInHome section below).
   // Mirrors dashboard.html's ALL_COURSES, kept lightweight since this view only needs
@@ -505,7 +640,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
       if (!meta.comingSoon || meta.hidden || !meta.visible) return;
       var visual = LIH_ILLUSTRATIONS[slug] || ('<div class="lih-icon">' + meta.icon + '</div>');
       var bg = LIH_BG[slug] || 'var(--accent-dim)';
-      html += '<div class="course-card-v2 cc-soon"><div class="ccv2-banner" style="background:' + bg + ';">' + visual + '</div><div class="ccv2-body"><span class="ccv2-badge badge-soon">SEGERA HADIR</span><h3>' + meta.title + '</h3><p>' + meta.desc + '</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><span class="ccv2-btn disabled">Segera Hadir</span></div></div></div>';
+      html += '<div class="course-card-v2 cc-soon"><div class="ccv2-banner" style="background:' + bg + ';">' + visual + '</div><div class="ccv2-body"><span class="ccv2-badge badge-soon">SEGERA HADIR</span><h3>' + meta.title + '</h3><p>' + meta.desc + '</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><span class="ccv2-btn disabled">→</span></div></div></div>';
     });
     slot.innerHTML = html;
   }
@@ -587,8 +722,6 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
           if (hasAllAccess) {
             marketingRevealed = true; // marketingHome starts hidden — never reveal it for All Access holders
             document.getElementById('loggedInHome').style.display = 'block';
-            var reassuranceEl = document.getElementById('reassuranceSection');
-            if (reassuranceEl) reassuranceEl.style.display = 'none';
             // #kursus lives inside marketingHome, which is now hidden — retarget
             // the nav "Kursus" link to the course grid that's actually visible
             // in loggedInHome, otherwise the link silently does nothing.
