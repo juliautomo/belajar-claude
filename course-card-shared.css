@@ -1,0 +1,24 @@
+/* Shared "coming soon" course card treatment — used across every course-card
+   component on the site (index.html's logged-out marketing grid, index.html's
+   logged-in/enrolled grid, dashboard.html's explore grid, and any future one).
+
+   Root cause this file fixes: each page/component previously defined its own
+   dimming rule independently (.course-card-v2.card-soon, .lih-card.lih-card-soon,
+   .explore-card.explore-card-soon), so adding the treatment to one component and
+   forgetting the others was easy — Checkpoints 116 and 117 both fixed the same
+   bug in two different places for exactly this reason.
+
+   Usage: add class="cc-soon" to any course-card element (alongside its own
+   layout/component class) when the course is not yet launched. Don't
+   reintroduce a per-component .card-soon-style rule — add the card's own
+   container class to the selector list below instead, if a genuinely different
+   dimming treatment is ever needed for a new component.
+
+   If you build a new "coming soon" course card anywhere on the site, link this
+   file (<link rel="stylesheet" href="course-card-shared.css">) and use
+   class="cc-soon" — don't duplicate this rule locally. */
+
+.cc-soon {
+  filter: grayscale(0.6);
+  opacity: 0.6;
+}

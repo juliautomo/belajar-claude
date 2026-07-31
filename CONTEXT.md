@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 117)_
+_Last updated: July 30, 2026 (checkpoint 118)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1530,6 +1530,22 @@ Site now has three separate "coming soon" card components across two files (`ind
 **Verified**: JS syntax-checked via `node --check` after extracting all `<script>` blocks. Full visual confirmation still pending an authenticated session screenshot (same caveat as Checkpoint 116).
 
 **File**: `dashboard.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 118, July 30, 2026): consolidated "coming soon" card dimming into one shared file
+
+Checkpoints 116 and 117 fixed the identical bug twice in two different files because the dimming treatment was defined independently three times (`index.html`'s `.course-card-v2.card-soon`, `index.html`'s `.lih-card.lih-card-soon`, `dashboard.html`'s `.explore-card.explore-card-soon`). Consolidated per Julia's request so this can't drift out of sync again.
+
+**New file**: `course-card-shared.css` — a single canonical rule, `.cc-soon { filter: grayscale(0.6); opacity: 0.6; }`, documented with a comment explaining the three-component drift bug it fixes and instructing future card components to link this file and use `class="cc-soon"` rather than redefining the treatment locally.
+
+**Changes**: `index.html` and `dashboard.html` both now `<link rel="stylesheet" href="course-card-shared.css">` (same external-shared-file pattern the site already uses for `supabase-config.js`). Removed the three duplicated per-component CSS rules, replaced them with a one-line comment pointing at the shared file. Renamed the conditionally-applied class in all three card-building JS templates from the old component-specific names (`card-soon`, `lih-card-soon`, `explore-card-soon`) to the single shared `cc-soon` — kept each card's own layout/component class (`course-card-v2`, `lih-card`, `explore-card`) untouched since those three contexts still have legitimately different sizes (large marketing card, medium enrolled-dashboard card, small horizontal-scroll strip card); only the dimming treatment was unified, not the layout.
+
+**Verified**: grepped both files to confirm no leftover references to the old three class names; `node --check` on every extracted `<script>` block in both files.
+
+**Files**: `course-card-shared.css` (new), `index.html`, `dashboard.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
