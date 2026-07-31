@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 124)_
+_Last updated: July 31, 2026 (checkpoint 125)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1648,6 +1648,18 @@ Julia flagged that the "Termasuk Dalam All Access" grid (plain icon-row `.incl-c
 Replaced all 6 `.incl-card` rows with a compact variant of index.html's `.course-card-v2`/`.ccv2-*` pattern — same class names, same gradient-banner-with-icon + badge + title + description structure, reused verbatim so both pages share one visual language, just scaled down (76px banner vs 168px, 36px icon vs 64px, smaller type/padding, no price/CTA footer since these are inclusion cards, not sales cards). Reused index.html's per-course gradient palette (`bnr-1` through `bnr-5`, matching prompt-gratis/mulai-claude/produktivitas/content-marketing/strategi-marketing) and added a new `bnr-7` (soft violet) for the "Semua Kursus Baru" placeholder card, which has no equivalent slug on index.html. Badge colors: green for "Tersedia", gray for "Segera Hadir" (matches `badge-soon` on index.html), and `badge-b` (accent) for "Otomatis" to visually set the future-proofing card apart. Grid changed from `auto-fit minmax(260px,1fr)` to an explicit `repeat(3,1fr)` with 2-col/1-col responsive breakpoints, matching the 3-column layout Julia's screenshot showed.
 
 Verified with a weasyprint render of the isolated section — grid, banners, badges, and card heights all line up correctly (emoji rendered as tofu boxes in that render only, a known weasyprint-sandbox limitation with no color-emoji font documented in PDF-Style-Guide.md — renders fine as real emoji in an actual browser).
+
+**File**: `all-access.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 125, July 31, 2026): "Semua Kursus Baru" pulled out of the course-card grid into its own full-width note
+
+Julia looked at the live Checkpoint 124 result and pointed out that "Semua Kursus Baru" isn't really a course — styling it as a 6th `.course-card-v2` (complete with a gradient banner and "Otomatis" badge) made it look like a peer of the actual 5 courses, which is misleading.
+
+Removed the 6th card entirely and replaced it with a `.future-note` element: a full-width (`grid-column: 1/-1`) dashed-border, accent-tinted banner sitting below the 5 real course cards — icon in a white rounded box + heading + one-line description, no gradient banner, no badge pill styled like the course badges. Visually it now reads as a policy statement ("new courses are automatically included") rather than a 6th course. Grid auto-placement handles the layout correctly: row 1 gets 3 cards, row 2 gets the remaining 2, and the full-span note can't fit in row 2's one open slot so it flows to its own row 3 — standard CSS Grid behavior, verified logically (weasyprint's PDF preview has known grid/flex rendering bugs per `PDF-Style-Guide.md` so it wasn't used as the check here).
 
 **File**: `all-access.html`.
 

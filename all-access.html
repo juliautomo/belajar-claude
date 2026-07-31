@@ -104,16 +104,20 @@
   .bnr-3 { background: linear-gradient(135deg,#FBD98A,#FDF0D5); }
   .bnr-4 { background: linear-gradient(135deg,#FBC2D9,#FDE9F1); }
   .bnr-5 { background: linear-gradient(135deg,#A8D8FF,#E3F3FF); }
-  .bnr-7 { background: linear-gradient(135deg,#E5DFFF,#F5F3FF); }
   .ccv2-body { padding: 15px 17px 17px; display: flex; flex-direction: column; gap: 7px; }
   .ccv2-badge { display: inline-flex; align-self: flex-start; font-size: 9.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 3px 10px; border-radius: 100px; }
   .badge-green { color: var(--green); background: var(--green-dim); }
-  .badge-b { color: var(--accent); background: var(--accent-dim); }
   .badge-soon { color: #71717A; background: #F4F4F5; }
   .ccv2-body h3 { font-family: var(--font); font-size: 15px; font-weight: 700; color: var(--ink); line-height: 1.25; letter-spacing: -0.2px; }
   .ccv2-body p { font-size: 12.5px; color: var(--ink-2); line-height: 1.5; }
+  /* Not a course, so not a course-card-v2 — a full-width policy note about
+     future releases instead, spanning the grid rather than sitting in it. */
+  .future-note { grid-column: 1 / -1; background: var(--accent-dim); border: 1px dashed rgba(108,71,255,0.3); border-radius: 14px; padding: 18px 22px; display: flex; align-items: center; gap: 14px; }
+  .future-note-icon { width: 34px; height: 34px; border-radius: 10px; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; box-shadow: 0 3px 8px rgba(0,0,0,0.05); }
+  .future-note h3 { font-family: var(--font); font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+  .future-note p { font-size: 12.5px; color: var(--ink-2); line-height: 1.5; }
   @media (max-width: 900px) { .courses-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 640px) { .courses-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 640px) { .courses-grid { grid-template-columns: 1fr; } .future-note { flex-direction: column; align-items: flex-start; } }
 
   .compare-box { background: var(--ink); color: #fff; border-radius: 16px; padding: 32px 36px; display: flex; align-items: center; gap: 20px; margin-top: 40px; flex-wrap: wrap; }
   .compare-icon { font-size: 36px; flex-shrink: 0; }
@@ -218,9 +222,12 @@
         <div class="ccv2-banner bnr-5"><div class="ccv2-icon">📈</div></div>
         <div class="ccv2-body"><span class="ccv2-badge badge-soon">Segera Hadir</span><h3>Strategi & Analisis Marketing</h3><p>Analisis performa iklan, alokasi budget, dan 1 Strategi Command Center yang terus jalan.</p></div>
       </div>
-      <div class="course-card-v2">
-        <div class="ccv2-banner bnr-7"><div class="ccv2-icon">✨</div></div>
-        <div class="ccv2-body"><span class="ccv2-badge badge-b">Otomatis</span><h3>Semua Kursus Baru</h3><p>Setiap kursus baru yang dirilis di masa depan langsung termasuk — tanpa biaya tambahan.</p></div>
+      <div class="future-note">
+        <div class="future-note-icon">✨</div>
+        <div>
+          <h3>Semua Kursus Baru — Otomatis Termasuk</h3>
+          <p>Setiap kursus baru yang dirilis di masa depan langsung termasuk di akunmu — tanpa biaya tambahan.</p>
+        </div>
       </div>
     </div>
   </div>
