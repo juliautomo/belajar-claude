@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 120)_
+_Last updated: July 30, 2026 (checkpoint 121)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1586,6 +1586,26 @@ Deliberately **not touched**: in-content time-savings/result claims anywhere in 
 **Verified**: re-grepped the whole repo afterward for `jam`/`menit`/duration patterns to confirm only legitimate result-claim text remains; `node --check` on every extracted `<script>` block in `index.html` and `dashboard.html` (both have inline JS course-metadata objects that were edited); counted `<p class="module-subtitle">` open/close tags per content file to confirm the regex substitution didn't damage any markup (all balanced).
 
 **Files**: `mulai-claude.html`, `content-marketing.html`, `produktivitas.html`, `strategi-marketing.html`, `all-access.html`, `index.html`, `dashboard.html`, `mulai-claude-content.html`, `produktivitas-content.html`, `content-marketing-content.html`, `strategi-marketing-content.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 121, July 30, 2026): trimmed case-study sections to 3 per course, removed count-based section headings
+
+Julia flagged the "6 Studi Kasus dari Berbagai Profesi" case-study grid (and the "N Skill ... dengan Claude" heading above it) as feeling too uniform/forced — six identical cards in a rigid grid, with headlines that just announce a count. She asked for 3 curated, course-relevant case studies instead of a fixed 6, and no more "X Skill" / "X Studi Kasus" style numbered headlines anywhere in these sections.
+
+Went through all 4 modules-based course sales pages (`mulai-claude.html`, `produktivitas.html`, `content-marketing.html`, `strategi-marketing.html` — `prompt-gratis.html` has neither a skills-chip nor case-study section, so nothing to change there) and:
+
+- **Cut every case-study grid from 6 cards to 3**, chosen for relevance/coverage rather than arbitrarily: mulai-claude.html kept Manajer Proyek (mirrors the course's own Module 5 meeting-notes example), Guru SMA (the one case that explicitly names Claude Artifacts), and Customer Service (broadest, punchiest relatability) — dropped HRD, Freelancer, Mahasiswa. produktivitas.html kept Finance Manager, Operations, Sales Manager (data analysis, document structuring, and prompt chaining — three distinct techniques the course teaches; also keeps the existing subtitle "Dari Finance hingga Sales" bookended correctly) — dropped HR Manager, Marketing, Legal. content-marketing.html kept Toko Fashion Online, Warung Kopi Lokal, Jasa Foto & Video — reads as a funnel (positioning/SEO → content → customer-facing WhatsApp CS) — dropped Toko Skincare, Restoran Keluarga, Konsultan Bisnis. strategi-marketing.html kept Toko Skincare, Jasa Foto & Video, Konsultan Bisnis (ad performance analysis, cross-channel attribution, and the full Capstone simulation) — dropped Warung Kopi Lokal, Toko Fashion Online, Restoran Keluarga. `.cases-grid` is a responsive `auto-fit, minmax(240px,1fr)` grid, so 3 cards reflow cleanly with no layout changes needed.
+- **Removed the number from every skills-chip and case-study `<h2 class="section-title">`** that had one: "7 Skill Konten dengan Claude" → "Skill Konten dengan Claude", "6 Skill Strategi dengan Claude" → "Skill Strategi dengan Claude", "6 Tipe Bisnis, 1 Sistem Pemasaran" → "Satu Sistem Pemasaran, Berbagai Jenis Bisnis", "6 Studi Kasus dari Berbagai Profesi" → "Studi Kasus dari Berbagai Profesi". produktivitas.html's "6 Profesi, 6 Workflow Nyata" → "Profesi Berbeda, Workflow Nyata". mulai-claude.html's skills heading ("Skill Claude Inti") and strategi-marketing.html's case-study heading ("Dari Analisis ke Keputusan yang Bisa Dijalankan") already had no count, left untouched.
+- **Deliberately left untouched**: the "N Modul · ..." curriculum-overview headings (e.g. "5 Modul · 1 Tool Baru per Modul", "7 Modul · Workflow Kantor Nyata") — module count is legitimate structural info about the course, not the same kind of numbered-listicle framing Julia was reacting to.
+
+Also discussed (not built yet, offered as follow-ups if wanted): breaking the remaining 3-card grid into an asymmetric "featured case + list" layout, a horizontal-scroll carousel matching dashboard.html's existing explore-carousel pattern, or a zigzag timeline treatment — mocked up all three as visual options before Julia asked for the simpler "just cut to 3, keep the grid" direction instead.
+
+**Verified**: grepped every `section-title` across all 4 files to confirm only the intentionally-preserved module-count headings still have numbers; counted `case-card`/`case-role` per file to confirm exactly 3 each; div open/close tag balance check on all 4 files (all balanced).
+
+**Files**: `mulai-claude.html`, `produktivitas.html`, `content-marketing.html`, `strategi-marketing.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
