@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 132)_
+_Last updated: July 31, 2026 (checkpoint 133)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1780,6 +1780,22 @@ Julia flagged two spots with excessive whitespace: between the case-demo card an
 **Verification**: full `html.parser` tag-balance walk, zero errors.
 
 **File**: `index.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 133, July 31, 2026): matched the pricing card's left/right margins on all 5 course pages to the homepage
+
+Julia compared the pricing card side-by-side (content-marketing.html vs index.html) and noticed the card was visibly narrower on the course page — same design, different width.
+
+**Root cause**: every page-wide `.container` on the 5 course preview pages is `max-width: 1000px; padding: 0 24px;`, while index.html's is `max-width: 1100px; padding: 0 40px;`. The `.bottom-cta` pricing section reuses each page's shared `.container` class, so it inherited the narrower 1000px/24px sizing meant for the rest of that page's content (module lists, hero, etc.) — 100px narrower and 16px less side padding than the homepage's card, on top of already being scaled down 10px on internal padding.
+
+**Fix**: scoped an override to just the pricing section instead of widening the whole page (which would've thrown off the module/hero layouts those pages were built around): added `.bottom-cta .container { max-width: 1100px; padding: 0 40px; }` plus the matching `@media (max-width: 640px) { padding: 0 20px; }` mobile drop that index.html itself uses, to all 5 course pages. The pricing card's own width now matches the homepage's exactly; everything else on those pages (hero, modules, kurikulum) is untouched.
+
+**Verification**: full `html.parser` tag-balance walk on all 5 files, zero errors (CSS-only change, no HTML/JS touched).
+
+**Files**: `prompt-gratis.html`, `mulai-claude.html`, `produktivitas.html`, `content-marketing.html`, `strategi-marketing.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
