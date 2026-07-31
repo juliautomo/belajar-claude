@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 125)_
+_Last updated: July 31, 2026 (checkpoint 126)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1662,6 +1662,26 @@ Julia looked at the live Checkpoint 124 result and pointed out that "Semua Kursu
 Removed the 6th card entirely and replaced it with a `.future-note` element: a full-width (`grid-column: 1/-1`) dashed-border, accent-tinted banner sitting below the 5 real course cards — icon in a white rounded box + heading + one-line description, no gradient banner, no badge pill styled like the course badges. Visually it now reads as a policy statement ("new courses are automatically included") rather than a 6th course. Grid auto-placement handles the layout correctly: row 1 gets 3 cards, row 2 gets the remaining 2, and the full-span note can't fit in row 2's one open slot so it flows to its own row 3 — standard CSS Grid behavior, verified logically (weasyprint's PDF preview has known grid/flex rendering bugs per `PDF-Style-Guide.md` so it wasn't used as the check here).
 
 **File**: `all-access.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 126, July 31, 2026): full accuracy audit of all 5 course preview pages — tools, kurikulum, skills, output-box
+
+Julia asked for a full recheck: do the tools mentioned, course outline, case studies, and output-box claims on every lesson preview page actually match what's taught in the corresponding `*-content.html`? Went through all 5 preview/content pairs (`prompt-gratis`, `mulai-claude`, `produktivitas`, `content-marketing`, `strategi-marketing`) module by module, cross-referencing every specific claim (tool names, numeric claims like "5 menit"/"20 hasil"/"chain 4 langkah", skill-chip list, hero-meta tags, output-box deliverables) against the actual lesson text rather than trusting prior copy.
+
+**prompt-gratis.html**: fully accurate. All 5 category titles, the 4/5/4/4/3 = 20 prompt count, and the 3 spot-check preview prompts (#1, #7, #14) matched the content file word-for-word.
+
+**mulai-claude.html**: found 2 fabricated module descriptions. Module 2's card claimed "Praktek 3 email nyata dari pekerjaan kamu sendiri" — the actual module has zero email content; it's a single customer-service/WhatsApp complaint scenario (Rina, sepatu robek). Module 3's card claimed "Praktek 5 skenario dari role & industri kamu" — the "5" actually refers to a reference list of 5 role types (copywriter, analis, konsultan, editor, guru), not 5 practice scenarios; there's only 1 real exercise. Rewrote both to describe what's actually taught (R-K-T-F framework + real complaint case study; 5 reference roles + 1 before/after case study).
+
+**produktivitas.html**: found 2 issues. Module 1's card invented a "5 menit setup" claim and "'email writer' sampai 'business analyst'" persona examples that don't appear anywhere in the module (real content: 20-menit-edit prompt → 30-detik siap pakai via the 4-element framework). Module 6's card said "22 menit" but the module's own subtitle and worked example both say "25 menit" — the 22-minute figure only appears in the capstone's retelling of a different scenario (Rina specifically), so fixed the card to match M06's own canonical number. All other module cards, the hero-meta tools, and all 8 skill-chips verified accurate.
+
+**content-marketing.html**: found 2 real drift bugs — leftover references to Email, which was removed entirely from the course back in Checkpoint 104 (M05 is WhatsApp-only now). The hero-meta tags still listed "📧 Gmail" (zero Gmail mentions anywhere in the actual course), the skill-chip list still had "Email & Promo Copywriting", and the output-box still promised "email promosi" as a deliverable. Removed all three. Every module card, case study, and remaining skill-chip verified grounded against the real Dapur Rara module content.
+
+**strategi-marketing.html**: fully accurate — every module card (ROAS/CTR/CPC analysis, Notion Command Center, Gmail Connector, Calendar Connector), hero-meta tag, skill-chip (including Gmail and GA4, which are both genuinely used via real Connectors in this course, unlike content-marketing), and the output-box all checked out against the content file.
+
+**Files**: `mulai-claude.html`, `produktivitas.html`, `content-marketing.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
