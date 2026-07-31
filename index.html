@@ -101,7 +101,7 @@ section { padding: 88px 0; position: relative; z-index: 1; }
 
 /* --- Profession workflows section --- */
 .cases-section { padding: 88px 0; position: relative; z-index: 1; }
-.cases-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.cases-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 52px; }
 @media (max-width: 900px) { .cases-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 560px) { .cases-grid { grid-template-columns: 1fr; } }
 .case-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 14px; padding: 18px; transition: opacity 0.4s ease, border-color 0.2s, transform 0.12s ease-out; cursor: pointer; transform-style: preserve-3d; opacity: 0; }
@@ -120,17 +120,29 @@ section { padding: 88px 0; position: relative; z-index: 1; }
 .case-window .caret { display: inline-block; width: 2px; height: 12px; background: var(--accent-2); vertical-align: middle; margin-left: 2px; animation: caretBlink2 0.9s step-end infinite; }
 @keyframes caretBlink2 { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
 
-/* --- Closing CTA (matches the simple cta-box pattern used on every course
-   preview page — mulai-claude.html, produktivitas.html, etc. — instead of a
-   custom homepage-only design, so the site's pricing-adjacent CTAs stay
-   visually consistent everywhere). --- */
-.cta-box { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px 32px; max-width: 440px; margin: 0 auto; box-shadow: 0 4px 24px rgba(0,0,0,0.06); text-align: center; }
-.cta-tag { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; }
-.cta-name { font-family: var(--serif); font-size: 24px; font-weight: 400; letter-spacing: -0.5px; color: var(--ink); line-height: 1.15; margin-bottom: 10px; }
-.cta-desc { font-size: 13px; color: var(--ink-2); line-height: 1.6; margin-bottom: 8px; }
-.btn-primary { width: 100%; padding: 15px; background: var(--ink); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: var(--font); margin-top: 18px; transition: background 0.2s, transform 0.15s; text-decoration: none; display: block; text-align: center; }
-.btn-primary:hover { background: var(--accent); transform: translateY(-1px); }
-.cta-note { font-size: 12px; color: var(--ink-3); text-align: center; margin-top: 10px; }
+/* --- Closing CTA: dark pricing card (badge + headline + live price +
+   checklist), mirrors the All Access hero card's pricing data but as a
+   two-column dark component for the homepage close. --- */
+.pricing-section { padding: 88px 0 96px; }
+.pricing-card { position: relative; overflow: hidden; background: linear-gradient(135deg, #0D0D14 0%, #15121F 55%, #1D1732 100%); border-radius: 24px; padding: 56px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 48px; align-items: center; }
+.pricing-card::after { content: ''; position: absolute; bottom: -140px; right: -140px; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(108,71,255,0.35) 0%, transparent 70%); pointer-events: none; }
+.pricing-badge { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; color: var(--accent-2); background: rgba(108,71,255,0.15); border: 1px solid rgba(155,125,255,0.3); padding: 5px 14px; border-radius: 100px; margin-bottom: 20px; position: relative; z-index: 1; }
+.pricing-name { font-family: var(--serif); font-size: clamp(28px, 3vw, 38px); font-weight: 400; letter-spacing: -0.5px; color: #fff; line-height: 1.2; margin-bottom: 14px; position: relative; z-index: 1; }
+.pricing-desc { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.55); max-width: 400px; margin-bottom: 22px; position: relative; z-index: 1; }
+.pricing-discount-badge { display: none; font-size: 11px; font-weight: 700; color: #4ADE80; background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3); padding: 4px 12px; border-radius: 100px; margin-bottom: 10px; position: relative; z-index: 1; }
+.pricing-price-row { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; position: relative; z-index: 1; }
+.pricing-price-old { display: none; font-size: 16px; color: rgba(255,255,255,0.35); text-decoration: line-through; }
+.pricing-price-big { font-family: var(--font); font-size: 34px; font-weight: 800; color: #fff; }
+.pricing-price-note { font-size: 13px; color: rgba(255,255,255,0.5); }
+.pricing-sub-note { font-size: 12px; color: rgba(255,255,255,0.4); margin: 6px 0 22px; position: relative; z-index: 1; }
+.pricing-btn { display: inline-block; background: #fff; color: #111; padding: 15px 26px; border-radius: 10px; font-size: 14px; font-weight: 700; text-decoration: none; transition: transform 0.15s, background 0.15s, color 0.15s; position: relative; z-index: 1; }
+.pricing-btn:hover { transform: translateY(-1px); }
+.pricing-features { display: flex; flex-direction: column; gap: 22px; position: relative; z-index: 1; }
+.pricing-feature { display: flex; align-items: flex-start; gap: 12px; }
+.pricing-feature-icon { flex-shrink: 0; width: 22px; height: 22px; margin-top: 1px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; font-size: 11px; color: #fff; }
+.pricing-feature-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 3px; }
+.pricing-feature-desc { font-size: 12.5px; color: rgba(255,255,255,0.5); line-height: 1.5; }
+@media (max-width: 760px) { .pricing-card { grid-template-columns: 1fr; padding: 40px 28px; } }
 .course-card-v2 { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; transition: all 0.2s; }
 .course-card-v2:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,0.08); border-color: rgba(108,71,255,0.2); }
 .ccv2-banner { height: 168px; display: flex; align-items: center; justify-content: center; }
@@ -361,14 +373,27 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     <div class="course-lib-grid" id="lihCourseGrid"></div>
   </div>
 </div>
-<section id="komunitas" style="padding: 88px 0 96px;">
+<section id="komunitas" class="pricing-section">
   <div class="container">
-    <div class="cta-box">
-      <div class="cta-tag">Termasuk All Access</div>
-      <div class="cta-name" id="ctaHeadline">Satu Akses, Semua Kursus</div>
-      <p class="cta-desc" id="ctaSubtext">Satu kali bayar untuk akses semua kursus — sekarang dan yang akan datang.</p>
-      <a class="btn-primary" id="ctaBtn" href="all-access.html">Mulai Belajar Sekarang →</a>
-      <p class="cta-note">Akses selamanya · Bukan langganan bulanan</p>
+    <div class="pricing-card">
+      <div>
+        <span class="pricing-badge">ALL ACCESS</span>
+        <h2 class="pricing-name" id="ctaHeadline">Satu akses, semua kursus.</h2>
+        <p class="pricing-desc" id="ctaSubtext">Satu kali pembayaran membuka seluruh course library — sekarang dan setiap kursus baru yang ditambahkan nanti.</p>
+        <div class="pricing-discount-badge" id="pricingDiscountBadge"></div>
+        <div class="pricing-price-row">
+          <span class="pricing-price-old" id="pricingOldPrice"></span>
+          <span class="pricing-price-big" id="pricingBigPrice">Rp 399K</span>
+          <span class="pricing-price-note">sekali bayar</span>
+        </div>
+        <p class="pricing-sub-note">Akses selamanya · Bukan langganan bulanan</p>
+        <a class="pricing-btn" id="ctaBtn" href="all-access.html">Mulai Belajar Sekarang →</a>
+      </div>
+      <div class="pricing-features">
+        <div class="pricing-feature"><div class="pricing-feature-icon">✓</div><div><div class="pricing-feature-title">Semua kursus</div><div class="pricing-feature-desc">Akses semua materi yang tersedia dalam satu pembelian.</div></div></div>
+        <div class="pricing-feature"><div class="pricing-feature-icon">✓</div><div><div class="pricing-feature-title">Sekali bayar</div><div class="pricing-feature-desc">Tidak ada biaya bulanan atau langganan berulang.</div></div></div>
+        <div class="pricing-feature"><div class="pricing-feature-icon">✓</div><div><div class="pricing-feature-title">Kursus baru termasuk</div><div class="pricing-feature-desc">Kursus baru yang ditambahkan ke library juga termasuk.</div></div></div>
+      </div>
     </div>
   </div>
 </section>
@@ -887,6 +912,29 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     var pill = document.getElementById('navUserPill');
     if (pill) pill.classList.remove('open');
   });
+
+  // Live price for the closing pricing card — mirrors the fetch on
+  // all-access.html so the discount shown here stays in sync. Falls back to
+  // the static Rp 399K in the HTML if the course_pricing row/fetch fails.
+  (async function() {
+    try {
+      var res = await sbClient.from('course_pricing').select('*').eq('course_slug', 'all-access').maybeSingle();
+      var data = res.data;
+      if (!data) return;
+      var now = new Date();
+      var discountActive = data.discount_price != null
+        && (!data.discount_start || new Date(data.discount_start) <= now)
+        && (!data.discount_end || new Date(data.discount_end) >= now);
+      if (!discountActive) return;
+      var pct = data.base_price ? Math.round((1 - data.discount_price / data.base_price) * 100) : null;
+      var badge = document.getElementById('pricingDiscountBadge');
+      var old = document.getElementById('pricingOldPrice');
+      var big = document.getElementById('pricingBigPrice');
+      if (badge) { badge.style.display = 'inline-block'; badge.textContent = 'HEMAT ' + (pct != null ? pct + '%' : ''); }
+      if (old) { old.style.display = 'inline'; old.textContent = 'Rp ' + Math.round(data.base_price / 1000) + 'K'; }
+      if (big) big.textContent = 'Rp ' + Math.round(data.discount_price / 1000) + 'K';
+    } catch (e) { console.error('Pricing fetch failed, using default price', e); }
+  })();
 </script>
 </body>
 </html>

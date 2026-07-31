@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 128)_
+_Last updated: July 31, 2026 (checkpoint 129)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1714,6 +1714,22 @@ Two follow-up fixes after Julia reviewed the live Checkpoint 127 redesign.
 **Pricing card**: Julia asked the homepage's closing CTA to follow "the one on lesson page" — clarified via question that she meant the simple `.cta-box` pattern already used on every course preview page (mulai-claude.html, produktivitas.html, content-marketing.html, etc.): a small centered white card with a "Termasuk All Access" tag, course/offer name, one-line description, full-width dark button, and a small note — no price or discount shown (those pages never display the Rp amount either; price only ever shows on all-access.html itself). Replaced the dark two-column `.pricing-card`/feature-list component from Checkpoint 127 with this exact same `.cta-box`/`.cta-tag`/`.cta-name`/`.cta-desc`/`.btn-primary`/`.cta-note` markup and CSS, reusing new class names (not `.cta-card`/`.cta-btn`, which are still needed elsewhere on the page for the logged-in "continue learning" banner). Kept the `ctaHeadline`/`ctaSubtext`/`ctaBtn`/`komunitas` ids so the existing personalization JS (welcome-back headline, enrollment-status subtext, "Buka Dashboard" button swap for logged-in users, hide-for-All-Access-holders) still works untouched. Since price/discount no longer renders anywhere on this page, removed the now-fully-dead `course_pricing` fetch IIFE that used to populate `heroPrice`/`hcDiscountBadge`/`hcOriginalPrice`/`hcDiscountEnd` — those elements don't exist anymore, so the fetch had nothing left to do.
 
 **Verification**: re-ran the same static checks as Checkpoint 127 — full `html.parser` walk (zero unclosed/mismatched tags), `node --check` on the extracted script, grep sweep confirming zero orphaned references to the removed `pricing-*`/`price-*`/`feature-*`/`heroPrice`/`hcDiscountBadge`/`hcOriginalPrice`/`hcDiscountEnd` classes and ids.
+
+**File**: `index.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 129, July 31, 2026): index.html — reverted closing CTA to a dark pricing card, fixed cases-section header spacing
+
+Two more follow-ups after Julia reviewed the live Checkpoint 128 result.
+
+**Cases-section spacing**: the "Lintas profesi, workflow nyata" cards sat right under the header paragraph with no breathing room, unlike the course-library grid above it. Root cause: `.course-grid-wrap` (wrapping the course cards) has `margin-top: 52px` separating it from its header block, but `.cases-grid` had no equivalent margin. Added `margin-top: 52px` to `.cases-grid` to match.
+
+**Pricing card**: Julia asked to swap the plain `.cta-box` closing CTA back out for a richer dark two-column pricing card, matching a reference screenshot — "ALL ACCESS" badge, serif headline ("Satu akses, semua kursus."), description, a live "HEMAT XX%" discount badge with strikethrough original price and the current price, an "Akses selamanya · Bukan langganan bulanan" note, a white "Mulai Belajar Sekarang →" button, and a 3-item checklist on the right (Semua kursus / Sekali bayar / Kursus baru termasuk — reusing the same copy as the `.value-strip` band under the hero). Rebuilt as `.pricing-section`/`.pricing-card`/`.pricing-badge`/`.pricing-name`/`.pricing-desc`/`.pricing-discount-badge`/`.pricing-price-row`/`.pricing-price-old`/`.pricing-price-big`/`.pricing-price-note`/`.pricing-sub-note`/`.pricing-btn`/`.pricing-features`/`.pricing-feature*` — dark gradient background with a soft purple radial glow in the corner, matching the site's accent color. Kept the `ctaHeadline`/`ctaSubtext`/`ctaBtn`/`komunitas` ids so the existing personalization JS (welcome-back headline, enrollment-status subtext, "Buka Dashboard" button-color swap, hide-for-All-Access-holders) still works untouched — `ctaHeadline` is now an `<h2>` instead of a `<div>`, which the JS's `innerHTML`/`textContent` calls don't care about. Added a new price-fetch IIFE (mirrors `all-access.html`'s `loadPricing()`) that reads the `course_pricing` row for `all-access` and populates `pricingDiscountBadge`/`pricingOldPrice`/`pricingBigPrice` when a discount is active, so the price shown here stays in sync with the real offer instead of being hardcoded.
+
+**Verification**: grep sweep confirmed zero leftover `cta-box`/`cta-tag`/`cta-desc`/`cta-note`/`btn-primary` references and no duplicate element ids; full `html.parser` walk over the whole file reported zero unclosed/mismatched tags; `node --check` on the extracted `<script>` block passed.
 
 **File**: `index.html`.
 
