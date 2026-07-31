@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 131)_
+_Last updated: July 31, 2026 (checkpoint 132)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1764,6 +1764,22 @@ Two structural changes to `marketingHome` per Julia's review:
 **Verification**: full `html.parser` tag-balance walk on all 6 touched files (index.html + the 5 course pages) reported zero unclosed/mismatched tags; `node --check` on each file's extracted `<script>` block passed; grep confirmed zero leftover `cta-box`/`cta-tag`/`cta-name`/`cta-desc`/`btn-primary`/`cta-note` references and no duplicate element ids on any of the 5 course pages. Confirmed `#ctaBtn` removal is safe — the enrollment-status JS on each page does `document.querySelectorAll('#ctaBtn, #bottomCtaBtn')`, which simply matches only `#bottomCtaBtn` now that `#ctaBtn` no longer exists (querySelectorAll doesn't error on unmatched selectors in a comma list).
 
 **Files**: `index.html`, `prompt-gratis.html`, `mulai-claude.html`, `produktivitas.html`, `content-marketing.html`, `strategi-marketing.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 132, July 31, 2026): index.html — fixed double-stacked section gaps left over from the Checkpoint 130 reorder
+
+Julia flagged two spots with excessive whitespace: between the case-demo card and "Course Library", and between the course grid and the closing pricing card.
+
+**Root cause**: `.cases-section` and `.pricing-section` were unchanged from before Checkpoint 130's reorder, which moved `.cases-section` from *after* `.kursus` to *before* it. `.cases-section` still had its own 88px bottom padding, which now stacked with `#kursus`'s 88px top padding for a 176px gap where a single 88px gap should be — the same "one section owns the boundary, the other zeroes its side" convention `#kursus` itself already followed for its old adjacency (it has `padding-bottom:0` for exactly this reason).
+
+**Fix**: zeroed `.cases-section`'s bottom padding (`88px 0` → `88px 0 0`) so the gap into `#kursus` is a single 88px, matching the rest of the page's section rhythm. Also tightened `.pricing-section`'s top padding from 88px to 40px — with the `.pricing-card`'s own 56px internal padding added on top, this lands close to the ~88px total blank space the equivalent `.bottom-cta`/`.aa-card` transition already uses on the 5 course preview pages (40px section padding + 48px card padding there), rather than inventing a new spacing value.
+
+**Verification**: full `html.parser` tag-balance walk, zero errors.
+
+**File**: `index.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
