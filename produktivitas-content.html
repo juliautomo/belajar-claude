@@ -76,6 +76,8 @@
   .module-desc-box strong{color:var(--accent);}
   .prompt-section{background:#fff;border:1px solid var(--border);border-radius:14px;margin-bottom:18px;overflow:hidden;}
   .prompt-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-3);margin:0;font-family:var(--font);display:flex;align-items:center;gap:6px;padding:13px 18px;background:#fafafa;border-bottom:1px solid var(--border);}
+  .prompt-section.latihan{background:var(--accent-dim);border:1.5px solid rgba(108,71,255,0.25);border-radius:18px;}
+  .prompt-section.latihan .prompt-label{font-size:11px;color:var(--accent);background:transparent;border-bottom:1px solid rgba(108,71,255,0.15);padding:16px 20px 12px;}
   .prompt-box{background:var(--ink);border:0;border-radius:0;padding:20px 52px 20px 20px;font-size:13px;color:#f2f2f2;line-height:1.8;font-family:'SF Mono',Consolas,monospace;white-space:pre-wrap;position:relative;}
   .copy-btn{position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.12);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font);transition:background 0.2s;}
   .copy-btn:hover{background:var(--accent);}
@@ -87,6 +89,7 @@
   .case-box p{font-size:13.5px;color:var(--ink);line-height:1.7;}
   .prompt-section .case-box{background:transparent;border:0;border-radius:0;margin-top:0;padding:20px;}
   .prompt-section .case-box::before{display:none;}
+  .prompt-section .case-box + .prompt-box{margin:0 20px 20px;border-radius:12px;}
   .output-box{background:var(--green-dim);border:1px solid var(--green-border);border-radius:14px;padding:20px 24px;margin-top:24px;display:flex;gap:14px;align-items:flex-start;}
   .output-icon{width:36px;height:36px;border-radius:10px;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
   .output-box h3{font-size:14.5px;font-weight:700;color:var(--ink);margin-bottom:5px;}
@@ -331,7 +334,7 @@
           <p>Tidak perlu urutan persis. Yang penting 4 elemen hadir. Kalau hasilnya kurang tepat: identifikasi elemen yang hilang — lalu tambahkan. Jangan ganti prompt dari nol.</p>
         </div>
 
-        <div class="prompt-section">
+        <div class="prompt-section latihan">
           <div class="prompt-label">📝 Latihan</div>
           <div class="case-box">
             <p><strong>Contoh skenario</strong> (kalau belum ada tugas mendesak): Kasual Studio dapat DM Instagram — <em>"Kak, badan aku agak berisi, kemeja linen size M kira-kira muat gak ya? Terus warna apa yang gak gampang keliatan kotor?"</em> Pakai skenario ini, atau pilih 1 pesan/dokumen lain yang perlu kamu buat hari ini — bisa email, caption, balasan komplain, atau laporan singkat. Tulis prompt menggunakan 4 elemen. Kirim ke Claude. Kalau hasilnya belum tepat, tanya diri sendiri: <em>elemen mana yang kurang spesifik?</em> Tambahkan info itu dan coba lagi.</p>
@@ -406,7 +409,7 @@
           <div class="step-card"><div class="step-num">3</div><p>Mulai chat. Tidak perlu briefing ulang lagi.</p></div>
         </div>
 
-        <div class="prompt-section">
+        <div class="prompt-section latihan">
           <div class="prompt-label">📝 Latihan</div>
           <div class="case-box">
             <p>Setup Claude Project pertamamu sekarang pakai <strong>k2-m2-referensi-project.txt</strong> — sudah berisi profil lengkap PT Kreatif Digital (agensi digital marketing), jadi kamu tidak perlu punya data bisnis sendiri dulu untuk mulai latihan. Download file-nya, paste ke "Project Instructions", lalu coba 3 prompt pendek tanpa briefing, misalnya: <em>"Tulis caption promo diskon 20% untuk klien F&amp;B"</em>, <em>"Balas email klien yang komplain laporan bulanan terlalu teknis"</em>, atau <em>"Buatkan 3 poin highlight untuk laporan bulanan klien fashion"</em>. Perhatikan: Claude langsung paham konteks PT Kreatif Digital tanpa kamu jelaskan ulang.</p>
@@ -562,7 +565,7 @@ ringkasan poin penting. Singkat, maks 60 kata.<button class="copy-btn" onclick="
           ☐ Panjang sudah sesuai, tidak bertele-tele</p>
         </div>
 
-        <div class="prompt-section">
+        <div class="prompt-section latihan">
           <div class="prompt-label">📝 Latihan</div>
           <div class="case-box">
             <p>Download file latihan <strong>k2-m3-contoh-inbox.txt</strong> dari halaman materi — isinya 12 email contoh inbox Kasual Studio. Pilih 1 email: (1) identifikasi tipenya — inquiry / komplain / follow-up / konfirmasi, (2) pilih template yang sesuai dari atas dan isi [placeholder] dengan info dari email, (3) paste ke Claude, baca draft, edit seperlunya. Lanjutkan dengan email asli dari inbox kamu sendiri.</p>
@@ -874,7 +877,7 @@ Produk: Kemeja linen putih, koleksi summer, harga Rp 189.000<button class="copy-
           </ul>
         </div>
 
-        <div class="prompt-section">
+        <div class="prompt-section latihan">
           <div class="prompt-label">📝 Latihan</div>
           <div class="case-box">
             <p>Pilih 5–10 item sejenis dari pekerjaanmu: deskripsi produk, email template, ringkasan, atau apapun. Belum ada bahan sendiri? Pakai <strong>k2-m5-latihan-batch.txt</strong> dari halaman materi (4 set latihan: deskripsi produk, ringkasan email, klasifikasi pesan DM/WA, variasi caption). Tulis satu batch prompt dengan instruksi + format + semua item. Proses sekaligus. Simpan prompt tersebut sebagai template — pakai lagi kapanpun perlu.</p>
@@ -988,7 +991,7 @@ Fokus pada bagian yang bisa membuat reseller ragu.<button class="copy-btn" oncli
           <div class="learn-card"><div class="num">04</div><h3>Pitch atau Proposal</h3><p>Riset klien → Kerangka → Draft lengkap → Identifikasi kelemahan</p></div>
         </div>
 
-        <div class="prompt-section">
+        <div class="prompt-section latihan">
           <div class="prompt-label">📝 Latihan</div>
           <div class="case-box">
             <p>Pilih satu tugas yang biasanya kamu kerjakan dalam beberapa langkah terpisah. Buat chain minimal 3 step. Kerjakan dalam satu chat yang sama. Review output di setiap step sebelum lanjut. Bandingkan hasilnya dengan satu prompt langsung — mana yang lebih baik?</p>

@@ -88,8 +88,11 @@
   .case-box p{font-size:13.5px;color:var(--ink);line-height:1.7;}
   .prompt-section .case-box{background:transparent;border:0;border-radius:0;margin-top:0;padding:20px;}
   .prompt-section .case-box::before{display:none;}
+  .prompt-section .case-box + .prompt-box{margin:0 20px 18px;border-radius:12px;}
   .step-divider{padding:14px 20px 0;font-size:12px;font-weight:700;color:var(--ink);border-top:1px solid var(--border);}
   .mini-output{padding:0 20px 18px;font-size:12px;color:var(--green);font-weight:700;}
+  .prompt-section .prompt-box + .mini-output,
+  .prompt-section .case-box + .mini-output{padding-top:14px;border-top:1px solid rgba(108,71,255,0.15);}
   .mini-output span{font-weight:400;color:var(--ink-2);}
   .case-box.persona{background:var(--gold-pale);border:1px solid rgba(239,159,39,0.25);border-radius:12px;padding:16px 18px;}
   .case-box.persona::before{background:var(--gold);}

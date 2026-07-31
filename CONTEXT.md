@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 138)_
+_Last updated: July 31, 2026 (checkpoint 139)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1878,6 +1878,24 @@ Same recurring adaptation calls as the other three files: `.tip-box` stayed a pl
 This completes the lesson-page redesign across all four content files (`prompt-gratis-content.html`, `mulai-claude-content.html`, `produktivitas-content.html`, `content-marketing-content.html`) — each restyled independently to accommodate its own pre-existing class structure while converging on the same visual language: serif module titles, pill breadcrumbs, gradient sidebar progress, dark code-style prompt boxes with translucent copy buttons, tinted callout boxes, and `::before`-based badge icons wherever the preview's markup wasn't already present.
 
 **File**: `content-marketing-content.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 139, July 31, 2026): standardized "Latihan" exercise boxes across all 4 lesson files
+
+Follow-up polish after the lesson-page redesign. Two issues fixed:
+
+1. **Spacing bug in `content-marketing-content.html`**: inside `.prompt-section.latihan`, the dark `.prompt-box` sat flush against the `.case-box` above and the `.mini-output` line below with zero gap, reading as visually cramped. Fixed with two scoped sibling-combinator rules — `.prompt-section .case-box + .prompt-box` (gives the dark box its own inset margin + rounded corners instead of a flush full-bleed panel) and `.prompt-section .prompt-box + .mini-output` / `.prompt-section .case-box + .mini-output` (adds a top divider + padding before the green output line). Scoped narrowly via adjacent-sibling selectors so it only affects this specific stacked pattern, not the plain single-prompt cards elsewhere in the same file.
+
+2. **Inconsistent "Latihan" styling across files**: only `content-marketing-content.html` had a visually distinct `.prompt-section.latihan` treatment (accent-tinted background, thicker border) — in `mulai-claude-content.html` and `produktivitas-content.html`, exercise boxes ("📝 Latihan" / "📝 Exercise") looked identical to plain prompt/template sections. Fixed by:
+   - Adding the same `.prompt-section.latihan` CSS rule to both files (accent-dim background, `1.5px` accent border, `18px` radius, accent-colored label), adapted per file's existing architecture — `produktivitas-content.html` uses the same bordered-card structure as `content-marketing-content.html` so the rule ports directly (plus the same `.case-box + .prompt-box` spacing fix, added preemptively even though no current content combines both in one Latihan box); `mulai-claude-content.html`'s `.prompt-section` has no card styling of its own (matches the design-preview file's plain-wrapper approach), so `.latihan` there adds a brand-new enclosing padded card around the already-independently-styled `.prompt-box`/`.case-box` children.
+   - Adding the literal `latihan` class to every `<div class="prompt-section">` whose `.prompt-label` reads exactly "📝 Latihan" (produktivitas, 5 instances) or "📝 Exercise" (mulai-claude, 5 instances), via a scripted regex substitution matched on the label text — not applied to labels like "📋 Prompt", "📝 Contoh Prompt", or "📝 Cara Chain Role + Tugas + Format", which stay in the plain white-card treatment since they're templates/examples, not hands-on exercises. `prompt-gratis-content.html` has no equivalent concept (flat prompt-library layout, no case-box/exercise pattern) so it was left untouched.
+
+**Verification**: full `html.parser` tag-balance walk (zero errors on all 3 files), CSS brace-balance check (mulai-claude 152/152, produktivitas 198/198, content-marketing 189/189), `node --check` on all 6 extracted scripts (pass), no duplicate ids, and weasyprint renders of a Latihan box in both `mulai-claude-content.html` (Modul 1 — prompt-box + case-box now enclosed in one accent-tinted card) and `produktivitas-content.html` (Modul 1 — case-box-only Latihan now matches the same accent-tinted treatment) confirming both now look the same and are clearly distinct from surrounding tip/summary boxes.
+
+**Files**: `mulai-claude-content.html`, `produktivitas-content.html`, `content-marketing-content.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
