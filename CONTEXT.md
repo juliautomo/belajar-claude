@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 133)_
+_Last updated: July 31, 2026 (checkpoint 134)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1796,6 +1796,18 @@ Julia compared the pricing card side-by-side (content-marketing.html vs index.ht
 **Verification**: full `html.parser` tag-balance walk on all 5 files, zero errors (CSS-only change, no HTML/JS touched).
 
 **Files**: `prompt-gratis.html`, `mulai-claude.html`, `produktivitas.html`, `content-marketing.html`, `strategi-marketing.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 134, July 31, 2026): matched the logged-in "welcome back" hero font to the logged-out hero
+
+Julia noticed the `#loggedInHome` greeting ("Selamat datang kembali, *julia.utomo*") still used the old serif/italic hero styling from before the Checkpoint 127 hero redesign, while the logged-out hero ("Kuasai Claude AI, **tingkatkan karir**") now uses bold Inter with a non-italic accent-colored highlight. Updated the logged-in h1's inline style to match `.hero h1` exactly (`font-family:'Inter',sans-serif; font-weight:700; font-size:clamp(38px,4.4vw,56px); line-height:1.12`), and restyled the `<em id="lihName">` name span to match `.rot-word` (`font-style:normal; font-weight:700; color:var(--accent)`) instead of the browser-default italic serif emphasis. The JS that fills in the user's name (`lihName.textContent = ...`) only touches text content, not styling, so no script changes were needed.
+
+**Verification**: full `html.parser` tag-balance walk, zero errors.
+
+**File**: `index.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
