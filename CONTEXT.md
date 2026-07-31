@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 119)_
+_Last updated: July 30, 2026 (checkpoint 120)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1568,6 +1568,24 @@ Julia reported that on login, index.html briefly showed the logged-out marketing
 **Verified**: extracted and `node --check`'d all 4 `<script>` blocks after each edit; grepped for every remaining reference to `marketingHome` to confirm no other code path assumes it's visible by default; traced `doSignOut()` (redirects to a fresh `index.html` load) and the `.reveal`/`IntersectionObserver` fade-in setup to confirm neither breaks with the new hidden-by-default state. Full before/after timing wasn't measured against production (would need real network conditions + an authenticated session), so worth a manual check on the next login.
 
 **File**: `index.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 120, July 30, 2026): removed all course/module duration estimates from the live site
+
+Julia noticed "1 JAM" still showing in a level-tag badge on a lesson preview page and asked to remove it everywhere, plus a full sweep for any other duration estimate still on the site (separate from the earlier PDF-only "no menit" work in Checkpoint 110, which never touched the live HTML). Grepped every `.html` file in the repo for `jam`/`menit`/duration patterns and found three distinct categories:
+
+1. **Level-tag badges on sales/preview pages** — `mulai-claude.html` ("Beginner · 1 Jam · 5 Modul"), `content-marketing.html` ("· 1.5 Jam ·"), `produktivitas.html` ("· 2 Jam ·"), `strategi-marketing.html` ("· 1.5 Jam ·"). Removed the "X Jam ·" segment from each, leaving level + module count. `prompt-gratis.html`'s badge never had a duration ("20 Prompt · 5 Kategori") — left untouched.
+2. **"Selesai dalam X jam" course-completion claims** baked into card/hero copy in five places, all describing "Dasar Claude AI" (this course's copy was the only one phrased as an overall completion-time claim): `mulai-claude.html`'s hero-sub, `all-access.html`'s course-inclusion card, `index.html`'s static logged-out course-card-v2 paragraph, and `dashboard.html`'s `ALL_COURSES` desc field. (`index.html`'s own `LIH_COURSES` desc for the same course had already been phrased without the duration claim, so no change needed there.) Reworded each to drop "— dalam 1 jam" while keeping the rest of the sentence intact.
+3. **Per-module "— N menit" suffixes** in the live lesson-reader pages' `module-subtitle` text — 17 occurrences across `mulai-claude-content.html` (5), `produktivitas-content.html` (8), `content-marketing-content.html` (2), `strategi-marketing-content.html` (2). Removed via a regex anchored to the actual end of each subtitle (`\s*—\s*\d+\s*menit</p>`) rather than a blanket "menit" strip, since several subtitles use "menit"/"jam" mid-sentence as part of a legitimate result claim (e.g. produktivitas Modul 4's "Laporan 2 jam jadi 15 menit — data langsung jadi insight" describes an outcome, not how long the module takes, and was correctly left alone). One irregular case in `strategi-marketing-content.html` ("— Capstone, 20 menit") didn't match the standard pattern and was fixed by hand — the module's title already says "(Capstone)", so the whole trailing clause was just dropped. `prompt-gratis-content.html` had none to begin with.
+
+Deliberately **not touched**: in-content time-savings/result claims anywhere in body copy or case studies (e.g. "Hemat 3–5 jam kerja per minggu", "dalam 22 menit", "dari 45 menit jadi 10 menit") — these describe outcomes Claude produces, not course/module length, matching the distinction already established in Checkpoint 110's PDF work.
+
+**Verified**: re-grepped the whole repo afterward for `jam`/`menit`/duration patterns to confirm only legitimate result-claim text remains; `node --check` on every extracted `<script>` block in `index.html` and `dashboard.html` (both have inline JS course-metadata objects that were edited); counted `<p class="module-subtitle">` open/close tags per content file to confirm the regex substitution didn't damage any markup (all balanced).
+
+**Files**: `mulai-claude.html`, `content-marketing.html`, `produktivitas.html`, `strategi-marketing.html`, `all-access.html`, `index.html`, `dashboard.html`, `mulai-claude-content.html`, `produktivitas-content.html`, `content-marketing-content.html`, `strategi-marketing-content.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
