@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 135)_
+_Last updated: July 31, 2026 (checkpoint 136)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1828,6 +1828,24 @@ Julia asked to roll the visual redesign shown in `_design-previews/lesson-redesi
 **Verification**: full `html.parser` tag-balance walk (zero errors), CSS brace-balance check (107 open / 107 close), `node --check` on both extracted `<script>` blocks (auth/progress logic + feedback logic), and a weasyprint render of the first module panel to sanity-check the sidebar/header/typography visually (rendered correctly: rounded active sidebar item, gradient-ready progress bar, pill breadcrumb, large serif module title).
 
 **File**: `prompt-gratis-content.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 136, July 31, 2026): mulai-claude-content.html — applied the lesson-page visual redesign (CSS-only)
+
+Second of the four lesson pages. Unlike `prompt-gratis-content.html`, this page's class names already matched `_design-previews/lesson-redesign-preview.html` (Modul 3 sample) almost 1:1 — `.module-title`, `.module-desc-box`, `.prompt-section`/`.prompt-label`/`.prompt-box`, `.case-box`/`.case-role`, `.tip-box`(`.warn`), `.mistake-list`, `.output-box` all already existed with the same names, just with the old flatter styling. Restyled each to the preview's values (34px serif module titles, pill breadcrumb, dark `.prompt-box` with translucent-white copy button, gradient sidebar progress bar, rounded-card `.mod-item` states, etc.), plus extended the same visual language to this page's own extra patterns that don't exist in the preview at all (`.compare-table`, `.info-grid`, `.body-text`, `.summary-box`) — rounded/bordered table wrapper, consistent card radii, serif `.section-heading`.
+
+Two structural constraints handled without touching HTML:
+- **`.tip-box` icon**: the preview shows a floating colored icon square (`.tip-icon`) to the left of the label, but this page already has the icon typed directly into the label text (`<div class="tip-label">💡 Analogi — ...</div>`). Adding a separate icon square would either duplicate the emoji or require editing that text (forbidden), so `.tip-box` here keeps its plain-card treatment (tinted background, no left icon slot) instead of the preview's icon-square variant.
+- **`.mistake-list`/`.summary-box` markers**: the preview uses a dedicated `<span class="mistake-x">`/`.summary-check` element per list item; this page only has `<li>` with a CSS `::before` bullet. Recreated the preview's round colored badge look (red ✕ circle / green ✓ square) entirely via `::before` sizing (`width`/`height`/`border-radius`/`display:flex` on the pseudo-element itself) rather than adding new markup — visually equivalent, zero HTML changes.
+
+Same `'Plus Jakarta Sans'` (never-loaded font) bug fixed on `.logout-btn`/`.copy-btn`/`.nav-btn`. `copyPrompt()` JS only ever toggles a `.copied` class (no "bounce" class), so the animated-button feel comes from a `@keyframes btnPop` CSS animation fired by the class toggle itself — no JS touched. Feedback panel, `course-video.js` slots, and `showModule()`/`copyPrompt()` logic left completely untouched per the brief.
+
+**Verification**: full `html.parser` tag-balance walk (zero errors), CSS brace-balance check (150/150), `node --check` on both extracted scripts, grep sweep for leftover `monospace`/`Plus Jakarta Sans` references (only the untouched feedback panel remains), and a weasyprint render of Module 1 confirming the redesigned sidebar, breadcrumb pill, serif title, tinted `module-desc-box`, and gold `tip-box` all render correctly.
+
+**File**: `mulai-claude-content.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
