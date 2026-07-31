@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 129)_
+_Last updated: July 31, 2026 (checkpoint 130)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1730,6 +1730,22 @@ Two more follow-ups after Julia reviewed the live Checkpoint 128 result.
 **Pricing card**: Julia asked to swap the plain `.cta-box` closing CTA back out for a richer dark two-column pricing card, matching a reference screenshot — "ALL ACCESS" badge, serif headline ("Satu akses, semua kursus."), description, a live "HEMAT XX%" discount badge with strikethrough original price and the current price, an "Akses selamanya · Bukan langganan bulanan" note, a white "Mulai Belajar Sekarang →" button, and a 3-item checklist on the right (Semua kursus / Sekali bayar / Kursus baru termasuk — reusing the same copy as the `.value-strip` band under the hero). Rebuilt as `.pricing-section`/`.pricing-card`/`.pricing-badge`/`.pricing-name`/`.pricing-desc`/`.pricing-discount-badge`/`.pricing-price-row`/`.pricing-price-old`/`.pricing-price-big`/`.pricing-price-note`/`.pricing-sub-note`/`.pricing-btn`/`.pricing-features`/`.pricing-feature*` — dark gradient background with a soft purple radial glow in the corner, matching the site's accent color. Kept the `ctaHeadline`/`ctaSubtext`/`ctaBtn`/`komunitas` ids so the existing personalization JS (welcome-back headline, enrollment-status subtext, "Buka Dashboard" button-color swap, hide-for-All-Access-holders) still works untouched — `ctaHeadline` is now an `<h2>` instead of a `<div>`, which the JS's `innerHTML`/`textContent` calls don't care about. Added a new price-fetch IIFE (mirrors `all-access.html`'s `loadPricing()`) that reads the `course_pricing` row for `all-access` and populates `pricingDiscountBadge`/`pricingOldPrice`/`pricingBigPrice` when a discount is active, so the price shown here stays in sync with the real offer instead of being hardcoded.
 
 **Verification**: grep sweep confirmed zero leftover `cta-box`/`cta-tag`/`cta-desc`/`cta-note`/`btn-primary` references and no duplicate element ids; full `html.parser` walk over the whole file reported zero unclosed/mismatched tags; `node --check` on the extracted `<script>` block passed.
+
+**File**: `index.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 130, July 31, 2026): index.html — removed the value-strip checklist, reordered homepage sections
+
+Two structural changes to `marketingHome` per Julia's review:
+
+**Removed the `.value-strip` band** (the 3-column "✓ Semua kursus / ✓ Sekali bayar / ✓ Kursus baru termasuk" row that sat right under the hero, above "Course Library") — redundant now that the same 3 points appear as the checklist inside the closing dark pricing card. Deleted the section markup and the now-fully-unused `.value-strip`/`.value-item` CSS.
+
+**Reordered sections**: was hero → course-grid ("Semua kursus yang kamu dapatkan") → cases-section ("Lintas profesi, workflow nyata") → pricing-card. Now: hero → cases-section → course-grid → pricing-card. Pure markup reorder (moved the `<section class="cases-section">` block to sit before `<section id="kursus">`) — no CSS or JS changes needed since both sections already used page-relative `.section-eyebrow`/`.section-title`/`.section-sub` styling and the `.cases-grid`/`.course-grid-wrap` top-margins (both 52px, per Checkpoint 129) that don't depend on section order.
+
+**Verification**: full `html.parser` tag-balance walk (zero unclosed/mismatched tags), `node --check` on the extracted script block, grep confirming zero leftover `value-strip`/`value-item` references.
 
 **File**: `index.html`.
 
