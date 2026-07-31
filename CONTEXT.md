@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 122)_
+_Last updated: July 31, 2026 (checkpoint 123)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1622,6 +1622,20 @@ Audited each course's 3 sales-page case studies against its real `*-content.html
 - **content-marketing.html / strategi-marketing.html**: different pattern, not an error — both courses teach through one continuous named example ("Dapur Rara", confirmed 12 and 8 mentions respectively) running through every module, so their sales-page case studies (Toko Fashion Online, Warung Kopi Lokal, Toko Skincare, etc.) were never meant to be literal course excerpts — they illustrate the same system applied to other business types. Left as-is pending Julia's call on whether she wants these pinned to real in-course scenarios too (would mean writing new Dapur-Rara-adjacent examples per module rather than hypothetical other businesses).
 
 **File**: `mulai-claude.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 123, July 31, 2026): content-marketing.html + strategi-marketing.html case studies re-grounded to real Dapur Rara module content; All Access section reworded
+
+Follow-up to Checkpoint 122's open item — Julia asked for the two Dapur Rara courses' sales-page case studies to reflect actual lesson exercises too, not the "illustrative other business" pattern left as-is last time.
+
+- **content-marketing.html**: replaced the 3 hypothetical-business case cards (Toko Fashion Online / Warung Kopi Lokal / Jasa Foto & Video) with 3 real Dapur Rara module beats pulled directly from `content-marketing-content.html`'s own `.case-box` copy: Positioning (Module 1 — "200+ kompetitor bilang halal enak berkualitas, Claude bantu temukan positioning yang beda, dalam 3 minggu"), Sistem Konten Instagram (Module 3 — 30-hari kalender konten selesai dalam 2 jam), and Komunikasi Pelanggan (Module 5 — balas WA dari 45 menit jadi 10 menit/hari). Section title changed from "Satu Sistem Pemasaran, Berbagai Jenis Bisnis" to "Ikuti Dapur Rara Sepanjang Kursus" since the cards are now one continuous business, not several.
+- **strategi-marketing.html**: same treatment — replaced Toko Skincare / Jasa Foto & Video / Konsultan Bisnis with 3 real Dapur Rara beats from `strategi-marketing-content.html`: Performance Marketing (Module 1 — found a 0.86x ROAS campaign, redirected budget to an 8.6x channel), Alokasi Budget (Module 2 — post-launch budget reallocation plan + finance email + Calendar reminder), Content OS (Module 3 — consolidated 7 scattered tools into 1 Notion command center). Section title ("Dari Analisis ke Keputusan yang Bisa Dijalankan") already worked for a single continuous case, left unchanged.
+- **all-access.html**: reworded the "Kenapa Pilih All Access" section per Julia's supplied copy — h2 "Dibuat Untuk yang Serius Belajar Claude" → "Belajar Claude Tanpa Batas", section-sub updated, and all 4 value-card headings/body text replaced with the emoji-prefixed version (💜 Harga Sekali Bayar, ✨ Kursus Baru? Langsung Masuk, ∞ Akses Selamanya, 🎯 Belajar Sesuai Kebutuhan). Existing `.value-grid`/`.value-card` markup and CSS untouched — wording-only change.
+
+**Files**: `content-marketing.html`, `strategi-marketing.html`, `all-access.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
