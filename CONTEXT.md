@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 30, 2026 (checkpoint 121)_
+_Last updated: July 30, 2026 (checkpoint 122)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1606,6 +1606,22 @@ Also discussed (not built yet, offered as follow-ups if wanted): breaking the re
 **Verified**: grepped every `section-title` across all 4 files to confirm only the intentionally-preserved module-count headings still have numbers; counted `case-card`/`case-role` per file to confirm exactly 3 each; div open/close tag balance check on all 4 files (all balanced).
 
 **Files**: `mulai-claude.html`, `produktivitas.html`, `content-marketing.html`, `strategi-marketing.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 122, July 30, 2026): fixed one ungrounded case study, verified the rest against actual course content
+
+Julia asked whether Checkpoint 121's trimmed-to-3 case studies actually reflect what each course teaches, rather than just being plausible-sounding marketing copy. Good catch — one of them didn't hold up.
+
+Audited each course's 3 sales-page case studies against its real `*-content.html` lesson content:
+
+- **mulai-claude.html**: "Manajer Proyek" and "Customer Service" are both genuinely grounded — Manajer matches Module 5's own "Contoh Skenario Berdasarkan Profesi" list verbatim, and Customer Service is the actual running example threaded through all of Module 2 (a shoe-seller replying to a customer named Rina) plus its practice exercise. "Guru SMA" (claiming "20 soal pilihan ganda Matematika kelas 10 via Claude Artifacts") was **not** grounded — searched the whole file for "soal", "pilihan ganda", "kuis", "Matematika" and found nothing; Module 4's actual Artifacts exercise is a 5-feature comparison table, and "Guru" only appears once as a one-line role suggestion in Module 3 with no quiz example attached. Fixed by swapping it for "Mahasiswa S1", the third of Module 5's three official scenario examples (Manajer/HRD/Mahasiswa) — now all three case studies trace to something real in the course.
+- **produktivitas.html**: all 3 (Finance Manager, Operations, Sales Manager) verified solidly grounded — match `produktivitas-content.html`'s own scenario cards almost word-for-word, including exact step counts ("chain 4 langkah" matches the course's own "Pitch atau Proposal: Riset klien → Kerangka → Draft lengkap → Identifikasi kelemahan"). No changes needed.
+- **content-marketing.html / strategi-marketing.html**: different pattern, not an error — both courses teach through one continuous named example ("Dapur Rara", confirmed 12 and 8 mentions respectively) running through every module, so their sales-page case studies (Toko Fashion Online, Warung Kopi Lokal, Toko Skincare, etc.) were never meant to be literal course excerpts — they illustrate the same system applied to other business types. Left as-is pending Julia's call on whether she wants these pinned to real in-course scenarios too (would mean writing new Dapur-Rara-adjacent examples per module rather than hypothetical other businesses).
+
+**File**: `mulai-claude.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
