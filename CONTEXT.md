@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 143)_
+_Last updated: July 31, 2026 (checkpoint 144)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1958,6 +1958,22 @@ The 4 lesson-content files (`mulai-claude-content.html`, `produktivitas-content.
 **Verification**: html.parser tag-balance walk + CSS brace-balance check on all 26 touched files (zero errors), `node --check` on every extracted inline `<script>` block (pass), grep confirming zero remaining `--serif: 'Instrument Serif'` and zero literal "Instrument Serif" font-family usages anywhere outside the now-unused Google Fonts `<link>` import, and a weasyprint render of index.html's logged-in "Terakhir Dibuka" dark continue-card (the exact context from Julia's screenshot) confirming clean rendering with no layout breakage.
 
 **Files**: 26 total — the 22 listed above plus `mulai-claude-content.html`, `produktivitas-content.html`, `content-marketing-content.html`, `prompt-gratis-content.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 144, July 31, 2026): Exercise/Latihan label unified to "🎯 Latihan" across all lesson files
+
+Last inconsistency in the Latihan box work (Checkpoints 139/140/142): `mulai-claude-content.html` still labeled its 5 hands-on boxes "📝 Exercise" (English, wrong emoji) while `produktivitas-content.html` used "📝 Latihan" (right word, wrong emoji) and `content-marketing-content.html` used "🎯 Latihan" (the target convention, since Checkpoint 140 also uses 🎯 for produktivitas's standalone `.latihan-heading`).
+
+Renamed all 5 `mulai-claude-content.html` labels and all 5 `produktivitas-content.html` labels to "🎯 Latihan", matching `content-marketing-content.html`. Also closed a structural gap: `mulai-claude-content.html`'s `.prompt-section` (unlike the other two files) has no bordered-card base style — the `.latihan` variant only added a padded background — so its label sat flush above the prompt-box with no divider. Added `padding-bottom:12px;border-bottom:1px solid rgba(108,71,255,0.15);` and bumped `margin-bottom` to 14px on `.prompt-section.latihan .prompt-label`, giving it the same header-bar/divider visual grammar as the other two files without touching the shared base `.prompt-section` rule (which would have affected ~15 non-exercise prompt-sections in the same file).
+
+`prompt-gratis-content.html` was checked and confirmed to have no `.prompt-section.latihan`/hands-on-exercise concept at all — it's a prompt-library page (card grid of ready-to-use prompts), a different content type, so nothing to standardize there.
+
+**Verification**: tag-balance and CSS brace-balance checks on all 4 lesson-content files (zero errors), `node --check` on `mulai-claude-content.html`/`produktivitas-content.html` scripts (pass), grep confirming zero leftover "📝 Exercise"/"📝 Latihan" labels, and an isolated weasyprint render of the new `mulai-claude-content.html` Latihan box confirming the divider renders correctly under the bold "Latihan" title.
+
+**Files**: `mulai-claude-content.html`, `produktivitas-content.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
