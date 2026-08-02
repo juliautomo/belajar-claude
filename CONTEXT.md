@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 139)_
+_Last updated: July 31, 2026 (checkpoint 140)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1896,6 +1896,22 @@ Follow-up polish after the lesson-page redesign. Two issues fixed:
 **Verification**: full `html.parser` tag-balance walk (zero errors on all 3 files), CSS brace-balance check (mulai-claude 152/152, produktivitas 198/198, content-marketing 189/189), `node --check` on all 6 extracted scripts (pass), no duplicate ids, and weasyprint renders of a Latihan box in both `mulai-claude-content.html` (Modul 1 — prompt-box + case-box now enclosed in one accent-tinted card) and `produktivitas-content.html` (Modul 1 — case-box-only Latihan now matches the same accent-tinted treatment) confirming both now look the same and are clearly distinct from surrounding tip/summary boxes.
 
 **Files**: `mulai-claude-content.html`, `produktivitas-content.html`, `content-marketing-content.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 140, July 31, 2026): Latihan section-heading treatment + dashboard.html welcome-back font
+
+Two small follow-up fixes:
+
+1. **`produktivitas-content.html` Modul 4 "Latihan — Langkah demi Langkah"**: this exercise doesn't use the `.prompt-section.latihan` box pattern at all — it's a `.section-heading` followed by a `.sub-heading`, a `.step-row`, and three separate plain `.prompt-section` blocks (Prompt 1/2/3), so it rendered identically to every other plain section title with no visual signal that it's the hands-on exercise. Added a new `.section-heading.latihan-heading` modifier (bold `Inter`-family weight instead of the regular-weight serif, colored `var(--accent)`) and applied it plus a 🎯 emoji prefix to this one heading. Checked all four lesson files for other instances of "Latihan" used as a bare section title — this was the only one; everywhere else "Latihan" appears inside an already-differentiated `.prompt-label`, `.case-role`, or `.tip-label`.
+
+2. **`dashboard.html` "Selamat datang kembali" greeting**: still used the pre-redesign styling (`var(--serif)` regular weight, italic accent name) that Checkpoint 134 had already fixed on `index.html`'s logged-in home but never propagated to `dashboard.html`'s own separate `#greetH1` element. `dashboard.html` didn't even load the Inter font — added it to the `<link>` font import alongside Instrument Serif/Geist, then updated `.g-h1`/`.g-h1 em` to the same `'Inter', sans-serif; font-weight:700` treatment with a non-italic accent-colored name, matching `index.html` exactly. Confirmed via grep that only these two files ever render this greeting string.
+
+**Verification**: tag-balance and CSS brace-balance checks on both files (produktivitas 199/199, dashboard 125/125, zero HTML errors), and weasyprint renders confirming the bold purple "🎯 Latihan" heading and the bold non-italic Inter dashboard greeting both render as intended.
+
+**Files**: `produktivitas-content.html`, `dashboard.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
