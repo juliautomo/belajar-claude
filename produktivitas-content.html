@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Produktivitas Kantor dengan Claude — Belajar Claude</title>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script>const COURSE_SLUG = 'produktivitas';</script>
@@ -20,7 +20,7 @@
     --gold:#EF9F27;--gold-pale:rgba(239,159,39,0.08);
     --shadow:0 1px 4px rgba(0,0,0,0.06),0 4px 20px rgba(0,0,0,0.05);
     --shadow-sm:0 1px 3px rgba(0,0,0,0.05),0 2px 8px rgba(0,0,0,0.04);
-    --serif:'Instrument Serif',Georgia,serif;--font:'Geist',ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--r:14px;
+    --serif:'Instrument Serif',Georgia,serif;--serif-2:'Fraunces',Georgia,serif;--font:'Geist',ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--r:14px;
   }
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
   body{font-family:var(--font);background:var(--bg);color:var(--ink);height:100vh;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;overflow:hidden;}
@@ -69,7 +69,7 @@
   .module-panel{display:none;}
   .module-panel.active{display:block;}
   .hero{background:#fff;border:1px solid var(--border);border-radius:16px;padding:28px 32px;margin-bottom:24px;box-shadow:var(--shadow-sm);}
-  .module-title{font-family:var(--serif);font-size:34px;font-weight:400;letter-spacing:-0.8px;color:var(--ink);margin-bottom:8px;line-height:1.15;}
+  .module-title{font-family:var(--serif-2);font-size:34px;font-weight:400;letter-spacing:-0.8px;color:var(--ink);margin-bottom:8px;line-height:1.15;}
   .module-subtitle{font-size:14.5px;color:var(--ink-2);margin-bottom:0;line-height:1.6;}
   .hero .video-slot:not(:empty){margin-top:22px;}
   .module-desc-box{background:var(--accent-dim);border:1px solid rgba(108,71,255,0.15);border-radius:14px;padding:20px 24px;margin-bottom:24px;font-size:14px;color:var(--ink);line-height:1.8;}
@@ -166,7 +166,7 @@
   .pro-tip-card-icon{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:rgba(255,255,255,0.1);font-size:14px;flex-shrink:0;}
   .pro-tip-card h4{margin:0;font-size:13px;font-weight:700;}
   .pro-tip-card p{margin:0;color:rgba(255,255,255,0.6);font-size:12px;line-height:1.6;}
-  .section-heading{font-family:var(--serif);font-weight:400;font-size:21px;letter-spacing:-0.3px;color:var(--ink);margin:32px 0 6px;padding-bottom:0;border-bottom:none;}
+  .section-heading{font-family:var(--serif-2);font-weight:400;font-size:21px;letter-spacing:-0.3px;color:var(--ink);margin:32px 0 6px;padding-bottom:0;border-bottom:none;}
   .section-heading.latihan-heading{font-family:var(--font);font-weight:700;color:var(--accent);letter-spacing:-0.2px;}
   .sub-heading{font-size:13px;font-weight:600;color:var(--ink-2);margin:20px 0 10px;text-transform:none;letter-spacing:normal;}
   .body-text{font-size:13.5px;color:var(--ink-2);line-height:1.8;margin-bottom:10px;}

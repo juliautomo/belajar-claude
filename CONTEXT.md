@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 140)_
+_Last updated: July 31, 2026 (checkpoint 141)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1912,6 +1912,22 @@ Two small follow-up fixes:
 **Verification**: tag-balance and CSS brace-balance checks on both files (produktivitas 199/199, dashboard 125/125, zero HTML errors), and weasyprint renders confirming the bold purple "🎯 Latihan" heading and the bold non-italic Inter dashboard greeting both render as intended.
 
 **Files**: `produktivitas-content.html`, `dashboard.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 141, July 31, 2026): course title + section title font switched to Fraunces
+
+Swapped the display font used for `.module-title` (the big course/module title at the top of each lesson panel, e.g. "Positioning & Analisis Kompetitor") and `.section-heading` (in-lesson section titles, e.g. "Apa Itu Positioning dan Kenapa Penting") from Instrument Serif to **Fraunces**, across all 4 lesson content files.
+
+Scoped narrowly rather than swapping the whole `--serif` token, since `var(--serif)` also feeds other elements that should keep the original font: `.completion-badge h2` (feedback panel — explicitly off-limits), `.learn-card .num` (produktivitas number badges), and `.pro-tip-section h3` (bonus-box sub-heading). Introduced a new `--serif-2: 'Fraunces', Georgia, serif;` token alongside the existing `--serif` token in each file's `:root`, and repointed only `.module-title` and `.section-heading` (where present — `prompt-gratis-content.html` has no `.section-heading`, only `.module-title`) to `var(--serif-2)`. Added Fraunces to each file's Google Fonts `<link>` (`family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600`, using the variable font's optical-size axis so it renders crisply at both the 34px title size and the 21px section-heading size).
+
+`produktivitas-content.html`'s `.section-heading.latihan-heading` modifier (Checkpoint 140, bold accent-colored "🎯 Latihan" title) was left untouched — it already overrides `font-family` to the sans-serif `var(--font)` intentionally for stronger differentiation, unrelated to this Fraunces swap.
+
+**Verification**: full `html.parser` tag-balance walk and CSS brace-balance check on all 4 files (zero errors), `node --check` on all 8 extracted scripts (pass), grep confirming `--serif-2` resolves to exactly the intended selectors per file and that `.completion-badge h2` still references the original `--serif` token everywhere, and weasyprint renders of `content-marketing-content.html` Modul 1 and `produktivitas-content.html` Modul 1 confirming both the module title and section heading now render in Fraunces's distinctive high-contrast serif style.
+
+**Files**: `prompt-gratis-content.html`, `mulai-claude-content.html`, `produktivitas-content.html`, `content-marketing-content.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
