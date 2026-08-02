@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 141)_
+_Last updated: July 31, 2026 (checkpoint 142)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1928,6 +1928,20 @@ Scoped narrowly rather than swapping the whole `--serif` token, since `var(--ser
 **Verification**: full `html.parser` tag-balance walk and CSS brace-balance check on all 4 files (zero errors), `node --check` on all 8 extracted scripts (pass), grep confirming `--serif-2` resolves to exactly the intended selectors per file and that `.completion-badge h2` still references the original `--serif` token everywhere, and weasyprint renders of `content-marketing-content.html` Modul 1 and `produktivitas-content.html` Modul 1 confirming both the module title and section heading now render in Fraunces's distinctive high-contrast serif style.
 
 **Files**: `prompt-gratis-content.html`, `mulai-claude-content.html`, `produktivitas-content.html`, `content-marketing-content.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 142, July 31, 2026): Latihan box title still read as a tiny tag, not a title — fixed
+
+Follow-up to Checkpoint 139/140. After standardizing the `.prompt-section.latihan` box background/border, the "🎯 Latihan" text inside it was still styled via the base `.prompt-label` rules — an 11px (content-marketing/produktivitas) or 10px (mulai-claude) uppercase caps tag, which read as a small label, not a section title, even though the surrounding box was now visually distinct. This was inconsistent with the bold 21px `.latihan-heading` treatment shipped in Checkpoint 140 for produktivitas's standalone "Latihan — Langkah demi Langkah" heading.
+
+Fixed `.prompt-section.latihan .prompt-label` in all three files that use the box pattern (`mulai-claude-content.html`, `produktivitas-content.html`, `content-marketing-content.html`) to render as an actual title: `font-size:17px`, `font-weight:700`, `text-transform:none` (the HTML text was always mixed-case "🎯 Latihan", only CSS was uppercasing it), `font-family:var(--font)` (bold sans, matching `.latihan-heading`'s treatment rather than the tiny-label look). `prompt-gratis-content.html` has no `.prompt-section.latihan` usage so was untouched.
+
+**Verification**: tag-balance and CSS brace-balance checks on all 3 files (zero errors), `node --check` on all 6 extracted scripts (pass), and a weasyprint render of `content-marketing-content.html` Modul 4's "🎯 Latihan" box confirming it now renders as a clear, bold, appropriately-sized title instead of a small caps tag.
+
+**Files**: `mulai-claude-content.html`, `produktivitas-content.html`, `content-marketing-content.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
