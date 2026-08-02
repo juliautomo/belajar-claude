@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 142)_
+_Last updated: July 31, 2026 (checkpoint 143)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1942,6 +1942,22 @@ Fixed `.prompt-section.latihan .prompt-label` in all three files that use the bo
 **Verification**: tag-balance and CSS brace-balance checks on all 3 files (zero errors), `node --check` on all 6 extracted scripts (pass), and a weasyprint render of `content-marketing-content.html` Modul 4's "🎯 Latihan" box confirming it now renders as a clear, bold, appropriately-sized title instead of a small caps tag.
 
 **Files**: `mulai-claude-content.html`, `produktivitas-content.html`, `content-marketing-content.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 143, July 31, 2026): Instrument Serif → Fraunces, site-wide
+
+Julia asked what font "Produktivitas Kantor" (white serif on the dark "Terakhir Dibuka" continue-card on index.html) was rendered in — it was Instrument Serif, the site's shared `--serif` token used on all 26 pages that reference it, not just the lesson pages. Asked to scope the swap (lesson pages only / literally every page / just the one card); Julia chose **literally every page**.
+
+Ran a script across the 22 non-lesson-content HTML files (`admin.html`, `all-access.html`, `coming-soon.html`, `content-marketing.html`, `dashboard.html`, `index.html`, `kebijakan-pengembalian.html`, `kebijakan-privasi.html`, `kursus-karyawan.html`, `kursus-mahasiswa.html`, `kursus-ukm.html`, `login.html`, `mulai-claude.html`, `paket-content-creator.html`, `paket.html`, `payment-success.html`, `produktivitas.html`, `profile.html`, `prompt-gratis.html`, `strategi-marketing.html`, `strategi-marketing-content.html`, `syarat-ketentuan.html`) that: (1) added the Fraunces Google Fonts family (`family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700`) to each file's font `<link>`, and (2) changed the `--serif` CSS variable value from `'Instrument Serif'` to `'Fraunces'` (fallback `Georgia, serif` kept), so every element already keyed off `var(--serif)` picks up the new font automatically — no per-selector changes needed.
+
+The 4 lesson-content files (`mulai-claude-content.html`, `produktivitas-content.html`, `content-marketing-content.html`, `prompt-gratis-content.html`) already had `--serif-2: 'Fraunces'` from Checkpoint 141, scoped to just `.module-title`/`.section-heading`, while `--serif` (still Instrument Serif) fed `.completion-badge h2`, `.learn-card .num`, and `.pro-tip-section h3`. Given "literally every page" with no stated exceptions, unified these too by changing `--serif` itself to Fraunces in all 4 files (leaving the now-redundant `--serif-2` in place, harmless).
+
+**Verification**: html.parser tag-balance walk + CSS brace-balance check on all 26 touched files (zero errors), `node --check` on every extracted inline `<script>` block (pass), grep confirming zero remaining `--serif: 'Instrument Serif'` and zero literal "Instrument Serif" font-family usages anywhere outside the now-unused Google Fonts `<link>` import, and a weasyprint render of index.html's logged-in "Terakhir Dibuka" dark continue-card (the exact context from Julia's screenshot) confirming clean rendering with no layout breakage.
+
+**Files**: 26 total — the 22 listed above plus `mulai-claude-content.html`, `produktivitas-content.html`, `content-marketing-content.html`, `prompt-gratis-content.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
