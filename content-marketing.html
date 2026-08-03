@@ -102,6 +102,17 @@
   .aa-check-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 2px; }
   .aa-check-desc { font-size: 12.5px; color: rgba(255,255,255,0.45); line-height: 1.5; }
   @media (max-width: 768px) { .aa-card { grid-template-columns: 1fr; padding: 36px 28px; } }
+
+  /* Shown instead of .aa-card once the visitor already has access (enrolled, or holds
+     All Access) — no reason to keep pitching them the pricing/checklist again. */
+  .mulai-card { display: none; background: linear-gradient(120deg,#111111 0%,#1e1e22 60%,#232028 100%); border-radius: 20px; padding: 32px 36px; align-items: center; justify-content: space-between; gap: 24px; position: relative; overflow: hidden; }
+  .mulai-card::before { content: ''; position: absolute; top: -80px; left: -60px; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(139,109,255,0.32), transparent 70%); pointer-events: none; }
+  .mulai-eyebrow { font-size: 10.5px; font-weight: 700; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; position: relative; }
+  .mulai-title { font-family: var(--serif); font-size: 26px; color: #fff; letter-spacing: -0.3px; margin-bottom: 6px; position: relative; }
+  .mulai-desc { font-size: 13px; color: rgba(255,255,255,0.55); position: relative; max-width: 460px; }
+  .mulai-btn { flex-shrink: 0; display: inline-flex; align-items: center; gap: 8px; background: #fff; color: var(--ink); font-weight: 700; font-size: 14px; padding: 13px 26px; border-radius: 12px; text-decoration: none; transition: all 0.2s; position: relative; }
+  .mulai-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.35); }
+  @media (max-width: 640px) { .mulai-card { flex-direction: column; align-items: flex-start; text-align: left; } .mulai-btn { width: 100%; justify-content: center; } }
   footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); padding: 48px 40px 28px; position: relative; z-index: 1; }
   .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 32px; }
   .footer-brand .logo { color: #fff; font-size: 17px; letter-spacing: -0.4px; }
@@ -140,7 +151,7 @@
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-content">
-    <span class="level-tag">Beginner · 5 Modul</span>
+    <span class="level-tag">5 Modul</span>
     <h1>Claude untuk <span class="accent">Kreasi Konten Pemasaran</span></h1>
     <p class="hero-sub">Bangun sistem konten pemasaran lengkap dengan Claude — dari positioning, deskripsi produk, dan konten Instagram sampai copy iklan dan template komunikasi pelanggan. Setiap modul membangun di atas modul sebelumnya, siap dipakai hari itu juga.</p>
     <div class="hero-meta">
@@ -271,6 +282,14 @@
       </div>
     </div>
   </div>
+  <div class="mulai-card" id="mulaiCard">
+    <div>
+      <div class="mulai-eyebrow">Mulai Belajar</div>
+      <div class="mulai-title">Kreasi Konten Pemasaran</div>
+      <div class="mulai-desc">Dari positioning sampai konten siap posting: Instagram, copy iklan, dan komunikasi pelanggan.</div>
+    </div>
+    <a class="mulai-btn" id="mulaiCardBtn" href="content-marketing-content.html">Mulai <span>→</span></a>
+  </div>
   </div>
 </section>
 
@@ -330,21 +349,23 @@
       const { data: enrollments } = await sbClient.from('enrollments').select('course_slug').eq('email', session.user.email);
       const isEnrolled = enrollments && enrollments.some(e => e.course_slug === COURSE_SLUG);
       const hasAllAccess = enrollments && enrollments.some(e => e.course_slug === 'all-access');
-      if (isEnrolled) {
-        document.querySelectorAll('#ctaBtn, #bottomCtaBtn').forEach(btn => {
-          btn.textContent = 'Buka Kursus →';
-          btn.setAttribute('href', CONTENT_LINK);
-        });
-      } else if (hasAllAccess) {
-        document.querySelectorAll('#ctaBtn, #bottomCtaBtn').forEach(btn => {
-          btn.textContent = 'Mulai Kursus →';
-          btn.removeAttribute('href');
-          btn.style.cursor = 'pointer';
-          btn.addEventListener('click', function(e) {
+      if (isEnrolled || hasAllAccess) {
+        document.querySelector('.aa-card').style.display = 'none';
+        var mulaiCard = document.getElementById('mulaiCard');
+        mulaiCard.style.display = 'flex';
+        var mBtn = document.getElementById('mulaiCardBtn');
+        if (isEnrolled) {
+          mBtn.textContent = 'Buka Kursus →';
+          mBtn.setAttribute('href', CONTENT_LINK);
+        } else {
+          mBtn.textContent = 'Mulai Kursus →';
+          mBtn.removeAttribute('href');
+          mBtn.style.cursor = 'pointer';
+          mBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            enrollAndOpen(btn, session.user.email);
+            enrollAndOpen(mBtn, session.user.email);
           });
-        });
+        }
       }
     } catch (e) {}
   })();
@@ -352,14 +373,14 @@
   async function enrollAndOpen(btn, email) {
     var original = btn.textContent;
     btn.textContent = 'Memproses...';
-    document.querySelectorAll('#ctaBtn, #bottomCtaBtn').forEach(b => b.style.pointerEvents = 'none');
+    document.querySelectorAll('#ctaBtn, #bottomCtaBtn, #mulaiCardBtn').forEach(b => b.style.pointerEvents = 'none');
     try {
       const { error } = await sbClient.from('enrollments').insert({ email: email, course_slug: COURSE_SLUG, course_name: 'Kreasi Konten Pemasaran', type: 'paid', enrolled_at: new Date().toISOString() });
       if (error) throw error;
       window.location.href = CONTENT_LINK;
     } catch (e) {
       btn.textContent = original;
-      document.querySelectorAll('#ctaBtn, #bottomCtaBtn').forEach(b => b.style.pointerEvents = '');
+      document.querySelectorAll('#ctaBtn, #bottomCtaBtn, #mulaiCardBtn').forEach(b => b.style.pointerEvents = '');
       alert('Gagal mendaftar kursus: ' + (e.message || 'Terjadi kesalahan, coba lagi.'));
     }
   }
