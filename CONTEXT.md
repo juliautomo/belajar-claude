@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 144)_
+_Last updated: July 31, 2026 (checkpoint 145)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1974,6 +1974,20 @@ Renamed all 5 `mulai-claude-content.html` labels and all 5 `produktivitas-conten
 **Verification**: tag-balance and CSS brace-balance checks on all 4 lesson-content files (zero errors), `node --check` on `mulai-claude-content.html`/`produktivitas-content.html` scripts (pass), grep confirming zero leftover "📝 Exercise"/"📝 Latihan" labels, and an isolated weasyprint render of the new `mulai-claude-content.html` Latihan box confirming the divider renders correctly under the bold "Latihan" title.
 
 **Files**: `mulai-claude-content.html`, `produktivitas-content.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 145, July 31, 2026): Fixed missing PDF download button on Produktivitas Kantor
+
+Julia uploaded a course PDF for Produktivitas Kantor via admin.html but it never appeared on the lesson page. Root cause: `course-video.js` (shared script, injects admin-set video/PDF/PPT/doc content into any lesson page) looks for a sidebar element with `id="pdf-download-slot"` to inject the "📄 Unduh Materi PDF" button into — `mulai-claude-content.html`, `content-marketing-content.html`, and `prompt-gratis-content.html` all have this div right after `.sidebar-header`, but `produktivitas-content.html` was missing it entirely, so the query succeeded (PDF row existed in `course_resources`) but had nowhere to render into, and failed silently (no console error, by design).
+
+Added `<div id="pdf-download-slot"></div>` to `produktivitas-content.html`'s sidebar in the same position as the other 3 files (immediately after `.sidebar-header`, before the module list). Audited all 4 lesson-content files for consistency: all now have exactly one `pdf-download-slot`, and matching `video-slot-N`/`ppt-slot-N`/`doc-slot-N` ids for every module (produktivitas has 8 of each — modules 1–7 plus an unused slot on its module-8 "Feedback" panel, harmless dead weight since admin.html only manages 7 modules for that course). All 4 files load `course-video.js` and define `COURSE_SLUG` matching `admin.html`'s `COURSES` array slugs exactly (`mulai-claude`, `produktivitas`, `content-marketing`, `prompt-gratis`), so PPT and practice-document uploads for all 4 courses were already wired correctly — only the course-level PDF slot on produktivitas was missing.
+
+**Verification**: tag-balance and CSS brace-balance check on `produktivitas-content.html` (zero errors), `node --check` on its extracted scripts (pass), grep confirming exactly one `pdf-download-slot` per file across all 4 lesson files, and an isolated weasyprint render of the sidebar with a mock PDF resource confirming the button renders identically to the working version on the other courses.
+
+**Files**: `produktivitas-content.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
