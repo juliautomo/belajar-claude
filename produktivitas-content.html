@@ -1540,6 +1540,10 @@ yang bisa saya buka lagi setiap hari kerja padat berikutnya.<button class="copy-
       if (!existing || existing.length === 0) { window.location.href = 'produktivitas.html'; return; }
     }
 
+    // Touch last_accessed_at so the dashboard's spotlight card can show whichever course
+    // was opened most recently, not just whichever has the highest completion %.
+    sb.from('enrollments').update({ last_accessed_at: new Date().toISOString() }).eq('email', email).eq('course_slug', COURSE_SLUG).then(()=>{}, ()=>{});
+
     document.getElementById('navEmail').textContent = email;
 
     // Load completions

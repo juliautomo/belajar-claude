@@ -681,6 +681,10 @@ Tolong bantu saya dengan: outline struktur yang kuat, poin-poin kunci yang perlu
       if (!existing || existing.length === 0) { window.location.href = 'prompt-gratis.html'; return; }
     }
 
+    // Touch last_accessed_at so the dashboard's spotlight card can show whichever course
+    // was opened most recently, not just whichever has the highest completion %.
+    sbClient.from('enrollments').update({ last_accessed_at: new Date().toISOString() }).eq('email', email).eq('course_slug', COURSE_SLUG).then(()=>{}, ()=>{});
+
     document.getElementById('navEmail').textContent = email;
 
     // Load existing progress from Supabase

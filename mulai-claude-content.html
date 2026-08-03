@@ -925,6 +925,10 @@ saya export ke Google Docs.<button class="copy-btn" onclick="copyPrompt(this)">S
       if (!existing || existing.length === 0) { window.location.href = 'mulai-claude.html'; return; }
     }
 
+    // Touch last_accessed_at so the dashboard's spotlight card can show whichever course
+    // was opened most recently, not just whichever has the highest completion %.
+    sbClient.from('enrollments').update({ last_accessed_at: new Date().toISOString() }).eq('email', email).eq('course_slug', COURSE_SLUG).then(()=>{}, ()=>{});
+
     document.getElementById('navEmail').textContent = email;
     document.getElementById('loadingScreen').style.display = 'none';
     document.getElementById('mainLayout').style.display = 'flex';
