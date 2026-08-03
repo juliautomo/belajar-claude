@@ -320,7 +320,11 @@ async function loadProgress(email){
 function getProgress(slug){
   var total=(ALL_COURSES[slug]&&ALL_COURSES[slug].modules)||0;
   if(total===0)return{done:0,total:0,pct:100};
-  var done=(progressMap[slug]&&progressMap[slug].size)||parseInt(localStorage.getItem('klaud_progress_'+slug)||'0');
+  // Trust the DB (progressMap, populated by loadProgress before this is ever called) as the
+  // sole source of truth. Do NOT fall back to localStorage here — a course with zero real
+  // completions has no entry in progressMap, which used to look identical to "fetch failed"
+  // and silently resurrect a stale cached count from a previous browser session/test account.
+  var done=(progressMap[slug]&&progressMap[slug].size)||0;
   return{done:done,total:total,pct:Math.min(100,Math.round((done/total)*100))};
 }
 function getInitials(name){return name.split(' ').map(function(w){return w[0];}).slice(0,2).join('').toUpperCase();}
