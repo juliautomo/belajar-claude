@@ -14,6 +14,18 @@ function extractYoutubeId(url) {
   return m ? m[1] : null;
 }
 
+// Appends Supabase Storage's "?download" query param so the browser saves the file
+// instead of rendering it inline. This matters most for .txt/.csv practice files —
+// without it, the browser guesses an encoding while displaying them raw and the
+// smart-quotes/em-dashes in the content show up as mojibake. A plain `download`
+// attribute on the <a> tag doesn't help here since these URLs are cross-origin
+// (Supabase's own domain, not belajarclaude.id) — modern browsers ignore that
+// attribute for cross-origin links, so it has to be done via the URL itself.
+function withDownload(url) {
+  if (!url) return url;
+  return url + (url.indexOf('?') === -1 ? '?' : '&') + 'download';
+}
+
 (function () {
   function run() {
     if (typeof COURSE_SLUG === 'undefined' || !COURSE_SLUG) return;
@@ -109,7 +121,7 @@ function extractYoutubeId(url) {
           var items = '';
           var ppt = pptByModule[moduleNum];
           if (ppt) {
-            items += '<a href="' + ppt.ppt_url + '" target="_blank" rel="noopener" ' +
+            items += '<a href="' + withDownload(ppt.ppt_url) + '" target="_blank" rel="noopener" ' +
               'style="display:flex;align-items:center;gap:8px;padding:10px 12px;' +
               'background:var(--accent-dim, rgba(108,71,255,0.08));border:1px solid rgba(108,71,255,0.15);border-radius:10px;' +
               'font-size:13px;font-weight:700;color:var(--accent);text-decoration:none;margin-bottom:8px;">' +
@@ -117,7 +129,7 @@ function extractYoutubeId(url) {
               '<span>Lihat ' + (ppt.ppt_label || 'Slide Modul') + '</span></a>';
           }
           (docsByModule[moduleNum] || []).forEach(function (d) {
-            items += '<a href="' + d.doc_url + '" target="_blank" rel="noopener" ' +
+            items += '<a href="' + withDownload(d.doc_url) + '" target="_blank" rel="noopener" ' +
               'style="display:flex;align-items:center;gap:8px;padding:10px 12px;' +
               'background:var(--surface-2, #F5F5F7);border:1px solid var(--border);border-radius:10px;' +
               'font-size:13px;font-weight:600;color:var(--ink);text-decoration:none;margin-bottom:8px;">' +
