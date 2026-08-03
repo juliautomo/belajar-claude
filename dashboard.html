@@ -73,6 +73,34 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 .g-sub{font-size:13px;color:var(--ink-3);margin-top:8px;}
 .g-pill{display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--accent-dim),rgba(139,109,255,0.08));border:1px solid rgba(108,71,255,0.15);padding:10px 18px;border-radius:12px;font-size:12px;font-weight:600;color:var(--accent);white-space:nowrap;align-self:flex-start;}
 
+/* CONTINUE SPOTLIGHT — highlights the enrolled-but-unfinished course closest to
+   completion, so there's always one clear "pick up where you left off" card above
+   the full Kursus Kamu list. Ported from dashboard-redesign-preview.html; uses this
+   file's own --serif/--font (Fraunces/Geist) rather than the preview's Instrument Serif. */
+.spotlight{animation:up 0.5s 0.03s ease both;}
+.spot-card{background:linear-gradient(120deg,var(--ink) 0%,#1e1e22 60%,#232028 100%);border-radius:20px;padding:32px 36px;display:flex;align-items:center;gap:28px;position:relative;overflow:hidden;color:#fff;cursor:pointer;transition:transform 0.25s ease;}
+.spot-card:hover{transform:translateY(-2px);}
+.spot-card::before{content:'';position:absolute;top:-80px;left:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(139,109,255,0.32),transparent 70%);pointer-events:none;}
+.spot-card::after{content:'';position:absolute;bottom:-100px;right:-40px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.06),transparent 70%);pointer-events:none;}
+.spot-ring{position:relative;width:96px;height:96px;flex-shrink:0;}
+.spot-ring svg{width:100%;height:100%;transform:rotate(-90deg);}
+.spot-ring-bg{fill:none;stroke:rgba(255,255,255,0.12);stroke-width:6;}
+.spot-ring-fill{fill:none;stroke:url(#spotRingGrad);stroke-width:6;stroke-linecap:round;stroke-dasharray:264;transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1);}
+.spot-ring-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:22px;color:#fff;}
+.spot-info{flex:1;min-width:0;position:relative;}
+.spot-eyebrow{font-size:10.5px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.spot-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:#FFD84D;animation:spotBlink 1.6s ease-in-out infinite;}
+@keyframes spotBlink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.spot-title{font-family:var(--serif);font-size:26px;letter-spacing:-0.3px;margin-bottom:6px;}
+.spot-meta{font-size:13px;color:rgba(255,255,255,0.55);}
+.spot-meta b{color:#fff;font-weight:600;}
+.spot-action{position:relative;flex-shrink:0;}
+.btn-spot{font-family:var(--font);font-size:14px;font-weight:600;color:var(--ink);background:#fff;border:none;border-radius:12px;padding:13px 24px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:8px;position:relative;overflow:hidden;}
+.btn-spot:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.35);}
+.spot-ripple{position:absolute;border-radius:50%;background:rgba(108,71,255,0.25);transform:scale(0);animation:spotRippleAnim 0.6s ease-out;pointer-events:none;}
+@keyframes spotRippleAnim{to{transform:scale(3.5);opacity:0;}}
+@media(max-width:640px){.spot-card{flex-direction:column;align-items:flex-start;text-align:left;}.spot-action{align-self:stretch;}.btn-spot{width:100%;justify-content:center;}}
+
 /* STAT GRID */
 .stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;animation:up 0.5s 0.07s ease both;}
 .s-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px 20px;position:relative;overflow:hidden;transition:all 0.2s;}
@@ -136,7 +164,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 .badge-meta{font-size:11px;color:var(--ink-3);margin-top:2px;}
 
 /* EXPLORE */
-.explore-carousel{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:4px;}
+/* padding on all 4 sides (not just bottom) so hover box-shadow/lift has room to
+   render before getting clipped — overflow-x:auto here silently forces
+   overflow-y:auto too (CSS spec quirk), so without this the shadow's soft blur
+   gets hard-cut flush against the container edge and reads as a squared-off box. */
+.explore-carousel{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:10px 4px 16px;}
 .explore-carousel::-webkit-scrollbar{display:none;}
 .explore-card{min-width:200px;max-width:200px;scroll-snap-align:start;flex-shrink:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:all 0.2s;}
 .explore-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,0.08);border-color:rgba(108,71,255,0.2);}
@@ -213,6 +245,27 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
         <p class="g-sub" id="greetSub"></p>
       </div>
       <div class="g-pill" id="greetPill" style="display:none;"></div>
+    </div>
+
+    <div class="spotlight" id="spotlightSection" style="display:none;">
+      <div class="spot-card" id="spotCard">
+        <svg width="0" height="0"><defs><linearGradient id="spotRingGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#8B6DFF"/><stop offset="100%" stop-color="#6C47FF"/></linearGradient></defs></svg>
+        <div class="spot-ring">
+          <svg viewBox="0 0 96 96">
+            <circle class="spot-ring-bg" cx="48" cy="48" r="42"/>
+            <circle class="spot-ring-fill" id="spotRingFill" cx="48" cy="48" r="42" style="stroke-dashoffset:264"/>
+          </svg>
+          <div class="spot-ring-pct" id="spotPct"></div>
+        </div>
+        <div class="spot-info">
+          <div class="spot-eyebrow"><span class="dot"></span>Lanjutkan belajar</div>
+          <div class="spot-title" id="spotTitle"></div>
+          <div class="spot-meta" id="spotMeta"></div>
+        </div>
+        <div class="spot-action">
+          <button class="btn-spot" id="spotBtn" onclick="event.stopPropagation();spotRipple(event);">Lanjutkan <span>→</span></button>
+        </div>
+      </div>
     </div>
 
     <div id="enrolledSection" style="display:none;">
@@ -301,6 +354,19 @@ async function enrollCourse(btn,slug){
   }
 }
 function scrollExplore(dir){document.getElementById('exploreGrid').scrollBy({left:dir*224,behavior:'smooth'});}
+
+function spotRipple(e){
+  var btn=e.currentTarget;
+  var rect=btn.getBoundingClientRect();
+  var ripple=document.createElement('span');
+  var size=Math.max(rect.width,rect.height);
+  ripple.className='spot-ripple';
+  ripple.style.width=ripple.style.height=size+'px';
+  ripple.style.left=(e.clientX-rect.left-size/2)+'px';
+  ripple.style.top=(e.clientY-rect.top-size/2)+'px';
+  btn.appendChild(ripple);
+  setTimeout(function(){ripple.remove();},600);
+}
 async function logout(){await sbClient.auth.signOut();window.location.href='index.html';}
 
 async function init(){
@@ -397,6 +463,29 @@ async function _init(){
   var COURSE_ORDER={'prompt-gratis':0,'mulai-claude':1,'produktivitas':2,'content-marketing':3,'strategi-marketing':4,'analisis-data':5,'build-automation':6,'ai-powered-app':7,'claude-api-dev':8,'jual-produk-ai':9};
   function courseSort(a,b){return (COURSE_ORDER[a.course_slug]||99)-(COURSE_ORDER[b.course_slug]||99);}
   activeCourses.sort(courseSort);
+
+  // Spotlight: highlight whichever active (enrolled, not yet 100%) course is closest
+  // to done, so there's always one clear "pick up where you left off" card — ties
+  // broken by COURSE_ORDER since activeCourses is already sorted that way.
+  if(activeCourses.length>0){
+    var spotCourse=activeCourses.reduce(function(best,c){
+      return getProgress(c.course_slug).pct>getProgress(best.course_slug).pct?c:best;
+    },activeCourses[0]);
+    var spotMeta=ALL_COURSES[spotCourse.course_slug],spotProg=getProgress(spotCourse.course_slug);
+    var circumference=264; // 2*pi*42, matches the ring's r=42
+    document.getElementById('spotRingFill').style.strokeDashoffset=circumference-(circumference*spotProg.pct/100);
+    document.getElementById('spotPct').textContent=spotProg.pct+'%';
+    document.getElementById('spotTitle').textContent=spotMeta.icon+' '+spotMeta.title;
+    var remaining=spotProg.total-spotProg.done;
+    document.getElementById('spotMeta').innerHTML=spotProg.done>0
+      ?'<b>'+spotProg.done+'/'+spotProg.total+' modul</b> selesai'+(remaining===1?' — tinggal 1 lagi buat kelar!':remaining>0?' — '+remaining+' modul lagi menuju selesai.':'.')
+      :'<b>'+spotProg.total+' modul</b> menunggu — yuk mulai!';
+    document.querySelector('#spotlightSection .spot-eyebrow').lastChild.textContent=spotProg.done>0?'Lanjutkan belajar':'Mulai belajar';
+    var spotBtn=document.getElementById('spotBtn');
+    spotBtn.innerHTML=(spotProg.done>0?'Lanjutkan':'Mulai')+' <span>&rarr;</span>';
+    document.getElementById('spotCard').onclick=function(){location.href=spotMeta.contentLink;};
+    document.getElementById('spotlightSection').style.display='block';
+  }
 
   var thumbs=['et1','et2','et3','et4'];
   function renderEnrolledCard(c,i,list){
