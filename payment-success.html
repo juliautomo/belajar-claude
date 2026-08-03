@@ -112,11 +112,18 @@
   (async () => {
     try {
       const { data: { session } } = await sbClient.auth.getSession();
-      if (!session) {
-        document.getElementById('step1Title').textContent = 'Cek email kamu — wajib sebelum masuk';
-        document.getElementById('passwordNote').style.display = 'block';
+      if (session) {
+        // Already had a session before paying — enrollment is live immediately,
+        // no reason to make them read this page or click through.
+        window.location.href = 'dashboard.html';
+        return;
       }
-    } catch (e) { /* fail silent — worst case the note just doesn't show */ }
+      // Guest checkout, no session: "Ke Dashboard" would just bounce to a login
+      // screen with no way in yet, so don't offer it — the real next step is email.
+      document.getElementById('step1Title').textContent = 'Cek email kamu — wajib sebelum masuk';
+      document.getElementById('passwordNote').style.display = 'block';
+      document.getElementById('dashBtn').style.display = 'none';
+    } catch (e) { /* fail silent — worst case the button stays as-is */ }
   })();
 </script>
 </body>

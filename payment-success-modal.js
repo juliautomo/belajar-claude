@@ -1,6 +1,14 @@
 // ─── Belajar Claude Payment Success Modal ──────────────────────────────────────────
-// Call window.showPaymentSuccess(courseName) after a successful Duitku payment.
-// Shows a modal, then auto-redirects to dashboard after 5 seconds.
+// Call window.showPaymentSuccess() after a successful Duitku payment.
+//
+// Guest checkout creates the account server-side with no browser session — so most
+// buyers here have no session yet, and their real next step is the one-click
+// "set password" link waiting in their email, NOT the dashboard (which would just
+// bounce them to a login screen they can't use). So: if a session already exists
+// (buyer was logged in before paying), skip this modal and go straight to the
+// dashboard — no reason to make them read 3 steps or wait out a countdown. If there's
+// no session, show the modal with no auto-redirect (there's nowhere useful to send
+// them yet) and point them at their email instead.
 
 (function () {
   const style = document.createElement('style');
@@ -99,8 +107,8 @@
         <div class="ps-step">
           <div class="ps-num">2</div>
           <div>
-            <div class="ps-step-title">Masuk ke dashboard</div>
-            <div class="ps-step-desc">Kursus yang kamu beli langsung muncul dan bisa dimulai.</div>
+            <div class="ps-step-title">Set password lewat email</div>
+            <div class="ps-step-desc">Klik link di email untuk buat password — baru bisa masuk ke dashboard.</div>
           </div>
         </div>
         <div class="ps-step">
@@ -111,23 +119,28 @@
           </div>
         </div>
       </div>
-      <button class="ps-btn" onclick="window.location.href='dashboard.html'">Ke Dashboard →</button>
-      <p class="ps-timer" id="ps-timer">Otomatis ke dashboard dalam <strong>5</strong> detik...</p>
+      <button class="ps-btn" id="ps-btn">Oke, Saya Akan Cek Email</button>
     </div>
   `;
   document.body.appendChild(overlay);
 
-  window.showPaymentSuccess = function () {
+  overlay.querySelector('#ps-btn').addEventListener('click', () => {
+    overlay.classList.remove('open');
+  });
+
+  window.showPaymentSuccess = async function () {
+    let hasSession = false;
+    try {
+      const { data: { session } } = await sbClient.auth.getSession();
+      hasSession = !!session;
+    } catch (e) { /* fail closed — treat as guest, safer default */ }
+
+    if (hasSession) {
+      // Already had a session before paying — enrollment is live immediately, no
+      // reason to interrupt with this modal at all.
+      window.location.href = 'dashboard.html';
+      return;
+    }
     overlay.classList.add('open');
-    let secs = 5;
-    const strong = overlay.querySelector('#ps-timer strong');
-    const timer = setInterval(() => {
-      secs--;
-      if (strong) strong.textContent = secs;
-      if (secs <= 0) {
-        clearInterval(timer);
-        window.location.href = 'dashboard.html';
-      }
-    }, 1000);
   };
 })();
