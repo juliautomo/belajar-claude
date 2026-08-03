@@ -2,9 +2,10 @@
 // module PPT slides, and practice documents into content pages.
 // Requires: sbClient (from supabase-config.js) and a global COURSE_SLUG
 // constant defined before this script tag loads. Looks for elements with id
-// "video-slot-<moduleNum>", "ppt-slot-<moduleNum>", "doc-slot-<moduleNum>"
-// (all below the module title) and "pdf-download-slot" (sidebar link to the
-// course-level PDF).
+// "video-slot-<moduleNum>" (below the module title), "downloads-slot-<moduleNum>"
+// (a single grouped card for that module's PPT + practice documents, so admins
+// see one "Materi Unduhan" section instead of two disconnected blocks), and
+// "pdf-download-slot" (sidebar link to the course-level PDF).
 
 // Extracts an 11-char YouTube video ID from watch/share/shorts/embed URLs.
 function extractYoutubeId(url) {
@@ -79,55 +80,59 @@ function extractYoutubeId(url) {
       })
       .catch(function (e) { console.log('course-video: gagal memuat PDF', e); });
 
-    sbClient
-      .from('module_ppts')
-      .select('module_num, ppt_url, ppt_label')
-      .eq('course_slug', COURSE_SLUG)
-      .then(function (res) {
-        (res.data || []).forEach(function (row) {
-          if (!row.ppt_url) return;
-          var slot = document.getElementById('ppt-slot-' + row.module_num);
-          if (!slot) return;
-          var label = row.ppt_label || 'Slide Modul';
-          slot.innerHTML =
-            '<a href="' + row.ppt_url + '" target="_blank" rel="noopener" ' +
-            'style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding:12px 14px;' +
-            'background:var(--accent-dim, rgba(108,71,255,0.08));color:var(--accent);border-radius:10px;' +
-            'font-size:13px;font-weight:700;text-decoration:none;">' +
-            '<span style="font-size:18px;line-height:1;">📊</span>' +
-            '<span>Lihat ' + label + '</span></a>';
+    // PPT slides and practice documents are two separate tables, but they render
+    // into one grouped "📥 Materi Unduhan" card per module — fetched together so
+    // the card is built once, with whichever of the two actually has content.
+    Promise.all([
+      sbClient.from('module_ppts').select('module_num, ppt_url, ppt_label').eq('course_slug', COURSE_SLUG),
+      sbClient.from('module_documents').select('module_num, doc_url, doc_label').eq('course_slug', COURSE_SLUG).order('created_at')
+    ])
+      .then(function (results) {
+        var pptByModule = {};
+        (results[0].data || []).forEach(function (row) {
+          if (row.ppt_url) pptByModule[row.module_num] = row;
         });
-      })
-      .catch(function (e) { console.log('course-video: gagal memuat PPT', e); });
-
-    sbClient
-      .from('module_documents')
-      .select('module_num, doc_url, doc_label')
-      .eq('course_slug', COURSE_SLUG)
-      .order('created_at')
-      .then(function (res) {
-        var byModule = {};
-        (res.data || []).forEach(function (row) {
+        var docsByModule = {};
+        (results[1].data || []).forEach(function (row) {
           if (!row.doc_url) return;
-          (byModule[row.module_num] = byModule[row.module_num] || []).push(row);
+          (docsByModule[row.module_num] = docsByModule[row.module_num] || []).push(row);
         });
-        Object.keys(byModule).forEach(function (moduleNum) {
-          var slot = document.getElementById('doc-slot-' + moduleNum);
+
+        var moduleNums = {};
+        Object.keys(pptByModule).forEach(function (n) { moduleNums[n] = true; });
+        Object.keys(docsByModule).forEach(function (n) { moduleNums[n] = true; });
+
+        Object.keys(moduleNums).forEach(function (moduleNum) {
+          var slot = document.getElementById('downloads-slot-' + moduleNum);
           if (!slot) return;
-          var items = byModule[moduleNum].map(function (d) {
-            return '<a href="' + d.doc_url + '" target="_blank" rel="noopener" ' +
+
+          var items = '';
+          var ppt = pptByModule[moduleNum];
+          if (ppt) {
+            items += '<a href="' + ppt.ppt_url + '" target="_blank" rel="noopener" ' +
+              'style="display:flex;align-items:center;gap:8px;padding:10px 12px;' +
+              'background:var(--accent-dim, rgba(108,71,255,0.08));border:1px solid rgba(108,71,255,0.15);border-radius:10px;' +
+              'font-size:13px;font-weight:700;color:var(--accent);text-decoration:none;margin-bottom:8px;">' +
+              '<span style="font-size:16px;line-height:1;flex-shrink:0;">📊</span>' +
+              '<span>Lihat ' + (ppt.ppt_label || 'Slide Modul') + '</span></a>';
+          }
+          (docsByModule[moduleNum] || []).forEach(function (d) {
+            items += '<a href="' + d.doc_url + '" target="_blank" rel="noopener" ' +
               'style="display:flex;align-items:center;gap:8px;padding:10px 12px;' +
               'background:var(--surface-2, #F5F5F7);border:1px solid var(--border);border-radius:10px;' +
               'font-size:13px;font-weight:600;color:var(--ink);text-decoration:none;margin-bottom:8px;">' +
-              '📎 ' + (d.doc_label || 'Dokumen Praktik') + '</a>';
-          }).join('');
+              '<span style="font-size:16px;line-height:1;flex-shrink:0;">📎</span>' +
+              '<span>' + (d.doc_label || 'Dokumen Praktik') + '</span></a>';
+          });
+
+          if (!items) return;
           slot.innerHTML =
-            '<div style="margin-top:8px;">' +
-            '<div style="font-size:11px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;color:var(--ink-2);margin-bottom:10px;">Materi Praktik</div>' +
+            '<div style="margin-bottom:24px;">' +
+            '<div style="font-size:11px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;color:var(--ink-2);margin-bottom:10px;">📥 Materi Unduhan</div>' +
             items + '</div>';
         });
       })
-      .catch(function (e) { console.log('course-video: gagal memuat dokumen praktik', e); });
+      .catch(function (e) { console.log('course-video: gagal memuat materi unduhan', e); });
   }
 
   if (document.readyState === 'loading') {

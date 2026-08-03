@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 145)_
+_Last updated: July 31, 2026 (checkpoint 146)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1988,6 +1988,22 @@ Added `<div id="pdf-download-slot"></div>` to `produktivitas-content.html`'s sid
 **Verification**: tag-balance and CSS brace-balance check on `produktivitas-content.html` (zero errors), `node --check` on its extracted scripts (pass), grep confirming exactly one `pdf-download-slot` per file across all 4 lesson files, and an isolated weasyprint render of the sidebar with a mock PDF resource confirming the button renders identically to the working version on the other courses.
 
 **Files**: `produktivitas-content.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 146, July 31, 2026): Grouped PPT + practice-doc downloads into one "Materi Unduhan" card per module
+
+Julia pointed out that a module's PPT link ("Lihat K2-M02-Claude-Projects.pptx") and its practice-document list ("MATERI PRAKTIK" / "k2-m2-referensi-project.txt") rendered as two visually disconnected blocks — no shared header, so it wasn't obvious both were downloadable materials for the same module.
+
+`course-video.js` previously queried `module_ppts` and `module_documents` independently and injected each into its own DOM slot (`ppt-slot-<n>` / `doc-slot-<n>`). Rewrote it to fetch both via `Promise.all`, merge by module number, and render a single combined card into one new slot (`downloads-slot-<n>`): one "📥 Materi Unduhan" header, PPT link first (📊 icon, accent-tinted) if present, then any practice documents (📎 icon, neutral card) — all in one visual group. The card renders only if the module actually has a PPT or at least one document; otherwise the slot stays empty, same as before.
+
+Updated all 5 lesson-content files (`mulai-claude-content.html`, `produktivitas-content.html`, `content-marketing-content.html`, `prompt-gratis-content.html`, `strategi-marketing-content.html`) to replace each module's `<div class="ppt-slot">`/`<div class="doc-slot">` pair with a single `<div class="downloads-slot" id="downloads-slot-<n>">`, via a regex substitution across all 26 module instances (mulai-claude 5, produktivitas 8, content-marketing 5, prompt-gratis 5, strategi-marketing 3).
+
+**Verification**: tag-balance and CSS brace-balance checks on all 5 files (zero errors), `node --check` on `course-video.js` and every extracted inline script across the 5 files (pass), grep confirming zero leftover `ppt-slot`/`doc-slot` references and exactly the expected `downloads-slot` count per file, and a weasyprint render of produktivitas Modul 2 with mock PPT + doc data confirming the grouped card renders as one unit under a single header.
+
+**Files**: `course-video.js`, `mulai-claude-content.html`, `produktivitas-content.html`, `content-marketing-content.html`, `prompt-gratis-content.html`, `strategi-marketing-content.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
