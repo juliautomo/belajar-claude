@@ -74,8 +74,8 @@
       <div class="step">
         <div class="step-num">1</div>
         <div class="step-body">
-          <div class="step-title">Cek email kamu</div>
-          <div class="step-desc">Kami sudah kirimkan konfirmasi ke inbox kamu. Akun baru? Ada link sekali klik buat set password juga.</div>
+          <div class="step-title" id="step1Title">Cek email kamu</div>
+          <div class="step-desc" id="step1Desc">Kami sudah kirimkan konfirmasi ke inbox kamu. Akun baru? Ada link sekali klik buat set password juga.</div>
         </div>
       </div>
       <div class="step">
@@ -94,10 +94,30 @@
       </div>
     </div>
 
-    <a href="dashboard.html" class="btn">
+    <a href="dashboard.html" class="btn" id="dashBtn">
       Ke Dashboard →
     </a>
+    <p class="note" id="passwordNote" style="display:none;">🔒 Akun kamu baru — masuk ke dashboard baru bisa setelah kamu set password lewat link di email. Belum lihat emailnya? Cek folder spam, atau <a href="mailto:belajarclaude.id@gmail.com" style="color:var(--accent);">hubungi kami</a>.</p>
     <p class="note">Ada pertanyaan? Hubungi kami di WhatsApp Community.</p>
   </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script>
+  // Guest checkout creates the account server-side (via the Duitku webhook) without
+  // logging the browser in — so a brand-new buyer has no session here, and clicking
+  // "Ke Dashboard" would just bounce them to a login screen they can't use yet (no
+  // password set). Detect that case and make the required next step explicit instead
+  // of letting them hit a confusing dead end.
+  (async () => {
+    try {
+      const { data: { session } } = await sbClient.auth.getSession();
+      if (!session) {
+        document.getElementById('step1Title').textContent = 'Cek email kamu — wajib sebelum masuk';
+        document.getElementById('passwordNote').style.display = 'block';
+      }
+    } catch (e) { /* fail silent — worst case the note just doesn't show */ }
+  })();
+</script>
 </body>
 </html>
