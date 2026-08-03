@@ -696,7 +696,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         if (headline) headline.innerHTML = 'Selamat datang kembali, <em>' + name + '</em>';
         // Check enrollment for subtext
         try {
-          var enr = await sbClient.from('enrollments').select('course_slug,course_name').eq('email', s.user.email);
+          var enr = await sbClient.from('enrollments').select('course_slug,course_name,last_accessed_at').eq('email', s.user.email);
           var paid = (enr.data || []).filter(function(e){ return e.course_slug !== 'prompt-gratis'; });
           var hasAllAccess = paid.some(function(e){ return e.course_slug === 'all-access'; });
           if (subtext) subtext.textContent = hasAllAccess
@@ -729,7 +729,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
             if (lihNameEl) lihNameEl.textContent = name.split(' ')[0];
 
             var enrolledSlugs = new Set((enr.data || []).map(function(e){ return e.course_slug; }));
-            var progRes = await sbClient.from('module_completions').select('course_slug,module_num,completed_at').eq('email', s.user.email).order('completed_at', { ascending: false });
+            var progRes = await sbClient.from('module_completions').select('course_slug,module_num').eq('email', s.user.email);
             var progressRows = progRes.data || [];
             var progressMap = {};
             progressRows.forEach(function(row) {
@@ -739,12 +739,26 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
 
             // Top-of-grid "last opened" banner (dark cta-card, matching the original
             // reference design) sits right above the course picker. It shows the course
-            // you most recently studied — the greeting already lives in the hero above,
-            // so this banner is purely about resuming, not re-greeting. Only shown as a
-            // continue card if the user has a real enrollment row for that course
-            // (holding all-access with old/admin-era progress but no real enrollment
-            // shouldn't surface a direct-to-lesson CTA) — otherwise a generic start prompt.
-            var lastSlug = progressRows.length ? progressRows[0].course_slug : null;
+            // you most recently STUDIED — mirrors dashboard.html's spotlight card: pick
+            // whichever real, enrolled course (excluding the 'all-access' sentinel row)
+            // has the most recent enrollments.last_accessed_at (set by each course-content
+            // page on load), not whichever has the most recently completed module. If
+            // you're enrolled but haven't opened anything yet, fall back to the first
+            // enrolled course by LIH_COURSE_ORDER rather than suggesting something new.
+            var realEnrolled = (enr.data || []).filter(function(e){ return e.course_slug !== 'all-access' && LIH_COURSES[e.course_slug]; });
+            var lastRow = realEnrolled.reduce(function(best, e){
+              if (!best) return e;
+              var eTime = e.last_accessed_at ? new Date(e.last_accessed_at).getTime() : 0;
+              var bTime = best.last_accessed_at ? new Date(best.last_accessed_at).getTime() : 0;
+              return eTime > bTime ? e : best;
+            }, null);
+            if (!lastRow && realEnrolled.length) {
+              var sortedEnrolled = realEnrolled.slice().sort(function(a, b){
+                return LIH_COURSE_ORDER.indexOf(a.course_slug) - LIH_COURSE_ORDER.indexOf(b.course_slug);
+              });
+              lastRow = sortedEnrolled[0];
+            }
+            var lastSlug = lastRow ? lastRow.course_slug : null;
             var lastMeta = lastSlug ? LIH_COURSES[lastSlug] : null;
             var lihLabelEl = document.getElementById('lihContinueLabel');
             var lihHeadlineEl = document.getElementById('lihContinueHeadline');
