@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 147)_
+_Last updated: August 3, 2026 (checkpoint 147)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -1947,7 +1947,7 @@ Fixed `.prompt-section.latihan .prompt-label` in all three files that use the bo
 
 ---
 
-## SHIPPED (Checkpoint 143, July 31, 2026): Instrument Serif → Fraunces, site-wide
+## SHIPPED (Checkpoint 143, August 3, 2026): Instrument Serif → Fraunces, site-wide
 
 Julia asked what font "Produktivitas Kantor" (white serif on the dark "Terakhir Dibuka" continue-card on index.html) was rendered in — it was Instrument Serif, the site's shared `--serif` token used on all 26 pages that reference it, not just the lesson pages. Asked to scope the swap (lesson pages only / literally every page / just the one card); Julia chose **literally every page**.
 
@@ -1963,7 +1963,7 @@ The 4 lesson-content files (`mulai-claude-content.html`, `produktivitas-content.
 
 ---
 
-## SHIPPED (Checkpoint 144, July 31, 2026): Exercise/Latihan label unified to "🎯 Latihan" across all lesson files
+## SHIPPED (Checkpoint 144, August 3, 2026): Exercise/Latihan label unified to "🎯 Latihan" across all lesson files
 
 Last inconsistency in the Latihan box work (Checkpoints 139/140/142): `mulai-claude-content.html` still labeled its 5 hands-on boxes "📝 Exercise" (English, wrong emoji) while `produktivitas-content.html` used "📝 Latihan" (right word, wrong emoji) and `content-marketing-content.html` used "🎯 Latihan" (the target convention, since Checkpoint 140 also uses 🎯 for produktivitas's standalone `.latihan-heading`).
 
@@ -1979,7 +1979,7 @@ Renamed all 5 `mulai-claude-content.html` labels and all 5 `produktivitas-conten
 
 ---
 
-## SHIPPED (Checkpoint 145, July 31, 2026): Fixed missing PDF download button on Produktivitas Kantor
+## SHIPPED (Checkpoint 145, August 3, 2026): Fixed missing PDF download button on Produktivitas Kantor
 
 Julia uploaded a course PDF for Produktivitas Kantor via admin.html but it never appeared on the lesson page. Root cause: `course-video.js` (shared script, injects admin-set video/PDF/PPT/doc content into any lesson page) looks for a sidebar element with `id="pdf-download-slot"` to inject the "📄 Unduh Materi PDF" button into — `mulai-claude-content.html`, `content-marketing-content.html`, and `prompt-gratis-content.html` all have this div right after `.sidebar-header`, but `produktivitas-content.html` was missing it entirely, so the query succeeded (PDF row existed in `course_resources`) but had nowhere to render into, and failed silently (no console error, by design).
 
@@ -1993,7 +1993,7 @@ Added `<div id="pdf-download-slot"></div>` to `produktivitas-content.html`'s sid
 
 ---
 
-## SHIPPED (Checkpoint 146, July 31, 2026): Grouped PPT + practice-doc downloads into one "Materi Unduhan" card per module
+## SHIPPED (Checkpoint 146, August 3, 2026): Grouped PPT + practice-doc downloads into one "Materi Unduhan" card per module
 
 Julia pointed out that a module's PPT link ("Lihat K2-M02-Claude-Projects.pptx") and its practice-document list ("MATERI PRAKTIK" / "k2-m2-referensi-project.txt") rendered as two visually disconnected blocks — no shared header, so it wasn't obvious both were downloadable materials for the same module.
 
@@ -2009,7 +2009,7 @@ Updated all 5 lesson-content files (`mulai-claude-content.html`, `produktivitas-
 
 ---
 
-## SHIPPED (Checkpoint 147, July 31, 2026): Removed redundant "Ke Dashboard" button in feedback thank-you box
+## SHIPPED (Checkpoint 147, August 3, 2026): Removed redundant "Ke Dashboard" button in feedback thank-you box
 
 Julia flagged that the feedback thank-you box ("Terima kasih atas feedbackmu! 🙏") showed its own "Ke Dashboard →" button, duplicating the one already in the bottom-right nav bar right below it.
 
