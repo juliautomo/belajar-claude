@@ -164,14 +164,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 .badge-meta{font-size:11px;color:var(--ink-3);margin-top:2px;}
 
 /* EXPLORE */
-/* padding on all 4 sides (not just bottom) so hover box-shadow/lift has room to
-   render before getting clipped — overflow-x:auto here silently forces
-   overflow-y:auto too (CSS spec quirk), so without this the shadow's soft blur
-   gets hard-cut flush against the container edge and reads as a squared-off box. */
 .explore-carousel{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:10px 4px 16px;}
 .explore-carousel::-webkit-scrollbar{display:none;}
 .explore-card{min-width:200px;max-width:200px;scroll-snap-align:start;flex-shrink:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:all 0.2s;}
-.explore-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,0.08);border-color:rgba(108,71,255,0.2);}
+/* No box-shadow here on purpose — a blurred shadow under a small rounded card tends to
+   read as a squared-off halo rather than following the card's curve. Border + a faint
+   tint instead, which stays crisp at any zoom/scroll position. */
+.explore-card:hover{transform:translateY(-3px);border-color:var(--accent);background:var(--accent-dim);}
 /* .cc-soon dimming rule lives in course-card-shared.css — shared across every
    coming-soon card component on the site, don't redefine it here. */
 .ex-thumb{height:72px;display:flex;align-items:center;justify-content:center;font-size:22px;}
