@@ -240,7 +240,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
       <div>
         <div class="g-eyebrow" id="greetEyebrow"></div>
         <h1 class="g-h1" id="greetH1">Hei!</h1>
-        <p class="g-sub" id="greetSub"></p>
       </div>
       <div class="g-pill" id="greetPill" style="display:none;"></div>
     </div>
@@ -454,7 +453,6 @@ async function _init(){
     pill.textContent='✦  '+statC+' kursus diselesaikan';
     pill.style.display='flex';
   }
-  document.getElementById('greetSub').textContent=statC>0?statC+' kursus selesai — luar biasa!':activeCourses.length>0?'Lanjutkan perjalanan belajarmu.':'Mulai kursus pertamamu hari ini.';
 
   // Coming-soon courses are NOT injected into "Kursus Kamu" — even with All Access,
   // a course only becomes "yours" once you explicitly enroll (click "Mulai Kursus" in

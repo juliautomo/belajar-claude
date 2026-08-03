@@ -197,7 +197,7 @@
       <div class="sidebar-course-name">Strategi & Analisis Marketing</div>
       <div class="progress-bar-wrap">
         <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-        <span class="progress-label" id="progressLabel">0/4</span>
+        <span class="progress-label" id="progressLabel">0/3</span>
       </div>
     </div>
     <div id="pdf-download-slot"></div>
@@ -795,9 +795,11 @@ yang bisa saya buka lagi setiap kali launching produk baru.<button class="copy-b
           if (checkEl) checkEl.textContent = '✓';
           if (navEl) navEl.classList.add('done');
         });
-        updateProgress();
       }
     } catch(e) {}
+    // Always compute from CONTENT_MODULES, even with zero completions - the static "0/4"
+    // placeholder in the HTML only happened to be wrong for this exact reason.
+    updateProgress();
 
     loadExistingFeedback(session.user.email);
   }
