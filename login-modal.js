@@ -147,7 +147,7 @@
 
       <div class="m-tabs" id="m-tabs">
         <button class="m-tab active" data-tab="login">Masuk</button>
-        <button class="m-tab" data-tab="register">Daftar</button>
+        <button class="m-tab" data-tab="register" style="display:none;">Daftar</button>
       </div>
 
       <!-- Login view -->
