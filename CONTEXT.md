@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: July 31, 2026 (checkpoint 146)_
+_Last updated: July 31, 2026 (checkpoint 147)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2004,6 +2004,20 @@ Updated all 5 lesson-content files (`mulai-claude-content.html`, `produktivitas-
 **Verification**: tag-balance and CSS brace-balance checks on all 5 files (zero errors), `node --check` on `course-video.js` and every extracted inline script across the 5 files (pass), grep confirming zero leftover `ppt-slot`/`doc-slot` references and exactly the expected `downloads-slot` count per file, and a weasyprint render of produktivitas Modul 2 with mock PPT + doc data confirming the grouped card renders as one unit under a single header.
 
 **Files**: `course-video.js`, `mulai-claude-content.html`, `produktivitas-content.html`, `content-marketing-content.html`, `prompt-gratis-content.html`, `strategi-marketing-content.html`.
+
+**Commit**: `belajar-claude`: (pushed same session).
+
+---
+
+## SHIPPED (Checkpoint 147, July 31, 2026): Removed redundant "Ke Dashboard" button in feedback thank-you box
+
+Julia flagged that the feedback thank-you box ("Terima kasih atas feedbackmu! 🙏") showed its own "Ke Dashboard →" button, duplicating the one already in the bottom-right nav bar right below it.
+
+Removed the `<a href="dashboard.html">Ke Dashboard →</a>` inside `.feedback-done` across all 5 lesson-content files, keeping just the thank-you message — the bottom-right nav's "Ke Dashboard →" button (`.nav-btn.primary`) is the only way to proceed from there now. Also removed the now-dead `.feedback-done a` / `.feedback-done a:hover` CSS rules in each file since nothing renders inside `.feedback-done` but the `<p>` anymore.
+
+**Verification**: tag-balance and CSS brace-balance checks on all 5 files (zero errors), `node --check` on every extracted inline script (pass), and grep confirming zero remaining `.feedback-done a` CSS rules or middle-position "Ke Dashboard" links across all 5 files.
+
+**Files**: `mulai-claude-content.html`, `produktivitas-content.html`, `content-marketing-content.html`, `prompt-gratis-content.html`, `strategi-marketing-content.html`.
 
 **Commit**: `belajar-claude`: (pushed same session).
 
