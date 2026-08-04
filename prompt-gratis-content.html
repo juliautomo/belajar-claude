@@ -41,6 +41,15 @@
     .logout-btn { background: transparent; border: 1px solid var(--border); color: var(--ink-2); padding: 5px 12px; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: var(--font); transition: all 0.2s; }
     .logout-btn:hover { border-color: var(--accent); color: var(--ink); }
 
+  /* Mobile header — declutters to logo + Dashboard/Keluar only, matching
+     the decluttered/priority-content approach index.html uses on mobile. */
+  @media (max-width: 640px) {
+    nav { padding: 0 16px; }
+    .nav-divider, .nav-course-title, .nav-email { display: none; }
+    .nav-back { font-size: 12.5px; }
+    .logout-btn { padding: 5px 10px; font-size: 11px; }
+  }
+
     .layout { display: flex; flex: 1; overflow: hidden; }
 
     /* Sidebar */

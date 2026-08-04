@@ -36,6 +36,15 @@
   .nav-back:hover{color:var(--ink);}
   .logout-btn{background:#fff;border:1px solid var(--border);color:#555;padding:7px 14px;border-radius:9px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all 0.2s;}
   .logout-btn:hover{border-color:var(--accent);color:var(--ink);}
+
+  /* Mobile header — declutters to logo + Dashboard/Keluar only, matching
+     the decluttered/priority-content approach index.html uses on mobile. */
+  @media (max-width: 640px) {
+    nav { padding: 0 16px; }
+    .nav-divider, .nav-course-title, .nav-email { display: none; }
+    .nav-back { font-size: 12.5px; }
+    .logout-btn { padding: 5px 10px; font-size: 11px; }
+  }
   .layout{display:flex;flex:1;overflow:hidden;}
   .sidebar{width:280px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;padding-top:6px;}
   .sidebar-header{padding:22px 22px 18px;border-bottom:1px solid var(--border);}
