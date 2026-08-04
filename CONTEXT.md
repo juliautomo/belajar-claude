@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 4, 2026 (checkpoint 156)_
+_Last updated: August 4, 2026 (checkpoint 157)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2146,6 +2146,24 @@ On the site side, all 10 pages that render a footer (`index.html`, `all-access.h
 **Files**: `admin.html`, `index.html`, `all-access.html`, `content-marketing.html`, `mulai-claude.html`, `produktivitas.html`, `prompt-gratis.html`, `strategi-marketing.html`, `kebijakan-pengembalian.html`, `kebijakan-privasi.html`, `syarat-ketentuan.html`. Supabase migration: `add_contact_whatsapp_to_social_links`.
 
 **Commit**: `belajar-claude`: `174aa65`.
+
+---
+
+## SHIPPED (Checkpoint 157, August 4, 2026): Full-system health check + storage bucket listing lockdown
+
+Julia asked for a whole-system check — everything working, anything stale, anything worth improving. Audited both repos end-to-end rather than just the frontend:
+
+**Confirmed healthy, no action needed**: live site (Cloudflare Workers) renders correctly end-to-end; every inline `<script>` block across all 33 HTML pages plus all 4 standalone `.js` files and the backend's 3 `.js` files pass `node --check` clean; every local `href`/`src` file reference resolves (zero 404s); the 5 retired-course redirect stubs (`kursus-karyawan.html`, `kursus-mahasiswa.html`, `kursus-ukm.html`, `paket-content-creator.html`, `paket.html`) correctly bounce to `all-access.html`; no leftover `vercel.app`/`github.io`/`bisnis-ukm`/`kerja-sehari-hari` references anywhere; Supabase schema matches what every page/admin panel actually queries (including the new `contact_whatsapp` columns from Checkpoint 156); RLS is enabled on all 11 `public` tables with admin-write policies correctly scoped to the two admin emails via `auth.jwt() ->> 'email'`; the backend's inert legacy `COURSES` entries (old paket/single-course SKUs) are deliberately kept as metadata-only per an explicit code comment, not dead code — `/create-payment` already 410s anything but `all-access`.
+
+**False alarm, resolved by direct comparison**: both local mounted repos show as "15+ commits behind / all files modified" under `git status` — this is the known stray-`.git`-lock-file sandbox issue (first diagnosed Checkpoint 62), not real drift. Cloned fresh copies of both `origin/main` branches into `/tmp` and diffed byte-for-byte against the mounted working trees — zero differences in either repo. The live file content Julia sees always matches GitHub; only the local `.git` bookkeeping lags.
+
+**Real, fixed this checkpoint — storage bucket listing.** Supabase's security advisor flagged all 4 storage buckets (`course-documents`, `course-pdfs`, `course-ppts`, `course-videos`) as allowing directory listing/enumeration via their `"Public read *"` SELECT policies on `storage.objects`. Verified these buckets are `public = true` at the bucket level, meaning direct-URL downloads (the only access pattern the app actually uses — grep-confirmed `admin.html` only calls `.upload()`/`.getPublicUrl()`/`.remove()`, never `.list()` or `.download()` via the SDK) don't depend on that SELECT policy at all; Supabase's public-bucket CDN serves known object keys regardless of RLS. Dropped all 4 `"Public read *"` policies (migration `restrict_public_bucket_listing`) — this removes the ability to enumerate all files in a bucket while leaving uploads, admin management, and every real download link (verified live against `course-pdfs/prompt-gratis/...20-prompt-claude-terbaik.pdf`, content downloads correctly) completely unaffected. Security advisor confirms all 4 `public_bucket_allows_listing` warnings are cleared.
+
+**Flagged, not actioned — needs Julia**: Leaked Password Protection is disabled in Supabase Auth (checks new passwords against HaveIBeenPwned before allowing signup/reset). No MCP tool covers Auth config, only SQL/migrations — this has to be toggled manually in the Supabase dashboard under Authentication → Policies/Settings → Password Security.
+
+**Deliberately left as low-priority backlog, not fixed this pass** (all pure performance nits, irrelevant at current data volume — table row counts are in the single/low-double digits): ~20 RLS policies across 9 tables re-evaluate `auth.<fn>()` per row instead of once per query (fix: wrap in `(select auth.<fn>())`); `social_links` and `course_visibility` each have a redundant admin-`ALL` + public-`SELECT` policy overlap for the `SELECT` action; one unused index (`idx_module_completions_email`). Also noted but not touched: internal CSS ids and `localStorage` keys (`klaud-modal`, `klaud_progress_*`) still carry the pre-rebrand name — invisible to users, cosmetic only.
+
+**Commit**: `belajar-claude`: (this checkpoint, `CONTEXT.md` only — no frontend code changed). Supabase migration: `restrict_public_bucket_listing` (already applied to production `ctqtdqbsucbhikwnagvl`).
 
 ---
 
