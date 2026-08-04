@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 4, 2026 (checkpoint 160)_
+_Last updated: August 4, 2026 (checkpoint 161)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2222,6 +2222,20 @@ Same-day follow-up closing out the blocker from Checkpoint 159. Julia generated 
 **Commit**: `belajar-claude`: (this checkpoint, `CONTEXT.md` only — no frontend code changed). Supabase migration: `restrict_public_bucket_listing` (already applied to production `ctqtdqbsucbhikwnagvl`).
 
 ---
+
+## SHIPPED (Checkpoint 161, August 4, 2026): Critical — `.git` folder and internal docs were publicly served on the live site; fixed same-session
+
+Found while helping Julia locate the `dev` preview URL: a Cloudflare Workers Build log she shared showed `wrangler` uploading `/.git/HEAD`, `/.git/index`, `/.git/objects/pack/*.pack`, `/.git/logs/HEAD`, and `/.wrangler/tmp/...` as static assets. Root cause: `wrangler.jsonc`'s `assets.directory` is `.` (the whole repo root, checked out fresh by Cloudflare's build clone), and the project had no `.assetsignore` file — Workers static assets serves *everything* in that directory as a public file by default, unlike Cloudflare Pages which auto-excludes `.git`/`node_modules`/etc.
+
+**Verified the real-world impact before and after fixing**, not just the build log: fetched `https://belajarclaude.id/.git/HEAD` and `https://belajarclaude.id/.git/config` directly — both returned live content (not 404), confirming the `.git` folder was genuinely reachable by anyone, not just a theoretical risk from the log. Went further and checked `https://belajarclaude.id/CONTEXT.md` — **also fully publicly downloadable**, the entire internal project history/decisions log, not just `.git` internals. Neither exposure appears to have included the GitHub PAT used for pushes (that lives only in each contributor's local `.git/config` on their own machine, never committed to the repo — Cloudflare's build clone uses its own separate, Cloudflare-managed auth to fetch from GitHub, unrelated to that token), but a `.git` folder being scrapeable is a well-known real vulnerability class regardless (full commit history reconstruction, including anything ever committed and later removed) and `CONTEXT.md` being public is a straightforward internal-info leak on its own.
+
+**Fixed immediately, treated as an exception to the dev-first workflow** given a live, real security exposure rather than a routine change: added `.assetsignore` (Cloudflare's own mechanism for this, analogous to `.gitignore`) excluding `.git`, `.wrangler`, `.github`, `node_modules`, `.DS_Store`, and — since they're internal project docs, not site content — `CONTEXT.md`, `TEAM-WORKFLOW.md`, `ci-check.js`. Pushed to `dev` (`8327b83`) and immediately after, directly to `main` (`adfb6c5`) rather than waiting for a normal merge cycle. Waited for the Cloudflare auto-deploy and **re-verified against the live site**: `.git/HEAD` and `CONTEXT.md` now both return nothing (404) where they returned real content minutes earlier; `index.html` and the rest of the live site continue to work normally — confirmed the fix didn't break anything else.
+
+**Also answered along the way**: the `dev` preview link isn't stable per-push — the "Version Preview URL" (`https://<hash>-belajar-claude.belajarclaude-id.workers.dev`) is unique to every single deployment — but Cloudflare also generates a **stable alias that doesn't change**, `https://dev-belajar-claude.belajarclaude-id.workers.dev`, tied to the branch name itself and always pointing at the latest `dev` deployment. That's the one worth bookmarking. Also explained a Chrome "this site looks fake" warning Julia hit on the hash-based preview URL — a false positive from Chrome's lookalike-domain heuristic (the workers.dev subdomain contains "belajarclaude" as a substring), not a real threat, safe to dismiss for URLs sourced directly from her own Cloudflare dashboard.
+
+**Files**: `.assetsignore` (new, both `main` and `dev`), `CONTEXT.md`.
+
+**Commits**: `belajar-claude`: `adfb6c5` (`.assetsignore` on `main`, live), `8327b83` (`.assetsignore` on `dev`).
 
 ## Design System (as of June 2026)
 All pages use these CSS variables:
