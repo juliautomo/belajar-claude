@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 4, 2026 (checkpoint 158)_
+_Last updated: August 4, 2026 (checkpoint 159)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2184,6 +2184,24 @@ Julia is bringing on a friend to co-manage the project, each working from her ow
 **Files**: `TEAM-WORKFLOW.md` (new, both `main` and `dev`), `CONTEXT.md`. New branch: `dev` (branched from `main` at commit `572e7f8`).
 
 **Commits**: `belajar-claude`: `572e7f8` (`TEAM-WORKFLOW.md` on `main`), `dev` branch pushed from the same commit.
+
+---
+
+## SHIPPED (Checkpoint 159, August 4, 2026): CI check script added; staging DB and workflow-file blockers surfaced
+
+Follow-up same day. Went through the pending list from Checkpoint 158 in priority order:
+
+**Staging Supabase project — blocked, deferred by Julia's choice, not a bug.** Attempted to provision a second free Supabase project for staging. Supabase's free tier caps an org member at 2 active free projects; Julia is already at that cap (`ctqtdqbsucbhikwnagvl` production + an existing `Personal` project, unrelated to this app, created May 30 2026). Asked Julia how to proceed (pause the Personal project / upgrade the org / skip for now) — she chose to skip for now rather than touch the unrelated project. No staging database exists yet; revisit if she later frees up a project slot or upgrades.
+
+**CI syntax/link check — script shipped to `dev`, but the automation half is blocked on a GitHub token permission.** Wrote `ci-check.js` (repo root) — a dependency-free Node script that: extracts every inline `<script>` block from every `.html` file and syntax-checks each with `node --check`; syntax-checks every standalone `.js` file the same way; and verifies every local `href`/`src` file reference actually resolves on disk. This is the same manual sweep from Checkpoint 157, now a committed, repeatable script — tested clean against the current repo (27 HTML files, 4 JS files, 23 references, zero problems) before pushing. Pushed to `dev` (commit `1b9f2b5`).
+
+The other half — a `.github/workflows/check.yml` GitHub Actions file that would run `ci-check.js` automatically on every push/PR to `dev`/`main` — **could not be pushed**: GitHub rejected it with `refusing to allow a Personal Access Token to create or update workflow ".github/workflows/check.yml" without workflow scope`. The PAT stored in this repo's `.git/config` (per the Git/Claude Workflow section above) has repo-content write access but not the separate `workflow` OAuth scope GitHub requires specifically for anything under `.github/workflows/`. **This needs Julia to regenerate the PAT with the `workflow` scope included** (GitHub → Settings → Developer settings → Personal access tokens → edit/regenerate → check the `workflow` box alongside `repo`) and update it in both repos' `.git/config` the same way past token rotations have been handled (see Git/Claude Workflow section) — a future session can push the workflow file itself once that's done; `ci-check.js` is already in place and ready to be called by it. In the meantime, `ci-check.js` still works as a manual check — any session can run `node ci-check.js` from the repo root before pushing.
+
+**Cloudflare non-production branch builds — still pending Julia's dashboard click**, unchanged from Checkpoint 158 (no API access to Workers Build settings from here).
+
+**Files**: `ci-check.js` (new, `dev` branch only pending merge), `CONTEXT.md`.
+
+**Commits**: `belajar-claude`: `1b9f2b5` (`ci-check.js` on `dev`).
 
 **Deliberately left as low-priority backlog, not fixed this pass** (all pure performance nits, irrelevant at current data volume — table row counts are in the single/low-double digits): ~20 RLS policies across 9 tables re-evaluate `auth.<fn>()` per row instead of once per query (fix: wrap in `(select auth.<fn>())`); `social_links` and `course_visibility` each have a redundant admin-`ALL` + public-`SELECT` policy overlap for the `SELECT` action; one unused index (`idx_module_completions_email`). Also noted but not touched: internal CSS ids and `localStorage` keys (`klaud-modal`, `klaud_progress_*`) still carry the pre-rebrand name — invisible to users, cosmetic only.
 
