@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 4, 2026 (checkpoint 164)_
+_Last updated: August 4, 2026 (checkpoint 166)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2290,6 +2290,34 @@ Direct follow-up, same session, closing out the item Checkpoint 163 flagged as n
 **Files**: `belajar-claude`: `backend-config.js` (`dev` only), `CONTEXT.md`, `TEAM-WORKFLOW.md` (`main` + `dev`).
 
 **Commits**: `belajar-claude`: pending push this checkpoint.
+
+## SHIPPED (Checkpoint 165, August 4, 2026): `dev` merged into `main` — checkpoints 158-164 now live
+
+Julia gave the go-ahead to merge, with an explicit requirement: confirm nothing changes for real users. Merged `dev` into `main` on `belajar-claude` (fast-forward, commit `3f2b76f` — "Merge dev into main: backend-config.js consolidation, CI check, dev/prod collaboration workflow (checkpoints 158-164)"). This brings the CI workflow, `.assetsignore` security fix (already on `main` directly since Checkpoint 161), `backend-config.js` consolidation, and the real dev/prod Duitku split onto production.
+
+**Verified behavior-neutral empirically, not just asserted**: after Cloudflare's auto-deploy, re-fetched the live site and confirmed `backend-config.js`'s hostname check routes `belajarclaude.id` to the same production backend URL as before (no change to real checkout traffic), and spot-checked page content matched pre-merge. The `belajar-claude-backend` repo's own `dev`→`main` merge (Duitku env configurability, `dd8a573`) was already done in Checkpoint 163/164's window and is similarly a no-op by default (`DUITKU_ENV` unset on production, same as before — still sandbox until Julia's Duitku approval clears).
+
+**Files**: `belajar-claude` only (merge commit, no new file changes). `CONTEXT.md` this checkpoint.
+
+**Commits**: `belajar-claude`: `3f2b76f`.
+
+## SHIPPED (Checkpoint 166, August 4, 2026): FAQ page added, footer "Hubungi Kami" restructured to "Bantuan" (FAQ + Email + WhatsApp)
+
+Julia asked for an FAQ page sourced from a Google Doc, added to the footer under a "Help" grouping alongside the existing email/WhatsApp links. Confirmed with her that this targets `dev` first, per the standing workflow.
+
+**Sourced the content directly from Julia's Google Doc** (not publicly shared — used the Google Drive connector's `read_file_content`, authenticated as Julia's own account, rather than a public fetch) — 17 Q&As across 5 categories, transcribed verbatim.
+
+**New `faq.html`** — built from `kebijakan-privasi.html`'s template (same nav/footer/CSS-variable pattern as every other page) with a native `<details>/<summary>` accordion (no JS framework needed), grouped by category, plus a "still have questions" contact box wired to the same `social_links` Supabase query every other page uses for email/WhatsApp.
+
+**Footer restructured on all 11 pages** (`faq.html` + the 10 existing pages that carry the shared footer: `all-access.html`, `content-marketing.html`, `index.html`, `kebijakan-pengembalian.html`, `kebijakan-privasi.html`, `mulai-claude.html`, `produktivitas.html`, `prompt-gratis.html`, `strategi-marketing.html`, `syarat-ketentuan.html`): the "Hubungi Kami" column — previously hidden by default (`id="footerContactLinks" style="display:none;"`, only shown via JS once email/WhatsApp data loaded) — is now a permanently-visible "Bantuan" column with a static "FAQ" link listed first, followed by the same conditional Email/WhatsApp items as before. Removed the now-obsolete `document.getElementById('footerContactLinks').style.display = 'block'` JS lines (2 per file, 20 total) since the div no longer needs JS to reveal it.
+
+**Verification**: confirmed via grep no `footerContactLinks` references remain anywhere, all 11 pages link to `faq.html`, and `ci-check.js` passes clean (28 HTML files, 5 JS files, 25 local references, nothing broken) both before and after copying into a fresh scratch clone for the push — done deliberately via a clean `/tmp` clone rather than committing from the local working copy, since the local copy currently has a large amount of unrelated, uncommitted local edits (course PDFs/PPTX/CSVs) that aren't part of this change and shouldn't be swept into this push.
+
+**Pushed to `dev` only** (`26dc634`), matching Julia's own expectation stated in her request. Not merged to `main` — this is a straightforward content/layout change with no payment or database involvement, so it's safe to merge whenever Julia wants to review the dev preview first.
+
+**Files**: `belajar-claude`: `faq.html` (new), `all-access.html`, `content-marketing.html`, `index.html`, `kebijakan-pengembalian.html`, `kebijakan-privasi.html`, `mulai-claude.html`, `produktivitas.html`, `prompt-gratis.html`, `strategi-marketing.html`, `syarat-ketentuan.html` — all `dev` only.
+
+**Commits**: `belajar-claude`: `26dc634`.
 
 ## Design System (as of June 2026)
 All pages use these CSS variables:
