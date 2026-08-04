@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 4, 2026 (checkpoint 169)_
+_Last updated: August 4, 2026 (checkpoint 170)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2356,6 +2356,22 @@ Follow-up polish on the Checkpoint 168 tabbed demo, still on `dev`: the "Pemilik
 **Files**: `belajar-claude`: `index.html` (persona emoji, `dev` only until the merge), `CONTEXT.md`.
 
 **Commits**: `belajar-claude`: `dbdea3b`, `787b5d0`, `b530d58`, `edd115b` (all `dev`), merged to `main` via `c14e270`.
+
+## SHIPPED (Checkpoint 170, August 4, 2026): Two mobile-only layout bugs found and fixed — dashboard course rows, and site-wide nav
+
+Both surfaced from Julia testing on her phone against the just-merged `main`. Both are mobile-only (desktop untouched), pushed to `dev`.
+
+**1. Dashboard "Kursus Kamu" rows overlapping on mobile.** The row (index number, thumbnail, title, progress bar, action button) has no room for all of that on one line on a phone, and flexbox doesn't reserve space for overflowing content — the progress percentage was rendering visually underneath the "Mulai"/"Lanjutkan" button instead of wrapping. First attempt (`8c8a7f8`) used flex `order` + `flex-wrap` to force a two-row layout, which turned out to be width-dependent: it worked for the short "Mulai" label but the longer "Lanjutkan" label didn't fit the same way and wrapped onto its own line, landing lower and not flush right — inconsistent between rows depending on which button label a given course happened to have. Fixed properly (`336f6c5`) by switching to CSS Grid with explicit named areas (`grid-template-areas: "idx thumb . button" "info info info info"`) — this is deterministic regardless of button text length, since Grid placement isn't driven by content-width wrapping the way flex is.
+
+**2. Nav links unreachable on mobile, site-wide.** `index.html`'s mobile media query did `.nav-links { display: none; }` with no replacement — "Kursus," "Masuk" (login), and the whole logged-in account dropdown (Dashboard/Admin/Keluar) were completely unreachable from the header on any phone. Fixed on `index.html` first (`b84323f`) by adding a hamburger button (`#navHamburger`) that toggles `#navLinks` into a fixed dropdown panel below the nav bar, closing on outside click / Escape / tapping a link inside it — `toggleMobileNav()` in JS, doesn't touch the existing logged-in-state logic (`nav-user-pill`'s display is still JS-controlled exactly as before).
+
+Julia asked for this rolled out everywhere for consistency. Investigated first (six other pages — `strategi-marketing.html`, `prompt-gratis.html`, `produktivitas.html`, `mulai-claude.html`, `content-marketing.html`, `all-access.html` — share this exact same nav component, confirmed byte-for-byte identical to each other) and found their bug was actually different from `index.html`'s original one: none of them hid `.nav-links` at all, it just stayed `display:flex` at every width with no dedicated mobile treatment, so links technically stayed reachable but crowded/unpolished, inconsistent with the newly-fixed `index.html` pattern. Applied the same hamburger pattern to all 6 (`84a45e9`) via a scripted find-and-replace (all 6 files being identical made this safe — verified with an exact-match count check per anchor string before writing, so nothing silently no-ops on a mismatch) rather than one-by-one manual edits. Their existing `@media (max-width: 768px)` block (already bundling other page-specific mobile rules) was extended in place rather than adding a second, duplicate breakpoint block.
+
+**Also fixed while in `index.html`**: the gap between the hero and the "Dari Pekerjaan Sehari-hari" section was 152px on mobile (hero's 64px bottom padding + the section's 88px top padding, neither of which had ever been tuned for small screens) — trimmed to 32px + 56px.
+
+**Files**: `belajar-claude`: `dashboard.html`, `index.html`, `strategi-marketing.html`, `prompt-gratis.html`, `produktivitas.html`, `mulai-claude.html`, `content-marketing.html`, `all-access.html` — all `dev` only.
+
+**Commits**: `belajar-claude`: `8c8a7f8`, `336f6c5` (dashboard), `b84323f` (index.html nav + hero gap), `84a45e9` (nav rolled out to the other 6 pages).
 
 ## Design System (as of June 2026)
 All pages use these CSS variables:
