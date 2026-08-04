@@ -193,16 +193,26 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 @keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:900px){.sidebar{display:none;}.main{padding:24px 20px;}}
 /* Mobile "Kursus Kamu" / "Kursus Selesai" rows — on a narrow screen there isn't
-   room for idx + thumb + title + progress + button on one line, and flexbox
-   doesn't reserve space for overflowing content, so the progress text was
-   sliding underneath the action button instead of wrapping. Restructured into
-   two rows: idx/thumb/button on top, full-width title + progress below. */
+   room for idx + thumb + title + progress + button on one line. First attempt
+   used flex "order" + wrap, but that's width-dependent: the short "Mulai"
+   label wrapped onto its own row cleanly while the longer "Lanjutkan" label
+   didn't fit the same way, landing lower and not flush to the edge. CSS Grid
+   with named areas is deterministic regardless of button text length —
+   idx/thumb/button always sit on row 1, title+progress always fill row 2. */
 @media(max-width:560px){
-  .enrolled-card{flex-wrap:wrap;padding:16px 18px;row-gap:10px;}
-  .enrolled-idx{order:1;}
-  .enrolled-thumb{order:2;width:40px;height:40px;font-size:19px;}
-  .resume-btn{order:3;margin-left:auto;}
-  .enrolled-info{order:4;flex:1 1 100%;min-width:100%;}
+  .enrolled-card{
+    display:grid;
+    grid-template-columns:auto auto 1fr auto;
+    grid-template-areas:"idx thumb . button" "info info info info";
+    align-items:center;
+    column-gap:14px;
+    row-gap:10px;
+    padding:16px 18px;
+  }
+  .enrolled-idx{grid-area:idx;width:auto;}
+  .enrolled-thumb{grid-area:thumb;width:40px;height:40px;font-size:19px;}
+  .resume-btn{grid-area:button;justify-self:end;}
+  .enrolled-info{grid-area:info;}
   .enrolled-info h3{white-space:normal;overflow:visible;text-overflow:clip;}
 }
 </style>
