@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 4, 2026 (checkpoint 163)_
+_Last updated: August 4, 2026 (checkpoint 164)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2270,6 +2270,28 @@ Direct follow-up to Checkpoint 162's finding. Julia pushed back on the assumptio
 **Files**: `belajar-claude`: `backend-config.js` (new), `all-access.html`, `login.html`, `coming-soon.html`, `login-modal.js`, `index.html`, `content-marketing.html`, `mulai-claude.html`, `produktivitas.html`, `prompt-gratis.html`, `strategi-marketing.html` — all on `dev` only. `belajar-claude-backend`: `index.js` — on new `dev` branch only. `CONTEXT.md`, `TEAM-WORKFLOW.md`.
 
 **Commits**: `belajar-claude`: `3fd978b` (`dev`). `belajar-claude-backend`: `dd8a573` (`dev`, new branch).
+
+---
+
+## SHIPPED (Checkpoint 164, August 4, 2026): Real dev/prod Duitku split completed — second Railway environment provisioned
+
+Direct follow-up, same session, closing out the item Checkpoint 163 flagged as needing manual Railway setup. Julia provisioned it live, screen-sharing each step:
+
+**Railway GitHub connection issue found and fixed along the way**: the existing production service showed "GitHub Repo not found" under Settings → Source, unrelated to today's work — likely stale from the repo's earlier rename (`klaud-backend` → `belajar-claude-backend`, see Checkpoint ~8). Checked GitHub's side first (Settings → Installed GitHub Apps → Railway → already set to "All repositories," not a permissions problem), then fixed it via a plain disconnect/reconnect on the Railway service itself, which resolved after a short propagation delay.
+
+**Used Railway's native Environments feature** (cleaner than manually duplicating a service, which was the original plan) — created a new "dev" environment under the existing `belajar-claude` project, cloned from "production" (carries over the shared env vars — Supabase, SendGrid, Google Sheets — automatically), then changed just that environment's branch from `main` to `dev` under Settings → Source. Confirmed `DUITKU_ENV` was correctly absent from both environments (never set on production either, intentionally — see Checkpoint 163), so the clone needed no cleanup there. Duitku merchant credentials in this dev environment are whatever was already in production (presumably the original/sandbox account) — left as-is, sufficient for sandbox testing.
+
+**Got the dev backend's public URL** from Settings → Networking: `https://belajar-claude-backend-dev.up.railway.app`. Updated `backend-config.js`'s ternary to actually use it (previously both branches pointed at the same production URL as a placeholder) — production traffic (`belajarclaude.id`) still routes to the real backend, everything else now genuinely routes to this new sandbox-backed dev service. Verified with `ci-check.js` — clean.
+
+**Still pushed to `dev` only, not merged to `main`** — same reasoning as Checkpoint 163, this is payment-adjacent code and merging is Julia's call even though the change is safe. Updated `TEAM-WORKFLOW.md`'s "Payments: dev vs. production" section to describe the now-real setup (URLs, what's left for going to real production, and the still-true caveat that both Railway environments share the one real Supabase database, so a fully-completed sandbox test purchase still writes a real — just $0 — row to production `enrollments`).
+
+**Still outstanding**: the actual production cutover (setting real `DUITKU_MERCHANT_CODE`/`DUITKU_API_KEY` + `DUITKU_ENV=production` on the **production** Railway environment specifically) is blocked on Julia's pending Duitku merchant approval — not a technical blocker, just waiting on Duitku's side. When that clears, only the production environment's env vars need touching; the dev environment is unaffected either way.
+
+**Files**: `belajar-claude`: `backend-config.js` (`dev` only), `CONTEXT.md`, `TEAM-WORKFLOW.md` (`main` + `dev`).
+
+**Commits**: `belajar-claude`: pending push this checkpoint.
+
+## Design System (as of June 2026)
 All pages use these CSS variables:
 ```css
 --bg: #FAFAFA;

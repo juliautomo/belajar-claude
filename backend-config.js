@@ -3,14 +3,11 @@
 // signup, etc.) — every page that calls the backend should use BACKEND_URL from
 // here instead of hardcoding the Railway URL directly.
 //
-// Today, dev and production both point at the SAME real backend, because no
-// separate dev backend service exists yet (see TEAM-WORKFLOW.md — "What dev does
-// NOT protect you from"). That means checkout and sign-up are still real
-// regardless of which URL you're using, even after this change.
-//
-// Once a second Railway service exists for `dev` (with its own sandbox Duitku
-// credentials), only this one file needs to change — update the URL below for
-// the non-production branch, instead of hunting through every page again.
+// Real dev/prod split, as of the second Railway environment set up under the
+// belajar-claude-backend project (environment "dev", branch `dev`, sandbox Duitku
+// credentials, DUITKU_ENV unset). Production traffic (belajarclaude.id) hits the
+// real backend; everything else (dev preview URLs, local file testing, etc.)
+// hits the dev backend, which uses Duitku's sandbox — no real money moves there.
 const BACKEND_URL = (location.hostname === 'belajarclaude.id')
-  ? 'https://klaud-backend-production.up.railway.app'   // production
-  : 'https://klaud-backend-production.up.railway.app';  // TODO: point at the dev Railway service once it exists
+  ? 'https://klaud-backend-production.up.railway.app'    // production — real Duitku once DUITKU_ENV=production is set there
+  : 'https://belajar-claude-backend-dev.up.railway.app';  // dev — sandbox Duitku, no real money
