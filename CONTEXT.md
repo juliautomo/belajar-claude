@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 4, 2026 (checkpoint 161)_
+_Last updated: August 4, 2026 (checkpoint 162)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2237,7 +2237,19 @@ Found while helping Julia locate the `dev` preview URL: a Cloudflare Workers Bui
 
 **Commits**: `belajar-claude`: `adfb6c5` (`.assetsignore` on `main`, live), `8327b83` (`.assetsignore` on `dev`).
 
-## Design System (as of June 2026)
+---
+
+## SHIPPED (Checkpoint 162, August 4, 2026): Full recheck after the day's changes; documented that dev/prod does NOT cover the database or backend
+
+Julia asked for a full recheck after the day's flurry of changes (new branches, new PAT, CI script, `.assetsignore` fix), plus a direct question that surfaced an important gap: does `admin.html` behave differently on `dev` vs `main`?
+
+**Recheck, all clean**: dev preview URL (`dev-belajar-claude.belajarclaude-id.workers.dev`) confirmed working and correctly blocking `.git`/`CONTEXT.md` same as production; `ci-check.js` re-run clean (27 HTML files, 4 JS files, 23 references, zero problems); backend's 3 files re-verified with `node --check`; Supabase security advisors re-checked, no new issues (same single known item as before — leaked password protection, Pro-plan-gated, already decided to skip); `main`/`dev` branch diff confirmed `dev` is exactly `main` plus only the not-yet-merged CI workflow file and script, no unexpected drift; spot-checked a second live page (`prompt-gratis.html`) beyond just the homepage.
+
+**Real gap found and documented — the dev/prod split is code-only, not data-only.** Checked `supabase-config.js`: one hardcoded Supabase URL+key, no environment switching logic at all. Grepped for the backend URL across the frontend and found it hardcoded directly into `all-access.html`, `login.html`, `login-modal.js`, and `coming-soon.html` (`https://klaud-backend-production.up.railway.app`) — meaning every page, regardless of which branch/URL it's served from, talks to the exact same real database, real storage buckets, and real payment/email backend. Concretely this means: `admin.html` opened via the dev link still reads/writes the real production database (course files, pricing, social links) — no separate practice database exists (the staging Supabase project was deferred earlier this session, blocked by the free-tier 2-project cap); and testing the "Beli All Access" checkout button or the sign-up form on the dev link creates a **real Duitku payment attempt and a real customer account**, identical to doing it on the live site, since the frontend calls the one real backend directly.
+
+**Documented in `TEAM-WORKFLOW.md`** under a new section, "What `dev` does NOT protect you from" — plain-language, written for both non-technical owners: admin page changes, checkout/sign-up, and file uploads are always real regardless of which link is used; the CI check catches broken code but not logic bugs and isn't a hard merge-blocker (no branch protection configured); `dev` is genuinely safe only for page content/layout/copy changes. This is the single most important caveat in the whole workflow doc, since it's the one place the "dev is a safe sandbox" mental model actually breaks down.
+
+**Files**: `TEAM-WORKFLOW.md`, `CONTEXT.md` (both `main` and `dev`).
 All pages use these CSS variables:
 ```css
 --bg: #FAFAFA;
