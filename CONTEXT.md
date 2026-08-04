@@ -2024,6 +2024,115 @@ Removed the `<a href="dashboard.html">Ke Dashboard →</a>` inside `.feedback-do
 
 ---
 
+## SHIPPED (Checkpoint 148, August 3, 2026): Duitku merchant switch + SendGrid link-tracking bug fixed + guest-checkout post-purchase flow made session-aware
+
+Julia created a fresh Duitku merchant account (the old one stays as a dead reference) and switched Railway's env vars to it herself. Two follow-on fixes:
+
+**Order-ID prefix changed `KLAUD-` → `BC-`** (`belajar-claude-backend/index.js`) to match the new merchant identity, with the webhook's `merchantOrderId` parser updated to accept *either* prefix (`/^(BC|KLAUD)-/`) so any order already in-flight under the old prefix at cutover time still resolves correctly. Verified live against a real production order reference. Backend commit `235020b`.
+
+**Root-caused a silent guest-checkout breakage**: the "set password" button in the access email silently failed to work, while the plain-text link in the same email worked fine — despite both using the identical `ctaLink` value in source. Traced to SendGrid's click-tracking rewriting the button's `<a href>` into a `sendgrid.net` redirect wrapper; something (scanner/prefetch) was visiting that wrapped link before the real user did, burning the one-time-use Supabase recovery token before the user ever clicked. Fixed in `belajar-claude-backend/mailer.js`: disabled `tracking_settings.click_tracking` on the SendGrid API call, and removed the now-redundant plain-text link line from the email template. Backend commit `ed47661`.
+
+**Post-purchase flow made session-aware** (`payment-success.html`, `payment-success-modal.js`): previously, every guest-checkout purchase auto-redirected/pointed at a dashboard login the buyer couldn't use yet (no password set). Both files now check `sbClient.auth.getSession()` on load — if a session already exists (returning buyer), skip straight to the dashboard; if not (fresh guest purchase), stay on the page/modal with copy pointing explicitly at "check your email to set a password," no premature dashboard link, no auto-close countdown. Commit `b816452`.
+
+**Files**: `belajar-claude-backend/index.js`, `belajar-claude-backend/mailer.js`, `payment-success.html`, `payment-success-modal.js`.
+
+**Commits**: `belajar-claude-backend`: `235020b`, `ed47661`. `belajar-claude`: `b816452`.
+
+---
+
+## SHIPPED (Checkpoint 149, August 3, 2026): Self-serve "Daftar" signup removed
+
+Accounts are now only ever created server-side via the guest-checkout webhook (see Checkpoint 49/148) — there's no legitimate path where someone should be registering through the login page directly anymore. Hid the "Daftar" tab button in both `login.html` and `login-modal.js` (`style="display:none;"`); the underlying register view/JS was left intact rather than deleted, in case it's needed again. Commit `0e46dd3`.
+
+**Files**: `login.html`, `login-modal.js`.
+
+**Commit**: `belajar-claude`: `0e46dd3`.
+
+---
+
+## SHIPPED (Checkpoint 150, August 3, 2026): Dashboard "Continue Learning" spotlight card + explore-carousel shadow-clip fix
+
+Ported a progress-ring "Continue Learning" spotlight card from an uploaded design mockup (`dashboard-redesign-preview.html`) into the real `dashboard.html`, using the site's actual fonts (Fraunces/Geist, not the mockup's fonts) and wired to real progress data instead of the mockup's static placeholder numbers. New CSS component classes: `.spotlight`, `.spot-card` (+ gradient-blob pseudo-elements matching the existing `.aa-card`/`.mulai-card` visual language), `.spot-ring` (SVG progress ring), `.spot-info`, `.spot-eyebrow` (blinking dot), `.spot-title`, `.spot-meta`, `.btn-spot`, `.spot-ripple` (click feedback). Populated from whichever enrolled, not-yet-completed course had the highest completion % at the time (this selection logic was later changed to "most recently visited" — see Checkpoint 153).
+
+**Also fixed a real CSS bug** in the same file: `.explore-carousel`'s hover shadow/lift on course cards looked "squared off"/clipped. Root cause: `overflow-x: auto` on the carousel silently forces `overflow-y: auto` too (a genuine CSS spec quirk), which was hard-clipping the shadow's soft blur flush against the container edge. Fixed by adding padding on all 4 sides of the carousel instead of just the bottom.
+
+**Files**: `dashboard.html`.
+
+**Commits**: `belajar-claude`: `ab11d80`.
+
+---
+
+## SHIPPED (Checkpoint 151, August 3, 2026): Site-wide naming/pricing-card consistency pass
+
+Several small but genuine inconsistencies, found and fixed together:
+
+- **"Dasar Claude AI" vs "Mulai dengan Claude AI"**: the course was renamed at some point but the old name had survived in `admin.html`'s course list, `mulai-claude.html`'s hero `<h1>`, `mulai-claude-content.html` (9 occurrences — title tag, nav, sidebar, 4 breadcrumbs, completion message), and a cross-sell card in `prompt-gratis-content.html`. All standardized to "Dasar Claude AI" (confirmed as the correct/current name via majority-of-surfaces + the page's own `<title>` tag).
+- **Beginner/Intermediate level tags removed** from the hero `.level-tag` on all 5 course preview pages (`prompt-gratis.html`, `mulai-claude.html`, `produktivitas.html`, `content-marketing.html`, `strategi-marketing.html`) — inaccurate/irrelevant now that everything sells through one All Access tier.
+- **Dashboard "Jelajahi Kursus" cards** (`dashboard.html`): removed the "Termasuk All Access" price line and the Beginner level tag from each `.explore-card` (dead CSS classes `.ex-lv`/`.ex-price` removed too), and dropped a stray/inconsistent 📋 emoji prefix from the "20 Prompt Dasar" card title.
+- **Big "All Access" pricing/checklist card replaced with a simpler dark "Mulai Belajar" card** on every course preview page, shown *only* to visitors who already have access (real per-course enrollment, or hold All Access and haven't started the course yet) — no reason to keep pitching the price/checklist to someone who's already bought in. New `.mulai-card` component (dark gradient, radial glow, eyebrow/title/desc + CTA button) added identically to `prompt-gratis.html`, `produktivitas.html`, `content-marketing.html`, and — in the immediate follow-up once Julia asked for the same treatment "on the other courses as well" — `strategi-marketing.html` and `mulai-claude.html` too, so all 5 preview pages now behave consistently. Each page's JS swaps `.aa-card`'s `display:none` and populates `#mulaiCard` with an enrolled → "Buka Kursus" / all-access-but-not-enrolled → "Mulai Kursus" (self-enrolls on click) branch.
+
+**Files**: `admin.html`, `mulai-claude.html`, `mulai-claude-content.html`, `prompt-gratis-content.html`, `prompt-gratis.html`, `produktivitas.html`, `content-marketing.html`, `strategi-marketing.html`, `dashboard.html`.
+
+**Commits**: `belajar-claude`: `21abfdc` (bulk of this checkpoint), `1f03835` (strategi-marketing/mulai-claude follow-up).
+
+---
+
+## SHIPPED (Checkpoint 152, August 3, 2026): Two real progress-tracking bugs found and fixed, plus 3 wrong static progress placeholders
+
+Julia noticed the same course showing different progress in two places — "2/5" on the actual lesson page vs. "100% / 1/1" on the dashboard's completed-courses card. Two distinct, real bugs, found by digging into how progress numbers actually flow:
+
+1. **`dashboard.html`'s `ALL_COURSES['prompt-gratis'].modules` said `1`**, while `prompt-gratis-content.html`'s real `CONTENT_MODULES` constant is `5` — these are two independently-maintained numbers (a recurring class of bug on this project, see the "3 independent catalog copies" pattern noted elsewhere in this file) that had drifted. Fixed: `modules:1` → `modules:5`.
+2. **`dashboard.html`'s `getProgress()` silently fell back to a cached `localStorage` value** (`klaud_progress_<slug>`) whenever a course had zero rows in `module_completions` for the current session — indistinguishable, in that code, from "the DB fetch failed." A test account that gets its enrollments/completions wiped in Supabase (done repeatedly this session for re-testing purchase flow) but keeps the same browser would show a stale, resurrected completion count from before the wipe. Fixed by removing the `localStorage` fallback entirely — `loadProgress()` is always awaited before `getProgress()` is ever called, so the DB is trustworthy as the sole source of truth; "no rows" now correctly means 0, not "check the cache."
+
+**Separately, 3 lesson-content pages had wrong static HTML placeholders** for their progress label (`mulai-claude-content.html` and `content-marketing-content.html` showed a hardcoded "0/6", `strategi-marketing-content.html` showed "0/4") that had drifted from their real `CONTENT_MODULES` value (5, 5, and 3 respectively) after past module-count restructures. Root cause: these 3 files only called `updateProgress()` inside the `if (completions.length > 0)` branch, so a genuinely fresh 0-progress user never triggered the function that would've overwritten the stale placeholder. Fixed the placeholder text and moved `updateProgress()` to run unconditionally on `init()`, matching the more robust pattern `prompt-gratis-content.html`/`produktivitas-content.html` already used.
+
+**Also removed** the "Lanjutkan perjalanan belajarmu." subtitle line from the dashboard greeting (`#greetSub`), per Julia's request — it added nothing under the big "Selamat datang kembali" heading.
+
+**Files**: `dashboard.html`, `mulai-claude-content.html`, `content-marketing-content.html`, `strategi-marketing-content.html`.
+
+**Commits**: `belajar-claude`: `1f03835`, `8f800f8`, `39b6955`.
+
+---
+
+## SHIPPED (Checkpoint 153, August 3, 2026): Spotlight/"last opened" logic switched from "highest progress %" to genuine "last visited"
+
+Julia asked whether the dashboard's Continue Learning spotlight card (Checkpoint 150) could show whichever course was actually opened most recently, instead of whichever has the highest completion percentage. Required real tracking that didn't exist yet:
+
+- Added `enrollments.last_accessed_at` (`timestamptz`, nullable) via Supabase migration, plus an `UPDATE` RLS policy scoped to `auth.jwt()->>'email' = email` (the table previously only had `SELECT` and a scoped `INSERT` policy — no `UPDATE` at all, so a client-side write would've been silently denied).
+- Every course-content page (`prompt-gratis-content.html`, `mulai-claude-content.html`, `produktivitas-content.html`, `content-marketing-content.html`, `strategi-marketing-content.html`) now fires a fire-and-forget `.update({last_accessed_at: now})` on its own enrollment row right after confirming access, inside `init()`.
+- `dashboard.html`'s spotlight-pick `reduce()` changed from "highest `getProgress().pct`" to "most recent `last_accessed_at`" among active (enrolled, not-yet-100%) courses; falls back to `activeCourses[0]` (already `COURSE_ORDER`-sorted) if nothing has a timestamp yet.
+- `index.html`'s logged-in-home "last opened" banner had a *different*, older signal — whichever course had the most recently *completed module* (`module_completions.completed_at`) — which meant the homepage and dashboard could disagree about "what you were last doing." Changed to the same `last_accessed_at`-based logic as the dashboard, with the same enrolled-but-never-opened fallback (first enrolled course by `LIH_COURSE_ORDER`, instead of suggesting an unenrolled course).
+
+**Files**: `dashboard.html`, `index.html`, `prompt-gratis-content.html`, `mulai-claude-content.html`, `produktivitas-content.html`, `content-marketing-content.html`, `strategi-marketing-content.html`. **DB**: `enrollments.last_accessed_at` column + `"update own enrollments"` RLS policy (Supabase migrations, not git-tracked).
+
+**Commits**: `belajar-claude`: `6ecc119` (dashboard + last_accessed_at plumbing), `98f3e04` (index.html).
+
+---
+
+## SHIPPED (Checkpoint 154, August 3, 2026): Explore-card hover shadow → border treatment; mulai-claude hero headline framed like every other course page
+
+**`dashboard.html`**: the `.explore-card:hover` box-shadow (`0 12px 32px rgba(0,0,0,0.08)`) still read as a squared-off halo under the card's rounded corners even after the earlier overflow/clipping fix (Checkpoint 150) — Julia asked for something other than a shadow entirely. Replaced with an accent border-color + faint `--accent-dim` background tint, keeping the existing `translateY(-3px)` lift.
+
+**`mulai-claude.html`**: its hero `<h1>` was just the bare course title ("Dasar Claude AI"), unlike every other course preview page, which frames the title inside a fuller phrase — `content-marketing.html`/`strategi-marketing.html` use "Claude untuk *X*", `produktivitas.html` uses "*X* dengan Claude AI", `prompt-gratis.html` is fully descriptive. Changed to "Kuasai **Dasar Claude AI** dari Nol" to match the pattern (found and fixed while addressing the request above, as part of the same conversation).
+
+**Files**: `dashboard.html`, `mulai-claude.html`.
+
+**Commits**: `belajar-claude`: `404fd71`, `9221bc0`.
+
+---
+
+## SHIPPED (Checkpoint 155, August 3, 2026): "Materi Unduhan" links now force a real download; Cloudflare Workers Build infra hang diagnosed and resolved
+
+Julia flagged that a module's `.txt` practice-document link opened inline in a new tab as raw, garbled text (mojibake on the em-dashes/smart-quotes) instead of downloading. Root cause: these files live on Supabase Storage, a cross-origin domain relative to `belajarclaude.id` — the browser was rendering the file inline with a guessed/wrong encoding, and a plain HTML `download` attribute on the `<a>` tag doesn't help here since modern browsers ignore that attribute for cross-origin links. Fixed in the shared `course-video.js` (loaded by all 5 course-content pages) by appending Supabase Storage's documented `?download` query parameter to both the PPT and practice-document link URLs, which makes Supabase's own server respond with `Content-Disposition: attachment` — verified directly via Chrome (same URL renders inline without the param, downloads with it) across `.txt` and `.xlsx` files. Also did a full inventory of what materials exist per course (queried `module_ppts`/`module_documents`/`course_resources` directly): Produktivitas Kantor, Kreasi Konten Pemasaran, and Dasar Claude AI all have PPTs/docs wired up; 20 Prompt Dasar has only a course PDF; Strategi & Analisis Marketing (still coming-soon) has nothing uploaded yet.
+
+**Found a genuine Cloudflare Workers Build infrastructure incident while verifying the deploy**: the fix's commit (`9727200`) never showed up on the live site even after several minutes — normally deploys land within ~1-2 minutes of a push to `main`. Diagnosis ruled out the obvious causes in order: confirmed the commit really was on GitHub's `main` (via `raw.githubusercontent.com`), confirmed it wasn't a CDN/browser cache issue (fresh cache-busting fetches, and Chrome DevTools-level checks, still showed old code), and confirmed Cloudflare's own status page showed Workers Builds as fully "Operational" (i.e. not a public/broad outage). The actual cause, found by opening the build's own log in the Cloudflare dashboard: builds were genuinely hanging at "Initializing build environment..." for 5+ minutes with zero further log output and 0% progress on every stage past Initializing — a stuck build queue specific to this project/account, not a code or config problem (the build settings — empty build command, `npx wrangler deploy`, root `/` — were confirmed correct against the known-good config). **Resolved by disconnecting and reconnecting the GitHub Git integration** under Workers & Pages → belajar-claude → Settings → Build (same repo/branch/commands re-selected) — the next push after reconnecting built and deployed successfully.
+
+**Files**: `course-video.js`.
+
+**Commits**: `belajar-claude`: `9727200` (the actual fix — initially failed to build), `4b8a769`/`094656e`/`6d23e01` (empty retry commits during the incident, no code changes), one further empty commit that finally built successfully after the Git integration reconnect.
+
+---
+
 ## Design System (as of June 2026)
 All pages use these CSS variables:
 ```css
@@ -2125,10 +2234,11 @@ All pages use these CSS variables:
 ## Dashboard Features (dashboard.html)
 - **Nav**: Uses `.brand` class (not `.logo`) — same Geist 700 styling. Has avatar + name on right, "Keluar" button.
 - **Sidebar**: Initials avatar (dark square), name/email, join date, "Edit profil" button, stats (kursus diikuti / selesai)
-- **Greeting**: `font-family: var(--serif)` (Instrument Serif), uses first name + time-of-day
-- **Kursus Kamu**: Grouped list with numbered index, progress bar, Mulai/Lanjutkan button. Completed courses move to Pencapaian.
-- **Pencapaian**: Badge cards — checkmark icon top-left, "Selesai" pill top-right, completion date
-- **Jelajahi Kursus**: Horizontal carousel. Available courses → "Lihat Kursus". Coming soon → "Beritahu saya" (saves to `waitlist` table, turns green on click)
+- **Greeting**: `font-family: var(--serif)` (Fraunces, site-wide since Checkpoint 143), first name only — no subtitle line under it (the "Lanjutkan perjalanan belajarmu." text was removed, see Checkpoint 152).
+- **Continue Learning spotlight card** (added Checkpoint 150, logic changed Checkpoint 153): dark hero card between the greeting and "Kursus Kamu" showing a progress ring + whichever enrolled, not-yet-completed course you **most recently opened** (`enrollments.last_accessed_at`, touched by each course-content page on load — NOT which course has the highest completion %, that was the original logic and was deliberately changed). Falls back to `COURSE_ORDER` if nothing's been opened yet. Hidden entirely if there are no active courses.
+- **Kursus Kamu**: Grouped list with numbered index, progress bar, Mulai/Lanjutkan button. Completed courses move to "Kursus Selesai".
+- **Kursus Selesai** (renamed from "Pencapaian"): Badge cards — checkmark icon top-left, "Selesai" pill top-right, completion date
+- **Jelajahi Kursus**: Horizontal carousel of `.explore-card`s. Available courses → "Lihat Kursus". Coming soon → "Beritahu saya" (saves to `waitlist` table, turns green on click). Cards no longer show a price line or Beginner/Intermediate level tag (Checkpoint 151 — All Access made those redundant/inaccurate). Hover treatment is a border-color + faint tint, **not** a box-shadow (Checkpoint 154 — a blurred shadow under this card's small radius kept reading as a squared-off halo).
 - **Profile modal**: 3-step questionnaire (role, goal, experience). Has X close button. Saves to `profiles` table. Freelancer, Karir, and Jarang pakai options removed.
 
 ## Course Content Pages Features
