@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 3, 2026 (checkpoint 147)_
+_Last updated: August 4, 2026 (checkpoint 156)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2130,6 +2130,22 @@ Julia flagged that a module's `.txt` practice-document link opened inline in a n
 **Files**: `course-video.js`.
 
 **Commits**: `belajar-claude`: `9727200` (the actual fix — initially failed to build), `4b8a769`/`094656e`/`6d23e01` (empty retry commits during the incident, no code changes), one further empty commit that finally built successfully after the Git integration reconnect.
+
+---
+
+## SHIPPED (Checkpoint 156, August 4, 2026): "Kontak WA" — direct WhatsApp contact number, admin-editable, shown site-wide
+
+Julia asked for a way to put a WhatsApp contact number in the footer, editable from the admin panel the same way the contact email already is. Added a new `contact_whatsapp` field to the `social_links` singleton table (plus `contact_whatsapp_visible`), distinct from the pre-existing `whatsapp_url` field — that one powers the "WhatsApp Community" group-link under "Ikuti Kami" (Follow Us); this new one is a personal contact number under "Hubungi Kami" (Contact Us), sitting right next to Email.
+
+`admin.html`'s Social Media Links panel got a new "Kontak WA" field (text input + visibility toggle + inline hint explaining the distinction from the community link above it), following the exact same input/validation/save pattern as the existing Email field — including a minimum-8-digit sanity check before save.
+
+On the site side, all 10 pages that render a footer (`index.html`, `all-access.html`, `content-marketing.html`, `mulai-claude.html`, `produktivitas.html`, `prompt-gratis.html`, `strategi-marketing.html`, `kebijakan-pengembalian.html`, `kebijakan-privasi.html`, `syarat-ketentuan.html`) got a new `<li id="liContactWa">` under "Hubungi Kami", populated by the same footer IIFE that already reads `contact_email`. The number gets normalized into a `wa.me` link — leading `0` is swapped for the `62` country code, digits are stripped of any other formatting — so Julia can type it in any format (`08123456789`, `+62 812-3456-789`, etc.) and it always resolves to a working `wa.me` link.
+
+**Verification**: div-tag balance check (open/close counts match) and `node --check` on every extracted inline `<script>` block across all 11 edited files, all clean.
+
+**Files**: `admin.html`, `index.html`, `all-access.html`, `content-marketing.html`, `mulai-claude.html`, `produktivitas.html`, `prompt-gratis.html`, `strategi-marketing.html`, `kebijakan-pengembalian.html`, `kebijakan-privasi.html`, `syarat-ketentuan.html`. Supabase migration: `add_contact_whatsapp_to_social_links`.
+
+**Commit**: `belajar-claude`: `174aa65`.
 
 ---
 
