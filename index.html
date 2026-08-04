@@ -120,12 +120,6 @@ section { padding: 88px 0; position: relative; z-index: 1; }
 .wf-nav-btn:disabled { opacity: 0.35; cursor: default; }
 .wf-nav-btn:disabled:hover { border-color: var(--border); color: var(--ink); background: var(--surface); }
 @media (max-width: 640px) { .wf-card { flex-basis: 88%; } }
-.wf-bottom { margin: 20px 0 0; padding: 16px 20px; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow-sm); display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-@media (max-width: 900px) { .wf-bottom { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 560px) { .wf-bottom { grid-template-columns: 1fr; } }
-.wf-benefit { display: flex; gap: 8px; align-items: center; color: var(--ink-2); font-size: 12.5px; line-height: 1.3; }
-.wf-benefit-icon { width: 26px; height: 26px; border-radius: 50%; background: var(--accent-dim); color: var(--accent); display: grid; place-items: center; font-size: 13px; flex: none; }
-.wf-benefit strong { color: var(--ink); display: block; }
 .wf-accent { color: var(--accent); }
 @keyframes caretBlink2 { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
 
@@ -391,13 +385,6 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
       <button class="wf-nav-btn" id="wfPrev" aria-label="Sebelumnya" onclick="wfScroll(-1)">←</button>
       <button class="wf-nav-btn" id="wfNext" aria-label="Selanjutnya" onclick="wfScroll(1)">→</button>
     </div>
-    </div>
-
-    <div class="wf-bottom">
-      <div class="wf-benefit"><span class="wf-benefit-icon">☺</span><div><strong>Bahasa Indonesia</strong>sederhana &amp; mudah dipahami</div></div>
-      <div class="wf-benefit"><span class="wf-benefit-icon">✓</span><div><strong>Praktis &amp; langsung</strong>bisa dipakai</div></div>
-      <div class="wf-benefit"><span class="wf-benefit-icon">◷</span><div><strong>Hemat waktu</strong>fokus ke hal yang lebih penting</div></div>
-      <div class="wf-benefit"><span class="wf-benefit-icon">⌑</span><div><strong>Belajar sekali,</strong>akses selamanya</div></div>
     </div>
   </div>
 </section>
