@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 4, 2026 (checkpoint 162)_
+_Last updated: August 4, 2026 (checkpoint 163)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2250,6 +2250,26 @@ Julia asked for a full recheck after the day's flurry of changes (new branches, 
 **Documented in `TEAM-WORKFLOW.md`** under a new section, "What `dev` does NOT protect you from" — plain-language, written for both non-technical owners: admin page changes, checkout/sign-up, and file uploads are always real regardless of which link is used; the CI check catches broken code but not logic bugs and isn't a hard merge-blocker (no branch protection configured); `dev` is genuinely safe only for page content/layout/copy changes. This is the single most important caveat in the whole workflow doc, since it's the one place the "dev is a safe sandbox" mental model actually breaks down.
 
 **Files**: `TEAM-WORKFLOW.md`, `CONTEXT.md` (both `main` and `dev`).
+
+---
+
+## SHIPPED (Checkpoint 163, August 4, 2026): Duitku environment made configurable; backend URL consolidated — pushed to `dev` only, pending Julia's merchant-portal check
+
+Direct follow-up to Checkpoint 162's finding. Julia pushed back on the assumption that checkout was untested/fake — she's been seeing real-looking Duitku responses and believed production was already live. Investigated properly rather than taking either claim at face value:
+
+**Verified via Duitku's own official docs/SDK** (not assumption): the backend's `createDuitkuInvoice()` hardcodes `hostname: 'api-sandbox.duitku.com'` — confirmed via Duitku's official Go SDK source that this is unambiguously the sandbox-only host, distinct from production (`api-prod.duitku.com`), with sandbox and production using entirely separate merchant code/API key pairs issued from Duitku's portal (`passport.duitku.com/merchant/Project`) — not a shared credential that behaves differently by host. Reconciled this against Julia's experience: Duitku's sandbox is a fully real, fully functional system (real invoice IDs, real-looking responses) that simply doesn't move actual money — so "getting real API responses" is consistent with being in sandbox, not proof of being in production. **Could not determine from code alone which one is actually active** — that depends entirely on which merchant code is currently set in Railway's env vars, which isn't visible from this session. Told Julia the only reliable way to check is Duitku's own merchant portal, rather than guessing.
+
+**Shipped regardless of that open question, since the fix is safe either way**: made the Duitku host configurable via a new `DUITKU_ENV` env var (`'production'` → `api-prod.duitku.com`, anything else/unset → `api-sandbox.duitku.com`, i.e. **defaults to today's exact current behavior** — this change cannot silently start charging real money on its own). Added a startup log line (`💳 Duitku mode: ...`) so the active mode is visible in Railway's logs going forward instead of being invisible. Also consolidated the backend's URL, previously hardcoded identically in 4 separate frontend files (`all-access.html`, `login.html`, `coming-soon.html`, `login-modal.js`), into one new shared file, `backend-config.js` (same pattern as `supabase-config.js`), included on all 9 pages that need it (verified via grep — zero hardcoded Railway URLs remain outside that one file). This doesn't change behavior today (both branches of its ternary still point at the same production backend) but means a future dev backend only requires editing one line in one file instead of hunting across the codebase again.
+
+**Deliberately not finished — real dev/prod payment separation still requires manual Railway setup Claude can't do remotely**: a second Railway service, tracking the `dev` branch, with its own sandbox Duitku merchant credentials and `DUITKU_ENV` left unset. This is the same "Railway dev environment for the backend" item that's been sitting at lowest priority since Checkpoint 158 — now more clearly justified given what this checkpoint found, but still Julia's to provision (no Railway API/MCP access from this session).
+
+**Pushed to `dev` only on both repos** (created a `dev` branch on `belajar-claude-backend` for the first time, mirroring the frontend's existing one) — not merged to either `main`, per the standing rule to ask before touching payment code regardless of how safe the change looks. **Both changes are backward-compatible no-ops on their own** (identical default behavior to before), so merging either to `main` carries no functional risk — but left for Julia to explicitly say go ahead on, since it touches the payment path.
+
+**Documented in `TEAM-WORKFLOW.md`**: updated the checkout/sign-up caveat to note this is in progress, and added a new "Payments: dev vs. production (Duitku)" section explaining how to check which environment is actually live (the merchant portal, not guesswork), what's been built, and what Railway setup is still needed to finish the split.
+
+**Files**: `belajar-claude`: `backend-config.js` (new), `all-access.html`, `login.html`, `coming-soon.html`, `login-modal.js`, `index.html`, `content-marketing.html`, `mulai-claude.html`, `produktivitas.html`, `prompt-gratis.html`, `strategi-marketing.html` — all on `dev` only. `belajar-claude-backend`: `index.js` — on new `dev` branch only. `CONTEXT.md`, `TEAM-WORKFLOW.md`.
+
+**Commits**: `belajar-claude`: `3fd978b` (`dev`). `belajar-claude-backend`: `dd8a573` (`dev`, new branch).
 All pages use these CSS variables:
 ```css
 --bg: #FAFAFA;
