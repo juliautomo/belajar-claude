@@ -328,6 +328,18 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
           <input type="text" id="socialEmail" placeholder="hello@belajarclaude.id">
         </div>
 
+        <div class="social-field">
+          <div class="social-label-row">
+            <label>Kontak WA</label>
+            <div class="social-toggle-wrap">
+              <span class="social-toggle-text" id="socialContactWaVisibleLabel">Tampil</span>
+              <label class="toggle-switch"><input type="checkbox" id="socialContactWaVisible" checked onchange="onSocialToggle('ContactWa')"><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+          <input type="text" id="socialContactWa" placeholder="08123456789">
+          <p class="hint" style="margin-top:6px;margin-bottom:0;">Nomor WhatsApp untuk dihubungi langsung (beda dari link grup WhatsApp Community di atas). Format bebas — boleh pakai 0 di depan atau +62, otomatis dirapikan jadi link wa.me.</p>
+        </div>
+
         <button class="btn" id="socialSaveBtn" onclick="saveSocialLinks()">Simpan Link</button>
         <div class="status" id="socialStatus"></div>
       </div>
@@ -490,7 +502,7 @@ async function reloadAndRender() {
 
 // ─── SOCIAL MEDIA LINKS ──────────────────────────────────────────────────────
 
-var SOCIAL_PLATFORMS = ['Tiktok', 'Youtube', 'Instagram', 'Whatsapp', 'Email'];
+var SOCIAL_PLATFORMS = ['Tiktok', 'Youtube', 'Instagram', 'Whatsapp', 'Email', 'ContactWa'];
 
 function renderSocialLinks() {
   document.getElementById('socialTiktok').value = (socialCache && socialCache.tiktok_url) || '';
@@ -498,8 +510,9 @@ function renderSocialLinks() {
   document.getElementById('socialInstagram').value = (socialCache && socialCache.instagram_url) || '';
   document.getElementById('socialWhatsapp').value = (socialCache && socialCache.whatsapp_url) || '';
   document.getElementById('socialEmail').value = (socialCache && socialCache.contact_email) || '';
+  document.getElementById('socialContactWa').value = (socialCache && socialCache.contact_whatsapp) || '';
 
-  var fieldMap = { Tiktok: 'tiktok_visible', Youtube: 'youtube_visible', Instagram: 'instagram_visible', Whatsapp: 'whatsapp_visible', Email: 'contact_email_visible' };
+  var fieldMap = { Tiktok: 'tiktok_visible', Youtube: 'youtube_visible', Instagram: 'instagram_visible', Whatsapp: 'whatsapp_visible', Email: 'contact_email_visible', ContactWa: 'contact_whatsapp_visible' };
   SOCIAL_PLATFORMS.forEach(function (p) {
     var visible = socialCache ? (socialCache[fieldMap[p]] !== false) : true;
     document.getElementById('social' + p + 'Visible').checked = visible;
@@ -526,6 +539,12 @@ async function saveSocialLinks() {
     statusEl.textContent = 'Format email tidak valid.';
     return;
   }
+  var waVal = document.getElementById('socialContactWa').value.trim();
+  if (waVal && waVal.replace(/\D/g, '').length < 8) {
+    statusEl.className = 'status show error';
+    statusEl.textContent = 'Nomor WhatsApp tidak valid — minimal 8 digit angka.';
+    return;
+  }
   var payload = {
     id: 'main',
     tiktok_url: document.getElementById('socialTiktok').value.trim() || null,
@@ -533,11 +552,13 @@ async function saveSocialLinks() {
     instagram_url: document.getElementById('socialInstagram').value.trim() || null,
     whatsapp_url: document.getElementById('socialWhatsapp').value.trim() || null,
     contact_email: document.getElementById('socialEmail').value.trim() || null,
+    contact_whatsapp: waVal || null,
     tiktok_visible: document.getElementById('socialTiktokVisible').checked,
     youtube_visible: document.getElementById('socialYoutubeVisible').checked,
     instagram_visible: document.getElementById('socialInstagramVisible').checked,
     whatsapp_visible: document.getElementById('socialWhatsappVisible').checked,
     contact_email_visible: document.getElementById('socialEmailVisible').checked,
+    contact_whatsapp_visible: document.getElementById('socialContactWaVisible').checked,
     updated_at: new Date().toISOString(),
     updated_by: currentSession.user.email,
   };

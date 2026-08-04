@@ -356,7 +356,7 @@
     <div class="footer-links" id="footerContactLinks" style="display:none;">
       <h4>Hubungi Kami</h4>
       <ul>
-        <li id="liEmail" style="display:none;"><a href="#" id="linkEmail">Email</a></li>
+        <li id="liEmail" style="display:none;"><a href="#" id="linkEmail">Email</a></li><li id="liContactWa" style="display:none;"><a href="#" id="linkContactWa" target="_blank" rel="noopener">WhatsApp</a></li>
       </ul>
     </div>
     <div class="footer-links">
@@ -477,6 +477,17 @@
       if (email && emailVisible) {
         document.getElementById('liEmail').style.display = 'block';
         document.getElementById('linkEmail').href = 'mailto:' + email;
+        document.getElementById('footerContactLinks').style.display = 'block';
+      }
+
+      var contactWa = row.contact_whatsapp;
+      var contactWaVisible = row.contact_whatsapp_visible !== false;
+      if (contactWa && contactWaVisible) {
+        var waDigits = String(contactWa).replace(/\D/g, '');
+        if (waDigits.charAt(0) === '0') waDigits = '62' + waDigits.slice(1);
+        else if (waDigits.slice(0, 2) !== '62') waDigits = '62' + waDigits;
+        document.getElementById('liContactWa').style.display = 'block';
+        document.getElementById('linkContactWa').href = 'https://wa.me/' + waDigits;
         document.getElementById('footerContactLinks').style.display = 'block';
       }
     } catch (e) {}
