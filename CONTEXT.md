@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 4, 2026 (checkpoint 157)_
+_Last updated: August 4, 2026 (checkpoint 158)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2162,6 +2162,28 @@ Julia asked for a whole-system check — everything working, anything stale, any
 **Flagged, checked, not actionable today**: Leaked Password Protection (checks new passwords against HaveIBeenPwned before allowing signup/reset) lives in the Supabase dashboard under Authentication → Sign In / Providers → Email → "Prevent use of leaked passwords." Julia navigated there directly and confirmed it's **gated to the Pro plan and above** — the project is on Free, so the toggle is present but not usable. Not worth upgrading Supabase's plan just for this (it was already the lowest-priority item found). Revisit if/when the project moves to Pro for other reasons.
 
 **Follow-up same session — auth email rate limit checked, already fine, corrects a stale CONTEXT.md claim.** Julia asked whether the password-reset flow (`resetPasswordForEmail()` in `login.html`/`login-modal.js`'s "Lupa password?") is still capped at the commonly-cited Supabase default of 2 emails/hour project-wide, which would risk silently failing a self-service reset if two people requested one in the same hour. Checked live in Authentication → Rate Limits: **"Rate limit for sending emails" is actually set to 30/hour**, not 2 — comfortably enough for this project's traffic. This corrects two now-stale mentions elsewhere in this file (the "Supabase's 3/hour free-tier limit" note under Supabase Project → SMTP, and the "2 emails/hour... even with custom SMTP" aside in the generate_link explanation under Checkpoint ~49/148) — both describe the *unconfigured* default, not the actual current setting. No further action needed; noted here so this doesn't get re-flagged as a concern in a future session.
+
+---
+
+## SHIPPED (Checkpoint 158, August 4, 2026): Dev/prod collaboration workflow — foundation laid for a second person
+
+Julia is bringing on a friend to co-manage the project, each working from her own laptop through her own separate Claude/Cowork session, both pushing to the same GitHub repos (friend already added as a real collaborator with her own GitHub login, not a shared account — confirmed by Julia before this checkpoint). Asked for a plan to (a) avoid the two sessions clobbering each other's work and (b) stop every change from landing directly on the live production site.
+
+**Key framing that shaped the plan**: this isn't a normal multi-developer team — neither person writes code by hand, both direct Claude in plain language, and each session is stateless/independent (no awareness of what the other session is doing right now). That ruled out heavyweight process (mandatory PR review, CI gates as a hard blocker) in favor of a couple of cheap structural guardrails plus an explicit, written convention both Claude sessions can read.
+
+**Shipped this checkpoint**:
+- **New `dev` branch** created on `belajar-claude`, branched from the current `main` (includes everything through Checkpoint 157) so both branches start in sync. Going forward, day-to-day work targets `dev`; `main` only updates via a deliberate merge.
+- **New `TEAM-WORKFLOW.md`** at the repo root (both branches) — a plain-language doc (no jargon, written for two non-technical owners) covering: the dev/prod split and what each is for; the default rule ("assume `dev` unless told otherwise; say 'push to production'/'make it live' explicitly to target `main`; Claude asks first regardless of phrasing for anything touching payments/pricing/the database"); how merging works ("tell Claude to merge dev into main" — expected to be a clean fast-forward since all changes flow one direction); and a collaboration norm for avoiding collisions between two live sessions (heads-up messaging on what page/area each person is about to touch; Claude always pulls fresh immediately before pushing rather than reusing a stale clone from earlier in a long conversation; a real conflict gets surfaced to the user rather than auto-resolved). This file is meant to be read by *either* Claude session at the start of a conversation, the same way CONTEXT.md already is — it's the shared alignment mechanism between two independent sessions.
+
+**Deliberately not done yet — still pending, ranked by priority if picked back up**:
+1. **A second, free Supabase project as a staging database.** Real Supabase branching needs a paid compute add-on (project is on Free) — the plan is a manually-synced second project instead, migrations applied there first via the existing `sql/` files before touching production `ctqtdqbsucbhikwnagvl`. Ranked highest of the remaining items since bad data/schema changes are the most expensive mistake to walk back.
+2. **A GitHub Action running the syntax/link checks** (the same `node --check` + reference-resolution sweep done manually in Checkpoint 157) automatically on every merge into `main`, so a bad change gets caught before going live rather than after.
+3. **Cloudflare "non-production branch builds" toggle** (Workers & Pages → belajar-claude → Settings → Build → Branch control) — confirmed via Cloudflare's own docs that this is a real, free, built-in feature: enabling it makes every push to `dev` auto-build a separate preview URL (via `wrangler versions upload`) without touching the production Worker. This is a dashboard-only setting Julia needs to click herself — no API access to Workers Build config from here.
+4. **A matching dev environment for the backend on Railway** (separate environment/service tied to the `dev` branch, its own env vars, ideally a sandbox Duitku merchant so test purchases don't hit real payment data). Ranked lowest — more setup-heavy than the others, and only matters once backend/payment-flow changes are actually in flight between the two of them.
+
+**Files**: `TEAM-WORKFLOW.md` (new, both `main` and `dev`), `CONTEXT.md`. New branch: `dev` (branched from `main` at commit `572e7f8`).
+
+**Commits**: `belajar-claude`: `572e7f8` (`TEAM-WORKFLOW.md` on `main`), `dev` branch pushed from the same commit.
 
 **Deliberately left as low-priority backlog, not fixed this pass** (all pure performance nits, irrelevant at current data volume — table row counts are in the single/low-double digits): ~20 RLS policies across 9 tables re-evaluate `auth.<fn>()` per row instead of once per query (fix: wrap in `(select auth.<fn>())`); `social_links` and `course_visibility` each have a redundant admin-`ALL` + public-`SELECT` policy overlap for the `SELECT` action; one unused index (`idx_module_completions_email`). Also noted but not touched: internal CSS ids and `localStorage` keys (`klaud-modal`, `klaud_progress_*`) still carry the pre-rebrand name — invisible to users, cosmetic only.
 
