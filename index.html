@@ -95,31 +95,36 @@ section { padding: 88px 0; position: relative; z-index: 1; }
 
 /* --- Profession workflows section --- */
 .cases-section { padding: 88px 0 0; position: relative; z-index: 1; }
-.wf-carousel { margin-top: 40px; }
-.wf-track { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 2px; }
-.wf-track::-webkit-scrollbar { display: none; }
-.wf-card { flex: 0 0 calc(50% - 10px); scroll-snap-align: start; min-height: 260px; border: 1px solid var(--border); border-radius: 22px; padding: 24px; display: grid; grid-template-columns: 40% 60%; align-items: center; gap: 16px; overflow: hidden; }
-.wf-card:nth-child(6n+1) { background: #FFF8E9; }
-.wf-card:nth-child(6n+2) { background: #F3F0FF; }
-.wf-card:nth-child(6n+3) { background: #FFF1F3; }
-.wf-card:nth-child(6n+4) { background: #F0F5FF; }
-.wf-card:nth-child(6n+5) { background: #F8F0FF; }
-.wf-card:nth-child(6n+6) { background: #EEF9F6; }
-.wf-profile { align-self: stretch; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
-.wf-tag { display: inline-flex; max-width: 100%; width: max-content; padding: 6px 14px; border-radius: 999px; background: rgba(255,255,255,0.72); color: #6044e8; font-size: 12px; font-weight: 700; letter-spacing: 0.02em; line-height: 1.3; }
-.wf-person { font-size: 84px; line-height: 1; text-align: center; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.08)); }
-.wf-caption { font-size: 16px; font-weight: 700; color: var(--ink); line-height: 1.32; }
-.wf-flow { display: flex; flex-direction: column; gap: 8px; }
-.wf-bubble { background: rgba(255,255,255,0.82); border: 1px solid rgba(108,71,255,0.12); border-radius: 14px; padding: 10px 13px; font-size: 13.5px; color: var(--ink); line-height: 1.28; box-shadow: 0 3px 8px rgba(0,0,0,0.03); }
-.wf-bubble.ai { border-color: #D8CEFF; }
-.wf-bubble.done { border-color: #BDE8C9; }
-.wf-arrow { text-align: center; color: #7A67DB; font-weight: 900; font-size: 13px; }
-.wf-nav { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }
-.wf-nav-btn { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); color: var(--ink); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; transition: border-color 0.15s, color 0.15s, background 0.15s; }
-.wf-nav-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
-.wf-nav-btn:disabled { opacity: 0.35; cursor: default; }
-.wf-nav-btn:disabled:hover { border-color: var(--border); color: var(--ink); background: var(--surface); }
-@media (max-width: 640px) { .wf-card { flex-basis: 88%; } }
+.wf-tabs { display: flex; justify-content: flex-start; gap: 8px; flex-wrap: wrap; margin: 36px 0 18px; }
+.wf-tab { border: 1px solid var(--border); background: var(--surface); border-radius: 999px; padding: 8px 14px; cursor: pointer; font: inherit; font-size: 12px; font-weight: 800; color: var(--ink-2); transition: 0.2s; }
+.wf-tab:hover { border-color: rgba(108,71,255,0.35); }
+.wf-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 6px 16px var(--accent-glow); }
+.wf-demo { border-radius: 22px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 12px 32px rgba(20,10,60,0.08); min-height: 320px; position: relative; transition: background 0.4s; }
+.wf-demo.business { background: #FFF8E9; } .wf-demo.freelancer { background: #F3F0FF; } .wf-demo.creator { background: #FFF1F4; } .wf-demo.office { background: #EFF5FF; } .wf-demo.student { background: #F7F0FF; } .wf-demo.admin { background: #EEF9F6; }
+.wf-demo-inner { max-width: 880px; margin: auto; padding: 26px 28px; display: grid; grid-template-columns: 36% 64%; gap: 22px; align-items: center; min-height: 320px; }
+.wf-profile { text-align: center; }
+.wf-person { font-size: 76px; line-height: 1; filter: drop-shadow(0 6px 5px rgba(0,0,0,0.06)); display: inline-block; }
+.wf-demo.play .wf-person { animation: wfPop 0.55s ease; }
+@keyframes wfPop { 0% { transform: translateY(10px) scale(0.92); opacity: 0; } 70% { transform: translateY(-3px) scale(1.03); } 100% { transform: none; opacity: 1; } }
+.wf-role { font-size: 10px; font-weight: 900; letter-spacing: 0.08em; color: var(--accent); margin-top: 6px; }
+.wf-profile h3 { font-family: var(--font); font-size: 18px; font-weight: 700; letter-spacing: -0.02em; margin: 6px 0; color: var(--ink); }
+.wf-profile p { color: var(--ink-2); margin: 0 auto; max-width: 220px; line-height: 1.42; font-size: 12.5px; }
+.wf-stage { position: relative; min-height: 240px; display: flex; flex-direction: column; justify-content: center; gap: 8px; }
+.wf-bubble { background: var(--surface); border: 1px solid var(--border); border-radius: 13px; padding: 10px 13px; box-shadow: 0 5px 14px rgba(0,0,0,0.04); max-width: 100%; opacity: 0; transform: translateY(10px); animation: wfShow 0.5s forwards; }
+.wf-bubble.problem { animation-delay: 0.2s; }
+.wf-bubble.chat { animation-delay: 0.45s; }
+.wf-bubble.ai { animation-delay: 0.7s; border-color: #D7CDFF; }
+.wf-bubble.result { animation-delay: 0.95s; border-color: #BDE5C9; }
+@keyframes wfShow { to { opacity: 1; transform: none; } }
+.wf-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 900; color: #888; margin-bottom: 4px; }
+.wf-arrow { height: 6px; color: #745CE0; text-align: center; font-weight: 900; font-size: 11px; opacity: 0; animation: wfShow 0.3s forwards; }
+.wf-a1 { animation-delay: 0.38s; } .wf-a2 { animation-delay: 0.63s; } .wf-a3 { animation-delay: 0.88s; }
+.wf-claude { display: flex; align-items: center; gap: 8px; }
+.wf-spark { width: 26px; height: 26px; border-radius: 9px; background: var(--accent); color: #fff; display: grid; place-items: center; font-size: 13px; flex: none; box-shadow: 0 6px 14px var(--accent-glow); }
+.wf-prompt { font-family: 'SF Mono', Consolas, monospace; font-size: 11px; color: #4E4E55; line-height: 1.4; }
+.wf-bubble.result strong { color: #218447; font-size: 12.5px; }
+@media (max-width: 850px) { .wf-demo-inner { grid-template-columns: 1fr; min-height: auto; padding-top: 30px; } .wf-person { font-size: 56px; } .wf-stage { min-height: 200px; } }
+@media (max-width: 560px) { .wf-demo-inner { padding: 22px 18px; } .wf-tabs { gap: 6px; } .wf-tab { padding: 7px 11px; font-size: 11px; } }
 .wf-accent { color: var(--accent); }
 @keyframes caretBlink2 { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
 
@@ -301,90 +306,12 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     <h2 class="section-title">AI nggak harus ribet.<br><span class="wf-accent">Belajar dari pekerjaan yang kamu lakukan.</span></h2>
     <p class="section-sub" style="max-width:600px;">Kursus ini dibuat untuk kamu yang ingin belajar AI secara praktis, tanpa perlu latar belakang teknis.</p>
 
-    <div class="wf-carousel">
-    <div class="wf-track" id="wfTrack">
-      <article class="wf-card">
-        <div class="wf-profile">
-          <span class="wf-tag">PEMILIK BISNIS / UMKM</span>
-          <div class="wf-person">👩🏻‍💼</div>
-          <div class="wf-caption">Balas pelanggan jadi cepat &amp; profesional</div>
-        </div>
-        <div class="wf-flow">
-          <div class="wf-bubble">😟 Banyak chat pelanggan</div><div class="wf-arrow">↓</div>
-          <div class="wf-bubble ai">✨ Claude bantu balas dengan ramah</div><div class="wf-arrow">↓</div>
-          <div class="wf-bubble done">🟢 Selesai!</div>
-        </div>
-      </article>
-
-      <article class="wf-card">
-        <div class="wf-profile">
-          <span class="wf-tag">FREELANCER</span>
-          <div class="wf-person">🧑🏻‍💻</div>
-          <div class="wf-caption">Bikin proposal lebih cepat &amp; meyakinkan</div>
-        </div>
-        <div class="wf-flow">
-          <div class="wf-bubble">😟 Mau bikin proposal klien</div><div class="wf-arrow">↓</div>
-          <div class="wf-bubble ai">✨ Claude bantu buat draft proposal</div><div class="wf-arrow">↓</div>
-          <div class="wf-bubble done">🟢 Selesai!</div>
-        </div>
-      </article>
-
-      <article class="wf-card">
-        <div class="wf-profile">
-          <span class="wf-tag">CONTENT CREATOR</span>
-          <div class="wf-person">👩🏻‍🎨</div>
-          <div class="wf-caption">Ide konten konsisten &amp; menarik</div>
-        </div>
-        <div class="wf-flow">
-          <div class="wf-bubble">😟 Ide konten mentok</div><div class="wf-arrow">↓</div>
-          <div class="wf-bubble ai">✨ Claude bantu cari ide konten menarik</div><div class="wf-arrow">↓</div>
-          <div class="wf-bubble done">🟢 Selesai!</div>
-        </div>
-      </article>
-
-      <article class="wf-card">
-        <div class="wf-profile">
-          <span class="wf-tag">PEKERJA KANTOR</span>
-          <div class="wf-person">👩🏻‍💼</div>
-          <div class="wf-caption">Rangkum laporan dalam hitungan menit</div>
-        </div>
-        <div class="wf-flow">
-          <div class="wf-bubble">😟 Laporan menumpuk dan berantakan</div><div class="wf-arrow">↓</div>
-          <div class="wf-bubble ai">✨ Claude bantu rapikan &amp; rangkum</div><div class="wf-arrow">↓</div>
-          <div class="wf-bubble done">🟢 Selesai!</div>
-        </div>
-      </article>
-
-      <article class="wf-card">
-        <div class="wf-profile">
-          <span class="wf-tag">MAHASISWA</span>
-          <div class="wf-person">👩🏻‍🎓</div>
-          <div class="wf-caption">Ringkas materi, belajar jadi lebih fokus</div>
-        </div>
-        <div class="wf-flow">
-          <div class="wf-bubble">😟 Banyak materi sulit dipahami</div><div class="wf-arrow">↓</div>
-          <div class="wf-bubble ai">✨ Claude bantu ringkas poin penting</div><div class="wf-arrow">↓</div>
-          <div class="wf-bubble done">🟢 Selesai!</div>
-        </div>
-      </article>
-
-      <article class="wf-card">
-        <div class="wf-profile">
-          <span class="wf-tag">ADMIN</span>
-          <div class="wf-person">🧑🏻‍💻</div>
-          <div class="wf-caption">Pekerjaan lebih terorganisir &amp; efisien</div>
-        </div>
-        <div class="wf-flow">
-          <div class="wf-bubble">😟 Banyak detail harus diurus</div><div class="wf-arrow">↓</div>
-          <div class="wf-bubble ai">✨ Claude bantu buat checklist &amp; catatan rapi</div><div class="wf-arrow">↓</div>
-          <div class="wf-bubble done">🟢 Selesai!</div>
-        </div>
-      </article>
-    </div>
-    <div class="wf-nav">
-      <button class="wf-nav-btn" id="wfPrev" aria-label="Sebelumnya" onclick="wfScroll(-1)">←</button>
-      <button class="wf-nav-btn" id="wfNext" aria-label="Selanjutnya" onclick="wfScroll(1)">→</button>
-    </div>
+    <div class="wf-tabs" id="wfTabs"></div>
+    <div class="wf-demo" id="wfDemo">
+      <div class="wf-demo-inner">
+        <div class="wf-profile" id="wfProfile"></div>
+        <div class="wf-stage" id="wfStage"></div>
+      </div>
     </div>
   </div>
 </section>
@@ -526,30 +453,46 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     }, 2400);
   }
 
-  // "Dari Pekerjaan Sehari-hari" workflow carousel — left/right arrows
-  // scroll the track by one viewport's width (2 cards), with native
-  // scroll-snap doing the settling. Arrow disabled state follows scroll
-  // position so it's obvious when you've hit either end.
+  // "Dari Pekerjaan Sehari-hari" workflow section — tabbed single-card demo.
+  // Clicking a profession tab swaps the demo card's content and replays a
+  // short reveal animation (problem → typical reply → Claude prompt → result).
+  var WF_DATA = {
+    business:   { tab: 'Pemilik Bisnis',      role: 'PEMILIK BISNIS / UMKM', person: '👩🏻‍💼', title: 'Chat pelanggan numpuk?',      desc: 'Kamu ingin tetap ramah ke pelanggan, tapi nggak punya waktu untuk mengetik semuanya satu-satu.', problem: '😟 Banyak chat pelanggan yang harus dibalas', chat: '💬 "Kak, produknya masih tersedia? Bisa dikirim hari ini?"', prompt: '"Bantu buat balasan yang ramah, singkat, dan jelas untuk pelanggan ini."', result: '"Halo Kak 😊 Terima kasih sudah menghubungi kami! Produknya masih tersedia dan bisa dikirim hari ini ya."' },
+    freelancer: { tab: 'Freelancer',          role: 'FREELANCER',           person: '🧑🏻‍💻', title: 'Brief klien berantakan?',     desc: 'Daripada mulai dari halaman kosong, minta Claude membantu mengubah informasi klien menjadi draft yang rapi.', problem: '😟 Klien minta proposal, tapi brief-nya masih acak', chat: '📄 Nama proyek, kebutuhan, harga, dan deadline masih tercecer', prompt: '"Bantu ubah informasi ini menjadi draft proposal sederhana."', result: '"✓ Draft proposal siap diedit dan dikirim ke klien."' },
+    creator:    { tab: 'Content Creator',     role: 'CONTENT CREATOR',      person: '👩🏻‍🎨', title: 'Kehabisan ide konten?',       desc: 'Nggak perlu menatap layar kosong. Ceritakan bisnis atau topikmu dan minta beberapa ide.', problem: '😟 Besok harus posting, tapi belum punya ide', chat: '📱 "Aku punya bisnis makanan. Kasih ide konten yang simpel."', prompt: '"Berikan 5 ide konten Instagram yang mudah dibuat untuk bisnis ini."', result: '"✓ Punya beberapa ide untuk mulai posting."' },
+    office:     { tab: 'Pekerja Kantor',      role: 'PEKERJA KANTOR',       person: '👩🏻‍💼', title: 'Laporan panjang banget?',     desc: 'Claude bisa membantu mengambil inti dari dokumen panjang supaya kamu lebih cepat memahami isinya.', problem: '😟 Laporan panjang harus dibaca hari ini', chat: '📑 Banyak halaman, tapi kamu cuma perlu poin pentingnya', prompt: '"Ringkas laporan ini menjadi 5 poin utama yang mudah dipahami."', result: '"✓ Poin penting sudah dirangkum."' },
+    student:    { tab: 'Mahasiswa',           role: 'MAHASISWA',            person: '👩🏻‍🎓', title: 'Materi terlalu banyak?',      desc: 'Gunakan Claude untuk membantu merangkum materi menjadi bagian-bagian yang lebih mudah dipelajari.', problem: '😟 Banyak materi, bingung harus mulai dari mana', chat: '📚 "Tolong bantu jelaskan materi ini dengan bahasa sederhana."', prompt: '"Ringkas materi ini dan jelaskan 3 konsep terpentingnya."', result: '"✓ Materi jadi lebih mudah dipahami."' },
+    admin:      { tab: 'Admin / Operasional', role: 'ADMIN / OPERASIONAL',  person: '🧑🏻‍💻', title: 'Banyak hal harus diurus?',    desc: 'Gunakan Claude untuk membantu mengubah catatan yang berantakan menjadi daftar tugas yang lebih jelas.', problem: '😟 Banyak detail dan tugas yang harus diingat', chat: '📋 Catatan, deadline, dan tugas masih tercampur', prompt: '"Ubah catatan ini menjadi checklist tugas berdasarkan prioritas."', result: '"✓ Checklist siap dipakai."' }
+  };
   (function() {
-    var track = document.getElementById('wfTrack');
-    var prevBtn = document.getElementById('wfPrev');
-    var nextBtn = document.getElementById('wfNext');
-    if (!track || !prevBtn || !nextBtn) return;
+    var tabsEl = document.getElementById('wfTabs');
+    var demoEl = document.getElementById('wfDemo');
+    var profileEl = document.getElementById('wfProfile');
+    var stageEl = document.getElementById('wfStage');
+    if (!tabsEl || !demoEl || !profileEl || !stageEl) return;
 
-    function wfUpdateNav() {
-      var max = track.scrollWidth - track.clientWidth - 2;
-      prevBtn.disabled = track.scrollLeft <= 2;
-      nextBtn.disabled = track.scrollLeft >= max;
-    }
-    window.wfScroll = function(dir) {
-      track.scrollBy({ left: dir * track.clientWidth, behavior: 'smooth' });
+    function esc(s) { return s.replace(/</g, '&lt;'); }
+
+    window.wfRender = function(key) {
+      var d = WF_DATA[key];
+      tabsEl.innerHTML = Object.keys(WF_DATA).map(function(k) {
+        var v = WF_DATA[k];
+        return '<button class="wf-tab' + (k === key ? ' active' : '') + '" onclick="wfRender(\'' + k + '\')">' + v.tab + '</button>';
+      }).join('');
+      demoEl.className = 'wf-demo ' + key;
+      profileEl.innerHTML = '<div class="wf-person">' + d.person + '</div><div class="wf-role">' + d.role + '</div><h3>' + d.title + '</h3><p>' + esc(d.desc) + '</p>';
+      stageEl.innerHTML =
+        '<div class="wf-bubble problem"><div class="wf-label">Masalahnya</div>' + esc(d.problem) + '</div>' +
+        '<div class="wf-arrow wf-a1">↓</div>' +
+        '<div class="wf-bubble chat"><div class="wf-label">Yang biasanya terjadi</div>' + esc(d.chat) + '</div>' +
+        '<div class="wf-arrow wf-a2">↓</div>' +
+        '<div class="wf-bubble ai"><div class="wf-claude"><span class="wf-spark">✦</span><div><div class="wf-label">Dengan Claude</div><div class="wf-prompt">' + esc(d.prompt) + '</div></div></div></div>' +
+        '<div class="wf-arrow wf-a3">↓</div>' +
+        '<div class="wf-bubble result"><div class="wf-label">Hasilnya</div><strong>' + esc(d.result) + '</strong></div>';
+      demoEl.classList.add('play');
+      setTimeout(function() { demoEl.classList.remove('play'); }, 700);
     };
-    track.addEventListener('scroll', function() {
-      clearTimeout(track._wfT);
-      track._wfT = setTimeout(wfUpdateNav, 80);
-    });
-    window.addEventListener('resize', wfUpdateNav);
-    wfUpdateNav();
+    wfRender('business');
   })();
 
   // Course catalog for the logged-in "welcome back" home (loggedInHome section below).
