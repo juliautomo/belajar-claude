@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 4, 2026 (checkpoint 170)_
+_Last updated: August 4, 2026 (checkpoint 171)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2372,6 +2372,18 @@ Julia asked for this rolled out everywhere for consistency. Investigated first (
 **Files**: `belajar-claude`: `dashboard.html`, `index.html`, `strategi-marketing.html`, `prompt-gratis.html`, `produktivitas.html`, `mulai-claude.html`, `content-marketing.html`, `all-access.html` — all `dev` only.
 
 **Commits**: `belajar-claude`: `8c8a7f8`, `336f6c5` (dashboard), `b84323f` (index.html nav + hero gap), `84a45e9` (nav rolled out to the other 6 pages).
+
+## SHIPPED (Checkpoint 171, August 4, 2026): Fixed admin.html upload failures caused by stale auth tokens
+
+Julia reported an intermittent "Gagal unggah: new row violates row-level security policy" error when uploading a course PDF in `admin.html`. Investigated via Supabase storage/API logs (project `ctqtdqbsucbhikwnagvl`) — found the exact failed request and ruled out RLS misconfiguration (INSERT/UPDATE policies on `course-pdfs` are correctly scoped to both admin emails, re-verified directly against `pg_policies`), filename characters (Supabase explicitly allows spaces/parentheses in object keys per their docs), and bucket/global file size limits (initially suspected given the project is on the Free plan's 50MB cap, but ruled out once the actual error text came back from a screenshot — it's an RLS rejection, not a size/payload error).
+
+Root cause: `supabase-js` pauses its background token-refresh timer while the browser tab is unfocused/backgrounded. `admin.html` only fetched the session once at page load (`currentSession`) and never re-checked it before writes. If the admin tab sits open and idle past the ~1hr access-token lifetime (e.g. left open while doing other things, then coming back to upload), the next write goes out with an expired token — Postgres RLS then evaluates `auth.jwt() ->> 'email'` as null/mismatched and rejects the row, surfacing as a generic RLS violation rather than a clean 401.
+
+Fix: added `ensureFreshSession()` (calls `sbClient.auth.getSession()`, which transparently renews the token if expired) and call it at the top of all 10 write functions in `admin.html`: `saveSocialLinks`, `savePricing`, `submitPdfModal`, `onCourseVisibilityToggle`, `submitVideoModal`, `deleteVideoModal`, `submitPptModal`, `deletePptModal`, `submitDocsModal`, `deleteDocModal`. This makes every admin write self-healing regardless of how long the tab has been idle.
+
+**Files**: `belajar-claude`: `admin.html` — `dev` only.
+
+**Commits**: `belajar-claude`: `8303829`.
 
 ## Design System (as of June 2026)
 All pages use these CSS variables:
