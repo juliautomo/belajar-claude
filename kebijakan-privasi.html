@@ -159,10 +159,10 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         <li id="liInstagram" style="display:none;"><a href="#" id="linkInstagram" target="_blank" rel="noopener">Instagram</a></li><li id="liWhatsapp" style="display:none;"><a href="#" id="linkWhatsapp" target="_blank" rel="noopener">WhatsApp Community</a></li>
       </ul>
     </div>
-    <div class="footer-links" id="footerContactLinks" style="display:none;">
-      <h4>Hubungi Kami</h4>
+    <div class="footer-links">
+      <h4>Bantuan</h4>
       <ul>
-        <li id="liEmail" style="display:none;"><a href="#" id="linkEmail">Email</a></li><li id="liContactWa" style="display:none;"><a href="#" id="linkContactWa" target="_blank" rel="noopener">WhatsApp</a></li>
+        <li><a href="faq.html">FAQ</a></li><li id="liEmail" style="display:none;"><a href="#" id="linkEmail">Email</a></li><li id="liContactWa" style="display:none;"><a href="#" id="linkContactWa" target="_blank" rel="noopener">WhatsApp</a></li>
       </ul>
     </div>
     <div class="footer-links">
@@ -213,7 +213,6 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
       if (email && emailVisible) {
         document.getElementById('liEmail').style.display = 'block';
         document.getElementById('linkEmail').href = 'mailto:' + email;
-        document.getElementById('footerContactLinks').style.display = 'block';
       }
 
       var contactWa = row.contact_whatsapp;
@@ -224,7 +223,6 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         else if (waDigits.slice(0, 2) !== '62') waDigits = '62' + waDigits;
         document.getElementById('liContactWa').style.display = 'block';
         document.getElementById('linkContactWa').href = 'https://wa.me/' + waDigits;
-        document.getElementById('footerContactLinks').style.display = 'block';
       }
     } catch (e) {}
   })();
