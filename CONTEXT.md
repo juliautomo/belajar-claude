@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 4, 2026 (checkpoint 172)_
+_Last updated: August 4, 2026 (checkpoint 173)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2396,6 +2396,18 @@ Also note: earlier in this session I initially misattributed a report of this sa
 **Files**: `belajar-claude`: `dashboard.html`, `mulai-claude-content.html`, `prompt-gratis-content.html`, `produktivitas-content.html`, `content-marketing-content.html`, `strategi-marketing-content.html` — all `dev` only.
 
 **Commits**: `belajar-claude`: `8703cc9` (dashboard grid fix), `24faf7b` (lesson header mobile declutter).
+
+## SHIPPED (Checkpoint 173, August 4, 2026): Dead spotlight button, dashboard nav padding — merged to `main`, `dev`↔`main` back in sync
+
+**1. Dead "Lanjutkan" button on the dashboard's continue-spotlight card.** The button's `onclick` called `event.stopPropagation()` before its ripple effect — this blocked the click from ever reaching the card's own `onclick` (`document.getElementById('spotCard').onclick = function(){ location.href = spotMeta.contentLink; }`, set in JS), so clicking the button did nothing but ripple; only clicking elsewhere on the card navigated. Fixed by removing `stopPropagation()` so the click bubbles up and navigates (`dashboard.html`, commit `2d567b0`).
+
+**2. Dashboard logo sitting differently than other pages on mobile.** `dashboard.html`'s `nav` padding was hardcoded `0 40px` at every width — never reduced on mobile like `index.html` and the other pages do (`0 20px`) — so the logo looked more inset than everywhere else. Added `nav{padding:0 20px;}` to the existing `max-width:900px` query (`dashboard.html`, commit `ca4268d`).
+
+Julia asked to push straight to `main` once these were confirmed, so both went directly through `dev` → merge → `main` in the same session (no separate review gap this time). **Standing instruction going forward: default back to `dev`-only pushes and wait for explicit go-ahead before merging to `main`, even for small fixes** — this was a one-off exception, not a change to the normal workflow.
+
+**Files**: `belajar-claude`: `dashboard.html` — both `dev` and `main`.
+
+**Commits**: `belajar-claude`: `2d567b0` (dead button), `ca4268d` (nav padding) — both on `dev` and merged to `main` via the same commits (fast-forward, no separate merge commit needed since `dev` was already ahead).
 
 ## Design System (as of June 2026)
 All pages use these CSS variables:
