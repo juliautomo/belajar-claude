@@ -191,7 +191,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 .cnav-btn svg{width:12px;height:12px;}
 
 @keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:900px){.layout{grid-template-columns:1fr;}.sidebar{display:none;}.main{padding:24px 20px;min-width:0;}}
+@media(max-width:900px){.layout{grid-template-columns:1fr;}.sidebar{display:none;}.main{padding:24px 20px;min-width:0;}nav{padding:0 20px;}}
 /* Mobile "Kursus Kamu" / "Kursus Selesai" rows — on a narrow screen there isn't
    room for idx + thumb + title + progress + button on one line. First attempt
    used flex "order" + wrap, but that's width-dependent: the short "Mulai"
