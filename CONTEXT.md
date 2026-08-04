@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 4, 2026 (checkpoint 166)_
+_Last updated: August 4, 2026 (checkpoint 168)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2318,6 +2318,32 @@ Julia asked for an FAQ page sourced from a Google Doc, added to the footer under
 **Files**: `belajar-claude`: `faq.html` (new), `all-access.html`, `content-marketing.html`, `index.html`, `kebijakan-pengembalian.html`, `kebijakan-privasi.html`, `mulai-claude.html`, `produktivitas.html`, `prompt-gratis.html`, `strategi-marketing.html`, `syarat-ketentuan.html` — all `dev` only.
 
 **Commits**: `belajar-claude`: `26dc634`.
+
+## SHIPPED (Checkpoint 167, August 4, 2026): "Lintas profesi" case-demo illustration refactored into a swappable component
+
+Julia asked to be able to try a different visual for the "begini Claude membantu" terminal-style box under the profession cards on `index.html`, while keeping the ability to revert. Refactored the click-to-see-demo JS so the typed-terminal rendering lives behind one function reference, `CASE_ILLUSTRATION_RENDERER`, with the original effect preserved as `renderCaseIllustration_Terminal` — swapping in a different look is a one-line change (`CASE_ILLUSTRATION_RENDERER = renderNewThing`) rather than a rewrite. HTML block wrapped in named comment markers for the same reason. No visual change; `ci-check.js` clean.
+
+This component was fully superseded by Checkpoint 168 below (the whole section was replaced, not just this sub-piece), but the pattern — isolate the swappable part behind one named seam — is worth reusing next time a similar "let me try alternatives" request comes up.
+
+**Files**: `belajar-claude`: `index.html` (`dev` only).
+
+**Commits**: `belajar-claude`: `2e2822b`.
+
+## SHIPPED (Checkpoint 168, August 4, 2026): "Lintas profesi" section fully redesigned — now "Dari Pekerjaan Sehari-hari" tabbed demo
+
+Multi-round iteration, all on `dev`, all confirmed via a fresh scratch-clone push + `ci-check.js` + live dev-preview fetch each round:
+
+1. **Static 6-card grid** (`db0e0b6`) — replaced the old click-a-card/typed-terminal interaction entirely with a new design Julia provided (uploaded HTML mockup): 6 profession cards (Pemilik Bisnis/UMKM, Freelancer, Content Creator, Pekerja Kantor, Mahasiswa, Admin), each showing a problem → Claude helps → done chat-bubble flow next to an emoji illustration. Rebuilt using the site's real classes (`.container`, `.section-title` with Fraunces, `.section-sub`) instead of the mockup's standalone CSS, so margins/alignment match the rest of the page automatically. Removed the old `CASE_DEMOS`/`showCaseDemo`/tilt-on-hover JS from Checkpoint 167 as dead code — the new cards are self-contained, no interaction needed.
+2. **Carousel version** (`4519cd3`) — Julia asked for it larger, 2-per-slide, with left/right arrows, "more alive, not boxed." Converted the static grid to a horizontally-scrolling track (`scroll-snap`), bigger cards, circular arrow buttons that scroll one viewport at a time and grey out at either end.
+3. **Removed the bottom benefits bar** (`2dab2e5`) per Julia's direct request ("remove").
+4. **Tabbed single-card demo** (`71a6354`) — Julia sent a second, richer mockup (pill-shaped profession tabs above one large animated demo card: problem → "yang biasanya terjadi" → Claude prompt → result, with a pop-in animation on tab switch). Rebuilt to fit inside the site's standard `.container` width (the source mockup was a much wider, standalone 1440px section) and dropped the mockup's "Coba prompt ini" CTA button per instruction. Content (6 profession scenarios, richer copy than the original cards) lives in `WF_DATA`; `wfRender(key)` swaps the demo card and replays the reveal animation.
+5. **Sizing/layout fix** (`7f720b3`) — Julia flagged too much empty space in the profile column and the bubble column getting clipped on the right. Root cause: profile column was a `36%` share of the box, so it grew disproportionately as the box got wider. Changed to a fixed `260px` profile column with the bubble column taking the remainder, and sized the whole card up.
+
+**Verification note**: because the tab/card content is rendered by JS (`wfRender('business')` on load) rather than baked into the static HTML, a plain-text fetch of the dev URL shows the section as empty — expected, not a bug. Confirmed correctness instead via `ci-check.js` (which runs `node --check` on every inline `<script>` block) and by grepping for zero leftover references to the removed classes/IDs after each round.
+
+**Files**: `belajar-claude`: `index.html` (`dev` only, all 4 commits).
+
+**Commits**: `belajar-claude`: `db0e0b6`, `4519cd3`, `2dab2e5`, `71a6354`, `7f720b3`.
 
 ## Design System (as of June 2026)
 All pages use these CSS variables:
