@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 4, 2026 (checkpoint 168)_
+_Last updated: August 4, 2026 (checkpoint 169)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2344,6 +2344,18 @@ Multi-round iteration, all on `dev`, all confirmed via a fresh scratch-clone pus
 **Files**: `belajar-claude`: `index.html` (`dev` only, all 4 commits).
 
 **Commits**: `belajar-claude`: `db0e0b6`, `4519cd3`, `2dab2e5`, `71a6354`, `7f720b3`.
+
+## SHIPPED (Checkpoint 169, August 4, 2026): Persona emoji swaps for the workflow demo, then merged to `main`
+
+Follow-up polish on the Checkpoint 168 tabbed demo, still on `dev`: the "Pemilik Bisnis / UMKM" persona was swapped from a corporate suit-and-tie office-worker emoji to 🧕🏻 (woman with headscarf) — a more relatable "ibu-ibu UMKM" look for the Indonesian small-business-owner archetype (`dbdea3b`). The "Admin / Operasional" persona went through three rounds at Julia's direction: white-hair man (`787b5d0`, rejected — "not white hair"), nerd-face 🤓 for the glasses (`b530d58`, rejected — wanted a full-body figure like the other cards, not a face-only emoji), then a multiple-choice check via `AskUserQuestion` since "man + glasses" isn't an available combination in the standard emoji set — Julia picked "man office worker" 👨🏻‍💼, landed on for its suit + distinct side-parted hair vs. the freelancer's look (`edd115b`).
+
+**Explained the Mac-vs-other-platforms rendering difference** when Julia asked why the illustrations looked different in her Mac browser: these are raw Unicode emoji characters, not images, so each OS renders its own emoji artwork (Apple Color Emoji vs Segoe UI Emoji vs Noto) — same character, different look per platform. Offered to convert to a hosted image-based emoji set (e.g. Twemoji) for pixel-identical rendering everywhere if that inconsistency becomes a problem; not done, left as an open option.
+
+**Merged `dev` into `main`** (`c14e270`) after Julia asked to check dev and ship if clean. Verified before merging: `ci-check.js` clean on `dev`, and `git diff origin/main..origin/dev --stat` showed only content-layer files (`CONTEXT.md`, `faq.html`, `index.html`, and 8 pages' footer-only diffs) — no `backend-config.js`, `admin.html`, or database-adjacent changes in this batch, so no extra confirmation needed beyond the direct instruction. Merge was a clean fast-forward-equivalent (`ort` strategy, no conflicts), `ci-check.js` re-run clean post-merge, pushed to `main`, and confirmed live on `https://belajarclaude.id` — homepage shows the new "Dari Pekerjaan Sehari-hari" section and the "Bantuan" footer with a working `faq.html`.
+
+**Files**: `belajar-claude`: `index.html` (persona emoji, `dev` only until the merge), `CONTEXT.md`.
+
+**Commits**: `belajar-claude`: `dbdea3b`, `787b5d0`, `b530d58`, `edd115b` (all `dev`), merged to `main` via `c14e270`.
 
 ## Design System (as of June 2026)
 All pages use these CSS variables:
