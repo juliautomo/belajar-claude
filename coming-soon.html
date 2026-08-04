@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
+<script src="backend-config.js"></script>
 <style>
     :root {
     --bg: #FAFAFA; --surface: #FFFFFF; --surface-2: #F5F5F7;
@@ -93,7 +94,7 @@
         msg.className = 'msg error'; return;
       }
       try {
-        await fetch('https://klaud-backend-production.up.railway.app/signup', {
+        await fetch(BACKEND_URL + '/signup', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name: email.split('@')[0], email: email, source: 'coming-soon' })
         });

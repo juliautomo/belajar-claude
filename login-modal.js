@@ -283,7 +283,7 @@
     }
 
     // Fire-and-forget: trigger welcome email + ConvertKit/Sheets logging (non-blocking, no name field on this form)
-    fetch('https://klaud-backend-production.up.railway.app/signup', {
+    fetch(BACKEND_URL + '/signup', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: email.split('@')[0], email: email, source: 'signup-modal' })
     }).catch(function() {});

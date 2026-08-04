@@ -327,6 +327,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
+  <script src="backend-config.js"></script>
   <script src="login-modal.js"></script>
   <script src="payment-success-modal.js"></script>
 <script>
@@ -437,7 +438,7 @@
     if (!email || !email.includes('@')) { alert('Mohon masukkan email yang valid.'); return; }
     btn.disabled = true; btn.textContent = 'Memproses...';
     try {
-      const res  = await fetch('https://klaud-backend-production.up.railway.app/create-payment', {
+      const res  = await fetch(BACKEND_URL + '/create-payment', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ courseSlug: 'all-access', customerName: name, customerEmail: email })
       });
