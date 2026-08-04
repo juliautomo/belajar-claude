@@ -95,25 +95,31 @@ section { padding: 88px 0; position: relative; z-index: 1; }
 
 /* --- Profession workflows section --- */
 .cases-section { padding: 88px 0 0; position: relative; z-index: 1; }
-.wf-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 40px; }
-@media (max-width: 900px) { .wf-cards { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 560px) { .wf-cards { grid-template-columns: 1fr; } }
-.wf-card { min-height: 190px; border: 1px solid var(--border); border-radius: 18px; padding: 16px; display: grid; grid-template-columns: 42% 58%; align-items: center; gap: 10px; overflow: hidden; }
-.wf-card:nth-child(1) { background: #FFF8E9; }
-.wf-card:nth-child(2) { background: #F3F0FF; }
-.wf-card:nth-child(3) { background: #FFF1F3; }
-.wf-card:nth-child(4) { background: #F0F5FF; }
-.wf-card:nth-child(5) { background: #F8F0FF; }
-.wf-card:nth-child(6) { background: #EEF9F6; }
+.wf-carousel { margin-top: 40px; }
+.wf-track { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 2px; }
+.wf-track::-webkit-scrollbar { display: none; }
+.wf-card { flex: 0 0 calc(50% - 10px); scroll-snap-align: start; min-height: 260px; border: 1px solid var(--border); border-radius: 22px; padding: 24px; display: grid; grid-template-columns: 40% 60%; align-items: center; gap: 16px; overflow: hidden; }
+.wf-card:nth-child(6n+1) { background: #FFF8E9; }
+.wf-card:nth-child(6n+2) { background: #F3F0FF; }
+.wf-card:nth-child(6n+3) { background: #FFF1F3; }
+.wf-card:nth-child(6n+4) { background: #F0F5FF; }
+.wf-card:nth-child(6n+5) { background: #F8F0FF; }
+.wf-card:nth-child(6n+6) { background: #EEF9F6; }
 .wf-profile { align-self: stretch; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
-.wf-tag { display: inline-flex; max-width: 100%; width: max-content; padding: 4px 10px; border-radius: 999px; background: rgba(255,255,255,0.72); color: #6044e8; font-size: 10px; font-weight: 700; letter-spacing: 0.02em; line-height: 1.3; }
-.wf-person { font-size: 56px; line-height: 1; text-align: center; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.08)); }
-.wf-caption { font-size: 13px; font-weight: 700; color: var(--ink); line-height: 1.32; }
-.wf-flow { display: flex; flex-direction: column; gap: 6px; }
-.wf-bubble { background: rgba(255,255,255,0.82); border: 1px solid rgba(108,71,255,0.12); border-radius: 12px; padding: 8px 10px; font-size: 11.5px; color: var(--ink); line-height: 1.25; box-shadow: 0 3px 8px rgba(0,0,0,0.03); }
+.wf-tag { display: inline-flex; max-width: 100%; width: max-content; padding: 6px 14px; border-radius: 999px; background: rgba(255,255,255,0.72); color: #6044e8; font-size: 12px; font-weight: 700; letter-spacing: 0.02em; line-height: 1.3; }
+.wf-person { font-size: 84px; line-height: 1; text-align: center; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.08)); }
+.wf-caption { font-size: 16px; font-weight: 700; color: var(--ink); line-height: 1.32; }
+.wf-flow { display: flex; flex-direction: column; gap: 8px; }
+.wf-bubble { background: rgba(255,255,255,0.82); border: 1px solid rgba(108,71,255,0.12); border-radius: 14px; padding: 10px 13px; font-size: 13.5px; color: var(--ink); line-height: 1.28; box-shadow: 0 3px 8px rgba(0,0,0,0.03); }
 .wf-bubble.ai { border-color: #D8CEFF; }
 .wf-bubble.done { border-color: #BDE8C9; }
-.wf-arrow { text-align: center; color: #7A67DB; font-weight: 900; font-size: 11px; }
+.wf-arrow { text-align: center; color: #7A67DB; font-weight: 900; font-size: 13px; }
+.wf-nav { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }
+.wf-nav-btn { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); color: var(--ink); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; transition: border-color 0.15s, color 0.15s, background 0.15s; }
+.wf-nav-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+.wf-nav-btn:disabled { opacity: 0.35; cursor: default; }
+.wf-nav-btn:disabled:hover { border-color: var(--border); color: var(--ink); background: var(--surface); }
+@media (max-width: 640px) { .wf-card { flex-basis: 88%; } }
 .wf-bottom { margin: 20px 0 0; padding: 16px 20px; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow-sm); display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
 @media (max-width: 900px) { .wf-bottom { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 560px) { .wf-bottom { grid-template-columns: 1fr; } }
@@ -301,7 +307,8 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     <h2 class="section-title">AI nggak harus ribet.<br><span class="wf-accent">Belajar dari pekerjaan yang kamu lakukan.</span></h2>
     <p class="section-sub" style="max-width:600px;">Kursus ini dibuat untuk kamu yang ingin belajar AI secara praktis, tanpa perlu latar belakang teknis.</p>
 
-    <div class="wf-cards">
+    <div class="wf-carousel">
+    <div class="wf-track" id="wfTrack">
       <article class="wf-card">
         <div class="wf-profile">
           <span class="wf-tag">PEMILIK BISNIS / UMKM</span>
@@ -379,6 +386,11 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
           <div class="wf-bubble done">🟢 Selesai!</div>
         </div>
       </article>
+    </div>
+    <div class="wf-nav">
+      <button class="wf-nav-btn" id="wfPrev" aria-label="Sebelumnya" onclick="wfScroll(-1)">←</button>
+      <button class="wf-nav-btn" id="wfNext" aria-label="Selanjutnya" onclick="wfScroll(1)">→</button>
+    </div>
     </div>
 
     <div class="wf-bottom">
@@ -527,9 +539,31 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     }, 2400);
   }
 
-  // "Dari Pekerjaan Sehari-hari" workflow section (.wf-cards) is static
-  // markup — no JS needed. (Previously this held a click-to-see-demo
-  // interaction for the old "Lintas profesi" version of this section.)
+  // "Dari Pekerjaan Sehari-hari" workflow carousel — left/right arrows
+  // scroll the track by one viewport's width (2 cards), with native
+  // scroll-snap doing the settling. Arrow disabled state follows scroll
+  // position so it's obvious when you've hit either end.
+  (function() {
+    var track = document.getElementById('wfTrack');
+    var prevBtn = document.getElementById('wfPrev');
+    var nextBtn = document.getElementById('wfNext');
+    if (!track || !prevBtn || !nextBtn) return;
+
+    function wfUpdateNav() {
+      var max = track.scrollWidth - track.clientWidth - 2;
+      prevBtn.disabled = track.scrollLeft <= 2;
+      nextBtn.disabled = track.scrollLeft >= max;
+    }
+    window.wfScroll = function(dir) {
+      track.scrollBy({ left: dir * track.clientWidth, behavior: 'smooth' });
+    };
+    track.addEventListener('scroll', function() {
+      clearTimeout(track._wfT);
+      track._wfT = setTimeout(wfUpdateNav, 80);
+    });
+    window.addEventListener('resize', wfUpdateNav);
+    wfUpdateNav();
+  })();
 
   // Course catalog for the logged-in "welcome back" home (loggedInHome section below).
   // Mirrors dashboard.html's ALL_COURSES, kept lightweight since this view only needs
