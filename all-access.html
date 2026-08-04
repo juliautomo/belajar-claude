@@ -39,6 +39,8 @@
   }
   .logo { font-family: var(--font); font-size: 17px; font-weight: 700; color: var(--ink); text-decoration: none; letter-spacing: -0.4px; }
   .logo span { color: var(--accent); }
+  .nav-hamburger { display: none; background: none; border: none; color: var(--ink); width: 36px; height: 36px; align-items: center; justify-content: center; cursor: pointer; border-radius: 8px; }
+  .nav-hamburger:hover { background: var(--surface-2); }
   .nav-links { display: flex; align-items: center; gap: 28px; }
   .nav-links a { font-size: 13px; font-weight: 500; color: var(--ink-2); text-decoration: none; transition: color 0.15s; }
   .nav-links a:hover { color: var(--ink); }
@@ -150,14 +152,26 @@
   .footer-bottom p { font-size: 11px; color: rgba(255,255,255,0.18); }
   @media (max-width: 640px) { footer { padding: 40px 20px 24px; } .footer-inner { flex-direction: column; gap: 24px; } }
 
-  @media (max-width: 768px) { nav { padding: 0 20px; } .compare-box { flex-direction: column; } }
+  @media (max-width: 768px) { nav { padding: 0 20px; } .compare-box { flex-direction: column; } 
+  /* Mobile nav — Kursus/Masuk/account links collapse into a hamburger-triggered
+     dropdown panel below 768px, matching the same fix applied on index.html. */
+  .nav-hamburger { display: flex; }
+  .nav-links { display: none; position: fixed; top: 58px; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 2px; background: var(--surface); border-bottom: 1px solid var(--border); padding: 10px 20px 16px; box-shadow: 0 12px 30px rgba(0,0,0,0.08); z-index: 99; }
+  .nav-links.mobile-open { display: flex; }
+  .nav-links a { padding: 12px 4px; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .nav-links a:last-of-type { border-bottom: none; }
+  .nav-user-pill { padding: 12px 4px 4px; }
+}
 </style>
 </head>
 <body>
 
 <nav>
   <a href="index.html" class="logo">belajar<span>claude</span></a>
-  <div class="nav-links">
+  <button class="nav-hamburger" id="navHamburger" onclick="toggleMobileNav(event)" aria-label="Menu" aria-expanded="false">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <div class="nav-links" id="navLinks">
     <a href="index.html#kursus">Kursus</a>
     <a href="login.html" id="navLoginBtn">Masuk</a>
     <div class="nav-user-pill" id="navUserPill" onclick="toggleUserMenu(event)">
@@ -490,6 +504,37 @@
     var pill = document.getElementById('navUserPill');
     if (pill) pill.classList.remove('open');
   });
+
+  // Mobile hamburger menu — toggles the same Kursus/Masuk/account links that
+  // are always visible on desktop. Closes on an outside click, on pressing
+  // Escape, or after tapping a link inside it.
+  function toggleMobileNav(e) {
+    e.stopPropagation();
+    var links = document.getElementById('navLinks');
+    var btn = document.getElementById('navHamburger');
+    var open = links.classList.toggle('mobile-open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  document.addEventListener('click', function(e) {
+    var links = document.getElementById('navLinks');
+    var btn = document.getElementById('navHamburger');
+    if (links && links.classList.contains('mobile-open') && !links.contains(e.target) && e.target !== btn) {
+      links.classList.remove('mobile-open');
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+    }
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      var links = document.getElementById('navLinks');
+      if (links) links.classList.remove('mobile-open');
+    }
+  });
+  var navLinksEl = document.getElementById('navLinks');
+  if (navLinksEl) {
+    navLinksEl.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() { navLinksEl.classList.remove('mobile-open'); });
+    });
+  }
 
   // Populate footer social links from admin-managed social_links table.
   // Each link stays hidden unless the admin has filled in a URL for it.
