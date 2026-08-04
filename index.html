@@ -299,6 +299,15 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
       <div class="case-card" data-role="owner" onclick="showCaseDemo('owner', this)"><div class="case-icon">💼</div><div class="case-role">Business Owner</div><p>Data penjualan, arus kas, dan catatan tim — Claude rangkum jadi health check bisnis singkat plus 3 langkah prioritas.</p></div>
       <div class="case-card" data-role="sales" onclick="showCaseDemo('sales', this)"><div class="case-icon">🤝</div><div class="case-role">Sales Manager</div><p>Proposal kerjasama custom untuk 5 klien berbeda lewat chain 4 langkah — masing-masing terasa personal, bukan template generik.</p></div>
     </div>
+    <!-- ============================================================
+         COMPONENT: Case Demo Illustration (swappable)
+         This is the "begini Claude membantu" visual under the profession
+         cards. It's a self-contained block on purpose — to try a
+         different illustration style here, only .case-window's contents
+         need to change (see CASE_ILLUSTRATION_RENDERER in the script
+         below). The current typed-terminal look is kept as the default/
+         fallback so it's easy to switch back.
+         ============================================================ -->
     <div class="case-demo-wrap">
       <div class="case-connector" id="caseConnector"></div>
       <div class="case-demo-card">
@@ -306,6 +315,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         <div class="case-window" id="caseDemoWindow"></div>
       </div>
     </div>
+    <!-- ========================= END COMPONENT ========================= -->
   </div>
 </section>
 <section id="kursus" style="padding-bottom:0;">
@@ -464,7 +474,33 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     owner: { icon: '💼', label: 'Business Owner' },
     sales: { icon: '🤝', label: 'Sales Manager' }
   };
+  // ============================================================
+  // COMPONENT: Case Demo Illustration — renderer (swappable)
+  //
+  // Whatever renders inside #caseDemoWindow for a given role lives here,
+  // behind a single function reference (CASE_ILLUSTRATION_RENDERER). To
+  // try a different illustration, write a new renderRoleXxx(role, win)
+  // function with the same signature (role string in, fill the #win
+  // element however you like) and point CASE_ILLUSTRATION_RENDERER at it.
+  // The current version (typed-out terminal text) is kept below as
+  // renderCaseIllustration_Terminal so switching back is a one-line change.
+  // ============================================================
   var caseTypingTimer = null;
+  function renderCaseIllustration_Terminal(role, win) {
+    clearInterval(caseTypingTimer);
+    var text = CASE_DEMOS[role];
+    var i = 0;
+    win.innerHTML = '<span class="caret"></span>';
+    caseTypingTimer = setInterval(function() {
+      i += 2;
+      win.innerHTML = text.slice(0, i).replace(/\n/g, '<br>') + '<span class="caret"></span>';
+      if (i >= text.length) clearInterval(caseTypingTimer);
+    }, 10);
+  }
+
+  // Swap point — change this line to try a different illustration renderer.
+  var CASE_ILLUSTRATION_RENDERER = renderCaseIllustration_Terminal;
+
   function showCaseDemo(role, cardEl) {
     document.querySelectorAll('#casesGrid .case-card').forEach(function(c) { c.classList.remove('active'); });
     cardEl.classList.add('active');
@@ -477,16 +513,8 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     var cardCenter = cardEl.offsetLeft + cardEl.offsetWidth / 2 - 8;
     connector.style.left = cardCenter + 'px';
 
-    clearInterval(caseTypingTimer);
     var win = document.getElementById('caseDemoWindow');
-    var text = CASE_DEMOS[role];
-    var i = 0;
-    win.innerHTML = '<span class="caret"></span>';
-    caseTypingTimer = setInterval(function() {
-      i += 2;
-      win.innerHTML = text.slice(0, i).replace(/\n/g, '<br>') + '<span class="caret"></span>';
-      if (i >= text.length) clearInterval(caseTypingTimer);
-    }, 10);
+    CASE_ILLUSTRATION_RENDERER(role, win);
   }
   document.querySelectorAll('.case-card').forEach(function(card, i) {
     card.style.transitionDelay = (i * 50) + 'ms';
