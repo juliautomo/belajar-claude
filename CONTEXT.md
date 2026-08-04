@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 4, 2026 (checkpoint 159)_
+_Last updated: August 4, 2026 (checkpoint 160)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2198,6 +2198,18 @@ Follow-up same day. Went through the pending list from Checkpoint 158 in priorit
 The other half — a `.github/workflows/check.yml` GitHub Actions file that would run `ci-check.js` automatically on every push/PR to `dev`/`main` — **could not be pushed**: GitHub rejected it with `refusing to allow a Personal Access Token to create or update workflow ".github/workflows/check.yml" without workflow scope`. The PAT stored in this repo's `.git/config` (per the Git/Claude Workflow section above) has repo-content write access but not the separate `workflow` OAuth scope GitHub requires specifically for anything under `.github/workflows/`. **This needs Julia to regenerate the PAT with the `workflow` scope included** (GitHub → Settings → Developer settings → Personal access tokens → edit/regenerate → check the `workflow` box alongside `repo`) and update it in both repos' `.git/config` the same way past token rotations have been handled (see Git/Claude Workflow section) — a future session can push the workflow file itself once that's done; `ci-check.js` is already in place and ready to be called by it. In the meantime, `ci-check.js` still works as a manual check — any session can run `node ci-check.js` from the repo root before pushing.
 
 **Cloudflare non-production branch builds — still pending Julia's dashboard click**, unchanged from Checkpoint 158 (no API access to Workers Build settings from here).
+
+---
+
+## SHIPPED (Checkpoint 160, August 4, 2026): New GitHub token (classic, `repo`+`workflow` scopes) unblocks CI automation
+
+Same-day follow-up closing out the blocker from Checkpoint 159. Julia generated a new classic PAT (`repo` + `workflow` scopes, replacing the previous `repo`-only token) via GitHub → Settings → Developer settings → Personal access tokens (classic). Updated the token in both repos' `.git/config` via `sed -i` (same pattern as prior rotations — see Git/Claude Workflow section). Verified immediately by pushing the previously-rejected `.github/workflows/check.yml` to `dev`: succeeded this time (commit `a284a43`), confirming the new token's `workflow` scope is active. GitHub Actions now runs `ci-check.js` automatically on every push/PR to `dev` and `main` — the CI check from Checkpoint 159 is fully wired up, not just a manual script anymore. Julia asked to check the Actions tab herself to confirm the run went green, since this sandbox has no network access to GitHub's API/Actions endpoints (only `git` operations over `github.com` are reachable — confirmed via a direct test, `curl`/API calls to `api.github.com` return no response) — the file's presence and successful push are the parts verifiable from here.
+
+**Remaining pending, unchanged**: Cloudflare "non-production branch builds" dashboard toggle (Julia); staging Supabase database (deferred, blocked on the free-tier 2-project cap, Julia's call to revisit); Railway dev environment for the backend (lowest priority, only needed once backend changes are actively in flight).
+
+**Files**: `.github/workflows/check.yml` (new, `dev` branch), `CONTEXT.md`. Both repos' local `.git/config` (token rotation, not tracked in git history).
+
+**Commits**: `belajar-claude`: `a284a43` (`.github/workflows/check.yml` on `dev`).
 
 **Files**: `ci-check.js` (new, `dev` branch only pending merge), `CONTEXT.md`.
 
