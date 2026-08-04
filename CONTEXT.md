@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 4, 2026 (checkpoint 171)_
+_Last updated: August 4, 2026 (checkpoint 172)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2384,6 +2384,18 @@ Fix: added `ensureFreshSession()` (calls `sbClient.auth.getSession()`, which tra
 **Files**: `belajar-claude`: `admin.html` — `dev` only.
 
 **Commits**: `belajar-claude`: `8303829`.
+
+## SHIPPED (Checkpoint 172, August 4, 2026): Dashboard mobile-squeeze bug (real cause) fixed; lesson-page mobile headers decluttered
+
+Julia kept reporting the dashboard mobile layout was "still cut off, still so much right margin" even after the Checkpoint 170 nav/row fixes. Turned out to be a separate, previously-undiagnosed bug: `.layout` is `display:grid` with `grid-template-columns: 280px 1fr` (sidebar + main). The `max-width:900px` query hides `.sidebar` but never reset the grid's column tracks, so with the sidebar removed from the grid, `.main` auto-placed into the leftover 280px first column instead of spanning full width — the entire dashboard content rendered squeezed into a 280px strip with the second `1fr` track sitting empty. Fixed by adding `.layout{grid-template-columns:1fr}` inside that same media query (`dashboard.html`, commit `8703cc9`).
+
+Also note: earlier in this session I initially misattributed a report of this same symptom to Cloudflare only auto-deploying `main` (not `dev`) — that was wrong; Julia was testing the `dev` preview correctly, the bug was real and is now fixed above.
+
+**Lesson-page headers**: the 5 course lesson pages (`mulai-claude-content.html`, `prompt-gratis-content.html`, `produktivitas-content.html`, `content-marketing-content.html`, `strategi-marketing-content.html`) share a header — logo, divider, course title, back-to-dashboard link, user email, logout button — that had no mobile treatment at all and overflowed/clipped on narrow screens (`body` has `overflow:hidden`, so anything overflowing the nav row was silently cut off rather than scrollable). Added a `max-width:640px` query to each (same breakpoint index.html uses) that hides the divider/course-title/email and shrinks the back link + logout button, leaving just logo + Dashboard + Keluar — same decluttering spirit as index.html's mobile nav, just without a hamburger since only two actions remain once the informational bits are dropped.
+
+**Files**: `belajar-claude`: `dashboard.html`, `mulai-claude-content.html`, `prompt-gratis-content.html`, `produktivitas-content.html`, `content-marketing-content.html`, `strategi-marketing-content.html` — all `dev` only.
+
+**Commits**: `belajar-claude`: `8703cc9` (dashboard grid fix), `24faf7b` (lesson header mobile declutter).
 
 ## Design System (as of June 2026)
 All pages use these CSS variables:
