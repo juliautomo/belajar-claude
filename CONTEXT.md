@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 4, 2026 (checkpoint 164)_
+_Last updated: August 4, 2026 (checkpoint 168)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2290,6 +2290,60 @@ Direct follow-up, same session, closing out the item Checkpoint 163 flagged as n
 **Files**: `belajar-claude`: `backend-config.js` (`dev` only), `CONTEXT.md`, `TEAM-WORKFLOW.md` (`main` + `dev`).
 
 **Commits**: `belajar-claude`: pending push this checkpoint.
+
+## SHIPPED (Checkpoint 165, August 4, 2026): `dev` merged into `main` — checkpoints 158-164 now live
+
+Julia gave the go-ahead to merge, with an explicit requirement: confirm nothing changes for real users. Merged `dev` into `main` on `belajar-claude` (fast-forward, commit `3f2b76f` — "Merge dev into main: backend-config.js consolidation, CI check, dev/prod collaboration workflow (checkpoints 158-164)"). This brings the CI workflow, `.assetsignore` security fix (already on `main` directly since Checkpoint 161), `backend-config.js` consolidation, and the real dev/prod Duitku split onto production.
+
+**Verified behavior-neutral empirically, not just asserted**: after Cloudflare's auto-deploy, re-fetched the live site and confirmed `backend-config.js`'s hostname check routes `belajarclaude.id` to the same production backend URL as before (no change to real checkout traffic), and spot-checked page content matched pre-merge. The `belajar-claude-backend` repo's own `dev`→`main` merge (Duitku env configurability, `dd8a573`) was already done in Checkpoint 163/164's window and is similarly a no-op by default (`DUITKU_ENV` unset on production, same as before — still sandbox until Julia's Duitku approval clears).
+
+**Files**: `belajar-claude` only (merge commit, no new file changes). `CONTEXT.md` this checkpoint.
+
+**Commits**: `belajar-claude`: `3f2b76f`.
+
+## SHIPPED (Checkpoint 166, August 4, 2026): FAQ page added, footer "Hubungi Kami" restructured to "Bantuan" (FAQ + Email + WhatsApp)
+
+Julia asked for an FAQ page sourced from a Google Doc, added to the footer under a "Help" grouping alongside the existing email/WhatsApp links. Confirmed with her that this targets `dev` first, per the standing workflow.
+
+**Sourced the content directly from Julia's Google Doc** (not publicly shared — used the Google Drive connector's `read_file_content`, authenticated as Julia's own account, rather than a public fetch) — 17 Q&As across 5 categories, transcribed verbatim.
+
+**New `faq.html`** — built from `kebijakan-privasi.html`'s template (same nav/footer/CSS-variable pattern as every other page) with a native `<details>/<summary>` accordion (no JS framework needed), grouped by category, plus a "still have questions" contact box wired to the same `social_links` Supabase query every other page uses for email/WhatsApp.
+
+**Footer restructured on all 11 pages** (`faq.html` + the 10 existing pages that carry the shared footer: `all-access.html`, `content-marketing.html`, `index.html`, `kebijakan-pengembalian.html`, `kebijakan-privasi.html`, `mulai-claude.html`, `produktivitas.html`, `prompt-gratis.html`, `strategi-marketing.html`, `syarat-ketentuan.html`): the "Hubungi Kami" column — previously hidden by default (`id="footerContactLinks" style="display:none;"`, only shown via JS once email/WhatsApp data loaded) — is now a permanently-visible "Bantuan" column with a static "FAQ" link listed first, followed by the same conditional Email/WhatsApp items as before. Removed the now-obsolete `document.getElementById('footerContactLinks').style.display = 'block'` JS lines (2 per file, 20 total) since the div no longer needs JS to reveal it.
+
+**Verification**: confirmed via grep no `footerContactLinks` references remain anywhere, all 11 pages link to `faq.html`, and `ci-check.js` passes clean (28 HTML files, 5 JS files, 25 local references, nothing broken) both before and after copying into a fresh scratch clone for the push — done deliberately via a clean `/tmp` clone rather than committing from the local working copy, since the local copy currently has a large amount of unrelated, uncommitted local edits (course PDFs/PPTX/CSVs) that aren't part of this change and shouldn't be swept into this push.
+
+**Pushed to `dev` only** (`26dc634`), matching Julia's own expectation stated in her request. Not merged to `main` — this is a straightforward content/layout change with no payment or database involvement, so it's safe to merge whenever Julia wants to review the dev preview first.
+
+**Files**: `belajar-claude`: `faq.html` (new), `all-access.html`, `content-marketing.html`, `index.html`, `kebijakan-pengembalian.html`, `kebijakan-privasi.html`, `mulai-claude.html`, `produktivitas.html`, `prompt-gratis.html`, `strategi-marketing.html`, `syarat-ketentuan.html` — all `dev` only.
+
+**Commits**: `belajar-claude`: `26dc634`.
+
+## SHIPPED (Checkpoint 167, August 4, 2026): "Lintas profesi" case-demo illustration refactored into a swappable component
+
+Julia asked to be able to try a different visual for the "begini Claude membantu" terminal-style box under the profession cards on `index.html`, while keeping the ability to revert. Refactored the click-to-see-demo JS so the typed-terminal rendering lives behind one function reference, `CASE_ILLUSTRATION_RENDERER`, with the original effect preserved as `renderCaseIllustration_Terminal` — swapping in a different look is a one-line change (`CASE_ILLUSTRATION_RENDERER = renderNewThing`) rather than a rewrite. HTML block wrapped in named comment markers for the same reason. No visual change; `ci-check.js` clean.
+
+This component was fully superseded by Checkpoint 168 below (the whole section was replaced, not just this sub-piece), but the pattern — isolate the swappable part behind one named seam — is worth reusing next time a similar "let me try alternatives" request comes up.
+
+**Files**: `belajar-claude`: `index.html` (`dev` only).
+
+**Commits**: `belajar-claude`: `2e2822b`.
+
+## SHIPPED (Checkpoint 168, August 4, 2026): "Lintas profesi" section fully redesigned — now "Dari Pekerjaan Sehari-hari" tabbed demo
+
+Multi-round iteration, all on `dev`, all confirmed via a fresh scratch-clone push + `ci-check.js` + live dev-preview fetch each round:
+
+1. **Static 6-card grid** (`db0e0b6`) — replaced the old click-a-card/typed-terminal interaction entirely with a new design Julia provided (uploaded HTML mockup): 6 profession cards (Pemilik Bisnis/UMKM, Freelancer, Content Creator, Pekerja Kantor, Mahasiswa, Admin), each showing a problem → Claude helps → done chat-bubble flow next to an emoji illustration. Rebuilt using the site's real classes (`.container`, `.section-title` with Fraunces, `.section-sub`) instead of the mockup's standalone CSS, so margins/alignment match the rest of the page automatically. Removed the old `CASE_DEMOS`/`showCaseDemo`/tilt-on-hover JS from Checkpoint 167 as dead code — the new cards are self-contained, no interaction needed.
+2. **Carousel version** (`4519cd3`) — Julia asked for it larger, 2-per-slide, with left/right arrows, "more alive, not boxed." Converted the static grid to a horizontally-scrolling track (`scroll-snap`), bigger cards, circular arrow buttons that scroll one viewport at a time and grey out at either end.
+3. **Removed the bottom benefits bar** (`2dab2e5`) per Julia's direct request ("remove").
+4. **Tabbed single-card demo** (`71a6354`) — Julia sent a second, richer mockup (pill-shaped profession tabs above one large animated demo card: problem → "yang biasanya terjadi" → Claude prompt → result, with a pop-in animation on tab switch). Rebuilt to fit inside the site's standard `.container` width (the source mockup was a much wider, standalone 1440px section) and dropped the mockup's "Coba prompt ini" CTA button per instruction. Content (6 profession scenarios, richer copy than the original cards) lives in `WF_DATA`; `wfRender(key)` swaps the demo card and replays the reveal animation.
+5. **Sizing/layout fix** (`7f720b3`) — Julia flagged too much empty space in the profile column and the bubble column getting clipped on the right. Root cause: profile column was a `36%` share of the box, so it grew disproportionately as the box got wider. Changed to a fixed `260px` profile column with the bubble column taking the remainder, and sized the whole card up.
+
+**Verification note**: because the tab/card content is rendered by JS (`wfRender('business')` on load) rather than baked into the static HTML, a plain-text fetch of the dev URL shows the section as empty — expected, not a bug. Confirmed correctness instead via `ci-check.js` (which runs `node --check` on every inline `<script>` block) and by grepping for zero leftover references to the removed classes/IDs after each round.
+
+**Files**: `belajar-claude`: `index.html` (`dev` only, all 4 commits).
+
+**Commits**: `belajar-claude`: `db0e0b6`, `4519cd3`, `2dab2e5`, `71a6354`, `7f720b3`.
 
 ## Design System (as of June 2026)
 All pages use these CSS variables:

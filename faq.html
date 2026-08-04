@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ — Pertanyaan yang Sering Diajukan | Belajar Claude</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+:root {
+  --bg: #FAFAFA; --surface: #FFFFFF; --surface-2: #F5F5F7;
+  --border: #E8E8E8; --border-strong: #D0D0D0;
+  --ink: #111111; --ink-2: #555555; --ink-3: #999999;
+  --accent: #6C47FF; --accent-2: #9B7DFF; --accent-dim: rgba(108,71,255,0.08);
+  --serif: 'Fraunces', Georgia, serif; --font: 'Geist', sans-serif;
+}
+body { font-family: var(--font); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; }
+nav {
+  position: sticky; top: 0; z-index: 100; height: 58px; padding: 0 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(250,250,250,0.92); backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.logo { font-family: var(--font); font-size: 17px; font-weight: 700; color: var(--ink); text-decoration: none; letter-spacing: -0.4px; }
+.logo span { color: var(--accent); }
+.nav-back { font-size: 13px; font-weight: 500; color: var(--ink-2); text-decoration: none; }
+.nav-back:hover { color: var(--ink); }
+.wrap { max-width: 760px; margin: 0 auto; padding: 64px 24px 96px; }
+.doc-header { margin-bottom: 44px; }
+.doc-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+h1 { font-family: var(--serif); font-size: 40px; font-weight: 400; letter-spacing: -0.5px; margin-bottom: 10px; }
+.doc-sub { font-size: 15px; color: var(--ink-2); line-height: 1.7; max-width: 520px; }
+
+.faq-category { margin: 44px 0 0; }
+.faq-category:first-of-type { margin-top: 0; }
+.faq-cat-title { font-family: var(--serif); font-size: 22px; font-weight: 400; letter-spacing: -0.3px; margin-bottom: 4px; }
+.faq-list { border-top: 1px solid var(--border); margin-top: 14px; }
+details.faq-item { border-bottom: 1px solid var(--border); }
+details.faq-item summary {
+  cursor: pointer; list-style: none; padding: 16px 2px;
+  display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  font-size: 15px; font-weight: 600; color: var(--ink);
+}
+details.faq-item summary::-webkit-details-marker { display: none; }
+details.faq-item summary::marker { content: ''; }
+.faq-icon { flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; background: var(--accent-dim); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; transition: transform 0.2s ease; }
+details.faq-item[open] .faq-icon { transform: rotate(45deg); }
+.faq-answer { padding: 0 2px 18px; font-size: 14.5px; line-height: 1.85; color: var(--ink-2); }
+.faq-answer p { margin-bottom: 10px; }
+.faq-answer p:last-child { margin-bottom: 0; }
+.faq-answer ul { padding-left: 20px; margin: 8px 0 10px; }
+.faq-answer li { margin-bottom: 6px; }
+.faq-answer strong { color: var(--ink); font-weight: 600; }
+
+.contact-box { margin-top: 48px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px 26px; }
+.contact-box p:first-child { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+.contact-box p.contact-sub { font-size: 13px; color: var(--ink-2); margin-bottom: 16px; }
+.contact-box .contact-links { display: flex; gap: 10px; flex-wrap: wrap; }
+.contact-box .contact-links a { font-size: 13px; font-weight: 500; color: var(--accent); text-decoration: none; padding: 8px 14px; border: 1px solid var(--border); border-radius: 999px; transition: border-color 0.15s, background 0.15s; }
+.contact-box .contact-links a:hover { border-color: var(--accent); background: var(--accent-dim); }
+
+footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); padding: 48px 40px 28px; position: relative; z-index: 1; }
+.footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 32px; }
+.footer-brand .logo { color: #fff; font-size: 17px; letter-spacing: -0.4px; }
+.footer-brand .logo span { color: var(--accent); }
+.footer-brand p { font-size: 12px; color: rgba(255,255,255,0.3); margin-top: 10px; max-width: 200px; line-height: 1.75; }
+.footer-links h4 { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 14px; }
+.footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.footer-links ul a { font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.15s; }
+.footer-links ul a:hover { color: #fff; }
+.footer-bottom { max-width: 1100px; margin: 28px auto 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.footer-bottom p { font-size: 11px; color: rgba(255,255,255,0.18); }
+@media (max-width: 640px) { footer { padding: 40px 20px 24px; } .footer-inner { flex-direction: column; gap: 24px; } }
+@media (max-width: 640px) {
+  nav, .wrap { padding-left: 20px; padding-right: 20px; }
+  h1 { font-size: 32px; }
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">belajar<span>claude</span></a>
+  <a href="index.html" class="nav-back">← Kembali ke Beranda</a>
+</nav>
+
+<div class="wrap">
+  <div class="doc-header">
+    <div class="doc-eyebrow">Pusat Bantuan</div>
+    <h1>Pertanyaan yang Sering Diajukan</h1>
+    <p class="doc-sub">Semua yang perlu kamu tahu sebelum mulai belajar Claude bersama BelajarClaude.</p>
+  </div>
+
+  <div class="faq-category">
+    <div class="faq-cat-title">Tentang BelajarClaude</div>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>Apa itu BelajarClaude? <span class="faq-icon">+</span></summary>
+        <div class="faq-answer">
+          <p>BelajarClaude adalah platform belajar yang mengajarkan cara memakai Claude (AI dari Anthropic) untuk kerja sehari-hari — mulai dari setup akun, menyusun prompt yang tepat, sampai workflow nyata untuk konten pemasaran dan produktivitas kantor.</p>
+          <p>Semua materi disusun dalam Bahasa Indonesia, dalam bentuk modul praktis lengkap dengan contoh kasus nyata dan file latihan — bukan sekadar teori.</p>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>Untuk siapa kursus ini? <span class="faq-icon">+</span></summary>
+        <div class="faq-answer">
+          <p>Untuk siapa saja yang ingin mulai memakai Claude secara produktif — pemilik usaha kecil, tim pemasaran, staf kantor, pelajar dan mahasiswa, sampai pekerja lepas.</p>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>Apakah saya perlu pengalaman dengan AI sebelumnya? <span class="faq-icon">+</span></summary>
+        <div class="faq-answer">
+          <p>Tidak perlu. Modul pertama, "Mulai dengan Claude AI", dirancang khusus untuk pemula — mulai dari apa itu Claude, cara membuat akun gratis, sampai dasar menyusun prompt.</p>
+          <p>Kalau kamu sudah terbiasa memakai AI, kamu bisa langsung lompat ke modul yang paling relevan dengan kebutuhanmu.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="faq-category">
+    <div class="faq-cat-title">Materi & Kurikulum</div>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>Apa saja yang akan saya pelajari? <span class="faq-icon">+</span></summary>
+        <div class="faq-answer">
+          <p>Saat ini ada 3 rangkaian modul yang bisa kamu ikuti:</p>
+          <ul>
+            <li><strong>Mulai dengan Claude AI</strong> — dasar-dasar: setup akun, orientasi interface, cara menyusun prompt, role prompting, dan Claude Artifacts (5 modul)</li>
+            <li><strong>Kreasi Konten Pemasaran</strong> — positioning, deskripsi produk marketplace, sistem konten Instagram, ads copywriting multi-platform, dan template komunikasi pelanggan (5 modul)</li>
+            <li><strong>Produktivitas Kantor dengan Claude</strong> — role prompting, Claude Projects, Gmail, spreadsheet, batch prompting, prompt chaining, serta dokumen & riset (7 modul)</li>
+          </ul>
+          <p>Setiap modul dilengkapi framework, contoh prompt siap pakai, file latihan, dan target output yang jelas di setiap langkah.</p>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>Bagaimana cara belajarnya? <span class="faq-icon">+</span></summary>
+        <div class="faq-answer">
+          <p>Materi disampaikan sebagai modul yang bisa kamu pelajari sendiri (self-paced) — lengkap dengan penjelasan konsep, contoh kasus nyata, latihan langsung dengan file contoh yang sudah disediakan, dan target output di setiap modul.</p>
+          <p>Kamu belajar sesuai kecepatanmu sendiri, kapan saja, tanpa jadwal kelas yang mengikat.</p>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>Versi Claude apa yang dipakai di materi? <span class="faq-icon">+</span></summary>
+        <div class="faq-answer">
+          <p>Materi disusun mengikuti model umum Claude Sonnet — versi seimbang untuk kebutuhan sehari-hari. Tapi Claude punya beberapa versi lain yang bisa kamu pilih sesuai kebutuhan:</p>
+          <ul>
+            <li><strong>Claude Haiku 4.5</strong> — versi paling ringan dan cepat</li>
+            <li><strong>Claude Sonnet 5</strong> — versi seimbang untuk kebutuhan umum, menjadi acuan utama di materi</li>
+            <li><strong>Claude Opus 4.8</strong> — versi paling mumpuni untuk tugas yang kompleks</li>
+            <li><strong>Claude Fable 5 / Claude Mythos 5</strong> — model terbaru dan paling canggih dari Anthropic (kelas "Mythos"); Fable adalah versi dengan pengaman ekstra untuk topik sensitif seperti biologi, keamanan siber, dan riset LLM</li>
+          </ul>
+          <p>Framework dan prompt di materi berlaku untuk semua versi Claude — kamu tinggal menyesuaikan dengan model yang kamu pakai.</p>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>Apakah materinya akan diperbarui? <span class="faq-icon">+</span></summary>
+        <div class="faq-answer">
+          <p>Ya. Dunia AI berkembang cepat, jadi materi akan terus disesuaikan mengikuti perkembangan Claude.</p>
+          <p>Untuk modul-modul baru, kami akan menginformasikan lebih dulu begitu topiknya sudah dikonfirmasi — saat ini belum ada jadwal rilis yang pasti.</p>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>Perangkat apa saja yang bisa saya pakai untuk mengakses kursus? <span class="faq-icon">+</span></summary>
+        <div class="faq-answer">
+          <p>Untuk pengalaman belajar yang paling maksimal, kami sarankan mengakses lewat browser di laptop atau komputer.</p>
+          <p>Saat ini BelajarClaude baru tersedia dalam versi web.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="faq-category">
+    <div class="faq-cat-title">Akun Claude & Akses Kursus</div>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>Apakah saya harus bayar untuk memakai Claude? <span class="faq-icon">+</span></summary>
+        <div class="faq-answer">
+          <p>Tidak wajib. Untuk mulai belajar, kamu bisa mendaftar akun Claude gratis.</p>
+          <p>Kalau pemakaianmu makin sering dan kamu butuh limit pesan yang lebih besar atau akses ke model yang lebih canggih, baru pertimbangkan upgrade ke paket berbayar.</p>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>Apakah saya bisa mengakses kursus selamanya? <span class="faq-icon">+</span></summary>
+        <div class="faq-answer">
+          <p>Ya. Setelah kamu mendapat akses ke kursus, materinya bisa kamu akses kapan saja tanpa batas waktu.</p>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>Apakah ada sertifikat penyelesaian? <span class="faq-icon">+</span></summary>
+        <div class="faq-answer">
+          <p>Saat ini belum tersedia sertifikat penyelesaian kursus.</p>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>Saya lupa password. Harus bagaimana? <span class="faq-icon">+</span></summary>
+        <div class="faq-answer">
+          <p>Tinggal lakukan reset password — kami akan kirim email berisi link untuk membuat password baru.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="faq-category">
+    <div class="faq-cat-title">Pembayaran</div>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>Metode pembayaran apa saja yang tersedia? <span class="faq-icon">+</span></summary>
+        <div class="faq-answer">
+          <p>Kami menerima pembayaran lewat QRIS dan kartu kredit.</p>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>Apakah pembayarannya aman? <span class="faq-icon">+</span></summary>
+        <div class="faq-answer">
+          <p>Ya. Kami menggunakan Duitku sebagai payment gateway pihak ketiga, jadi setiap transaksi pembayaranmu diproses secara aman.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="faq-category">
+    <div class="faq-cat-title">Bantuan</div>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>Bagaimana kalau saya mengalami kendala atau punya pertanyaan? <span class="faq-icon">+</span></summary>
+        <div class="faq-answer">
+          <p>Kamu bisa menghubungi kami lewat email atau WhatsApp — tim kami akan bantu jawab pertanyaanmu secepatnya.</p>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>Jam berapa layanan support beroperasi? <span class="faq-icon">+</span></summary>
+        <div class="faq-answer">
+          <p>Tim support kami aktif Senin–Jumat, pukul 09.00–18.00.</p>
+          <p>Di luar jam tersebut, pesanmu tetap akan kami terima, tapi balasannya mungkin membutuhkan waktu lebih lama.</p>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>Apakah ada komunitas untuk peserta kursus? <span class="faq-icon">+</span></summary>
+        <div class="faq-answer">
+          <p>Ada rencananya — saat ini kami sedang membangun komunitas supaya sesama peserta bisa saling bertukar ide dan belajar bersama. Nantikan kabarnya, ya!</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="contact-box" id="contactBox" style="display:none;">
+    <p>Masih ada pertanyaan?</p>
+    <p class="contact-sub">Tim kami siap bantu jawab lebih lanjut.</p>
+    <div class="contact-links">
+      <a href="#" id="linkEmailBox" style="display:none;">📧 Email</a>
+      <a href="#" id="linkWaBox" target="_blank" rel="noopener" style="display:none;">💬 WhatsApp</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="logo">belajar<span>claude</span></a>
+      <p>Platform belajar Claude AI dalam Bahasa Indonesia — untuk profesional, UKM, dan mahasiswa.</p>
+    </div>
+    <div class="footer-links" id="footerSocialLinks" style="display:none;">
+      <h4>Ikuti Kami</h4>
+      <ul>
+        <li id="liTiktok" style="display:none;"><a href="#" id="linkTiktok" target="_blank" rel="noopener">TikTok</a></li><li id="liYoutube" style="display:none;"><a href="#" id="linkYoutube" target="_blank" rel="noopener">YouTube</a></li>
+        <li id="liInstagram" style="display:none;"><a href="#" id="linkInstagram" target="_blank" rel="noopener">Instagram</a></li><li id="liWhatsapp" style="display:none;"><a href="#" id="linkWhatsapp" target="_blank" rel="noopener">WhatsApp Community</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h4>Bantuan</h4>
+      <ul>
+        <li><a href="faq.html">FAQ</a></li>
+        <li id="liEmail" style="display:none;"><a href="#" id="linkEmail">Email</a></li><li id="liContactWa" style="display:none;"><a href="#" id="linkContactWa" target="_blank" rel="noopener">WhatsApp</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="syarat-ketentuan.html">Syarat & Ketentuan</a></li>
+        <li><a href="kebijakan-privasi.html">Kebijakan Privasi</a></li>
+        <li><a href="kebijakan-pengembalian.html">Kebijakan Pengembalian Dana</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Belajar Claude</p>
+    <p>Dibuat untuk Indonesia</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script>
+  // Populate footer social links + the in-page "still have questions" contact box
+  // from the admin-managed social_links table.
+  (async function() {
+    try {
+      var res = await sbClient.from('social_links').select('*').eq('id', 'main').maybeSingle();
+      var row = res.data;
+      if (!row) return;
+      var map = [
+        ['tiktok_url', 'tiktok_visible', 'liTiktok', 'linkTiktok'],
+        ['youtube_url', 'youtube_visible', 'liYoutube', 'linkYoutube'],
+        ['instagram_url', 'instagram_visible', 'liInstagram', 'linkInstagram'],
+        ['whatsapp_url', 'whatsapp_visible', 'liWhatsapp', 'linkWhatsapp'],
+      ];
+      var anySocialShown = false;
+      map.forEach(function(m) {
+        var url = row[m[0]];
+        var visible = row[m[1]] !== false;
+        if (url && visible) {
+          document.getElementById(m[2]).style.display = 'block';
+          document.getElementById(m[3]).href = url;
+          anySocialShown = true;
+        }
+      });
+      if (anySocialShown) document.getElementById('footerSocialLinks').style.display = 'block';
+
+      var contactAny = false;
+      var email = row.contact_email;
+      var emailVisible = row.contact_email_visible !== false;
+      if (email && emailVisible) {
+        document.getElementById('liEmail').style.display = 'block';
+        document.getElementById('linkEmail').href = 'mailto:' + email;
+        document.getElementById('linkEmailBox').href = 'mailto:' + email;
+        document.getElementById('linkEmailBox').style.display = 'inline-block';
+        contactAny = true;
+      }
+
+      var contactWa = row.contact_whatsapp;
+      var contactWaVisible = row.contact_whatsapp_visible !== false;
+      if (contactWa && contactWaVisible) {
+        var waDigits = String(contactWa).replace(/\D/g, '');
+        if (waDigits.charAt(0) === '0') waDigits = '62' + waDigits.slice(1);
+        else if (waDigits.slice(0, 2) !== '62') waDigits = '62' + waDigits;
+        document.getElementById('liContactWa').style.display = 'block';
+        document.getElementById('linkContactWa').href = 'https://wa.me/' + waDigits;
+        document.getElementById('linkWaBox').href = 'https://wa.me/' + waDigits;
+        document.getElementById('linkWaBox').style.display = 'inline-block';
+        contactAny = true;
+      }
+
+      if (contactAny) document.getElementById('contactBox').style.display = 'block';
+    } catch (e) {}
+  })();
+</script>
+</body>
+</html>
