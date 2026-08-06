@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 6, 2026 (checkpoint 174)_
+_Last updated: August 6, 2026 (checkpoint 175)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -13,6 +13,7 @@ Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign 
 - **Hosting**: Cloudflare Workers (static assets) — `belajar-claude.belajarclaude-id.workers.dev`. Previously Vercel, before that GitHub Pages. Vercel project deleted July 24, 2026.
 - **GitHub repo**: `juliautomo/belajar-claude` (renamed from `klaud-id`)
 - **Backend repo**: `juliautomo/belajar-claude-backend** (Node.js — `index.js`, `mailer.js`, `sheets.js`)
+- **Analytics**: Cloudflare Web Analytics, dashboard → Analytics & Logs → Web Analytics → `belajarclaude.id` site. Automatic setup (beacon auto-injected into every page via the Cloudflare zone, no code/script tag in the repo) — was already enabled ~13 days before Checkpoint 175 confirmed it, likely turned on incidentally during the Workers migration. Free, cookieless, no consent banner needed. Gives page views, visits (Cloudflare's session equivalent), top pages, top referrers, countries, browser/OS/device, Core Web Vitals. No custom events/funnels — for user-behavior/funnel tracking (signup → purchase → module completion) a separate tool (e.g. PostHog) would be needed, discussed but not yet decided as of Checkpoint 175.
 
 ---
 
@@ -2421,7 +2422,19 @@ Julia asked to push straight to `main` once these were confirmed, so both went d
 
 **Process note for future sessions (this one included)**: this file is an append-only chronological log — an item marked "pending"/"open"/"deferred" in one checkpoint can be resolved by a later one without the original note ever being edited. Before reporting something as outstanding, grep the rest of CONTEXT.md for later mentions of the same topic (filename, feature name, framework name, etc.) AND spot-check the actual current file/PDF/PPT content — don't rely on a single checkpoint entry's stated status in isolation, especially for anything more than a checkpoint or two old.
 
-**Commits**: `belajar-claude`: pending push this checkpoint (CONTEXT.md only).
+**Commits**: `belajar-claude`: `3e3ce55` (`dev`), `c5bedef` (`main`) — CONTEXT.md only.
+
+---
+
+## SHIPPED (Checkpoint 175, August 6, 2026): Confirmed Cloudflare Web Analytics already enabled
+
+**Status: verified, no code changes.** Julia asked about adding basic traffic tracking (visitor count, sessions, pages viewed). Recommended Cloudflare Web Analytics as the simplest free fit — no cost, cookieless (sidesteps UU PDP consent-banner requirement, unlike GA4), and since the site is already on Cloudflare, setup is normally a dashboard toggle with zero code changes needed across the repo's 25+ standalone HTML files (no shared template to inject a script tag into otherwise).
+
+Julia checked the Cloudflare dashboard and found it was **already turned on** — `belajarclaude.id` shows up under Analytics & Logs → Web Analytics with "Automatic setup," created ~13 days prior (i.e. around the July 24 Workers migration) and already collecting real data (4 page views / 4 visits in the last 24hrs at time of screenshot). Nothing to build — just needed surfacing and documenting so it isn't re-discovered or re-set-up from scratch by a future session. Added to the Tech Stack section above for visibility going forward.
+
+**Noted limitation, not yet acted on**: Cloudflare Web Analytics only covers traffic-level metrics (page views, visits, top pages/referrers, geography, device, Core Web Vitals) — no custom events or funnels. If Julia wants actual in-product behavior tracking (signup → all-access purchase → module completion drop-off), that needs a second tool layered on top (PostHog was discussed as the best free-tier fit for that, in anonymous mode to avoid a consent banner) — not decided or built yet.
+
+**Commits**: none (dashboard-only, already live).
 
 ---
 
