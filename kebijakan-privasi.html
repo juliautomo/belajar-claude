@@ -162,7 +162,12 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     <div class="footer-links">
       <h4>Bantuan</h4>
       <ul>
-        <li><a href="faq.html">FAQ</a></li><li id="liEmail" style="display:none;"><a href="#" id="linkEmail">Email</a></li><li id="liContactWa" style="display:none;"><a href="#" id="linkContactWa" target="_blank" rel="noopener">WhatsApp</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+      </ul>
+      <div id="footerContactGroup" style="display:none;margin-top:16px;">
+        <h4>Hubungi Kami</h4>
+        <ul>
+        <li id="liEmail" style="display:none;"><a href="#" id="linkEmail">Email</a></li><li id="liContactWa" style="display:none;"><a href="#" id="linkContactWa" target="_blank" rel="noopener">WhatsApp</a></li><li id="liAddress" style="display:none;"><span id="linkAddress"></span></li>
       </ul>
     </div>
     <div class="footer-links">
@@ -208,11 +213,13 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
       });
       if (anySocialShown) document.getElementById('footerSocialLinks').style.display = 'block';
 
+      var anyContactShown = false;
       var email = row.contact_email;
       var emailVisible = row.contact_email_visible !== false;
       if (email && emailVisible) {
         document.getElementById('liEmail').style.display = 'block';
         document.getElementById('linkEmail').href = 'mailto:' + email;
+        anyContactShown = true;
       }
 
       var contactWa = row.contact_whatsapp;
@@ -223,7 +230,18 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         else if (waDigits.slice(0, 2) !== '62') waDigits = '62' + waDigits;
         document.getElementById('liContactWa').style.display = 'block';
         document.getElementById('linkContactWa').href = 'https://wa.me/' + waDigits;
+        anyContactShown = true;
       }
+
+      var address = row.address;
+      var addressVisible = row.address_visible !== false;
+      if (address && addressVisible) {
+        document.getElementById('liAddress').style.display = 'block';
+        document.getElementById('linkAddress').textContent = address;
+        anyContactShown = true;
+      }
+
+      if (anyContactShown) document.getElementById('footerContactGroup').style.display = 'block';
     } catch (e) {}
   })();
 </script>
