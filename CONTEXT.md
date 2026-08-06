@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 6, 2026 (checkpoint 175)_
+_Last updated: August 6, 2026 (checkpoint 176)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2438,6 +2438,21 @@ Julia checked the Cloudflare dashboard and found it was **already turned on** �
 
 ---
 
+## SHIPPED (Checkpoint 176, August 6, 2026): Web Analytics coverage audit — confirmed which pages track, found + fixed a stale doc claim (4 pages wrongly listed as redirect stubs)
+
+**Status: verified/docs only, no code changes.** Follow-up to Checkpoint 175. Julia noticed `/prompt-gratis` wasn't showing in Web Analytics for a visit made in her normal browser; a guest-window retest (no extensions) showed up immediately, confirming an ad blocker/privacy extension on her regular profile was silently dropping the `cloudflareinsights.com`/`cdn-cgi/rum` beacon request — not a site bug. Verified via Claude-in-Chrome network inspection: `beacon.min.js` loads and posts successfully to `/cdn-cgi/rum` (204) on a clean browser session.
+
+Julia then asked whether *all* pages are covered, or if any can't be tracked. Audited every `.html` file in the repo (28 total):
+
+- **Confirmed working**: the vast majority — all real content/sales/course/app pages — get Cloudflare's automatic beacon injection with no per-page setup needed (it's zone-wide, so new pages are covered automatically too).
+- **Found a real stale-doc bug while checking**: the "Pages & Their Purpose" table above claimed 8 pages are "redirect stubs → all-access.html" (dating to Checkpoints 34/35). Directly grepped the live files instead of trusting the table — only **5 are still genuine instant-redirect stubs** (`kursus-karyawan.html`, `kursus-mahasiswa.html`, `kursus-ukm.html`, `paket.html`, `paket-content-creator.html` — all 28 lines, `<meta http-equiv="refresh" content="0;...">` + `location.replace()`). The other **4 (`mulai-claude.html`, `produktivitas.html`, `content-marketing.html`, `prompt-gratis.html`) are actually full real pages again** (500+ lines each, real hero/content/CTA, no redirect at all) — someone reverted these back to standalone pages at some point after Checkpoint 34/35 without the table ever being updated. Exact checkpoint not identified (not worth guessing); table entries corrected in place with a note rather than silently rewritten, same convention as Checkpoint 174's fix.
+- **Genuine remaining gap, low priority**: for the 5 real stub pages, the `content="0"` meta-refresh + `location.replace()` fire near-instantly, and a live test (Claude-in-Chrome network capture on `kursus-karyawan.html`) landed on `all-access.html` too fast to confirm the stub page's own beacon call completed — plausible the specific old URL undercounts in the Paths report even though the visitor still correctly lands on and gets tracked by `all-access.html` a moment later. Not fixed or further chased this checkpoint: these are legacy/retired URLs (old paket/kursus sales pages), traffic to them should be near-zero (only old bookmarks/backlinks), and the user-facing funnel isn't broken either way.
+- **Not trackable by design, not a bug**: non-HTML responses (PDFs, images, JS/CSS files) never count as "page views" under Cloudflare's definition (requires `text/html` content-type) — expected behavior, not a gap.
+
+**Commits**: `belajar-claude`: pending push this checkpoint (CONTEXT.md only).
+
+---
+
 ## Design System (as of June 2026)
 All pages use these CSS variables:
 ```css
@@ -2497,12 +2512,12 @@ All pages use these CSS variables:
 | File | Purpose |
 |------|---------|
 | `index.html` | Landing page — hero, jalur belajar grid, course carousel, CTA |
-| `mulai-claude.html` | **Redirect stub → `all-access.html`** as of Checkpoint 34 (was: sales page for the now-retired free "Mulai dengan Claude AI") |
-| `produktivitas.html` | **Redirect stub → `all-access.html`** as of Checkpoint 34 (was: sales page — K2 · Produktivitas Kantor, Rp 149K individually; M8 Case Study archive history still applies to `produktivitas-content.html`, see Checkpoint 25) |
+| `mulai-claude.html` | **CORRECTED at Checkpoint 175 — this is a real, full sales/preview page (523 lines), NOT a redirect stub.** The "Redirect stub → `all-access.html` as of Checkpoint 34" note below was stale — verified directly against the live file and it's a genuine landing page with real content, no meta-refresh/JS redirect. Unclear exactly which later checkpoint reverted it from a stub back to a real page (not found in a targeted search of this log); flagging rather than guessing. ~~Redirect stub → `all-access.html` as of Checkpoint 34~~ (was: sales page for the now-retired free "Mulai dengan Claude AI") |
+| `produktivitas.html` | **CORRECTED at Checkpoint 175 — real, full sales/preview page (569 lines), NOT a redirect stub.** Same stale-note situation as `mulai-claude.html` above, verified directly. ~~Redirect stub → `all-access.html` as of Checkpoint 34~~ (was: sales page — K2 · Produktivitas Kantor, Rp 149K individually; M8 Case Study archive history still applies to `produktivitas-content.html`, see Checkpoint 25) |
 | `kerja-sehari-hari.html` | DELETED from repo (July 14, 2026) |
-| `content-marketing.html` | **Redirect stub → `all-access.html`** as of Checkpoint 34 (was: sales page — Content & Marketing, Rp 149K individually; renamed from bisnis-ukm.html checkpoint 11) |
-| `prompt-gratis.html` | **Redirect stub → `all-access.html`** as of Checkpoint 35 (was: sales page for the now-retired free "20 Prompt Gratis" guide) |
-| `kursus-karyawan.html` | **Redirect stub → `all-access.html`** as of Checkpoint 34 (was: Jalur Profesional paket page) |
+| `content-marketing.html` | **CORRECTED at Checkpoint 175 — real, full sales/preview page (521 lines), NOT a redirect stub.** Same stale-note situation, verified directly. ~~Redirect stub → `all-access.html` as of Checkpoint 34~~ (was: sales page — Content & Marketing, Rp 149K individually; renamed from bisnis-ukm.html checkpoint 11) |
+| `prompt-gratis.html` | **CORRECTED at Checkpoint 175 — real, full sales/preview page (521 lines), NOT a redirect stub.** Found while debugging a Cloudflare Web Analytics question — verified directly (full hero/modules/preview/CTA content, no meta-refresh/JS redirect). ~~Redirect stub → `all-access.html` as of Checkpoint 35~~ (was: sales page for the now-retired free "20 Prompt Gratis" guide) |
+| `kursus-karyawan.html` | **Confirmed still a genuine redirect stub (28 lines) at Checkpoint 175** — `<meta http-equiv="refresh" content="0;url=all-access.html">` + `window.location.replace('all-access.html')`. Redirect stub → `all-access.html` as of Checkpoint 34 |
 | `kursus-mahasiswa.html` | **Redirect stub → `all-access.html`** as of Checkpoint 34 (was: Jalur Mahasiswa paket page) |
 | `kursus-ukm.html` | **Redirect stub → `all-access.html`** as of Checkpoint 34 (was: Jalur UKM paket page) |
 | `paket.html` | **Redirect stub → `all-access.html`** as of Checkpoint 34 (was: stale unwired mockup pricing page flagged in Checkpoint 32) |
