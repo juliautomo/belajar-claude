@@ -1500,12 +1500,12 @@ yang bisa saya buka lagi setiap hari kerja padat berikutnya.<button class="copy-
           <div class="feedback-card" id="feedbackForm">
             <h3>Beri nilai kursus ini</h3>
             <p class="feedback-sub">Feedback kamu membantu kami bikin kursus yang lebih baik.</p>
-            <div class="star-row" id="starRow">
-              <button class="star-btn" data-val="1" onclick="setRating(1)">★</button>
-              <button class="star-btn" data-val="2" onclick="setRating(2)">★</button>
-              <button class="star-btn" data-val="3" onclick="setRating(3)">★</button>
-              <button class="star-btn" data-val="4" onclick="setRating(4)">★</button>
-              <button class="star-btn" data-val="5" onclick="setRating(5)">★</button>
+            <div class="star-row" id="starRow" onmouseleave="hoverRating(0)">
+              <button class="star-btn" data-val="1" onclick="setRating(1)" onmouseenter="hoverRating(1)">★</button>
+              <button class="star-btn" data-val="2" onclick="setRating(2)" onmouseenter="hoverRating(2)">★</button>
+              <button class="star-btn" data-val="3" onclick="setRating(3)" onmouseenter="hoverRating(3)">★</button>
+              <button class="star-btn" data-val="4" onclick="setRating(4)" onmouseenter="hoverRating(4)">★</button>
+              <button class="star-btn" data-val="5" onclick="setRating(5)" onmouseenter="hoverRating(5)">★</button>
             </div>
             <div class="feedback-label">Komentar (opsional)</div>
             <textarea class="feedback-textarea" id="feedbackComment" placeholder="Ada yang ingin kamu sampaikan?"></textarea>
@@ -1636,11 +1636,19 @@ yang bisa saya buka lagi setiap hari kerja padat berikutnya.<button class="copy-
     });
   }
 
-  function setRating(val) {
-    starRating = val;
+  function renderStars(val) {
     document.querySelectorAll('.star-btn').forEach(function(btn) {
       btn.classList.toggle('active', parseInt(btn.getAttribute('data-val')) <= val);
     });
+  }
+
+  function setRating(val) {
+    starRating = val;
+    renderStars(val);
+  }
+
+  function hoverRating(val) {
+    renderStars(val || starRating);
   }
 
   async function submitFeedback() {
