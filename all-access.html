@@ -144,15 +144,14 @@
   .footer-brand .logo { color: #fff; font-size: 17px; letter-spacing: -0.4px; }
   .footer-brand .logo span { color: var(--accent); }
   .footer-brand p { font-size: 12px; color: rgba(255,255,255,0.3); margin-top: 10px; max-width: 200px; line-height: 1.75; }
-  .footer-links h4 { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 14px; }
+  .footer-links { flex: 0 0 150px; }
+.footer-links h4 { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 14px; }
   .footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
   .footer-links ul a { font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.15s; }
   .footer-links ul a:hover { color: #fff; }
   .footer-bottom { max-width: 1100px; margin: 28px auto 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
   .footer-bottom p { font-size: 11px; color: rgba(255,255,255,0.18); }
   @media (max-width: 640px) { footer { padding: 40px 20px 24px; } .footer-inner { flex-direction: column; gap: 24px; } }
-  /* Footer sub-heading "Hubungi Kami" widened the Bantuan column just enough that the Legal column could wrap onto its own orphaned row between ~641-860px (Checkpoint 178 fix) — extend the clean single-column stack a bit earlier to avoid that in-between state. */
-  @media (max-width: 1180px) and (min-width: 641px) { footer { padding: 40px 20px 24px; } .footer-inner { flex-direction: column; gap: 24px; } }
 
   @media (max-width: 768px) { nav { padding: 0 20px; } .compare-box { flex-direction: column; } 
   /* Mobile nav — Kursus/Masuk/account links collapse into a hamburger-triggered
