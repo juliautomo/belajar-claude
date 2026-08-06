@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 6, 2026 (checkpoint 179)_
+_Last updated: August 6, 2026 (checkpoint 180)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2502,6 +2502,22 @@ Julia then asked whether *all* pages are covered, or if any can't be tracked. Au
 **Files**: all 11 footer pages (`index.html`, `all-access.html`, `content-marketing.html`, `mulai-claude.html`, `produktivitas.html`, `prompt-gratis.html`, `strategi-marketing.html`, `faq.html`, `syarat-ketentuan.html`, `kebijakan-privasi.html`, `kebijakan-pengembalian.html`).
 
 **Commits**: `belajar-claude`: `05e5789` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 180, August 6, 2026): Checkpoint 179's 860px threshold wasn't wide enough either — switched from empirical guessing to a structurally-guaranteed-safe threshold
+
+**Status: pushed to `dev` only** — fourth pass on the Checkpoint 177 footer change before merge.
+
+**Julia's next screenshot showed the same orphan-wrap pattern still happening** — Legal alone on its own row while brand/Ikuti Kami/Bantuan stayed in a row above it — meaning her actual browser width is wider than the 860px threshold set in Checkpoint 179. Claude-in-Chrome was disconnected this round (extension unreachable), so live re-measurement to pin an exact new number wasn't an option.
+
+**Changed approach instead of guessing again**: rather than empirically re-measuring a second specific pixel threshold (which just failed once already and could fail again for the same reason — real rendering conditions differing from a simulated test), widened the breakpoint to **1180px** — deliberately chosen to sit safely above `.footer-inner`'s own `max-width: 1100px`. This is a structural guarantee, not a measurement: below ~1180px there is categorically not enough room for the footer's own intended full-width layout regardless of exactly how wide any individual column's content happens to be, so the partial "3 columns fit, 1 doesn't" state becomes impossible by construction rather than by tuning around today's specific text widths (which would need re-tuning again the next time footer content changes).
+
+**Trade-off, worth knowing**: the footer now switches to single-column mobile-style stacking earlier (anywhere below 1180px wide) than it used to (640px) or than Checkpoint 179's fix did (860px). This affects the footer's appearance on tablet-width and narrower-laptop-width screens — it'll look like the phone layout there now, not a mistake, just an earlier switch than before this whole change started. Flagged for Julia/Tiffany to confirm they're fine with that trade-off (simpler/more robust vs. columns persisting slightly longer at medium widths).
+
+**Still unverified visually** — same caveat as Checkpoint 179, now compounded: three fix attempts on this footer change (178, 179, 180) have gone out without a live pixel-rendered confirmation on the actual dev URL at the width that's actually failing. Recommend the next session (or Julia directly) load `https://dev-belajar-claude.belajarclaude-id.workers.dev/` and check the footer at a few different window widths before merging to `main` — don't take this checkpoint's fix on faith just because the reasoning is sound.
+
+**Commits**: `belajar-claude`: `7df218c` (`dev` only).
 
 ---
 
