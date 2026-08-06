@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 6, 2026 (checkpoint 178)_
+_Last updated: August 6, 2026 (checkpoint 179)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2484,6 +2484,24 @@ Julia then asked whether *all* pages are covered, or if any can't be tracked. Au
 **Second same-day collision with Tiffany, also handled cleanly.** Push was rejected again on fetch — Tiffany had pushed a new "community feed" feature in the time between Checkpoint 177 and this fix (`6962ee2`: new `community.html`, small nav-link additions to `dashboard.html`/`profile.html`, `sql/community-feed.sql` migration). No file overlap with the footer fix, clean rebase, pushed, and her new/changed files mirrored into the local mounted working directory as usual.
 
 **Commits**: `belajar-claude`: `d7ba56e` (`dev` only, rebased on top of Tiffany's `6962ee2`).
+
+---
+
+## SHIPPED (Checkpoint 179, August 6, 2026): Second bug from the footer change — "Legal" column orphan-wrapping at in-between widths, root-caused and fixed
+
+**Status: pushed to `dev` only** — still the same footer change from Checkpoint 177, now on its third fix pass before merge.
+
+**Julia sent another screenshot** — the div-nesting bug from Checkpoint 178 was fixed (Legal was a proper column again), but now Legal appeared on its own row below the other three columns instead of beside them, oddly left-aligned under the brand/logo rather than under Bantuan. This wasn't the same bug recurring — it was a new, more subtle side effect of the same underlying change.
+
+**Root-caused properly this time** by directly testing against production's live CSS in a browser (not just reasoning about it): cloned the real page, swapped the "Bantuan" column's innerHTML between the old (flat FAQ/Email/WhatsApp list) and new (nested "Hubungi Kami" sub-group) structure, and measured exact wrap thresholds. Confirmed: **the original footer never wraps "Legal" onto its own row, even down to a 600px-wide footer** — but the new structure starts wrapping below ~750px. Traced to the specific cause via direct width measurement of each text element: the new "Hubungi Kami" heading is 87px wide unwrapped, wider than anything the Bantuan column previously contained (the old widest item, "WhatsApp", was only 61px) — flexbox's line-wrapping decision is based on each item's full unwrapped (max-content) width regardless of `min-width`, so that extra ~25px was enough to push the whole row past its available space at moderate-but-not-narrow window widths. Also confirmed `min-width: 0` does *not* fix this (tested and ruled out) — clamping only bounds a value, it can't shrink a wrap decision already based on max-content.
+
+**Fixed** by widening the existing `@media (max-width: 640px) { .footer-inner { flex-direction: column } }` single-column-stack rule with a second, additive rule at `@media (max-width: 860px) and (min-width: 641px)` in all 11 footer files (`index.html` needed a standalone addition since its 640px breakpoint is one large shared block covering nav/hero/sections too — didn't touch that shared block, just added the new rule separately after it, same as the other 10 files' more isolated footer-only rule). This fully skips the awkward "3 columns + 1 orphaned column" state for any window in the 641-860px range by falling straight to the same clean single-column layout the footer already uses on phones, rather than trying to fine-tune pixel-level text widths (which would just recur the next time footer content changes).
+
+**Verification gap, flagged honestly**: confirmed via direct measurement that the *diagnosis* is correct (exact wrap thresholds, exact width culprit), and the *fix* uses a well-established, already-proven pattern (the same single-column stacking the footer already does cleanly at ≤640px, just triggered earlier) — but could not get a pixel-rendered before/after screenshot of the fix itself at the actual 641-860px range this checkpoint, because the browser-automation resize tool did not change the tab's actual viewport width in this environment (`window.innerWidth` stayed 1440 despite the resize call reporting success). Asked Julia to give it a final visual check on her end since the verification chain has a gap at the very last step.
+
+**Files**: all 11 footer pages (`index.html`, `all-access.html`, `content-marketing.html`, `mulai-claude.html`, `produktivitas.html`, `prompt-gratis.html`, `strategi-marketing.html`, `faq.html`, `syarat-ketentuan.html`, `kebijakan-privasi.html`, `kebijakan-pengembalian.html`).
+
+**Commits**: `belajar-claude`: `05e5789` (`dev` only).
 
 ---
 
