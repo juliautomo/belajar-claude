@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 6, 2026 (checkpoint 177)_
+_Last updated: August 6, 2026 (checkpoint 178)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2468,6 +2468,22 @@ Julia then asked whether *all* pages are covered, or if any can't be tracked. Au
 **5. First real two-session collision, handled without incident.** Push was rejected on the first attempt — `git fetch` showed `origin/dev` had moved since this session's last pull: Tiffany (the newly onboarded collaborator, see Checkpoint 176's context) had pushed her own commit (`e352fe6`, a feedback star-rating hover fix) roughly 8 hours earlier, then merged `dev` → `main` about 1 hour before this checkpoint (confirmed via the Cloudflare Workers deployment log, which shows both events attributed to her). No file overlap with this checkpoint's changes (hers touched the 5 `*-content.html` course pages; this touched the footer/admin/sql files), so `git rebase origin/dev` was clean with zero conflicts — rebased, pushed, and mirrored her 5 changed files into the local mounted working directory too so it stays byte-identical to GitHub. **Flagging for Julia**: Tiffany's dev→main merge happened without visibility into whether it was an explicit "push to production" instruction on her end (very likely it was, per normal TEAM-WORKFLOW.md usage — just noting it since this session has no way to confirm that from here). The underlying change itself (a hover-highlight CSS/JS fix on the feedback stars, no payment/DB involvement) is low-risk regardless.
 
 **Commits**: `belajar-claude`: `ec79204` (`dev` only, includes rebase on top of Tiffany's `e352fe6`).
+
+---
+
+## SHIPPED (Checkpoint 178, August 6, 2026): Fixed a real layout bug introduced by Checkpoint 177's footer change — unclosed div nested "Legal" inside "Bantuan"
+
+**Status: pushed to `dev` only**, same as the change it's fixing — still awaiting Julia's review/merge to `main`.
+
+**Self-inflicted bug, caught by Julia visually within minutes of the Checkpoint 177 push.** She sent a screenshot of the live footer showing "Legal" (and its links) rendering squeezed directly underneath the WhatsApp line with no column separation, instead of as its own column to the right. Root cause: the bulk Python script used to apply the "Hubungi Kami" nesting change across 10 of the 11 footer files (everything except `faq.html`, which was hand-edited separately and got this right) added a new wrapping `<div id="footerContactGroup">` but only emitted enough replacement text to close 2 tags (inner `<ul>` and one `<div>`) where 3 were needed (inner `<ul>`, `footerContactGroup` `<div>`, and the outer `.footer-links` `<div>` for "Bantuan" itself) — it relied on the original source's trailing `</ul></div>` to supply the last two closes, but that trailing pair could only correctly close one of the two newly-nested divs, leaving "Bantuan"'s outer div permanently open. Everything that followed in the document (`Legal`, `footer-bottom`) became an HTML child of "Bantuan" instead of a sibling, which is why it rendered nested/uncontained instead of as a separate flex column.
+
+**Fixed** by adding the missing `</div>` in all 10 affected files (`all-access.html`, `content-marketing.html`, `mulai-claude.html`, `produktivitas.html`, `prompt-gratis.html`, `strategi-marketing.html`, `index.html`, `syarat-ketentuan.html`, `kebijakan-privasi.html`, `kebijakan-pengembalian.html`).
+
+**Verified properly this time** — not just eyeballing indentation like the original change: parsed all 11 footer files with BeautifulSoup and asserted structurally (not just visually) that `.footer-inner` has exactly 4 direct child `<div>`s, `Legal` is a direct sibling of `Bantuan` (not nested inside it), and `#footerContactGroup` is nested inside `Bantuan` only. All 11 pass. `ci-check.js` also clean. This is the verification step that should have caught the bug before the original push — noted for next time: when restructuring nested HTML via bulk find-and-replace, verify with an actual HTML parser's DOM tree, not just a visual diff review of the text.
+
+**Second same-day collision with Tiffany, also handled cleanly.** Push was rejected again on fetch — Tiffany had pushed a new "community feed" feature in the time between Checkpoint 177 and this fix (`6962ee2`: new `community.html`, small nav-link additions to `dashboard.html`/`profile.html`, `sql/community-feed.sql` migration). No file overlap with the footer fix, clean rebase, pushed, and her new/changed files mirrored into the local mounted working directory as usual.
+
+**Commits**: `belajar-claude`: `d7ba56e` (`dev` only, rebased on top of Tiffany's `6962ee2`).
 
 ---
 
