@@ -109,8 +109,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 .post-action-btn:hover{color:var(--ink);}
 .post-action-btn.liked{color:var(--accent);}
 .post-action-btn.pin-active{color:var(--accent);}
+.post-action-btn.danger:hover{color:var(--red);}
 .post-action-btn svg{width:16px;height:16px;flex-shrink:0;}
 .post-action-btn.liked svg{fill:var(--accent);stroke:var(--accent);}
+.comment-del{background:none;border:none;color:var(--ink-3);cursor:pointer;padding:4px;flex-shrink:0;display:flex;align-items:center;}
+.comment-del:hover{color:var(--red);}
+.comment-del svg{width:13px;height:13px;}
 
 /* COMMENTS */
 .comments-section{display:none;flex-direction:column;gap:10px;padding-top:10px;border-top:1px solid var(--border);}
@@ -365,6 +369,44 @@ async function togglePin(postId){
   }
 }
 
+async function deletePost(postId){
+  var p = posts.find(function(x){ return x.id === postId; });
+  if (!p) return;
+  if (!confirm('Hapus post ini? Komentar dan like di post ini juga akan terhapus.')) return;
+  try {
+    var r = await sbClient.from('community_posts').delete().eq('id', postId);
+    if (r.error) throw r.error;
+    if (p.image_path) {
+      try { await sbClient.storage.from('community-images').remove([p.image_path]); } catch(e) { console.error(e); }
+    }
+    posts = posts.filter(function(x){ return x.id !== postId; });
+    delete likesByPost[postId];
+    delete commentCountByPost[postId];
+    delete loadedComments[postId];
+    delete openComments[postId];
+    renderFeed();
+  } catch(e) {
+    console.error(e);
+    alert('Gagal menghapus post. Coba lagi.');
+  }
+}
+
+async function deleteComment(postId, commentId){
+  if (!confirm('Hapus komentar ini?')) return;
+  try {
+    var r = await sbClient.from('community_comments').delete().eq('id', commentId);
+    if (r.error) throw r.error;
+    if (loadedComments[postId]) {
+      loadedComments[postId] = loadedComments[postId].filter(function(c){ return c.id !== commentId; });
+    }
+    commentCountByPost[postId] = Math.max(0, (commentCountByPost[postId] || 1) - 1);
+    renderFeed();
+  } catch(e) {
+    console.error(e);
+    alert('Gagal menghapus komentar. Coba lagi.');
+  }
+}
+
 async function loadFeed(){
   var pr = await sbClient.from('community_posts').select('*').order('created_at', {ascending:false}).limit(100);
   posts = pr.data || [];
@@ -419,6 +461,13 @@ function renderPostCard(p){
       '<span>' + (p.pinned ? 'Lepas pin' : 'Pin') + '</span>' +
     '</button>'
   ) : '';
+  var canDelete = isAdmin || p.email === currentEmail;
+  var deleteBtn = canDelete ? (
+    '<button class="post-action-btn danger" onclick="deletePost(\'' + p.id + '\')" title="Hapus post">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14z"/></svg>' +
+      '<span>Hapus</span>' +
+    '</button>'
+  ) : '';
   return '' +
     '<div class="post-card' + (p.pinned ? ' pinned' : '') + '" id="post-' + p.id + '">' +
       pinnedBadge +
@@ -442,6 +491,7 @@ function renderPostCard(p){
           '<span>' + cCount + '</span>' +
         '</button>' +
         pinBtn +
+        deleteBtn +
       '</div>' +
       '<div class="comments-section' + (openComments[p.id] ? ' open' : '') + '" id="comments-' + p.id + '">' + commentsHtml + '</div>' +
     '</div>';
@@ -452,9 +502,12 @@ function renderCommentsSection(postId){
   var listHtml = '<div class="comments-loading">Memuat komentar...</div>';
   if (list) {
     listHtml = list.map(function(c){
+      var canDelete = isAdmin || c.email === currentEmail;
+      var delBtn = canDelete ? '<button class="comment-del" onclick="deleteComment(\'' + postId + '\',\'' + c.id + '\')" title="Hapus komentar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14z"/></svg></button>' : '';
       return '<div class="comment-row">' +
         '<div class="comment-avatar">' + escapeHtml(getInitials(c.author_name)) + '</div>' +
         '<div class="comment-bubble"><div class="comment-author">' + escapeHtml(c.author_name) + '</div><div class="comment-text">' + escapeHtml(c.content) + '</div></div>' +
+        delBtn +
       '</div>';
     }).join('') || '';
   }
