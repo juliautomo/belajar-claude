@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 6, 2026 (checkpoint 181)_
+_Last updated: August 6, 2026 (checkpoint 182)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2536,6 +2536,22 @@ Julia then asked whether *all* pages are covered, or if any can't be tracked. Au
 **Also confirmed this checkpoint**: the Address field Julia filled in via admin.html *did* save correctly (queried `social_links` directly: `address` and `address_visible: true` both present) and the display JS logic is correct — the "not showing up" report was most likely just needing a page reload after saving, not a real bug. Not independently re-verified visually for the same Chrome-disconnected reason as above.
 
 **Commits**: `belajar-claude`: `34f63e0` (`dev` only, rebased on top of Tiffany's `f7d4ea0`, a "Community feed v2" commit — no file overlap).
+
+---
+
+## SHIPPED (Checkpoint 182, August 6, 2026): Address line's font/color mismatch fixed — real root cause found and confirmed by Julia's screenshot
+
+**Status: pushed to `dev` only.**
+
+Julia's screenshot confirmed the layout itself is now correct (three even columns, Legal properly beside Ikuti Kami/Bantuan — Checkpoint 181's fix held) but the Address line under "Hubungi Kami" rendered in browser-default blue/underlined text instead of matching Email and WhatsApp's grey link styling. Root cause: Address is markup'd as `<span id="linkAddress">` (it isn't a clickable link), but the footer CSS rule that styles those list items — `.footer-links ul a { font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none; ... }` — only ever targeted `<a>` tags. Email and WhatsApp are `<a>` elements so they picked up the rule; the address `<span>` fell through to the browser's default text-selection/link-like styling, which is exactly the highlighted-blue look in Julia's screenshot.
+
+**Fix**: extended the selector to `.footer-links ul a, .footer-links ul span { ...same rule..., display: block; }` across all 11 footer files (same set as Checkpoints 177-181). `display: block` added so the span behaves like the `<a>` items for spacing/click-target purposes inside the `<li>`.
+
+This also resolves the earlier "address still not showing up" report from Checkpoint 181/182's investigation — the address WAS rendering all along, just in unstyled/default browser text that read as visually broken rather than as a genuine missing-content bug.
+
+**Verification**: `ci-check.js` clean (29 HTML, 5 JS, 26 local refs, nothing broken). Not yet visually re-confirmed in a live browser (Chrome MCP not attempted this checkpoint) — recommend Julia do a final visual check on `https://dev-belajar-claude.belajarclaude-id.workers.dev/` before this whole footer change (Checkpoints 177-182) gets merged to `main`.
+
+**Commits**: `belajar-claude`: `031ca2f` (`dev` only, rebased cleanly on top of Tiffany's `cffec20` "Community feed: add delete for posts/comments" — no file overlap).
 
 ---
 
