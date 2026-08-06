@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 6, 2026 (checkpoint 180)_
+_Last updated: August 6, 2026 (checkpoint 181)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2518,6 +2518,24 @@ Julia then asked whether *all* pages are covered, or if any can't be tracked. Au
 **Still unverified visually** — same caveat as Checkpoint 179, now compounded: three fix attempts on this footer change (178, 179, 180) have gone out without a live pixel-rendered confirmation on the actual dev URL at the width that's actually failing. Recommend the next session (or Julia directly) load `https://dev-belajar-claude.belajarclaude-id.workers.dev/` and check the footer at a few different window widths before merging to `main` — don't take this checkpoint's fix on faith just because the reasoning is sound.
 
 **Commits**: `belajar-claude`: `7df218c` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 181, August 6, 2026): Checkpoint 180's prediction was wrong — Julia's screenshot showed the bug on a clearly wide desktop window; abandoned threshold-chasing for a structural fix
+
+**Status: pushed to `dev` only** — fifth pass on the Checkpoint 177 footer change, hopefully the last before merge.
+
+**The 1180px breakpoint from Checkpoint 180 didn't fix it, and the screenshot proved why the whole approach was wrong.** Julia sent a screenshot of the still-broken footer (Legal alone below Ikuti Kami/Bantuan) taken in a normal, full-size desktop Chrome window — visible taskbar, full browser chrome, generous whitespace, clearly not a narrow/squeezed viewport. Checkpoint 180's 1180px "stack everything below this width" rule should have forced full single-column stacking at any width that narrow — but the screenshot showed the *old* partial-wrap pattern (3 columns in a row, Legal alone), meaning her actual window width must be **wider than 1180px** and the natural content-driven wrap was still happening there. This directly contradicts the empirical thresholds measured in Checkpoints 179/180 (which found wrapping starting around 700-750px) — meaning that simulated measurement, done against a cloned/manipulated copy of production's page rather than the real dev deployment, didn't actually predict real-world behavior accurately. Chrome was disconnected again this checkpoint (extension unreachable, retried twice), so live re-measurement to find "the real number" wasn't possible a second time either.
+
+**Stopped guessing thresholds, fixed the actual mechanism instead.** Rather than attempt a third empirical measurement with no way to verify it, addressed the root cause directly: added `.footer-links { flex: 0 0 150px; }` (all 11 footer files) so every footer column — Ikuti Kami, Bantuan, Legal — gets an equal, fixed 150px width instead of sizing itself to its own content. This is what Julia explicitly asked for ("use similar space as ikuti kami and bantuan"). It also structurally eliminates the entire bug class: no single column's content (the "Hubungi Kami" heading that caused this, or anything added to any footer column in the future) can ever again make the whole row overflow, because columns no longer measure themselves by content width at all. Total row requirement is now a fixed, calculable ~776px (brand 200 + 3×150 columns + 3×32 gaps) — far under the 1100px `footer-inner` max-width, so it fits comfortably at any normal desktop or tablet size. **Trade-off**: "Kebijakan Pengembalian Dana" (Legal's longest link, ~180px unwrapped) will now wrap onto two lines instead of one, since it no longer gets to dictate the column's width — a deliberate, visible consequence of prioritizing consistent column sizing, not an oversight.
+
+**Also removed** the now-counterproductive 1180px breakpoint from Checkpoint 180 — with fixed-width columns needing so little total space, that rule would have forced unnecessary full-page stacking on windows that comfortably fit the new row layout. Back to just the original, long-proven 640px mobile breakpoint.
+
+**Verification status, still honest**: structurally confirmed via the same BeautifulSoup DOM check as Checkpoints 178/179 (4 top-level footer-inner children, Legal a proper sibling) and `ci-check.js` clean. Still no live pixel-rendered confirmation — Chrome unreachable for the second checkpoint running. This fix is architecturally different from the previous two attempts (doesn't depend on any measured threshold at all, which is exactly why it should be more reliable), but "should be more reliable" is not the same as verified. **Strongly recommend an actual visual check on `https://dev-belajar-claude.belajarclaude-id.workers.dev/` before merging to `main`** — this footer change has now needed four follow-up fixes since Checkpoint 177 shipped, all because of the gap between "verified via reasoning/DOM structure" and "actually looks right in a browser."
+
+**Also confirmed this checkpoint**: the Address field Julia filled in via admin.html *did* save correctly (queried `social_links` directly: `address` and `address_visible: true` both present) and the display JS logic is correct — the "not showing up" report was most likely just needing a page reload after saving, not a real bug. Not independently re-verified visually for the same Chrome-disconnected reason as above.
+
+**Commits**: `belajar-claude`: `34f63e0` (`dev` only, rebased on top of Tiffany's `f7d4ea0`, a "Community feed v2" commit — no file overlap).
 
 ---
 
