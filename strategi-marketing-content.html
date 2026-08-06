@@ -735,12 +735,12 @@ yang bisa saya buka lagi setiap kali launching produk baru.<button class="copy-b
           <div class="feedback-card" id="feedbackForm">
             <h3>Bagaimana kursus ini menurut kamu?</h3>
             <p class="feedback-sub">Feedback kamu membantu kami bikin kursus yang lebih baik.</p>
-            <div class="star-row" id="starRow">
-              <button class="star-btn" data-val="1" onclick="setRating(1)">★</button>
-              <button class="star-btn" data-val="2" onclick="setRating(2)">★</button>
-              <button class="star-btn" data-val="3" onclick="setRating(3)">★</button>
-              <button class="star-btn" data-val="4" onclick="setRating(4)">★</button>
-              <button class="star-btn" data-val="5" onclick="setRating(5)">★</button>
+            <div class="star-row" id="starRow" onmouseleave="hoverRating(0)">
+              <button class="star-btn" data-val="1" onclick="setRating(1)" onmouseenter="hoverRating(1)">★</button>
+              <button class="star-btn" data-val="2" onclick="setRating(2)" onmouseenter="hoverRating(2)">★</button>
+              <button class="star-btn" data-val="3" onclick="setRating(3)" onmouseenter="hoverRating(3)">★</button>
+              <button class="star-btn" data-val="4" onclick="setRating(4)" onmouseenter="hoverRating(4)">★</button>
+              <button class="star-btn" data-val="5" onclick="setRating(5)" onmouseenter="hoverRating(5)">★</button>
             </div>
             <div class="feedback-label">Komentar (opsional)</div>
             <textarea class="feedback-textarea" id="feedbackComment" placeholder="Apa yang paling berguna? Ada yang bisa diperbaiki?"></textarea>
@@ -865,11 +865,19 @@ yang bisa saya buka lagi setiap kali launching produk baru.<button class="copy-b
   // ── Feedback ─────────────────────────────────────
   let currentRating = 0;
 
-  function setRating(val) {
-    currentRating = val;
+  function renderStars(val) {
     document.querySelectorAll('.star-btn').forEach(function(btn) {
       btn.classList.toggle('active', parseInt(btn.getAttribute('data-val')) <= val);
     });
+  }
+
+  function setRating(val) {
+    currentRating = val;
+    renderStars(val);
+  }
+
+  function hoverRating(val) {
+    renderStars(val || currentRating);
   }
 
   async function loadExistingFeedback(email) {
