@@ -387,7 +387,7 @@ async function deletePost(postId){
     renderFeed();
   } catch(e) {
     console.error(e);
-    alert('Gagal menghapus post. Coba lagi.');
+    alert('Gagal menghapus post: ' + (e && e.message ? e.message : 'unknown error'));
   }
 }
 
@@ -403,7 +403,7 @@ async function deleteComment(postId, commentId){
     renderFeed();
   } catch(e) {
     console.error(e);
-    alert('Gagal menghapus komentar. Coba lagi.');
+    alert('Gagal menghapus komentar: ' + (e && e.message ? e.message : 'unknown error'));
   }
 }
 
@@ -544,7 +544,7 @@ async function submitComment(postId){
     renderFeed();
   } catch(e) {
     console.error(e);
-    alert('Gagal mengirim komentar. Coba lagi.');
+    alert('Gagal mengirim komentar: ' + (e && e.message ? e.message : 'unknown error'));
   } finally {
     var again = document.getElementById('commentInput-' + postId);
     if (again) again.disabled = false;
@@ -614,7 +614,7 @@ async function submitPost(){
     renderFeed();
   } catch(e) {
     console.error(e);
-    errEl.textContent = 'Gagal posting. Coba lagi.';
+    errEl.textContent = 'Gagal posting: ' + (e && e.message ? e.message : 'unknown error');
     errEl.style.display = 'block';
   } finally {
     btn.disabled = false;
