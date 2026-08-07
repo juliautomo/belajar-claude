@@ -365,7 +365,7 @@ async function togglePin(postId){
     console.error(e);
     p.pinned = !newVal;
     renderFeed();
-    alert('Gagal mengubah status pin. Coba lagi.');
+    alert('Gagal mengubah status pin: ' + (e && e.message ? e.message : 'unknown error'));
   }
 }
 
