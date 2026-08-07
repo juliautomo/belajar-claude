@@ -153,7 +153,6 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
 <nav>
   <a href="index.html" class="logo">belajar<span>claude</span></a>
   <div class="nav-right">
-    <a href="dashboard.html">← Dashboard</a>
     <span id="navEmail"></span>
     <a href="#" id="logoutLink" onclick="logout(); return false;" style="display:none;">Keluar</a>
   </div>
@@ -446,13 +445,28 @@ let currentSession = null;
 
 // Refreshes the auth token before any write. supabase-js pauses its background
 // token-refresh timer while the tab is backgrounded, so a session left open and
-// idle past its ~1hr token lifetime can go stale — the next write then fails
-// with "new row violates row-level security policy" even though the account is
-// a valid admin. Calling getSession() re-checks expiry and auto-renews if needed.
+// idle can go stale — the next write then fails with "new row violates
+// row-level security policy" even though the account is a valid admin, because
+// getSession() alone only checks the LOCALLY-cached expiry time and doesn't
+// force a round-trip — if the refresh token was already rotated/invalidated
+// server-side (e.g. this tab left open across an earlier successful refresh in
+// another tab, or a long-idle tab), getSession() still returns the old,
+// now-dead session as if it were fine. Calling refreshSession() forces an
+// actual network refresh, so a truly-dead session surfaces HERE as a clear
+// "session expired" redirect instead of silently reaching Supabase as an
+// unauthenticated request and failing later with an opaque RLS error.
 async function ensureFreshSession() {
   var res = await sbClient.auth.getSession();
-  if (res.data.session) currentSession = res.data.session;
-  return res.data.session;
+  if (!res.data.session) { window.location.href = 'login.html'; return null; }
+
+  var refreshed = await sbClient.auth.refreshSession();
+  if (refreshed.error || !refreshed.data.session) {
+    await sbClient.auth.signOut();
+    window.location.href = 'login.html?expired=1';
+    return null;
+  }
+  currentSession = refreshed.data.session;
+  return currentSession;
 }
 let activeCourse = COURSES[0].slug;
 let dataCache = { resources: [], videos: [], ppts: [], docs: [], visibility: [] };
@@ -556,7 +570,8 @@ function onSocialToggle(platform) {
 }
 
 async function saveSocialLinks() {
-  await ensureFreshSession();
+  var _sess = await ensureFreshSession();
+  if (!_sess) return;
   var btn = document.getElementById('socialSaveBtn');
   var statusEl = document.getElementById('socialStatus');
   var emailVal = document.getElementById('socialEmail').value.trim();
@@ -695,7 +710,8 @@ function renderPricing() {
 }
 
 async function savePricing() {
-  await ensureFreshSession();
+  var _sess = await ensureFreshSession();
+  if (!_sess) return;
   var btn = document.getElementById('priceSaveBtn');
   var statusEl = document.getElementById('priceStatus');
   var base = parseInt(document.getElementById('priceBase').value, 10);
@@ -766,7 +782,8 @@ function openPdfModal() {
 }
 
 async function submitPdfModal() {
-  await ensureFreshSession();
+  var _sess = await ensureFreshSession();
+  if (!_sess) return;
   var fileInput = document.getElementById('modalPdfFile');
   var file = fileInput.files[0];
   if (!file) { setStatus('modalStatus', 'Pilih file PDF dulu.', 'error'); return; }
@@ -775,11 +792,7 @@ async function submitPdfModal() {
   setStatus('modalStatus', 'Mengunggah...', 'pending');
   var path = activeCourse + '/' + Date.now() + '-' + file.name;
   var up = await sbClient.storage.from('course-pdfs').upload(path, file, { upsert: true });
-  if (up.error) {
-    console.error('PDF upload error (full):', up.error);
-    setStatus('modalStatus', 'Gagal unggah [' + (up.error.statusCode || up.error.status || '?') + ']: ' + up.error.message + (up.error.error ? ' (' + up.error.error + ')' : ''), 'error');
-    return;
-  }
+  if (up.error) { setStatus('modalStatus', 'Gagal unggah: ' + up.error.message, 'error'); return; }
 
   var pub = sbClient.storage.from('course-pdfs').getPublicUrl(path);
   var db = await sbClient.from('course_resources').upsert({
@@ -855,7 +868,8 @@ function renderVisibilityToggles() {
 }
 
 async function onCourseVisibilityToggle(changedField) {
-  await ensureFreshSession();
+  var _sess = await ensureFreshSession();
+  if (!_sess) return;
   var hidden = document.getElementById('courseHiddenToggle').checked;
   var comingSoon = document.getElementById('courseComingSoonToggle').checked;
   document.getElementById('courseHiddenLabel').textContent = hidden ? 'Disembunyikan' : 'Tampil';
@@ -899,7 +913,8 @@ function openVideoModal(moduleNum) {
 }
 
 async function submitVideoModal(moduleNum) {
-  await ensureFreshSession();
+  var _sess = await ensureFreshSession();
+  if (!_sess) return;
   var url = document.getElementById('modalVideoUrl').value.trim();
   if (!url) { setStatus('modalStatus', 'Tempel link YouTube dulu.', 'error'); return; }
   if (!extractYoutubeId(url)) { setStatus('modalStatus', 'Link nggak dikenali sebagai YouTube. Pastikan formatnya seperti youtube.com/watch?v=... atau youtu.be/...', 'error'); return; }
@@ -923,7 +938,8 @@ async function deleteVideoModal(moduleNum) {
   var video = dataCache.videos.find(function (v) { return v.course_slug === activeCourse && v.module_num === moduleNum; });
   if (!video) return;
   if (!confirm('Hapus video untuk ' + moduleLabel(activeCourse, moduleNum) + '?')) return;
-  await ensureFreshSession();
+  var _sess = await ensureFreshSession();
+  if (!_sess) return;
   var db = await sbClient.from('module_videos').delete().eq('course_slug', activeCourse).eq('module_num', moduleNum);
   if (db.error) { alert('Gagal hapus video: ' + db.error.message); return; }
   await reloadAndRender();
@@ -944,7 +960,8 @@ function openPptModal(moduleNum) {
 }
 
 async function submitPptModal(moduleNum) {
-  await ensureFreshSession();
+  var _sess = await ensureFreshSession();
+  if (!_sess) return;
   var fileInput = document.getElementById('modalPptFile');
   var file = fileInput.files[0];
   if (!file) { setStatus('modalStatus', 'Pilih file PPT dulu.', 'error'); return; }
@@ -976,7 +993,8 @@ async function deletePptModal(moduleNum) {
   var ppt = dataCache.ppts.find(function (p) { return p.course_slug === activeCourse && p.module_num === moduleNum; });
   if (!ppt) return;
   if (!confirm('Hapus PPT "' + (ppt.ppt_label || 'file ini') + '"?')) return;
-  await ensureFreshSession();
+  var _sess = await ensureFreshSession();
+  if (!_sess) return;
   var path = extractStoragePath(ppt.ppt_url, 'course-ppts');
   if (path) { await sbClient.storage.from('course-ppts').remove([path]); }
   var db = await sbClient.from('module_ppts').delete().eq('course_slug', activeCourse).eq('module_num', moduleNum);
@@ -1014,7 +1032,8 @@ function openDocsModal(moduleNum) {
 }
 
 async function submitDocsModal(moduleNum) {
-  await ensureFreshSession();
+  var _sess = await ensureFreshSession();
+  if (!_sess) return;
   var fileInput = document.getElementById('modalDocFile');
   var files = Array.prototype.slice.call(fileInput.files || []);
   if (!files.length) { setStatus('modalStatus', 'Pilih minimal 1 file dokumen dulu.', 'error'); return; }
@@ -1056,7 +1075,8 @@ async function deleteDocModal(id, moduleNum) {
   var d = dataCache.docs.find(function (x) { return String(x.id) === String(id); });
   if (!d) return;
   if (!confirm('Hapus dokumen "' + (d.doc_label || 'dokumen ini') + '"?')) return;
-  await ensureFreshSession();
+  var _sess = await ensureFreshSession();
+  if (!_sess) return;
   await sbClient.storage.from('course-documents').remove([d.doc_path]);
   await sbClient.from('module_documents').delete().eq('id', d.id);
   await loadAllData();

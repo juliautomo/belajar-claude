@@ -170,6 +170,14 @@
       if (r.data.session) window.location.href = 'dashboard.html';
     })();
 
+    // Shown when admin.html force-refreshes the session and it's genuinely dead
+    // (rotated/expired refresh token) — clearer than a silent redirect.
+    if (new URLSearchParams(window.location.search).get('expired') === '1') {
+      document.addEventListener('DOMContentLoaded', function() {
+        showMsg(document.getElementById('login-msg'), 'error', 'Sesi kamu sudah berakhir. Silakan masuk lagi.');
+      });
+    }
+
     function switchTab(tab) {
       document.querySelectorAll('.tab-btn').forEach(function(b, i) {
         b.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'register'));
