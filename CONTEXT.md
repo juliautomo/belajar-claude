@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 7, 2026 (checkpoint 183)_
+_Last updated: August 7, 2026 (checkpoint 184)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2566,6 +2566,24 @@ Julia asked to push only her footer/Address changes to production, explicitly ho
 **Still on `dev` only, not in production**: community feed (posts/likes/comments/search/categories/pinning/images/delete — commits `6962ee2`, `f7d4ea0`, `cffec20`, `c90351f`), the admin.html "← Dashboard" nav link (`2f39b28`, `13f6563`). Tiffany's own call when to merge these.
 
 **Commits**: `belajar-claude`: pushed directly to `main` as `9153109..ddd2beb` (12 cherry-picked commits, hashes differ from their `dev` originals since cherry-pick rewrites commit SHAs — `dev` and `main` now share equivalent content for these files but not identical commit history).
+
+---
+
+## SHIPPED (Checkpoint 184, August 7, 2026): Root-caused and fixed the "row-level security policy" error on PDF upload — plus a second file-collision incident with Tiffany, same failure mode as Checkpoint 177's `13f6563`
+
+**Status: pushed to `dev` only.**
+
+Julia's screenshot showed `admin.html`'s PDF-upload modal failing with "Gagal unggah: new row violates row-level security policy" on every attempt, including immediately after a fresh login. Investigated the Supabase side directly (not guessable from the front-end alone): pulled every RLS policy on `storage.objects` and confirmed the `course-pdfs` INSERT/UPDATE policies are correctly scoped (`bucket_id = 'course-pdfs' AND auth.jwt()->>'email' IN (julia, tiffany)`), symmetric to the other three buckets — no misconfiguration there. Simulated the policy directly in SQL with her real email as the JWT claim and confirmed it evaluates to `true`. Checked bucket-level restrictions (mime type, size limit) — none set, identical across all four buckets. Checked `storage` service logs — every attempt across a 3-hour window (spanning a fresh sign-in at 06:35 UTC) returned 400, ruling out one-off flakiness.
+
+**Root cause**: `ensureFreshSession()` (the helper every write function calls first) only called `sbClient.auth.getSession()`, which returns the *locally-cached* session and only auto-refreshes if the client-side clock thinks the token is past its expiry — it does not verify the session is still valid server-side. If the refresh token had already been rotated or invalidated (e.g. the admin.html tab was left open across an earlier successful refresh that happened in a different tab, or sat idle a long time), `getSession()` still handed back the old session looking perfectly fine, the write then went out with a dead/invalid bearer token, Supabase silently treated it as an unauthenticated (anon) request, and `auth.jwt()->>'email'` evaluated to `null` — which is indistinguishable from a real permissions problem from the error message alone.
+
+**Fix**: `ensureFreshSession()` now calls `sbClient.auth.refreshSession()`, forcing an actual network round-trip. If that fails (session genuinely dead), it signs out and redirects to `login.html?expired=1` with a clear "Sesi kamu sudah berakhir, silakan masuk lagi" message, instead of letting the write proceed and fail downstream with an opaque RLS error. All 10 call sites in `admin.html` updated to bail out early (`if (!_sess) return;`) if the refreshed session comes back null.
+
+**Second collision with Tiffany, same root cause as Checkpoint 177's `13f6563`**: while I was mid-fix, Tiffany independently pushed `9de74a6` (adds status-code + full error detail to the PDF-upload error message, for her own debugging of this exact bug). My push workflow re-clones fresh from `origin` but then does a blind `cp` of the *locally-mounted* `admin.html` over it rather than diffing against what was just fetched — since my local mount's copy predated her commit, the `cp` silently reverted her addition. Caught it immediately after pushing by diffing the new commit's parent range and comparing file contents (same verification habit that caught the first collision), and pushed a follow-up commit (`46395ac`) restoring her error-detail logging on top of the session fix. **Process note for next time**: after any `git fetch`, diff `origin/dev` against the local mount for files about to be touched *before* copying, not just after pushing — would have caught this before it ever left the local clone instead of needing a correction commit.
+
+**Verification**: `ci-check.js` clean throughout both commits. Not yet visually/functionally re-confirmed — Chrome MCP had no existing tab into Julia's actual logged-in session (it's a separate sandboxed browser, not her real one), so the fix is verified by code review and Supabase-side testing (the RLS simulation, the log timeline) but not by an actual successful re-upload yet. **Recommend Julia do a hard refresh on `admin.html` and retry the PDF upload** — if `ensureFreshSession()`'s new `refreshSession()` call itself fails for her, she'll now land on `login.html?expired=1` instead of seeing the RLS error again, which would confirm the diagnosis; if the upload succeeds directly, that's confirmation too.
+
+**Commits**: `belajar-claude`: `93f69a2` (`dev`, force-refresh fix in `ensureFreshSession` + 10 call-site guards), `46395ac` (`dev`, restores Tiffany's `9de74a6` error-detail logging that the first commit's stale-copy `cp` had dropped).
 
 ---
 
