@@ -775,7 +775,11 @@ async function submitPdfModal() {
   setStatus('modalStatus', 'Mengunggah...', 'pending');
   var path = activeCourse + '/' + Date.now() + '-' + file.name;
   var up = await sbClient.storage.from('course-pdfs').upload(path, file, { upsert: true });
-  if (up.error) { setStatus('modalStatus', 'Gagal unggah: ' + up.error.message, 'error'); return; }
+  if (up.error) {
+    console.error('PDF upload error (full):', up.error);
+    setStatus('modalStatus', 'Gagal unggah [' + (up.error.statusCode || up.error.status || '?') + ']: ' + up.error.message + (up.error.error ? ' (' + up.error.error + ')' : ''), 'error');
+    return;
+  }
 
   var pub = sbClient.storage.from('course-pdfs').getPublicUrl(path);
   var db = await sbClient.from('course_resources').upsert({
