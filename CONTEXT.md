@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 6, 2026 (checkpoint 182)_
+_Last updated: August 7, 2026 (checkpoint 183)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2552,6 +2552,20 @@ This also resolves the earlier "address still not showing up" report from Checkp
 **Verification**: `ci-check.js` clean (29 HTML, 5 JS, 26 local refs, nothing broken). Not yet visually re-confirmed in a live browser (Chrome MCP not attempted this checkpoint) — recommend Julia do a final visual check on `https://dev-belajar-claude.belajarclaude-id.workers.dev/` before this whole footer change (Checkpoints 177-182) gets merged to `main`.
 
 **Commits**: `belajar-claude`: `031ca2f` (`dev` only, rebased cleanly on top of Tiffany's `cffec20` "Community feed: add delete for posts/comments" — no file overlap).
+
+---
+
+## SHIPPED (Checkpoint 183, August 7, 2026): Footer/Address work (Checkpoints 177-182) merged to `main` — selectively, without Tiffany's concurrent community-feed work
+
+**Status: pushed to `main` (production).**
+
+Julia asked to push only her footer/Address changes to production, explicitly holding back Tiffany's community feed and admin nav-link work for Tiffany to merge herself later. Since `dev` had both threads interleaved commit-by-commit, a straight `dev` → `main` merge wasn't an option — instead cherry-picked Julia's 12 commits (the full footer/Address chain: `ec79204` through `90544f6`, including all four follow-up layout fixes and CONTEXT.md checkpoints 177-182) onto a fresh branch off `origin/main`, in original order.
+
+**Verified before pushing**: all 12 cherry-picks applied with zero conflicts. Diffed the resulting branch against `dev` for every file Julia's commits touched (11 footer HTML files + `admin.html` + `sql/social-links-address.sql`) — identical, except `admin.html` correctly excludes Tiffany's "← Dashboard" nav link (the one expected difference). Diffed against `origin/main` to confirm none of Tiffany's files (`community.html`, `dashboard.html`, `profile.html`, `sql/community-feed*.sql`) came along. `ci-check.js` clean (28 HTML, 5 JS, 25 local refs).
+
+**Still on `dev` only, not in production**: community feed (posts/likes/comments/search/categories/pinning/images/delete — commits `6962ee2`, `f7d4ea0`, `cffec20`, `c90351f`), the admin.html "← Dashboard" nav link (`2f39b28`, `13f6563`). Tiffany's own call when to merge these.
+
+**Commits**: `belajar-claude`: pushed directly to `main` as `9153109..ddd2beb` (12 cherry-picked commits, hashes differ from their `dev` originals since cherry-pick rewrites commit SHAs — `dev` and `main` now share equivalent content for these files but not identical commit history).
 
 ---
 
