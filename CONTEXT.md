@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 10, 2026 (checkpoint 187)_
+_Last updated: August 10, 2026 (checkpoint 188)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2636,6 +2636,18 @@ All 4 admin.html cherry-picks auto-merged cleanly despite the Dashboard-link com
 **The actual RLS policy fix needed no separate production step** — Supabase project data (RLS policies) is shared between `dev` and `main` deployments; it was already live from the moment it was applied via `apply_migration` in Checkpoint 186, well before this code merge. This merge only brings the *client-side* pieces (session refresh, error-detail logging, JWT decoder) and the SQL file documenting the policy change into production's codebase.
 
 **Commits**: `belajar-claude`: pushed directly to `main` as `ddd2beb..fc2bd27` (5 cherry-picked commits, hashes differ from their `dev` originals).
+
+---
+
+## SHIPPED (Checkpoint 188, August 10, 2026): Status review — no code changes
+
+Julia asked what's left pending and for a recap of the past week's `main` activity. No code touched this checkpoint, just a status check; logging it since it reflects the current accurate state of the project going forward.
+
+**Pending, unchanged from Checkpoint 187**: Tiffany's community feed (`6962ee2`, `f7d4ea0`, `cffec20`, `c90351f`, `3a5d371`) and the admin.html "← Dashboard" nav link (`2f39b28`, `13f6563`) remain `dev`-only — her call when to merge, nothing technically blocking either. Duitku production merchant cutover still blocked on Duitku's own approval (external, not a code change — just swapping Railway prod env vars once cleared). Staging Supabase database still deferred by Julia's earlier choice (free-tier 2-project cap).
+
+**Past week on `main` (Aug 3-10), summarized for Julia**: Aug 3 — dashboard/progress bug sweep (stale localStorage resurrecting wiped test data, wrong module counts causing premature 100%), guest-checkout/payment-success flow fixes, Daftar self-serve signup removed, module-file download fix. Aug 4 — security fix (`.git`/`CONTEXT.md` briefly served as public static assets, fixed via `.assetsignore`), CI automation shipped (`ci-check.js` + GitHub Actions), Duitku dev/prod Railway split completed, FAQ page added, footer restructured, homepage "Lintas Profesi" replaced with new "Dari Pekerjaan Sehari-hari" workflow-card design (5 rounds), mobile nav/layout fixes. Aug 6 — Web Analytics coverage confirmed, footer "Hubungi Kami" contact grouping + admin-managed Address field (4 follow-up layout fixes). Aug 7-10 — PDF upload RLS bug: session-refresh attempt, JWT-claim decoder, then the real root cause (missing `SELECT` policy on `storage.objects` breaking Storage API's internal `RETURNING` clause) found and fixed. Tiffany also shipped a star-rating hover fix (Aug 6).
+
+**Commits**: none — documentation only.
 
 ---
 
