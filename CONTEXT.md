@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 10, 2026 (checkpoint 185)_
+_Last updated: August 10, 2026 (checkpoint 186)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2600,6 +2600,26 @@ Julia tried the PDF upload again after Checkpoint 184 shipped and got the same "
 **Verification**: `ci-check.js` clean. No live re-test possible (no browser access to Julia's actual session). **This is explicitly not resolved yet** — recommend Julia retry the PDF upload on `dev` and share whatever the new error message shows (specifically the "token email" / "role" values), which should make the real cause obvious on the next pass.
 
 **Commits**: `belajar-claude`: `91f62e4` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 186, August 10, 2026): Real root cause of the PDF-upload RLS error found and fixed — missing SELECT policy on storage.objects, unrelated to session freshness
+
+**Status: fixed directly in production Supabase (RLS policy is data, not a deploy) + committed to `dev` for the SQL migration file and error-message cleanup.**
+
+Julia retried after Checkpoint 185's JWT-claim decoder and the error now showed **"token email: julia.utomo@gmail.com, role: authenticated"** — a completely valid, correct token. This ruled out every theory from Checkpoints 184-185 (stale session, wrong claims) in one shot. Went back to direct SQL testing, but this time far more rigorously: wrapped the exact INSERT in a `DO` block with her exact JWT claims and it **succeeded** — directly contradicting the earlier "confirmed via SQL" conclusion from Checkpoint 184. Root-caused the contradiction itself: my earlier multi-statement `begin; set local ...; insert ...; rollback;` tests weren't reliably preserving `SET LOCAL` across statement boundaries the way a single atomic PL/pgSQL block does, making those earlier "confirmations" a testing artifact, not real signal — worth remembering for any future RLS debugging in this project.
+
+**Found the actual bug via a second, cleaner test**: the exact same INSERT succeeded when run *without* a `RETURNING` clause, and failed with the identical RLS error when `RETURNING id, bucket_id, name` was added. That's the tell — [Supabase's own troubleshooting docs](https://supabase.com/docs/guides/troubleshooting/storage-error-403-forbidden-new-row-violates-row-level-security-policy-on-upload-a94384) confirm the Storage API's upload endpoint always does an internal `INSERT ... RETURNING *`, which requires the newly-inserted row to be visible under a `SELECT` policy — independent of whether the `INSERT` policy itself passes. Checked `storage.objects`: all 4 admin-managed buckets (`course-pdfs`, `course-ppts`, `course-videos`, `course-documents`) had `INSERT`/`UPDATE` policies but **zero `SELECT` policy** — meanwhile Tiffany's `community-images` bucket (from the community feed work) *does* have one ("Public read community-images"), which is exactly why her uploads there have never hit this bug.
+
+**Fix**: added a public `SELECT` policy per bucket (`bucket_id = '<bucket>'`, no other condition), matching the existing `community-images` pattern — appropriate since all 4 buckets are already `public: true` and served via `getPublicUrl` regardless of RLS. Applied directly to production via Supabase MCP (`apply_migration`), and saved as `sql/storage-select-policies.sql` (idempotent, with a `pg_policy` existence guard) for the repo's schema history. Re-ran the exact failing `INSERT ... RETURNING` test after applying — it now succeeds cleanly.
+
+**Also confirmed no new exposure**: `get_advisors(security)` shows no new warnings — the only lint is the pre-existing, unrelated "leaked password protection disabled" note.
+
+**What this means for Checkpoints 184-185**: the `ensureFreshSession()` force-refresh fix and the JWT-claim decoder weren't wrong to add — they're genuinely more robust than what was there before, and the decoder is exactly what surfaced the "token is actually fine" signal that pointed at the real bug — but neither was the actual fix. The real fix was always a one-line missing policy, invisible from the client side no matter how much session/token debugging was done there.
+
+**Verification**: SQL-level fix confirmed directly (the failing repro now succeeds). Not yet confirmed via Julia's actual browser — recommend she retry the PDF upload on `dev` once more; it should now succeed outright instead of showing any error.
+
+**Commits**: `belajar-claude`: SQL migration file only (`sql/storage-select-policies.sql`), the policy itself is live in Supabase directly (not deploy-gated).
 
 ---
 
