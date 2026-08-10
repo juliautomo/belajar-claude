@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 10, 2026 (checkpoint 186)_
+_Last updated: August 10, 2026 (checkpoint 187)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2620,6 +2620,22 @@ Julia retried after Checkpoint 185's JWT-claim decoder and the error now showed 
 **Verification**: SQL-level fix confirmed directly (the failing repro now succeeds). Not yet confirmed via Julia's actual browser — recommend she retry the PDF upload on `dev` once more; it should now succeed outright instead of showing any error.
 
 **Commits**: `belajar-claude`: SQL migration file only (`sql/storage-select-policies.sql`), the policy itself is live in Supabase directly (not deploy-gated).
+
+---
+
+## SHIPPED (Checkpoint 187, August 10, 2026): PDF-upload fix (Checkpoints 184-186) merged to `main` — Julia confirmed the upload works, selectively without Tiffany's Dashboard-link/community-feed work
+
+**Status: pushed to `main` (production).**
+
+Julia confirmed the PDF upload now works on `dev` and asked to push the fix to production, holding back Tiffany's concurrent work the same way as Checkpoint 183. `dev`'s admin.html had the PDF-fix commits interleaved with Tiffany's "← Dashboard" nav-link commits (`2f39b28`, `13f6563`), so cherry-picked just the PDF-fix chain onto a fresh branch off `origin/main`: `9de74a6` (Tiffany's error-detail logging), `93f69a2` (session force-refresh + 10 call-site guards), `46395ac` (restores Tiffany's logging after my collision), `91f62e4` (JWT-claim decoder), `d8516ff` (the real fix — SQL migration file documenting the missing `SELECT` policies, already live in Supabase directly).
+
+All 4 admin.html cherry-picks auto-merged cleanly despite the Dashboard-link commits sitting in between (git's 3-way merge correctly ignored unrelated hunks). The 5th (`d8516ff`) conflicted only on `CONTEXT.md` — expected, since `main`'s CONTEXT.md doesn't have the intervening dev-only checkpoint entries — resolved by keeping `main`'s CONTEXT.md as-is and writing this fresh consolidated entry instead of carrying over the dev-only checkpoints verbatim.
+
+**Verified before pushing**: diffed the resulting branch's `admin.html` against `origin/dev` — identical except correctly missing Tiffany's nav-bar "← Dashboard" link (confirmed by grep — the only "Dashboard" reference left is an unrelated existing link in the access-denied view). Diffed against `origin/main` to confirm `community.html`, `dashboard.html`, `profile.html`, and the community-feed SQL files stayed out. `ci-check.js` clean (28 HTML, 5 JS, 25 local refs).
+
+**The actual RLS policy fix needed no separate production step** — Supabase project data (RLS policies) is shared between `dev` and `main` deployments; it was already live from the moment it was applied via `apply_migration` in Checkpoint 186, well before this code merge. This merge only brings the *client-side* pieces (session refresh, error-detail logging, JWT decoder) and the SQL file documenting the policy change into production's codebase.
+
+**Commits**: `belajar-claude`: pushed directly to `main` as `ddd2beb..fc2bd27` (5 cherry-picked commits, hashes differ from their `dev` originals).
 
 ---
 
