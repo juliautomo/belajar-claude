@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 7, 2026 (checkpoint 184)_
+_Last updated: August 10, 2026 (checkpoint 185)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2584,6 +2584,22 @@ Julia's screenshot showed `admin.html`'s PDF-upload modal failing with "Gagal un
 **Verification**: `ci-check.js` clean throughout both commits. Not yet visually/functionally re-confirmed — Chrome MCP had no existing tab into Julia's actual logged-in session (it's a separate sandboxed browser, not her real one), so the fix is verified by code review and Supabase-side testing (the RLS simulation, the log timeline) but not by an actual successful re-upload yet. **Recommend Julia do a hard refresh on `admin.html` and retry the PDF upload** — if `ensureFreshSession()`'s new `refreshSession()` call itself fails for her, she'll now land on `login.html?expired=1` instead of seeing the RLS error again, which would confirm the diagnosis; if the upload succeeds directly, that's confirmation too.
 
 **Commits**: `belajar-claude`: `93f69a2` (`dev`, force-refresh fix in `ensureFreshSession` + 10 call-site guards), `46395ac` (`dev`, restores Tiffany's `9de74a6` error-detail logging that the first commit's stale-copy `cp` had dropped).
+
+---
+
+## SHIPPED (Checkpoint 185, August 10, 2026): Checkpoint 184's session-refresh fix didn't resolve the PDF upload error — added a JWT-claim decoder to actually see what's failing
+
+**Status: pushed to `dev` only. Still an open bug — this checkpoint adds observability, not a confirmed fix.**
+
+Julia tried the PDF upload again after Checkpoint 184 shipped and got the same "Gagal unggah: new row violates row-level security policy" error — but now, thanks to Tiffany's error-detail logging, the toast additionally showed `statusCode: 403`. That detail changes the diagnosis: if `ensureFreshSession()`'s new `refreshSession()` call (Checkpoint 184's fix) had failed, she'd have been signed out and redirected to `login.html?expired=1` instead of seeing this error at all. Since she's still on the same page seeing a 403, the refresh succeeded — meaning a real, current, non-expired token reached Supabase and was still genuinely denied by the RLS policy. This rules out the "stale cached session" theory from Checkpoint 184.
+
+**Re-verified the backend is clean**: re-ran the SQL simulation of the `storage.objects` INSERT policy with `julia.utomo@gmail.com` as the JWT claim — still passes. Checked her `auth.users` row directly: `role: authenticated`, not banned, not deleted, email exact match, no SSO weirdness. Checked `auth.sessions`/`auth.refresh_tokens`: she currently has live, non-revoked sessions. Every backend signal says this should work — which means the actual discrepancy has to be in what her browser's request sends, something not visible from the server side at all.
+
+**Added a diagnostic, not a fix**: a `decodeJwtPayload()` helper that base64-decodes the access token's own payload (no signature verification, just reading the claims) and surfaces the `email` and `role` claims directly in the PDF-upload error message. Next attempt will show, e.g., "token email: julia.utomo@gmail.com, role: authenticated" (confirming everything's fine and the bug is elsewhere — perhaps in how the Authorization header actually gets attached to the Storage API request specifically) or reveal a genuine mismatch (wrong email, wrong role, or `n/a` if the token is malformed/missing entirely). This turns the next failure from a guess into a direct observation instead of another round of backend-only investigation that keeps coming up clean.
+
+**Verification**: `ci-check.js` clean. No live re-test possible (no browser access to Julia's actual session). **This is explicitly not resolved yet** — recommend Julia retry the PDF upload on `dev` and share whatever the new error message shows (specifically the "token email" / "role" values), which should make the real cause obvious on the next pass.
+
+**Commits**: `belajar-claude`: `91f62e4` (`dev` only).
 
 ---
 
