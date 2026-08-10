@@ -455,6 +455,20 @@ let currentSession = null;
 // actual network refresh, so a truly-dead session surfaces HERE as a clear
 // "session expired" redirect instead of silently reaching Supabase as an
 // unauthenticated request and failing later with an opaque RLS error.
+// Decodes a JWT's payload without verifying the signature — for surfacing
+// what claims (email, role) an access token actually carries client-side,
+// since a "row-level security" error alone can't tell us whether the
+// server-side auth.jwt() saw the email we expect.
+function decodeJwtPayload(token) {
+  try {
+    var base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    var json = decodeURIComponent(atob(base64).split('').map(function (c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(json);
+  } catch (e) { return null; }
+}
+
 async function ensureFreshSession() {
   var res = await sbClient.auth.getSession();
   if (!res.data.session) { window.location.href = 'login.html'; return null; }
@@ -793,8 +807,9 @@ async function submitPdfModal() {
   var path = activeCourse + '/' + Date.now() + '-' + file.name;
   var up = await sbClient.storage.from('course-pdfs').upload(path, file, { upsert: true });
   if (up.error) {
-    console.error('PDF upload error (full):', up.error);
-    setStatus('modalStatus', 'Gagal unggah [' + (up.error.statusCode || up.error.status || '?') + ']: ' + up.error.message + (up.error.error ? ' (' + up.error.error + ')' : ''), 'error');
+    var claims = currentSession && currentSession.access_token ? decodeJwtPayload(currentSession.access_token) : null;
+    console.error('PDF upload error (full):', up.error, 'token claims:', claims);
+    setStatus('modalStatus', 'Gagal unggah [' + (up.error.statusCode || up.error.status || '?') + ']: ' + up.error.message + (up.error.error ? ' (' + up.error.error + ')' : '') + ' — token email: ' + (claims ? claims.email : 'n/a') + ', role: ' + (claims ? claims.role : 'n/a'), 'error');
     return;
   }
 
