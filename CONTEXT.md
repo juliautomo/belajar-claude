@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 6, 2026 (checkpoint 182)_
+_Last updated: August 10, 2026 (checkpoint 189)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2552,6 +2552,112 @@ This also resolves the earlier "address still not showing up" report from Checkp
 **Verification**: `ci-check.js` clean (29 HTML, 5 JS, 26 local refs, nothing broken). Not yet visually re-confirmed in a live browser (Chrome MCP not attempted this checkpoint) — recommend Julia do a final visual check on `https://dev-belajar-claude.belajarclaude-id.workers.dev/` before this whole footer change (Checkpoints 177-182) gets merged to `main`.
 
 **Commits**: `belajar-claude`: `031ca2f` (`dev` only, rebased cleanly on top of Tiffany's `cffec20` "Community feed: add delete for posts/comments" — no file overlap).
+
+---
+
+## SHIPPED (Checkpoint 183, August 7, 2026): Footer/Address work (Checkpoints 177-182) merged to `main` — selectively, without Tiffany's concurrent community-feed work
+
+**Status: pushed to `main` (production).**
+
+Julia asked to push only her footer/Address changes to production, explicitly holding back Tiffany's community feed and admin nav-link work for Tiffany to merge herself later. Since `dev` had both threads interleaved commit-by-commit, a straight `dev` → `main` merge wasn't an option — instead cherry-picked Julia's 12 commits (the full footer/Address chain: `ec79204` through `90544f6`, including all four follow-up layout fixes and CONTEXT.md checkpoints 177-182) onto a fresh branch off `origin/main`, in original order.
+
+**Verified before pushing**: all 12 cherry-picks applied with zero conflicts. Diffed the resulting branch against `dev` for every file Julia's commits touched (11 footer HTML files + `admin.html` + `sql/social-links-address.sql`) — identical, except `admin.html` correctly excludes Tiffany's "← Dashboard" nav link (the one expected difference). Diffed against `origin/main` to confirm none of Tiffany's files (`community.html`, `dashboard.html`, `profile.html`, `sql/community-feed*.sql`) came along. `ci-check.js` clean (28 HTML, 5 JS, 25 local refs).
+
+**Still on `dev` only, not in production**: community feed (posts/likes/comments/search/categories/pinning/images/delete — commits `6962ee2`, `f7d4ea0`, `cffec20`, `c90351f`), the admin.html "← Dashboard" nav link (`2f39b28`, `13f6563`). Tiffany's own call when to merge these.
+
+**Commits**: `belajar-claude`: pushed directly to `main` as `9153109..ddd2beb` (12 cherry-picked commits, hashes differ from their `dev` originals since cherry-pick rewrites commit SHAs — `dev` and `main` now share equivalent content for these files but not identical commit history).
+
+---
+
+## SHIPPED (Checkpoint 184, August 7, 2026): Root-caused and fixed the "row-level security policy" error on PDF upload — plus a second file-collision incident with Tiffany, same failure mode as Checkpoint 177's `13f6563`
+
+**Status: pushed to `dev` only.**
+
+Julia's screenshot showed `admin.html`'s PDF-upload modal failing with "Gagal unggah: new row violates row-level security policy" on every attempt, including immediately after a fresh login. Investigated the Supabase side directly (not guessable from the front-end alone): pulled every RLS policy on `storage.objects` and confirmed the `course-pdfs` INSERT/UPDATE policies are correctly scoped (`bucket_id = 'course-pdfs' AND auth.jwt()->>'email' IN (julia, tiffany)`), symmetric to the other three buckets — no misconfiguration there. Simulated the policy directly in SQL with her real email as the JWT claim and confirmed it evaluates to `true`. Checked bucket-level restrictions (mime type, size limit) — none set, identical across all four buckets. Checked `storage` service logs — every attempt across a 3-hour window (spanning a fresh sign-in at 06:35 UTC) returned 400, ruling out one-off flakiness.
+
+**Root cause**: `ensureFreshSession()` (the helper every write function calls first) only called `sbClient.auth.getSession()`, which returns the *locally-cached* session and only auto-refreshes if the client-side clock thinks the token is past its expiry — it does not verify the session is still valid server-side. If the refresh token had already been rotated or invalidated (e.g. the admin.html tab was left open across an earlier successful refresh that happened in a different tab, or sat idle a long time), `getSession()` still handed back the old session looking perfectly fine, the write then went out with a dead/invalid bearer token, Supabase silently treated it as an unauthenticated (anon) request, and `auth.jwt()->>'email'` evaluated to `null` — which is indistinguishable from a real permissions problem from the error message alone.
+
+**Fix**: `ensureFreshSession()` now calls `sbClient.auth.refreshSession()`, forcing an actual network round-trip. If that fails (session genuinely dead), it signs out and redirects to `login.html?expired=1` with a clear "Sesi kamu sudah berakhir, silakan masuk lagi" message, instead of letting the write proceed and fail downstream with an opaque RLS error. All 10 call sites in `admin.html` updated to bail out early (`if (!_sess) return;`) if the refreshed session comes back null.
+
+**Second collision with Tiffany, same root cause as Checkpoint 177's `13f6563`**: while I was mid-fix, Tiffany independently pushed `9de74a6` (adds status-code + full error detail to the PDF-upload error message, for her own debugging of this exact bug). My push workflow re-clones fresh from `origin` but then does a blind `cp` of the *locally-mounted* `admin.html` over it rather than diffing against what was just fetched — since my local mount's copy predated her commit, the `cp` silently reverted her addition. Caught it immediately after pushing by diffing the new commit's parent range and comparing file contents (same verification habit that caught the first collision), and pushed a follow-up commit (`46395ac`) restoring her error-detail logging on top of the session fix. **Process note for next time**: after any `git fetch`, diff `origin/dev` against the local mount for files about to be touched *before* copying, not just after pushing — would have caught this before it ever left the local clone instead of needing a correction commit.
+
+**Verification**: `ci-check.js` clean throughout both commits. Not yet visually/functionally re-confirmed — Chrome MCP had no existing tab into Julia's actual logged-in session (it's a separate sandboxed browser, not her real one), so the fix is verified by code review and Supabase-side testing (the RLS simulation, the log timeline) but not by an actual successful re-upload yet. **Recommend Julia do a hard refresh on `admin.html` and retry the PDF upload** — if `ensureFreshSession()`'s new `refreshSession()` call itself fails for her, she'll now land on `login.html?expired=1` instead of seeing the RLS error again, which would confirm the diagnosis; if the upload succeeds directly, that's confirmation too.
+
+**Commits**: `belajar-claude`: `93f69a2` (`dev`, force-refresh fix in `ensureFreshSession` + 10 call-site guards), `46395ac` (`dev`, restores Tiffany's `9de74a6` error-detail logging that the first commit's stale-copy `cp` had dropped).
+
+---
+
+## SHIPPED (Checkpoint 185, August 10, 2026): Checkpoint 184's session-refresh fix didn't resolve the PDF upload error — added a JWT-claim decoder to actually see what's failing
+
+**Status: pushed to `dev` only. Still an open bug — this checkpoint adds observability, not a confirmed fix.**
+
+Julia tried the PDF upload again after Checkpoint 184 shipped and got the same "Gagal unggah: new row violates row-level security policy" error — but now, thanks to Tiffany's error-detail logging, the toast additionally showed `statusCode: 403`. That detail changes the diagnosis: if `ensureFreshSession()`'s new `refreshSession()` call (Checkpoint 184's fix) had failed, she'd have been signed out and redirected to `login.html?expired=1` instead of seeing this error at all. Since she's still on the same page seeing a 403, the refresh succeeded — meaning a real, current, non-expired token reached Supabase and was still genuinely denied by the RLS policy. This rules out the "stale cached session" theory from Checkpoint 184.
+
+**Re-verified the backend is clean**: re-ran the SQL simulation of the `storage.objects` INSERT policy with `julia.utomo@gmail.com` as the JWT claim — still passes. Checked her `auth.users` row directly: `role: authenticated`, not banned, not deleted, email exact match, no SSO weirdness. Checked `auth.sessions`/`auth.refresh_tokens`: she currently has live, non-revoked sessions. Every backend signal says this should work — which means the actual discrepancy has to be in what her browser's request sends, something not visible from the server side at all.
+
+**Added a diagnostic, not a fix**: a `decodeJwtPayload()` helper that base64-decodes the access token's own payload (no signature verification, just reading the claims) and surfaces the `email` and `role` claims directly in the PDF-upload error message. Next attempt will show, e.g., "token email: julia.utomo@gmail.com, role: authenticated" (confirming everything's fine and the bug is elsewhere — perhaps in how the Authorization header actually gets attached to the Storage API request specifically) or reveal a genuine mismatch (wrong email, wrong role, or `n/a` if the token is malformed/missing entirely). This turns the next failure from a guess into a direct observation instead of another round of backend-only investigation that keeps coming up clean.
+
+**Verification**: `ci-check.js` clean. No live re-test possible (no browser access to Julia's actual session). **This is explicitly not resolved yet** — recommend Julia retry the PDF upload on `dev` and share whatever the new error message shows (specifically the "token email" / "role" values), which should make the real cause obvious on the next pass.
+
+**Commits**: `belajar-claude`: `91f62e4` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 186, August 10, 2026): Real root cause of the PDF-upload RLS error found and fixed — missing SELECT policy on storage.objects, unrelated to session freshness
+
+**Status: fixed directly in production Supabase (RLS policy is data, not a deploy) + committed to `dev` for the SQL migration file and error-message cleanup.**
+
+Julia retried after Checkpoint 185's JWT-claim decoder and the error now showed **"token email: julia.utomo@gmail.com, role: authenticated"** — a completely valid, correct token. This ruled out every theory from Checkpoints 184-185 (stale session, wrong claims) in one shot. Went back to direct SQL testing, but this time far more rigorously: wrapped the exact INSERT in a `DO` block with her exact JWT claims and it **succeeded** — directly contradicting the earlier "confirmed via SQL" conclusion from Checkpoint 184. Root-caused the contradiction itself: my earlier multi-statement `begin; set local ...; insert ...; rollback;` tests weren't reliably preserving `SET LOCAL` across statement boundaries the way a single atomic PL/pgSQL block does, making those earlier "confirmations" a testing artifact, not real signal — worth remembering for any future RLS debugging in this project.
+
+**Found the actual bug via a second, cleaner test**: the exact same INSERT succeeded when run *without* a `RETURNING` clause, and failed with the identical RLS error when `RETURNING id, bucket_id, name` was added. That's the tell — [Supabase's own troubleshooting docs](https://supabase.com/docs/guides/troubleshooting/storage-error-403-forbidden-new-row-violates-row-level-security-policy-on-upload-a94384) confirm the Storage API's upload endpoint always does an internal `INSERT ... RETURNING *`, which requires the newly-inserted row to be visible under a `SELECT` policy — independent of whether the `INSERT` policy itself passes. Checked `storage.objects`: all 4 admin-managed buckets (`course-pdfs`, `course-ppts`, `course-videos`, `course-documents`) had `INSERT`/`UPDATE` policies but **zero `SELECT` policy** — meanwhile Tiffany's `community-images` bucket (from the community feed work) *does* have one ("Public read community-images"), which is exactly why her uploads there have never hit this bug.
+
+**Fix**: added a public `SELECT` policy per bucket (`bucket_id = '<bucket>'`, no other condition), matching the existing `community-images` pattern — appropriate since all 4 buckets are already `public: true` and served via `getPublicUrl` regardless of RLS. Applied directly to production via Supabase MCP (`apply_migration`), and saved as `sql/storage-select-policies.sql` (idempotent, with a `pg_policy` existence guard) for the repo's schema history. Re-ran the exact failing `INSERT ... RETURNING` test after applying — it now succeeds cleanly.
+
+**Also confirmed no new exposure**: `get_advisors(security)` shows no new warnings — the only lint is the pre-existing, unrelated "leaked password protection disabled" note.
+
+**What this means for Checkpoints 184-185**: the `ensureFreshSession()` force-refresh fix and the JWT-claim decoder weren't wrong to add — they're genuinely more robust than what was there before, and the decoder is exactly what surfaced the "token is actually fine" signal that pointed at the real bug — but neither was the actual fix. The real fix was always a one-line missing policy, invisible from the client side no matter how much session/token debugging was done there.
+
+**Verification**: SQL-level fix confirmed directly (the failing repro now succeeds). Not yet confirmed via Julia's actual browser — recommend she retry the PDF upload on `dev` once more; it should now succeed outright instead of showing any error.
+
+**Commits**: `belajar-claude`: SQL migration file only (`sql/storage-select-policies.sql`), the policy itself is live in Supabase directly (not deploy-gated).
+
+---
+
+## SHIPPED (Checkpoint 187, August 10, 2026): PDF-upload fix (Checkpoints 184-186) merged to `main` — Julia confirmed the upload works, selectively without Tiffany's Dashboard-link/community-feed work
+
+**Status: pushed to `main` (production).**
+
+Julia confirmed the PDF upload now works on `dev` and asked to push the fix to production, holding back Tiffany's concurrent work the same way as Checkpoint 183. `dev`'s admin.html had the PDF-fix commits interleaved with Tiffany's "← Dashboard" nav-link commits (`2f39b28`, `13f6563`), so cherry-picked just the PDF-fix chain onto a fresh branch off `origin/main`: `9de74a6` (Tiffany's error-detail logging), `93f69a2` (session force-refresh + 10 call-site guards), `46395ac` (restores Tiffany's logging after my collision), `91f62e4` (JWT-claim decoder), `d8516ff` (the real fix — SQL migration file documenting the missing `SELECT` policies, already live in Supabase directly).
+
+All 4 admin.html cherry-picks auto-merged cleanly despite the Dashboard-link commits sitting in between (git's 3-way merge correctly ignored unrelated hunks). The 5th (`d8516ff`) conflicted only on `CONTEXT.md` — expected, since `main`'s CONTEXT.md doesn't have the intervening dev-only checkpoint entries — resolved by keeping `main`'s CONTEXT.md as-is and writing this fresh consolidated entry instead of carrying over the dev-only checkpoints verbatim.
+
+**Verified before pushing**: diffed the resulting branch's `admin.html` against `origin/dev` — identical except correctly missing Tiffany's nav-bar "← Dashboard" link (confirmed by grep — the only "Dashboard" reference left is an unrelated existing link in the access-denied view). Diffed against `origin/main` to confirm `community.html`, `dashboard.html`, `profile.html`, and the community-feed SQL files stayed out. `ci-check.js` clean (28 HTML, 5 JS, 25 local refs).
+
+**The actual RLS policy fix needed no separate production step** — Supabase project data (RLS policies) is shared between `dev` and `main` deployments; it was already live from the moment it was applied via `apply_migration` in Checkpoint 186, well before this code merge. This merge only brings the *client-side* pieces (session refresh, error-detail logging, JWT decoder) and the SQL file documenting the policy change into production's codebase.
+
+**Commits**: `belajar-claude`: pushed directly to `main` as `ddd2beb..fc2bd27` (5 cherry-picked commits, hashes differ from their `dev` originals).
+
+---
+
+## SHIPPED (Checkpoint 188, August 10, 2026): Status review — no code changes
+
+Julia asked what's left pending and for a recap of the past week's `main` activity. No code touched this checkpoint, just a status check; logging it since it reflects the current accurate state of the project going forward.
+
+**Pending, unchanged from Checkpoint 187**: Tiffany's community feed (`6962ee2`, `f7d4ea0`, `cffec20`, `c90351f`, `3a5d371`) and the admin.html "← Dashboard" nav link (`2f39b28`, `13f6563`) remain `dev`-only — her call when to merge, nothing technically blocking either. Duitku production merchant cutover still blocked on Duitku's own approval (external, not a code change — just swapping Railway prod env vars once cleared). Staging Supabase database still deferred by Julia's earlier choice (free-tier 2-project cap).
+
+**Past week on `main` (Aug 3-10), summarized for Julia**: Aug 3 — dashboard/progress bug sweep (stale localStorage resurrecting wiped test data, wrong module counts causing premature 100%), guest-checkout/payment-success flow fixes, Daftar self-serve signup removed, module-file download fix. Aug 4 — security fix (`.git`/`CONTEXT.md` briefly served as public static assets, fixed via `.assetsignore`), CI automation shipped (`ci-check.js` + GitHub Actions), Duitku dev/prod Railway split completed, FAQ page added, footer restructured, homepage "Lintas Profesi" replaced with new "Dari Pekerjaan Sehari-hari" workflow-card design (5 rounds), mobile nav/layout fixes. Aug 6 — Web Analytics coverage confirmed, footer "Hubungi Kami" contact grouping + admin-managed Address field (4 follow-up layout fixes). Aug 7-10 — PDF upload RLS bug: session-refresh attempt, JWT-claim decoder, then the real root cause (missing `SELECT` policy on `storage.objects` breaking Storage API's internal `RETURNING` clause) found and fixed. Tiffany also shipped a star-rating hover fix (Aug 6).
+
+**Commits**: none — documentation only.
+
+---
+
+## SHIPPED (Checkpoint 189, August 10, 2026): "Coming Soon" purchase-button idea scoped, then dropped — no code changes
+
+Julia asked whether the purchase button and price could be temporarily swapped to "Coming Soon" while the Duitku production merchant approval is still pending. Investigated scope before touching anything: the real payment trigger (`buyCourse()`/`submitPayment()`, the `#ctaBuyBtn` button, and the live `course_pricing` fetch) lives only in `all-access.html` — no other page calls Duitku directly. But 7 other files (the 5 course preview pages' `.aa-card` CTA, plus `index.html`'s hero button and pricing section) each independently display their own price and a link into `all-access.html`, so a *consistent* "Coming Soon" treatment would touch 8 files total, not just the checkout page.
+
+Was about to ask Julia to confirm scope (all 8 files vs. just `all-access.html`), whether the button should be fully disabled vs. just relabeled, and dev vs. main — but she said "nevermind" before those were answered. **Not implemented.** No files changed.
+
+**Commits**: none.
 
 ---
 
