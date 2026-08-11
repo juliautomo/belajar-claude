@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 10, 2026 (checkpoint 188)_
+_Last updated: August 10, 2026 (checkpoint 189)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2648,6 +2648,16 @@ Julia asked what's left pending and for a recap of the past week's `main` activi
 **Past week on `main` (Aug 3-10), summarized for Julia**: Aug 3 — dashboard/progress bug sweep (stale localStorage resurrecting wiped test data, wrong module counts causing premature 100%), guest-checkout/payment-success flow fixes, Daftar self-serve signup removed, module-file download fix. Aug 4 — security fix (`.git`/`CONTEXT.md` briefly served as public static assets, fixed via `.assetsignore`), CI automation shipped (`ci-check.js` + GitHub Actions), Duitku dev/prod Railway split completed, FAQ page added, footer restructured, homepage "Lintas Profesi" replaced with new "Dari Pekerjaan Sehari-hari" workflow-card design (5 rounds), mobile nav/layout fixes. Aug 6 — Web Analytics coverage confirmed, footer "Hubungi Kami" contact grouping + admin-managed Address field (4 follow-up layout fixes). Aug 7-10 — PDF upload RLS bug: session-refresh attempt, JWT-claim decoder, then the real root cause (missing `SELECT` policy on `storage.objects` breaking Storage API's internal `RETURNING` clause) found and fixed. Tiffany also shipped a star-rating hover fix (Aug 6).
 
 **Commits**: none — documentation only.
+
+---
+
+## SHIPPED (Checkpoint 189, August 10, 2026): "Coming Soon" purchase-button idea scoped, then dropped — no code changes
+
+Julia asked whether the purchase button and price could be temporarily swapped to "Coming Soon" while the Duitku production merchant approval is still pending. Investigated scope before touching anything: the real payment trigger (`buyCourse()`/`submitPayment()`, the `#ctaBuyBtn` button, and the live `course_pricing` fetch) lives only in `all-access.html` — no other page calls Duitku directly. But 7 other files (the 5 course preview pages' `.aa-card` CTA, plus `index.html`'s hero button and pricing section) each independently display their own price and a link into `all-access.html`, so a *consistent* "Coming Soon" treatment would touch 8 files total, not just the checkout page.
+
+Was about to ask Julia to confirm scope (all 8 files vs. just `all-access.html`), whether the button should be fully disabled vs. just relabeled, and dev vs. main — but she said "nevermind" before those were answered. **Not implemented.** No files changed.
+
+**Commits**: none.
 
 ---
 
