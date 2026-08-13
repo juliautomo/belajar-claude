@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 13, 2026 (checkpoint 210)_
+_Last updated: August 13, 2026 (checkpoint 211)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2957,6 +2957,27 @@ Three fixes from screenshots.
 **Verified**: `ci-check.js` clean (29 HTML, 6 JS files, 26 local references — up from 5/25 with the new shared file). `node --check` clean on `course-illustrations.js`; sanity-loaded it in Node to confirm both objects parse and contain all 6 expected slugs. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
 
 **Commits**: `belajar-claude`: `1c935d6` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 211, August 13, 2026): Parallelized the sequential Supabase fetches gating index.html/dashboard.html's login-state UI — actual latency reduction, not just the visual/rendering-order fixes from Checkpoints 209-210
+
+**Status: pushed to `dev` only.**
+
+Julia asked to keep improving page load after the visual fixes in 209/210. Those fixed *what shows* while waiting; this targets *how long the wait actually is*. Both pages' post-login setup was written as a chain of sequential `await`s, each one a full Supabase network round trip that only started after the previous one finished completely — pure added latency with no dependency requiring it:
+
+- `index.html`: `await` profile → `await` enrollments → (for All Access holders) `await` module_completions. 3 round trips in a row.
+- `dashboard.html`'s `_init()`: `await` profile → `await` loadProgress()'s module_completions → `await` course_visibility → `await` enrollments. Up to 4 round trips in a row.
+
+None of these actually depend on each other's *data* — they only need the session email (course_visibility doesn't even need that). Refactored both to fire all their queries together via `Promise.allSettled([...])` and read results out by index afterward, so total wait time drops to whichever single query is slowest instead of the sum of 3-4 of them.
+
+The tricky part: supabase-js query builders are lazy — building a query with `.select()`/`.eq()` doesn't touch the network until something calls `.then()` on it (which `await` does). Assigning a builder to a variable and awaiting it later, one at a time, would NOT have parallelized anything — each `.then()` still fires only when its own `await` line is reached, in order. The fix only works because the query builders are passed directly as array elements into `Promise.allSettled(...)`, which calls `.then()` on every element in the same synchronous pass — verified this actually behaves as intended with a small Node harness simulating the `Promise.allSettled` indexing/fallback pattern and the `preFetched || await fetch()` short-circuit in `loadProgress()`, both behaving as expected.
+
+Behavior-preserving by design: `Promise.allSettled` (not `Promise.all`) means one query failing doesn't take the others down with it, and every call site keeps its original fallback — profile failure still falls back to `null`/metadata name, an enrollments failure on `index.html` still throws into the same `catch(e){ revealMarketing(); }` it always did, module_completions/course_visibility failures fall back to an empty result instead of the page failing (module_completions actually improves here: previously a failure there could incorrectly bounce an All Access holder to the marketing page instead of their dashboard; now it just shows 0% progress and still shows the right page). `dashboard.html`'s `loadProgress(email, preFetched)` gained an optional second parameter — its one call site now passes the already-fetched result instead of firing a redundant 2nd request; called without it (no other call sites exist today), it still fetches on its own exactly as before.
+
+**Verified**: `ci-check.js` clean. Extracted and ran `node --check` on both pages' inline `<script>` blocks to confirm no syntax errors from the refactor. Ran an isolated Node simulation of the `Promise.allSettled` fulfilled/rejected indexing logic and the `preFetched || await x` precedence/short-circuit behavior — both confirmed correct (rejected entries fall back to their defaults, fulfilled entries pass through, `preFetched` skips the redundant fetch entirely when provided). Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `04fe6f7` (`dev` only).
 
 ---
 
