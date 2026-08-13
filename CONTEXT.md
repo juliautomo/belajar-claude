@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 13, 2026 (checkpoint 213)_
+_Last updated: August 13, 2026 (checkpoint 214)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -3741,3 +3741,18 @@ Julia asked for the overall CONTEXT.md to be brought up to date. Did a targeted 
 No code files changed this checkpoint — CONTEXT.md only.
 
 **Commits this checkpoint**: one commit covering `CONTEXT.md`.
+
+## SHIPPED (Checkpoint 214, August 13, 2026): Synced dev and main — both branches now identical
+
+**Status: Shipped to production (frontend + backend).**
+
+Julia asked "ok all good to push to main?" after checkpoints 207-213 landed on dev. Before pushing, checked how far dev and main had actually diverged — turned out to be more than a simple fast-forward: main had ~20 commits since the merge-base that dev didn't have as direct ancestors (a819878, the merge that brought Tiffany's community-feed work into main directly; plus the admin.html PDF/PPT upload RLS fix from checkpoints 183-187; plus the footer-layout fix saga from checkpoints 177-182). These were all real production fixes that had been pushed straight to main at the time and never synced back into dev's own line.
+
+Rather than assume either side was safe to overwrite the other, did a dry-run three-way merge (`git merge origin/dev` on top of `origin/main` in a scratch clone, `--no-commit`) and inspected the result: it auto-merged cleanly with zero conflict markers across all 32 changed files, and spot-checks confirmed the merged tree kept everything from both sides — admin.html still had the RLS-fix error logging, index.html still had the "Hubungi Kami" footer grouping, and community.html still had Tiffany's community-feed columns, alongside all of dev's checkpoint 191-213 work (course-illustrations.js, the dashboard/index performance parallelization, the course_visibility race fix, etc.). `node ci-check.js` passed clean on the merged tree. Committed and pushed the merge to `main`, then fast-forwarded `dev` to the same commit so both branches are now identical (frontend HEAD: `fdf1269`).
+
+Backend repo divergence was much simpler: `dev` had 2 commits main didn't (the FRONTEND_URL email-redirect work from checkpoint 207, plus a related Duitku callbackUrl environment-awareness fix), and main had nothing unique — a clean fast-forward, no merge needed. Pushed `dev`'s tip directly to `main` (backend HEAD: `4a93fa1`). Railway's `production` environment tracks backend `main` and will auto-deploy.
+
+**Verified**: dry-run merge produced zero conflict markers; `node ci-check.js` passed (29 HTML, 6 JS, 26 local refs, nothing broken) on the merged frontend tree; confirmed via `git rev-parse` that `origin/main` and `origin/dev` point at the identical commit on both repos after the push.
+
+**Commits**: frontend `fdf1269` (merge commit) pushed to both `main` and `dev`. Backend `4a93fa1` pushed to `main` (already the tip of `dev`).
+
