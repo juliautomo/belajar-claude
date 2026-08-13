@@ -23,7 +23,12 @@ var LIH_BG = {
   'analisis-data':     'linear-gradient(135deg,#9FE8D8,#E3FBF5)'
 };
 var LIH_ILLUSTRATIONS = {
-  'prompt-gratis': '<svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">' +
+  // This one's viewBox is tighter than the others (5 10 205 90, not 0 0 400 100) —
+  // its drawn content (person + speech bubble + pen + sparkle) only ever occupied
+  // roughly x:20-190 of the original 400-wide canvas, so the artwork rendered visibly
+  // shifted left with empty space on the right. Cropped the viewBox to the actual
+  // content's bounding box (with a little padding) so it fills and centers properly.
+  'prompt-gratis': '<svg class="lih-illustration" viewBox="5 10 205 90" xmlns="http://www.w3.org/2000/svg">' +
     '<line x1="20" y1="82" x2="210" y2="82" stroke="#111" stroke-width="2.5" opacity="0.25"/>' +
     '<rect x="46" y="52" width="30" height="28" rx="10" fill="#fff" stroke="#111" stroke-width="3"/>' +
     '<circle cx="61" cy="38" r="13" fill="#fff" stroke="#111" stroke-width="3"/>' +
