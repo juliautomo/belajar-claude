@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 13, 2026 (checkpoint 201)_
+_Last updated: August 13, 2026 (checkpoint 202)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2833,6 +2833,16 @@ Two small nav-flow asks. (1) Previously every successful login/register on `logi
 Two follow-ups to Checkpoints 198/199. (1) Julia asked to also remove her own `all-access` enrollment (which Checkpoint 198 had deliberately kept) so her account matches Tiffany's fully-clean "test a real purchase from scratch" state — deleted her `enrollments` (including all-access), `module_completions`, `waitlist`, and `profiles` rows again (a `profiles` row and one new `content-marketing` enrollment had been re-created since Checkpoint 198 from her testing the onboarding flow). Confirmed zero rows remain in all four tables. Her 4 `community_posts` were explicitly left alone — she asked to keep those.
 
 (2) Julia asked to "remove maggie" — found a real, unrelated paying customer, `maggieshung@gmail.com` (signed up July 28, genuine `all-access` + 3 course purchases, 8 module completions, no profile/community activity). Given this wasn't a team test account like Julia/Tiffany's, confirmed with her exactly what "remove" meant before touching anything (revoke access / reset progress / delete account entirely / other) — she chose full account deletion. Deleted, in order: `module_completions`, `enrollments`, `waitlist`, `profiles`, then her `auth.users` row itself (cascaded cleanly through Supabase's own auth schema, no errors). Verified zero rows remain anywhere, including `auth.users`. This is irreversible — if Maggie returns she'll need to sign up as a brand-new account with no memory of her prior purchase.
+
+**Commits**: none (Supabase data only, via direct SQL through the Supabase MCP).
+
+---
+
+## SHIPPED (Checkpoint 202, August 13, 2026): Julia and Tiffany's own logins fully deleted — data change only, no code
+
+**Status: no code changes, Supabase data only.**
+
+Final step after Checkpoints 198/199/201's progressive resets: Julia asked to also delete both admin accounts' logins entirely (same treatment as Maggie), "remove everything except admin status." Clarified first that admin status isn't a stored flag anywhere — `admin.html`/`community.html`/`dashboard.html`/`index.html` all just check the logged-in email against a hardcoded `ADMIN_EMAILS` array (`julia.utomo@gmail.com`, `tiffany.utomo@gmail.com`), so there's nothing to separately preserve; admin access returns automatically the instant either email logs in again, even on a brand-new account. Confirmed twice given this is irreversible. Deleted Julia's remaining 4 `community_posts` (kept in Checkpoint 201, but superseded by this "remove everything" instruction), then both `auth.users` rows. Verified zero rows remain for either email in `auth.users` and `community_posts`. Both will need to register fresh accounts to log back in.
 
 **Commits**: none (Supabase data only, via direct SQL through the Supabase MCP).
 
