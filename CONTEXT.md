@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 13, 2026 (checkpoint 212)_
+_Last updated: August 13, 2026 (checkpoint 213)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2996,6 +2996,24 @@ Julia asked for a quick scan across the whole site for the same issue Checkpoint
 **Verified**: `ci-check.js` clean. Extracted and ran `node --check` on all 6 changed pages' inline scripts — all pass. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
 
 **Commits**: `belajar-claude`: `3e53dc4` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 213, August 13, 2026): Fixed a real regression from Checkpoint 211 — admin-hidden "coming soon" courses were reappearing on index.html's logged-in course grid; also fixed one illustration rendering visibly off-center
+
+**Status: pushed to `dev` only.**
+
+Julia flagged that 4 courses she'd hidden via admin.html's Visibilitas Kursus toggles (`ai-powered-app`, `build-automation`, `claude-api-dev`, `jual-produk-ai`) were showing again. Confirmed via direct SQL query against `course_visibility` that all 4 are still correctly stored as `hidden: true` — this was never a data problem, it was a genuine race condition in `index.html` that Checkpoint 211's parallelization made much more likely to actually happen.
+
+**Root cause**: `index.html` fetches `course_visibility` (admin.html's live overrides) in a fire-and-forget `.then()` chain that runs independently of the session-check flow — by design, so a slow visibility fetch never delays login-state personalization. That fetch mutates the same shared `LIH_COURSES` object that the All Access holders' course grid (`#lihCourseGrid`) reads `hidden`/`comingSoon`/`visible` from when it builds itself — but nothing ever made the grid-build code wait for that mutation to land first. Before Checkpoint 211, the session-check chain was 3 sequential Supabase round trips, giving the visibility fetch (1 round trip, fired first) enough of a head start that it almost always won the race. Once that chain got parallelized down to essentially 1 round trip, the odds flipped — the grid started frequently rendering before the visibility override had been applied, showing whichever courses' stale, un-overridden defaults happened to be sitting in `LIH_COURSES` (all 4 of these default to `comingSoon:true, visible:true` in the base course list, i.e. shown-but-disabled, unless explicitly hidden). **Confirmed dashboard.html did not have the same bug** — its equivalent `course_visibility` fetch was already correctly sequenced as one of the 4 queries in Checkpoint 211's own `Promise.allSettled` batch, applied synchronously before dashboard's own grid-build code runs.
+
+**Fix**: captured the visibility fetch's promise in a variable (`visibilityPromise`) instead of only chaining off it fire-and-forget, and added an explicit `await visibilityPromise;` right before the `#lihCourseGrid` build code reads `LIH_COURSES`. The guest/marketing-page behavior this fetch also drives (`renderKursusComingSoon()` for the below-the-fold teaser cards) is untouched — still fires the same way, still non-blocking for that path.
+
+**Also fixed while investigating**: the "20 Prompt Dasar" course card's illustration (person + speech bubble + pen) was rendering visibly shifted toward the left edge of its banner, with empty space on the right. Its hand-drawn content only ever occupied roughly the left half (x:20-190) of the original `viewBox="0 0 400 100"` canvas — SVGs center the *whole viewBox* within their rendered box by default, not the drawn content specifically, so a viewBox much wider than its actual artwork reads as off-center. Tightened the viewBox to `"5 10 205 90"` (the artwork's real bounding box plus a little padding) in both places this illustration is defined: `course-illustrations.js` (used by index.html's logged-in grid and dashboard.html's explore carousel) and index.html's own static marketing-grid card markup (not JS-generated, so it needed its own copy of the fix). The other 5 illustrations were checked too — their content already spans close to the full canvas width (or, for `mulai-claude`'s running-dog scene, is intentionally full-width), so they didn't need the same treatment.
+
+**Verified**: `ci-check.js` clean. `node --check` on the affected inline script and on `course-illustrations.js`. Ran a small Node snippet to confirm the new viewBox string actually landed in the shared file. Queried `course_visibility` directly via the Supabase MCP to confirm the 4 courses really are `hidden: true` in the database (read-only query, no data changed). Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `023faf7` (`dev` only).
 
 ---
 
