@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 13, 2026 (checkpoint 196)_
+_Last updated: August 13, 2026 (checkpoint 198)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2773,6 +2773,34 @@ Fixed all 6: each nav-pill init block now fetches `profiles.full_name` the same 
 **Verified**: `ci-check.js` clean. Confirmed via grep that exactly one `user_metadata?.full_name` fallback remains in `all-access.html` (the checkout prefill) after the edit. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
 
 **Commits**: `belajar-claude`: `a5098c4` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 197, August 13, 2026): Performance pass — unified Google Fonts URL + moved head-blocking scripts, in response to "website a bit lag, when logging in, back to home, etc."
+
+**Status: pushed to `dev` only.**
+
+Julia reported general navigation lag. Audited script-loading and font-loading patterns site-wide (no wrangler/Cloudflare Worker config lives in this repo — the site deploys as static Workers Assets, so nothing to tune there; the fix had to be in the HTML itself). Found two concrete, safe wins and one riskier one (parallelizing dashboard's sequential Supabase queries) that was deliberately deferred to a separate pass so any bug is easy to isolate — confirmed with Julia first, ranked by risk, she approved the two safer ones.
+
+**Fonts**: 5 slightly different Google Fonts URLs were in use across 29 pages (different family/weight subsets per page), which meant the browser couldn't reuse a single cached stylesheet response across page navigations — every page paid a small extra fetch. Replaced all 29 with one identical canonical URL (the superset already used by index.html: Instrument Serif, Geist, Playfair Display, Inter, Fraunces). Google Fonts only downloads the actual font binary for families/weights a page's CSS actually renders, so pages that don't use e.g. Playfair Display incur no extra binary download — purely a cache-sharing win, zero visual risk.
+
+**Head-blocking scripts**: the Supabase JS CDN script + `supabase-config.js` (+ `course-video.js`/`backend-config.js` where used) were loaded in `<head>` on the 12 highest-traffic pages (`dashboard.html`, `community.html`, `profile.html`, `admin.html`, `login.html`, `reset-password.html`, `coming-soon.html`, and the 5 course-content lesson pages) — this blocks the browser from painting anything until they finish downloading, which is likely the main source of the reported lag on login/navigation. Moved all of them from `<head>` to just above each page's existing bottom-of-body business-logic `<script>` block, preserving exact relative order (confirmed safe: every page's actual logic already lived in an `init()`/`_init()` pattern at the bottom of body, so nothing depended on these loading early; `course-video.js` already self-guards on `document.readyState`/`DOMContentLoaded` so it was safe regardless). Verified no duplicate script tags remain (`supabase-js`/`supabase-config.js` each appear exactly once per file, post-move) and that removal didn't leave any file with 0 copies.
+
+**Deferred to a future pass, not done here**: parallelizing `dashboard.html`'s sequential Supabase queries (profile → course_visibility → enrollments → module_completions, currently one-after-another) — real potential win but touches actual async control flow, higher risk of a subtle bug than the two structural changes above.
+
+**Verified**: `ci-check.js` clean. Grepped every touched file post-edit to confirm exactly one `supabase-js@2` and one `supabase-config.js` reference remains (no dupes, none accidentally deleted). Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes (origin hadn't moved since Checkpoint 196).
+
+**Commits**: `belajar-claude`: `387e849` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 198, August 13, 2026): Julia's account reset to "just paid, nothing else" for testing the onboarding flow — data change only, no code
+
+**Status: no code changes, Supabase data only.**
+
+Julia asked to reset her own account (`julia.utomo@gmail.com`) to simulate a brand-new paying customer, to test the Checkpoint 195 onboarding gate end-to-end. Two passes: (1) deleted her 4 per-course `enrollments` rows (content-marketing, prompt-gratis, mulai-claude, produktivitas) and all 6 `module_completions` rows, keeping the `all-access` enrollment row so her paid status is untouched; (2) deleted her `profiles` row entirely (was full_name "julia utomo", username "jul", role "developer", goal "efisiensi-kerja", experience "sudah-mahir") so the dashboard's onboarding gate (`!userProfile||!userProfile.role||!userProfile.goal`) correctly treats her as a fresh purchaser and redirects to `profile.html?onboarding=1` on next dashboard visit.
+
+**Commits**: none (Supabase data only, via direct SQL through the Supabase MCP).
 
 ---
 
