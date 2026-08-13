@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 13, 2026 (checkpoint 192)_
+_Last updated: August 13, 2026 (checkpoint 193)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2711,6 +2711,22 @@ Two asks from a round of screenshots: an "Admin" badge next to admin replies in 
 **Verified**: `ci-check.js` clean. Confirmed via grep that `userProfile` in `dashboard.html` genuinely had no other reader before this fix (so reordering it couldn't break anything else), and that `index.html` had exactly one place computing the logged-in display name (reused by both the nav pill and the "Selamat datang kembali" hero further down), so one fix covers both.
 
 **Commits**: `belajar-claude`: `4f4c9a9` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 193, August 13, 2026): Community posts/comments now use `profiles.username`; new price-change history log in admin Pricing panel
+
+**Status: pushed to `dev` only.**
+
+Two asks from a screenshot of the admin Pricing panel: "can the username be used for komunitas?" and "can we have history of pricing / discounts?"
+
+**Username in komunitas**: `community.html`'s `_init()` previously computed `currentAuthorName` (used as both the displayed name and the value frozen into `community_posts.author_name` / `community_comments.author_name` on every new post/comment) from `profiles.full_name` → `user_metadata.full_name` → email local-part. Changed the `profiles` query to also select `username`, and put it first in the fallback chain: `profiles.username || profiles.full_name || user_metadata.full_name || email.split('@')[0]`. Since `author_name` is a frozen snapshot at insert time (not a live join — see Checkpoint 192 area for that pattern), this only affects *new* posts/comments going forward; existing ones keep whatever name was saved when they were written.
+
+**Pricing history**: `course_pricing` only ever held one row per course (upserted in place), so there was no way to see what a price used to be. Added a new `course_pricing_history` table (`sql/course-pricing-history.sql`, applied directly to production Supabase) — admin-only RLS (SELECT + INSERT restricted to the two admin emails), one row appended per successful save. `admin.html`: `savePricing()` now inserts a history row right after the `course_pricing` upsert succeeds (best-effort — a history-insert failure is logged to console but doesn't block the price save itself or show an error to the admin); `loadAllData()` fetches the last 20 history rows ordered newest-first; a new "Riwayat Perubahan Harga" card (below the existing pricing card, reusing the `table.matrix-table` style) renders date, base price, discount price, discount period, and who made the change.
+
+**Verified**: `ci-check.js` clean. Confirmed via Supabase MCP that the migration applied successfully to production project `ctqtdqbsucbhikwnagvl`. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes to either file.
+
+**Commits**: `belajar-claude`: `4d954ea` (`dev` only).
 
 ---
 
