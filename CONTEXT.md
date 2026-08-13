@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 10, 2026 (checkpoint 189)_
+_Last updated: August 13, 2026 (checkpoint 213)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2658,6 +2658,362 @@ Julia asked whether the purchase button and price could be temporarily swapped t
 Was about to ask Julia to confirm scope (all 8 files vs. just `all-access.html`), whether the button should be fully disabled vs. just relabeled, and dev vs. main — but she said "nevermind" before those were answered. **Not implemented.** No files changed.
 
 **Commits**: none.
+
+---
+
+## SHIPPED (Checkpoint 190, August 13, 2026): Duitku production cutover complete — real payments now live
+
+**Status: live in production.** No code change — the backend was already built for this (Checkpoint 164 gated the whole thing behind `DUITKU_ENV`), so this was purely a config/credentials day.
+
+Julia received her Duitku production merchant approval (merchant code `D24113`, project "BELAJARCLAUDE"). Steps taken together:
+
+1. Confirmed `api-prod.duitku.com` is genuinely Duitku's standard production `createInvoice` host (verified via their public API docs) — matches what was already hardcoded in `belajar-claude-backend/index.js`, so no code needed updating for the endpoint itself.
+2. Set the merchant project's **URL Callback Proyek** in Duitku's dashboard to `https://klaud-backend-production.up.railway.app/webhook/duitku` — cross-checked against both `index.js`'s hardcoded `callbackUrl` and `backend-config.js`'s production `BACKEND_URL`, which agree exactly.
+3. Julia set `DUITKU_MERCHANT_CODE`, `DUITKU_API_KEY`, and `DUITKU_ENV=production` directly on Railway's **production** environment herself (per standing rule, I never enter credentials into any field myself, even when supplied — walked her through exactly where each value goes instead).
+4. Julia connected the Railway MCP connector mid-session so I could verify directly rather than asking her to copy-paste logs.
+
+**Verified via Railway MCP** (read-only — variable values came back redacted, names only, so no secret ever entered this session): production environment has all 3 Duitku vars present; the deployment that picked them up (`d3a99329`, Aug 13 05:43 UTC, same commit as the original `DUITKU_ENV` feature) succeeded and its startup log reads exactly `💳 Duitku mode: PRODUCTION (real money) — host: api-prod.duitku.com`. Also confirmed the **dev** environment has no `DUITKU_ENV` var at all (stays defaulted to sandbox, untouched by this change) — dev's own recent logs show a normal sandbox test invoice from Tiffany, consistent with that.
+
+**Not yet done**: an actual real end-to-end test purchase to confirm the full flow (webhook → Supabase enrollment → access email) works against the real merchant account, not just that the mode flag is correct. Worth doing before telling customers it's live, even though the underlying webhook code path is unchanged from what's been working in sandbox for weeks.
+
+**Commits**: none — this was entirely Railway/Duitku dashboard configuration, no repo changes.
+
+---
+
+## SHIPPED (Checkpoint 191, August 13, 2026): Tiffany's community feed + admin Dashboard link found already merged to `main` directly by her; refund policy retracted; FAQ payment/community answers updated
+
+**Status: pushed to `dev`** (the two FAQ/legal changes). The community-feed merge to `main` required no action from me — already done.
+
+Julia asked to push Tiffany's community feed + admin Dashboard-link work to `main` (quoting back the "her call when to merge" line from my own status summary). Checked first rather than re-doing it blind: Tiffany had already merged `dev` into `main` herself on Aug 11 13:42 (commit `a819878`, direct git access, not through me). Verified the merge is clean — `ci-check.js` passes on `main`, the diff only added the one Dashboard-link line to `admin.html`, and all my PDF-fix/Duitku-cutover code is untouched. Nothing to push; told Julia it was already live.
+
+**Refund policy retracted** (Julia's call, in response to a screenshot of `syarat-ketentuan.html`'s section 5): rather than finally settle the placeholder 7-day/under-20%-progress refund numbers that had been flagged for her review since Checkpoint 53 and never confirmed, she chose to drop the commitment entirely. Removed section 5 "Kebijakan Pengembalian Dana" from `syarat-ketentuan.html`, renumbered sections 6→5 through 10→9. Removed the "Kebijakan Pengembalian Dana" footer Legal link from the other 10 pages that had it (`index.html`, `all-access.html`, `content-marketing.html`, `mulai-claude.html`, `produktivitas.html`, `prompt-gratis.html`, `strategi-marketing.html`, `faq.html`, `kebijakan-privasi.html`, plus its own self-link). Converted `kebijakan-pengembalian.html` itself into a redirect stub pointing to `syarat-ketentuan.html`, matching the existing `paket.html` pattern, so any bookmarked/indexed links land somewhere real instead of 404ing or a dead orphan page.
+
+**FAQ payment-methods answer corrected** (from a screenshot of the live FAQ page): the old copy claimed "QRIS dan kartu kredit" only, which was never accurate — Duitku supports far more than that. Updated to name Duitku explicitly and describe general method categories (bank transfer/VA, e-wallet, QRIS, card) rather than an exhaustive list, since exact enabled methods are a merchant-dashboard setting that could change without a corresponding code update — deliberately chose the lower-maintenance framing over trying to mirror Duitku's exact current config.
+
+**FAQ community answer updated**: replaced the stale "we're still building it, stay tuned" copy (predates Tiffany's community feed shipping) with copy reflecting it now exists, member-only. Investigated what "member-only" actually means technically before writing this — `community.html`'s access gate (`_init()`, checked via `sbClient.auth.getSession()`) and its RLS policies (`sql/community-feed.sql`) both only require *being logged in*, not an actual course purchase. This is still accurate framing given self-serve signup was removed back in the Aug 3 cleanup pass — in the current model, having an account effectively does mean being a paying member, since accounts are no longer created any other way.
+
+**Verified**: `ci-check.js` clean (29 HTML, 5 JS, 25 local refs — one fewer than before, matching the removed footer links). Confirmed zero remaining references to `kebijakan-pengembalian` anywhere in the codebase's HTML content after the change (`grep -rl` came back empty).
+
+**Commits**: `belajar-claude`: `3fc127f` (`dev` only — legal/FAQ copy, not deploy-urgent, will go to `main` next time Julia asks for a push).
+
+---
+
+## SHIPPED (Checkpoint 192, August 13, 2026): Community admin badge added; display-name inconsistency (julia vs julia.utomo) root-caused and fixed on dashboard.html + index.html
+
+**Status: pushed to `dev` only.**
+
+Two asks from a round of screenshots: an "Admin" badge next to admin replies in the community feed, and an investigation into why the account name renders differently across pages ("julia" in some places, "julia.utomo" in others).
+
+**Admin badge**: `community.html` already had a page-global `isAdmin` (whether the *viewer* is an admin, used for existing pin/delete-any-post moderation features) but nothing that flags whether a given *post or comment's author* is an admin — those are different things. Added a per-row check (`ADMIN_EMAILS.indexOf((p.email||c.email).toLowerCase())`) in both `renderPostCard()` and `renderCommentsSection()`, with a new `.admin-badge` pill (dark, distinct from the existing purple `.post-cat-tag` category pills so the two aren't visually confused) and a `.post-author-row` flex wrapper reused for both post and comment name+badge layout.
+
+**Display-name root cause**: `community.html` and `profile.html` already preferred `profiles.full_name` (with a fallback chain down to `session.user.user_metadata.full_name`, then `email.split('@')[0]`) — but `dashboard.html` and `index.html` didn't. `dashboard.html` was the sneakier bug: it *did* fetch the `profiles` row (`userProfile = pr.data`), but only *after* already computing and applying the display name from `user_metadata`/email, and `userProfile` was never read again anywhere in the file (confirmed via grep — dead fetch). `index.html` never queried `profiles` at all. Both always fell back to the literal email local-part `julia.utomo`, while `community.html`/`profile.html` correctly showed whatever Julia had actually saved as her display name (`julia`) via the profile form. Fixed both to use the same fallback chain, reordering `dashboard.html`'s fetch to run before the name computation instead of after.
+
+**Verified**: `ci-check.js` clean. Confirmed via grep that `userProfile` in `dashboard.html` genuinely had no other reader before this fix (so reordering it couldn't break anything else), and that `index.html` had exactly one place computing the logged-in display name (reused by both the nav pill and the "Selamat datang kembali" hero further down), so one fix covers both.
+
+**Commits**: `belajar-claude`: `4f4c9a9` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 193, August 13, 2026): Community posts/comments now use `profiles.username`; new price-change history log in admin Pricing panel
+
+**Status: pushed to `dev` only.**
+
+Two asks from a screenshot of the admin Pricing panel: "can the username be used for komunitas?" and "can we have history of pricing / discounts?"
+
+**Username in komunitas**: `community.html`'s `_init()` previously computed `currentAuthorName` (used as both the displayed name and the value frozen into `community_posts.author_name` / `community_comments.author_name` on every new post/comment) from `profiles.full_name` → `user_metadata.full_name` → email local-part. Changed the `profiles` query to also select `username`, and put it first in the fallback chain: `profiles.username || profiles.full_name || user_metadata.full_name || email.split('@')[0]`. Since `author_name` is a frozen snapshot at insert time (not a live join — see Checkpoint 192 area for that pattern), this only affects *new* posts/comments going forward; existing ones keep whatever name was saved when they were written.
+
+**Pricing history**: `course_pricing` only ever held one row per course (upserted in place), so there was no way to see what a price used to be. Added a new `course_pricing_history` table (`sql/course-pricing-history.sql`, applied directly to production Supabase) — admin-only RLS (SELECT + INSERT restricted to the two admin emails), one row appended per successful save. `admin.html`: `savePricing()` now inserts a history row right after the `course_pricing` upsert succeeds (best-effort — a history-insert failure is logged to console but doesn't block the price save itself or show an error to the admin); `loadAllData()` fetches the last 20 history rows ordered newest-first; a new "Riwayat Perubahan Harga" card (below the existing pricing card, reusing the `table.matrix-table` style) renders date, base price, discount price, discount period, and who made the change.
+
+**Verified**: `ci-check.js` clean. Confirmed via Supabase MCP that the migration applied successfully to production project `ctqtdqbsucbhikwnagvl`. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes to either file.
+
+**Commits**: `belajar-claude`: `4d954ea` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 194, August 13, 2026): community.html display-name split (full name vs username); onboarding gate forces profile completion before dashboard; free-text "Lainnya" for occupation/goal
+
+**Status: pushed to `dev` only.**
+
+Two follow-up rounds of feedback on top of Checkpoint 193's community-username change.
+
+**Round 1 — community.html was too aggressive**: Checkpoint 193 made `currentAuthorName` (used for *both* the sidebar/avatar display *and* the value saved into new posts/comments) prefer `profiles.username`. Julia's screenshots showed this also flipped the community sidebar itself to show the username ("jul") instead of the full name ("julia utomo") — not intended; only posts/comments should show the username. Split into two variables: `displayFullName` (full_name → user_metadata → email prefix, used for sidebar/avatar/greeting, matching every other page) and `currentAuthorName` (username → displayFullName, used only for the `author_name` written into `community_posts`/`community_comments`). Also added a hint under the Username field in `profile.html`: "Nama ini yang akan ditampilkan di Komunitas."
+
+**Round 2 — onboarding gate + free-text "Lainnya"**: Two asks from a screenshot of the profile page's role/goal question. (1) New users should be made to fill out their profile (role + goal) the first time they land on the dashboard, e.g. right after a purchase. `dashboard.html`'s `_init()` now checks `userProfile.role`/`userProfile.goal` right after the `profiles` fetch — if either is missing, redirects to `profile.html?onboarding=1` before rendering anything else. That page shows a purple banner explaining why, changes the save button to "Simpan & Lanjutkan ke Dashboard", requires both fields before allowing save, and redirects back to `dashboard.html` on success. Existing users who already have both fields set never see this — it only fires once, the first time either is missing. (2) Both the role ("Kamu saat ini sebagai apa?") and goal ("Apa tujuan utama...") option groups now have a "Lainnya" button that reveals a free-text input; typing directly sets `answers.role`/`answers.goal` to the typed text (no schema change — the DB column already just holds text, and on reload anything that isn't one of the known preset values is treated as custom text and restored into the Lainnya input automatically).
+
+**Verified**: `ci-check.js` clean on both pushes. Diffed `origin/dev` against the local mount before each push — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `9c0299c`, `0078741` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 195, August 13, 2026): First-name-only display everywhere (sidebar, nav pill, avatar) — was full name in the sidebar vs. first name in the dashboard greeting, flagged as inconsistent
+
+**Status: pushed to `dev` only.**
+
+Julia's `profiles.full_name` is "julia utomo". The dashboard greeting ("Selamat datang kembali, julia") has always shown just the first word by design, while the account sidebar (dashboard/profile/community) and the marketing-page nav pill (index.html) showed the full name — flagged as inconsistent. Asked her which way to reconcile it (show full name in the greeting too, or first name everywhere); she picked first-name-everywhere.
+
+Changed `sideName`/`navAvatar` in `dashboard.html`, `profile.html`, `community.html`, and `navUname` in `index.html` to all derive a `firstName` (`displayName.trim().split(/\s+/)[0]`) and display that instead of the full name. Two things intentionally left untouched: `profile.html`'s editable "Nama Lengkap" input still shows/saves the real full name (only the read-only sidebar label was shortened); `community.html`'s post/comment author name (`currentAuthorName`, from Checkpoint 193/194) is unaffected — it already prefers the short `username` field, so no further change needed there.
+
+Noted but out of scope (not touched, flagged for a future ask if she wants full consistency): the nav-user-pill on 5 other marketing pages (`strategi-marketing.html`, `prompt-gratis.html`, `produktivitas.html`, `mulai-claude.html`, `content-marketing.html`, `all-access.html`) never queries `profiles.full_name` at all — they show `user_metadata.full_name` as-is, un-split, a pre-existing inconsistency separate from this fix.
+
+**Verified**: `ci-check.js` clean. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `7593773` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 196, August 13, 2026): Nav-pill name fixed on the 6 sales pages too — Julia pointed out these ARE visited while logged in (browsing another course before enrolling), so the gap from Checkpoint 195 wasn't actually low-priority
+
+**Status: pushed to `dev` only.**
+
+Checkpoint 195 fixed first-name display consistency on dashboard/profile/community/index, but flagged 6 sales/marketing pages (`strategi-marketing.html`, `prompt-gratis.html`, `produktivitas.html`, `mulai-claude.html`, `content-marketing.html`, `all-access.html`) as a separate, lower-priority gap — their nav-user-pill never queried `profiles.full_name` at all, just showed `user_metadata.full_name` raw. Assumed these pages were rarely seen while logged in. Julia correctly pushed back: an existing customer routinely lands on another course's sales page while logged in, deciding whether to enroll in it next — so the gap was real, not edge-case.
+
+Fixed all 6: each nav-pill init block now fetches `profiles.full_name` the same way index.html does, falls back to `user_metadata.full_name` then email-prefix, and displays only the first word — matching Checkpoint 195's pages exactly. `all-access.html` has a second, unrelated use of the same raw `user_metadata.full_name` pattern (prefilling the guest-checkout payment form's name field) — left untouched on purpose, since a payment form should prefill the real full name, not just first name.
+
+**Verified**: `ci-check.js` clean. Confirmed via grep that exactly one `user_metadata?.full_name` fallback remains in `all-access.html` (the checkout prefill) after the edit. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `a5098c4` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 197, August 13, 2026): Performance pass — unified Google Fonts URL + moved head-blocking scripts, in response to "website a bit lag, when logging in, back to home, etc."
+
+**Status: pushed to `dev` only.**
+
+Julia reported general navigation lag. Audited script-loading and font-loading patterns site-wide (no wrangler/Cloudflare Worker config lives in this repo — the site deploys as static Workers Assets, so nothing to tune there; the fix had to be in the HTML itself). Found two concrete, safe wins and one riskier one (parallelizing dashboard's sequential Supabase queries) that was deliberately deferred to a separate pass so any bug is easy to isolate — confirmed with Julia first, ranked by risk, she approved the two safer ones.
+
+**Fonts**: 5 slightly different Google Fonts URLs were in use across 29 pages (different family/weight subsets per page), which meant the browser couldn't reuse a single cached stylesheet response across page navigations — every page paid a small extra fetch. Replaced all 29 with one identical canonical URL (the superset already used by index.html: Instrument Serif, Geist, Playfair Display, Inter, Fraunces). Google Fonts only downloads the actual font binary for families/weights a page's CSS actually renders, so pages that don't use e.g. Playfair Display incur no extra binary download — purely a cache-sharing win, zero visual risk.
+
+**Head-blocking scripts**: the Supabase JS CDN script + `supabase-config.js` (+ `course-video.js`/`backend-config.js` where used) were loaded in `<head>` on the 12 highest-traffic pages (`dashboard.html`, `community.html`, `profile.html`, `admin.html`, `login.html`, `reset-password.html`, `coming-soon.html`, and the 5 course-content lesson pages) — this blocks the browser from painting anything until they finish downloading, which is likely the main source of the reported lag on login/navigation. Moved all of them from `<head>` to just above each page's existing bottom-of-body business-logic `<script>` block, preserving exact relative order (confirmed safe: every page's actual logic already lived in an `init()`/`_init()` pattern at the bottom of body, so nothing depended on these loading early; `course-video.js` already self-guards on `document.readyState`/`DOMContentLoaded` so it was safe regardless). Verified no duplicate script tags remain (`supabase-js`/`supabase-config.js` each appear exactly once per file, post-move) and that removal didn't leave any file with 0 copies.
+
+**Deferred to a future pass, not done here**: parallelizing `dashboard.html`'s sequential Supabase queries (profile → course_visibility → enrollments → module_completions, currently one-after-another) — real potential win but touches actual async control flow, higher risk of a subtle bug than the two structural changes above.
+
+**Verified**: `ci-check.js` clean. Grepped every touched file post-edit to confirm exactly one `supabase-js@2` and one `supabase-config.js` reference remains (no dupes, none accidentally deleted). Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes (origin hadn't moved since Checkpoint 196).
+
+**Commits**: `belajar-claude`: `387e849` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 198, August 13, 2026): Julia's account reset to "just paid, nothing else" for testing the onboarding flow — data change only, no code
+
+**Status: no code changes, Supabase data only.**
+
+Julia asked to reset her own account (`julia.utomo@gmail.com`) to simulate a brand-new paying customer, to test the Checkpoint 195 onboarding gate end-to-end. Two passes: (1) deleted her 4 per-course `enrollments` rows (content-marketing, prompt-gratis, mulai-claude, produktivitas) and all 6 `module_completions` rows, keeping the `all-access` enrollment row so her paid status is untouched; (2) deleted her `profiles` row entirely (was full_name "julia utomo", username "jul", role "developer", goal "efisiensi-kerja", experience "sudah-mahir") so the dashboard's onboarding gate (`!userProfile||!userProfile.role||!userProfile.goal`) correctly treats her as a fresh purchaser and redirects to `profile.html?onboarding=1` on next dashboard visit.
+
+**Commits**: none (Supabase data only, via direct SQL through the Supabase MCP).
+
+---
+
+## SHIPPED (Checkpoint 199, August 13, 2026): Tiffany's account fully reset for an end-to-end purchase test — data change only, no code
+
+**Status: no code changes, Supabase data only.**
+
+Different from Checkpoint 198's reset for Julia: Julia wanted to keep her paid/all-access status and only re-test the onboarding-profile flow, whereas Julia asked this time for Tiffany to test the actual purchase itself from scratch. Deleted, for `tiffany.utomo@gmail.com`: her `profiles` row (full_name "tiffany.utomo", role "pemilik-bisnis", goal "bisnis", experience "sudah-mahir"), all 5 `enrollments` rows including `all-access` (so she is no longer a paid holder and can run a real checkout), all 23 `module_completions` rows, and her 1 `waitlist` row. Confirmed zero rows remain across all of: profiles, enrollments, module_completions, waitlist, community_posts, community_comments. Her Supabase Auth login/account itself was left untouched — only app-level purchase/progress data was cleared.
+
+**Commits**: none (Supabase data only, via direct SQL through the Supabase MCP).
+
+---
+
+## SHIPPED (Checkpoint 200, August 13, 2026): Login from homepage stays on homepage instead of auto-jumping to dashboard; dashboard nav gets a "Beranda" link back home
+
+**Status: pushed to `dev` only.**
+
+Two small nav-flow asks. (1) Previously every successful login/register on `login.html` hard-redirected to `dashboard.html`, regardless of where the user came from — so logging in from the homepage immediately yanked them away from it. Homepage's "Masuk" link now points to `login.html?next=index.html`; `login.html` has a new `getNextUrl()` helper used by all three redirect points (already-logged-in auto-redirect, login success, register success) that honors `?next=` if present, falling back to `dashboard.html` otherwise. `getNextUrl()` only accepts a bare same-site `.html` filename via regex (`/^[a-zA-Z0-9_-]+\.html$/`) — never a full URL — so this can't become an open redirect even if someone hand-crafts the query string. Every other entry point to `login.html` (nav pills on other marketing pages, direct navigation) is untouched and still defaults to the dashboard as before. (2) `dashboard.html`'s nav only had the logo (which does link to `index.html`, but not obviously) and "Keluar" — added an explicit "← Beranda" link next to Keluar.
+
+**Verified**: `ci-check.js` clean. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `75924c1` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 201, August 13, 2026): Julia's account fully reset to match Tiffany's clean state; a real customer account (maggieshung@gmail.com) permanently deleted — data change only, no code
+
+**Status: no code changes, Supabase data only.**
+
+Two follow-ups to Checkpoints 198/199. (1) Julia asked to also remove her own `all-access` enrollment (which Checkpoint 198 had deliberately kept) so her account matches Tiffany's fully-clean "test a real purchase from scratch" state — deleted her `enrollments` (including all-access), `module_completions`, `waitlist`, and `profiles` rows again (a `profiles` row and one new `content-marketing` enrollment had been re-created since Checkpoint 198 from her testing the onboarding flow). Confirmed zero rows remain in all four tables. Her 4 `community_posts` were explicitly left alone — she asked to keep those.
+
+(2) Julia asked to "remove maggie" — found a real, unrelated paying customer, `maggieshung@gmail.com` (signed up July 28, genuine `all-access` + 3 course purchases, 8 module completions, no profile/community activity). Given this wasn't a team test account like Julia/Tiffany's, confirmed with her exactly what "remove" meant before touching anything (revoke access / reset progress / delete account entirely / other) — she chose full account deletion. Deleted, in order: `module_completions`, `enrollments`, `waitlist`, `profiles`, then her `auth.users` row itself (cascaded cleanly through Supabase's own auth schema, no errors). Verified zero rows remain anywhere, including `auth.users`. This is irreversible — if Maggie returns she'll need to sign up as a brand-new account with no memory of her prior purchase.
+
+**Commits**: none (Supabase data only, via direct SQL through the Supabase MCP).
+
+---
+
+## SHIPPED (Checkpoint 202, August 13, 2026): Julia and Tiffany's own logins fully deleted — data change only, no code
+
+**Status: no code changes, Supabase data only.**
+
+Final step after Checkpoints 198/199/201's progressive resets: Julia asked to also delete both admin accounts' logins entirely (same treatment as Maggie), "remove everything except admin status." Clarified first that admin status isn't a stored flag anywhere — `admin.html`/`community.html`/`dashboard.html`/`index.html` all just check the logged-in email against a hardcoded `ADMIN_EMAILS` array (`julia.utomo@gmail.com`, `tiffany.utomo@gmail.com`), so there's nothing to separately preserve; admin access returns automatically the instant either email logs in again, even on a brand-new account. Confirmed twice given this is irreversible. Deleted Julia's remaining 4 `community_posts` (kept in Checkpoint 201, but superseded by this "remove everything" instruction), then both `auth.users` rows. Verified zero rows remain for either email in `auth.users` and `community_posts`. Both will need to register fresh accounts to log back in.
+
+**Commits**: none (Supabase data only, via direct SQL through the Supabase MCP).
+
+---
+
+## SHIPPED (Checkpoint 203, August 13, 2026): "Semua Kursus Baru" callout on all-access.html made more prominent — dark background instead of light dashed-border box
+
+**Status: pushed to `dev` only.**
+
+Julia flagged the "Semua Kursus Baru — Otomatis Termasuk" note on all-access.html as easy to miss and asked to either enlarge it or give it a dark background; picked dark, matching the site's existing dark-card pattern (already used for `.output-box` on course sales pages and the dashboard's spotlight card) rather than inventing a new style. `.future-note` changed from a light `--accent-dim` fill with a dashed border to a solid `var(--ink)` background with a subtle purple radial-glow accent (`::before`), white/translucent-white text, and slightly larger padding/icon.
+
+**Verified**: `ci-check.js` clean. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `154e238` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 204, August 13, 2026): Fixed dev never sending the welcome/set-password email after a test purchase — Duitku callbackUrl was hardcoded to production
+
+**Status: pushed to `belajar-claude-backend`'s `dev` branch only. NEW: this backend repo now has its own `dev`/`main` split (previously main-only) — confirmed via Railway service config: dev environment tracks branch `dev`, production tracks `main`, same pattern as the frontend.**
+
+Julia reported not receiving the welcome/set-password email after a test purchase on dev. Investigated via Railway logs: found a `create-payment` invoice was created successfully (`POST /create-payment` → 200) but no corresponding `/webhook/duitku` call ever landed on the dev backend — the trail went cold right after invoice creation.
+
+**Root cause**: `createDuitkuInvoice()` in `belajar-claude-backend/index.js` had `callbackUrl` hardcoded to `'https://klaud-backend-production.up.railway.app/webhook/duitku'` unconditionally — so even when the *dev* backend created a sandbox invoice, Duitku was told to send the payment-confirmation webhook to the *production* backend. Production would receive it but reject it (its `DUITKU_API_KEY` differs from dev/sandbox's, so the signature check fails), so the entire post-payment chain (create Supabase account → generate password-set link → send access email) never ran for dev purchases.
+
+**Fix**: `callbackUrl` now derived from `` `https://${process.env.RAILWAY_PUBLIC_DOMAIN}/webhook/duitku` `` (with a fallback to the old hardcoded production URL if that var is ever unset, so production behavior can't regress) — `RAILWAY_PUBLIC_DOMAIN` is set automatically by Railway to whichever environment is actually running the code, confirmed present on both dev and production via `list-variables`. `returnUrl` (where the browser redirects post-payment) is still hardcoded to `https://belajarclaude.id/...` regardless of environment — left as-is since that wasn't the reported problem, flagged here for awareness in case dev testing ever needs to land back on a dev preview URL instead.
+
+**Verified**: `node --check index.js` clean. Confirmed via Railway that the dev backend redeployed automatically on push and came up successfully, logging `Duitku mode: SANDBOX — host: api-sandbox.duitku.com` as expected. Diffed `origin/dev` (freshly cloned into a new `/tmp/backend-push` scratch clone, this repo's `.git` in the mounted folder is corrupted the same way the frontend's is) against the local mount before pushing — only the intended `index.js` change; `mailer.js` had no real diff despite an earlier stale-index false positive.
+
+**Commits**: `belajar-claude-backend`: `49ff9be` (`dev` only — not yet on `main`/production).
+
+---
+
+## SHIPPED (Checkpoint 205, August 13, 2026): Dev/prod separation audit; reset-password.html "Kembali ke beranda" link removed; Checkpoint 204's email fix confirmed working end-to-end
+
+**Status: pushed to `dev` only (frontend); no code change for the audit itself.**
+
+Julia asked to double check dev/prod separation was clean. Audited all four layers: **hosting** (Cloudflare) — separate dev/prod URLs, fine. **Backend** (Railway) — genuinely separate `dev`/`production` environments tracking the matching git branches, separate env vars, separate public URLs, confirmed via `get-service-config`. **Payment gateway** (Duitku) — separate too: dev has no `DUITKU_ENV` set (defaults to sandbox), only production has `DUITKU_ENV=production` with real credentials, confirmed via `list-variables`. **Database** (Supabase) — NOT separate: only one real project (`Belajar-Claude`, `ctqtdqbsucbhikwnagvl`) exists in the account, and `supabase-config.js` hardcodes that same project identically on both the `dev` and `main` branches (byte-for-byte diffed to confirm). Flagged the practical implication clearly: sandbox test purchases are money-safe (can never charge a real card), but the resulting rows aren't test-marked — a dev enrollment is indistinguishable from a real one in the shared tables, and critically, `course_pricing` is a single global table, so a pricing change made while "testing" on dev is actually a live price change for real customers on belajarclaude.id right now. Julia decided this tradeoff is acceptable for now rather than standing up a second Supabase project.
+
+Separately, confirmed Checkpoint 204's callbackUrl fix is working end-to-end — Julia received the set-password email from a real dev sandbox purchase and reached the actual `reset-password.html` "Buat Password Baru" screen from the email link. While there, asked to remove the "← Kembali ke beranda" link from that page's card (sat below all three of its states — reset form, invalid-link, loading — so removing it once at the bottom covered all cases).
+
+**Verified**: `ci-check.js` clean. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `18650b3` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 206, August 13, 2026): Dashboard "Jelajahi Kursus" no longer one-click auto-enrolls All Access holders; explore-card button shadow removed; confirmed dashboard's "Beranda" link is a dev-only screenshot mismatch, not a bug
+
+**Status: pushed to `dev` only.**
+
+Three items from a dashboard screenshot. (1) The "← Beranda" link looked missing in her screenshot — checked the code, it's present (added Checkpoint 200) and the screenshot's hover tooltip showed `belajarclaude.id`, i.e. she was looking at **production**, which doesn't have Checkpoint 200's changes yet (dev-only so far) — not a new bug, just dev/main not yet merged. (2) Removed `box-shadow` from `.btn-view` (the black "Mulai Kursus"/"Lihat Kursus" buttons in the explore-card grid) per her ask. (3) The bigger one: dashboard's "Jelajahi Kursus" section previously gave All Access holders a one-click "Mulai Kursus" button that called `enrollCourse()` and immediately inserted a real enrollment row with no preview step — different from the experience of browsing from index.html, where you always land on a course's sales page first. Investigated `mulai-claude-content.html`'s access gate and confirmed each course's own sales page (e.g. `mulai-claude.html`'s `enrollAndOpen()`) already has its own equivalent "Mulai Kursus" enroll flow built in for All Access holders who land there — this was already the intended pattern, the dashboard shortcut was the inconsistency. Changed the dashboard's CTA to always link to `meta.salesLink` regardless of All Access status, same as a non-holder sees, removing the direct-enroll button entirely. `enrollCourse()` is left defined but now unused/dead in `dashboard.html` (each sales page has its own equivalent insert logic already).
+
+**Verified**: `ci-check.js` clean. Confirmed via grep that each course's sales page already has working enroll-on-page logic before removing the dashboard's duplicate path. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `638d2f3` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 207, August 13, 2026): Profile filled-field styling; Beranda link added to Komunitas/Profil headers; dev-purchase emails now link to a dev hostname instead of production
+
+**Status: pushed to `dev` only.**
+
+Three items. (1) `profile.html`'s form fields (Nama Lengkap, Username, Email) only turned white on `:focus`, staying grey the rest of the time even when filled in — added `.field-input:not(:placeholder-shown){background:#fff;}` so any field with actual content shows white regardless of focus. Works for Nama Lengkap and Username (both have a `placeholder` attribute, so the CSS pseudo-class correctly tracks "empty vs has a value"); the disabled Email field has no `placeholder` attribute at all, so `:not(:placeholder-shown)` matches it unconditionally — it's always white, which is correct since it's always populated. (2) Added the same "← Beranda" nav link (introduced on `dashboard.html` in Checkpoint 200) to `community.html` and `profile.html`'s headers, for consistency across all three logged-in pages.
+
+(3) The bigger one: Julia asked whether dev-triggered purchase emails could link to a dev site instead of hardcoded production URLs. Investigated the actual Cloudflare setup — there is only **one** Worker deployment (`belajar-claude`), reachable at two hostnames: the custom domain `belajarclaude.id` and its default `dev-belajar-claude.belajarclaude-id.workers.dev` workers.dev address — same live code, same content, just a different URL (confirmed both serve the site correctly via direct fetch). Used the workers.dev hostname as a real, working stand-in "dev" link. Added a `FRONTEND_URL` constant to both `index.js` and `mailer.js` (backend), gated on the same `DUITKU_ENV` signal already used for picking the Duitku sandbox vs. production host: `DUITKU_ENV === 'production'` → `belajarclaude.id`, anything else → the workers.dev hostname. Replaced every hardcoded `https://belajarclaude.id` reference that ends up in an outbound email or payment redirect: all 13 `COURSES` catalog links, `generatePasswordSetLink()`'s `redirect_to`, Duitku's `returnUrl` (previously flagged as out-of-scope in Checkpoint 204, now fixed as part of this same root cause), the `sendAccessEmail` fallback `accessLink`, and `mailer.js`'s two hardcoded "Lihat All Access" / "Lihat Semua Kursus" buttons in the welcome email. Production behavior is unchanged (still points to `belajarclaude.id`); dev/sandbox purchases now correctly point to the dev hostname instead of silently deep-linking test buyers into production.
+
+**Verified**: `ci-check.js` clean (frontend); `node --check` clean on both `index.js` and `mailer.js` (backend). Diffed `origin/dev` against the local mount before copying on both repos — no concurrent Tiffany changes on either.
+
+**Commits**: `belajar-claude`: `77b82eb` (`dev` only). `belajar-claude-backend`: `4a93fa1` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 208, August 13, 2026): Dashboard's "Jelajahi Kursus" carousel cards get the same accent top-border hover reveal used by `.s-card` elsewhere on the page
+
+**Status: pushed to `dev` only.**
+
+Julia shared a screenshot of the dashboard's course carousel and asked to reuse "the same animation as on the dashboard" — turned out the screenshot was itself of `.explore-card` on `dashboard.html` (confirmed via its distinctive 200px-wide horizontally-scrolling cards with a dimmed "coming soon" card, matching `.explore-carousel`'s CSS exactly — no other page has this component). Asked a clarifying question since "the same as the dashboard" was ambiguous when the screenshot already was the dashboard; her answer pointed at the hover-animation option. Read the rest of `dashboard.html`'s own cards and found `.s-card` (the stats row) already has a small polish `.explore-card` was missing: a colored top-border line that fades in on hover (`::before` with a 2px accent gradient, opacity 0→1). Added the identical treatment to `.explore-card` — lift + border/background tint (already existed) now paired with the same accent top-border reveal used elsewhere on the same page, for a consistent hover feel across all of `dashboard.html`'s card types.
+
+**Verified**: `ci-check.js` clean. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `df3da20` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 209, August 13, 2026): Fixed a flash of unstyled/unpersonalized pricing CTA card on index.html — root cause of the "slow, shows a weird card" report navigating dashboard → index
+
+**Status: pushed to `dev` only.**
+
+Julia shared a screenshot from navigating dashboard.html → index.html (logged in as her non-purchaser test account): nav bar + a personalized "Selamat datang kembali, juliaaa" ALL ACCESS pricing card + footer, with a large blank gap between the card and footer, then presumably the rest of the page catching up. Investigated the actual page structure rather than just profiling load times: `#marketingHome` (hero, workflow demo, course grid) and `#loggedInHome` (welcome-back view for All Access holders) both start `display:none` and get revealed by JS once the session/enrollment checks resolve — but `#komunitas` (the bottom pricing/CTA `<section>`, personalized via `ctaHeadline`/`pricingBigPrice`/etc.) had no such default-hidden state of its own. It rendered immediately on every page load, static and unpersonalized at first, sitting alone while the rest of the page was still hidden — then got personalized in place and, for All Access holders, explicitly hidden again once the async chain finished. That's the exact flash Julia saw, and the layout reflow from marketingHome popping in above it likely contributed to the "slow" feeling too, on top of the actual network round trips.
+
+Fix: gave `#komunitas` `style="display:none;"` by default, matching the other two containers, and moved its reveal into the existing `revealMarketing()` function so it now appears together with `#marketingHome`, already fully personalized — never as a bare flash of default content. All Access holders never call `revealMarketing()` (they get `#loggedInHome` instead), so `#komunitas` now correctly stays hidden for them throughout, making the pre-existing explicit `komunitasEl.style.display='none'` line further down redundant but harmless (left in place as a no-op safety net rather than risk removing something with more context than visible here).
+
+**Verified**: `ci-check.js` clean. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `668bc6b` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 210, August 13, 2026): Reverted Checkpoint 208's bold double-border hover bug; dashboard explore-card now shares index.html's illustrations instead of plain emoji icons; added a "Memuat..." placeholder for the blank-page gap left over after Checkpoint 209's fix
+
+**Status: pushed to `dev` only.**
+
+Three fixes from screenshots.
+
+**1. Bold hover border, root-caused to Checkpoint 208 itself.** Julia asked why the explore-card hover showed a noticeably thick/bold line along the top edge. Checkpoint 208 had added a colored `::before` top-border reveal to match `.s-card`, but `.explore-card` already turns its *entire* border `var(--accent)` on hover (a pre-existing rule `.s-card` doesn't have) — the new line was rendering directly on top of that existing accent border, doubling the visual weight only at the top edge. Reverted the `::before` addition entirely; the card's existing full-border hover was already correct and didn't need it.
+
+**2. Dashboard's course carousel used flat emoji icons (📋🤖💼🏷📈) in solid-color boxes, while index.html's course grid uses hand-drawn line-art SVG illustrations** with matching pastel gradients — Julia asked for the dashboard to use "the image from index." Extracted `LIH_BG` (background gradients) and `LIH_ILLUSTRATIONS` (the SVG markup) out of index.html's inline script into a new shared file, `course-illustrations.js` — avoids the copy-paste-drift risk `course-card-shared.css` was created to solve for the "coming soon" dimming rule (Checkpoints 116/117). Both `index.html` and `dashboard.html` now load this file. `dashboard.html`'s explore-card renderer uses `LIH_ILLUSTRATIONS[slug]`/`LIH_BG[slug]` when available, falling back to the original emoji-in-a-color-box treatment for slugs without a custom illustration (mostly not-yet-designed "coming soon" courses). Also copied over the `.lih-illustration` sizing rule and all of the `@keyframes lih*`/`.lih-*` animation classes the SVGs depend on for their little animated details (running dog, blinking cursor, pulsing sparkle, camera flash, etc.) — without these, the illustrations would have rendered as static line art instead of matching index.html's motion. Added `overflow:hidden` + a 1.3x scale on `.ex-thumb .lih-illustration` since the carousel's card (200×72px) is much smaller/differently-proportioned than index.html's original banner (which the illustrations were designed for, ~380×168px) — without the zoom, the artwork would sit small and letterboxed. Worth a visual check once live to see if the crop needs nudging.
+
+**3. Julia flagged the residual symptom left over after Checkpoint 209's fix**: with `#komunitas`'s flash gone, navigating dashboard → index now shows nav + footer with a plain blank gap in between while the session/enrollment checks run — same underlying wait, just less confusing-looking than before. Added a `#indexLoading` "Memuat..." placeholder (matching the `.loading-screen` "Memuat ..." pattern already used on dashboard.html/profile.html/community.html) shown between nav and footer by default, hidden inside `revealMarketing()` and at the `loggedInHome` reveal point — covers every code path (guest, non-buyer, All Access holder, and the various error/timeout fallbacks, since they all funnel through `revealMarketing()`).
+
+**Verified**: `ci-check.js` clean (29 HTML, 6 JS files, 26 local references — up from 5/25 with the new shared file). `node --check` clean on `course-illustrations.js`; sanity-loaded it in Node to confirm both objects parse and contain all 6 expected slugs. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `1c935d6` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 211, August 13, 2026): Parallelized the sequential Supabase fetches gating index.html/dashboard.html's login-state UI — actual latency reduction, not just the visual/rendering-order fixes from Checkpoints 209-210
+
+**Status: pushed to `dev` only.**
+
+Julia asked to keep improving page load after the visual fixes in 209/210. Those fixed *what shows* while waiting; this targets *how long the wait actually is*. Both pages' post-login setup was written as a chain of sequential `await`s, each one a full Supabase network round trip that only started after the previous one finished completely — pure added latency with no dependency requiring it:
+
+- `index.html`: `await` profile → `await` enrollments → (for All Access holders) `await` module_completions. 3 round trips in a row.
+- `dashboard.html`'s `_init()`: `await` profile → `await` loadProgress()'s module_completions → `await` course_visibility → `await` enrollments. Up to 4 round trips in a row.
+
+None of these actually depend on each other's *data* — they only need the session email (course_visibility doesn't even need that). Refactored both to fire all their queries together via `Promise.allSettled([...])` and read results out by index afterward, so total wait time drops to whichever single query is slowest instead of the sum of 3-4 of them.
+
+The tricky part: supabase-js query builders are lazy — building a query with `.select()`/`.eq()` doesn't touch the network until something calls `.then()` on it (which `await` does). Assigning a builder to a variable and awaiting it later, one at a time, would NOT have parallelized anything — each `.then()` still fires only when its own `await` line is reached, in order. The fix only works because the query builders are passed directly as array elements into `Promise.allSettled(...)`, which calls `.then()` on every element in the same synchronous pass — verified this actually behaves as intended with a small Node harness simulating the `Promise.allSettled` indexing/fallback pattern and the `preFetched || await fetch()` short-circuit in `loadProgress()`, both behaving as expected.
+
+Behavior-preserving by design: `Promise.allSettled` (not `Promise.all`) means one query failing doesn't take the others down with it, and every call site keeps its original fallback — profile failure still falls back to `null`/metadata name, an enrollments failure on `index.html` still throws into the same `catch(e){ revealMarketing(); }` it always did, module_completions/course_visibility failures fall back to an empty result instead of the page failing (module_completions actually improves here: previously a failure there could incorrectly bounce an All Access holder to the marketing page instead of their dashboard; now it just shows 0% progress and still shows the right page). `dashboard.html`'s `loadProgress(email, preFetched)` gained an optional second parameter — its one call site now passes the already-fetched result instead of firing a redundant 2nd request; called without it (no other call sites exist today), it still fetches on its own exactly as before.
+
+**Verified**: `ci-check.js` clean. Extracted and ran `node --check` on both pages' inline `<script>` blocks to confirm no syntax errors from the refactor. Ran an isolated Node simulation of the `Promise.allSettled` fulfilled/rejected indexing logic and the `preFetched || await x` precedence/short-circuit behavior — both confirmed correct (rejected entries fall back to their defaults, fulfilled entries pass through, `preFetched` skips the redundant fetch entirely when provided). Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `04fe6f7` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 212, August 13, 2026): Site-wide scan for the same sequential-Supabase-fetch pattern fixed in Checkpoint 211 — found and fixed it on 6 more pages
+
+**Status: pushed to `dev` only.**
+
+Julia asked for a quick scan across the whole site for the same issue Checkpoint 211 fixed. Grepped every HTML file for `await sbClient.from(` counts as a rough signal, then read the pages with multiple hits to separate genuine page-load bottlenecks from user-triggered action handlers (pin/delete/like/comment-submit etc. — those don't affect load time, only fired on click).
+
+**Found and fixed the identical pattern on all 5 course sales pages** (`mulai-claude.html`, `produktivitas.html`, `content-marketing.html`, `prompt-gratis.html`, `strategi-marketing.html`) — each had the exact same sequential `profile` → `enrollments` fetch chain index.html had before Checkpoint 211 (unsurprising, these 6 pages' nav-pill logic was already unified together back in Checkpoint 196). Applied the identical `Promise.allSettled` fix to each.
+
+**Found and fixed two instances in `community.html`**: (1) `_init()` awaited the `profiles` lookup (for the sidebar name + post-author display name) fully before even starting `loadFeed()` — these don't depend on each other, so `loadFeed()` now kicks off immediately and both are awaited together; `currentAuthorName` is only actually read later when the user submits a post/comment, so it's fine for it to still be unset while the feed itself renders. (2) Inside `loadFeed()`, the likes and comment-count fetches both only depend on `postIds` (from the posts fetch, which still has to happen first) but not on each other — these two now fire together via `Promise.allSettled` too.
+
+**Checked and left alone**: `admin.html` has the most `await sbClient.from(` calls in the codebase (19) including a `loadAllData()` function that's very likely the same pattern at a larger scale, but it's an internal tool only Julia and Tiffany use, and untangling 19 calls safely needs more careful review than this pass's budget — flagged for a future pass if worth the effort given its low traffic. All the other multi-fetch pages counted (`all-access.html`, the `*-content.html` lesson readers) were checked and their multiple `await sbClient.from(` calls turned out to be either already-independent one-off features (e.g. `course_pricing` fetched in a separate, already-non-blocking IIFE) or action handlers, not sequential page-load chains — no changes needed there.
+
+**Verified**: `ci-check.js` clean. Extracted and ran `node --check` on all 6 changed pages' inline scripts — all pass. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `3e53dc4` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 213, August 13, 2026): Fixed a real regression from Checkpoint 211 — admin-hidden "coming soon" courses were reappearing on index.html's logged-in course grid; also fixed one illustration rendering visibly off-center
+
+**Status: pushed to `dev` only.**
+
+Julia flagged that 4 courses she'd hidden via admin.html's Visibilitas Kursus toggles (`ai-powered-app`, `build-automation`, `claude-api-dev`, `jual-produk-ai`) were showing again. Confirmed via direct SQL query against `course_visibility` that all 4 are still correctly stored as `hidden: true` — this was never a data problem, it was a genuine race condition in `index.html` that Checkpoint 211's parallelization made much more likely to actually happen.
+
+**Root cause**: `index.html` fetches `course_visibility` (admin.html's live overrides) in a fire-and-forget `.then()` chain that runs independently of the session-check flow — by design, so a slow visibility fetch never delays login-state personalization. That fetch mutates the same shared `LIH_COURSES` object that the All Access holders' course grid (`#lihCourseGrid`) reads `hidden`/`comingSoon`/`visible` from when it builds itself — but nothing ever made the grid-build code wait for that mutation to land first. Before Checkpoint 211, the session-check chain was 3 sequential Supabase round trips, giving the visibility fetch (1 round trip, fired first) enough of a head start that it almost always won the race. Once that chain got parallelized down to essentially 1 round trip, the odds flipped — the grid started frequently rendering before the visibility override had been applied, showing whichever courses' stale, un-overridden defaults happened to be sitting in `LIH_COURSES` (all 4 of these default to `comingSoon:true, visible:true` in the base course list, i.e. shown-but-disabled, unless explicitly hidden). **Confirmed dashboard.html did not have the same bug** — its equivalent `course_visibility` fetch was already correctly sequenced as one of the 4 queries in Checkpoint 211's own `Promise.allSettled` batch, applied synchronously before dashboard's own grid-build code runs.
+
+**Fix**: captured the visibility fetch's promise in a variable (`visibilityPromise`) instead of only chaining off it fire-and-forget, and added an explicit `await visibilityPromise;` right before the `#lihCourseGrid` build code reads `LIH_COURSES`. The guest/marketing-page behavior this fetch also drives (`renderKursusComingSoon()` for the below-the-fold teaser cards) is untouched — still fires the same way, still non-blocking for that path.
+
+**Also fixed while investigating**: the "20 Prompt Dasar" course card's illustration (person + speech bubble + pen) was rendering visibly shifted toward the left edge of its banner, with empty space on the right. Its hand-drawn content only ever occupied roughly the left half (x:20-190) of the original `viewBox="0 0 400 100"` canvas — SVGs center the *whole viewBox* within their rendered box by default, not the drawn content specifically, so a viewBox much wider than its actual artwork reads as off-center. Tightened the viewBox to `"5 10 205 90"` (the artwork's real bounding box plus a little padding) in both places this illustration is defined: `course-illustrations.js` (used by index.html's logged-in grid and dashboard.html's explore carousel) and index.html's own static marketing-grid card markup (not JS-generated, so it needed its own copy of the fix). The other 5 illustrations were checked too — their content already spans close to the full canvas width (or, for `mulai-claude`'s running-dog scene, is intentionally full-width), so they didn't need the same treatment.
+
+**Verified**: `ci-check.js` clean. `node --check` on the affected inline script and on `course-illustrations.js`. Ran a small Node snippet to confirm the new viewBox string actually landed in the shared file. Queried `course_visibility` directly via the Supabase MCP to confirm the 4 courses really are `hidden: true` in the database (read-only query, no data changed). Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `023faf7` (`dev` only).
 
 ---
 

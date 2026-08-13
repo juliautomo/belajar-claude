@@ -4,10 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard — Belajar Claude</title>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="course-card-shared.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-config.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -166,21 +164,58 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 /* EXPLORE */
 .explore-carousel{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:10px 4px 16px;}
 .explore-carousel::-webkit-scrollbar{display:none;}
-.explore-card{min-width:200px;max-width:200px;scroll-snap-align:start;flex-shrink:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:all 0.2s;}
+.explore-card{position:relative;min-width:200px;max-width:200px;scroll-snap-align:start;flex-shrink:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:all 0.2s;}
 /* No box-shadow here on purpose — a blurred shadow under a small rounded card tends to
    read as a squared-off halo rather than following the card's curve. Border + a faint
    tint instead, which stays crisp at any zoom/scroll position. */
 .explore-card:hover{transform:translateY(-3px);border-color:var(--accent);background:var(--accent-dim);}
 /* .cc-soon dimming rule lives in course-card-shared.css — shared across every
    coming-soon card component on the site, don't redefine it here. */
-.ex-thumb{height:72px;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.ex-thumb{height:72px;display:flex;align-items:center;justify-content:center;font-size:22px;overflow:hidden;}
+.ex-thumb .lih-illustration{transform:scale(1.3);}
 .ex-t1{background:linear-gradient(135deg,#EEF0FF,#DDE0FF);}
 .ex-t2{background:linear-gradient(135deg,#FFF7ED,#FDE8C8);}
 .ex-t3{background:linear-gradient(135deg,#FDF4FF,#F5D0FE);}
+/* Shared with index.html's course-library illustrations (markup lives in
+   course-illustrations.js) — same @keyframes/animation classes needed here so the
+   little animated details (running dog, blinking cursor, pulsing sparkle, etc.) play
+   the same way in this smaller carousel card. */
+.lih-illustration{width:100%;height:100%;display:block;}
+@keyframes lihBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes lihLegA{0%,100%{transform:rotate(16deg)}50%{transform:rotate(-16deg)}}
+@keyframes lihLegB{0%,100%{transform:rotate(-16deg)}50%{transform:rotate(16deg)}}
+@keyframes lihGround{from{stroke-dashoffset:0}to{stroke-dashoffset:-24}}
+@keyframes lihTailWag{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(14deg)}}
+@keyframes lihScribble{0%,100%{stroke-dashoffset:0;opacity:0.75}50%{stroke-dashoffset:10;opacity:0.35}}
+@keyframes lihPenWiggle{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(6deg)}}
+@keyframes lihSparkle{0%,100%{opacity:0.25;transform:scale(0.85)}50%{opacity:1;transform:scale(1.1)}}
+@keyframes lihCursorBlink{0%,49%{opacity:1}50%,100%{opacity:0}}
+@keyframes lihDotPulse{0%,80%,100%{opacity:0.25}40%{opacity:1}}
+@keyframes lihBubblePop{0%,100%{transform:scale(0.94);opacity:0.85}50%{transform:scale(1.03);opacity:1}}
+@keyframes lihFlash{0%,85%,100%{opacity:0}92%{opacity:0.9}}
+@keyframes lihCamClick{0%,88%,100%{transform:scale(1)}92%{transform:scale(0.93)}}
+.lih-run-a{animation:lihBob 0.6s ease-in-out infinite;}
+.lih-run-b{animation:lihBob 0.6s ease-in-out infinite;animation-delay:0.15s;}
+.lih-leg-a{animation:lihLegA 0.6s ease-in-out infinite;}
+.lih-leg-b{animation:lihLegB 0.6s ease-in-out infinite;}
+.lih-ground{animation:lihGround 1s linear infinite;}
+.lih-tail{animation:lihTailWag 0.5s ease-in-out infinite;}
+.lih-scribble{animation:lihScribble 1.6s ease-in-out infinite;}
+.lih-scribble-2{animation:lihScribble 1.6s ease-in-out infinite;animation-delay:0.3s;}
+.lih-scribble-3{animation:lihScribble 1.6s ease-in-out infinite;animation-delay:0.6s;}
+.lih-pen{animation:lihPenWiggle 0.9s ease-in-out infinite;}
+.lih-sparkle{animation:lihSparkle 1.8s ease-in-out infinite;}
+.lih-cursor{animation:lihCursorBlink 1s step-end infinite;}
+.lih-dot1{animation:lihDotPulse 1.2s ease-in-out infinite;}
+.lih-dot2{animation:lihDotPulse 1.2s ease-in-out infinite;animation-delay:0.2s;}
+.lih-dot3{animation:lihDotPulse 1.2s ease-in-out infinite;animation-delay:0.4s;}
+.lih-bubble{animation:lihBubblePop 2s ease-in-out infinite;}
+.lih-flash{animation:lihFlash 2.4s ease-in-out infinite;}
+.lih-cam{animation:lihCamClick 2.4s ease-in-out infinite;}
 .ex-body{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1;}
 .ex-title{font-size:13px;font-weight:600;color:var(--ink);line-height:1.3;flex:1;}
 .ex-desc{font-size:11px;color:var(--ink-3);line-height:1.6;}
-.btn-view{display:block;background:var(--ink);color:#fff;text-decoration:none;font-family:var(--font);font-size:11px;font-weight:600;padding:8px;border-radius:8px;text-align:center;transition:all 0.18s;margin-top:4px;box-shadow:0 2px 6px rgba(0,0,0,0.1);}
+.btn-view{display:block;background:var(--ink);color:#fff;text-decoration:none;font-family:var(--font);font-size:11px;font-weight:600;padding:8px;border-radius:8px;text-align:center;transition:all 0.18s;margin-top:4px;}
 .btn-view:hover{opacity:0.85;}
 .btn-notify{display:flex;align-items:center;justify-content:center;gap:5px;background:var(--surface-2);color:var(--ink-2);border:1px solid var(--border);font-family:var(--font);font-size:11px;font-weight:600;padding:8px;border-radius:8px;cursor:pointer;transition:all 0.18s;margin-top:4px;width:100%;}
 .btn-notify:hover{border-color:var(--border-strong);color:var(--ink);}
@@ -222,6 +257,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 <nav>
   <a class="brand" href="index.html">belajar<span>claude</span></a>
   <div class="nav-right">
+    <a href="index.html" class="btn-nav" style="text-decoration:none;">← Beranda</a>
     <button class="btn-nav" onclick="logout()">Keluar</button>
   </div>
 </nav>
@@ -313,6 +349,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
   </main>
 </div>
 
+<!-- Moved here from <head> (perf): these were blocking first paint on every load.
+     Position matters — must stay directly above the script below since it uses
+     sbClient synchronously. -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="course-illustrations.js"></script>
 <script>
 const ALL_COURSES = {
   'prompt-gratis':    { title:'20 Prompt Dasar',              icon:'📋', thumb:'et1', contentLink:'prompt-gratis-content.html', salesLink:'prompt-gratis.html', desc:'20 prompt siap pakai dalam Bahasa Indonesia.', price:'Termasuk All Access', level:'Beginner', exThumb:'ex-t1', modules:5 },
@@ -329,9 +371,9 @@ const ALL_COURSES = {
 
 let progressMap = {}, userProfile = null, currentEmail = null;
 
-async function loadProgress(email){
+async function loadProgress(email,preFetched){
   try{
-    var r=await sbClient.from('module_completions').select('course_slug,module_num').eq('email',email);
+    var r=preFetched||await sbClient.from('module_completions').select('course_slug,module_num').eq('email',email);
     if(r.data){
       r.data.forEach(function(row){
         if(!progressMap[row.course_slug])progressMap[row.course_slug]=new Set();
@@ -362,10 +404,11 @@ async function notifyMe(btn,slug){
   btn.classList.add('notified');btn.textContent='Terdaftar ✓';
 }
 
-// Explicit enroll step for All Access holders: purchasing all-access only grants access
-// (checked via the sentinel row on content pages), it doesn't auto-add courses to
-// "Kursus Kamu" anymore. Clicking "Mulai Kursus" here creates the real per-course
-// enrollment row that makes it show up in the dashboard.
+// No longer called from the dashboard's "Jelajahi Kursus" cards (see the cta logic in
+// _init() below) — those now link to the course's own sales page instead of enrolling
+// in one click, so an All Access holder previews the course first, same as anyone else.
+// Left in place since each course's own sales page (e.g. mulai-claude.html's
+// enrollAndOpen()) does its own equivalent insert; this was the dashboard-side twin.
 async function enrollCourse(btn,slug){
   var meta=ALL_COURSES[slug];
   if(!meta||!currentEmail)return;
@@ -409,36 +452,70 @@ async function _init(){
   currentEmail=session.user.email;
   var ADMIN_EMAILS=['julia.utomo@gmail.com','tiffany.utomo@gmail.com'];
   if(ADMIN_EMAILS.indexOf(currentEmail.toLowerCase())!==-1){document.getElementById('adminNavItem').style.display='flex';}
-  var name=(session.user.user_metadata&&session.user.user_metadata.full_name)||currentEmail.split('@')[0];
+
+  // profiles / module_completions / course_visibility / enrollments don't depend on
+  // each other's results, only (at most) on currentEmail — this used to be up to 4
+  // sequential Supabase round trips in a row (profile → progress → visibility →
+  // enrollments), each one waiting on the last. Firing them together via
+  // Promise.allSettled means we only pay for whichever one is slowest, not the sum of
+  // all four. Passing the query builders directly into the array (rather than assigning
+  // them to variables and awaiting each individually later) is what actually makes this
+  // concurrent — supabase-js builders are lazy and don't hit the network until something
+  // calls .then() on them, which Promise.allSettled does for every item up front.
+  var settled=await Promise.allSettled([
+    sbClient.from('profiles').select('*').eq('email',currentEmail).maybeSingle(),
+    sbClient.from('module_completions').select('course_slug,module_num').eq('email',currentEmail),
+    sbClient.from('course_visibility').select('*'),
+    sbClient.from('enrollments').select('course_slug,course_name,type,enrolled_at,last_accessed_at').eq('email',currentEmail).order('enrolled_at',{ascending:false})
+  ]);
+
+  userProfile=(settled[0].status==='fulfilled'&&settled[0].value.data)||null;
+
+  // Onboarding gate: force profile completion (role + goal) before the dashboard is
+  // shown — mainly hits right after a purchase, when a fresh account has neither set
+  // yet. profile.html?onboarding=1 shows a banner, requires both fields, and redirects
+  // back here on save. Skipped entirely once role+goal are set, so this only fires once.
+  if(!userProfile||!userProfile.role||!userProfile.goal){
+    window.location.href='profile.html?onboarding=1';
+    return;
+  }
+
+  var name=(userProfile&&userProfile.full_name)||(session.user.user_metadata&&session.user.user_metadata.full_name)||currentEmail.split('@')[0];
+  // Sidebar/nav/greeting all show first-name-only now — full name stays reserved for
+  // the editable "Nama Lengkap" field on profile.html, so it's still saved/editable
+  // in full, just not displayed everywhere.
+  var firstName=name.trim().split(/\s+/)[0];
   var joinDate=new Date(session.user.created_at).toLocaleDateString('id-ID',{month:'long',year:'numeric'});
-  var initials=getInitials(name);
+  var initials=getInitials(firstName);
   document.getElementById('navAvatar').textContent=initials;
-  document.getElementById('sideName').textContent=name;
+  document.getElementById('sideName').textContent=firstName;
   document.getElementById('sideEmail').textContent=currentEmail;
   document.getElementById('sideSince').textContent='Bergabung '+joinDate;
   var hour=new Date().getHours();
   var greet=hour<12?'Selamat pagi':hour<17?'Selamat siang':'Selamat malam';
-  var firstName=name.split(' ')[0];
   document.getElementById('greetEyebrow').textContent=greet+' ·';
   document.getElementById('greetH1').innerHTML='Selamat datang kembali,<br><em>'+firstName+'</em>';
 
-  try{var pr=await sbClient.from('profiles').select('*').eq('email',currentEmail).maybeSingle();userProfile=pr.data;}catch(e){userProfile=null;}
-  await loadProgress(currentEmail);
+  // Already fetched above (settled[1]) — loadProgress() now just processes a result
+  // instead of also fetching it, so the 2nd argument skips a redundant network call.
+  await loadProgress(currentEmail, settled[1].status==='fulfilled'?settled[1].value:{data:[]});
 
   // Live visibility overrides from the admin toggle (course_visibility table) — falls
   // back to each course's static comingSoon/visible defaults in ALL_COURSES above if
   // this fetch fails, so a Supabase hiccup never exposes/hides something unexpectedly.
   try{
-    var vr=await sbClient.from('course_visibility').select('*');
-    (vr.data||[]).forEach(function(row){
-      if(!ALL_COURSES[row.course_slug])return;
-      ALL_COURSES[row.course_slug].hidden=!!row.hidden;
-      ALL_COURSES[row.course_slug].comingSoon=!!row.coming_soon;
-      ALL_COURSES[row.course_slug].visible=true;
-    });
+    if(settled[2].status==='fulfilled'){
+      var vr=settled[2].value;
+      (vr.data||[]).forEach(function(row){
+        if(!ALL_COURSES[row.course_slug])return;
+        ALL_COURSES[row.course_slug].hidden=!!row.hidden;
+        ALL_COURSES[row.course_slug].comingSoon=!!row.coming_soon;
+        ALL_COURSES[row.course_slug].visible=true;
+      });
+    }
   }catch(e){}
 
-  var er=await sbClient.from('enrollments').select('course_slug,course_name,type,enrolled_at,last_accessed_at').eq('email',currentEmail).order('enrolled_at',{ascending:false});
+  var er=settled[3].status==='fulfilled'?settled[3].value:{data:[]};
   var rawEnrollments=(er.data||[]);
   // 'mulai-claude' is no longer free-standing (moved behind All Access) - drop any
   // legacy free enrollment rows for it so the dashboard doesn't show it as owned
@@ -452,9 +529,10 @@ async function _init(){
   rawEnrollments.forEach(function(e){if(PAKET_COURSES[e.course_slug]){PAKET_COURSES[e.course_slug].forEach(function(slug){if(!existingSlugs.has(slug)){existingSlugs.add(slug);paketExpanded.push({course_slug:slug,course_name:(ALL_COURSES[slug]&&ALL_COURSES[slug].title)||slug,type:'paid',enrolled_at:e.enrolled_at,last_accessed_at:null});}});}});
   // All Access sentinel: one 'all-access' enrollment row grants ACCESS to every course in
   // ALL_COURSES (content pages check for this row directly), but no longer auto-populates
-  // "Kursus Kamu" - the user has to explicitly click "Mulai Kursus" on a course under
-  // "Jelajahi Kursus" first, which inserts a real per-course enrollment row (see enrollCourse()).
-  // This keeps the dashboard from listing every course the moment someone buys all-access.
+  // "Kursus Kamu" - the user still has to visit the course's own sales page and enroll
+  // from there (same preview-first flow as any other visitor), which inserts a real
+  // per-course enrollment row. This keeps the dashboard from listing every course the
+  // moment someone buys all-access.
   var allAccessRow=rawEnrollments.find(function(e){return e.course_slug==='all-access';});
   var enrollments=paketExpanded.filter(function(e){return ALL_COURSES[e.course_slug];});
   var enrolledSlugs=new Set(enrollments.map(function(e){return e.course_slug;}));
@@ -569,13 +647,21 @@ async function _init(){
     var grid=document.getElementById('exploreGrid');
     unenrolled.forEach(function(slug){
       var meta=ALL_COURSES[slug];
+      // Always link to the course's own sales/preview page first — even for All Access
+      // holders — instead of a one-click auto-enroll button. Matches the experience of
+      // browsing from index.html: preview the course, then enroll from its own page.
       var cta=meta.comingSoon
           ?'<span class="btn-view" style="cursor:default;pointer-events:none;">Segera Hadir</span>'
-          :allAccessRow
-          ?'<button class="btn-view" onclick="enrollCourse(this,\''+slug+'\')">Mulai Kursus &rarr;</button>'
           :'<a href="'+meta.salesLink+'" class="btn-view">Lihat Kursus &rarr;</a>';
+      // Same hand-drawn illustrations as index.html's course-library grid (shared via
+      // course-illustrations.js), falling back to the plain emoji-in-a-color-box
+      // treatment for slugs that don't have a custom illustration yet (most "coming
+      // soon" courses).
+      var exVisual = (typeof LIH_ILLUSTRATIONS !== 'undefined' && LIH_ILLUSTRATIONS[slug]) || meta.icon;
+      var exBg = (typeof LIH_BG !== 'undefined' && LIH_BG[slug]) ? 'background:' + LIH_BG[slug] + ';' : '';
+      var exClass = exBg ? '' : ' ' + meta.exThumb;
       grid.innerHTML+='<div class="explore-card'+(meta.comingSoon?' cc-soon':'')+'">'
-        +'<div class="ex-thumb '+meta.exThumb+'">'+meta.icon+'</div>'
+        +'<div class="ex-thumb'+exClass+'" style="'+exBg+'">'+exVisual+'</div>'
         +'<div class="ex-body">'
         +'<div class="ex-title">'+meta.title+'</div>'
         +'<div class="ex-desc">'+meta.desc+'</div>'

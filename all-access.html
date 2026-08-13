@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>All Access — Semua Kursus | Belajar Claude</title>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&display=swap" rel="stylesheet">
 <style>
       :root {
     --bg: #FAFAFA; --surface: #FFFFFF; --surface-2: #F5F5F7;
@@ -117,10 +117,11 @@
   .ccv2-body p { font-size: 12.5px; color: var(--ink-2); line-height: 1.5; }
   /* Not a course, so not a course-card-v2 — a full-width policy note about
      future releases instead, spanning the grid rather than sitting in it. */
-  .future-note { grid-column: 1 / -1; background: var(--accent-dim); border: 1px dashed rgba(108,71,255,0.3); border-radius: 14px; padding: 18px 22px; display: flex; align-items: center; gap: 14px; }
-  .future-note-icon { width: 34px; height: 34px; border-radius: 10px; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; box-shadow: 0 3px 8px rgba(0,0,0,0.05); }
-  .future-note h3 { font-family: var(--font); font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
-  .future-note p { font-size: 12.5px; color: var(--ink-2); line-height: 1.5; }
+  .future-note { grid-column: 1 / -1; background: var(--ink); border: none; border-radius: 16px; padding: 26px 30px; display: flex; align-items: center; gap: 18px; position: relative; overflow: hidden; }
+  .future-note::before { content: ''; position: absolute; top: -60px; right: -40px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(139,109,255,0.28), transparent 70%); pointer-events: none; }
+  .future-note-icon { width: 42px; height: 42px; border-radius: 12px; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 19px; flex-shrink: 0; position: relative; }
+  .future-note h3 { font-family: var(--font); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 3px; position: relative; }
+  .future-note p { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.5; position: relative; }
   @media (max-width: 900px) { .courses-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 640px) { .courses-grid { grid-template-columns: 1fr; } .future-note { flex-direction: column; align-items: flex-start; } }
 
@@ -336,7 +337,6 @@
       <ul>
         <li><a href="syarat-ketentuan.html">Syarat & Ketentuan</a></li>
         <li><a href="kebijakan-privasi.html">Kebijakan Privasi</a></li>
-        <li><a href="kebijakan-pengembalian.html">Kebijakan Pengembalian Dana</a></li>
       </ul>
     </div>
   </div>
@@ -356,10 +356,13 @@
   (async () => {
     const { data: { session } } = await sbClient.auth.getSession();
     if (!session) return;
-    const name = session.user.user_metadata?.full_name || session.user.email.split('@')[0];
+    let profileRow = null;
+    try { const pr = await sbClient.from('profiles').select('full_name').eq('email', session.user.email).maybeSingle(); profileRow = pr.data; } catch (e) {}
+    const name = (profileRow && profileRow.full_name) || session.user.user_metadata?.full_name || session.user.email.split('@')[0];
+    const firstName = name.trim().split(/\s+/)[0];
     const pill = document.getElementById('navUserPill');
     if (pill) pill.style.display = 'flex';
-    const un = document.getElementById('navUname'); if (un) un.textContent = name;
+    const un = document.getElementById('navUname'); if (un) un.textContent = firstName;
     const ue = document.getElementById('navUemail'); if (ue) ue.textContent = session.user.email;
     const lb = document.getElementById('navLoginBtn');
     if (lb) { lb.textContent = 'Dashboard'; lb.href = 'dashboard.html'; }

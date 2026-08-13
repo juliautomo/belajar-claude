@@ -286,7 +286,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
   </button>
   <div class="nav-links" id="navLinks">
     <a href="#kursus" id="navKursusLink">Kursus</a>
-    <a href="login.html" id="navLoginBtn">Masuk</a>
+    <a href="login.html?next=index.html" id="navLoginBtn">Masuk</a>
     <div class="nav-user-pill" id="navUserPill" onclick="toggleUserMenu(event)">
       <div><span class="nav-uname" id="navUname"></span><span class="nav-uemail" id="navUemail"></span></div>
       <span class="nav-user-chevron">▾</span>
@@ -299,6 +299,11 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     </div>
   </div>
 </nav>
+<!-- Shown while marketingHome/loggedInHome are both still hidden pending the session/
+     enrollment checks below — without this, logged-in users briefly see just the nav
+     and footer with a large blank gap between them (reported as "looks weird" navigating
+     dashboard → index). Hidden by revealMarketing() and by the loggedInHome reveal. -->
+<div id="indexLoading" style="padding:180px 20px 160px;text-align:center;color:var(--ink-2);font-size:14px;">Memuat...</div>
 <div id="marketingHome" style="display:none;">
 <div class="hero">
   <div class="hero-grid">
@@ -341,7 +346,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     </div>
     <div class="course-grid-wrap reveal">
       <div class="course-lib-grid">
-        <div class="course-card-v2"><div class="ccv2-banner" style="background:linear-gradient(135deg,#C7CBFF,#EEF0FF);"><svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg"><line x1="20" y1="82" x2="210" y2="82" stroke="#111" stroke-width="2.5" opacity="0.25"/><rect x="46" y="52" width="30" height="28" rx="10" fill="#fff" stroke="#111" stroke-width="3"/><circle cx="61" cy="38" r="13" fill="#fff" stroke="#111" stroke-width="3"/><path d="M52 34 Q61 22 70 34" fill="none" stroke="#111" stroke-width="2.5"/><g class="lih-pen" style="transform-origin:78px 62px"><line x1="78" y1="62" x2="112" y2="54" stroke="#111" stroke-width="3" stroke-linecap="round"/><circle cx="112" cy="54" r="3.5" fill="#6C47FF"/></g><rect x="100" y="42" width="72" height="46" rx="6" fill="#fff" stroke="#111" stroke-width="2.5"/><line class="lih-scribble" x1="110" y1="55" x2="152" y2="55" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 4" opacity="0.6"/><line class="lih-scribble-2" x1="110" y1="65" x2="160" y2="65" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 4" opacity="0.6"/><line class="lih-scribble-3" x1="110" y1="75" x2="144" y2="75" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 4" opacity="0.6"/><g class="lih-sparkle" style="transform-origin:180px 34px"><path d="M180 26 L183 33 L190 34 L183 35 L180 42 L177 35 L170 34 L177 33 Z" fill="#6C47FF"/></g></svg></div><div class="ccv2-body"><span class="ccv2-badge badge-b">ALL ACCESS</span><h3>20 Prompt Dasar</h3><p>Prompt siap pakai untuk email, laporan, konten sosmed — langsung copy-paste.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><a href="prompt-gratis.html" class="ccv2-btn"><span class="lbl">Lihat</span><span>→</span></a></div></div></div>
+        <div class="course-card-v2"><div class="ccv2-banner" style="background:linear-gradient(135deg,#C7CBFF,#EEF0FF);"><svg class="lih-illustration" viewBox="5 10 205 90" xmlns="http://www.w3.org/2000/svg"><line x1="20" y1="82" x2="210" y2="82" stroke="#111" stroke-width="2.5" opacity="0.25"/><rect x="46" y="52" width="30" height="28" rx="10" fill="#fff" stroke="#111" stroke-width="3"/><circle cx="61" cy="38" r="13" fill="#fff" stroke="#111" stroke-width="3"/><path d="M52 34 Q61 22 70 34" fill="none" stroke="#111" stroke-width="2.5"/><g class="lih-pen" style="transform-origin:78px 62px"><line x1="78" y1="62" x2="112" y2="54" stroke="#111" stroke-width="3" stroke-linecap="round"/><circle cx="112" cy="54" r="3.5" fill="#6C47FF"/></g><rect x="100" y="42" width="72" height="46" rx="6" fill="#fff" stroke="#111" stroke-width="2.5"/><line class="lih-scribble" x1="110" y1="55" x2="152" y2="55" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 4" opacity="0.6"/><line class="lih-scribble-2" x1="110" y1="65" x2="160" y2="65" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 4" opacity="0.6"/><line class="lih-scribble-3" x1="110" y1="75" x2="144" y2="75" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 4" opacity="0.6"/><g class="lih-sparkle" style="transform-origin:180px 34px"><path d="M180 26 L183 33 L190 34 L183 35 L180 42 L177 35 L170 34 L177 33 Z" fill="#6C47FF"/></g></svg></div><div class="ccv2-body"><span class="ccv2-badge badge-b">ALL ACCESS</span><h3>20 Prompt Dasar</h3><p>Prompt siap pakai untuk email, laporan, konten sosmed — langsung copy-paste.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><a href="prompt-gratis.html" class="ccv2-btn"><span class="lbl">Lihat</span><span>→</span></a></div></div></div>
         <div class="course-card-v2"><div class="ccv2-banner" style="background:linear-gradient(135deg,#B7F0D6,#E6FBF0);"><svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg"><line class="lih-ground" x1="0" y1="84" x2="400" y2="84" stroke="#111" stroke-width="3" stroke-dasharray="10 10" opacity="0.25"/><circle cx="368" cy="20" r="11" fill="#FBD98A" stroke="#111" stroke-width="2"/><g stroke="#111" stroke-width="2" opacity="0.5"><line x1="368" y1="4" x2="368" y2="10"/><line x1="384" y1="12" x2="379" y2="16"/><line x1="390" y1="26" x2="383" y2="24"/></g><rect x="24" y="58" width="6" height="24" fill="#111" opacity="0.3"/><circle cx="27" cy="46" r="17" fill="#BFEAD1" stroke="#111" stroke-width="2" opacity="0.9"/><g class="lih-run-a"><rect x="150" y="44" width="34" height="30" rx="8" fill="#fff" stroke="#111" stroke-width="3"/><line x1="167" y1="44" x2="167" y2="34" stroke="#111" stroke-width="2.5"/><circle cx="167" cy="31" r="3.5" fill="#6C47FF"/><circle cx="159" cy="58" r="2.5" fill="#111"/><circle cx="175" cy="58" r="2.5" fill="#111"/><g class="lih-leg-a" style="transform-origin:158px 74px"><line x1="158" y1="74" x2="158" y2="88" stroke="#111" stroke-width="4" stroke-linecap="round"/></g><g class="lih-leg-b" style="transform-origin:176px 74px"><line x1="176" y1="74" x2="176" y2="88" stroke="#111" stroke-width="4" stroke-linecap="round"/></g></g><g class="lih-run-b"><ellipse cx="240" cy="66" rx="24" ry="11" fill="#fff" stroke="#111" stroke-width="3"/><circle cx="265" cy="58" r="10" fill="#fff" stroke="#111" stroke-width="3"/><path d="M260 50 L264 40 L268 50 Z" fill="#fff" stroke="#111" stroke-width="2"/><rect x="255" y="63" width="10" height="5" rx="2" fill="#6C47FF" opacity="0.85"/><g class="lih-tail" style="transform-origin:218px 62px"><path d="M218 62 Q206 50 212 42" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/></g><g class="lih-leg-b" style="transform-origin:228px 76px"><line x1="228" y1="76" x2="228" y2="88" stroke="#111" stroke-width="4" stroke-linecap="round"/></g><g class="lih-leg-a" style="transform-origin:250px 76px"><line x1="250" y1="76" x2="250" y2="88" stroke="#111" stroke-width="4" stroke-linecap="round"/></g></g></svg></div><div class="ccv2-body"><span class="ccv2-badge badge-b">ALL ACCESS</span><h3>Dasar Claude AI</h3><p>Dari nol sampai bisa pakai Claude untuk kebutuhan sehari-hari.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><a href="mulai-claude.html" class="ccv2-btn"><span class="lbl">Lihat</span><span>→</span></a></div></div></div>
         <div class="course-card-v2"><div class="ccv2-banner" style="background:linear-gradient(135deg,#FBD98A,#FDF0D5);"><svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg"><circle cx="352" cy="22" r="10" fill="none" stroke="#111" stroke-width="2" opacity="0.4"/><line x1="352" y1="22" x2="352" y2="15" stroke="#111" stroke-width="2" opacity="0.4"/><line x1="352" y1="22" x2="357" y2="24" stroke="#111" stroke-width="2" opacity="0.4"/><rect x="120" y="66" width="150" height="10" rx="4" fill="#fff" stroke="#111" stroke-width="2.5"/><line x1="135" y1="76" x2="135" y2="88" stroke="#111" stroke-width="2.5" opacity="0.4"/><line x1="255" y1="76" x2="255" y2="88" stroke="#111" stroke-width="2.5" opacity="0.4"/><circle cx="140" cy="46" r="12" fill="#fff" stroke="#111" stroke-width="2.5"/><path d="M126 66 Q140 54 154 66" fill="#fff" stroke="#111" stroke-width="2.5"/><circle cx="195" cy="40" r="12" fill="#fff" stroke="#111" stroke-width="2.5"/><path d="M181 66 Q195 50 209 66" fill="#fff" stroke="#111" stroke-width="2.5"/><rect x="180" y="55" width="30" height="11" rx="2" fill="#fff" stroke="#111" stroke-width="2"/><line class="lih-cursor" x1="185" y1="60" x2="185" y2="66" stroke="#6C47FF" stroke-width="2"/><line x1="190" y1="60" x2="204" y2="60" stroke="#111" stroke-width="1.5" opacity="0.4"/><circle cx="250" cy="46" r="12" fill="#fff" stroke="#111" stroke-width="2.5"/><path d="M236 66 Q250 54 264 66" fill="#fff" stroke="#111" stroke-width="2.5"/><g class="lih-bubble" style="transform-origin:140px 20px"><rect x="118" y="10" width="44" height="20" rx="8" fill="#fff" stroke="#111" stroke-width="2"/><path d="M134 30 L130 37 L140 30 Z" fill="#fff" stroke="#111" stroke-width="2"/><circle class="lih-dot1" cx="130" cy="20" r="2.2" fill="#6C47FF"/><circle class="lih-dot2" cx="140" cy="20" r="2.2" fill="#6C47FF"/><circle class="lih-dot3" cx="150" cy="20" r="2.2" fill="#6C47FF"/></g></svg></div><div class="ccv2-body"><span class="ccv2-badge badge-b">ALL ACCESS</span><h3>Produktivitas Kantor</h3><p>Hemat 3–5 jam kerja per minggu. Gmail, Sheets, Docs, Claude Projects.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><a href="produktivitas.html" class="ccv2-btn"><span class="lbl">Lihat</span><span>→</span></a></div></div></div>
         <div class="course-card-v2"><div class="ccv2-banner" style="background:linear-gradient(135deg,#FBC2D9,#FDE9F1);"><svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg"><line x1="60" y1="88" x2="320" y2="88" stroke="#111" stroke-width="2.5" opacity="0.2"/><g class="lih-sparkle" style="transform-origin:150px 24px"><path d="M150 17 L153 23 L159 24 L153 25 L150 31 L147 25 L141 24 L147 23 Z" fill="#6C47FF"/></g><circle cx="118" cy="38" r="12" fill="#fff" stroke="#111" stroke-width="3"/><path d="M107 33 Q118 20 129 33" fill="none" stroke="#111" stroke-width="2.5"/><path d="M100 86 Q100 54 118 50 Q136 54 136 86 Z" fill="#FBC2D9" stroke="#111" stroke-width="2.5"/><path d="M100 66 Q90 72 92 82" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/><circle cx="252" cy="42" r="12" fill="#fff" stroke="#111" stroke-width="3"/><path d="M243 88 Q243 60 252 56 Q261 60 261 88 Z" fill="#fff" stroke="#111" stroke-width="2.5"/><g class="lih-cam" style="transform-origin:280px 58px"><rect x="264" y="48" width="34" height="22" rx="4" fill="#fff" stroke="#111" stroke-width="3"/><rect x="274" y="42" width="10" height="7" rx="2" fill="#fff" stroke="#111" stroke-width="2.5"/><circle cx="281" cy="59" r="8" fill="none" stroke="#111" stroke-width="3"/><circle cx="281" cy="59" r="3.5" fill="#6C47FF"/></g><circle class="lih-flash" cx="281" cy="59" r="16" fill="#FFD84D" opacity="0"/></svg></div><div class="ccv2-body"><span class="ccv2-badge badge-b">ALL ACCESS</span><h3>Kreasi Konten Pemasaran</h3><p>Positioning, konten Instagram, copy iklan, sampai komunikasi pelanggan lewat WhatsApp.</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><a href="content-marketing.html" class="ccv2-btn"><span class="lbl">Lihat</span><span>→</span></a></div></div></div>
@@ -386,7 +391,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     <div class="course-lib-grid" id="lihCourseGrid"></div>
   </div>
 </div>
-<section id="komunitas" class="pricing-section">
+<section id="komunitas" class="pricing-section" style="display:none;">
   <div class="container">
     <div class="pricing-card">
       <div>
@@ -443,7 +448,6 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
       <ul>
         <li><a href="syarat-ketentuan.html">Syarat & Ketentuan</a></li>
         <li><a href="kebijakan-privasi.html">Kebijakan Privasi</a></li>
-        <li><a href="kebijakan-pengembalian.html">Kebijakan Pengembalian Dana</a></li>
       </ul>
     </div>
   </div>
@@ -456,6 +460,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
 <script src="supabase-config.js"></script>
 <script src="backend-config.js"></script>
 <script src="login-modal.js"></script>
+<script src="course-illustrations.js"></script>
 <script>
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
@@ -538,96 +543,8 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
   // Hand-doodled animated scene banners for the live courses — replaces the plain emoji
   // icon with a small illustrated, gently-animated scene per course (pen writing, robot+dog
   // running, a meeting, a photoshoot). Pastel backgrounds reuse the .bnr-1..4 gradient palette.
-  var LIH_BG = {
-    'prompt-gratis':     'linear-gradient(135deg,#C7CBFF,#EEF0FF)',
-    'mulai-claude':      'linear-gradient(135deg,#B7F0D6,#E6FBF0)',
-    'produktivitas':     'linear-gradient(135deg,#FBD98A,#FDF0D5)',
-    'content-marketing': 'linear-gradient(135deg,#FBC2D9,#FDE9F1)',
-    'strategi-marketing':'linear-gradient(135deg,#A8D8FF,#E4F3FF)',
-    'analisis-data':     'linear-gradient(135deg,#9FE8D8,#E3FBF5)'
-  };
-  var LIH_ILLUSTRATIONS = {
-    'prompt-gratis': '<svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">' +
-      '<line x1="20" y1="82" x2="210" y2="82" stroke="#111" stroke-width="2.5" opacity="0.25"/>' +
-      '<rect x="46" y="52" width="30" height="28" rx="10" fill="#fff" stroke="#111" stroke-width="3"/>' +
-      '<circle cx="61" cy="38" r="13" fill="#fff" stroke="#111" stroke-width="3"/>' +
-      '<path d="M52 34 Q61 22 70 34" fill="none" stroke="#111" stroke-width="2.5"/>' +
-      '<g class="lih-pen" style="transform-origin:78px 62px"><line x1="78" y1="62" x2="112" y2="54" stroke="#111" stroke-width="3" stroke-linecap="round"/><circle cx="112" cy="54" r="3.5" fill="#6C47FF"/></g>' +
-      '<rect x="100" y="42" width="72" height="46" rx="6" fill="#fff" stroke="#111" stroke-width="2.5"/>' +
-      '<line class="lih-scribble" x1="110" y1="55" x2="152" y2="55" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 4" opacity="0.6"/>' +
-      '<line class="lih-scribble-2" x1="110" y1="65" x2="160" y2="65" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 4" opacity="0.6"/>' +
-      '<line class="lih-scribble-3" x1="110" y1="75" x2="144" y2="75" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 4" opacity="0.6"/>' +
-      '<g class="lih-sparkle" style="transform-origin:180px 34px"><path d="M180 26 L183 33 L190 34 L183 35 L180 42 L177 35 L170 34 L177 33 Z" fill="#6C47FF"/></g>' +
-      '</svg>',
-    'mulai-claude': '<svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">' +
-      '<line class="lih-ground" x1="0" y1="84" x2="400" y2="84" stroke="#111" stroke-width="3" stroke-dasharray="10 10" opacity="0.25"/>' +
-      '<circle cx="368" cy="20" r="11" fill="#FBD98A" stroke="#111" stroke-width="2"/>' +
-      '<g stroke="#111" stroke-width="2" opacity="0.5"><line x1="368" y1="4" x2="368" y2="10"/><line x1="384" y1="12" x2="379" y2="16"/><line x1="390" y1="26" x2="383" y2="24"/></g>' +
-      '<rect x="24" y="58" width="6" height="24" fill="#111" opacity="0.3"/>' +
-      '<circle cx="27" cy="46" r="17" fill="#BFEAD1" stroke="#111" stroke-width="2" opacity="0.9"/>' +
-      '<g class="lih-run-a"><rect x="150" y="44" width="34" height="30" rx="8" fill="#fff" stroke="#111" stroke-width="3"/>' +
-      '<line x1="167" y1="44" x2="167" y2="34" stroke="#111" stroke-width="2.5"/><circle cx="167" cy="31" r="3.5" fill="#6C47FF"/>' +
-      '<circle cx="159" cy="58" r="2.5" fill="#111"/><circle cx="175" cy="58" r="2.5" fill="#111"/>' +
-      '<g class="lih-leg-a" style="transform-origin:158px 74px"><line x1="158" y1="74" x2="158" y2="88" stroke="#111" stroke-width="4" stroke-linecap="round"/></g>' +
-      '<g class="lih-leg-b" style="transform-origin:176px 74px"><line x1="176" y1="74" x2="176" y2="88" stroke="#111" stroke-width="4" stroke-linecap="round"/></g></g>' +
-      '<g class="lih-run-b"><ellipse cx="240" cy="66" rx="24" ry="11" fill="#fff" stroke="#111" stroke-width="3"/>' +
-      '<circle cx="265" cy="58" r="10" fill="#fff" stroke="#111" stroke-width="3"/>' +
-      '<path d="M260 50 L264 40 L268 50 Z" fill="#fff" stroke="#111" stroke-width="2"/>' +
-      '<rect x="255" y="63" width="10" height="5" rx="2" fill="#6C47FF" opacity="0.85"/>' +
-      '<g class="lih-tail" style="transform-origin:218px 62px"><path d="M218 62 Q206 50 212 42" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/></g>' +
-      '<g class="lih-leg-b" style="transform-origin:228px 76px"><line x1="228" y1="76" x2="228" y2="88" stroke="#111" stroke-width="4" stroke-linecap="round"/></g>' +
-      '<g class="lih-leg-a" style="transform-origin:250px 76px"><line x1="250" y1="76" x2="250" y2="88" stroke="#111" stroke-width="4" stroke-linecap="round"/></g></g>' +
-      '</svg>',
-    'produktivitas': '<svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">' +
-      '<circle cx="352" cy="22" r="10" fill="none" stroke="#111" stroke-width="2" opacity="0.4"/>' +
-      '<line x1="352" y1="22" x2="352" y2="15" stroke="#111" stroke-width="2" opacity="0.4"/><line x1="352" y1="22" x2="357" y2="24" stroke="#111" stroke-width="2" opacity="0.4"/>' +
-      '<rect x="120" y="66" width="150" height="10" rx="4" fill="#fff" stroke="#111" stroke-width="2.5"/>' +
-      '<line x1="135" y1="76" x2="135" y2="88" stroke="#111" stroke-width="2.5" opacity="0.4"/><line x1="255" y1="76" x2="255" y2="88" stroke="#111" stroke-width="2.5" opacity="0.4"/>' +
-      '<circle cx="140" cy="46" r="12" fill="#fff" stroke="#111" stroke-width="2.5"/><path d="M126 66 Q140 54 154 66" fill="#fff" stroke="#111" stroke-width="2.5"/>' +
-      '<circle cx="195" cy="40" r="12" fill="#fff" stroke="#111" stroke-width="2.5"/><path d="M181 66 Q195 50 209 66" fill="#fff" stroke="#111" stroke-width="2.5"/>' +
-      '<rect x="180" y="55" width="30" height="11" rx="2" fill="#fff" stroke="#111" stroke-width="2"/>' +
-      '<line class="lih-cursor" x1="185" y1="60" x2="185" y2="66" stroke="#6C47FF" stroke-width="2"/><line x1="190" y1="60" x2="204" y2="60" stroke="#111" stroke-width="1.5" opacity="0.4"/>' +
-      '<circle cx="250" cy="46" r="12" fill="#fff" stroke="#111" stroke-width="2.5"/><path d="M236 66 Q250 54 264 66" fill="#fff" stroke="#111" stroke-width="2.5"/>' +
-      '<g class="lih-bubble" style="transform-origin:140px 20px"><rect x="118" y="10" width="44" height="20" rx="8" fill="#fff" stroke="#111" stroke-width="2"/>' +
-      '<path d="M134 30 L130 37 L140 30 Z" fill="#fff" stroke="#111" stroke-width="2"/>' +
-      '<circle class="lih-dot1" cx="130" cy="20" r="2.2" fill="#6C47FF"/><circle class="lih-dot2" cx="140" cy="20" r="2.2" fill="#6C47FF"/><circle class="lih-dot3" cx="150" cy="20" r="2.2" fill="#6C47FF"/></g>' +
-      '</svg>',
-    'content-marketing': '<svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">' +
-      '<line x1="60" y1="88" x2="320" y2="88" stroke="#111" stroke-width="2.5" opacity="0.2"/>' +
-      '<g class="lih-sparkle" style="transform-origin:150px 24px"><path d="M150 17 L153 23 L159 24 L153 25 L150 31 L147 25 L141 24 L147 23 Z" fill="#6C47FF"/></g>' +
-      '<circle cx="118" cy="38" r="12" fill="#fff" stroke="#111" stroke-width="3"/><path d="M107 33 Q118 20 129 33" fill="none" stroke="#111" stroke-width="2.5"/>' +
-      '<path d="M100 86 Q100 54 118 50 Q136 54 136 86 Z" fill="#FBC2D9" stroke="#111" stroke-width="2.5"/>' +
-      '<path d="M100 66 Q90 72 92 82" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/>' +
-      '<circle cx="252" cy="42" r="12" fill="#fff" stroke="#111" stroke-width="3"/>' +
-      '<path d="M243 88 Q243 60 252 56 Q261 60 261 88 Z" fill="#fff" stroke="#111" stroke-width="2.5"/>' +
-      '<g class="lih-cam" style="transform-origin:280px 58px"><rect x="264" y="48" width="34" height="22" rx="4" fill="#fff" stroke="#111" stroke-width="3"/>' +
-      '<rect x="274" y="42" width="10" height="7" rx="2" fill="#fff" stroke="#111" stroke-width="2.5"/>' +
-      '<circle cx="281" cy="59" r="8" fill="none" stroke="#111" stroke-width="3"/><circle cx="281" cy="59" r="3.5" fill="#6C47FF"/></g>' +
-      '<circle class="lih-flash" cx="281" cy="59" r="16" fill="#FFD84D" opacity="0"/>' +
-      '</svg>',
-    'strategi-marketing': '<svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">' +
-      '<line x1="60" y1="88" x2="320" y2="88" stroke="#111" stroke-width="2.5" opacity="0.2"/>' +
-      '<polyline points="90,78 130,58 170,66 210,36 250,44 290,20" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>' +
-      '<circle cx="90" cy="78" r="4" fill="#6C47FF"/><circle cx="130" cy="58" r="4" fill="#6C47FF"/><circle cx="170" cy="66" r="4" fill="#6C47FF"/>' +
-      '<circle cx="210" cy="36" r="4" fill="#6C47FF"/><circle cx="250" cy="44" r="4" fill="#6C47FF"/><circle cx="290" cy="20" r="4" fill="#6C47FF"/>' +
-      '<rect x="300" y="46" width="26" height="42" rx="4" fill="#fff" stroke="#111" stroke-width="2.5"/>' +
-      '<line x1="306" y1="54" x2="320" y2="54" stroke="#111" stroke-width="2" opacity="0.4"/><line x1="306" y1="62" x2="320" y2="62" stroke="#111" stroke-width="2" opacity="0.4"/><line x1="306" y1="70" x2="316" y2="70" stroke="#111" stroke-width="2" opacity="0.4"/>' +
-      '</svg>',
-    'analisis-data': '<svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">' +
-      '<line x1="100" y1="88" x2="290" y2="88" stroke="#111" stroke-width="2.5" opacity="0.2"/>' +
-      '<rect x="120" y="68" width="22" height="20" rx="3" fill="#fff" stroke="#111" stroke-width="2.5"/>' +
-      '<rect x="154" y="56" width="22" height="32" rx="3" fill="#fff" stroke="#111" stroke-width="2.5"/>' +
-      '<rect x="188" y="44" width="22" height="44" rx="3" fill="#fff" stroke="#111" stroke-width="2.5"/>' +
-      '<rect x="222" y="32" width="22" height="56" rx="3" fill="#fff" stroke="#111" stroke-width="2.5"/>' +
-      '<circle class="lih-dot1" cx="131" cy="58" r="2.5" fill="#6C47FF"/>' +
-      '<circle class="lih-dot2" cx="165" cy="46" r="2.5" fill="#6C47FF"/>' +
-      '<circle class="lih-dot3" cx="199" cy="34" r="2.5" fill="#6C47FF"/>' +
-      '<g class="lih-bubble" style="transform-origin:255px 46px"><circle cx="252" cy="44" r="15" fill="none" stroke="#111" stroke-width="3"/>' +
-      '<circle cx="252" cy="44" r="4" fill="#6C47FF"/>' +
-      '<line x1="263" y1="55" x2="272" y2="64" stroke="#111" stroke-width="3.5" stroke-linecap="round"/></g>' +
-      '<g class="lih-sparkle" style="transform-origin:300px 24px"><path d="M300 16 L303 23 L310 24 L303 25 L300 32 L297 25 L290 24 L297 23 Z" fill="#6C47FF"/></g>' +
-      '</svg>'
-  };
+  // LIH_BG / LIH_ILLUSTRATIONS now live in course-illustrations.js (loaded above),
+  // shared with dashboard.html's explore carousel so both pages show identical artwork.
 
   // The pre-login/non-all-access marketing page (#kursus) statically lists the 4 live
   // courses (pre-rendered HTML, unchanged), but the coming-soon teasers used to be a
@@ -660,6 +577,20 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     marketingRevealed = true;
     var mh = document.getElementById('marketingHome');
     if (mh) mh.style.display = '';
+    // #komunitas (the bottom pricing/CTA card) used to have no default-hidden state of
+    // its own, unlike #marketingHome/#loggedInHome — so it rendered immediately on every
+    // load, static and unpersonalized, while the rest of the page sat hidden waiting on
+    // the session/enrollment checks below. That's the "weird card by itself" flash Julia
+    // saw navigating dashboard → index: nav + this one card + footer, big blank gap
+    // between them, then everything else popping in and shifting the layout once ready.
+    // Now it starts hidden too and reveals together with marketingHome, already fully
+    // personalized. All Access holders never call revealMarketing() (loggedInHome shows
+    // instead), so #komunitas correctly stays hidden for them the whole time — the
+    // separate explicit hide further down is now just a harmless no-op safety net.
+    var km = document.getElementById('komunitas');
+    if (km) km.style.display = '';
+    var il = document.getElementById('indexLoading');
+    if (il) il.style.display = 'none';
   }
   // Safety net: if the auth check hangs or a script fails to load entirely (ad
   // blocker, network hiccup, Supabase outage), never leave a real visitor staring
@@ -672,30 +603,60 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
   // directly — the preview page is where the actual "Mulai Kursus" enroll click lives.
   (async function() {
     // Live overrides from admin.html's Visibilitas Kursus toggles — fired in parallel
-    // with the session check below instead of awaited first. This used to run before
-    // getSession(), which meant every page load — logged in or not — paid for an
-    // extra network round trip before login state was even checked, and was the main
-    // cause of the logged-out homepage visibly flashing before switching to the
-    // logged-in view. It only affects the below-the-fold "coming soon" teaser cards,
-    // not which home page shows, so it doesn't need to block anything.
-    try {
-      sbClient.from('course_visibility').select('*').then(function(vis) {
-        (vis.data || []).forEach(function(row) {
-          if (!LIH_COURSES[row.course_slug]) return;
-          LIH_COURSES[row.course_slug].hidden = !!row.hidden;
-          LIH_COURSES[row.course_slug].comingSoon = !!row.coming_soon;
-          LIH_COURSES[row.course_slug].visible = true;
-        });
-      }).catch(function(){}).then(renderKursusComingSoon);
-    } catch (e) { renderKursusComingSoon(); }
+    // with the session check below instead of awaited first, so a slow visibility fetch
+    // never delays login-state personalization. Captured in visibilityPromise so the
+    // All Access holders' course grid further down can explicitly wait for it before
+    // building itself — it mutates the same LIH_COURSES object that grid reads
+    // hidden/comingSoon/visible from, so if the grid rendered before this fetch
+    // resolved, it would show whatever admin.html-hidden courses were still in their
+    // stale default state. That race used to be unlikely to lose (this fetch usually
+    // won since the session-check chain was 3 sequential round trips), but got much
+    // more likely to actually happen once that chain was parallelized down to ~1 round
+    // trip — which is what caused hidden "coming soon" courses to reappear.
+    var visibilityPromise = (function() {
+      try {
+        return sbClient.from('course_visibility').select('*').then(function(vis) {
+          (vis.data || []).forEach(function(row) {
+            if (!LIH_COURSES[row.course_slug]) return;
+            LIH_COURSES[row.course_slug].hidden = !!row.hidden;
+            LIH_COURSES[row.course_slug].comingSoon = !!row.coming_soon;
+            LIH_COURSES[row.course_slug].visible = true;
+          });
+        }).catch(function(){});
+      } catch (e) { return Promise.resolve(); }
+    })();
+    visibilityPromise.then(renderKursusComingSoon);
 
     try {
       var r = await sbClient.auth.getSession();
       var s = r.data.session;
       if (s) {
-        var name = (s.user.user_metadata && s.user.user_metadata.full_name) || s.user.email.split('@')[0];
+        // profiles/enrollments/module_completions only need s.user.email, not each
+        // other's results — fire all three Supabase queries together via
+        // Promise.allSettled instead of the three sequential round trips this used to
+        // be (profile → enrollments → module_completions). module_completions is now
+        // fetched unconditionally even though it's only used a few lines down for All
+        // Access holders (found out from the enrollments result) — firing it eagerly
+        // and ignoring it otherwise is cheaper than paying for a 3rd round trip only
+        // when needed. Passing the query builders directly into the array (rather than
+        // assigning to variables and awaiting each individually later) is what actually
+        // makes this concurrent — supabase-js builders are lazy and don't hit the
+        // network until something calls .then() on them, which Promise.allSettled does
+        // for every item up front.
+        var settled = await Promise.allSettled([
+          sbClient.from('profiles').select('full_name').eq('email', s.user.email).maybeSingle(),
+          sbClient.from('enrollments').select('course_slug,course_name,last_accessed_at').eq('email', s.user.email),
+          sbClient.from('module_completions').select('course_slug,module_num').eq('email', s.user.email)
+        ]);
+        // Same profiles.full_name preference as community.html/profile.html — without
+        // this, the homepage greeting shows the raw email local-part even when the
+        // user has set a real display name in Profil Kamu.
+        var profileRow = (settled[0].status === 'fulfilled' && settled[0].value.data) || null;
+        var name = (profileRow && profileRow.full_name) || (s.user.user_metadata && s.user.user_metadata.full_name) || s.user.email.split('@')[0];
+        // First-name-only, matching dashboard.html/profile.html/community.html.
+        var firstName = name.trim().split(/\s+/)[0];
         document.getElementById('navUserPill').style.display = 'flex';
-        document.getElementById('navUname').textContent  = name;
+        document.getElementById('navUname').textContent  = firstName;
         document.getElementById('navUemail').textContent = s.user.email;
         var ADMIN_EMAILS = ['julia.utomo@gmail.com', 'tiffany.utomo@gmail.com'];
         if (ADMIN_EMAILS.indexOf(s.user.email.toLowerCase()) !== -1) {
@@ -710,7 +671,8 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         if (headline) headline.innerHTML = 'Selamat datang kembali, <em>' + name + '</em>';
         // Check enrollment for subtext
         try {
-          var enr = await sbClient.from('enrollments').select('course_slug,course_name,last_accessed_at').eq('email', s.user.email);
+          if (settled[1].status !== 'fulfilled') { throw settled[1].reason; } // same fallback as an enrollments-fetch failure always had: catch below calls revealMarketing()
+          var enr = settled[1].value;
           var paid = (enr.data || []).filter(function(e){ return e.course_slug !== 'prompt-gratis'; });
           var hasAllAccess = paid.some(function(e){ return e.course_slug === 'all-access'; });
           if (subtext) subtext.textContent = hasAllAccess
@@ -726,6 +688,8 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
           if (hasAllAccess) {
             marketingRevealed = true; // marketingHome starts hidden — never reveal it for All Access holders
             document.getElementById('loggedInHome').style.display = 'block';
+            var ilAA = document.getElementById('indexLoading');
+            if (ilAA) ilAA.style.display = 'none';
             // #kursus lives inside marketingHome, which is now hidden — retarget
             // the nav "Kursus" link to the course grid that's actually visible
             // in loggedInHome, otherwise the link silently does nothing.
@@ -743,7 +707,11 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
             if (lihNameEl) lihNameEl.textContent = name.split(' ')[0];
 
             var enrolledSlugs = new Set((enr.data || []).map(function(e){ return e.course_slug; }));
-            var progRes = await sbClient.from('module_completions').select('course_slug,module_num').eq('email', s.user.email);
+            // Already fetched above alongside profile/enrollments — settled[2] falls
+            // back to an empty result (rather than throwing/falling back to the marketing
+            // page) if this one specific query failed, so a module_completions hiccup
+            // never hides the whole logged-in home for an actual All Access holder.
+            var progRes = settled[2].status === 'fulfilled' ? settled[2].value : { data: [] };
             var progressRows = progRes.data || [];
             var progressMap = {};
             progressRows.forEach(function(row) {
@@ -821,6 +789,11 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
             // redundant with the banner above — hide it for All Access holders.
             var komunitasEl = document.getElementById('komunitas');
             if (komunitasEl) komunitasEl.style.display = 'none';
+
+            // Make sure admin.html's Visibilitas Kursus overrides have actually landed
+            // on LIH_COURSES before reading hidden/comingSoon/visible below — see the
+            // comment where visibilityPromise is created for why this matters now.
+            await visibilityPromise;
 
             var gridHtml = '';
             // Coming-soon courses stay hidden here too, same rule as all-access.html's
