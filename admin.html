@@ -212,6 +212,17 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
         <div class="current-indicator" id="priceIndicator"></div>
         <div class="status" id="priceStatus"></div>
       </div>
+      <div class="card">
+        <h2>Riwayat Perubahan Harga</h2>
+        <p class="hint">Catatan otomatis setiap kali harga atau diskon disimpan, terbaru di atas.</p>
+        <table class="matrix-table" id="pricingHistoryTable">
+          <thead>
+            <tr><th>Tanggal</th><th>Harga Normal</th><th>Harga Diskon</th><th>Periode Diskon</th><th>Diubah oleh</th></tr>
+          </thead>
+          <tbody id="pricingHistoryBody"></tbody>
+        </table>
+        <div id="pricingHistoryEmpty" class="hint" style="display:none;">Belum ada riwayat perubahan.</div>
+      </div>
     </div>
 
     <!-- Panel: Course Content -->
@@ -485,6 +496,7 @@ async function ensureFreshSession() {
 let activeCourse = COURSES[0].slug;
 let dataCache = { resources: [], videos: [], ppts: [], docs: [], visibility: [] };
 let pricingCache = null;
+let pricingHistoryCache = [];
 let socialCache = null;
 
 function showState(state) {
@@ -536,6 +548,7 @@ async function loadAllData() {
   var pptsRes = await sbClient.from('module_ppts').select('*').order('course_slug').order('module_num');
   var docsRes = await sbClient.from('module_documents').select('*').order('course_slug').order('module_num').order('created_at');
   var pricingRes = await sbClient.from('course_pricing').select('*').eq('course_slug', 'all-access').maybeSingle();
+  var pricingHistoryRes = await sbClient.from('course_pricing_history').select('*').eq('course_slug', 'all-access').order('changed_at', { ascending: false }).limit(20);
   var socialRes = await sbClient.from('social_links').select('*').eq('id', 'main').maybeSingle();
   var visibilityRes = await sbClient.from('course_visibility').select('*');
   dataCache.resources = resourcesRes.data || [];
@@ -544,6 +557,7 @@ async function loadAllData() {
   dataCache.docs = docsRes.data || [];
   dataCache.visibility = visibilityRes.data || [];
   pricingCache = pricingRes.data || null;
+  pricingHistoryCache = pricingHistoryRes.data || [];
   socialCache = socialRes.data || null;
 }
 
@@ -673,6 +687,7 @@ function switchCourse(slug) {
 
 function renderAll() {
   renderPricing();
+  renderPricingHistory();
   renderCourseTabs();
   renderPdfRow();
   renderMatrix();
@@ -723,6 +738,30 @@ function renderPricing() {
   }
 }
 
+function renderPricingHistory() {
+  var body = document.getElementById('pricingHistoryBody');
+  var empty = document.getElementById('pricingHistoryEmpty');
+  var table = document.getElementById('pricingHistoryTable');
+  if (!pricingHistoryCache || !pricingHistoryCache.length) {
+    table.style.display = 'none';
+    empty.style.display = 'block';
+    return;
+  }
+  table.style.display = '';
+  empty.style.display = 'none';
+  body.innerHTML = pricingHistoryCache.map(function (h) {
+    var when = new Date(h.changed_at).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
+    var base = 'Rp ' + Number(h.base_price).toLocaleString('id-ID');
+    var disc = h.discount_price != null ? 'Rp ' + Number(h.discount_price).toLocaleString('id-ID') : '—';
+    var period = '—';
+    if (h.discount_start || h.discount_end) {
+      var fmt = function (iso) { return iso ? new Date(iso).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) : '?'; };
+      period = fmt(h.discount_start) + ' – ' + fmt(h.discount_end);
+    }
+    return '<tr><td>' + when + '</td><td>' + base + '</td><td>' + disc + '</td><td>' + period + '</td><td>' + escapeHtml(h.changed_by) + '</td></tr>';
+  }).join('');
+}
+
 async function savePricing() {
   var _sess = await ensureFreshSession();
   if (!_sess) return;
@@ -760,6 +799,22 @@ async function savePricing() {
     if (res.error) throw res.error;
     pricingCache = payload;
     renderPricing();
+    try {
+      var histRow = {
+        course_slug: payload.course_slug,
+        base_price: payload.base_price,
+        discount_price: payload.discount_price,
+        discount_start: payload.discount_start,
+        discount_end: payload.discount_end,
+        changed_by: payload.updated_by,
+        changed_at: new Date().toISOString(),
+      };
+      var histRes = await sbClient.from('course_pricing_history').insert(histRow);
+      if (!histRes.error) {
+        pricingHistoryCache.unshift(histRow);
+        renderPricingHistory();
+      }
+    } catch (histErr) { console.error('Gagal mencatat riwayat harga:', histErr); }
     statusEl.className = 'status show success';
     statusEl.textContent = 'Harga tersimpan ✓ — langsung berlaku di all-access.html dan checkout.';
   } catch (e) {

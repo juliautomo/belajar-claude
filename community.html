@@ -276,12 +276,14 @@ async function _init(){
   }
 
   var metaName = (session.user.user_metadata && session.user.user_metadata.full_name) || null;
+  var profileUsername = null;
   var profileName = null;
   try {
-    var pr = await sbClient.from('profiles').select('full_name').eq('email', currentEmail).maybeSingle();
+    var pr = await sbClient.from('profiles').select('full_name, username').eq('email', currentEmail).maybeSingle();
+    profileUsername = pr.data && pr.data.username;
     profileName = pr.data && pr.data.full_name;
   } catch(e) {}
-  currentAuthorName = profileName || metaName || currentEmail.split('@')[0];
+  currentAuthorName = profileUsername || profileName || metaName || currentEmail.split('@')[0];
 
   var joinDate = new Date(session.user.created_at).toLocaleDateString('id-ID', {month:'long', year:'numeric'});
   document.getElementById('navAvatar').textContent = getInitials(currentAuthorName);
