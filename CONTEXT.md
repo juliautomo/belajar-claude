@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 13, 2026 (checkpoint 193)_
+_Last updated: August 13, 2026 (checkpoint 194)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2727,6 +2727,22 @@ Two asks from a screenshot of the admin Pricing panel: "can the username be used
 **Verified**: `ci-check.js` clean. Confirmed via Supabase MCP that the migration applied successfully to production project `ctqtdqbsucbhikwnagvl`. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes to either file.
 
 **Commits**: `belajar-claude`: `4d954ea` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 194, August 13, 2026): community.html display-name split (full name vs username); onboarding gate forces profile completion before dashboard; free-text "Lainnya" for occupation/goal
+
+**Status: pushed to `dev` only.**
+
+Two follow-up rounds of feedback on top of Checkpoint 193's community-username change.
+
+**Round 1 — community.html was too aggressive**: Checkpoint 193 made `currentAuthorName` (used for *both* the sidebar/avatar display *and* the value saved into new posts/comments) prefer `profiles.username`. Julia's screenshots showed this also flipped the community sidebar itself to show the username ("jul") instead of the full name ("julia utomo") — not intended; only posts/comments should show the username. Split into two variables: `displayFullName` (full_name → user_metadata → email prefix, used for sidebar/avatar/greeting, matching every other page) and `currentAuthorName` (username → displayFullName, used only for the `author_name` written into `community_posts`/`community_comments`). Also added a hint under the Username field in `profile.html`: "Nama ini yang akan ditampilkan di Komunitas."
+
+**Round 2 — onboarding gate + free-text "Lainnya"**: Two asks from a screenshot of the profile page's role/goal question. (1) New users should be made to fill out their profile (role + goal) the first time they land on the dashboard, e.g. right after a purchase. `dashboard.html`'s `_init()` now checks `userProfile.role`/`userProfile.goal` right after the `profiles` fetch — if either is missing, redirects to `profile.html?onboarding=1` before rendering anything else. That page shows a purple banner explaining why, changes the save button to "Simpan & Lanjutkan ke Dashboard", requires both fields before allowing save, and redirects back to `dashboard.html` on success. Existing users who already have both fields set never see this — it only fires once, the first time either is missing. (2) Both the role ("Kamu saat ini sebagai apa?") and goal ("Apa tujuan utama...") option groups now have a "Lainnya" button that reveals a free-text input; typing directly sets `answers.role`/`answers.goal` to the typed text (no schema change — the DB column already just holds text, and on reload anything that isn't one of the known preset values is treated as custom text and restored into the Lainnya input automatically).
+
+**Verified**: `ci-check.js` clean on both pushes. Diffed `origin/dev` against the local mount before each push — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `9c0299c`, `0078741` (`dev` only).
 
 ---
 
