@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 13, 2026 (checkpoint 190)_
+_Last updated: August 13, 2026 (checkpoint 191)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2677,6 +2677,24 @@ Julia received her Duitku production merchant approval (merchant code `D24113`, 
 **Not yet done**: an actual real end-to-end test purchase to confirm the full flow (webhook → Supabase enrollment → access email) works against the real merchant account, not just that the mode flag is correct. Worth doing before telling customers it's live, even though the underlying webhook code path is unchanged from what's been working in sandbox for weeks.
 
 **Commits**: none — this was entirely Railway/Duitku dashboard configuration, no repo changes.
+
+---
+
+## SHIPPED (Checkpoint 191, August 13, 2026): Tiffany's community feed + admin Dashboard link found already merged to `main` directly by her; refund policy retracted; FAQ payment/community answers updated
+
+**Status: pushed to `dev`** (the two FAQ/legal changes). The community-feed merge to `main` required no action from me — already done.
+
+Julia asked to push Tiffany's community feed + admin Dashboard-link work to `main` (quoting back the "her call when to merge" line from my own status summary). Checked first rather than re-doing it blind: Tiffany had already merged `dev` into `main` herself on Aug 11 13:42 (commit `a819878`, direct git access, not through me). Verified the merge is clean — `ci-check.js` passes on `main`, the diff only added the one Dashboard-link line to `admin.html`, and all my PDF-fix/Duitku-cutover code is untouched. Nothing to push; told Julia it was already live.
+
+**Refund policy retracted** (Julia's call, in response to a screenshot of `syarat-ketentuan.html`'s section 5): rather than finally settle the placeholder 7-day/under-20%-progress refund numbers that had been flagged for her review since Checkpoint 53 and never confirmed, she chose to drop the commitment entirely. Removed section 5 "Kebijakan Pengembalian Dana" from `syarat-ketentuan.html`, renumbered sections 6→5 through 10→9. Removed the "Kebijakan Pengembalian Dana" footer Legal link from the other 10 pages that had it (`index.html`, `all-access.html`, `content-marketing.html`, `mulai-claude.html`, `produktivitas.html`, `prompt-gratis.html`, `strategi-marketing.html`, `faq.html`, `kebijakan-privasi.html`, plus its own self-link). Converted `kebijakan-pengembalian.html` itself into a redirect stub pointing to `syarat-ketentuan.html`, matching the existing `paket.html` pattern, so any bookmarked/indexed links land somewhere real instead of 404ing or a dead orphan page.
+
+**FAQ payment-methods answer corrected** (from a screenshot of the live FAQ page): the old copy claimed "QRIS dan kartu kredit" only, which was never accurate — Duitku supports far more than that. Updated to name Duitku explicitly and describe general method categories (bank transfer/VA, e-wallet, QRIS, card) rather than an exhaustive list, since exact enabled methods are a merchant-dashboard setting that could change without a corresponding code update — deliberately chose the lower-maintenance framing over trying to mirror Duitku's exact current config.
+
+**FAQ community answer updated**: replaced the stale "we're still building it, stay tuned" copy (predates Tiffany's community feed shipping) with copy reflecting it now exists, member-only. Investigated what "member-only" actually means technically before writing this — `community.html`'s access gate (`_init()`, checked via `sbClient.auth.getSession()`) and its RLS policies (`sql/community-feed.sql`) both only require *being logged in*, not an actual course purchase. This is still accurate framing given self-serve signup was removed back in the Aug 3 cleanup pass — in the current model, having an account effectively does mean being a paying member, since accounts are no longer created any other way.
+
+**Verified**: `ci-check.js` clean (29 HTML, 5 JS, 25 local refs — one fewer than before, matching the removed footer links). Confirmed zero remaining references to `kebijakan-pengembalian` anywhere in the codebase's HTML content after the change (`grep -rl` came back empty).
+
+**Commits**: `belajar-claude`: `3fc127f` (`dev` only — legal/FAQ copy, not deploy-urgent, will go to `main` next time Julia asks for a push).
 
 ---
 
