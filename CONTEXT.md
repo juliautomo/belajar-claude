@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 13, 2026 (checkpoint 206)_
+_Last updated: August 13, 2026 (checkpoint 207)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2899,6 +2899,20 @@ Three items from a dashboard screenshot. (1) The "← Beranda" link looked missi
 **Verified**: `ci-check.js` clean. Confirmed via grep that each course's sales page already has working enroll-on-page logic before removing the dashboard's duplicate path. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
 
 **Commits**: `belajar-claude`: `638d2f3` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 207, August 13, 2026): Profile filled-field styling; Beranda link added to Komunitas/Profil headers; dev-purchase emails now link to a dev hostname instead of production
+
+**Status: pushed to `dev` only.**
+
+Three items. (1) `profile.html`'s form fields (Nama Lengkap, Username, Email) only turned white on `:focus`, staying grey the rest of the time even when filled in — added `.field-input:not(:placeholder-shown){background:#fff;}` so any field with actual content shows white regardless of focus. Works for Nama Lengkap and Username (both have a `placeholder` attribute, so the CSS pseudo-class correctly tracks "empty vs has a value"); the disabled Email field has no `placeholder` attribute at all, so `:not(:placeholder-shown)` matches it unconditionally — it's always white, which is correct since it's always populated. (2) Added the same "← Beranda" nav link (introduced on `dashboard.html` in Checkpoint 200) to `community.html` and `profile.html`'s headers, for consistency across all three logged-in pages.
+
+(3) The bigger one: Julia asked whether dev-triggered purchase emails could link to a dev site instead of hardcoded production URLs. Investigated the actual Cloudflare setup — there is only **one** Worker deployment (`belajar-claude`), reachable at two hostnames: the custom domain `belajarclaude.id` and its default `dev-belajar-claude.belajarclaude-id.workers.dev` workers.dev address — same live code, same content, just a different URL (confirmed both serve the site correctly via direct fetch). Used the workers.dev hostname as a real, working stand-in "dev" link. Added a `FRONTEND_URL` constant to both `index.js` and `mailer.js` (backend), gated on the same `DUITKU_ENV` signal already used for picking the Duitku sandbox vs. production host: `DUITKU_ENV === 'production'` → `belajarclaude.id`, anything else → the workers.dev hostname. Replaced every hardcoded `https://belajarclaude.id` reference that ends up in an outbound email or payment redirect: all 13 `COURSES` catalog links, `generatePasswordSetLink()`'s `redirect_to`, Duitku's `returnUrl` (previously flagged as out-of-scope in Checkpoint 204, now fixed as part of this same root cause), the `sendAccessEmail` fallback `accessLink`, and `mailer.js`'s two hardcoded "Lihat All Access" / "Lihat Semua Kursus" buttons in the welcome email. Production behavior is unchanged (still points to `belajarclaude.id`); dev/sandbox purchases now correctly point to the dev hostname instead of silently deep-linking test buyers into production.
+
+**Verified**: `ci-check.js` clean (frontend); `node --check` clean on both `index.js` and `mailer.js` (backend). Diffed `origin/dev` against the local mount before copying on both repos — no concurrent Tiffany changes on either.
+
+**Commits**: `belajar-claude`: `77b82eb` (`dev` only). `belajar-claude-backend`: `4a93fa1` (`dev` only).
 
 ---
 
