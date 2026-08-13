@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 13, 2026 (checkpoint 211)_
+_Last updated: August 13, 2026 (checkpoint 212)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2978,6 +2978,24 @@ Behavior-preserving by design: `Promise.allSettled` (not `Promise.all`) means on
 **Verified**: `ci-check.js` clean. Extracted and ran `node --check` on both pages' inline `<script>` blocks to confirm no syntax errors from the refactor. Ran an isolated Node simulation of the `Promise.allSettled` fulfilled/rejected indexing logic and the `preFetched || await x` precedence/short-circuit behavior — both confirmed correct (rejected entries fall back to their defaults, fulfilled entries pass through, `preFetched` skips the redundant fetch entirely when provided). Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
 
 **Commits**: `belajar-claude`: `04fe6f7` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 212, August 13, 2026): Site-wide scan for the same sequential-Supabase-fetch pattern fixed in Checkpoint 211 — found and fixed it on 6 more pages
+
+**Status: pushed to `dev` only.**
+
+Julia asked for a quick scan across the whole site for the same issue Checkpoint 211 fixed. Grepped every HTML file for `await sbClient.from(` counts as a rough signal, then read the pages with multiple hits to separate genuine page-load bottlenecks from user-triggered action handlers (pin/delete/like/comment-submit etc. — those don't affect load time, only fired on click).
+
+**Found and fixed the identical pattern on all 5 course sales pages** (`mulai-claude.html`, `produktivitas.html`, `content-marketing.html`, `prompt-gratis.html`, `strategi-marketing.html`) — each had the exact same sequential `profile` → `enrollments` fetch chain index.html had before Checkpoint 211 (unsurprising, these 6 pages' nav-pill logic was already unified together back in Checkpoint 196). Applied the identical `Promise.allSettled` fix to each.
+
+**Found and fixed two instances in `community.html`**: (1) `_init()` awaited the `profiles` lookup (for the sidebar name + post-author display name) fully before even starting `loadFeed()` — these don't depend on each other, so `loadFeed()` now kicks off immediately and both are awaited together; `currentAuthorName` is only actually read later when the user submits a post/comment, so it's fine for it to still be unset while the feed itself renders. (2) Inside `loadFeed()`, the likes and comment-count fetches both only depend on `postIds` (from the posts fetch, which still has to happen first) but not on each other — these two now fire together via `Promise.allSettled` too.
+
+**Checked and left alone**: `admin.html` has the most `await sbClient.from(` calls in the codebase (19) including a `loadAllData()` function that's very likely the same pattern at a larger scale, but it's an internal tool only Julia and Tiffany use, and untangling 19 calls safely needs more careful review than this pass's budget — flagged for a future pass if worth the effort given its low traffic. All the other multi-fetch pages counted (`all-access.html`, the `*-content.html` lesson readers) were checked and their multiple `await sbClient.from(` calls turned out to be either already-independent one-off features (e.g. `course_pricing` fetched in a separate, already-non-blocking IIFE) or action handlers, not sequential page-load chains — no changes needed there.
+
+**Verified**: `ci-check.js` clean. Extracted and ran `node --check` on all 6 changed pages' inline scripts — all pass. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `3e53dc4` (`dev` only).
 
 ---
 
