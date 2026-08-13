@@ -165,10 +165,20 @@
   <script src="supabase-config.js"></script>
   <script src="backend-config.js"></script>
   <script>
+    // Where to send the user after a successful login/register. Defaults to the
+    // dashboard, but honors ?next=index.html (used by the homepage's "Masuk" link)
+    // so logging in from the homepage lands back on the homepage, logged in, instead
+    // of jumping straight to the dashboard. Only allows a plain same-site .html
+    // filename — never a full URL — to avoid this becoming an open redirect.
+    function getNextUrl() {
+      var next = new URLSearchParams(window.location.search).get('next');
+      return (next && /^[a-zA-Z0-9_-]+\.html$/.test(next)) ? next : 'dashboard.html';
+    }
+
     // Redirect if already logged in
     (async function() {
       var r = await sbClient.auth.getSession();
-      if (r.data.session) window.location.href = 'dashboard.html';
+      if (r.data.session) window.location.href = getNextUrl();
     })();
 
     // Shown when admin.html force-refreshes the session and it's genuinely dead
@@ -211,7 +221,7 @@
         btn.disabled = false; btn.textContent = 'Masuk →';
       } else {
         btn.textContent = 'Berhasil!';
-        window.location.href = 'dashboard.html';
+        window.location.href = getNextUrl();
       }
     }
 
@@ -244,7 +254,7 @@
 
       if (res.data.session) {
         btn.textContent = 'Berhasil!';
-        window.location.href = 'dashboard.html';
+        window.location.href = getNextUrl();
       } else {
         showMsg(msg, 'success', 'Cek inbox ' + email + ' untuk konfirmasi akun, lalu kembali ke sini untuk masuk.');
         btn.disabled = false; btn.textContent = 'Daftar →';
