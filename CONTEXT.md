@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 13, 2026 (checkpoint 195)_
+_Last updated: August 13, 2026 (checkpoint 196)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2759,6 +2759,20 @@ Noted but out of scope (not touched, flagged for a future ask if she wants full 
 **Verified**: `ci-check.js` clean. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
 
 **Commits**: `belajar-claude`: `7593773` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 196, August 13, 2026): Nav-pill name fixed on the 6 sales pages too — Julia pointed out these ARE visited while logged in (browsing another course before enrolling), so the gap from Checkpoint 195 wasn't actually low-priority
+
+**Status: pushed to `dev` only.**
+
+Checkpoint 195 fixed first-name display consistency on dashboard/profile/community/index, but flagged 6 sales/marketing pages (`strategi-marketing.html`, `prompt-gratis.html`, `produktivitas.html`, `mulai-claude.html`, `content-marketing.html`, `all-access.html`) as a separate, lower-priority gap — their nav-user-pill never queried `profiles.full_name` at all, just showed `user_metadata.full_name` raw. Assumed these pages were rarely seen while logged in. Julia correctly pushed back: an existing customer routinely lands on another course's sales page while logged in, deciding whether to enroll in it next — so the gap was real, not edge-case.
+
+Fixed all 6: each nav-pill init block now fetches `profiles.full_name` the same way index.html does, falls back to `user_metadata.full_name` then email-prefix, and displays only the first word — matching Checkpoint 195's pages exactly. `all-access.html` has a second, unrelated use of the same raw `user_metadata.full_name` pattern (prefilling the guest-checkout payment form's name field) — left untouched on purpose, since a payment form should prefill the real full name, not just first name.
+
+**Verified**: `ci-check.js` clean. Confirmed via grep that exactly one `user_metadata?.full_name` fallback remains in `all-access.html` (the checkout prefill) after the edit. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `a5098c4` (`dev` only).
 
 ---
 
