@@ -280,6 +280,15 @@ async function _init(){
   var metaName = (session.user.user_metadata && session.user.user_metadata.full_name) || null;
   var profileUsername = null;
   var profileName = null;
+
+  renderComposerCats();
+  renderFilterRow();
+  // The profile lookup (sidebar name + post-author display name) and the initial feed
+  // load don't depend on each other's results — kick off loadFeed() immediately instead
+  // of waiting for the profile fetch to finish first, and await both together below.
+  // currentAuthorName is only read later, when the user actually submits a post/comment,
+  // so it's fine for it to still be unset while the feed itself renders.
+  var feedPromise = loadFeed();
   try {
     var pr = await sbClient.from('profiles').select('full_name, username').eq('email', currentEmail).maybeSingle();
     profileUsername = pr.data && pr.data.username;
@@ -298,9 +307,7 @@ async function _init(){
   document.getElementById('sideEmail').textContent = currentEmail;
   document.getElementById('sideSince').textContent = 'Bergabung ' + joinDate;
 
-  renderComposerCats();
-  renderFilterRow();
-  await loadFeed();
+  await feedPromise;
 
   document.getElementById('loadingScreen').style.display = 'none';
   document.getElementById('mainLayout').style.display = 'grid';
@@ -426,13 +433,19 @@ async function loadFeed(){
   likesByPost = {};
   commentCountByPost = {};
   if (postIds.length){
-    var lr = await sbClient.from('community_likes').select('post_id,email').in('post_id', postIds);
+    // Likes and comment counts both only depend on postIds, not on each other — fire
+    // both together instead of the two sequential round trips this used to be.
+    var likesCommentsSettled = await Promise.allSettled([
+      sbClient.from('community_likes').select('post_id,email').in('post_id', postIds),
+      sbClient.from('community_comments').select('post_id').in('post_id', postIds)
+    ]);
+    var lr = likesCommentsSettled[0].status === 'fulfilled' ? likesCommentsSettled[0].value : { data: [] };
     (lr.data || []).forEach(function(row){
       if (!likesByPost[row.post_id]) likesByPost[row.post_id] = {count:0, mine:false};
       likesByPost[row.post_id].count++;
       if (row.email === currentEmail) likesByPost[row.post_id].mine = true;
     });
-    var cr = await sbClient.from('community_comments').select('post_id').in('post_id', postIds);
+    var cr = likesCommentsSettled[1].status === 'fulfilled' ? likesCommentsSettled[1].value : { data: [] };
     (cr.data || []).forEach(function(row){
       commentCountByPost[row.post_id] = (commentCountByPost[row.post_id] || 0) + 1;
     });

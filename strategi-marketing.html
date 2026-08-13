@@ -347,8 +347,13 @@
   (async () => {
     const { data: { session } } = await sbClient.auth.getSession();
     if (!session) return;
-    let profileRow = null;
-    try { const pr = await sbClient.from('profiles').select('full_name').eq('email', session.user.email).maybeSingle(); profileRow = pr.data; } catch (e) {}
+    // profile and enrollments only need session.user.email, not each other's results —
+    // fire both together instead of the two sequential round trips this used to be.
+    const settled = await Promise.allSettled([
+      sbClient.from('profiles').select('full_name').eq('email', session.user.email).maybeSingle(),
+      sbClient.from('enrollments').select('course_slug').eq('email', session.user.email)
+    ]);
+    let profileRow = (settled[0].status === 'fulfilled' && settled[0].value.data) || null;
     const name = (profileRow && profileRow.full_name) || session.user.user_metadata?.full_name || session.user.email.split('@')[0];
     const firstName = name.trim().split(/\s+/)[0];
     const pill = document.getElementById('navUserPill');
@@ -360,7 +365,8 @@
 
     if (COMING_SOON) return;
     try {
-      const { data: enrollments } = await sbClient.from('enrollments').select('course_slug').eq('email', session.user.email);
+      if (settled[1].status !== 'fulfilled') { throw settled[1].reason; }
+      const { data: enrollments } = settled[1].value;
       const isEnrolled = enrollments && enrollments.some(e => e.course_slug === COURSE_SLUG);
       const hasAllAccess = enrollments && enrollments.some(e => e.course_slug === 'all-access');
       if (isEnrolled || hasAllAccess) {
