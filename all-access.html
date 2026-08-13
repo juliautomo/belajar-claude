@@ -499,7 +499,18 @@
 </div>
 
 <!-- Duitku POP -->
-<script src="https://app-sandbox.duitku.com/lib/js/duitku.js"></script>
+<!-- Widget SDK must match the environment the backend created the invoice in
+     (production references only exist on app-prod, sandbox refs only on app-sandbox) —
+     this was hardcoded to sandbox regardless of hostname, so real belajarclaude.id
+     purchases got "data transaksi anda tidak ditemukan" from the sandbox widget
+     looking up a production reference. Mirrors the backend's DUITKU_ENV check. -->
+<script>
+  document.write('<scr' + 'ipt src="' +
+    (location.hostname === 'belajarclaude.id'
+      ? 'https://app-prod.duitku.com/lib/js/duitku.js'
+      : 'https://app-sandbox.duitku.com/lib/js/duitku.js') +
+    '"></scr' + 'ipt>');
+</script>
 <script>
   function toggleUserMenu(e) {
     e.stopPropagation();
