@@ -371,9 +371,9 @@ const ALL_COURSES = {
 
 let progressMap = {}, userProfile = null, currentEmail = null;
 
-async function loadProgress(email){
+async function loadProgress(email,preFetched){
   try{
-    var r=await sbClient.from('module_completions').select('course_slug,module_num').eq('email',email);
+    var r=preFetched||await sbClient.from('module_completions').select('course_slug,module_num').eq('email',email);
     if(r.data){
       r.data.forEach(function(row){
         if(!progressMap[row.course_slug])progressMap[row.course_slug]=new Set();
@@ -453,12 +453,23 @@ async function _init(){
   var ADMIN_EMAILS=['julia.utomo@gmail.com','tiffany.utomo@gmail.com'];
   if(ADMIN_EMAILS.indexOf(currentEmail.toLowerCase())!==-1){document.getElementById('adminNavItem').style.display='flex';}
 
-  // Fetched before computing the display name (not just for progress data below) so
-  // profiles.full_name — same source community.html/profile.html already prefer —
-  // wins over the raw email local-part. Previously this ran after `name` was already
-  // set and its result was never applied, so the sidebar/greeting silently ignored
-  // whatever the user saved as their name in Profil Kamu.
-  try{var pr=await sbClient.from('profiles').select('*').eq('email',currentEmail).maybeSingle();userProfile=pr.data;}catch(e){userProfile=null;}
+  // profiles / module_completions / course_visibility / enrollments don't depend on
+  // each other's results, only (at most) on currentEmail — this used to be up to 4
+  // sequential Supabase round trips in a row (profile → progress → visibility →
+  // enrollments), each one waiting on the last. Firing them together via
+  // Promise.allSettled means we only pay for whichever one is slowest, not the sum of
+  // all four. Passing the query builders directly into the array (rather than assigning
+  // them to variables and awaiting each individually later) is what actually makes this
+  // concurrent — supabase-js builders are lazy and don't hit the network until something
+  // calls .then() on them, which Promise.allSettled does for every item up front.
+  var settled=await Promise.allSettled([
+    sbClient.from('profiles').select('*').eq('email',currentEmail).maybeSingle(),
+    sbClient.from('module_completions').select('course_slug,module_num').eq('email',currentEmail),
+    sbClient.from('course_visibility').select('*'),
+    sbClient.from('enrollments').select('course_slug,course_name,type,enrolled_at,last_accessed_at').eq('email',currentEmail).order('enrolled_at',{ascending:false})
+  ]);
+
+  userProfile=(settled[0].status==='fulfilled'&&settled[0].value.data)||null;
 
   // Onboarding gate: force profile completion (role + goal) before the dashboard is
   // shown — mainly hits right after a purchase, when a fresh account has neither set
@@ -485,22 +496,26 @@ async function _init(){
   document.getElementById('greetEyebrow').textContent=greet+' ·';
   document.getElementById('greetH1').innerHTML='Selamat datang kembali,<br><em>'+firstName+'</em>';
 
-  await loadProgress(currentEmail);
+  // Already fetched above (settled[1]) — loadProgress() now just processes a result
+  // instead of also fetching it, so the 2nd argument skips a redundant network call.
+  await loadProgress(currentEmail, settled[1].status==='fulfilled'?settled[1].value:{data:[]});
 
   // Live visibility overrides from the admin toggle (course_visibility table) — falls
   // back to each course's static comingSoon/visible defaults in ALL_COURSES above if
   // this fetch fails, so a Supabase hiccup never exposes/hides something unexpectedly.
   try{
-    var vr=await sbClient.from('course_visibility').select('*');
-    (vr.data||[]).forEach(function(row){
-      if(!ALL_COURSES[row.course_slug])return;
-      ALL_COURSES[row.course_slug].hidden=!!row.hidden;
-      ALL_COURSES[row.course_slug].comingSoon=!!row.coming_soon;
-      ALL_COURSES[row.course_slug].visible=true;
-    });
+    if(settled[2].status==='fulfilled'){
+      var vr=settled[2].value;
+      (vr.data||[]).forEach(function(row){
+        if(!ALL_COURSES[row.course_slug])return;
+        ALL_COURSES[row.course_slug].hidden=!!row.hidden;
+        ALL_COURSES[row.course_slug].comingSoon=!!row.coming_soon;
+        ALL_COURSES[row.course_slug].visible=true;
+      });
+    }
   }catch(e){}
 
-  var er=await sbClient.from('enrollments').select('course_slug,course_name,type,enrolled_at,last_accessed_at').eq('email',currentEmail).order('enrolled_at',{ascending:false});
+  var er=settled[3].status==='fulfilled'?settled[3].value:{data:[]};
   var rawEnrollments=(er.data||[]);
   // 'mulai-claude' is no longer free-standing (moved behind All Access) - drop any
   // legacy free enrollment rows for it so the dashboard doesn't show it as owned

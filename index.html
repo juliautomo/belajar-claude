@@ -624,11 +624,27 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
       var r = await sbClient.auth.getSession();
       var s = r.data.session;
       if (s) {
+        // profiles/enrollments/module_completions only need s.user.email, not each
+        // other's results — fire all three Supabase queries together via
+        // Promise.allSettled instead of the three sequential round trips this used to
+        // be (profile → enrollments → module_completions). module_completions is now
+        // fetched unconditionally even though it's only used a few lines down for All
+        // Access holders (found out from the enrollments result) — firing it eagerly
+        // and ignoring it otherwise is cheaper than paying for a 3rd round trip only
+        // when needed. Passing the query builders directly into the array (rather than
+        // assigning to variables and awaiting each individually later) is what actually
+        // makes this concurrent — supabase-js builders are lazy and don't hit the
+        // network until something calls .then() on them, which Promise.allSettled does
+        // for every item up front.
+        var settled = await Promise.allSettled([
+          sbClient.from('profiles').select('full_name').eq('email', s.user.email).maybeSingle(),
+          sbClient.from('enrollments').select('course_slug,course_name,last_accessed_at').eq('email', s.user.email),
+          sbClient.from('module_completions').select('course_slug,module_num').eq('email', s.user.email)
+        ]);
         // Same profiles.full_name preference as community.html/profile.html — without
         // this, the homepage greeting shows the raw email local-part even when the
         // user has set a real display name in Profil Kamu.
-        var profileRow = null;
-        try { var pr = await sbClient.from('profiles').select('full_name').eq('email', s.user.email).maybeSingle(); profileRow = pr.data; } catch (e) {}
+        var profileRow = (settled[0].status === 'fulfilled' && settled[0].value.data) || null;
         var name = (profileRow && profileRow.full_name) || (s.user.user_metadata && s.user.user_metadata.full_name) || s.user.email.split('@')[0];
         // First-name-only, matching dashboard.html/profile.html/community.html.
         var firstName = name.trim().split(/\s+/)[0];
@@ -648,7 +664,8 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         if (headline) headline.innerHTML = 'Selamat datang kembali, <em>' + name + '</em>';
         // Check enrollment for subtext
         try {
-          var enr = await sbClient.from('enrollments').select('course_slug,course_name,last_accessed_at').eq('email', s.user.email);
+          if (settled[1].status !== 'fulfilled') { throw settled[1].reason; } // same fallback as an enrollments-fetch failure always had: catch below calls revealMarketing()
+          var enr = settled[1].value;
           var paid = (enr.data || []).filter(function(e){ return e.course_slug !== 'prompt-gratis'; });
           var hasAllAccess = paid.some(function(e){ return e.course_slug === 'all-access'; });
           if (subtext) subtext.textContent = hasAllAccess
@@ -683,7 +700,11 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
             if (lihNameEl) lihNameEl.textContent = name.split(' ')[0];
 
             var enrolledSlugs = new Set((enr.data || []).map(function(e){ return e.course_slug; }));
-            var progRes = await sbClient.from('module_completions').select('course_slug,module_num').eq('email', s.user.email);
+            // Already fetched above alongside profile/enrollments — settled[2] falls
+            // back to an empty result (rather than throwing/falling back to the marketing
+            // page) if this one specific query failed, so a module_completions hiccup
+            // never hides the whole logged-in home for an actual All Access holder.
+            var progRes = settled[2].status === 'fulfilled' ? settled[2].value : { data: [] };
             var progressRows = progRes.data || [];
             var progressMap = {};
             progressRows.forEach(function(row) {
