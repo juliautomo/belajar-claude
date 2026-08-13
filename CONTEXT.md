@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 13, 2026 (checkpoint 209)_
+_Last updated: August 13, 2026 (checkpoint 210)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2939,6 +2939,24 @@ Fix: gave `#komunitas` `style="display:none;"` by default, matching the other tw
 **Verified**: `ci-check.js` clean. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
 
 **Commits**: `belajar-claude`: `668bc6b` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 210, August 13, 2026): Reverted Checkpoint 208's bold double-border hover bug; dashboard explore-card now shares index.html's illustrations instead of plain emoji icons; added a "Memuat..." placeholder for the blank-page gap left over after Checkpoint 209's fix
+
+**Status: pushed to `dev` only.**
+
+Three fixes from screenshots.
+
+**1. Bold hover border, root-caused to Checkpoint 208 itself.** Julia asked why the explore-card hover showed a noticeably thick/bold line along the top edge. Checkpoint 208 had added a colored `::before` top-border reveal to match `.s-card`, but `.explore-card` already turns its *entire* border `var(--accent)` on hover (a pre-existing rule `.s-card` doesn't have) — the new line was rendering directly on top of that existing accent border, doubling the visual weight only at the top edge. Reverted the `::before` addition entirely; the card's existing full-border hover was already correct and didn't need it.
+
+**2. Dashboard's course carousel used flat emoji icons (📋🤖💼🏷📈) in solid-color boxes, while index.html's course grid uses hand-drawn line-art SVG illustrations** with matching pastel gradients — Julia asked for the dashboard to use "the image from index." Extracted `LIH_BG` (background gradients) and `LIH_ILLUSTRATIONS` (the SVG markup) out of index.html's inline script into a new shared file, `course-illustrations.js` — avoids the copy-paste-drift risk `course-card-shared.css` was created to solve for the "coming soon" dimming rule (Checkpoints 116/117). Both `index.html` and `dashboard.html` now load this file. `dashboard.html`'s explore-card renderer uses `LIH_ILLUSTRATIONS[slug]`/`LIH_BG[slug]` when available, falling back to the original emoji-in-a-color-box treatment for slugs without a custom illustration (mostly not-yet-designed "coming soon" courses). Also copied over the `.lih-illustration` sizing rule and all of the `@keyframes lih*`/`.lih-*` animation classes the SVGs depend on for their little animated details (running dog, blinking cursor, pulsing sparkle, camera flash, etc.) — without these, the illustrations would have rendered as static line art instead of matching index.html's motion. Added `overflow:hidden` + a 1.3x scale on `.ex-thumb .lih-illustration` since the carousel's card (200×72px) is much smaller/differently-proportioned than index.html's original banner (which the illustrations were designed for, ~380×168px) — without the zoom, the artwork would sit small and letterboxed. Worth a visual check once live to see if the crop needs nudging.
+
+**3. Julia flagged the residual symptom left over after Checkpoint 209's fix**: with `#komunitas`'s flash gone, navigating dashboard → index now shows nav + footer with a plain blank gap in between while the session/enrollment checks run — same underlying wait, just less confusing-looking than before. Added a `#indexLoading` "Memuat..." placeholder (matching the `.loading-screen` "Memuat ..." pattern already used on dashboard.html/profile.html/community.html) shown between nav and footer by default, hidden inside `revealMarketing()` and at the `loggedInHome` reveal point — covers every code path (guest, non-buyer, All Access holder, and the various error/timeout fallbacks, since they all funnel through `revealMarketing()`).
+
+**Verified**: `ci-check.js` clean (29 HTML, 6 JS files, 26 local references — up from 5/25 with the new shared file). `node --check` clean on `course-illustrations.js`; sanity-loaded it in Node to confirm both objects parse and contain all 6 expected slugs. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `1c935d6` (`dev` only).
 
 ---
 
