@@ -692,7 +692,12 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
       var r = await sbClient.auth.getSession();
       var s = r.data.session;
       if (s) {
-        var name = (s.user.user_metadata && s.user.user_metadata.full_name) || s.user.email.split('@')[0];
+        // Same profiles.full_name preference as community.html/profile.html — without
+        // this, the homepage greeting shows the raw email local-part even when the
+        // user has set a real display name in Profil Kamu.
+        var profileRow = null;
+        try { var pr = await sbClient.from('profiles').select('full_name').eq('email', s.user.email).maybeSingle(); profileRow = pr.data; } catch (e) {}
+        var name = (profileRow && profileRow.full_name) || (s.user.user_metadata && s.user.user_metadata.full_name) || s.user.email.split('@')[0];
         document.getElementById('navUserPill').style.display = 'flex';
         document.getElementById('navUname').textContent  = name;
         document.getElementById('navUemail').textContent = s.user.email;

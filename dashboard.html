@@ -409,7 +409,15 @@ async function _init(){
   currentEmail=session.user.email;
   var ADMIN_EMAILS=['julia.utomo@gmail.com','tiffany.utomo@gmail.com'];
   if(ADMIN_EMAILS.indexOf(currentEmail.toLowerCase())!==-1){document.getElementById('adminNavItem').style.display='flex';}
-  var name=(session.user.user_metadata&&session.user.user_metadata.full_name)||currentEmail.split('@')[0];
+
+  // Fetched before computing the display name (not just for progress data below) so
+  // profiles.full_name — same source community.html/profile.html already prefer —
+  // wins over the raw email local-part. Previously this ran after `name` was already
+  // set and its result was never applied, so the sidebar/greeting silently ignored
+  // whatever the user saved as their name in Profil Kamu.
+  try{var pr=await sbClient.from('profiles').select('*').eq('email',currentEmail).maybeSingle();userProfile=pr.data;}catch(e){userProfile=null;}
+
+  var name=(userProfile&&userProfile.full_name)||(session.user.user_metadata&&session.user.user_metadata.full_name)||currentEmail.split('@')[0];
   var joinDate=new Date(session.user.created_at).toLocaleDateString('id-ID',{month:'long',year:'numeric'});
   var initials=getInitials(name);
   document.getElementById('navAvatar').textContent=initials;
@@ -422,7 +430,6 @@ async function _init(){
   document.getElementById('greetEyebrow').textContent=greet+' ·';
   document.getElementById('greetH1').innerHTML='Selamat datang kembali,<br><em>'+firstName+'</em>';
 
-  try{var pr=await sbClient.from('profiles').select('*').eq('email',currentEmail).maybeSingle();userProfile=pr.data;}catch(e){userProfile=null;}
   await loadProgress(currentEmail);
 
   // Live visibility overrides from the admin toggle (course_visibility table) — falls
