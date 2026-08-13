@@ -164,11 +164,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 /* EXPLORE */
 .explore-carousel{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:10px 4px 16px;}
 .explore-carousel::-webkit-scrollbar{display:none;}
-.explore-card{min-width:200px;max-width:200px;scroll-snap-align:start;flex-shrink:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:all 0.2s;}
+.explore-card{position:relative;min-width:200px;max-width:200px;scroll-snap-align:start;flex-shrink:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:all 0.2s;}
 /* No box-shadow here on purpose — a blurred shadow under a small rounded card tends to
    read as a squared-off halo rather than following the card's curve. Border + a faint
    tint instead, which stays crisp at any zoom/scroll position. */
 .explore-card:hover{transform:translateY(-3px);border-color:var(--accent);background:var(--accent-dim);}
+/* Matches the accent top-border reveal used by .s-card elsewhere on this page. */
+.explore-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent-2));opacity:0;transition:opacity 0.2s;}
+.explore-card:hover::before{opacity:1;}
 /* .cc-soon dimming rule lives in course-card-shared.css — shared across every
    coming-soon card component on the site, don't redefine it here. */
 .ex-thumb{height:72px;display:flex;align-items:center;justify-content:center;font-size:22px;}
