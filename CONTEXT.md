@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 13, 2026 (checkpoint 207)_
+_Last updated: August 13, 2026 (checkpoint 208)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2913,6 +2913,18 @@ Three items. (1) `profile.html`'s form fields (Nama Lengkap, Username, Email) on
 **Verified**: `ci-check.js` clean (frontend); `node --check` clean on both `index.js` and `mailer.js` (backend). Diffed `origin/dev` against the local mount before copying on both repos — no concurrent Tiffany changes on either.
 
 **Commits**: `belajar-claude`: `77b82eb` (`dev` only). `belajar-claude-backend`: `4a93fa1` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 208, August 13, 2026): Dashboard's "Jelajahi Kursus" carousel cards get the same accent top-border hover reveal used by `.s-card` elsewhere on the page
+
+**Status: pushed to `dev` only.**
+
+Julia shared a screenshot of the dashboard's course carousel and asked to reuse "the same animation as on the dashboard" — turned out the screenshot was itself of `.explore-card` on `dashboard.html` (confirmed via its distinctive 200px-wide horizontally-scrolling cards with a dimmed "coming soon" card, matching `.explore-carousel`'s CSS exactly — no other page has this component). Asked a clarifying question since "the same as the dashboard" was ambiguous when the screenshot already was the dashboard; her answer pointed at the hover-animation option. Read the rest of `dashboard.html`'s own cards and found `.s-card` (the stats row) already has a small polish `.explore-card` was missing: a colored top-border line that fades in on hover (`::before` with a 2px accent gradient, opacity 0→1). Added the identical treatment to `.explore-card` — lift + border/background tint (already existed) now paired with the same accent top-border reveal used elsewhere on the same page, for a consistent hover feel across all of `dashboard.html`'s card types.
+
+**Verified**: `ci-check.js` clean. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `df3da20` (`dev` only).
 
 ---
 
