@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 13, 2026 (checkpoint 200)_
+_Last updated: August 13, 2026 (checkpoint 201)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2823,6 +2823,18 @@ Two small nav-flow asks. (1) Previously every successful login/register on `logi
 **Verified**: `ci-check.js` clean. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
 
 **Commits**: `belajar-claude`: `75924c1` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 201, August 13, 2026): Julia's account fully reset to match Tiffany's clean state; a real customer account (maggieshung@gmail.com) permanently deleted — data change only, no code
+
+**Status: no code changes, Supabase data only.**
+
+Two follow-ups to Checkpoints 198/199. (1) Julia asked to also remove her own `all-access` enrollment (which Checkpoint 198 had deliberately kept) so her account matches Tiffany's fully-clean "test a real purchase from scratch" state — deleted her `enrollments` (including all-access), `module_completions`, `waitlist`, and `profiles` rows again (a `profiles` row and one new `content-marketing` enrollment had been re-created since Checkpoint 198 from her testing the onboarding flow). Confirmed zero rows remain in all four tables. Her 4 `community_posts` were explicitly left alone — she asked to keep those.
+
+(2) Julia asked to "remove maggie" — found a real, unrelated paying customer, `maggieshung@gmail.com` (signed up July 28, genuine `all-access` + 3 course purchases, 8 module completions, no profile/community activity). Given this wasn't a team test account like Julia/Tiffany's, confirmed with her exactly what "remove" meant before touching anything (revoke access / reset progress / delete account entirely / other) — she chose full account deletion. Deleted, in order: `module_completions`, `enrollments`, `waitlist`, `profiles`, then her `auth.users` row itself (cascaded cleanly through Supabase's own auth schema, no errors). Verified zero rows remain anywhere, including `auth.users`. This is irreversible — if Maggie returns she'll need to sign up as a brand-new account with no memory of her prior purchase.
+
+**Commits**: none (Supabase data only, via direct SQL through the Supabase MCP).
 
 ---
 
