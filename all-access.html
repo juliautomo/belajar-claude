@@ -355,10 +355,13 @@
   (async () => {
     const { data: { session } } = await sbClient.auth.getSession();
     if (!session) return;
-    const name = session.user.user_metadata?.full_name || session.user.email.split('@')[0];
+    let profileRow = null;
+    try { const pr = await sbClient.from('profiles').select('full_name').eq('email', session.user.email).maybeSingle(); profileRow = pr.data; } catch (e) {}
+    const name = (profileRow && profileRow.full_name) || session.user.user_metadata?.full_name || session.user.email.split('@')[0];
+    const firstName = name.trim().split(/\s+/)[0];
     const pill = document.getElementById('navUserPill');
     if (pill) pill.style.display = 'flex';
-    const un = document.getElementById('navUname'); if (un) un.textContent = name;
+    const un = document.getElementById('navUname'); if (un) un.textContent = firstName;
     const ue = document.getElementById('navUemail'); if (ue) ue.textContent = session.user.email;
     const lb = document.getElementById('navLoginBtn');
     if (lb) { lb.textContent = 'Dashboard'; lb.href = 'dashboard.html'; }
