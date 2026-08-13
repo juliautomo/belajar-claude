@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 13, 2026 (checkpoint 208)_
+_Last updated: August 13, 2026 (checkpoint 209)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2925,6 +2925,20 @@ Julia shared a screenshot of the dashboard's course carousel and asked to reuse 
 **Verified**: `ci-check.js` clean. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
 
 **Commits**: `belajar-claude`: `df3da20` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 209, August 13, 2026): Fixed a flash of unstyled/unpersonalized pricing CTA card on index.html — root cause of the "slow, shows a weird card" report navigating dashboard → index
+
+**Status: pushed to `dev` only.**
+
+Julia shared a screenshot from navigating dashboard.html → index.html (logged in as her non-purchaser test account): nav bar + a personalized "Selamat datang kembali, juliaaa" ALL ACCESS pricing card + footer, with a large blank gap between the card and footer, then presumably the rest of the page catching up. Investigated the actual page structure rather than just profiling load times: `#marketingHome` (hero, workflow demo, course grid) and `#loggedInHome` (welcome-back view for All Access holders) both start `display:none` and get revealed by JS once the session/enrollment checks resolve — but `#komunitas` (the bottom pricing/CTA `<section>`, personalized via `ctaHeadline`/`pricingBigPrice`/etc.) had no such default-hidden state of its own. It rendered immediately on every page load, static and unpersonalized at first, sitting alone while the rest of the page was still hidden — then got personalized in place and, for All Access holders, explicitly hidden again once the async chain finished. That's the exact flash Julia saw, and the layout reflow from marketingHome popping in above it likely contributed to the "slow" feeling too, on top of the actual network round trips.
+
+Fix: gave `#komunitas` `style="display:none;"` by default, matching the other two containers, and moved its reveal into the existing `revealMarketing()` function so it now appears together with `#marketingHome`, already fully personalized — never as a bare flash of default content. All Access holders never call `revealMarketing()` (they get `#loggedInHome` instead), so `#komunitas` now correctly stays hidden for them throughout, making the pre-existing explicit `komunitasEl.style.display='none'` line further down redundant but harmless (left in place as a no-op safety net rather than risk removing something with more context than visible here).
+
+**Verified**: `ci-check.js` clean. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `668bc6b` (`dev` only).
 
 ---
 
