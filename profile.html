@@ -75,6 +75,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 .form-footer{display:flex;align-items:center;gap:14px;}
 .save-msg{font-size:13px;font-weight:600;color:var(--green);opacity:0;transition:opacity 0.2s;}
 .save-msg.show{opacity:1;}
+.onboard-banner{display:flex;align-items:center;gap:10px;background:var(--accent-dim);border:1px solid rgba(108,71,255,0.2);border-radius:12px;padding:14px 18px;font-size:13px;color:var(--ink);line-height:1.4;}
 
 @media(max-width:900px){.sidebar{display:none;}.main{padding:24px 20px;}}
 </style>
@@ -126,6 +127,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
       <p class="g-sub">Kelola info akun dan preferensi belajarmu supaya rekomendasi kursus makin relevan.</p>
     </div>
 
+    <div class="onboard-banner" id="onboardBanner" style="display:none;">
+      ⚡ Lengkapi dulu profil kamu — supaya kami bisa kasih rekomendasi kursus yang paling relevan sebelum masuk ke dashboard.
+    </div>
+
     <div class="form-card">
       <div class="field-group">
         <label class="field-label">Nama Lengkap</label>
@@ -152,7 +157,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
           <button type="button" class="popt" data-val="pemilik-bisnis">Pemilik Bisnis / UKM</button>
           <button type="button" class="popt" data-val="developer">Developer</button>
           <button type="button" class="popt" data-val="kreator">Kreator Konten</button>
+          <button type="button" class="popt" data-val="__other__">Lainnya</button>
         </div>
+        <input class="field-input" id="fRoleOther" type="text" placeholder="Tulis profesi kamu..." style="display:none;">
       </div>
 
       <div class="field-group">
@@ -163,7 +170,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
           <button type="button" class="popt" data-val="konten">Buat konten lebih cepat</button>
           <button type="button" class="popt" data-val="coding">Build produk / app</button>
           <button type="button" class="popt" data-val="lainnya">Eksplorasi</button>
+          <button type="button" class="popt" data-val="__other__">Lainnya (isi sendiri)</button>
         </div>
+        <input class="field-input" id="fGoalOther" type="text" placeholder="Tulis tujuan kamu..." style="display:none;">
       </div>
 
       <div class="field-group">
@@ -187,6 +196,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 <script>
 let currentEmail = null;
 let answers = { role: null, goal: null, experience: null };
+let isOnboarding = false;
+
+// Preset button values for role/goal — anything saved that ISN'T one of these is
+// treated as free-typed "Lainnya" text and shown/restored in the matching text input.
+var PRESET_ROLE_VALS = ['karyawan', 'mahasiswa', 'pemilik-bisnis', 'developer', 'kreator'];
+var PRESET_GOAL_VALS = ['efisiensi-kerja', 'bisnis', 'konten', 'coding', 'lainnya'];
 
 function getInitials(name){
   return (name||'').trim().split(/\s+/).slice(0,2).map(function(w){return w[0]||'';}).join('').toUpperCase() || '?';
@@ -198,8 +213,34 @@ function selectOpt(groupId, val){
   });
 }
 
-document.querySelectorAll('#optsRole .popt').forEach(function(b){b.addEventListener('click', function(){answers.role = b.getAttribute('data-val'); selectOpt('optsRole', answers.role);});});
-document.querySelectorAll('#optsGoal .popt').forEach(function(b){b.addEventListener('click', function(){answers.goal = b.getAttribute('data-val'); selectOpt('optsGoal', answers.goal);});});
+// Wires up a preset-options group that also has a "Lainnya" (__other__) button revealing
+// a free-text input. answers[answerKey] always ends up holding either a preset data-val
+// or the raw typed text — never the literal "__other__" sentinel — so no schema change
+// or extra column was needed to store custom answers.
+function setupOtherOption(groupId, otherInputId, answerKey){
+  var otherInput = document.getElementById(otherInputId);
+  document.querySelectorAll('#'+groupId+' .popt').forEach(function(b){
+    b.addEventListener('click', function(){
+      var val = b.getAttribute('data-val');
+      if (val === '__other__') {
+        otherInput.style.display = 'block';
+        otherInput.focus();
+        answers[answerKey] = otherInput.value.trim();
+      } else {
+        otherInput.style.display = 'none';
+        otherInput.value = '';
+        answers[answerKey] = val;
+      }
+      selectOpt(groupId, val);
+    });
+  });
+  otherInput.addEventListener('input', function(){
+    answers[answerKey] = otherInput.value.trim();
+  });
+}
+
+setupOtherOption('optsRole', 'fRoleOther', 'role');
+setupOtherOption('optsGoal', 'fGoalOther', 'goal');
 document.querySelectorAll('#optsExperience .popt').forEach(function(b){b.addEventListener('click', function(){answers.experience = b.getAttribute('data-val'); selectOpt('optsExperience', answers.experience);});});
 
 async function logout(){await sbClient.auth.signOut();window.location.href='index.html';}
@@ -209,6 +250,12 @@ async function saveProfile(){
   var msg = document.getElementById('saveMsg');
   var name = document.getElementById('fName').value.trim();
   var username = document.getElementById('fUsername').value.trim();
+
+  if (isOnboarding && (!answers.role || !answers.goal)) {
+    alert('Pilih dulu "Kamu saat ini sebagai apa?" dan "Apa tujuan utama kamu belajar Claude?" (isi kolom "Lainnya" kalau opsi yang ada belum cocok) sebelum lanjut ke dashboard.');
+    return;
+  }
+
   btn.disabled = true;
   var original = btn.textContent;
   btn.textContent = 'Menyimpan...';
@@ -225,6 +272,10 @@ async function saveProfile(){
     }, { onConflict: 'email' });
     document.getElementById('sideName').textContent = name || currentEmail.split('@')[0];
     document.getElementById('navAvatar').textContent = getInitials(name || currentEmail.split('@')[0]);
+    if (isOnboarding) {
+      window.location.href = 'dashboard.html';
+      return;
+    }
     msg.classList.add('show');
     setTimeout(function(){ msg.classList.remove('show'); }, 2500);
   } catch (e) {
@@ -248,6 +299,12 @@ async function _init(){
   var session = sr.data.session;
   if (!session) { window.location.href = 'login.html'; return; }
   currentEmail = session.user.email;
+
+  isOnboarding = new URLSearchParams(window.location.search).get('onboarding') === '1';
+  if (isOnboarding) {
+    document.getElementById('onboardBanner').style.display = 'flex';
+    document.getElementById('saveBtn').textContent = 'Simpan & Lanjutkan ke Dashboard';
+  }
 
   var ADMIN_EMAILS = ['julia.utomo@gmail.com', 'tiffany.utomo@gmail.com'];
   if (ADMIN_EMAILS.indexOf(currentEmail.toLowerCase()) !== -1) {
@@ -278,8 +335,23 @@ async function _init(){
     goal: (profile && profile.goal) || null,
     experience: (profile && profile.experience) || null
   };
-  selectOpt('optsRole', answers.role);
-  selectOpt('optsGoal', answers.goal);
+
+  if (answers.role && PRESET_ROLE_VALS.indexOf(answers.role) === -1) {
+    document.getElementById('fRoleOther').value = answers.role;
+    document.getElementById('fRoleOther').style.display = 'block';
+    selectOpt('optsRole', '__other__');
+  } else {
+    selectOpt('optsRole', answers.role);
+  }
+
+  if (answers.goal && PRESET_GOAL_VALS.indexOf(answers.goal) === -1) {
+    document.getElementById('fGoalOther').value = answers.goal;
+    document.getElementById('fGoalOther').style.display = 'block';
+    selectOpt('optsGoal', '__other__');
+  } else {
+    selectOpt('optsGoal', answers.goal);
+  }
+
   selectOpt('optsExperience', answers.experience);
 
   document.getElementById('loadingScreen').style.display = 'none';

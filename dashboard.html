@@ -417,6 +417,15 @@ async function _init(){
   // whatever the user saved as their name in Profil Kamu.
   try{var pr=await sbClient.from('profiles').select('*').eq('email',currentEmail).maybeSingle();userProfile=pr.data;}catch(e){userProfile=null;}
 
+  // Onboarding gate: force profile completion (role + goal) before the dashboard is
+  // shown — mainly hits right after a purchase, when a fresh account has neither set
+  // yet. profile.html?onboarding=1 shows a banner, requires both fields, and redirects
+  // back here on save. Skipped entirely once role+goal are set, so this only fires once.
+  if(!userProfile||!userProfile.role||!userProfile.goal){
+    window.location.href='profile.html?onboarding=1';
+    return;
+  }
+
   var name=(userProfile&&userProfile.full_name)||(session.user.user_metadata&&session.user.user_metadata.full_name)||currentEmail.split('@')[0];
   var joinDate=new Date(session.user.created_at).toLocaleDateString('id-ID',{month:'long',year:'numeric'});
   var initials=getInitials(name);
