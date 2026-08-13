@@ -178,7 +178,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 .ex-body{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1;}
 .ex-title{font-size:13px;font-weight:600;color:var(--ink);line-height:1.3;flex:1;}
 .ex-desc{font-size:11px;color:var(--ink-3);line-height:1.6;}
-.btn-view{display:block;background:var(--ink);color:#fff;text-decoration:none;font-family:var(--font);font-size:11px;font-weight:600;padding:8px;border-radius:8px;text-align:center;transition:all 0.18s;margin-top:4px;box-shadow:0 2px 6px rgba(0,0,0,0.1);}
+.btn-view{display:block;background:var(--ink);color:#fff;text-decoration:none;font-family:var(--font);font-size:11px;font-weight:600;padding:8px;border-radius:8px;text-align:center;transition:all 0.18s;margin-top:4px;}
 .btn-view:hover{opacity:0.85;}
 .btn-notify{display:flex;align-items:center;justify-content:center;gap:5px;background:var(--surface-2);color:var(--ink-2);border:1px solid var(--border);font-family:var(--font);font-size:11px;font-weight:600;padding:8px;border-radius:8px;cursor:pointer;transition:all 0.18s;margin-top:4px;width:100%;}
 .btn-notify:hover{border-color:var(--border-strong);color:var(--ink);}
@@ -366,10 +366,11 @@ async function notifyMe(btn,slug){
   btn.classList.add('notified');btn.textContent='Terdaftar ✓';
 }
 
-// Explicit enroll step for All Access holders: purchasing all-access only grants access
-// (checked via the sentinel row on content pages), it doesn't auto-add courses to
-// "Kursus Kamu" anymore. Clicking "Mulai Kursus" here creates the real per-course
-// enrollment row that makes it show up in the dashboard.
+// No longer called from the dashboard's "Jelajahi Kursus" cards (see the cta logic in
+// _init() below) — those now link to the course's own sales page instead of enrolling
+// in one click, so an All Access holder previews the course first, same as anyone else.
+// Left in place since each course's own sales page (e.g. mulai-claude.html's
+// enrollAndOpen()) does its own equivalent insert; this was the dashboard-side twin.
 async function enrollCourse(btn,slug){
   var meta=ALL_COURSES[slug];
   if(!meta||!currentEmail)return;
@@ -475,9 +476,10 @@ async function _init(){
   rawEnrollments.forEach(function(e){if(PAKET_COURSES[e.course_slug]){PAKET_COURSES[e.course_slug].forEach(function(slug){if(!existingSlugs.has(slug)){existingSlugs.add(slug);paketExpanded.push({course_slug:slug,course_name:(ALL_COURSES[slug]&&ALL_COURSES[slug].title)||slug,type:'paid',enrolled_at:e.enrolled_at,last_accessed_at:null});}});}});
   // All Access sentinel: one 'all-access' enrollment row grants ACCESS to every course in
   // ALL_COURSES (content pages check for this row directly), but no longer auto-populates
-  // "Kursus Kamu" - the user has to explicitly click "Mulai Kursus" on a course under
-  // "Jelajahi Kursus" first, which inserts a real per-course enrollment row (see enrollCourse()).
-  // This keeps the dashboard from listing every course the moment someone buys all-access.
+  // "Kursus Kamu" - the user still has to visit the course's own sales page and enroll
+  // from there (same preview-first flow as any other visitor), which inserts a real
+  // per-course enrollment row. This keeps the dashboard from listing every course the
+  // moment someone buys all-access.
   var allAccessRow=rawEnrollments.find(function(e){return e.course_slug==='all-access';});
   var enrollments=paketExpanded.filter(function(e){return ALL_COURSES[e.course_slug];});
   var enrolledSlugs=new Set(enrollments.map(function(e){return e.course_slug;}));
@@ -592,10 +594,11 @@ async function _init(){
     var grid=document.getElementById('exploreGrid');
     unenrolled.forEach(function(slug){
       var meta=ALL_COURSES[slug];
+      // Always link to the course's own sales/preview page first — even for All Access
+      // holders — instead of a one-click auto-enroll button. Matches the experience of
+      // browsing from index.html: preview the course, then enroll from its own page.
       var cta=meta.comingSoon
           ?'<span class="btn-view" style="cursor:default;pointer-events:none;">Segera Hadir</span>'
-          :allAccessRow
-          ?'<button class="btn-view" onclick="enrollCourse(this,\''+slug+'\')">Mulai Kursus &rarr;</button>'
           :'<a href="'+meta.salesLink+'" class="btn-view">Lihat Kursus &rarr;</a>';
       grid.innerHTML+='<div class="explore-card'+(meta.comingSoon?' cc-soon':'')+'">'
         +'<div class="ex-thumb '+meta.exThumb+'">'+meta.icon+'</div>'
