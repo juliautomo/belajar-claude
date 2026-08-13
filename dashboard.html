@@ -427,15 +427,18 @@ async function _init(){
   }
 
   var name=(userProfile&&userProfile.full_name)||(session.user.user_metadata&&session.user.user_metadata.full_name)||currentEmail.split('@')[0];
+  // Sidebar/nav/greeting all show first-name-only now — full name stays reserved for
+  // the editable "Nama Lengkap" field on profile.html, so it's still saved/editable
+  // in full, just not displayed everywhere.
+  var firstName=name.trim().split(/\s+/)[0];
   var joinDate=new Date(session.user.created_at).toLocaleDateString('id-ID',{month:'long',year:'numeric'});
-  var initials=getInitials(name);
+  var initials=getInitials(firstName);
   document.getElementById('navAvatar').textContent=initials;
-  document.getElementById('sideName').textContent=name;
+  document.getElementById('sideName').textContent=firstName;
   document.getElementById('sideEmail').textContent=currentEmail;
   document.getElementById('sideSince').textContent='Bergabung '+joinDate;
   var hour=new Date().getHours();
   var greet=hour<12?'Selamat pagi':hour<17?'Selamat siang':'Selamat malam';
-  var firstName=name.split(' ')[0];
   document.getElementById('greetEyebrow').textContent=greet+' ·';
   document.getElementById('greetH1').innerHTML='Selamat datang kembali,<br><em>'+firstName+'</em>';
 

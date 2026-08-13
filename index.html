@@ -698,8 +698,10 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         var profileRow = null;
         try { var pr = await sbClient.from('profiles').select('full_name').eq('email', s.user.email).maybeSingle(); profileRow = pr.data; } catch (e) {}
         var name = (profileRow && profileRow.full_name) || (s.user.user_metadata && s.user.user_metadata.full_name) || s.user.email.split('@')[0];
+        // First-name-only, matching dashboard.html/profile.html/community.html.
+        var firstName = name.trim().split(/\s+/)[0];
         document.getElementById('navUserPill').style.display = 'flex';
-        document.getElementById('navUname').textContent  = name;
+        document.getElementById('navUname').textContent  = firstName;
         document.getElementById('navUemail').textContent = s.user.email;
         var ADMIN_EMAILS = ['julia.utomo@gmail.com', 'tiffany.utomo@gmail.com'];
         if (ADMIN_EMAILS.indexOf(s.user.email.toLowerCase()) !== -1) {

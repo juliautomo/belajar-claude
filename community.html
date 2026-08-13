@@ -287,10 +287,12 @@ async function _init(){
   // Posts/comments show the username (if set) — full name stays reserved for the
   // account sidebar/avatar/greeting elsewhere in the app.
   currentAuthorName = profileUsername || displayFullName;
+  // Sidebar/avatar show first-name-only, matching dashboard.html/profile.html.
+  var displayFirstName = displayFullName.trim().split(/\s+/)[0];
 
   var joinDate = new Date(session.user.created_at).toLocaleDateString('id-ID', {month:'long', year:'numeric'});
-  document.getElementById('navAvatar').textContent = getInitials(displayFullName);
-  document.getElementById('sideName').textContent = displayFullName;
+  document.getElementById('navAvatar').textContent = getInitials(displayFirstName);
+  document.getElementById('sideName').textContent = displayFirstName;
   document.getElementById('sideEmail').textContent = currentEmail;
   document.getElementById('sideSince').textContent = 'Bergabung ' + joinDate;
 

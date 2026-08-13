@@ -270,8 +270,9 @@ async function saveProfile(){
       experience: answers.experience,
       updated_at: new Date().toISOString()
     }, { onConflict: 'email' });
-    document.getElementById('sideName').textContent = name || currentEmail.split('@')[0];
-    document.getElementById('navAvatar').textContent = getInitials(name || currentEmail.split('@')[0]);
+    var savedFirstName = (name || currentEmail.split('@')[0]).trim().split(/\s+/)[0];
+    document.getElementById('sideName').textContent = savedFirstName;
+    document.getElementById('navAvatar').textContent = getInitials(savedFirstName);
     if (isOnboarding) {
       window.location.href = 'dashboard.html';
       return;
@@ -321,8 +322,11 @@ async function _init(){
   } catch (e) { profile = null; }
 
   var displayName = (profile && profile.full_name) || authName;
-  document.getElementById('navAvatar').textContent = getInitials(displayName);
-  document.getElementById('sideName').textContent = displayName;
+  // Sidebar/avatar show first-name-only (consistent with dashboard.html/community.html) —
+  // the "Nama Lengkap" field below still shows/edits the full name.
+  var firstName = displayName.trim().split(/\s+/)[0];
+  document.getElementById('navAvatar').textContent = getInitials(firstName);
+  document.getElementById('sideName').textContent = firstName;
   document.getElementById('sideEmail').textContent = currentEmail;
   document.getElementById('sideSince').textContent = 'Bergabung ' + joinDate;
 
