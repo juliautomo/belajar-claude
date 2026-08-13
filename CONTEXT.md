@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 13, 2026 (checkpoint 198)_
+_Last updated: August 13, 2026 (checkpoint 199)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2799,6 +2799,16 @@ Julia reported general navigation lag. Audited script-loading and font-loading p
 **Status: no code changes, Supabase data only.**
 
 Julia asked to reset her own account (`julia.utomo@gmail.com`) to simulate a brand-new paying customer, to test the Checkpoint 195 onboarding gate end-to-end. Two passes: (1) deleted her 4 per-course `enrollments` rows (content-marketing, prompt-gratis, mulai-claude, produktivitas) and all 6 `module_completions` rows, keeping the `all-access` enrollment row so her paid status is untouched; (2) deleted her `profiles` row entirely (was full_name "julia utomo", username "jul", role "developer", goal "efisiensi-kerja", experience "sudah-mahir") so the dashboard's onboarding gate (`!userProfile||!userProfile.role||!userProfile.goal`) correctly treats her as a fresh purchaser and redirects to `profile.html?onboarding=1` on next dashboard visit.
+
+**Commits**: none (Supabase data only, via direct SQL through the Supabase MCP).
+
+---
+
+## SHIPPED (Checkpoint 199, August 13, 2026): Tiffany's account fully reset for an end-to-end purchase test — data change only, no code
+
+**Status: no code changes, Supabase data only.**
+
+Different from Checkpoint 198's reset for Julia: Julia wanted to keep her paid/all-access status and only re-test the onboarding-profile flow, whereas Julia asked this time for Tiffany to test the actual purchase itself from scratch. Deleted, for `tiffany.utomo@gmail.com`: her `profiles` row (full_name "tiffany.utomo", role "pemilik-bisnis", goal "bisnis", experience "sudah-mahir"), all 5 `enrollments` rows including `all-access` (so she is no longer a paid holder and can run a real checkout), all 23 `module_completions` rows, and her 1 `waitlist` row. Confirmed zero rows remain across all of: profiles, enrollments, module_completions, waitlist, community_posts, community_comments. Her Supabase Auth login/account itself was left untouched — only app-level purchase/progress data was cleared.
 
 **Commits**: none (Supabase data only, via direct SQL through the Supabase MCP).
 
