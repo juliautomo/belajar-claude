@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 13, 2026 (checkpoint 202)_
+_Last updated: August 13, 2026 (checkpoint 204)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2845,6 +2845,34 @@ Two follow-ups to Checkpoints 198/199. (1) Julia asked to also remove her own `a
 Final step after Checkpoints 198/199/201's progressive resets: Julia asked to also delete both admin accounts' logins entirely (same treatment as Maggie), "remove everything except admin status." Clarified first that admin status isn't a stored flag anywhere — `admin.html`/`community.html`/`dashboard.html`/`index.html` all just check the logged-in email against a hardcoded `ADMIN_EMAILS` array (`julia.utomo@gmail.com`, `tiffany.utomo@gmail.com`), so there's nothing to separately preserve; admin access returns automatically the instant either email logs in again, even on a brand-new account. Confirmed twice given this is irreversible. Deleted Julia's remaining 4 `community_posts` (kept in Checkpoint 201, but superseded by this "remove everything" instruction), then both `auth.users` rows. Verified zero rows remain for either email in `auth.users` and `community_posts`. Both will need to register fresh accounts to log back in.
 
 **Commits**: none (Supabase data only, via direct SQL through the Supabase MCP).
+
+---
+
+## SHIPPED (Checkpoint 203, August 13, 2026): "Semua Kursus Baru" callout on all-access.html made more prominent — dark background instead of light dashed-border box
+
+**Status: pushed to `dev` only.**
+
+Julia flagged the "Semua Kursus Baru — Otomatis Termasuk" note on all-access.html as easy to miss and asked to either enlarge it or give it a dark background; picked dark, matching the site's existing dark-card pattern (already used for `.output-box` on course sales pages and the dashboard's spotlight card) rather than inventing a new style. `.future-note` changed from a light `--accent-dim` fill with a dashed border to a solid `var(--ink)` background with a subtle purple radial-glow accent (`::before`), white/translucent-white text, and slightly larger padding/icon.
+
+**Verified**: `ci-check.js` clean. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `154e238` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 204, August 13, 2026): Fixed dev never sending the welcome/set-password email after a test purchase — Duitku callbackUrl was hardcoded to production
+
+**Status: pushed to `belajar-claude-backend`'s `dev` branch only. NEW: this backend repo now has its own `dev`/`main` split (previously main-only) — confirmed via Railway service config: dev environment tracks branch `dev`, production tracks `main`, same pattern as the frontend.**
+
+Julia reported not receiving the welcome/set-password email after a test purchase on dev. Investigated via Railway logs: found a `create-payment` invoice was created successfully (`POST /create-payment` → 200) but no corresponding `/webhook/duitku` call ever landed on the dev backend — the trail went cold right after invoice creation.
+
+**Root cause**: `createDuitkuInvoice()` in `belajar-claude-backend/index.js` had `callbackUrl` hardcoded to `'https://klaud-backend-production.up.railway.app/webhook/duitku'` unconditionally — so even when the *dev* backend created a sandbox invoice, Duitku was told to send the payment-confirmation webhook to the *production* backend. Production would receive it but reject it (its `DUITKU_API_KEY` differs from dev/sandbox's, so the signature check fails), so the entire post-payment chain (create Supabase account → generate password-set link → send access email) never ran for dev purchases.
+
+**Fix**: `callbackUrl` now derived from `` `https://${process.env.RAILWAY_PUBLIC_DOMAIN}/webhook/duitku` `` (with a fallback to the old hardcoded production URL if that var is ever unset, so production behavior can't regress) — `RAILWAY_PUBLIC_DOMAIN` is set automatically by Railway to whichever environment is actually running the code, confirmed present on both dev and production via `list-variables`. `returnUrl` (where the browser redirects post-payment) is still hardcoded to `https://belajarclaude.id/...` regardless of environment — left as-is since that wasn't the reported problem, flagged here for awareness in case dev testing ever needs to land back on a dev preview URL instead.
+
+**Verified**: `node --check index.js` clean. Confirmed via Railway that the dev backend redeployed automatically on push and came up successfully, logging `Duitku mode: SANDBOX — host: api-sandbox.duitku.com` as expected. Diffed `origin/dev` (freshly cloned into a new `/tmp/backend-push` scratch clone, this repo's `.git` in the mounted folder is corrupted the same way the frontend's is) against the local mount before pushing — only the intended `index.js` change; `mailer.js` had no real diff despite an earlier stale-index false positive.
+
+**Commits**: `belajar-claude-backend`: `49ff9be` (`dev` only — not yet on `main`/production).
 
 ---
 
