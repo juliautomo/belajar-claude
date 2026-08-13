@@ -386,7 +386,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     <div class="course-lib-grid" id="lihCourseGrid"></div>
   </div>
 </div>
-<section id="komunitas" class="pricing-section">
+<section id="komunitas" class="pricing-section" style="display:none;">
   <div class="container">
     <div class="pricing-card">
       <div>
@@ -659,6 +659,18 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     marketingRevealed = true;
     var mh = document.getElementById('marketingHome');
     if (mh) mh.style.display = '';
+    // #komunitas (the bottom pricing/CTA card) used to have no default-hidden state of
+    // its own, unlike #marketingHome/#loggedInHome — so it rendered immediately on every
+    // load, static and unpersonalized, while the rest of the page sat hidden waiting on
+    // the session/enrollment checks below. That's the "weird card by itself" flash Julia
+    // saw navigating dashboard → index: nav + this one card + footer, big blank gap
+    // between them, then everything else popping in and shifting the layout once ready.
+    // Now it starts hidden too and reveals together with marketingHome, already fully
+    // personalized. All Access holders never call revealMarketing() (loggedInHome shows
+    // instead), so #komunitas correctly stays hidden for them the whole time — the
+    // separate explicit hide further down is now just a harmless no-op safety net.
+    var km = document.getElementById('komunitas');
+    if (km) km.style.display = '';
   }
   // Safety net: if the auth check hangs or a script fails to load entirely (ad
   // blocker, network hiccup, Supabase outage), never leave a real visitor staring
