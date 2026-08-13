@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 13, 2026 (checkpoint 205)_
+_Last updated: August 13, 2026 (checkpoint 206)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2887,6 +2887,18 @@ Separately, confirmed Checkpoint 204's callbackUrl fix is working end-to-end —
 **Verified**: `ci-check.js` clean. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
 
 **Commits**: `belajar-claude`: `18650b3` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 206, August 13, 2026): Dashboard "Jelajahi Kursus" no longer one-click auto-enrolls All Access holders; explore-card button shadow removed; confirmed dashboard's "Beranda" link is a dev-only screenshot mismatch, not a bug
+
+**Status: pushed to `dev` only.**
+
+Three items from a dashboard screenshot. (1) The "← Beranda" link looked missing in her screenshot — checked the code, it's present (added Checkpoint 200) and the screenshot's hover tooltip showed `belajarclaude.id`, i.e. she was looking at **production**, which doesn't have Checkpoint 200's changes yet (dev-only so far) — not a new bug, just dev/main not yet merged. (2) Removed `box-shadow` from `.btn-view` (the black "Mulai Kursus"/"Lihat Kursus" buttons in the explore-card grid) per her ask. (3) The bigger one: dashboard's "Jelajahi Kursus" section previously gave All Access holders a one-click "Mulai Kursus" button that called `enrollCourse()` and immediately inserted a real enrollment row with no preview step — different from the experience of browsing from index.html, where you always land on a course's sales page first. Investigated `mulai-claude-content.html`'s access gate and confirmed each course's own sales page (e.g. `mulai-claude.html`'s `enrollAndOpen()`) already has its own equivalent "Mulai Kursus" enroll flow built in for All Access holders who land there — this was already the intended pattern, the dashboard shortcut was the inconsistency. Changed the dashboard's CTA to always link to `meta.salesLink` regardless of All Access status, same as a non-holder sees, removing the direct-enroll button entirely. `enrollCourse()` is left defined but now unused/dead in `dashboard.html` (each sales page has its own equivalent insert logic already).
+
+**Verified**: `ci-check.js` clean. Confirmed via grep that each course's sales page already has working enroll-on-page logic before removing the dashboard's duplicate path. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `638d2f3` (`dev` only).
 
 ---
 
