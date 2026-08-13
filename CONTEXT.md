@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 13, 2026 (checkpoint 204)_
+_Last updated: August 13, 2026 (checkpoint 205)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2873,6 +2873,20 @@ Julia reported not receiving the welcome/set-password email after a test purchas
 **Verified**: `node --check index.js` clean. Confirmed via Railway that the dev backend redeployed automatically on push and came up successfully, logging `Duitku mode: SANDBOX — host: api-sandbox.duitku.com` as expected. Diffed `origin/dev` (freshly cloned into a new `/tmp/backend-push` scratch clone, this repo's `.git` in the mounted folder is corrupted the same way the frontend's is) against the local mount before pushing — only the intended `index.js` change; `mailer.js` had no real diff despite an earlier stale-index false positive.
 
 **Commits**: `belajar-claude-backend`: `49ff9be` (`dev` only — not yet on `main`/production).
+
+---
+
+## SHIPPED (Checkpoint 205, August 13, 2026): Dev/prod separation audit; reset-password.html "Kembali ke beranda" link removed; Checkpoint 204's email fix confirmed working end-to-end
+
+**Status: pushed to `dev` only (frontend); no code change for the audit itself.**
+
+Julia asked to double check dev/prod separation was clean. Audited all four layers: **hosting** (Cloudflare) — separate dev/prod URLs, fine. **Backend** (Railway) — genuinely separate `dev`/`production` environments tracking the matching git branches, separate env vars, separate public URLs, confirmed via `get-service-config`. **Payment gateway** (Duitku) — separate too: dev has no `DUITKU_ENV` set (defaults to sandbox), only production has `DUITKU_ENV=production` with real credentials, confirmed via `list-variables`. **Database** (Supabase) — NOT separate: only one real project (`Belajar-Claude`, `ctqtdqbsucbhikwnagvl`) exists in the account, and `supabase-config.js` hardcodes that same project identically on both the `dev` and `main` branches (byte-for-byte diffed to confirm). Flagged the practical implication clearly: sandbox test purchases are money-safe (can never charge a real card), but the resulting rows aren't test-marked — a dev enrollment is indistinguishable from a real one in the shared tables, and critically, `course_pricing` is a single global table, so a pricing change made while "testing" on dev is actually a live price change for real customers on belajarclaude.id right now. Julia decided this tradeoff is acceptable for now rather than standing up a second Supabase project.
+
+Separately, confirmed Checkpoint 204's callbackUrl fix is working end-to-end — Julia received the set-password email from a real dev sandbox purchase and reached the actual `reset-password.html` "Buat Password Baru" screen from the email link. While there, asked to remove the "← Kembali ke beranda" link from that page's card (sat below all three of its states — reset form, invalid-link, loading — so removing it once at the bottom covered all cases).
+
+**Verified**: `ci-check.js` clean. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `18650b3` (`dev` only).
 
 ---
 
