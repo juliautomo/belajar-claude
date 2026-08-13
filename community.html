@@ -283,11 +283,14 @@ async function _init(){
     profileUsername = pr.data && pr.data.username;
     profileName = pr.data && pr.data.full_name;
   } catch(e) {}
-  currentAuthorName = profileUsername || profileName || metaName || currentEmail.split('@')[0];
+  var displayFullName = profileName || metaName || currentEmail.split('@')[0];
+  // Posts/comments show the username (if set) — full name stays reserved for the
+  // account sidebar/avatar/greeting elsewhere in the app.
+  currentAuthorName = profileUsername || displayFullName;
 
   var joinDate = new Date(session.user.created_at).toLocaleDateString('id-ID', {month:'long', year:'numeric'});
-  document.getElementById('navAvatar').textContent = getInitials(currentAuthorName);
-  document.getElementById('sideName').textContent = currentAuthorName;
+  document.getElementById('navAvatar').textContent = getInitials(displayFullName);
+  document.getElementById('sideName').textContent = displayFullName;
   document.getElementById('sideEmail').textContent = currentEmail;
   document.getElementById('sideSince').textContent = 'Bergabung ' + joinDate;
 
