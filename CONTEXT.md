@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 13, 2026 (checkpoint 191)_
+_Last updated: August 13, 2026 (checkpoint 192)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2695,6 +2695,22 @@ Julia asked to push Tiffany's community feed + admin Dashboard-link work to `mai
 **Verified**: `ci-check.js` clean (29 HTML, 5 JS, 25 local refs — one fewer than before, matching the removed footer links). Confirmed zero remaining references to `kebijakan-pengembalian` anywhere in the codebase's HTML content after the change (`grep -rl` came back empty).
 
 **Commits**: `belajar-claude`: `3fc127f` (`dev` only — legal/FAQ copy, not deploy-urgent, will go to `main` next time Julia asks for a push).
+
+---
+
+## SHIPPED (Checkpoint 192, August 13, 2026): Community admin badge added; display-name inconsistency (julia vs julia.utomo) root-caused and fixed on dashboard.html + index.html
+
+**Status: pushed to `dev` only.**
+
+Two asks from a round of screenshots: an "Admin" badge next to admin replies in the community feed, and an investigation into why the account name renders differently across pages ("julia" in some places, "julia.utomo" in others).
+
+**Admin badge**: `community.html` already had a page-global `isAdmin` (whether the *viewer* is an admin, used for existing pin/delete-any-post moderation features) but nothing that flags whether a given *post or comment's author* is an admin — those are different things. Added a per-row check (`ADMIN_EMAILS.indexOf((p.email||c.email).toLowerCase())`) in both `renderPostCard()` and `renderCommentsSection()`, with a new `.admin-badge` pill (dark, distinct from the existing purple `.post-cat-tag` category pills so the two aren't visually confused) and a `.post-author-row` flex wrapper reused for both post and comment name+badge layout.
+
+**Display-name root cause**: `community.html` and `profile.html` already preferred `profiles.full_name` (with a fallback chain down to `session.user.user_metadata.full_name`, then `email.split('@')[0]`) — but `dashboard.html` and `index.html` didn't. `dashboard.html` was the sneakier bug: it *did* fetch the `profiles` row (`userProfile = pr.data`), but only *after* already computing and applying the display name from `user_metadata`/email, and `userProfile` was never read again anywhere in the file (confirmed via grep — dead fetch). `index.html` never queried `profiles` at all. Both always fell back to the literal email local-part `julia.utomo`, while `community.html`/`profile.html` correctly showed whatever Julia had actually saved as her display name (`julia`) via the profile form. Fixed both to use the same fallback chain, reordering `dashboard.html`'s fetch to run before the name computation instead of after.
+
+**Verified**: `ci-check.js` clean. Confirmed via grep that `userProfile` in `dashboard.html` genuinely had no other reader before this fix (so reordering it couldn't break anything else), and that `index.html` had exactly one place computing the logged-in display name (reused by both the nav pill and the "Selamat datang kembali" hero further down), so one fix covers both.
+
+**Commits**: `belajar-claude`: `4f4c9a9` (`dev` only).
 
 ---
 
