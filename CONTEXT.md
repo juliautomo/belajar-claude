@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 13, 2026 (checkpoint 194)_
+_Last updated: August 13, 2026 (checkpoint 195)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2743,6 +2743,22 @@ Two follow-up rounds of feedback on top of Checkpoint 193's community-username c
 **Verified**: `ci-check.js` clean on both pushes. Diffed `origin/dev` against the local mount before each push — no concurrent Tiffany changes.
 
 **Commits**: `belajar-claude`: `9c0299c`, `0078741` (`dev` only).
+
+---
+
+## SHIPPED (Checkpoint 195, August 13, 2026): First-name-only display everywhere (sidebar, nav pill, avatar) — was full name in the sidebar vs. first name in the dashboard greeting, flagged as inconsistent
+
+**Status: pushed to `dev` only.**
+
+Julia's `profiles.full_name` is "julia utomo". The dashboard greeting ("Selamat datang kembali, julia") has always shown just the first word by design, while the account sidebar (dashboard/profile/community) and the marketing-page nav pill (index.html) showed the full name — flagged as inconsistent. Asked her which way to reconcile it (show full name in the greeting too, or first name everywhere); she picked first-name-everywhere.
+
+Changed `sideName`/`navAvatar` in `dashboard.html`, `profile.html`, `community.html`, and `navUname` in `index.html` to all derive a `firstName` (`displayName.trim().split(/\s+/)[0]`) and display that instead of the full name. Two things intentionally left untouched: `profile.html`'s editable "Nama Lengkap" input still shows/saves the real full name (only the read-only sidebar label was shortened); `community.html`'s post/comment author name (`currentAuthorName`, from Checkpoint 193/194) is unaffected — it already prefers the short `username` field, so no further change needed there.
+
+Noted but out of scope (not touched, flagged for a future ask if she wants full consistency): the nav-user-pill on 5 other marketing pages (`strategi-marketing.html`, `prompt-gratis.html`, `produktivitas.html`, `mulai-claude.html`, `content-marketing.html`, `all-access.html`) never queries `profiles.full_name` at all — they show `user_metadata.full_name` as-is, un-split, a pre-existing inconsistency separate from this fix.
+
+**Verified**: `ci-check.js` clean. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `7593773` (`dev` only).
 
 ---
 
