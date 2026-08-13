@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 13, 2026 (checkpoint 199)_
+_Last updated: August 13, 2026 (checkpoint 200)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2811,6 +2811,18 @@ Julia asked to reset her own account (`julia.utomo@gmail.com`) to simulate a bra
 Different from Checkpoint 198's reset for Julia: Julia wanted to keep her paid/all-access status and only re-test the onboarding-profile flow, whereas Julia asked this time for Tiffany to test the actual purchase itself from scratch. Deleted, for `tiffany.utomo@gmail.com`: her `profiles` row (full_name "tiffany.utomo", role "pemilik-bisnis", goal "bisnis", experience "sudah-mahir"), all 5 `enrollments` rows including `all-access` (so she is no longer a paid holder and can run a real checkout), all 23 `module_completions` rows, and her 1 `waitlist` row. Confirmed zero rows remain across all of: profiles, enrollments, module_completions, waitlist, community_posts, community_comments. Her Supabase Auth login/account itself was left untouched — only app-level purchase/progress data was cleared.
 
 **Commits**: none (Supabase data only, via direct SQL through the Supabase MCP).
+
+---
+
+## SHIPPED (Checkpoint 200, August 13, 2026): Login from homepage stays on homepage instead of auto-jumping to dashboard; dashboard nav gets a "Beranda" link back home
+
+**Status: pushed to `dev` only.**
+
+Two small nav-flow asks. (1) Previously every successful login/register on `login.html` hard-redirected to `dashboard.html`, regardless of where the user came from — so logging in from the homepage immediately yanked them away from it. Homepage's "Masuk" link now points to `login.html?next=index.html`; `login.html` has a new `getNextUrl()` helper used by all three redirect points (already-logged-in auto-redirect, login success, register success) that honors `?next=` if present, falling back to `dashboard.html` otherwise. `getNextUrl()` only accepts a bare same-site `.html` filename via regex (`/^[a-zA-Z0-9_-]+\.html$/`) — never a full URL — so this can't become an open redirect even if someone hand-crafts the query string. Every other entry point to `login.html` (nav pills on other marketing pages, direct navigation) is untouched and still defaults to the dashboard as before. (2) `dashboard.html`'s nav only had the logo (which does link to `index.html`, but not obviously) and "Keluar" — added an explicit "← Beranda" link next to Keluar.
+
+**Verified**: `ci-check.js` clean. Diffed `origin/dev` against the local mount before pushing — no concurrent Tiffany changes.
+
+**Commits**: `belajar-claude`: `75924c1` (`dev` only).
 
 ---
 
