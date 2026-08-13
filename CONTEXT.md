@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 10, 2026 (checkpoint 189)_
+_Last updated: August 13, 2026 (checkpoint 190)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -2658,6 +2658,25 @@ Julia asked whether the purchase button and price could be temporarily swapped t
 Was about to ask Julia to confirm scope (all 8 files vs. just `all-access.html`), whether the button should be fully disabled vs. just relabeled, and dev vs. main — but she said "nevermind" before those were answered. **Not implemented.** No files changed.
 
 **Commits**: none.
+
+---
+
+## SHIPPED (Checkpoint 190, August 13, 2026): Duitku production cutover complete — real payments now live
+
+**Status: live in production.** No code change — the backend was already built for this (Checkpoint 164 gated the whole thing behind `DUITKU_ENV`), so this was purely a config/credentials day.
+
+Julia received her Duitku production merchant approval (merchant code `D24113`, project "BELAJARCLAUDE"). Steps taken together:
+
+1. Confirmed `api-prod.duitku.com` is genuinely Duitku's standard production `createInvoice` host (verified via their public API docs) — matches what was already hardcoded in `belajar-claude-backend/index.js`, so no code needed updating for the endpoint itself.
+2. Set the merchant project's **URL Callback Proyek** in Duitku's dashboard to `https://klaud-backend-production.up.railway.app/webhook/duitku` — cross-checked against both `index.js`'s hardcoded `callbackUrl` and `backend-config.js`'s production `BACKEND_URL`, which agree exactly.
+3. Julia set `DUITKU_MERCHANT_CODE`, `DUITKU_API_KEY`, and `DUITKU_ENV=production` directly on Railway's **production** environment herself (per standing rule, I never enter credentials into any field myself, even when supplied — walked her through exactly where each value goes instead).
+4. Julia connected the Railway MCP connector mid-session so I could verify directly rather than asking her to copy-paste logs.
+
+**Verified via Railway MCP** (read-only — variable values came back redacted, names only, so no secret ever entered this session): production environment has all 3 Duitku vars present; the deployment that picked them up (`d3a99329`, Aug 13 05:43 UTC, same commit as the original `DUITKU_ENV` feature) succeeded and its startup log reads exactly `💳 Duitku mode: PRODUCTION (real money) — host: api-prod.duitku.com`. Also confirmed the **dev** environment has no `DUITKU_ENV` var at all (stays defaulted to sandbox, untouched by this change) — dev's own recent logs show a normal sandbox test invoice from Tiffany, consistent with that.
+
+**Not yet done**: an actual real end-to-end test purchase to confirm the full flow (webhook → Supabase enrollment → access email) works against the real merchant account, not just that the mode flag is correct. Worth doing before telling customers it's live, even though the underlying webhook code path is unchanged from what's been working in sandbox for weeks.
+
+**Commits**: none — this was entirely Railway/Duitku dashboard configuration, no repo changes.
 
 ---
 
