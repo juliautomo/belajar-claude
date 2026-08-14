@@ -133,7 +133,7 @@ table.matrix-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 table.matrix-table th, table.matrix-table td { text-align: left; padding: 12px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
 table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.4px; }
 .mod-sub { display: block; font-size: 11.5px; color: var(--ink-2); font-weight: 400; margin-top: 1px; }
-.cell-done { display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; }
+.cell-done { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .cell-link, .cell-link-btn { color: var(--green); text-decoration: none; font-weight: 600; font-size: 12px; background: var(--green-dim); border: 1px solid var(--green-border); padding: 5px 10px; border-radius: 7px; cursor: pointer; font-family: inherit; display: inline-block; max-width: 340px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 1; min-width: 0; }
 .cell-link:hover, .cell-link-btn:hover { text-decoration: underline; }
 .cell-done .btn-mini, .cell-done .del-btn { flex-shrink: 0; }
@@ -291,7 +291,7 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
             <h2 id="matrixCourseTitle">Konten per Modul</h2>
             <p class="hint">Klik sel yang sudah terisi untuk lihat/ganti filenya, atau klik "+ Unggah" untuk yang masih kosong.</p>
             <table class="matrix-table" id="matrixTable">
-              <thead><tr><th style="width:16%;">Modul</th><th style="width:16%;">Video</th><th style="width:38%;">PPT</th><th style="width:30%;">Dokumen</th></tr></thead>
+              <thead><tr><th style="width:16%;">Modul</th><th style="width:22%;">Video</th><th style="width:32%;">PPT</th><th style="width:30%;">Dokumen</th></tr></thead>
               <tbody id="matrixBody"><tr><td colspan="4">Memuat...</td></tr></tbody>
             </table>
           </div>
@@ -946,7 +946,7 @@ function renderMatrix() {
       ? '<div class="cell-done"><a class="cell-link" href="' + video.video_url + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">✓ Lihat</a><button class="btn-mini" onclick="openVideoModal(' + i + ')">Ganti</button><button class="del-btn" onclick="deleteVideoModal(' + i + ')">Hapus</button></div>'
       : (video && video.no_video_planned)
         ? '<div class="cell-done"><span class="novideo-badge">Tidak ada video</span><button class="del-btn" onclick="clearNoVideo(' + i + ')">Batal</button></div>'
-        : '<div class="cell-done"><button class="cell-missing" onclick="openVideoModal(' + i + ')">+ Unggah</button><button class="btn-mini" onclick="markNoVideo(' + i + ')">Tidak ada video</button></div>';
+        : '<div class="cell-done"><button class="cell-missing" onclick="openVideoModal(' + i + ')">+ Unggah</button><button class="btn-mini" onclick="markNoVideo(' + i + ')">Tanpa video</button></div>';
 
     var pptCell = (ppt && ppt.ppt_url)
       ? '<div class="cell-done"><a class="cell-link" href="' + ppt.ppt_url + '" target="_blank" rel="noopener" title="' + escapeHtml(ppt.ppt_label || '') + '" onclick="event.stopPropagation()">✓ ' + escapeHtml(ppt.ppt_label || 'Lihat') + '</a><button class="btn-mini" onclick="openPptModal(' + i + ')">Ganti</button><button class="del-btn" onclick="deletePptModal(' + i + ')">Hapus</button></div>'
