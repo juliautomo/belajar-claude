@@ -139,6 +139,7 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
 .cell-done .btn-mini, .cell-done .del-btn { flex-shrink: 0; }
 .cell-missing { padding: 6px 12px; background: var(--surface-2); border: 1.5px dashed var(--border-strong); border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--ink-2); cursor: pointer; font-family: inherit; }
 .cell-missing:hover { border-color: var(--accent); color: var(--accent); }
+.novideo-badge { padding: 6px 12px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--ink-2); white-space: nowrap; }
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
 .modal-overlay.show { display: flex; }
 .modal { background: #fff; border-radius: 16px; padding: 28px; max-width: 440px; width: 100%; box-shadow: 0 24px 60px rgba(0,0,0,0.18); position: relative; max-height: 85vh; overflow-y: auto; }
@@ -943,7 +944,9 @@ function renderMatrix() {
 
     var videoCell = (video && video.video_url)
       ? '<div class="cell-done"><a class="cell-link" href="' + video.video_url + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">✓ Lihat</a><button class="btn-mini" onclick="openVideoModal(' + i + ')">Ganti</button><button class="del-btn" onclick="deleteVideoModal(' + i + ')">Hapus</button></div>'
-      : '<button class="cell-missing" onclick="openVideoModal(' + i + ')">+ Unggah</button>';
+      : (video && video.no_video_planned)
+        ? '<div class="cell-done"><span class="novideo-badge">Tidak ada video</span><button class="del-btn" onclick="clearNoVideo(' + i + ')">Batal</button></div>'
+        : '<div class="cell-done"><button class="cell-missing" onclick="openVideoModal(' + i + ')">+ Unggah</button><button class="btn-mini" onclick="markNoVideo(' + i + ')">Tidak ada video</button></div>';
 
     var pptCell = (ppt && ppt.ppt_url)
       ? '<div class="cell-done"><a class="cell-link" href="' + ppt.ppt_url + '" target="_blank" rel="noopener" title="' + escapeHtml(ppt.ppt_label || '') + '" onclick="event.stopPropagation()">✓ ' + escapeHtml(ppt.ppt_label || 'Lihat') + '</a><button class="btn-mini" onclick="openPptModal(' + i + ')">Ganti</button><button class="del-btn" onclick="deletePptModal(' + i + ')">Hapus</button></div>'
@@ -1112,6 +1115,7 @@ async function submitVideoModal(moduleNum) {
     course_slug: activeCourse,
     module_num: moduleNum,
     video_url: url,
+    no_video_planned: false,
     updated_at: new Date().toISOString(),
     updated_by: currentSession.user.email
   }, { onConflict: 'course_slug,module_num' });
@@ -1130,6 +1134,32 @@ async function deleteVideoModal(moduleNum) {
   if (!_sess) return;
   var db = await sbClient.from('module_videos').delete().eq('course_slug', activeCourse).eq('module_num', moduleNum);
   if (db.error) { alert('Gagal hapus video: ' + db.error.message); return; }
+  await reloadAndRender();
+}
+
+// Marks a module as intentionally having no video (e.g. a practice/capstone module),
+// so the content page's "Video coming soon" placeholder is suppressed for it instead
+// of implying a video is still on the way.
+async function markNoVideo(moduleNum) {
+  var _sess = await ensureFreshSession();
+  if (!_sess) return;
+  var db = await sbClient.from('module_videos').upsert({
+    course_slug: activeCourse,
+    module_num: moduleNum,
+    video_url: null,
+    no_video_planned: true,
+    updated_at: new Date().toISOString(),
+    updated_by: currentSession.user.email
+  }, { onConflict: 'course_slug,module_num' });
+  if (db.error) { alert('Gagal menyimpan: ' + db.error.message); return; }
+  await reloadAndRender();
+}
+
+async function clearNoVideo(moduleNum) {
+  var _sess = await ensureFreshSession();
+  if (!_sess) return;
+  var db = await sbClient.from('module_videos').delete().eq('course_slug', activeCourse).eq('module_num', moduleNum);
+  if (db.error) { alert('Gagal membatalkan: ' + db.error.message); return; }
   await reloadAndRender();
 }
 

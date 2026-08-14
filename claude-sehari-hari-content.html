@@ -83,7 +83,7 @@
   .prompt-section{background:#fff;border:1px solid var(--border);border-radius:14px;margin-bottom:18px;overflow:hidden;}
   .prompt-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-3);margin:0;font-family:var(--font);display:flex;align-items:center;gap:6px;padding:13px 18px;background:#fafafa;border-bottom:1px solid var(--border);}
   .prompt-section.latihan{background:var(--accent-dim);border:1.5px solid rgba(108,71,255,0.25);border-radius:18px;}
-  .prompt-section.latihan .prompt-label{font-family:var(--font);font-size:17px;font-weight:700;text-transform:none;letter-spacing:-0.2px;color:var(--accent);background:transparent;border-bottom:1px solid rgba(108,71,255,0.15);padding:16px 20px 12px;}
+  .prompt-section.latihan .prompt-label{font-family:var(--font);font-size:17px;font-weight:700;text-transform:none;letter-spacing:-0.2px;color:var(--accent);background:transparent;border-bottom:1px solid rgba(108,71,255,0.15);padding:10px 20px 10px;}
   .prompt-box{background:var(--ink);border:0;border-radius:0;padding:20px 52px 20px 20px;font-size:13px;color:#f2f2f2;line-height:1.8;font-family:'SF Mono',Consolas,monospace;white-space:pre-wrap;position:relative;}
   .copy-btn{position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.12);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font);transition:background 0.2s;}
   .copy-btn:hover{background:var(--accent);}
@@ -140,7 +140,7 @@
   .info-card{background:var(--accent-dim);padding:14px 16px;border-radius:12px;min-width:0;overflow-wrap:break-word;}
   .info-card strong{font-size:12.5px;color:var(--ink);display:block;margin-bottom:3px;}
   .info-card span{font-size:11.5px;color:var(--ink-2);line-height:1.6;}
-  .learn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:14px 0 6px;}
+  .learn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:14px 0 0;}
   .learn-grid.cols-4{grid-template-columns:repeat(4,1fr);}
   .learn-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px 16px;min-width:0;overflow-wrap:break-word;transition:border-color 0.2s,transform 0.2s;}
   .learn-card:hover{border-color:rgba(108,71,255,0.3);transform:translateY(-2px);}
@@ -1329,6 +1329,7 @@ yang lebih jelas dan sopan tapi tetap tegas.<button class="copy-btn" onclick="co
   // course-video.js runs async; we wait 1.5s then show placeholder only in still-empty slots
   setTimeout(function() {
     document.querySelectorAll('.video-slot[data-placeholder="true"]').forEach(function(slot) {
+      if (slot.getAttribute('data-no-video') === 'true') return;
       if (!slot.innerHTML.trim()) {
         slot.innerHTML =
           '<div style="display:flex;align-items:center;gap:12px;padding:14px 16px;' +
