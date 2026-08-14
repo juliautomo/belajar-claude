@@ -620,9 +620,12 @@ async function _init(){
   try{
     if(settled[2].status==='fulfilled'){
       var vr=settled[2].value;
+      // dev_preview lets admin.html unhide a course on the dev deployment only
+      // (hostname starting with "dev-") without it going live on production.
+      var IS_DEV_ENV=/^dev-/.test(location.hostname);
       (vr.data||[]).forEach(function(row){
         if(!ALL_COURSES[row.course_slug])return;
-        ALL_COURSES[row.course_slug].hidden=!!row.hidden;
+        ALL_COURSES[row.course_slug].hidden=(IS_DEV_ENV&&row.dev_preview)?false:!!row.hidden;
         ALL_COURSES[row.course_slug].comingSoon=!!row.coming_soon;
         ALL_COURSES[row.course_slug].visible=true;
         if(row.sort_order!=null)ALL_COURSES[row.course_slug].sortOrder=row.sort_order;

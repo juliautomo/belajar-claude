@@ -273,6 +273,16 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
                 </div>
               </div>
             </div>
+            <div class="social-field">
+              <div class="social-label-row">
+                <label>Tampilkan di Dev (preview)</label>
+                <div class="social-toggle-wrap">
+                  <span class="social-toggle-text" id="courseDevPreviewLabel">Nonaktif</span>
+                  <label class="toggle-switch"><input type="checkbox" id="courseDevPreviewToggle" onchange="onCourseVisibilityToggle('dev_preview')"><span class="toggle-slider"></span></label>
+                </div>
+              </div>
+              <p class="hint" style="margin-top:6px;">Kalau aktif, kursus ini tetap tampil di situs dev (dev-belajar-claude...) meski "Sembunyikan dari situs" nyala — supaya bisa direview sebelum go-live. Tidak berpengaruh ke situs production.</p>
+            </div>
             <div class="status" id="courseVisibilityStatus"></div>
           </div>
 
@@ -946,11 +956,14 @@ function renderVisibilityToggles() {
   var row = dataCache.visibility.find(function (v) { return v.course_slug === activeCourse; });
   var hidden = row ? !!row.hidden : false;
   var comingSoon = row ? !!row.coming_soon : !!(course && course.comingSoon);
+  var devPreview = row ? !!row.dev_preview : false;
 
   document.getElementById('courseHiddenToggle').checked = hidden;
   document.getElementById('courseHiddenLabel').textContent = hidden ? 'Disembunyikan' : 'Tampil';
   document.getElementById('courseComingSoonToggle').checked = comingSoon;
   document.getElementById('courseComingSoonLabel').textContent = comingSoon ? 'Segera Hadir' : 'Live';
+  document.getElementById('courseDevPreviewToggle').checked = devPreview;
+  document.getElementById('courseDevPreviewLabel').textContent = devPreview ? 'Aktif' : 'Nonaktif';
 
   var statusEl = document.getElementById('courseVisibilityStatus');
   statusEl.className = 'status';
@@ -962,8 +975,10 @@ async function onCourseVisibilityToggle(changedField) {
   if (!_sess) return;
   var hidden = document.getElementById('courseHiddenToggle').checked;
   var comingSoon = document.getElementById('courseComingSoonToggle').checked;
+  var devPreview = document.getElementById('courseDevPreviewToggle').checked;
   document.getElementById('courseHiddenLabel').textContent = hidden ? 'Disembunyikan' : 'Tampil';
   document.getElementById('courseComingSoonLabel').textContent = comingSoon ? 'Segera Hadir' : 'Live';
+  document.getElementById('courseDevPreviewLabel').textContent = devPreview ? 'Aktif' : 'Nonaktif';
 
   var statusEl = document.getElementById('courseVisibilityStatus');
   statusEl.className = 'status show';
@@ -973,6 +988,7 @@ async function onCourseVisibilityToggle(changedField) {
     course_slug: activeCourse,
     hidden: hidden,
     coming_soon: comingSoon,
+    dev_preview: devPreview,
     updated_at: new Date().toISOString(),
     updated_by: currentSession.user.email,
   };

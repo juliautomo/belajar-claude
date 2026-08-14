@@ -633,10 +633,15 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     // trip — which is what caused hidden "coming soon" courses to reappear.
     var visibilityPromise = (function() {
       try {
+        // dev_preview lets admin.html unhide a course on the dev deployment only
+        // (hostname starting with "dev-") without it going live on production —
+        // both environments read the same course_visibility row, so this is the
+        // one field prod deliberately ignores.
+        var IS_DEV_ENV = /^dev-/.test(location.hostname);
         return sbClient.from('course_visibility').select('*').then(function(vis) {
           (vis.data || []).forEach(function(row) {
             if (!LIH_COURSES[row.course_slug]) return;
-            LIH_COURSES[row.course_slug].hidden = !!row.hidden;
+            LIH_COURSES[row.course_slug].hidden = (IS_DEV_ENV && row.dev_preview) ? false : !!row.hidden;
             LIH_COURSES[row.course_slug].comingSoon = !!row.coming_soon;
             LIH_COURSES[row.course_slug].visible = true;
             if (row.sort_order != null) LIH_COURSES[row.course_slug].sortOrder = row.sort_order;
