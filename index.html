@@ -621,6 +621,19 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
             LIH_COURSES[row.course_slug].hidden = !!row.hidden;
             LIH_COURSES[row.course_slug].comingSoon = !!row.coming_soon;
             LIH_COURSES[row.course_slug].visible = true;
+            if (row.sort_order != null) LIH_COURSES[row.course_slug].sortOrder = row.sort_order;
+          });
+          // Admin-set sort_order (from admin.html's "Urutan Tampil Kursus" card) drives
+          // the course-card order everywhere — re-sort in place so both
+          // renderKursusComingSoon() and the All Access lihCourseGrid block below
+          // (which explicitly awaits this promise) pick it up. Courses without a
+          // sort_order row yet fall back to their original position in the array.
+          var fallbackIdx = {};
+          LIH_COURSE_ORDER.forEach(function(slug, i) { fallbackIdx[slug] = i + 1; });
+          LIH_COURSE_ORDER = LIH_COURSE_ORDER.slice().sort(function(a, b) {
+            var oa = (LIH_COURSES[a] && LIH_COURSES[a].sortOrder != null) ? LIH_COURSES[a].sortOrder : fallbackIdx[a];
+            var ob = (LIH_COURSES[b] && LIH_COURSES[b].sortOrder != null) ? LIH_COURSES[b].sortOrder : fallbackIdx[b];
+            return oa - ob;
           });
         }).catch(function(){});
       } catch (e) { return Promise.resolve(); }

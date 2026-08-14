@@ -123,6 +123,12 @@ td a:hover { text-decoration: underline; }
 .pdf-status a:hover { text-decoration: underline; }
 .btn-mini { padding: 6px 12px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--ink); cursor: pointer; font-family: inherit; }
 .btn-mini:hover { border-color: var(--border-strong); }
+.order-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; font-size: 13.5px; font-weight: 600; color: var(--ink); }
+.order-row:last-child { margin-bottom: 0; }
+.order-arrows { display: flex; gap: 6px; }
+.order-arrows .btn-mini { padding: 5px 11px; font-size: 13px; line-height: 1; }
+.order-arrows .btn-mini:disabled { opacity: 0.35; cursor: not-allowed; }
+.order-arrows .btn-mini:disabled:hover { border-color: var(--border); }
 table.matrix-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 table.matrix-table th, table.matrix-table td { text-align: left; padding: 12px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
 table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.4px; }
@@ -228,6 +234,13 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
     <div class="panel" id="panel-content">
       <h1 class="page-title">Course Content</h1>
       <p class="page-sub">Unggah PDF, video, PPT, dan dokumen praktik per modul — tampil langsung di halaman kursus, tidak perlu deploy ulang.</p>
+
+      <div class="card">
+        <h2>Urutan Tampil Kursus</h2>
+        <p class="hint">Atur urutan kartu kursus di halaman utama dan dashboard. Naikkan/turunkan dengan panah — berlaku langsung di seluruh situs, tidak perlu deploy ulang.</p>
+        <div id="courseOrderList">Memuat...</div>
+        <div class="status" id="courseOrderStatus"></div>
+      </div>
 
       <div class="content-split">
         <div class="course-subnav" id="courseSubnav"></div>
@@ -694,6 +707,7 @@ function renderAll() {
   renderPdfRow();
   renderMatrix();
   renderVisibilityToggles();
+  renderCourseOrder();
   renderSocialLinks();
   renderAccessList();
 }
@@ -969,6 +983,72 @@ async function onCourseVisibilityToggle(changedField) {
     if (idx === -1) dataCache.visibility.push(payload); else dataCache.visibility[idx] = payload;
     statusEl.className = 'status show success';
     statusEl.textContent = 'Tersimpan ✓ — langsung berlaku di seluruh situs.';
+  } catch (e) {
+    statusEl.className = 'status show error';
+    statusEl.textContent = 'Gagal menyimpan: ' + e.message;
+  }
+}
+
+// ─── COURSE ORDER (drives card order on index.html / dashboard.html) ────────
+// Also lives in `course_visibility.sort_order` — same live-override pattern as
+// the hide/coming-soon toggles above. Falls back to COURSES array order if a
+// course has no row yet (e.g. newly added).
+
+function getEffectiveSortOrder(slug, fallbackIdx) {
+  var row = dataCache.visibility.find(function (v) { return v.course_slug === slug; });
+  return (row && row.sort_order != null) ? row.sort_order : (fallbackIdx + 1);
+}
+
+function getSortedCourseOrder() {
+  return COURSES.map(function (c, idx) {
+    return { slug: c.slug, name: c.name, sortOrder: getEffectiveSortOrder(c.slug, idx) };
+  }).sort(function (a, b) { return a.sortOrder - b.sortOrder; });
+}
+
+function renderCourseOrder() {
+  var list = getSortedCourseOrder();
+  var el = document.getElementById('courseOrderList');
+  el.innerHTML = list.map(function (item, i) {
+    return '<div class="order-row">' +
+      '<span>' + escapeHtml(item.name) + '</span>' +
+      '<div class="order-arrows">' +
+        '<button class="btn-mini"' + (i === 0 ? ' disabled' : '') + ' onclick="moveCourseOrder(\'' + item.slug + '\', -1)" title="Naikkan">↑</button>' +
+        '<button class="btn-mini"' + (i === list.length - 1 ? ' disabled' : '') + ' onclick="moveCourseOrder(\'' + item.slug + '\', 1)" title="Turunkan">↓</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+async function moveCourseOrder(slug, direction) {
+  var _sess = await ensureFreshSession();
+  if (!_sess) return;
+  var list = getSortedCourseOrder();
+  var idx = list.findIndex(function (item) { return item.slug === slug; });
+  var targetIdx = idx + direction;
+  if (idx === -1 || targetIdx < 0 || targetIdx >= list.length) return;
+  var tmp = list[idx];
+  list[idx] = list[targetIdx];
+  list[targetIdx] = tmp;
+
+  var statusEl = document.getElementById('courseOrderStatus');
+  statusEl.className = 'status show';
+  statusEl.textContent = 'Menyimpan...';
+
+  var nowIso = new Date().toISOString();
+  var payloads = list.map(function (item, i) {
+    return { course_slug: item.slug, sort_order: i + 1, updated_at: nowIso, updated_by: currentSession.user.email };
+  });
+  try {
+    var res = await sbClient.from('course_visibility').upsert(payloads, { onConflict: 'course_slug' });
+    if (res.error) throw res.error;
+    payloads.forEach(function (p) {
+      var vIdx = dataCache.visibility.findIndex(function (v) { return v.course_slug === p.course_slug; });
+      if (vIdx === -1) dataCache.visibility.push(p);
+      else dataCache.visibility[vIdx] = Object.assign({}, dataCache.visibility[vIdx], p);
+    });
+    statusEl.className = 'status show success';
+    statusEl.textContent = 'Tersimpan ✓ — urutan langsung berlaku di seluruh situs.';
+    renderCourseOrder();
   } catch (e) {
     statusEl.className = 'status show error';
     statusEl.textContent = 'Gagal menyimpan: ' + e.message;
