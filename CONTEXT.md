@@ -3772,7 +3772,7 @@ Fixed both call sites with the same hostname-detection pattern already establish
 
 ## SHIPPED (Checkpoint 216, August 14, 2026): Onboarding gate is now an in-page modal, not a redirect
 
-**Status: pushed to `dev` only.**
+**Status: shipped to production.** Verified working on `dev` first, then fast-forwarded straight to `main` (0a64ff3 was already dev's tip, so no merge was needed — just `push origin/dev:main`).
 
 Julia's feedback: the checkpoint 194 onboarding gate (dashboard.html redirects to `profile.html?onboarding=1` if role/goal aren't set) was "a bit weird" — it blocks dashboard navigation, but once on profile.html the nav's "Beranda" link still works, so the "forced" step could just be sidestepped by leaving to the homepage instead of completing it.
 
@@ -3780,5 +3780,5 @@ Replaced the redirect with an in-page modal (`.onb-overlay`) on dashboard.html i
 
 **Verified**: `ci-check.js` clean; extracted and `node --check`'d the inline `<script>` separately since ci-check.js doesn't parse embedded JS. Diffed `origin/dev` against the local mount before copying — no concurrent changes.
 
-**Commits**: `bb6c170` on `dev`.
+**Commits**: `bb6c170` + `0a64ff3` — now on both `dev` and `main`.
 
