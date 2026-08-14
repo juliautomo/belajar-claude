@@ -162,7 +162,7 @@
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-content">
-    <span class="level-tag" style="background:#F4F4F5;color:#71717A;">Segera Hadir · 12 Modul</span>
+    <span class="level-tag" id="heroLevelTag" style="background:#F4F4F5;color:#71717A;">Segera Hadir · 13 Modul</span>
     <h1>Claude untuk <span class="accent">Sehari-hari</span></h1>
     <p class="hero-sub">Pakai Claude buat hal-hal yang sebenarnya kamu hadapi tiap hari — atur budget, rencanakan liburan, rapikan CV, sampai bantu ambil keputusan. Simpel, tanpa setup ribet, langsung praktik dari situasi nyata di hidupmu.</p>
     <div class="hero-meta">
@@ -178,7 +178,7 @@
 <section class="pad" style="background: var(--surface);">
   <div class="container">
     <div class="section-label">Kurikulum</div>
-    <h2 class="section-title">12 Modul · Praktis untuk Kehidupan Sehari-hari</h2>
+    <h2 class="section-title">13 Modul · Praktis untuk Kehidupan Sehari-hari</h2>
     <p class="section-sub">Tidak ada prasyarat, tidak perlu jadi pebisnis atau anak IT. Tiap modul berdiri sendiri (5-10 menit), langsung pakai situasi nyatamu sendiri — dari isi kulkas sampai keputusan beli motor.</p>
     <div class="modules-list">
       <div class="module-item">
@@ -425,6 +425,20 @@
   // have access" experience — with a live All Access session before that switch is flipped.
   const PROD_COMING_SOON = true;
   const COMING_SOON = /^dev-/.test(location.hostname) ? false : PROD_COMING_SOON;
+
+  // The hero badge is server-rendered as "Segera Hadir" (the safe pre-launch default,
+  // since the same static HTML is served to both dev and prod) — flip it to reflect
+  // reality wherever COMING_SOON is actually unlocked, same rule as the enrollment
+  // logic below, so the page doesn't contradict itself (badge says coming soon while
+  // the CTA further down already lets All Access holders start the course).
+  if (!COMING_SOON) {
+    var levelTag = document.getElementById('heroLevelTag');
+    if (levelTag) {
+      levelTag.textContent = 'Tersedia · 13 Modul';
+      levelTag.style.background = '#E8F8EE';
+      levelTag.style.color = '#1F9254';
+    }
+  }
 
   (async () => {
     const { data: { session } } = await sbClient.auth.getSession();
