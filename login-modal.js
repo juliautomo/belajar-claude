@@ -307,8 +307,12 @@
     btn.disabled = true; btn.textContent = 'Mengirim...';
     msg.className = 'm-msg';
 
+    // Same env-aware redirect as login.html's doForgot() — hardcoding production here
+    // would send dev-site users to production's reset-password.html/dashboard.html.
     var res = await sbClient.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://belajarclaude.id/reset-password.html'
+      redirectTo: (location.hostname === 'belajarclaude.id'
+        ? 'https://belajarclaude.id'
+        : 'https://dev-belajar-claude.belajarclaude-id.workers.dev') + '/reset-password.html'
     });
     if (res.error) {
       mShowMsg(msg, 'error', res.error.message);

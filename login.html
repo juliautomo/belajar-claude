@@ -270,8 +270,14 @@
       btn.disabled = true; btn.textContent = 'Mengirim...';
       msg.className = 'msg';
 
+      // redirectTo must match whichever hostname this page is actually loaded from —
+      // hardcoding production here sends dev-site "Lupa password?" users to production's
+      // reset-password.html (and, after resetting, production's dashboard.html), the same
+      // class of bug the Duitku widget script had. Mirrors FRONTEND_URL's env split.
       var res = await sbClient.auth.resetPasswordForEmail(email, {
-        redirectTo: 'https://belajarclaude.id/reset-password.html'
+        redirectTo: (location.hostname === 'belajarclaude.id'
+          ? 'https://belajarclaude.id'
+          : 'https://dev-belajar-claude.belajarclaude-id.workers.dev') + '/reset-password.html'
       });
       if (res.error) {
         showMsg(msg, 'error', res.error.message);
