@@ -242,7 +242,7 @@
       <div class="sidebar-course-name">Claude untuk Sehari-hari</div>
       <div class="progress-bar-wrap">
         <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-        <span class="progress-label" id="progressLabel">0/12</span>
+        <span class="progress-label" id="progressLabel">0/13</span>
       </div>
     </div>
     <div id="pdf-download-slot"></div>
@@ -295,6 +295,10 @@
       <div class="mod-check" id="check12"></div>
       <div class="mod-item-info"><div class="mod-item-title">Rapikan Tulisan & Chat</div><div class="mod-item-sub">Modul 12 · Komunikasi</div></div>
     </div>
+    <div class="mod-item" id="nav-mod13" onclick="showModule(13)">
+      <div class="mod-check" id="check13"></div>
+      <div class="mod-item-info"><div class="mod-item-title">Sekarang, Coba Sendiri</div><div class="mod-item-sub">Modul 13 · Praktik Bebas</div></div>
+    </div>
     <div class="sidebar-footer">
       <div class="sidebar-section-label" style="padding:0 0 8px;">Tools yang dipakai</div>
       <div class="sidebar-tools">
@@ -302,8 +306,8 @@
       </div>
     </div>
     <div class="mod-feedback">
-      <div class="mod-item" id="nav-mod13" onclick="showModule(13)">
-        <div class="mod-check" id="check13">★</div>
+      <div class="mod-item" id="nav-mod14" onclick="showModule(14)">
+        <div class="mod-check" id="check14">★</div>
         <div><div class="mod-item-title">Feedback</div><div class="mod-item-sub">Nilai kursus ini</div></div>
       </div>
     </div>
@@ -330,9 +334,10 @@
           <p>Selama ini penasaran kenapa harga telur naik-turun terus tiap bulan, tapi belum sempat cari tahu. Tanya ke Claude, dapat jawaban — lalu follow-up 2 kali sampai benar-benar paham, bukan cuma baca sekali lalu lupa.</p>
         </div>
 
-        <div class="step-label"><span class="step-badge">03</span> Coba di Claude</div>
+        <div class="step-label"><span class="step-badge">03</span> Prompt</div>
+        <p class="body-text">Salin prompt di bawah ini, lalu tempel ke chat Claude kamu.</p>
         <div class="prompt-section">
-          <div class="prompt-label">📝 Coba di Claude</div>
+          <div class="prompt-label">📝 Prompt</div>
           <div class="prompt-box">Kenapa sih harga telur di pasar suka naik-turun drastis?
 Jelasin dengan simpel, aku bukan orang ekonomi.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
@@ -342,29 +347,29 @@ Jelasin dengan simpel, aku bukan orang ekonomi.<button class="copy-btn" onclick=
         <div class="output-box">
           <div class="output-icon">✅</div>
           <div>
-            <h3>Output yang Diharapkan</h3>
-            <p>Tidak ada file yang dihasilkan — output modul ini adalah kebiasaan: kamu jadi terbiasa follow-up dan minta penjelasan ulang, bukan berhenti di jawaban pertama.</p>
+            <h3>Contoh Jawaban Claude</h3>
+            <p>Harga telur naik-turun karena beberapa faktor utama: (1) Harga pakan ayam seperti jagung dan kedelai yang fluktuatif — kalau pakan naik, biaya produksi ikut naik. (2) Siklus populasi ayam petelur — kalau banyak peternak sekaligus mengurangi jumlah ayam setelah harga anjlok, pasokan telur ikut turun dan harga naik lagi beberapa bulan kemudian. (3) Permintaan musiman, misalnya menjelang Lebaran atau Natal, yang melonjak sementara pasokan tetap. Jadi harga telur naik-turun dalam siklus beberapa bulan, bukan naik terus-menerus.</p>
+            <p style="margin-top:8px;font-size:11.5px;color:var(--ink-3);font-style:italic;">Catatan: ini contoh ilustrasi — jawaban Claude yang asli bisa berbeda tergantung detail yang kamu berikan.</p>
           </div>
         </div>
 
         <div class="step-label"><span class="step-badge">05</span> Sekarang Giliran Kamu</div>
 
         <div class="prompt-section latihan">
-          <div class="prompt-label">🎯 Sekarang Giliran Kamu</div>
+          <div class="prompt-label">🎯 Latihan</div>
           <div class="case-box">
             <p>Pilih 1 topik random yang selama ini bikin kamu penasaran — apa saja, bebas. Tanyakan ke Claude, lalu minta dijelaskan ulang "kayak ke anak SD" kalau masih ada bagian yang belum jelas. Follow-up sampai kamu bisa jelaskan ulang topik itu ke orang lain dengan kata-katamu sendiri.</p>
           </div>
         </div>
 
-        <div class="step-label"><span class="step-badge">06</span> Tantangan Kecil <span class="step-optional">(opsional)</span></div>
         <div class="tip-box bonus">
-          <div class="tip-label">🎯 Tantangan Kecil</div>
+          <div class="tip-label">🎯 Tantangan Kecil <span class="step-optional">(opsional)</span></div>
           <p>Coba follow-up dengan: "Emang kenapa bisa gitu?" atau "Ada contoh lain nggak?" — lihat gimana jawabannya berkembang.</p>
         </div>
 
         <div class="nav-bottom">
           <button class="nav-btn" disabled>← Sebelumnya</button>
-          <span class="nav-counter">1 / 12</span>
+          <span class="nav-counter">1 / 13</span>
           <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
       </div>
@@ -388,9 +393,10 @@ Jelasin dengan simpel, aku bukan orang ekonomi.<button class="copy-btn" onclick=
           <p>Gaji Rp 5.000.000/bulan. Kos Rp 1.500.000, makan sekitar Rp 1.500.000, transport Rp 500.000 — sisanya entah kemana. Ceritakan angka-angka ini ke Claude apa adanya, tidak perlu rapi dulu.</p>
         </div>
 
-        <div class="step-label"><span class="step-badge">03</span> Coba di Claude</div>
+        <div class="step-label"><span class="step-badge">03</span> Prompt</div>
+        <p class="body-text">Salin prompt di bawah ini, lalu tempel ke chat Claude kamu.</p>
         <div class="prompt-section">
-          <div class="prompt-label">📝 Coba di Claude</div>
+          <div class="prompt-label">📝 Prompt</div>
           <div class="prompt-box">Penghasilanku Rp 5.000.000/bulan. Pengeluaran: kos Rp 1.500.000,
 makan sekitar Rp 1.500.000, transport Rp 500.000, sisanya nggak
 jelas kemana. Bantu kategorikan pengeluaran ini, dan kasih 1
@@ -407,29 +413,29 @@ tampilan visual yang rapi.<button class="copy-btn" onclick="copyPrompt(this)">Sa
         <div class="output-box">
           <div class="output-icon">✅</div>
           <div>
-            <h3>Output yang Diharapkan</h3>
-            <p>1 Artifact ringkasan budget bulanan — penghasilan, pengeluaran per kategori, dan rekomendasi 1 area yang bisa dihemat.</p>
+            <h3>Contoh Jawaban Claude</h3>
+            <p>Ringkasan Budget Bulanan — Penghasilan Rp 5.000.000. Pengeluaran: Kos Rp 1.500.000 (30%), Makan Rp 1.500.000 (30%), Transport Rp 500.000 (10%), Tidak Terlacak Rp 1.500.000 (30%). 💡 Area yang bisa dihemat: "Tidak Terlacak" adalah kategori terbesar kedua — coba catat pengeluaran harian selama 1 minggu untuk tahu ke mana perginya.</p>
+            <p style="margin-top:8px;font-size:11.5px;color:var(--ink-3);font-style:italic;">Catatan: ini contoh ilustrasi — jawaban Claude yang asli bisa berbeda tergantung detail yang kamu berikan.</p>
           </div>
         </div>
 
         <div class="step-label"><span class="step-badge">05</span> Sekarang Giliran Kamu</div>
 
         <div class="prompt-section latihan">
-          <div class="prompt-label">🎯 Sekarang Giliran Kamu</div>
+          <div class="prompt-label">🎯 Latihan</div>
           <div class="case-box">
             <p>Sebutkan penghasilan dan pengeluaran bulan ini apa adanya — boleh perkiraan kasar kalau belum tahu persis. Minta Claude kategorikan pengeluaranmu dan kasih 1 area konkret yang bisa dihemat bulan depan.</p>
           </div>
         </div>
 
-        <div class="step-label"><span class="step-badge">06</span> Tantangan Kecil <span class="step-optional">(opsional)</span></div>
         <div class="tip-box bonus">
-          <div class="tip-label">🎯 Tantangan Kecil</div>
+          <div class="tip-label">🎯 Tantangan Kecil <span class="step-optional">(opsional)</span></div>
           <p>Coba follow-up dengan: "Kalau aku mau nabung Rp 500 ribu bulan depan, area mana yang paling realistis dipangkas?"</p>
         </div>
 
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">2 / 12</span>
+          <span class="nav-counter">2 / 13</span>
           <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
       </div>
@@ -453,9 +459,10 @@ tampilan visual yang rapi.<button class="copy-btn" onclick="copyPrompt(this)">Sa
           <p>Trip 2 hari ke Bandung berdua, budget total Rp 1.500.000. Belum tahu mau kemana saja atau bawa apa.</p>
         </div>
 
-        <div class="step-label"><span class="step-badge">03</span> Coba di Claude</div>
+        <div class="step-label"><span class="step-badge">03</span> Prompt</div>
+        <p class="body-text">Salin prompt di bawah ini, lalu tempel ke chat Claude kamu.</p>
         <div class="prompt-section">
-          <div class="prompt-label">📝 Coba di Claude</div>
+          <div class="prompt-label">📝 Prompt</div>
           <div class="prompt-box">Aku mau liburan 2 hari ke Bandung berdua, budget total Rp
 1.500.000 termasuk transport, penginapan, makan, dan aktivitas.
 Buatkan itinerary hari per hari, plus checklist barang yang
@@ -472,29 +479,29 @@ ke pasanganku.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button>
         <div class="output-box">
           <div class="output-icon">✅</div>
           <div>
-            <h3>Output yang Diharapkan</h3>
-            <p>1 file PDF — itinerary hari per hari plus checklist packing, siap diforward ke teman perjalanan.</p>
+            <h3>Contoh Jawaban Claude</h3>
+            <p>Itinerary Bandung 2 Hari (Rp 1.500.000) — Hari 1: berangkat pagi, check-in penginapan (Rp 250rb/malam), makan siang di Braga, sore santai ke Lawangwangi. Hari 2: Farmhouse Lembang pagi, makan siang di Floating Market, pulang sore. Checklist: jaket, powerbank, obat pribadi, kamera, uang tunai secukupnya.</p>
+            <p style="margin-top:8px;font-size:11.5px;color:var(--ink-3);font-style:italic;">Catatan: ini contoh ilustrasi — jawaban Claude yang asli bisa berbeda tergantung detail yang kamu berikan.</p>
           </div>
         </div>
 
         <div class="step-label"><span class="step-badge">05</span> Sekarang Giliran Kamu</div>
 
         <div class="prompt-section latihan">
-          <div class="prompt-label">🎯 Sekarang Giliran Kamu</div>
+          <div class="prompt-label">🎯 Latihan</div>
           <div class="case-box">
             <p>Kasih Claude destinasi, budget, dan durasi liburan atau acara yang kamu rencanakan (boleh yang beneran, boleh yang cuma angan-angan). Minta itinerary lengkap plus checklist packing sebagai 1 file PDF.</p>
           </div>
         </div>
 
-        <div class="step-label"><span class="step-badge">06</span> Tantangan Kecil <span class="step-optional">(opsional)</span></div>
         <div class="tip-box bonus">
-          <div class="tip-label">🎯 Tantangan Kecil</div>
+          <div class="tip-label">🎯 Tantangan Kecil <span class="step-optional">(opsional)</span></div>
           <p>Coba follow-up dengan: "Kalau budgetnya aku naikin 20%, apa yang berubah dari itinerary ini?"</p>
         </div>
 
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">3 / 12</span>
+          <span class="nav-counter">3 / 13</span>
           <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
       </div>
@@ -518,9 +525,10 @@ ke pasanganku.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button>
           <p>"Aku lulusan marketing, 2 tahun kerja di retail, pengen pindah ke digital marketing tapi nggak tahu harus mulai dari mana."</p>
         </div>
 
-        <div class="step-label"><span class="step-badge">03</span> Coba di Claude</div>
+        <div class="step-label"><span class="step-badge">03</span> Prompt</div>
+        <p class="body-text">Salin prompt di bawah ini, lalu tempel ke chat Claude kamu.</p>
         <div class="prompt-section">
-          <div class="prompt-label">📝 Coba di Claude</div>
+          <div class="prompt-label">📝 Prompt</div>
           <div class="prompt-box">Aku lulusan marketing, 2 tahun pengalaman kerja di retail,
 pengen pindah karier ke digital marketing. Bantu aku: (1) jenis
 posisi entry-level apa yang realistis buat aku lamar sekarang,
@@ -533,29 +541,29 @@ melamar.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         <div class="output-box">
           <div class="output-icon">✅</div>
           <div>
-            <h3>Output yang Diharapkan</h3>
-            <p>Tidak ada file — outputnya berupa diskusi: daftar jenis posisi yang cocok dan skill gap yang perlu diperkuat.</p>
+            <h3>Contoh Jawaban Claude</h3>
+            <p>Posisi entry-level yang realistis: Marketing Coordinator, Social Media Specialist, atau Digital Marketing Associate di startup/agency kecil — pengalaman retailmu relevan untuk consumer insight. Skill prioritas: (1) Google Analytics & Ads dasar, (2) copywriting untuk media sosial, (3) SEO dasar. Mulai dari kursus gratis seperti Google Skillshop sebelum mulai melamar.</p>
+            <p style="margin-top:8px;font-size:11.5px;color:var(--ink-3);font-style:italic;">Catatan: ini contoh ilustrasi — jawaban Claude yang asli bisa berbeda tergantung detail yang kamu berikan.</p>
           </div>
         </div>
 
         <div class="step-label"><span class="step-badge">05</span> Sekarang Giliran Kamu</div>
 
         <div class="prompt-section latihan">
-          <div class="prompt-label">🎯 Sekarang Giliran Kamu</div>
+          <div class="prompt-label">🎯 Latihan</div>
           <div class="case-box">
             <p>Ceritakan situasi kerjamu sekarang dan arah yang kamu minati — boleh yang serius, boleh yang masih sekadar kepikiran. Minta Claude bantu memetakan jenis posisi yang cocok dan skill gap yang perlu kamu tutup.</p>
           </div>
         </div>
 
-        <div class="step-label"><span class="step-badge">06</span> Tantangan Kecil <span class="step-optional">(opsional)</span></div>
         <div class="tip-box bonus">
-          <div class="tip-label">🎯 Tantangan Kecil</div>
+          <div class="tip-label">🎯 Tantangan Kecil <span class="step-optional">(opsional)</span></div>
           <p>Coba follow-up dengan: "Dari skill yang kurang itu, mana yang paling penting aku pelajari duluan?"</p>
         </div>
 
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">4 / 12</span>
+          <span class="nav-counter">4 / 13</span>
           <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
       </div>
@@ -579,9 +587,10 @@ melamar.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
           <p>CV lama yang masih generic — pengalaman kerja ditulis apa adanya tanpa highlight pencapaian — mau dilamar ke posisi tertentu yang deskripsinya sudah ada.</p>
         </div>
 
-        <div class="step-label"><span class="step-badge">03</span> Coba di Claude</div>
+        <div class="step-label"><span class="step-badge">03</span> Prompt</div>
+        <p class="body-text">Salin prompt di bawah ini, lalu tempel ke chat Claude kamu.</p>
         <div class="prompt-section">
-          <div class="prompt-label">📝 Coba di Claude</div>
+          <div class="prompt-label">📝 Prompt</div>
           <div class="prompt-box">[Upload atau paste CV-ku] Ini CV-ku saat ini. Aku mau melamar
 ke posisi [nama posisi] — ini deskripsi lowongannya: [paste job
 description]. Review CV-ku: perbaiki wording supaya lebih tajam,
@@ -598,8 +607,9 @@ sebagai file Word yang bisa aku edit lagi.<button class="copy-btn" onclick="copy
         <div class="output-box">
           <div class="output-icon">✅</div>
           <div>
-            <h3>Output yang Diharapkan</h3>
-            <p>1 file Word (docx) — CV yang sudah direvisi dan lebih tajam, siap diedit lagi untuk lowongan berikutnya.</p>
+            <h3>Contoh Jawaban Claude</h3>
+            <p>Bagian Pengalaman Kerja direvisi — dari: "Bertanggung jawab atas penjualan toko" menjadi: "Meningkatkan penjualan toko sebesar 18% dalam 6 bulan melalui strategi cross-selling dan pelatihan tim." Pencapaian dikuantifikasi dan disesuaikan dengan kata kunci di deskripsi lowongan yang kamu incar.</p>
+            <p style="margin-top:8px;font-size:11.5px;color:var(--ink-3);font-style:italic;">Catatan: ini contoh ilustrasi — jawaban Claude yang asli bisa berbeda tergantung detail yang kamu berikan.</p>
           </div>
         </div>
 
@@ -610,21 +620,20 @@ sebagai file Word yang bisa aku edit lagi.<button class="copy-btn" onclick="copy
           <p>Contoh CV latihan (untuk yang belum punya CV sendiri).</p>
         </div>
         <div class="prompt-section latihan">
-          <div class="prompt-label">🎯 Sekarang Giliran Kamu</div>
+          <div class="prompt-label">🎯 Latihan</div>
           <div class="case-box">
             <p>Upload CV asli kamu (atau pakai contoh CV latihan di bawah kalau belum punya). Kalau ada lowongan spesifik yang kamu incar, sertakan deskripsinya. Minta Claude review dan revisi jadi file Word.</p>
           </div>
         </div>
 
-        <div class="step-label"><span class="step-badge">06</span> Tantangan Kecil <span class="step-optional">(opsional)</span></div>
         <div class="tip-box bonus">
-          <div class="tip-label">🎯 Tantangan Kecil</div>
+          <div class="tip-label">🎯 Tantangan Kecil <span class="step-optional">(opsional)</span></div>
           <p>Coba follow-up dengan: "Bagian pengalaman kerja mana yang paling lemah dan gimana cara memperkuatnya?"</p>
         </div>
 
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">5 / 12</span>
+          <span class="nav-counter">5 / 13</span>
           <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
       </div>
@@ -648,9 +657,10 @@ sebagai file Word yang bisa aku edit lagi.<button class="copy-btn" onclick="copy
           <p>Besok ada wawancara kerja dan belum sempat latihan menjawab pertanyaan-pertanyaan umum. Atau: belum paham 1 topik kuliah yang mau diujikan minggu depan.</p>
         </div>
 
-        <div class="step-label"><span class="step-badge">03</span> Coba di Claude</div>
+        <div class="step-label"><span class="step-badge">03</span> Prompt</div>
+        <p class="body-text">Salin prompt di bawah ini, lalu tempel ke chat Claude kamu.</p>
         <div class="prompt-section">
-          <div class="prompt-label">📝 Coba di Claude</div>
+          <div class="prompt-label">📝 Prompt</div>
           <div class="prompt-box">Aku ada wawancara kerja besok untuk posisi customer service.
 Buatkan aku 8 pertanyaan wawancara umum yang biasa ditanyakan,
 plus tips singkat cara jawab tiap pertanyaan. Format sebagai
@@ -666,29 +676,29 @@ kartu kuis yang bisa aku klik satu-satu buat latihan.<button class="copy-btn" on
         <div class="output-box">
           <div class="output-icon">✅</div>
           <div>
-            <h3>Output yang Diharapkan</h3>
-            <p>1 Artifact — cheat sheet ringkas atau kartu kuis interaktif sesuai topik yang kamu pelajari.</p>
+            <h3>Contoh Jawaban Claude</h3>
+            <p>Kartu Kuis Interview Customer Service — Kartu 1: "Ceritakan pengalaman menangani pelanggan yang marah." Tips: gunakan struktur STAR (Situation, Task, Action, Result). Kartu 2: "Kenapa tertarik posisi ini?" Tips: hubungkan dengan value perusahaan, bukan cuma gaji. (8 kartu total, bisa diklik satu per satu untuk latihan.)</p>
+            <p style="margin-top:8px;font-size:11.5px;color:var(--ink-3);font-style:italic;">Catatan: ini contoh ilustrasi — jawaban Claude yang asli bisa berbeda tergantung detail yang kamu berikan.</p>
           </div>
         </div>
 
         <div class="step-label"><span class="step-badge">05</span> Sekarang Giliran Kamu</div>
 
         <div class="prompt-section latihan">
-          <div class="prompt-label">🎯 Sekarang Giliran Kamu</div>
+          <div class="prompt-label">🎯 Latihan</div>
           <div class="case-box">
             <p>Jelaskan ke Claude topik yang lagi kamu pelajari (atau situasi latihan interview/presentasi yang kamu hadapi). Minta dijelaskan ulang dengan caramu sendiri, lalu minta kuis singkat untuk menguji pemahamanmu.</p>
           </div>
         </div>
 
-        <div class="step-label"><span class="step-badge">06</span> Tantangan Kecil <span class="step-optional">(opsional)</span></div>
         <div class="tip-box bonus">
-          <div class="tip-label">🎯 Tantangan Kecil</div>
+          <div class="tip-label">🎯 Tantangan Kecil <span class="step-optional">(opsional)</span></div>
           <p>Coba follow-up dengan: "Kasih 1 pertanyaan jebakan yang sering bikin orang salah paham soal topik ini."</p>
         </div>
 
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">6 / 12</span>
+          <span class="nav-counter">6 / 13</span>
           <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
       </div>
@@ -712,9 +722,10 @@ kartu kuis yang bisa aku klik satu-satu buat latihan.<button class="copy-btn" on
           <p>Punya waktu luang sekitar 2 jam/hari sepulang kerja, modal Rp 500.000, dan cukup jago desain grafis.</p>
         </div>
 
-        <div class="step-label"><span class="step-badge">03</span> Coba di Claude</div>
+        <div class="step-label"><span class="step-badge">03</span> Prompt</div>
+        <p class="body-text">Salin prompt di bawah ini, lalu tempel ke chat Claude kamu.</p>
         <div class="prompt-section">
-          <div class="prompt-label">📝 Coba di Claude</div>
+          <div class="prompt-label">📝 Prompt</div>
           <div class="prompt-box">Aku punya waktu luang 2 jam/hari sepulang kerja, modal sekitar
 Rp 500.000, dan cukup jago desain grafis (biasa pakai Canva).
 Kasih aku 3-5 ide penghasilan sampingan yang realistis buat
@@ -726,29 +737,29 @@ dijalankan dengan kondisi ini — bukan daftar generik.<button class="copy-btn" 
         <div class="output-box">
           <div class="output-icon">✅</div>
           <div>
-            <h3>Output yang Diharapkan</h3>
-            <p>Tidak ada file — outputnya daftar 3-5 ide penghasilan sampingan yang disesuaikan dengan kondisimu.</p>
+            <h3>Contoh Jawaban Claude</h3>
+            <p>Dengan skill desain grafis dan modal Rp 500rb: (1) Jasa desain feed Instagram untuk UMKM lokal — modal cuma Canva Pro. (2) Jual template Canva di marketplace digital. (3) Desain undangan digital untuk acara kecil. (4) Freelance logo sederhana di Fiverr atau Sribu.</p>
+            <p style="margin-top:8px;font-size:11.5px;color:var(--ink-3);font-style:italic;">Catatan: ini contoh ilustrasi — jawaban Claude yang asli bisa berbeda tergantung detail yang kamu berikan.</p>
           </div>
         </div>
 
         <div class="step-label"><span class="step-badge">05</span> Sekarang Giliran Kamu</div>
 
         <div class="prompt-section latihan">
-          <div class="prompt-label">🎯 Sekarang Giliran Kamu</div>
+          <div class="prompt-label">🎯 Latihan</div>
           <div class="case-box">
             <p>Sebutkan skill yang kamu punya, waktu luang yang realistis, modal yang bisa dikeluarkan, dan minatmu. Minta Claude kasih 3-5 ide penghasilan sampingan yang benar-benar bisa dijalankan dengan kondisi itu.</p>
           </div>
         </div>
 
-        <div class="step-label"><span class="step-badge">06</span> Tantangan Kecil <span class="step-optional">(opsional)</span></div>
         <div class="tip-box bonus">
-          <div class="tip-label">🎯 Tantangan Kecil</div>
+          <div class="tip-label">🎯 Tantangan Kecil <span class="step-optional">(opsional)</span></div>
           <p>Coba follow-up dengan: "Dari 3 ide tadi, mana yang paling cepat bisa aku mulai minggu ini?"</p>
         </div>
 
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">7 / 12</span>
+          <span class="nav-counter">7 / 13</span>
           <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
       </div>
@@ -772,9 +783,10 @@ dijalankan dengan kondisi ini — bukan daftar generik.<button class="copy-btn" 
           <p>Di kulkas ada telur, bayam, tempe, dan nasi sisa kemarin. Waktu masak cuma 20 menit.</p>
         </div>
 
-        <div class="step-label"><span class="step-badge">03</span> Coba di Claude</div>
+        <div class="step-label"><span class="step-badge">03</span> Prompt</div>
+        <p class="body-text">Salin prompt di bawah ini, lalu tempel ke chat Claude kamu.</p>
         <div class="prompt-section">
-          <div class="prompt-label">📝 Coba di Claude</div>
+          <div class="prompt-label">📝 Prompt</div>
           <div class="prompt-box">Di kulkasku ada telur, bayam, tempe, dan nasi sisa kemarin.
 Waktu masakku cuma sekitar 20 menit. Kasih 3 ide menu yang bisa
 aku masak dari bahan ini, plus cara masaknya yang simpel.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
@@ -785,29 +797,29 @@ aku masak dari bahan ini, plus cara masaknya yang simpel.<button class="copy-btn
         <div class="output-box">
           <div class="output-icon">✅</div>
           <div>
-            <h3>Output yang Diharapkan</h3>
-            <p>Tidak ada file — outputnya 3 ide menu beserta cara masaknya yang bisa langsung dipraktikkan.</p>
+            <h3>Contoh Jawaban Claude</h3>
+            <p>3 ide menu 20 menit dari telur, bayam, tempe, dan nasi sisa: (1) Nasi goreng bayam tempe — tumis semua jadi satu. (2) Telur dadar isi bayam cincang, tempe goreng terpisah. (3) Bubur nasi sisa + telur rebus + tempe bacem simpel.</p>
+            <p style="margin-top:8px;font-size:11.5px;color:var(--ink-3);font-style:italic;">Catatan: ini contoh ilustrasi — jawaban Claude yang asli bisa berbeda tergantung detail yang kamu berikan.</p>
           </div>
         </div>
 
         <div class="step-label"><span class="step-badge">05</span> Sekarang Giliran Kamu</div>
 
         <div class="prompt-section latihan">
-          <div class="prompt-label">🎯 Sekarang Giliran Kamu</div>
+          <div class="prompt-label">🎯 Latihan</div>
           <div class="case-box">
             <p>Sebutkan isi kulkas atau dapurmu hari ini apa adanya. Minta Claude kasih 3 ide menu dan cara masak yang simpel, sesuaikan dengan waktu masak yang kamu punya.</p>
           </div>
         </div>
 
-        <div class="step-label"><span class="step-badge">06</span> Tantangan Kecil <span class="step-optional">(opsional)</span></div>
         <div class="tip-box bonus">
-          <div class="tip-label">🎯 Tantangan Kecil</div>
+          <div class="tip-label">🎯 Tantangan Kecil <span class="step-optional">(opsional)</span></div>
           <p>Coba follow-up dengan: "Kalau aku nggak sempat masak sama sekali, ada versi yang lebih cepat nggak?"</p>
         </div>
 
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">8 / 12</span>
+          <span class="nav-counter">8 / 13</span>
           <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
       </div>
@@ -831,9 +843,10 @@ aku masak dari bahan ini, plus cara masaknya yang simpel.<button class="copy-btn
           <p>"Harus bayar listrik, jemput adik jam 3, kerjain laporan bulanan, beli galon, telpon dokter gigi buat janji kontrol, cuci motor..."</p>
         </div>
 
-        <div class="step-label"><span class="step-badge">03</span> Coba di Claude</div>
+        <div class="step-label"><span class="step-badge">03</span> Prompt</div>
+        <p class="body-text">Salin prompt di bawah ini, lalu tempel ke chat Claude kamu.</p>
         <div class="prompt-section">
-          <div class="prompt-label">📝 Coba di Claude</div>
+          <div class="prompt-label">📝 Prompt</div>
           <div class="prompt-box">Ini semua yang harus aku kerjain minggu ini, aku tumpahkan
 apa adanya: bayar listrik, jemput adik jam 3 hari Rabu, kerjain
 laporan bulanan (deadline Jumat), beli galon, telpon dokter
@@ -850,29 +863,29 @@ berdasarkan urgensi, buat jadi checklist yang bisa aku centang.<button class="co
         <div class="output-box">
           <div class="output-icon">✅</div>
           <div>
-            <h3>Output yang Diharapkan</h3>
-            <p>1 Artifact — checklist interaktif dengan checkbox, dikelompokkan dan diurutkan berdasarkan urgensi.</p>
+            <h3>Contoh Jawaban Claude</h3>
+            <p>Checklist minggu ini (urut prioritas) — 🔴 Mendesak: Laporan bulanan (deadline Jumat), jemput adik Rabu jam 3. 🟡 Penting: Bayar listrik, telpon dokter gigi untuk janji kontrol. 🟢 Bisa nunggu: Beli galon, cuci motor.</p>
+            <p style="margin-top:8px;font-size:11.5px;color:var(--ink-3);font-style:italic;">Catatan: ini contoh ilustrasi — jawaban Claude yang asli bisa berbeda tergantung detail yang kamu berikan.</p>
           </div>
         </div>
 
         <div class="step-label"><span class="step-badge">05</span> Sekarang Giliran Kamu</div>
 
         <div class="prompt-section latihan">
-          <div class="prompt-label">🎯 Sekarang Giliran Kamu</div>
+          <div class="prompt-label">🎯 Latihan</div>
           <div class="case-box">
             <p>Tumpahkan semua yang harus kamu kerjakan minggu ini, tanpa mikir urutan dulu. Minta Claude kelompokkan dan urutkan berdasarkan urgensi jadi checklist interaktif.</p>
           </div>
         </div>
 
-        <div class="step-label"><span class="step-badge">06</span> Tantangan Kecil <span class="step-optional">(opsional)</span></div>
         <div class="tip-box bonus">
-          <div class="tip-label">🎯 Tantangan Kecil</div>
+          <div class="tip-label">🎯 Tantangan Kecil <span class="step-optional">(opsional)</span></div>
           <p>Coba follow-up dengan: "Kalau aku cuma punya waktu 2 jam hari ini, 3 hal mana yang harus diprioritaskan?"</p>
         </div>
 
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">9 / 12</span>
+          <span class="nav-counter">9 / 13</span>
           <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
       </div>
@@ -896,9 +909,10 @@ berdasarkan urgensi, buat jadi checklist yang bisa aku centang.<button class="co
           <p>Bingung mau ngapain akhir pekan ini di Jakarta. Atau: cari kado ulang tahun ibu, budget Rp 200.000.</p>
         </div>
 
-        <div class="step-label"><span class="step-badge">03</span> Coba di Claude</div>
+        <div class="step-label"><span class="step-badge">03</span> Prompt</div>
+        <p class="body-text">Salin prompt di bawah ini, lalu tempel ke chat Claude kamu.</p>
         <div class="prompt-section">
-          <div class="prompt-label">📝 Coba di Claude</div>
+          <div class="prompt-label">📝 Prompt</div>
           <div class="prompt-box">Aku bingung mau cari kado ulang tahun ibu, budget sekitar Rp
 200.000. Ibuku suka masak dan tanaman. Kasih beberapa opsi kado
 yang konkret, bukan yang generik.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
@@ -909,29 +923,29 @@ yang konkret, bukan yang generik.<button class="copy-btn" onclick="copyPrompt(th
         <div class="output-box">
           <div class="output-icon">✅</div>
           <div>
-            <h3>Output yang Diharapkan</h3>
-            <p>Tidak ada file — outputnya beberapa opsi konkret sesuai situasi dan batasan yang kamu sebutkan.</p>
+            <h3>Contoh Jawaban Claude</h3>
+            <p>Kado ulang tahun ibu (Rp 200rb, suka masak & tanaman): (1) Set talenan kayu + apron motif bunga. (2) Pot tanaman gantung + bibit herbal dapur. (3) Buku resep populer + spatula silikon premium.</p>
+            <p style="margin-top:8px;font-size:11.5px;color:var(--ink-3);font-style:italic;">Catatan: ini contoh ilustrasi — jawaban Claude yang asli bisa berbeda tergantung detail yang kamu berikan.</p>
           </div>
         </div>
 
         <div class="step-label"><span class="step-badge">05</span> Sekarang Giliran Kamu</div>
 
         <div class="prompt-section latihan">
-          <div class="prompt-label">🎯 Sekarang Giliran Kamu</div>
+          <div class="prompt-label">🎯 Latihan</div>
           <div class="case-box">
             <p>Sebutkan situasi dan batasanmu — budget, waktu, atau siapa saja yang terlibat. Minta Claude kasih beberapa opsi konkret sesuai situasimu.</p>
           </div>
         </div>
 
-        <div class="step-label"><span class="step-badge">06</span> Tantangan Kecil <span class="step-optional">(opsional)</span></div>
         <div class="tip-box bonus">
-          <div class="tip-label">🎯 Tantangan Kecil</div>
+          <div class="tip-label">🎯 Tantangan Kecil <span class="step-optional">(opsional)</span></div>
           <p>Coba follow-up dengan: "Kalau budgetnya aku turunin setengahnya, opsi mana yang masih masuk akal?"</p>
         </div>
 
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">10 / 12</span>
+          <span class="nav-counter">10 / 13</span>
           <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
       </div>
@@ -955,9 +969,10 @@ yang konkret, bukan yang generik.<button class="copy-btn" onclick="copyPrompt(th
           <p>Motor bekas A (murah, tahun tua, servis lebih sering) vs motor bekas B (lebih mahal, masih baru, servis lebih jarang). Bingung mana yang lebih worth it.</p>
         </div>
 
-        <div class="step-label"><span class="step-badge">03</span> Coba di Claude</div>
+        <div class="step-label"><span class="step-badge">03</span> Prompt</div>
+        <p class="body-text">Salin prompt di bawah ini, lalu tempel ke chat Claude kamu.</p>
         <div class="prompt-section">
-          <div class="prompt-label">📝 Coba di Claude</div>
+          <div class="prompt-label">📝 Prompt</div>
           <div class="prompt-box">Aku mau beli motor bekas, ada 2 pilihan. Motor A: Rp 8 juta,
 tahun 2016, sudah sering servis. Motor B: Rp 13 juta, tahun
 2021, jarang servis. Yang penting buatku: harga, biaya rawatan
@@ -974,29 +989,29 @@ tradeoff jelas dan 1 rekomendasi. Simpan sebagai file PDF.<button class="copy-bt
         <div class="output-box">
           <div class="output-icon">✅</div>
           <div>
-            <h3>Output yang Diharapkan</h3>
-            <p>1 file PDF — tabel perbandingan terstruktur dengan tradeoff jelas dan 1 rekomendasi.</p>
+            <h3>Contoh Jawaban Claude</h3>
+            <p>Tabel Perbandingan Motor — Harga: A Rp 8jt vs B Rp 13jt. Tahun: 2016 vs 2021. Estimasi servis/tahun: A Rp 1,5jt vs B Rp 500rb. Rekomendasi: kalau budget ketat, Motor A lebih hemat di depan tapi biaya rawatan lebih tinggi jangka panjang — Motor B lebih worth it kalau dipakai lebih dari 3 tahun.</p>
+            <p style="margin-top:8px;font-size:11.5px;color:var(--ink-3);font-style:italic;">Catatan: ini contoh ilustrasi — jawaban Claude yang asli bisa berbeda tergantung detail yang kamu berikan.</p>
           </div>
         </div>
 
         <div class="step-label"><span class="step-badge">05</span> Sekarang Giliran Kamu</div>
 
         <div class="prompt-section latihan">
-          <div class="prompt-label">🎯 Sekarang Giliran Kamu</div>
+          <div class="prompt-label">🎯 Latihan</div>
           <div class="case-box">
             <p>Sebutkan 2-3 pilihan yang sedang kamu pertimbangkan (motor, laptop, tawaran kerja, apa saja) dan hal-hal yang penting buatmu. Minta Claude susun tabel perbandingan dengan tradeoff jelas dan rekomendasi, simpan sebagai PDF.</p>
           </div>
         </div>
 
-        <div class="step-label"><span class="step-badge">06</span> Tantangan Kecil <span class="step-optional">(opsional)</span></div>
         <div class="tip-box bonus">
-          <div class="tip-label">🎯 Tantangan Kecil</div>
+          <div class="tip-label">🎯 Tantangan Kecil <span class="step-optional">(opsional)</span></div>
           <p>Coba follow-up dengan: "Kalau prioritasku ternyata harga, bukan keawetan, apa rekomendasinya berubah?"</p>
         </div>
 
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">11 / 12</span>
+          <span class="nav-counter">11 / 13</span>
           <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
       </div>
@@ -1020,9 +1035,10 @@ tradeoff jelas dan 1 rekomendasi. Simpan sebagai file PDF.<button class="copy-bt
           <p>Mau kirim pesan WhatsApp ke pemilik kos soal keluhan AC rusak, tapi draft yang sudah ditulis kedengarannya galak dan bisa bikin salah paham.</p>
         </div>
 
-        <div class="step-label"><span class="step-badge">03</span> Coba di Claude</div>
+        <div class="step-label"><span class="step-badge">03</span> Prompt</div>
+        <p class="body-text">Salin prompt di bawah ini, lalu tempel ke chat Claude kamu.</p>
         <div class="prompt-section">
-          <div class="prompt-label">📝 Coba di Claude</div>
+          <div class="prompt-label">📝 Prompt</div>
           <div class="prompt-box">Aku mau kirim pesan ke pemilik kos soal AC yang rusak sudah 3
 hari belum diperbaiki. Draftku: "AC kamar saya rusak dari 3
 hari lalu, tolong diperbaiki, saya sudah komplain berkali-kali
@@ -1035,34 +1051,79 @@ yang lebih jelas dan sopan tapi tetap tegas.<button class="copy-btn" onclick="co
         <div class="output-box">
           <div class="output-icon">✅</div>
           <div>
-            <h3>Output yang Diharapkan</h3>
-            <p>Tidak ada file — outputnya versi tulisan yang lebih jelas dan natural, siap di-copy-paste langsung.</p>
+            <h3>Contoh Jawaban Claude</h3>
+            <p>"Selamat siang Pak/Bu, mohon maaf mengganggu. AC di kamar saya sudah rusak sejak 3 hari lalu dan sudah saya laporkan beberapa kali, namun belum ada tindak lanjut. Mohon bantuannya untuk diperbaiki secepatnya. Terima kasih banyak."</p>
+            <p style="margin-top:8px;font-size:11.5px;color:var(--ink-3);font-style:italic;">Catatan: ini contoh ilustrasi — jawaban Claude yang asli bisa berbeda tergantung detail yang kamu berikan.</p>
           </div>
         </div>
 
         <div class="step-label"><span class="step-badge">05</span> Sekarang Giliran Kamu</div>
 
         <div class="prompt-section latihan">
-          <div class="prompt-label">🎯 Sekarang Giliran Kamu</div>
+          <div class="prompt-label">🎯 Latihan</div>
           <div class="case-box">
             <p>Paste tulisan asli yang mau kamu kirim — pesan WA, email, caption, atau apa saja. Minta Claude bikin versi yang lebih jelas, sopan, atau natural, sesuaikan dengan konteks dan siapa penerimanya.</p>
           </div>
         </div>
 
-        <div class="step-label"><span class="step-badge">06</span> Tantangan Kecil <span class="step-optional">(opsional)</span></div>
         <div class="tip-box bonus">
-          <div class="tip-label">🎯 Tantangan Kecil</div>
+          <div class="tip-label">🎯 Tantangan Kecil <span class="step-optional">(opsional)</span></div>
           <p>Coba follow-up dengan: "Buatin 1 versi lagi yang lebih santai, buat dikirim ke temen deket."</p>
         </div>
 
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">12 / 12</span>
-          <button class="nav-btn primary" onclick="showModule(13)">Lanjut →</button>
+          <span class="nav-counter">12 / 13</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
       </div>
 
       <div class="module-panel" id="panel13">
+        <div class="breadcrumb"><span>Claude untuk Sehari-hari</span><span>›</span><strong>Modul 13</strong></div>
+        <div class="hero">
+          <h1 class="module-title">Sekarang, Coba Sendiri</h1>
+          <p class="module-subtitle">Nggak perlu prompt yang sempurna — cukup ceritakan apa yang lagi kamu hadapi</p>
+          <div class="video-slot" data-placeholder="true" id="video-slot-13"></div>
+        </div>
+        <div class="downloads-slot" id="downloads-slot-13"></div>
+
+        <div class="module-desc-box">
+          Kamu sudah lihat 12 contoh penggunaan Claude untuk hal-hal sehari-hari. Sekarang giliranmu. Pilih satu situasi di bawah ini dan coba minta bantuan Claude. Tidak ada prompt yang benar atau salah — tulis saja seperti kamu sedang ngobrol biasa.
+        </div>
+
+        <div class="learn-grid">
+          <div class="learn-card"><div class="num">💸</div><h3>Uang terasa cepat habis</h3><p>Kamu merasa pengeluaran bulan ini lebih besar dari biasanya, tapi tidak tahu uangnya habis untuk apa.</p></div>
+          <div class="learn-card"><div class="num">🏖️</div><h3>Bingung mau ngapain weekend ini</h3><p>Weekend sudah dekat, tapi kamu belum punya rencana dan ingin melakukan sesuatu yang seru tanpa mengeluarkan terlalu banyak uang.</p></div>
+          <div class="learn-card"><div class="num">💼</div><h3>Mau melamar pekerjaan</h3><p>Kamu menemukan lowongan yang menarik, tapi bingung apakah pengalamanmu cocok dan harus mulai dari mana untuk melamar.</p></div>
+          <div class="learn-card"><div class="num">📚</div><h3>Mau belajar sesuatu yang baru</h3><p>Kamu ingin belajar skill baru, tapi bingung harus mulai dari mana dan apa yang perlu dipelajari terlebih dahulu.</p></div>
+          <div class="learn-card"><div class="num">😵</div><h3>Punya masalah, tapi nggak tahu harus mulai dari mana</h3><p>Ada sesuatu yang sedang kamu pikirkan dan ingin diselesaikan, tapi masalahnya terasa terlalu besar atau membingungkan.</p></div>
+        </div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p>Coba ceritakan situasimu ke Claude dengan bahasamu sendiri. Lalu lihat apakah Claude bisa membantumu menentukan langkah berikutnya.</p>
+          </div>
+        </div>
+
+        <div class="tip-box bonus">
+          <div class="tip-label">💡 Yang Perlu Diingat</div>
+          <p>Situasi terakhir di atas penting banget untuk diingat: kamu nggak perlu tahu prompt yang "sempurna". Cukup ceritakan apa yang sedang terjadi dengan kata-katamu sendiri — dan Claude akan bantu cari langkah berikutnya bersama kamu.</p>
+        </div>
+
+        <div class="bonus">
+          <h3>🎉 Sudah coba?</h3>
+          <p>Sudah coba? Yuk share hasil obrolanmu dengan Claude di halaman Community — mungkin bisa jadi inspirasi buat yang lain. <a href="community.html" style="color:var(--accent);font-weight:700;">Buka Community →</a></p>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">13 / 13</span>
+          <button class="nav-btn primary" onclick="showModule(14)">Lanjut →</button>
+        </div>
+      </div>
+
+      <div class="module-panel" id="panel14">
         <div class="feedback-panel">
           <div class="completion-badge">
             <div class="badge-check">
@@ -1108,8 +1169,8 @@ yang lebih jelas dan sopan tapi tetap tegas.<button class="copy-btn" onclick="co
 <script src="supabase-config.js"></script>
 <script src="course-video.js"></script>
 <script>
-  const TOTAL = 13;
-  const CONTENT_MODULES = 12;
+  const TOTAL = 14;
+  const CONTENT_MODULES = 13;
   let current = 1;
   const done = new Set();
   let starRating = 0;
