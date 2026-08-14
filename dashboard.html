@@ -250,9 +250,66 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
   .enrolled-info{grid-area:info;}
   .enrolled-info h3{white-space:normal;overflow:visible;text-overflow:clip;}
 }
+
+/* Onboarding modal — replaces the old profile.html?onboarding=1 redirect (checkpoint 194).
+   That approach still let people reach the homepage via the nav's "Beranda" link while
+   supposedly being "forced" through onboarding first. This overlay sits above the whole
+   page (nav included) with no close button and no backdrop-dismiss, so there's nothing to
+   navigate away to until role+goal are saved — then the page just reloads in place. */
+.onb-overlay{position:fixed;inset:0;z-index:9999;background:rgba(17,17,17,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px;overflow-y:auto;}
+.onb-card{background:#fff;border-radius:20px;padding:36px;max-width:460px;width:100%;box-shadow:0 24px 64px rgba(0,0,0,0.18);margin:auto;}
+.onb-eyebrow{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:1px;margin-bottom:10px;text-transform:uppercase;}
+.onb-title{font-family:var(--serif);font-size:22px;color:var(--ink);margin-bottom:8px;letter-spacing:-0.3px;}
+.onb-sub{font-size:13px;color:var(--ink-2);margin-bottom:24px;line-height:1.5;}
+.onb-field{margin-bottom:22px;}
+.onb-label{display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:10px;}
+.onb-opts{display:flex;flex-wrap:wrap;gap:8px;}
+.onb-opt{padding:9px 16px;border-radius:10px;border:1.5px solid var(--border);font-size:13px;font-weight:500;color:var(--ink-2);cursor:pointer;background:#fff;transition:all 0.15s;font-family:var(--font);}
+.onb-opt:hover{border-color:var(--accent);color:var(--ink);}
+.onb-opt.selected{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);font-weight:600;}
+.onb-input{font-family:var(--font);font-size:13px;color:var(--ink);background:var(--surface-2);border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;width:100%;margin-top:8px;display:none;}
+.onb-input:focus{outline:none;border-color:var(--accent);background:#fff;}
+.onb-btn{width:100%;padding:13px;background:var(--ink);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:background 0.2s;}
+.onb-btn:hover:not(:disabled){background:#000;}
+.onb-btn:disabled{opacity:0.5;cursor:not-allowed;}
+.onb-msg{margin-top:12px;font-size:12.5px;color:#DC2626;display:none;}
 </style>
 </head>
 <body>
+
+<div class="onb-overlay" id="onbOverlay">
+  <div class="onb-card">
+    <div class="onb-eyebrow">Sebelum lanjut</div>
+    <div class="onb-title">Kenalan dulu, yuk</div>
+    <p class="onb-sub">Dua pertanyaan singkat supaya rekomendasi kursus kamu lebih relevan.</p>
+    <div class="onb-field">
+      <label class="onb-label">Kamu saat ini sebagai apa?</label>
+      <div class="onb-opts" id="onbOptsRole">
+        <button type="button" class="onb-opt" data-val="karyawan">Karyawan</button>
+        <button type="button" class="onb-opt" data-val="mahasiswa">Mahasiswa</button>
+        <button type="button" class="onb-opt" data-val="pemilik-bisnis">Pemilik Bisnis / UKM</button>
+        <button type="button" class="onb-opt" data-val="developer">Developer</button>
+        <button type="button" class="onb-opt" data-val="kreator">Kreator Konten</button>
+        <button type="button" class="onb-opt" data-val="__other__">Lainnya</button>
+      </div>
+      <input class="onb-input" id="onbRoleOther" type="text" placeholder="Tulis profesi kamu...">
+    </div>
+    <div class="onb-field">
+      <label class="onb-label">Apa tujuan utama kamu belajar Claude?</label>
+      <div class="onb-opts" id="onbOptsGoal">
+        <button type="button" class="onb-opt" data-val="efisiensi-kerja">Hemat waktu kerja</button>
+        <button type="button" class="onb-opt" data-val="bisnis">Kembangkan bisnis</button>
+        <button type="button" class="onb-opt" data-val="konten">Buat konten lebih cepat</button>
+        <button type="button" class="onb-opt" data-val="coding">Build produk / app</button>
+        <button type="button" class="onb-opt" data-val="lainnya">Eksplorasi</button>
+        <button type="button" class="onb-opt" data-val="__other__">Lainnya (isi sendiri)</button>
+      </div>
+      <input class="onb-input" id="onbGoalOther" type="text" placeholder="Tulis tujuan kamu...">
+    </div>
+    <button class="onb-btn" id="onbSaveBtn" onclick="saveOnboarding()">Simpan &amp; Lanjutkan →</button>
+    <div class="onb-msg" id="onbMsg"></div>
+  </div>
+</div>
 
 <nav>
   <a class="brand" href="index.html">belajar<span>claude</span></a>
@@ -438,6 +495,55 @@ function spotRipple(e){
 }
 async function logout(){await sbClient.auth.signOut();window.location.href='index.html';}
 
+// Onboarding modal wiring — same preset-button + "Lainnya" free-text pattern as
+// profile.html's setupOtherOption(), reimplemented here since the modal has its own
+// element ids and only needs role+goal (not the full profile form).
+var onbAnswers={role:null,goal:null};
+function onbSelect(groupId,inputId,key,val){
+  onbAnswers[key]=val;
+  document.querySelectorAll('#'+groupId+' .onb-opt').forEach(function(b){
+    b.classList.toggle('selected',b.getAttribute('data-val')===val);
+  });
+  var otherInput=document.getElementById(inputId);
+  if(val==='__other__'){otherInput.style.display='block';otherInput.focus();onbAnswers[key]=otherInput.value.trim();}
+  else{otherInput.style.display='none';otherInput.value='';}
+}
+document.addEventListener('DOMContentLoaded',function(){
+  document.querySelectorAll('#onbOptsRole .onb-opt').forEach(function(b){
+    b.addEventListener('click',function(){onbSelect('onbOptsRole','onbRoleOther','role',b.getAttribute('data-val'));});
+  });
+  document.querySelectorAll('#onbOptsGoal .onb-opt').forEach(function(b){
+    b.addEventListener('click',function(){onbSelect('onbOptsGoal','onbGoalOther','goal',b.getAttribute('data-val'));});
+  });
+  document.getElementById('onbRoleOther').addEventListener('input',function(){onbAnswers.role=this.value.trim();});
+  document.getElementById('onbGoalOther').addEventListener('input',function(){onbAnswers.goal=this.value.trim();});
+});
+async function saveOnboarding(){
+  var btn=document.getElementById('onbSaveBtn');
+  var msg=document.getElementById('onbMsg');
+  msg.style.display='none';
+  if(!onbAnswers.role||!onbAnswers.goal){
+    msg.textContent='Pilih dulu kedua pertanyaan di atas ya (atau isi kolom "Lainnya").';
+    msg.style.display='block';
+    return;
+  }
+  btn.disabled=true;btn.textContent='Menyimpan...';
+  try{
+    // Only role/goal/updated_at in the payload — Supabase upsert only touches the
+    // columns sent, so any existing full_name/username (e.g. set separately via
+    // profile.html) is left alone, not nulled out.
+    await sbClient.from('profiles').upsert({
+      email:currentEmail, role:onbAnswers.role, goal:onbAnswers.goal, updated_at:new Date().toISOString()
+    },{onConflict:'email'});
+    window.location.reload();
+  }catch(e){
+    console.error(e);
+    msg.textContent='Gagal menyimpan. Coba lagi.';
+    msg.style.display='block';
+    btn.disabled=false;btn.textContent='Simpan & Lanjutkan →';
+  }
+}
+
 async function init(){
   try{await _init();}catch(err){
     console.error(err);
@@ -473,10 +579,14 @@ async function _init(){
 
   // Onboarding gate: force profile completion (role + goal) before the dashboard is
   // shown — mainly hits right after a purchase, when a fresh account has neither set
-  // yet. profile.html?onboarding=1 shows a banner, requires both fields, and redirects
-  // back here on save. Skipped entirely once role+goal are set, so this only fires once.
+  // yet. Used to redirect to profile.html?onboarding=1, but that page still had a
+  // working "Beranda" nav link, so the "forced" step had an escape hatch to the
+  // homepage. Now it's an in-page modal (see .onb-overlay) that covers the whole
+  // viewport including nav, with no close button — the only way past it is saving
+  // role+goal, which just reloads this page. Skipped entirely once both are set.
   if(!userProfile||!userProfile.role||!userProfile.goal){
-    window.location.href='profile.html?onboarding=1';
+    document.getElementById('loadingScreen').style.display='none';
+    document.getElementById('onbOverlay').style.display='flex';
     return;
   }
 
