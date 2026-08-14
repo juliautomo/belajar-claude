@@ -547,12 +547,38 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
   // LIH_BG / LIH_ILLUSTRATIONS now live in course-illustrations.js (loaded above),
   // shared with dashboard.html's explore carousel so both pages show identical artwork.
 
-  // The pre-login/non-all-access marketing page (#kursus) statically lists the 4 live
-  // courses (pre-rendered HTML, unchanged), but the coming-soon teasers used to be a
-  // single hardcoded card (only Strategi Marketing) — the other 5 not-yet-launched
-  // courses were invisible here even though the logged-in All Access grid (lihCourseGrid,
-  // below) already showed all 6. Renders every non-hidden coming-soon course from
-  // LIH_COURSES into the #kursusComingSoonSlot placeholder so both views agree.
+  // The 4 original live courses are pre-rendered as static HTML in #kursus (kept for
+  // fast first paint), which meant they never respected admin.html's "Sembunyikan dari
+  // situs" toggle the way every other course listing on the site does (lihCourseGrid
+  // below, dashboard.html's explore grid) — hiding one of them in admin still left it
+  // visible here. It also meant a course added to LIH_COURSES after launch (no static
+  // card written for it, e.g. claude-sehari-hari) would never appear here even once
+  // unhidden. This brings the logged-out grid in line with everywhere else: hide any
+  // card whose course is now hidden, and build a card for any live, non-hidden course
+  // that doesn't already have one.
+  function buildLiveCourseCardHtml(slug, meta) {
+    var visual = LIH_ILLUSTRATIONS[slug] || ('<div class="lih-icon">' + meta.icon + '</div>');
+    var bg = LIH_BG[slug] || 'var(--accent-dim)';
+    return '<div class="course-card-v2" data-slug="' + slug + '"><div class="ccv2-banner" style="background:' + bg + ';">' + visual + '</div><div class="ccv2-body"><span class="ccv2-badge badge-b">ALL ACCESS</span><h3>' + meta.title + '</h3><p>' + meta.desc + '</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><a href="' + meta.previewLink + '" class="ccv2-btn"><span class="lbl">Lihat</span><span>→</span></a></div></div></div>';
+  }
+  function syncKursusLiveGrid() {
+    var grid = document.querySelector('.course-lib-grid');
+    if (!grid) return;
+    LIH_COURSE_ORDER.forEach(function(slug) {
+      var meta = LIH_COURSES[slug];
+      if (!meta) return;
+      var existing = grid.querySelector('[data-slug="' + slug + '"]');
+      if (meta.hidden) { if (existing) existing.remove(); return; }
+      if (meta.comingSoon) return; // handled by renderKursusComingSoon() below
+      if (!existing) grid.insertAdjacentHTML('beforeend', buildLiveCourseCardHtml(slug, meta));
+    });
+  }
+
+  // The coming-soon teasers used to be a single hardcoded card (only Strategi
+  // Marketing) — the other 5 not-yet-launched courses were invisible here even though
+  // the logged-in All Access grid (lihCourseGrid, below) already showed all 6. Renders
+  // every non-hidden coming-soon course from LIH_COURSES into the #kursusComingSoonSlot
+  // placeholder so both views agree.
   function renderKursusComingSoon() {
     var slot = document.getElementById('kursusComingSoonSlot');
     if (!slot) return;
@@ -662,7 +688,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         }).catch(function(){});
       } catch (e) { return Promise.resolve(); }
     })();
-    visibilityPromise.then(renderKursusComingSoon);
+    visibilityPromise.then(function() { syncKursusLiveGrid(); renderKursusComingSoon(); });
 
     try {
       var r = await sbClient.auth.getSession();

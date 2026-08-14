@@ -277,6 +277,14 @@
         </div>
         <span class="tool-chip">Chat</span>
       </div>
+      <div class="module-item">
+        <div class="module-num">13</div>
+        <div class="module-body">
+          <h4>Sekarang, Coba Sendiri</h4>
+          <p>Nggak perlu prompt yang sempurna — cukup ceritakan apa yang lagi kamu hadapi</p>
+        </div>
+        <span class="tool-chip">Praktik Bebas</span>
+      </div>
     </div>
   </div>
 </section>
@@ -409,10 +417,14 @@
 <script>
   const COURSE_SLUG = 'claude-sehari-hari';
   const CONTENT_LINK = 'claude-sehari-hari-content.html';
-  // Course is built but paused pre-launch. Keep the enrollment/CTA logic below
-  // inert while this is true so no one — including existing All Access holders —
-  // can self-enroll before the course officially goes live. Flip to false to launch.
-  const COMING_SOON = true;
+  // Course is built but paused pre-launch on production. Keep the enrollment/CTA logic
+  // below inert while true so no one — including existing All Access holders — can
+  // self-enroll before the course officially goes live. Flip PROD_COMING_SOON to false
+  // when ready to launch on production. Always unlocked on the dev deployment (hostname
+  // starting with "dev-") so it can be reviewed end-to-end — including the real "already
+  // have access" experience — with a live All Access session before that switch is flipped.
+  const PROD_COMING_SOON = true;
+  const COMING_SOON = /^dev-/.test(location.hostname) ? false : PROD_COMING_SOON;
 
   (async () => {
     const { data: { session } } = await sbClient.auth.getSession();
