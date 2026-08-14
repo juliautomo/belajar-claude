@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 14, 2026 (checkpoint 215)_
+_Last updated: August 14, 2026 (checkpoint 216)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -3769,4 +3769,16 @@ Fixed both call sites with the same hostname-detection pattern already establish
 **Verified**: `ci-check.js` clean. Diffed `origin/main` against the local mount before copying — no concurrent changes on either file. Grepped the full repo for other `belajarclaude.id` hardcodes in `.js` files — only the two now-fixed spots plus the already-correct `backend-config.js` pattern.
 
 **Commits**: `4dfb979` pushed to both `main` and `dev`.
+
+## SHIPPED (Checkpoint 216, August 14, 2026): Onboarding gate is now an in-page modal, not a redirect
+
+**Status: pushed to `dev` only.**
+
+Julia's feedback: the checkpoint 194 onboarding gate (dashboard.html redirects to `profile.html?onboarding=1` if role/goal aren't set) was "a bit weird" — it blocks dashboard navigation, but once on profile.html the nav's "Beranda" link still works, so the "forced" step could just be sidestepped by leaving to the homepage instead of completing it.
+
+Replaced the redirect with an in-page modal (`.onb-overlay`) on dashboard.html itself: a fixed, full-viewport overlay (backdrop blur, z-index above everything including the nav) with no close button and no backdrop-dismiss. It only asks the two fields that were actually required (`role`, `goal`) — not the full profile.html form — reusing the same preset-button + "Lainnya" free-text pattern from profile.html's `setupOtherOption()`, reimplemented locally since the modal has its own element ids. Saving does a targeted Supabase upsert with only `{email, role, goal, updated_at}` (upsert only touches columns actually sent, so any `full_name`/`username` set separately via profile.html is left untouched, not nulled out), then reloads the page in place — no navigation to a separate page at all now, so there's nothing to escape to. `profile.html` itself is unchanged and still reachable normally any time to edit name/username/experience.
+
+**Verified**: `ci-check.js` clean; extracted and `node --check`'d the inline `<script>` separately since ci-check.js doesn't parse embedded JS. Diffed `origin/dev` against the local mount before copying — no concurrent changes.
+
+**Commits**: `bb6c170` on `dev`.
 
