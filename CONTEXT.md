@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 13, 2026 (checkpoint 214)_
+_Last updated: August 14, 2026 (checkpoint 215)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -3755,4 +3755,18 @@ Backend repo divergence was much simpler: `dev` had 2 commits main didn't (the F
 **Verified**: dry-run merge produced zero conflict markers; `node ci-check.js` passed (29 HTML, 6 JS, 26 local refs, nothing broken) on the merged frontend tree; confirmed via `git rev-parse` that `origin/main` and `origin/dev` point at the identical commit on both repos after the push.
 
 **Commits**: frontend `fdf1269` (merge commit) pushed to both `main` and `dev`. Backend `4a93fa1` pushed to `main` (already the tip of `dev`).
+
+## SHIPPED (Checkpoint 215, August 14, 2026): "Lupa password?" was hardcoded to production on dev
+
+**Status: Shipped to both `dev` and `main`.**
+
+Julia asked for a careful recheck of the whole email + password-set code path after the Duitku-widget fix (checkpoint 214) and the Supabase redirect-allowlist fix — Tiffany was about to repurchase on dev to verify it end to end, and Julia wanted confidence before that test, not after. Re-read the full webhook flow, `generatePasswordSetLink()`, `FRONTEND_URL` in both backend files, and `reset-password.html` — all consistent, no issues. But the "Lupa password?" self-service flow (separate from the purchase-triggered password-set link) turned out to have the *same* hardcoded-to-production bug the Duitku widget had, in two places: `login.html`'s `doForgot()` and the shared `login-modal.js` (used for the login popup on other pages). Both called `sbClient.auth.resetPasswordForEmail(email, { redirectTo: 'https://belajarclaude.id/reset-password.html' })` — a literal string, not environment-aware. Anyone clicking "Lupa password?" on the dev site would get a reset link pointing at production's `reset-password.html`, and since that page's post-reset redirect is a relative `dashboard.html`, they'd land on production's dashboard, not dev's.
+
+Notably, an earlier checkpoint's fix (the `redirect_to` payload-shape fix for the backend's admin `generate_link` call) had explicitly noted this client-side flow as "not affected... uses the real client-side SDK method... that path was never broken." That was true for the specific bug being fixed at the time (payload shape), but missed this separate, still-live environment-awareness gap — the SDK method was never broken, but the literal URL handed to it was.
+
+Fixed both call sites with the same hostname-detection pattern already established for `backend-config.js`'s `BACKEND_URL` and the Duitku widget fix: `location.hostname === 'belajarclaude.id' ? production : dev`. Swept the rest of the frontend for any other hardcoded `belajarclaude.id/reset-password` or `/dashboard` strings in JS — none found. Noted but did not fix: the `signUp()` calls in both `login.html` and `login-modal.js` (register flow) pass no `emailRedirectTo` at all, relying on Supabase's default Site URL — lower priority since the register/"Daftar" tab is currently hidden (`display:none`) site-wide and unreachable through the live UI.
+
+**Verified**: `ci-check.js` clean. Diffed `origin/main` against the local mount before copying — no concurrent changes on either file. Grepped the full repo for other `belajarclaude.id` hardcodes in `.js` files — only the two now-fixed spots plus the already-correct `backend-config.js` pattern.
+
+**Commits**: `4dfb979` pushed to both `main` and `dev`.
 
