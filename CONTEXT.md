@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 14, 2026 (checkpoint 217)_
+_Last updated: August 15, 2026 (checkpoint 218)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -3806,4 +3806,28 @@ Two rounds of visual-review fixes after Julia caught issues in the first build (
 **Deliberately out of scope this pass**: `strategi-marketing` still has no PDF — noted during the audit but never requested; not built. Not merged to `main` — all of the above is dev-only per Julia's usual review-before-promote workflow.
 
 **Commits this checkpoint** (`belajar-claude`, all on `dev`): `0a096f7`, `f0a0bb1`, `b7a2785`, `1ccf797`, `278f891`, `d323b9b`, `35b47ea`.
+
+---
+
+## SHIPPED (Checkpoint 218, August 15, 2026): "Claude Sehari-hari" slide deck built + local folder established as source of truth for it, plus a git-push infrastructure finding worth flagging
+
+**Status: shipped to `dev`.** Not merged to `main`.
+
+**First-ever slide deck for "Claude untuk Sehari-hari"** — Julia asked for a single PPTX covering all 13 modules, one slide per module, following the house style already documented in `belajarclaude-pptx-style-spec.md`. Built with `pptxgenjs`: a BeautifulSoup parser (`parse_for_ppt.py`) extracts `masalah`/`prompt`/`latihan` text per module from the live `claude-sehari-hari-content.html`, then `build.js` assembles a cover slide + 12 full-pattern module slides (masalah → prompt box → latihan callout) + a module-13 closing slide (intro recap → latihan → "yang perlu diingat" note), all self-sized per the spec's spacing rules rather than fixed heights.
+
+Two real bugs caught during the mandatory QA pass (schema validate → markitdown placeholder sweep → LibreOffice PDF render → page-by-page visual review of all 14 slides — same rigor as the PDF pipeline, not skipped just because it's a first-time asset type):
+1. The parser's `.prompt-box` extraction picked up the embedded `<button class="copy-btn">Salin</button>` markup via `get_text()`, so every prompt slide ended with a stray "...Salin" run-on with no space. Fixed by `.decompose()`-ing any `<button>` inside the prompt box before extracting text, across all 11 modules that have a prompt.
+2. Module 13's closing slide had a real box-overlap: `addExerciseCallout()`'s returned height wasn't captured, so the following "YANG PERLU DIINGAT" tinted box was placed at a fixed `y` offset regardless of how tall the latihan box actually rendered — the two boxes stacked on top of each other. Fixed by capturing the return value (`const usedLatihan = addExerciseCallout(...); y += usedLatihan + 0.28;`), matching the pattern already used correctly elsewhere in the same file. Also converted the closing slide's "yang perlu diingat" box from a hardcoded `h: 0.85` to the same self-sizing pattern as every other component, per the spec's explicit rule against fixed-height containers.
+
+Re-ran the full QA pass after both fixes — all 14 slides clean (no overflow, no overlaps, no placeholder text, no leftover "Salin"). Pushed to `dev` via the GitHub web-upload flow, byte-verified against a fresh clone. Delivered to Julia and placed on her local machine at `Claude-Sehari-Hari/Course-Level/Claude-Sehari-Hari-Slide-Deck.pptx`. (`5ffd3ae`)
+
+**Local file established as source of truth for this deck.** Julia manually edited the pptx on her machine after delivery (file shrank 249KB → 61KB) and asked that her local copy be treated as canonical going forward — future changes should be pulled from local, not overwritten by a regenerated version. Staged her edited file back into the sandbox, confirmed by hash that it genuinely differed from what was on `dev`, and pushed it up via the same web-upload flow to bring `dev` back in sync with her edit — verified byte-identical via a fresh clone afterward. (`c87626f`)
+
+Declined, per Julia's explicit call: adding a course-level PPT upload slot to `admin.html`/Supabase (checked — the existing PPT upload UI there is per-module only, unlike the PDF Kursus course-level slot; there's currently no Supabase-hosted copy of this deck, it lives in the repo and locally only).
+
+**Local-sync architecture question, answered with verification rather than assumption**: Julia asked whether local-folder file operations could ever affect `main`/production. Checked directly rather than asserting: her device has one frontend working copy (`C:\Users\julia\GitHub\belajar-claude`, on `main` branch, files content-matching `dev` from the prior session's sync) — a second connected folder, `C:\Dev\Belajar-Claude`, is empty and unrelated. `device_bash` has no network access at all, so a file write there is structurally incapable of reaching GitHub; nothing this session did touched `main`, and `dev`→`main` remains unmerged exactly as Julia left it in review.
+
+**Git-push infrastructure finding, worth remembering for future sessions**: Julia asked why she couldn't just give a PAT for direct `git push` instead of the browser-upload workflow, since it had reportedly worked in another session on this same project. Tested directly (`git push` to a scratch branch) and got `access denied by the git proxy: juliautomo/belajar-claude is not in this session's authorized repository set` — a server-side credential proxy (`GITHUB_TOKEN=proxy-injected`, custom CA cert) gates pushes per-session before any credential (PAT or otherwise) is even evaluated. Confirmed no GitHub MCP connector is installed for the org (`ListConnectors` returns none), so this isn't a connector-reconnect situation either. Found a public tracking issue (`anthropics/claude-code#76248`) describing the identical error as a recent, apparently unintended server-side regression — both fixes the error message suggests ("add repo to session's sources", `add_repo`) don't currently correspond to any real, usable feature. Conclusion for future work on this repo: keep using the Chrome-browser web-upload flow for all GitHub writes; don't spend time hunting for a PAT/settings fix until Anthropic resolves the underlying bug.
+
+**Commits this checkpoint** (`belajar-claude`, both on `dev`): `5ffd3ae`, `c87626f`. (Plus this checkpoint's own `CONTEXT.md` commit.)
 
