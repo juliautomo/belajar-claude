@@ -279,6 +279,16 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
   .cases-section { padding: 56px 0 0; }
   .cta-section { padding: 64px 20px; }
   footer { padding: 40px 20px 24px; } .footer-inner { flex-direction: column; gap: 24px; } .footer-links { flex: 0 0 auto; }
+  /* The rotating headline word uses white-space: nowrap (needed on desktop so the
+     crossfade animation doesn't reflow line height between words), but on narrow
+     screens the longest variants ("hemat waktu setiap hari.", "tingkatkan
+     produktivitas.") are wider than the viewport itself, which forced the entire
+     hero — text, buttons, and the illustration — into a horizontally-scrolling
+     451px-wide box instead of fitting the real ~390px screen. Letting it wrap here
+     fixes that at the source, rather than just shrinking the image (which was only
+     wide because its grid column had already been stretched by this same bug). */
+  .rot-word { white-space: normal; }
+  .hero-visual { min-width: 0; }
 }
 .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.55s ease, transform 0.55s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
