@@ -147,7 +147,6 @@
 
       <div class="m-tabs" id="m-tabs">
         <button class="m-tab active" data-tab="login">Masuk</button>
-        <button class="m-tab" data-tab="register" style="display:none;">Daftar</button>
       </div>
 
       <!-- Login view -->
@@ -159,18 +158,6 @@
         <button class="m-forgot" id="m-forgot-link">Lupa password?</button>
         <button class="m-btn" id="m-login-btn">Masuk →</button>
         <div class="m-msg" id="m-login-msg"></div>
-      </div>
-
-      <!-- Register view -->
-      <div class="m-view" id="m-view-register">
-        <label for="m-reg-email">Email</label>
-        <input type="email" id="m-reg-email" placeholder="nama@email.com" autocomplete="email" />
-        <label for="m-reg-password">Password</label>
-        <input type="password" id="m-reg-password" placeholder="Minimal 6 karakter" autocomplete="new-password" />
-        <label for="m-reg-confirm">Konfirmasi Password</label>
-        <input type="password" id="m-reg-confirm" placeholder="Ulangi password" autocomplete="new-password" style="margin-bottom:14px;" />
-        <button class="m-btn" id="m-reg-btn">Daftar →</button>
-        <div class="m-msg" id="m-reg-msg"></div>
       </div>
 
       <!-- Forgot password view -->
@@ -260,43 +247,6 @@
     }
   });
 
-  // Register button
-  overlay.querySelector('#m-reg-btn').addEventListener('click', async function() {
-    var email = overlay.querySelector('#m-reg-email').value.trim();
-    var password = overlay.querySelector('#m-reg-password').value;
-    var confirm = overlay.querySelector('#m-reg-confirm').value;
-    var btn = overlay.querySelector('#m-reg-btn');
-    var msg = overlay.querySelector('#m-reg-msg');
-
-    if (!email || !password) return mShowMsg(msg, 'error', 'Isi semua kolom ya.');
-    if (password.length < 6) return mShowMsg(msg, 'error', 'Password minimal 6 karakter.');
-    if (password !== confirm) return mShowMsg(msg, 'error', 'Konfirmasi password tidak cocok.');
-
-    btn.disabled = true; btn.textContent = 'Mendaftar...';
-    msg.className = 'm-msg';
-
-    var res = await sbClient.auth.signUp({ email: email, password: password });
-    if (res.error) {
-      mShowMsg(msg, 'error', res.error.message);
-      btn.disabled = false; btn.textContent = 'Daftar →';
-      return;
-    }
-
-    // Fire-and-forget: trigger welcome email + ConvertKit/Sheets logging (non-blocking, no name field on this form)
-    fetch(BACKEND_URL + '/signup', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: email.split('@')[0], email: email, source: 'signup-modal' })
-    }).catch(function() {});
-
-    if (res.data.session) {
-      btn.textContent = 'Berhasil!';
-      window.location.href = 'dashboard.html';
-    } else {
-      mShowMsg(msg, 'success', 'Cek inbox ' + email + ' untuk konfirmasi akun, lalu kembali untuk masuk.');
-      btn.disabled = false; btn.textContent = 'Daftar →';
-    }
-  });
-
   // Forgot password button
   overlay.querySelector('#m-forgot-btn').addEventListener('click', async function() {
     var email = overlay.querySelector('#m-forgot-email').value.trim();
@@ -335,7 +285,6 @@
     var active = overlay.querySelector('.m-view.active');
     if (!active) return;
     if (active.id === 'm-view-login') overlay.querySelector('#m-login-btn').click();
-    else if (active.id === 'm-view-register') overlay.querySelector('#m-reg-btn').click();
     else if (active.id === 'm-view-forgot') overlay.querySelector('#m-forgot-btn').click();
   });
 
@@ -351,7 +300,6 @@
     overlay.querySelectorAll('.m-msg').forEach(function(m) { m.className = 'm-msg'; m.style.display = ''; });
     overlay.querySelectorAll('.m-btn').forEach(function(b) { b.disabled = false; });
     overlay.querySelector('#m-login-btn').textContent = 'Masuk →';
-    overlay.querySelector('#m-reg-btn').textContent = 'Daftar →';
     overlay.querySelector('#m-forgot-btn').textContent = 'Kirim Link Reset →';
     // Context banner
     var ctxEl = overlay.querySelector('#m-context');

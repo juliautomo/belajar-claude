@@ -463,6 +463,17 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
 <script src="login-modal.js"></script>
 <script src="course-illustrations.js"></script>
 <script>
+  // Same escaping approach as community.html/admin.html — used below wherever a
+  // user-editable value (like profiles.full_name) gets inserted via innerHTML
+  // instead of textContent, so a display name containing HTML can't inject markup
+  // into your own page when you view it. Self-XSS only (you'd have to attack your
+  // own session), but worth being consistent about.
+  function escapeHtml(s) {
+    var d = document.createElement('div');
+    d.textContent = s || '';
+    return d.innerHTML;
+  }
+
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
   }, { threshold: 0.1 });
@@ -732,7 +743,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         var headline = document.getElementById('ctaHeadline');
         var subtext  = document.getElementById('ctaSubtext');
         var btn      = document.getElementById('ctaBtn');
-        if (headline) headline.innerHTML = 'Selamat datang kembali, <em>' + name + '</em>';
+        if (headline) headline.innerHTML = 'Selamat datang kembali, <em>' + escapeHtml(name) + '</em>';
         // Check enrollment for subtext
         try {
           if (settled[1].status !== 'fulfilled') { throw settled[1].reason; } // same fallback as an enrollments-fetch failure always had: catch below calls revealMarketing()
