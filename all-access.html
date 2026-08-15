@@ -103,6 +103,40 @@
   .course-card-v2:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(0,0,0,0.06); border-color: rgba(108,71,255,0.2); }
   .ccv2-banner { height: 76px; display: flex; align-items: center; justify-content: center; }
   .ccv2-icon { width: 36px; height: 36px; border-radius: 10px; background: rgba(255,255,255,0.85); display: flex; align-items: center; justify-content: center; font-size: 17px; box-shadow: 0 4px 12px rgba(0,0,0,0.07); }
+  /* Same animated hand-drawn illustrations as index.html/dashboard.html (course-illustrations.js) —
+     these rules just provide the animation, the markup+colors come from that shared file. */
+  .lih-illustration { width: 100%; height: 100%; display: block; }
+  @keyframes lihBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+  @keyframes lihLegA { 0%,100% { transform: rotate(16deg); } 50% { transform: rotate(-16deg); } }
+  @keyframes lihLegB { 0%,100% { transform: rotate(-16deg); } 50% { transform: rotate(16deg); } }
+  @keyframes lihGround { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -24; } }
+  @keyframes lihTailWag { 0%,100% { transform: rotate(-10deg); } 50% { transform: rotate(14deg); } }
+  @keyframes lihScribble { 0%,100% { stroke-dashoffset: 0; opacity: 0.75; } 50% { stroke-dashoffset: 10; opacity: 0.35; } }
+  @keyframes lihPenWiggle { 0%,100% { transform: rotate(-8deg); } 50% { transform: rotate(6deg); } }
+  @keyframes lihSparkle { 0%,100% { opacity: 0.25; transform: scale(0.85); } 50% { opacity: 1; transform: scale(1.1); } }
+  @keyframes lihCursorBlink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
+  @keyframes lihDotPulse { 0%,80%,100% { opacity: 0.25; } 40% { opacity: 1; } }
+  @keyframes lihBubblePop { 0%,100% { transform: scale(0.94); opacity: 0.85; } 50% { transform: scale(1.03); opacity: 1; } }
+  @keyframes lihFlash { 0%,85%,100% { opacity: 0; } 92% { opacity: 0.9; } }
+  @keyframes lihCamClick { 0%,88%,100% { transform: scale(1); } 92% { transform: scale(0.93); } }
+  .lih-run-a { animation: lihBob 0.6s ease-in-out infinite; }
+  .lih-run-b { animation: lihBob 0.6s ease-in-out infinite; animation-delay: 0.15s; }
+  .lih-leg-a { animation: lihLegA 0.6s ease-in-out infinite; }
+  .lih-leg-b { animation: lihLegB 0.6s ease-in-out infinite; }
+  .lih-ground { animation: lihGround 1s linear infinite; }
+  .lih-tail { animation: lihTailWag 0.5s ease-in-out infinite; }
+  .lih-scribble { animation: lihScribble 1.6s ease-in-out infinite; }
+  .lih-scribble-2 { animation: lihScribble 1.6s ease-in-out infinite; animation-delay: 0.3s; }
+  .lih-scribble-3 { animation: lihScribble 1.6s ease-in-out infinite; animation-delay: 0.6s; }
+  .lih-pen { animation: lihPenWiggle 0.9s ease-in-out infinite; }
+  .lih-sparkle { animation: lihSparkle 1.8s ease-in-out infinite; }
+  .lih-cursor { animation: lihCursorBlink 1s step-end infinite; }
+  .lih-dot1 { animation: lihDotPulse 1.2s ease-in-out infinite; }
+  .lih-dot2 { animation: lihDotPulse 1.2s ease-in-out infinite; animation-delay: 0.2s; }
+  .lih-dot3 { animation: lihDotPulse 1.2s ease-in-out infinite; animation-delay: 0.4s; }
+  .lih-bubble { animation: lihBubblePop 2s ease-in-out infinite; }
+  .lih-flash { animation: lihFlash 2.4s ease-in-out infinite; }
+  .lih-cam { animation: lihCamClick 2.4s ease-in-out infinite; }
   .bnr-1 { background: linear-gradient(135deg,#C7CBFF,#EEF0FF); }
   .bnr-2 { background: linear-gradient(135deg,#B7F0D6,#E6FBF0); }
   .bnr-3 { background: linear-gradient(135deg,#FBD98A,#FDF0D5); }
@@ -349,6 +383,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
   <script src="backend-config.js"></script>
+  <script src="course-illustrations.js"></script>
   <script src="login-modal.js"></script>
   <script src="payment-success-modal.js"></script>
 <script>
@@ -395,7 +430,14 @@
   function aaEsc(s) { return String(s).replace(/[&<>"]/g, function(c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function aaCardHtml(slug, meta) {
     var badge = meta.comingSoon ? '<span class="ccv2-badge badge-soon">Segera Hadir</span>' : '<span class="ccv2-badge badge-green">Tersedia</span>';
-    return '<div class="course-card-v2" data-slug="' + slug + '"><div class="ccv2-banner ' + (meta.bnr || 'bnr-1') + '"><div class="ccv2-icon">' + meta.icon + '</div></div><div class="ccv2-body">' + badge + '<h3>' + aaEsc(meta.title) + '</h3><p>' + aaEsc(meta.desc) + '</p></div></div>';
+    // Same shared illustrations as index.html/dashboard.html (course-illustrations.js) —
+    // falls back to the plain icon+gradient for any slug that doesn't have one yet.
+    var hasIllustration = typeof LIH_ILLUSTRATIONS !== 'undefined' && LIH_ILLUSTRATIONS[slug];
+    var visual = hasIllustration ? LIH_ILLUSTRATIONS[slug] : ('<div class="ccv2-icon">' + meta.icon + '</div>');
+    var bg = (typeof LIH_BG !== 'undefined' && LIH_BG[slug]) || null;
+    var bannerClass = 'ccv2-banner' + (bg ? '' : ' ' + (meta.bnr || 'bnr-1'));
+    var bannerStyle = bg ? ' style="background:' + bg + ';"' : '';
+    return '<div class="course-card-v2" data-slug="' + slug + '"><div class="' + bannerClass + '"' + bannerStyle + '>' + visual + '</div><div class="ccv2-body">' + badge + '<h3>' + aaEsc(meta.title) + '</h3><p>' + aaEsc(meta.desc) + '</p></div></div>';
   }
   function renderAACourses() {
     var grid = document.getElementById('aaCoursesGrid');
