@@ -750,6 +750,17 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
           // enrollment + progress data. Footer stays untouched either way.
           if (hasAllAccess) {
             marketingRevealed = true; // marketingHome starts hidden — never reveal it for All Access holders
+            // Explicitly force marketingHome (and komunitas) back to hidden rather than
+            // just relying on marketingRevealed staying false — the 2500ms revealMarketing()
+            // safety-net timeout (line ~644) can fire first on a slow connection/cold
+            // Supabase query, showing the marketing hero + course grid before this async
+            // chain gets here. Without this, that leaves both marketingHome AND
+            // loggedInHome visible at once (the "merged page" bug Julia saw): setting
+            // marketingRevealed=true above is a no-op once the timeout already ran.
+            var mhAA = document.getElementById('marketingHome');
+            if (mhAA) mhAA.style.display = 'none';
+            var kmAA = document.getElementById('komunitas');
+            if (kmAA) kmAA.style.display = 'none';
             document.getElementById('loggedInHome').style.display = 'block';
             var ilAA = document.getElementById('indexLoading');
             if (ilAA) ilAA.style.display = 'none';
