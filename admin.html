@@ -123,16 +123,23 @@ td a:hover { text-decoration: underline; }
 .pdf-status a:hover { text-decoration: underline; }
 .btn-mini { padding: 6px 12px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--ink); cursor: pointer; font-family: inherit; }
 .btn-mini:hover { border-color: var(--border-strong); }
+.order-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; font-size: 13.5px; font-weight: 600; color: var(--ink); }
+.order-row:last-child { margin-bottom: 0; }
+.order-arrows { display: flex; gap: 6px; }
+.order-arrows .btn-mini { padding: 5px 11px; font-size: 13px; line-height: 1; }
+.order-arrows .btn-mini:disabled { opacity: 0.35; cursor: not-allowed; }
+.order-arrows .btn-mini:disabled:hover { border-color: var(--border); }
 table.matrix-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 table.matrix-table th, table.matrix-table td { text-align: left; padding: 12px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
 table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.4px; }
 .mod-sub { display: block; font-size: 11.5px; color: var(--ink-2); font-weight: 400; margin-top: 1px; }
-.cell-done { display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; }
+.cell-done { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .cell-link, .cell-link-btn { color: var(--green); text-decoration: none; font-weight: 600; font-size: 12px; background: var(--green-dim); border: 1px solid var(--green-border); padding: 5px 10px; border-radius: 7px; cursor: pointer; font-family: inherit; display: inline-block; max-width: 340px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 1; min-width: 0; }
 .cell-link:hover, .cell-link-btn:hover { text-decoration: underline; }
 .cell-done .btn-mini, .cell-done .del-btn { flex-shrink: 0; }
 .cell-missing { padding: 6px 12px; background: var(--surface-2); border: 1.5px dashed var(--border-strong); border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--ink-2); cursor: pointer; font-family: inherit; }
 .cell-missing:hover { border-color: var(--accent); color: var(--accent); }
+.novideo-badge { padding: 6px 12px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--ink-2); white-space: nowrap; }
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
 .modal-overlay.show { display: flex; }
 .modal { background: #fff; border-radius: 16px; padding: 28px; max-width: 440px; width: 100%; box-shadow: 0 24px 60px rgba(0,0,0,0.18); position: relative; max-height: 85vh; overflow-y: auto; }
@@ -229,6 +236,13 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
       <h1 class="page-title">Course Content</h1>
       <p class="page-sub">Unggah PDF, video, PPT, dan dokumen praktik per modul — tampil langsung di halaman kursus, tidak perlu deploy ulang.</p>
 
+      <div class="card">
+        <h2>Urutan Tampil Kursus</h2>
+        <p class="hint">Atur urutan kartu kursus di halaman utama dan dashboard. Naikkan/turunkan dengan panah — berlaku langsung di seluruh situs, tidak perlu deploy ulang.</p>
+        <div id="courseOrderList">Memuat...</div>
+        <div class="status" id="courseOrderStatus"></div>
+      </div>
+
       <div class="content-split">
         <div class="course-subnav" id="courseSubnav"></div>
 
@@ -260,6 +274,16 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
                 </div>
               </div>
             </div>
+            <div class="social-field">
+              <div class="social-label-row">
+                <label>Tampilkan di Dev (preview)</label>
+                <div class="social-toggle-wrap">
+                  <span class="social-toggle-text" id="courseDevPreviewLabel">Nonaktif</span>
+                  <label class="toggle-switch"><input type="checkbox" id="courseDevPreviewToggle" onchange="onCourseVisibilityToggle('dev_preview')"><span class="toggle-slider"></span></label>
+                </div>
+              </div>
+              <p class="hint" style="margin-top:6px;">Kalau aktif, kursus ini tetap tampil di situs dev (dev-belajar-claude...) meski "Sembunyikan dari situs" nyala — supaya bisa direview sebelum go-live. Tidak berpengaruh ke situs production.</p>
+            </div>
             <div class="status" id="courseVisibilityStatus"></div>
           </div>
 
@@ -267,7 +291,7 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
             <h2 id="matrixCourseTitle">Konten per Modul</h2>
             <p class="hint">Klik sel yang sudah terisi untuk lihat/ganti filenya, atau klik "+ Unggah" untuk yang masih kosong.</p>
             <table class="matrix-table" id="matrixTable">
-              <thead><tr><th style="width:16%;">Modul</th><th style="width:16%;">Video</th><th style="width:38%;">PPT</th><th style="width:30%;">Dokumen</th></tr></thead>
+              <thead><tr><th style="width:16%;">Modul</th><th style="width:22%;">Video</th><th style="width:32%;">PPT</th><th style="width:30%;">Dokumen</th></tr></thead>
               <tbody id="matrixBody"><tr><td colspan="4">Memuat...</td></tr></tbody>
             </table>
           </div>
@@ -400,6 +424,7 @@ const COURSES = [
   { slug: 'mulai-claude',       name: 'Dasar Claude AI',                 modules: 5 },
   { slug: 'produktivitas',      name: 'Produktivitas Kantor',            modules: 7 },
   { slug: 'content-marketing',  name: 'Kreasi Konten Pemasaran',         modules: 5 },
+  { slug: 'claude-sehari-hari', name: 'Claude untuk Sehari-hari',        modules: 13 },
   { slug: 'strategi-marketing', name: 'Strategi & Analisis Marketing',   modules: 3, comingSoon: true, visible: true },
   // Coming-soon courses — placeholders so content can be prepped ahead of launch.
   // Slugs/module counts match ALL_COURSES in dashboard.html. `comingSoon`/`visible` here
@@ -436,6 +461,21 @@ const MODULE_TITLES = {
     'Sistem Konten Instagram',
     'Ads Copywriting Multi-Platform + Desain Siap Pakai',
     'Template Komunikasi Pelanggan (WhatsApp)',
+  ],
+  'claude-sehari-hari': [
+    'Ngobrol dengan Claude',
+    'Atur Pengeluaran & Budget',
+    'Rencanakan Liburan & Acara',
+    'Bantu Cari Kerja',
+    'Rapikan CV',
+    'Jadikan Claude Teman Belajar',
+    'Cari Ide Penghasilan Sampingan',
+    'Bingung Mau Masak Apa?',
+    'Bikin To-Do List & Checklist',
+    'Cari Ide & Rekomendasi',
+    'Bantu Pilih & Bandingkan',
+    'Rapikan Tulisan & Chat',
+    'Sekarang, Coba Sendiri',
   ],
   'strategi-marketing': [
     'Performance Marketing',
@@ -694,6 +734,7 @@ function renderAll() {
   renderPdfRow();
   renderMatrix();
   renderVisibilityToggles();
+  renderCourseOrder();
   renderSocialLinks();
   renderAccessList();
 }
@@ -903,7 +944,9 @@ function renderMatrix() {
 
     var videoCell = (video && video.video_url)
       ? '<div class="cell-done"><a class="cell-link" href="' + video.video_url + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">✓ Lihat</a><button class="btn-mini" onclick="openVideoModal(' + i + ')">Ganti</button><button class="del-btn" onclick="deleteVideoModal(' + i + ')">Hapus</button></div>'
-      : '<button class="cell-missing" onclick="openVideoModal(' + i + ')">+ Unggah</button>';
+      : (video && video.no_video_planned)
+        ? '<div class="cell-done"><span class="novideo-badge">Tidak ada video</span><button class="del-btn" onclick="clearNoVideo(' + i + ')">Batal</button></div>'
+        : '<div class="cell-done"><button class="cell-missing" onclick="openVideoModal(' + i + ')">+ Unggah</button><button class="btn-mini" onclick="markNoVideo(' + i + ')">Tanpa video</button></div>';
 
     var pptCell = (ppt && ppt.ppt_url)
       ? '<div class="cell-done"><a class="cell-link" href="' + ppt.ppt_url + '" target="_blank" rel="noopener" title="' + escapeHtml(ppt.ppt_label || '') + '" onclick="event.stopPropagation()">✓ ' + escapeHtml(ppt.ppt_label || 'Lihat') + '</a><button class="btn-mini" onclick="openPptModal(' + i + ')">Ganti</button><button class="del-btn" onclick="deletePptModal(' + i + ')">Hapus</button></div>'
@@ -932,11 +975,14 @@ function renderVisibilityToggles() {
   var row = dataCache.visibility.find(function (v) { return v.course_slug === activeCourse; });
   var hidden = row ? !!row.hidden : false;
   var comingSoon = row ? !!row.coming_soon : !!(course && course.comingSoon);
+  var devPreview = row ? !!row.dev_preview : false;
 
   document.getElementById('courseHiddenToggle').checked = hidden;
   document.getElementById('courseHiddenLabel').textContent = hidden ? 'Disembunyikan' : 'Tampil';
   document.getElementById('courseComingSoonToggle').checked = comingSoon;
   document.getElementById('courseComingSoonLabel').textContent = comingSoon ? 'Segera Hadir' : 'Live';
+  document.getElementById('courseDevPreviewToggle').checked = devPreview;
+  document.getElementById('courseDevPreviewLabel').textContent = devPreview ? 'Aktif' : 'Nonaktif';
 
   var statusEl = document.getElementById('courseVisibilityStatus');
   statusEl.className = 'status';
@@ -948,8 +994,10 @@ async function onCourseVisibilityToggle(changedField) {
   if (!_sess) return;
   var hidden = document.getElementById('courseHiddenToggle').checked;
   var comingSoon = document.getElementById('courseComingSoonToggle').checked;
+  var devPreview = document.getElementById('courseDevPreviewToggle').checked;
   document.getElementById('courseHiddenLabel').textContent = hidden ? 'Disembunyikan' : 'Tampil';
   document.getElementById('courseComingSoonLabel').textContent = comingSoon ? 'Segera Hadir' : 'Live';
+  document.getElementById('courseDevPreviewLabel').textContent = devPreview ? 'Aktif' : 'Nonaktif';
 
   var statusEl = document.getElementById('courseVisibilityStatus');
   statusEl.className = 'status show';
@@ -959,6 +1007,7 @@ async function onCourseVisibilityToggle(changedField) {
     course_slug: activeCourse,
     hidden: hidden,
     coming_soon: comingSoon,
+    dev_preview: devPreview,
     updated_at: new Date().toISOString(),
     updated_by: currentSession.user.email,
   };
@@ -969,6 +1018,72 @@ async function onCourseVisibilityToggle(changedField) {
     if (idx === -1) dataCache.visibility.push(payload); else dataCache.visibility[idx] = payload;
     statusEl.className = 'status show success';
     statusEl.textContent = 'Tersimpan ✓ — langsung berlaku di seluruh situs.';
+  } catch (e) {
+    statusEl.className = 'status show error';
+    statusEl.textContent = 'Gagal menyimpan: ' + e.message;
+  }
+}
+
+// ─── COURSE ORDER (drives card order on index.html / dashboard.html) ────────
+// Also lives in `course_visibility.sort_order` — same live-override pattern as
+// the hide/coming-soon toggles above. Falls back to COURSES array order if a
+// course has no row yet (e.g. newly added).
+
+function getEffectiveSortOrder(slug, fallbackIdx) {
+  var row = dataCache.visibility.find(function (v) { return v.course_slug === slug; });
+  return (row && row.sort_order != null) ? row.sort_order : (fallbackIdx + 1);
+}
+
+function getSortedCourseOrder() {
+  return COURSES.map(function (c, idx) {
+    return { slug: c.slug, name: c.name, sortOrder: getEffectiveSortOrder(c.slug, idx) };
+  }).sort(function (a, b) { return a.sortOrder - b.sortOrder; });
+}
+
+function renderCourseOrder() {
+  var list = getSortedCourseOrder();
+  var el = document.getElementById('courseOrderList');
+  el.innerHTML = list.map(function (item, i) {
+    return '<div class="order-row">' +
+      '<span>' + escapeHtml(item.name) + '</span>' +
+      '<div class="order-arrows">' +
+        '<button class="btn-mini"' + (i === 0 ? ' disabled' : '') + ' onclick="moveCourseOrder(\'' + item.slug + '\', -1)" title="Naikkan">↑</button>' +
+        '<button class="btn-mini"' + (i === list.length - 1 ? ' disabled' : '') + ' onclick="moveCourseOrder(\'' + item.slug + '\', 1)" title="Turunkan">↓</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+async function moveCourseOrder(slug, direction) {
+  var _sess = await ensureFreshSession();
+  if (!_sess) return;
+  var list = getSortedCourseOrder();
+  var idx = list.findIndex(function (item) { return item.slug === slug; });
+  var targetIdx = idx + direction;
+  if (idx === -1 || targetIdx < 0 || targetIdx >= list.length) return;
+  var tmp = list[idx];
+  list[idx] = list[targetIdx];
+  list[targetIdx] = tmp;
+
+  var statusEl = document.getElementById('courseOrderStatus');
+  statusEl.className = 'status show';
+  statusEl.textContent = 'Menyimpan...';
+
+  var nowIso = new Date().toISOString();
+  var payloads = list.map(function (item, i) {
+    return { course_slug: item.slug, sort_order: i + 1, updated_at: nowIso, updated_by: currentSession.user.email };
+  });
+  try {
+    var res = await sbClient.from('course_visibility').upsert(payloads, { onConflict: 'course_slug' });
+    if (res.error) throw res.error;
+    payloads.forEach(function (p) {
+      var vIdx = dataCache.visibility.findIndex(function (v) { return v.course_slug === p.course_slug; });
+      if (vIdx === -1) dataCache.visibility.push(p);
+      else dataCache.visibility[vIdx] = Object.assign({}, dataCache.visibility[vIdx], p);
+    });
+    statusEl.className = 'status show success';
+    statusEl.textContent = 'Tersimpan ✓ — urutan langsung berlaku di seluruh situs.';
+    renderCourseOrder();
   } catch (e) {
     statusEl.className = 'status show error';
     statusEl.textContent = 'Gagal menyimpan: ' + e.message;
@@ -1000,6 +1115,7 @@ async function submitVideoModal(moduleNum) {
     course_slug: activeCourse,
     module_num: moduleNum,
     video_url: url,
+    no_video_planned: false,
     updated_at: new Date().toISOString(),
     updated_by: currentSession.user.email
   }, { onConflict: 'course_slug,module_num' });
@@ -1018,6 +1134,32 @@ async function deleteVideoModal(moduleNum) {
   if (!_sess) return;
   var db = await sbClient.from('module_videos').delete().eq('course_slug', activeCourse).eq('module_num', moduleNum);
   if (db.error) { alert('Gagal hapus video: ' + db.error.message); return; }
+  await reloadAndRender();
+}
+
+// Marks a module as intentionally having no video (e.g. a practice/capstone module),
+// so the content page's "Video coming soon" placeholder is suppressed for it instead
+// of implying a video is still on the way.
+async function markNoVideo(moduleNum) {
+  var _sess = await ensureFreshSession();
+  if (!_sess) return;
+  var db = await sbClient.from('module_videos').upsert({
+    course_slug: activeCourse,
+    module_num: moduleNum,
+    video_url: null,
+    no_video_planned: true,
+    updated_at: new Date().toISOString(),
+    updated_by: currentSession.user.email
+  }, { onConflict: 'course_slug,module_num' });
+  if (db.error) { alert('Gagal menyimpan: ' + db.error.message); return; }
+  await reloadAndRender();
+}
+
+async function clearNoVideo(moduleNum) {
+  var _sess = await ensureFreshSession();
+  if (!_sess) return;
+  var db = await sbClient.from('module_videos').delete().eq('course_slug', activeCourse).eq('module_num', moduleNum);
+  if (db.error) { alert('Gagal membatalkan: ' + db.error.message); return; }
   await reloadAndRender();
 }
 

@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude untuk Sehari-hari — Belajar Claude</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&display=swap" rel="stylesheet">
+<script>const COURSE_SLUG = 'claude-sehari-hari';</script>
+<style>
+  :root {
+    --bg:#FAFAFA;--surface:#FFFFFF;--surface-2:#F5F5F7;
+    --border:#E8E8E8;--border-strong:#D0D0D0;
+    --ink:#111111;--ink-2:#777777;--ink-3:#BBBBBB;
+    --accent:#6C47FF;--accent-2:#9B7DFF;
+    --accent-dim:rgba(108,71,255,0.08);--accent-glow:rgba(108,71,255,0.18);
+    --green:#16A34A;--green-dim:rgba(22,163,74,0.08);--green-border:rgba(22,163,74,0.2);
+    --gold:#EF9F27;--gold-pale:rgba(239,159,39,0.08);
+    --shadow:0 1px 4px rgba(0,0,0,0.06),0 4px 20px rgba(0,0,0,0.05);
+    --shadow-sm:0 1px 3px rgba(0,0,0,0.05),0 2px 8px rgba(0,0,0,0.04);
+    --serif:'Fraunces',Georgia,serif;--serif-2:'Fraunces',Georgia,serif;--font:'Geist',ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--r:14px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--font);background:var(--bg);color:var(--ink);height:100vh;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;overflow:hidden;}
+  nav{height:58px;padding:0 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(250,250,250,0.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);flex-shrink:0;z-index:10;}
+  .nav-left{display:flex;align-items:center;gap:16px;}
+  .nav-logo{font-family:var(--font);font-size:17px;color:var(--ink);text-decoration:none;font-weight:700;letter-spacing:-0.4px;}
+  .nav-logo span{color:var(--accent);}
+  .nav-divider{width:1px;height:20px;background:var(--border);}
+  .nav-course-title{font-size:13px;font-weight:600;color:var(--ink-2);}
+  .nav-right{display:flex;align-items:center;gap:16px;}
+  .nav-email{font-size:12px;color:var(--ink-2);}
+  .nav-back{font-size:13px;color:var(--ink-2);text-decoration:none;font-weight:500;transition:color 0.2s;}
+  .nav-back:hover{color:var(--ink);}
+  .logout-btn{background:transparent;border:1px solid var(--border);color:var(--ink-2);padding:5px 12px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all 0.2s;}
+  .logout-btn:hover{border-color:var(--accent);color:var(--ink);}
+
+  /* Mobile header — declutters to logo + Dashboard/Keluar only, matching
+     the decluttered/priority-content approach index.html uses on mobile. */
+  @media (max-width: 640px) {
+    nav { padding: 0 16px; }
+    .nav-divider, .nav-course-title, .nav-email { display: none; }
+    .nav-back { font-size: 12.5px; }
+    .logout-btn { padding: 5px 10px; font-size: 11px; }
+  }
+  .layout{display:flex;flex:1;overflow:hidden;}
+  .sidebar{width:288px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;}
+  .sidebar-header{padding:22px 20px 18px;border-bottom:1px solid var(--border);}
+  .sidebar-course-name{font-size:14px;font-weight:800;color:var(--ink);line-height:1.35;margin-bottom:12px;}
+  .progress-bar-wrap{display:flex;align-items:center;gap:10px;}
+  .progress-bar{flex:1;height:7px;background:var(--surface-2);border-radius:10px;overflow:hidden;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));border-radius:10px;transition:width 0.5s cubic-bezier(.2,.8,.2,1);}
+  .progress-label{font-size:11.5px;font-weight:700;color:var(--accent);white-space:nowrap;font-family:var(--font);}
+  .sidebar-section-label{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-3);padding:18px 20px 8px;font-family:var(--font);}
+  .mod-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;margin:2px 8px;border-radius:12px;cursor:pointer;transition:background 0.15s,transform 0.15s;}
+  .mod-item:hover{background:var(--surface-2);}
+  .mod-item.active{background:var(--accent-dim);}
+  .mod-item.active:hover{transform:translateX(2px);}
+  .mod-check{width:24px;height:24px;border-radius:50%;flex-shrink:0;margin-top:1px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;transition:all 0.25s cubic-bezier(.2,.8,.2,1);background:#fff;}
+  .mod-item.done .mod-check{background:var(--green);border-color:var(--green);color:#fff;}
+  .mod-item.active .mod-check{border-color:var(--accent);background:#fff;color:var(--accent);font-weight:800;}
+  .mod-item-info{flex:1;}
+  .mod-item-title{font-size:12.5px;font-weight:600;color:var(--ink);line-height:1.4;margin-bottom:2px;}
+  .mod-item.active .mod-item-title{color:var(--accent);font-weight:700;}
+  .mod-item-sub{font-size:11px;color:var(--ink-3);}
+  .sidebar-footer{margin-top:auto;padding:18px 20px;border-top:1px solid var(--border);}
+  .sidebar-tools{display:flex;flex-wrap:wrap;gap:6px;}
+  .tool-chip{font-size:10.5px;font-weight:600;background:var(--accent-dim);color:var(--accent);padding:4px 10px;border-radius:100px;}
+  .content-chip-row{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 20px;}
+  .content-chip{font-size:12.5px;font-weight:650;background:var(--accent-dim);color:var(--accent);padding:6px 13px;border-radius:100px;}
+  .main{flex:1;min-width:0;overflow-y:auto;overflow-x:hidden;background:var(--bg);}
+  .main-inner{max-width:880px;margin:0 auto;padding:40px 40px 80px;min-width:0;}
+  .breadcrumb{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(108,71,255,0.18);padding:5px 12px;border-radius:100px;margin-bottom:20px;letter-spacing:0.02em;}
+  .breadcrumb span{color:inherit;}
+  .breadcrumb strong{color:inherit;font-weight:800;}
+  .module-panel{display:none;}
+  .module-panel.active{display:block;}
+  .hero{background:#fff;border:1px solid var(--border);border-radius:16px;padding:28px 32px;margin-bottom:24px;box-shadow:var(--shadow-sm);}
+  .module-title{font-family:var(--serif-2);font-size:34px;font-weight:400;letter-spacing:-0.8px;color:var(--ink);margin-bottom:8px;line-height:1.15;}
+  .module-subtitle{font-size:14.5px;color:var(--ink-2);margin-bottom:0;line-height:1.6;}
+  .hero .video-slot:not(:empty){margin-top:22px;}
+  .module-desc-box{background:var(--accent-dim);border:1px solid rgba(108,71,255,0.15);border-radius:14px;padding:20px 24px;margin-bottom:24px;font-size:14px;color:var(--ink);line-height:1.8;}
+  .module-desc-box strong{color:var(--accent);}
+  .prompt-section{background:#fff;border:1px solid var(--border);border-radius:14px;margin-bottom:18px;overflow:hidden;}
+  .prompt-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-3);margin:0;font-family:var(--font);display:flex;align-items:center;gap:6px;padding:13px 18px;background:#fafafa;border-bottom:1px solid var(--border);}
+  .prompt-section.latihan{background:var(--accent-dim);border:1.5px solid rgba(108,71,255,0.25);border-radius:18px;}
+  .prompt-section.latihan .prompt-label{font-family:var(--font);font-size:17px;font-weight:700;text-transform:none;letter-spacing:-0.2px;color:var(--accent);background:transparent;border-bottom:1px solid rgba(108,71,255,0.15);padding:16px 20px 12px;}
+  .prompt-box{background:var(--ink);border:0;border-radius:0;padding:20px 52px 20px 20px;font-size:13px;color:#f2f2f2;line-height:1.8;font-family:'SF Mono',Consolas,monospace;white-space:pre-wrap;position:relative;}
+  .copy-btn{position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.12);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font);transition:background 0.2s;}
+  .copy-btn:hover{background:var(--accent);}
+  .copy-btn.copied{background:var(--green);animation:btnPop 0.35s ease;}
+  @keyframes btnPop{0%{transform:scale(1);}50%{transform:scale(0.88);}100%{transform:scale(1);}}
+  .case-box{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-top:14px;position:relative;padding-left:22px;}
+  .case-box::before{content:'';position:absolute;left:0;top:12px;bottom:12px;width:4px;border-radius:4px;background:linear-gradient(180deg,var(--accent),var(--accent-2));}
+  .case-role{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;font-family:var(--font);}
+  .case-box p{font-size:13.5px;color:var(--ink);line-height:1.7;}
+  .prompt-section .case-box{background:transparent;border:0;border-radius:0;margin-top:0;padding:20px;}
+  .prompt-section .case-box::before{display:none;}
+  .prompt-section .case-box + .prompt-box{margin:0 20px 20px;border-radius:12px;}
+  .output-box{background:var(--gold-pale);border:1px solid rgba(239,159,39,0.22);border-radius:14px;padding:20px 24px;margin-top:24px;display:flex;gap:14px;align-items:flex-start;}
+  .output-icon{width:36px;height:36px;border-radius:10px;background:rgba(239,159,39,0.15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+  .output-box h3{font-size:14.5px;font-weight:700;color:var(--ink);margin-bottom:5px;}
+  .output-box p{font-size:13px;color:var(--ink-2);line-height:1.65;}
+  .tip-box{background:var(--gold-pale);border:1px solid rgba(239,159,39,0.22);border-radius:14px;padding:18px 20px;margin:16px 0;}
+  .tip-box .tip-label{font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:7px;font-family:var(--font);}
+  .tip-box p{font-size:13px;color:var(--ink);line-height:1.7;}
+  .tip-box.warn{background:rgba(220,38,38,0.05);border-color:rgba(220,38,38,0.18);}
+  .tip-box.warn .tip-label{color:#DC2626;}
+  .tip-box.bonus{background:var(--green-dim);border-color:var(--green-border);}
+  .tip-box.bonus .tip-label{color:var(--green);}
+  .tip-box.connector{background:var(--accent-dim);border-color:rgba(108,71,255,0.2);}
+  .tip-box.connector .tip-label{color:var(--accent);}
+  .tip-box.connector p{color:var(--ink);}
+  .mistake-list{list-style:none;margin:0;}
+  .mistake-list li{font-size:13px;color:var(--ink);line-height:1.7;padding-left:28px;position:relative;margin-bottom:8px;}
+  .mistake-list li:last-child{margin-bottom:0;}
+  .mistake-list li::before{content:"✕";position:absolute;left:0;top:1px;width:18px;height:18px;border-radius:50%;background:rgba(220,38,38,0.12);color:#DC2626;font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+  .summary-box{background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin:20px 0;}
+  .summary-box .summary-label{font-size:10px;font-weight:700;color:var(--ink-3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px;font-family:var(--font);}
+  .summary-box ul{list-style:none;}
+  .summary-box li{font-size:13px;color:var(--ink);line-height:1.75;padding-left:26px;position:relative;margin-bottom:6px;}
+  .summary-box li::before{content:"✓";position:absolute;left:0;top:1px;width:18px;height:18px;border-radius:6px;background:var(--green-dim);color:var(--green);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+  .compare-table-wrap{overflow-x:auto;margin:14px 0;border:1px solid var(--border);border-radius:14px;}
+  .compare-table{width:100%;border-collapse:collapse;font-size:12.5px;}
+  .compare-table th{background:var(--ink);color:#fff;text-align:left;padding:11px 14px;font-size:11px;font-weight:700;}
+  .compare-table td{padding:11px 14px;border-bottom:1px solid var(--border);color:var(--ink);vertical-align:top;line-height:1.6;}
+  .compare-table tr:last-child td{border-bottom:none;}
+  .step-row{display:flex;flex-wrap:wrap;gap:12px;margin:4px 0 20px;}
+  .step-card{flex:1;min-width:140px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;}
+  .step-num{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;}
+  .step-card p{font-size:12px;color:var(--ink-2);line-height:1.5;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:4px 0 14px;}
+  .two-col .col-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px 18px;min-width:0;overflow-wrap:break-word;}
+  .two-col .col-card.highlight{border-color:rgba(22,163,74,0.3);background:var(--green-dim);}
+  .two-col .col-card h4{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:9px;}
+  .two-col .col-card ul{list-style:none;}
+  .two-col .col-card li{font-size:12.5px;color:var(--ink-2);line-height:1.7;padding-left:14px;position:relative;margin-bottom:3px;}
+  .two-col .col-card li::before{content:"\2013";position:absolute;left:0;}
+  .two-col .col-card p{font-size:12.5px;color:var(--ink-2);line-height:1.7;}
+  .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}
+  .info-card{background:var(--accent-dim);padding:14px 16px;border-radius:12px;min-width:0;overflow-wrap:break-word;}
+  .info-card strong{font-size:12.5px;color:var(--ink);display:block;margin-bottom:3px;}
+  .info-card span{font-size:11.5px;color:var(--ink-2);line-height:1.6;}
+  .learn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:14px 0 18px;}
+  .learn-grid.cols-4{grid-template-columns:repeat(4,1fr);}
+  .learn-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px 16px;min-width:0;overflow-wrap:break-word;transition:border-color 0.2s,transform 0.2s;}
+  .learn-card:hover{border-color:rgba(108,71,255,0.3);transform:translateY(-2px);}
+  .learn-card .num{font-family:var(--serif);font-style:italic;font-size:26px;color:var(--accent-2);margin-bottom:4px;}
+  .learn-card h3{font-size:14px;font-weight:700;margin:0 0 6px;color:var(--ink);}
+  .learn-card p{font-size:12px;line-height:1.55;color:var(--ink-2);margin:0;}
+  .bonus{background:linear-gradient(135deg,var(--accent-dim),rgba(155,125,255,0.05));border:1px solid rgba(108,71,255,0.18);border-radius:14px;padding:22px 24px;margin:24px 0;}
+  .bonus h3{font-size:14.5px;font-weight:700;color:var(--ink);margin-bottom:8px;}
+  .bonus p{color:var(--ink);font-size:13px;line-height:1.75;margin:0;}
+  .install-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0 16px;}
+  .install{background:var(--surface-2);border-radius:12px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;min-width:0;overflow-wrap:break-word;}
+  .install-num{flex-shrink:0;width:22px;height:22px;border-radius:6px;background:var(--ink);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+  .install p{font-size:12.5px;color:var(--ink);line-height:1.6;margin:0;}
+  details{background:#fff;border:1px solid var(--border);border-radius:12px;padding:4px 16px;margin:10px 0;}
+  details summary{padding:12px 0;font-size:13.5px;font-weight:700;cursor:pointer;color:var(--ink);list-style:none;display:flex;align-items:center;gap:8px;}
+  details summary::-webkit-details-marker{display:none;}
+  details summary::before{content:"\25B8";color:var(--accent);display:inline-block;transition:transform 0.2s;}
+  details[open] summary::before{transform:rotate(90deg);}
+  details p{font-size:13px;color:var(--ink-2);line-height:1.7;padding:0 0 14px;margin:0;}
+  .pro-tip-section{margin:22px 0;background:var(--ink);border-radius:16px;padding:26px;color:#fff;}
+  .pro-tip-top{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+  .pro-tip-star{color:var(--accent-2);font-size:14px;}
+  .pro-tip-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.5);}
+  .pro-tip-section h3{font-family:var(--serif);font-weight:400;margin:0 0 16px;font-size:20px;letter-spacing:-.3px;}
+  .pro-tip-lead{margin:0 0 16px;color:rgba(255,255,255,0.65);font-size:13px;line-height:1.7;}
+  .pro-tip-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .pro-tip-card{padding:16px 18px;background:rgba(255,255,255,0.06);border-radius:12px;min-width:0;overflow-wrap:break-word;}
+  .pro-tip-card-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .pro-tip-card-icon{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:rgba(255,255,255,0.1);font-size:14px;flex-shrink:0;}
+  .pro-tip-card h4{margin:0;font-size:13px;font-weight:700;}
+  .pro-tip-card p{margin:0;color:rgba(255,255,255,0.6);font-size:12px;line-height:1.6;}
+  .section-heading{font-family:var(--serif-2);font-weight:400;font-size:21px;letter-spacing:-0.3px;color:var(--ink);margin:32px 0 6px;padding-bottom:0;border-bottom:none;}
+  .section-heading.latihan-heading{font-family:var(--font);font-weight:700;color:var(--accent);letter-spacing:-0.2px;}
+  .sub-heading{font-size:13px;font-weight:600;color:var(--ink-2);margin:20px 0 10px;text-transform:none;letter-spacing:normal;}
+  .body-text{font-size:13.5px;color:var(--ink-2);line-height:1.8;margin-bottom:10px;}
+  .next-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--ink-3);margin:32px 0 12px;font-family:var(--font);}
+  .next-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px 20px;display:flex;align-items:center;gap:14px;text-decoration:none;margin-bottom:10px;transition:border-color 0.2s,transform 0.2s;}
+  .next-card:hover{border-color:rgba(108,71,255,0.3);transform:translateY(-2px);}
+  .next-icon{font-size:26px;flex-shrink:0;}
+  .next-info{flex:1;}
+  .next-info h4{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+  .next-info p{font-size:12px;color:var(--ink-2);}
+  .next-arrow{font-size:16px;color:var(--accent);}
+  .nav-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:38px;padding-top:24px;border-top:1px solid var(--border);}
+  .nav-btn{display:flex;align-items:center;gap:8px;padding:11px 20px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);transition:all 0.18s;background:#fff;color:var(--ink);font-family:var(--font);}
+  .nav-btn:hover{border-color:var(--border-strong);}
+  .nav-btn:disabled{opacity:0.35;cursor:default;pointer-events:none;}
+  .nav-btn.primary{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .nav-btn.primary:hover{background:var(--accent);border-color:var(--accent);transform:translateY(-1px);}
+  .nav-counter{font-size:12.5px;color:var(--ink-3);font-family:var(--font);}
+  .loading{display:flex;align-items:center;justify-content:center;height:100vh;font-size:14px;color:var(--ink-2);}
+  .feedback-panel{max-width:600px;}
+  .completion-badge{display:flex;flex-direction:column;align-items:center;text-align:center;padding:44px 24px;background:var(--green-dim);border:1px solid var(--green-border);border-radius:18px;margin-bottom:32px;}
+  .completion-badge .badge-check{width:56px;height:56px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;margin-bottom:18px;}
+  .completion-badge .badge-check svg{width:26px;height:26px;color:#fff;}
+  .completion-badge h2{font-family:var(--serif);font-weight:800;letter-spacing:-.5px;font-size:24px;color:var(--ink);margin-bottom:9px;}
+  .completion-badge p{font-size:14px;color:#777;line-height:1.65;}
+  .feedback-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;box-shadow:0 1px 3px rgba(0,0,0,0.05),0 2px 8px rgba(0,0,0,0.04);}
+  .feedback-card h3{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+  .feedback-card .feedback-sub{font-size:13px;color:var(--ink-2);margin-bottom:24px;}
+  .feedback-label{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px;}
+  .star-row{display:flex;gap:8px;justify-content:center;margin:18px 0;}
+  .star-btn{background:none;border:none;font-size:28px;cursor:pointer;transition:transform 0.15s;color:var(--border-strong);padding:4px;line-height:1;}
+  .star-btn:hover,.star-btn.active{color:var(--gold);transform:scale(1.15);}
+  .feedback-textarea{width:100%;border:1px solid var(--border);border-radius:12px;padding:14px 16px;font-size:13px;font-family:var(--font);color:var(--ink);resize:vertical;min-height:100px;outline:none;transition:border-color 0.2s;}
+  .feedback-textarea:focus{border-color:var(--accent);}
+  .feedback-submit{display:block;width:100%;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);transition:background 0.2s;margin-top:16px;}
+  .feedback-submit:hover{background:#5b3fe0;}
+  .feedback-submit:disabled{opacity:0.5;cursor:default;}
+  .feedback-done{display:none;text-align:center;padding:24px;}
+  .feedback-done p{font-size:14px;color:var(--ink-2);margin-bottom:16px;font-weight:650;}
+  @media(max-width:900px){.two-col,.info-grid,.learn-grid,.learn-grid.cols-4,.install-grid,.pro-tip-grid{grid-template-columns:1fr;}}
+  @media(max-width:900px) and (min-width:601px){.learn-grid.cols-4{grid-template-columns:1fr 1fr;}}
+  @media(max-width:768px){.sidebar{display:none;}.main-inner{padding:24px 16px 48px;}.module-title{font-size:26px;}.hero{padding:22px 20px;}}
+
+  .step-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.3px;color:var(--accent);margin:30px 0 10px;font-family:var(--font);display:flex;align-items:center;gap:9px;}
+  .step-label:first-of-type{margin-top:0;}
+  .step-badge{display:inline-flex;align-items:center;justify-content:center;width:21px;height:21px;border-radius:50%;background:var(--accent-dim);color:var(--accent);font-size:10px;font-weight:800;flex-shrink:0;}
+  .step-label .step-optional{font-weight:600;color:var(--ink-3);text-transform:none;letter-spacing:0;font-size:11px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <a class="nav-logo" href="index.html">belajar<span>claude</span></a>
+    <div class="nav-divider"></div>
+    <span class="nav-course-title">Claude untuk Sehari-hari</span>
+  </div>
+  <div class="nav-right">
+    <a class="nav-back" href="dashboard.html">← Dashboard</a>
+    <span class="nav-email" id="navEmail"></span>
+    <button class="logout-btn" onclick="doLogout()">Keluar</button>
+  </div>
+</nav>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-course-name">Claude untuk Sehari-hari</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        <span class="progress-label" id="progressLabel">0/13</span>
+      </div>
+    </div>
+    <div id="pdf-download-slot"></div>
+    <div class="sidebar-section-label">Materi Kursus</div>
+    <div class="mod-item active" id="nav-mod1" onclick="showModule(1)">
+      <div class="mod-check" id="check1"></div>
+      <div class="mod-item-info"><div class="mod-item-title">Ngobrol dengan Claude</div><div class="mod-item-sub">Modul 1 · Dasar Percakapan</div></div>
+    </div>
+    <div class="mod-item" id="nav-mod2" onclick="showModule(2)">
+      <div class="mod-check" id="check2"></div>
+      <div class="mod-item-info"><div class="mod-item-title">Atur Pengeluaran & Budget</div><div class="mod-item-sub">Modul 2 · Keuangan Pribadi</div></div>
+    </div>
+    <div class="mod-item" id="nav-mod3" onclick="showModule(3)">
+      <div class="mod-check" id="check3"></div>
+      <div class="mod-item-info"><div class="mod-item-title">Rencanakan Liburan & Acara</div><div class="mod-item-sub">Modul 3 · Rencana Perjalanan</div></div>
+    </div>
+    <div class="mod-item" id="nav-mod4" onclick="showModule(4)">
+      <div class="mod-check" id="check4"></div>
+      <div class="mod-item-info"><div class="mod-item-title">Bantu Cari Kerja</div><div class="mod-item-sub">Modul 4 · Karier</div></div>
+    </div>
+    <div class="mod-item" id="nav-mod5" onclick="showModule(5)">
+      <div class="mod-check" id="check5"></div>
+      <div class="mod-item-info"><div class="mod-item-title">Rapikan CV</div><div class="mod-item-sub">Modul 5 · Karier</div></div>
+    </div>
+    <div class="mod-item" id="nav-mod6" onclick="showModule(6)">
+      <div class="mod-check" id="check6"></div>
+      <div class="mod-item-info"><div class="mod-item-title">Jadikan Claude Teman Belajar</div><div class="mod-item-sub">Modul 6 · Belajar & Latihan</div></div>
+    </div>
+    <div class="mod-item" id="nav-mod7" onclick="showModule(7)">
+      <div class="mod-check" id="check7"></div>
+      <div class="mod-item-info"><div class="mod-item-title">Cari Ide Penghasilan Sampingan</div><div class="mod-item-sub">Modul 7 · Penghasilan Tambahan</div></div>
+    </div>
+    <div class="mod-item" id="nav-mod8" onclick="showModule(8)">
+      <div class="mod-check" id="check8"></div>
+      <div class="mod-item-info"><div class="mod-item-title">Bingung Mau Masak Apa?</div><div class="mod-item-sub">Modul 8 · Sehari-hari</div></div>
+    </div>
+    <div class="mod-item" id="nav-mod9" onclick="showModule(9)">
+      <div class="mod-check" id="check9"></div>
+      <div class="mod-item-info"><div class="mod-item-title">Bikin To-Do List & Checklist</div><div class="mod-item-sub">Modul 9 · Produktivitas</div></div>
+    </div>
+    <div class="mod-item" id="nav-mod10" onclick="showModule(10)">
+      <div class="mod-check" id="check10"></div>
+      <div class="mod-item-info"><div class="mod-item-title">Cari Ide & Rekomendasi</div><div class="mod-item-sub">Modul 10 · Sehari-hari</div></div>
+    </div>
+    <div class="mod-item" id="nav-mod11" onclick="showModule(11)">
+      <div class="mod-check" id="check11"></div>
+      <div class="mod-item-info"><div class="mod-item-title">Bantu Pilih & Bandingkan</div><div class="mod-item-sub">Modul 11 · Pengambilan Keputusan</div></div>
+    </div>
+    <div class="mod-item" id="nav-mod12" onclick="showModule(12)">
+      <div class="mod-check" id="check12"></div>
+      <div class="mod-item-info"><div class="mod-item-title">Rapikan Tulisan & Chat</div><div class="mod-item-sub">Modul 12 · Komunikasi</div></div>
+    </div>
+    <div class="mod-item" id="nav-mod13" onclick="showModule(13)">
+      <div class="mod-check" id="check13"></div>
+      <div class="mod-item-info"><div class="mod-item-title">Sekarang, Coba Sendiri</div><div class="mod-item-sub">Modul 13 · Praktik Bebas</div></div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="sidebar-section-label" style="padding:0 0 8px;">Tools yang dipakai</div>
+      <div class="sidebar-tools">
+        <span class="tool-chip">Claude Artifacts</span><span class="tool-chip">File PDF & Word</span>
+      </div>
+    </div>
+    <div class="mod-feedback">
+      <div class="mod-item" id="nav-mod14" onclick="showModule(14)">
+        <div class="mod-check" id="check14">★</div>
+        <div><div class="mod-item-title">Feedback</div><div class="mod-item-sub">Nilai kursus ini</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="main-inner">
+      <div class="module-panel active" id="panel1">
+        <div class="breadcrumb"><span>Claude untuk Sehari-hari</span><span>›</span><strong>Modul 1</strong></div>
+        <div class="hero">
+          <h1 class="module-title">Ngobrol dengan Claude</h1>
+          <p class="module-subtitle">Pola dasar tanya-jawab yang jadi fondasi semua modul lainnya</p>
+          <div class="video-slot" data-placeholder="true" id="video-slot-1"></div>
+        </div>
+        <div class="downloads-slot" id="downloads-slot-1"></div>
+
+        <div class="step-label"><span class="step-badge">01</span> Masalah Sehari-hari</div>
+        <div class="module-desc-box">
+          Penasaran sama suatu hal, tapi bingung mau nanya ke siapa — takut kelihatan aneh, atau nggak ada yang bisa jelasin dengan sabar.
+        </div>
+
+        <div class="step-label"><span class="step-badge">02</span> Contoh Nyata</div>
+        <div class="case-box">
+          <p>Selama ini penasaran kenapa harga telur naik-turun terus tiap bulan, tapi belum sempat cari tahu. Tanya ke Claude, dapat jawaban — lalu follow-up 2 kali sampai benar-benar paham, bukan cuma baca sekali lalu lupa.</p>
+        </div>
+
+        <div class="step-label"><span class="step-badge">03</span> Prompt</div>
+        <p class="body-text">Salin prompt di bawah ini, lalu tempel ke chat Claude kamu.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Prompt</div>
+          <div class="prompt-box">Kenapa sih harga telur di pasar suka naik-turun drastis?
+Jelasin dengan simpel, aku bukan orang ekonomi.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="step-label"><span class="step-badge">04</span> Hasil yang Bisa Kamu Dapat</div>
+
+        <div class="output-box">
+          <div class="output-icon">💡</div>
+          <div>
+            <h3>Contoh Jawaban Claude</h3>
+            <p>Harga telur naik-turun karena beberapa faktor utama: (1) Harga pakan ayam seperti jagung dan kedelai yang fluktuatif — kalau pakan naik, biaya produksi ikut naik. (2) Siklus populasi ayam petelur — kalau banyak peternak sekaligus mengurangi jumlah ayam setelah harga anjlok, pasokan telur ikut turun dan harga naik lagi beberapa bulan kemudian. (3) Permintaan musiman, misalnya menjelang Lebaran atau Natal, yang melonjak sementara pasokan tetap. Jadi harga telur naik-turun dalam siklus beberapa bulan, bukan naik terus-menerus.</p>
+            <p style="margin-top:8px;font-size:11.5px;color:var(--ink-3);font-style:italic;">Catatan: ini contoh ilustrasi — jawaban Claude yang asli bisa berbeda tergantung detail yang kamu berikan.</p>
+          </div>
+        </div>
+
+        <div class="step-label"><span class="step-badge">05</span> Sekarang Giliran Kamu</div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p>Pilih 1 topik random yang selama ini bikin kamu penasaran — apa saja, bebas. Tanyakan ke Claude, lalu minta dijelaskan ulang "kayak ke anak SD" kalau masih ada bagian yang belum jelas. Follow-up sampai kamu bisa jelaskan ulang topik itu ke orang lain dengan kata-katamu sendiri.</p>
+          </div>
+        </div>
+
+        <div class="tip-box bonus">
+          <div class="tip-label">🎯 Tantangan Kecil <span class="step-optional">(opsional)</span></div>
+          <p>Coba follow-up dengan: "Emang kenapa bisa gitu?" atau "Ada contoh lain nggak?" — lihat gimana jawabannya berkembang.</p>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" disabled>← Sebelumnya</button>
+          <span class="nav-counter">1 / 13</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <div class="module-panel" id="panel2">
+        <div class="breadcrumb"><span>Claude untuk Sehari-hari</span><span>›</span><strong>Modul 2</strong></div>
+        <div class="hero">
+          <h1 class="module-title">Atur Pengeluaran & Budget</h1>
+          <p class="module-subtitle">Dari penghasilan dan pengeluaran yang berantakan jadi rencana yang jelas</p>
+          <div class="video-slot" data-placeholder="true" id="video-slot-2"></div>
+        </div>
+        <div class="downloads-slot" id="downloads-slot-2"></div>
+
+        <div class="step-label"><span class="step-badge">01</span> Masalah Sehari-hari</div>
+        <div class="module-desc-box">
+          Gajian rasanya baru kemarin, tapi sekarang udah nggak tahu duitnya kemana.
+        </div>
+
+        <div class="step-label"><span class="step-badge">02</span> Contoh Nyata</div>
+        <div class="case-box">
+          <p>Gaji Rp 5.000.000/bulan. Kos Rp 1.500.000, makan sekitar Rp 1.500.000, transport Rp 500.000 — sisanya entah kemana. Ceritakan angka-angka ini ke Claude apa adanya, tidak perlu rapi dulu.</p>
+        </div>
+
+        <div class="step-label"><span class="step-badge">03</span> Prompt</div>
+        <p class="body-text">Salin prompt di bawah ini, lalu tempel ke chat Claude kamu.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Prompt</div>
+          <div class="prompt-box">Penghasilanku Rp 5.000.000/bulan. Pengeluaran: kos Rp 1.500.000,
+makan sekitar Rp 1.500.000, transport Rp 500.000, sisanya nggak
+jelas kemana. Bantu kategorikan pengeluaran ini, dan kasih 1
+area yang paling bisa dihemat. Buatkan ringkasannya dalam
+tampilan visual yang rapi.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="step-label"><span class="step-badge">04</span> Hasil yang Bisa Kamu Dapat</div>
+
+        <div class="tip-box connector">
+          <div class="tip-label">🎨 Tentang Claude Artifacts</div>
+          <p>Artifact adalah tampilan visual yang muncul di samping chat — bukan file yang perlu diunduh, langsung terlihat dan interaktif di layar. Untuk modul ini, hasilnya berupa ringkasan budget dengan kategori berwarna: penghasilan, pengeluaran per kategori, dan area yang bisa dihemat. Tidak perlu setup apa pun, otomatis muncul begitu Claude selesai memprosesnya.</p>
+        </div>
+        <div class="output-box">
+          <div class="output-icon">💡</div>
+          <div>
+            <h3>Contoh Jawaban Claude</h3>
+            <p>Ringkasan Budget Bulanan — Penghasilan Rp 5.000.000. Pengeluaran: Kos Rp 1.500.000 (30%), Makan Rp 1.500.000 (30%), Transport Rp 500.000 (10%), Tidak Terlacak Rp 1.500.000 (30%). 💡 Area yang bisa dihemat: "Tidak Terlacak" adalah kategori terbesar kedua — coba catat pengeluaran harian selama 1 minggu untuk tahu ke mana perginya.</p>
+            <p style="margin-top:8px;font-size:11.5px;color:var(--ink-3);font-style:italic;">Catatan: ini contoh ilustrasi — jawaban Claude yang asli bisa berbeda tergantung detail yang kamu berikan.</p>
+          </div>
+        </div>
+
+        <div class="step-label"><span class="step-badge">05</span> Sekarang Giliran Kamu</div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p>Sebutkan penghasilan dan pengeluaran bulan ini apa adanya — boleh perkiraan kasar kalau belum tahu persis. Minta Claude kategorikan pengeluaranmu dan kasih 1 area konkret yang bisa dihemat bulan depan.</p>
+          </div>
+        </div>
+
+        <div class="tip-box bonus">
+          <div class="tip-label">🎯 Tantangan Kecil <span class="step-optional">(opsional)</span></div>
+          <p>Coba follow-up dengan: "Kalau aku mau nabung Rp 500 ribu bulan depan, area mana yang paling realistis dipangkas?"</p>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">2 / 13</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <div class="module-panel" id="panel3">
+        <div class="breadcrumb"><span>Claude untuk Sehari-hari</span><span>›</span><strong>Modul 3</strong></div>
+        <div class="hero">
+          <h1 class="module-title">Rencanakan Liburan & Acara</h1>
+          <p class="module-subtitle">Dari rencana samar jadi itinerary dan checklist yang siap dipakai</p>
+          <div class="video-slot" data-placeholder="true" id="video-slot-3"></div>
+        </div>
+        <div class="downloads-slot" id="downloads-slot-3"></div>
+
+        <div class="step-label"><span class="step-badge">01</span> Masalah Sehari-hari</div>
+        <div class="module-desc-box">
+          Pengen liburan tapi mulai dari mana aja bingung — destinasi, budget, itinerary, semuanya masih di kepala.
+        </div>
+
+        <div class="step-label"><span class="step-badge">02</span> Contoh Nyata</div>
+        <div class="case-box">
+          <p>Trip 2 hari ke Bandung berdua, budget total Rp 1.500.000. Belum tahu mau kemana saja atau bawa apa.</p>
+        </div>
+
+        <div class="step-label"><span class="step-badge">03</span> Prompt</div>
+        <p class="body-text">Salin prompt di bawah ini, lalu tempel ke chat Claude kamu.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Prompt</div>
+          <div class="prompt-box">Aku mau liburan 2 hari ke Bandung berdua, budget total Rp
+1.500.000 termasuk transport, penginapan, makan, dan aktivitas.
+Buatkan itinerary hari per hari, plus checklist barang yang
+perlu dibawa. Simpan sebagai 1 file PDF yang bisa aku forward
+ke pasanganku.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="step-label"><span class="step-badge">04</span> Hasil yang Bisa Kamu Dapat</div>
+
+        <div class="tip-box">
+          <div class="tip-label">📄 Tentang File PDF</div>
+          <p>Selain Artifact, Claude juga bisa membuat file PDF sungguhan yang bisa langsung diunduh dan dibuka di HP atau laptop mana pun — cocok untuk hal-hal yang mau dibaca ulang atau diforward ke orang lain, seperti itinerary ini. Fitur ini tersedia di paket Claude Free, tidak perlu upgrade.</p>
+        </div>
+        <div class="output-box">
+          <div class="output-icon">💡</div>
+          <div>
+            <h3>Contoh Jawaban Claude</h3>
+            <p>Itinerary Bandung 2 Hari (Rp 1.500.000) — Hari 1: berangkat pagi, check-in penginapan (Rp 250rb/malam), makan siang di Braga, sore santai ke Lawangwangi. Hari 2: Farmhouse Lembang pagi, makan siang di Floating Market, pulang sore. Checklist: jaket, powerbank, obat pribadi, kamera, uang tunai secukupnya.</p>
+            <p style="margin-top:8px;font-size:11.5px;color:var(--ink-3);font-style:italic;">Catatan: ini contoh ilustrasi — jawaban Claude yang asli bisa berbeda tergantung detail yang kamu berikan.</p>
+          </div>
+        </div>
+
+        <div class="step-label"><span class="step-badge">05</span> Sekarang Giliran Kamu</div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p>Kasih Claude destinasi, budget, dan durasi liburan atau acara yang kamu rencanakan (boleh yang beneran, boleh yang cuma angan-angan). Minta itinerary lengkap plus checklist packing sebagai 1 file PDF.</p>
+          </div>
+        </div>
+
+        <div class="tip-box bonus">
+          <div class="tip-label">🎯 Tantangan Kecil <span class="step-optional">(opsional)</span></div>
+          <p>Coba follow-up dengan: "Kalau budgetnya aku naikin 20%, apa yang berubah dari itinerary ini?"</p>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">3 / 13</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <div class="module-panel" id="panel4">
+        <div class="breadcrumb"><span>Claude untuk Sehari-hari</span><span>›</span><strong>Modul 4</strong></div>
+        <div class="hero">
+          <h1 class="module-title">Bantu Cari Kerja</h1>
+          <p class="module-subtitle">Kejelasan soal posisi yang cocok dan skill yang perlu ditingkatkan</p>
+          <div class="video-slot" data-placeholder="true" id="video-slot-4"></div>
+        </div>
+        <div class="downloads-slot" id="downloads-slot-4"></div>
+
+        <div class="step-label"><span class="step-badge">01</span> Masalah Sehari-hari</div>
+        <div class="module-desc-box">
+          Pengen pindah kerja atau ganti bidang, tapi bingung mulai dari mana dan skill apa yang perlu disiapkan.
+        </div>
+
+        <div class="step-label"><span class="step-badge">02</span> Contoh Nyata</div>
+        <div class="case-box">
+          <p>"Aku lulusan marketing, 2 tahun kerja di retail, pengen pindah ke digital marketing tapi nggak tahu harus mulai dari mana."</p>
+        </div>
+
+        <div class="step-label"><span class="step-badge">03</span> Prompt</div>
+        <p class="body-text">Salin prompt di bawah ini, lalu tempel ke chat Claude kamu.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Prompt</div>
+          <div class="prompt-box">Aku lulusan marketing, 2 tahun pengalaman kerja di retail,
+pengen pindah karier ke digital marketing. Bantu aku: (1) jenis
+posisi entry-level apa yang realistis buat aku lamar sekarang,
+(2) skill apa yang paling penting aku kuasai dulu sebelum
+melamar.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="step-label"><span class="step-badge">04</span> Hasil yang Bisa Kamu Dapat</div>
+
+        <div class="output-box">
+          <div class="output-icon">💡</div>
+          <div>
+            <h3>Contoh Jawaban Claude</h3>
+            <p>Posisi entry-level yang realistis: Marketing Coordinator, Social Media Specialist, atau Digital Marketing Associate di startup/agency kecil — pengalaman retailmu relevan untuk consumer insight. Skill prioritas: (1) Google Analytics & Ads dasar, (2) copywriting untuk media sosial, (3) SEO dasar. Mulai dari kursus gratis seperti Google Skillshop sebelum mulai melamar.</p>
+            <p style="margin-top:8px;font-size:11.5px;color:var(--ink-3);font-style:italic;">Catatan: ini contoh ilustrasi — jawaban Claude yang asli bisa berbeda tergantung detail yang kamu berikan.</p>
+          </div>
+        </div>
+
+        <div class="step-label"><span class="step-badge">05</span> Sekarang Giliran Kamu</div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p>Ceritakan situasi kerjamu sekarang dan arah yang kamu minati — boleh yang serius, boleh yang masih sekadar kepikiran. Minta Claude bantu memetakan jenis posisi yang cocok dan skill gap yang perlu kamu tutup.</p>
+          </div>
+        </div>
+
+        <div class="tip-box bonus">
+          <div class="tip-label">🎯 Tantangan Kecil <span class="step-optional">(opsional)</span></div>
+          <p>Coba follow-up dengan: "Dari skill yang kurang itu, mana yang paling penting aku pelajari duluan?"</p>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">4 / 13</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <div class="module-panel" id="panel5">
+        <div class="breadcrumb"><span>Claude untuk Sehari-hari</span><span>›</span><strong>Modul 5</strong></div>
+        <div class="hero">
+          <h1 class="module-title">Rapikan CV</h1>
+          <p class="module-subtitle">Dari CV lama yang generic jadi versi yang lebih tajam dan sesuai lowongan</p>
+          <div class="video-slot" data-placeholder="true" id="video-slot-5"></div>
+        </div>
+        <div class="downloads-slot" id="downloads-slot-5"></div>
+
+        <div class="step-label"><span class="step-badge">01</span> Masalah Sehari-hari</div>
+        <div class="module-desc-box">
+          CV udah lama nggak diupdate, dan tiap mau melamar rasanya harus mulai dari nol lagi.
+        </div>
+
+        <div class="step-label"><span class="step-badge">02</span> Contoh Nyata</div>
+        <div class="case-box">
+          <p>CV lama yang masih generic — pengalaman kerja ditulis apa adanya tanpa highlight pencapaian — mau dilamar ke posisi tertentu yang deskripsinya sudah ada.</p>
+        </div>
+
+        <div class="step-label"><span class="step-badge">03</span> Prompt</div>
+        <p class="body-text">Salin prompt di bawah ini, lalu tempel ke chat Claude kamu.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Prompt</div>
+          <div class="prompt-box">[Upload atau paste CV-ku] Ini CV-ku saat ini. Aku mau melamar
+ke posisi [nama posisi] — ini deskripsi lowongannya: [paste job
+description]. Review CV-ku: perbaiki wording supaya lebih tajam,
+highlight pencapaian yang relevan dengan lowongan ini. Simpan
+sebagai file Word yang bisa aku edit lagi.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="step-label"><span class="step-badge">04</span> Hasil yang Bisa Kamu Dapat</div>
+
+        <div class="tip-box">
+          <div class="tip-label">📝 Tentang File Word (docx)</div>
+          <p>Untuk CV, hasilnya sengaja dibuat sebagai file Word (.docx), bukan PDF — supaya tetap bisa kamu edit dan sesuaikan lagi setiap kali melamar ke lowongan yang berbeda. Kalau sudah final dan siap dikirim, kamu bisa export ke PDF sendiri dari Word sebagai langkah terakhir.</p>
+        </div>
+        <div class="output-box">
+          <div class="output-icon">💡</div>
+          <div>
+            <h3>Contoh Jawaban Claude</h3>
+            <p>Bagian Pengalaman Kerja direvisi — dari: "Bertanggung jawab atas penjualan toko" menjadi: "Meningkatkan penjualan toko sebesar 18% dalam 6 bulan melalui strategi cross-selling dan pelatihan tim." Pencapaian dikuantifikasi dan disesuaikan dengan kata kunci di deskripsi lowongan yang kamu incar.</p>
+            <p style="margin-top:8px;font-size:11.5px;color:var(--ink-3);font-style:italic;">Catatan: ini contoh ilustrasi — jawaban Claude yang asli bisa berbeda tergantung detail yang kamu berikan.</p>
+          </div>
+        </div>
+
+        <div class="step-label"><span class="step-badge">05</span> Sekarang Giliran Kamu</div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p>Upload CV asli kamu. Kalau ada lowongan spesifik yang kamu incar, sertakan deskripsinya. Minta Claude review dan revisi jadi file Word.</p>
+          </div>
+        </div>
+
+        <div class="tip-box bonus">
+          <div class="tip-label">🎯 Tantangan Kecil <span class="step-optional">(opsional)</span></div>
+          <p>Coba follow-up dengan: "Bagian pengalaman kerja mana yang paling lemah dan gimana cara memperkuatnya?"</p>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">5 / 13</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <div class="module-panel" id="panel6">
+        <div class="breadcrumb"><span>Claude untuk Sehari-hari</span><span>›</span><strong>Modul 6</strong></div>
+        <div class="hero">
+          <h1 class="module-title">Jadikan Claude Teman Belajar</h1>
+          <p class="module-subtitle">Tutor on-demand: jelaskan, kasih contoh, kuis, sampai latihan interview</p>
+          <div class="video-slot" data-placeholder="true" id="video-slot-6"></div>
+        </div>
+        <div class="downloads-slot" id="downloads-slot-6"></div>
+
+        <div class="step-label"><span class="step-badge">01</span> Masalah Sehari-hari</div>
+        <div class="module-desc-box">
+          Belum paham satu materi tapi ujian atau wawancara udah di depan mata, dan nggak ada yang bisa ditanya sekarang juga.
+        </div>
+
+        <div class="step-label"><span class="step-badge">02</span> Contoh Nyata</div>
+        <div class="case-box">
+          <p>Besok ada wawancara kerja dan belum sempat latihan menjawab pertanyaan-pertanyaan umum. Atau: belum paham 1 topik kuliah yang mau diujikan minggu depan.</p>
+        </div>
+
+        <div class="step-label"><span class="step-badge">03</span> Prompt</div>
+        <p class="body-text">Salin prompt di bawah ini, lalu tempel ke chat Claude kamu.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Prompt</div>
+          <div class="prompt-box">Aku ada wawancara kerja besok untuk posisi customer service.
+Buatkan aku 8 pertanyaan wawancara umum yang biasa ditanyakan,
+plus tips singkat cara jawab tiap pertanyaan. Format sebagai
+kartu kuis yang bisa aku klik satu-satu buat latihan.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="step-label"><span class="step-badge">04</span> Hasil yang Bisa Kamu Dapat</div>
+
+        <div class="tip-box connector">
+          <div class="tip-label">🎨 Artifact: Cheat Sheet & Kartu Kuis</div>
+          <p>Untuk modul ini, Claude bisa mengubah materi belajarmu jadi cheat sheet ringkas atau kartu kuis interaktif dalam bentuk Artifact — tampilan visual yang muncul langsung di samping chat, bisa kamu klik dan uji diri sendiri tanpa perlu bolak-balik scroll chat panjang.</p>
+        </div>
+        <div class="output-box">
+          <div class="output-icon">💡</div>
+          <div>
+            <h3>Contoh Jawaban Claude</h3>
+            <p>Kartu Kuis Interview Customer Service — Kartu 1: "Ceritakan pengalaman menangani pelanggan yang marah." Tips: gunakan struktur STAR (Situation, Task, Action, Result). Kartu 2: "Kenapa tertarik posisi ini?" Tips: hubungkan dengan value perusahaan, bukan cuma gaji. (8 kartu total, bisa diklik satu per satu untuk latihan.)</p>
+            <p style="margin-top:8px;font-size:11.5px;color:var(--ink-3);font-style:italic;">Catatan: ini contoh ilustrasi — jawaban Claude yang asli bisa berbeda tergantung detail yang kamu berikan.</p>
+          </div>
+        </div>
+
+        <div class="step-label"><span class="step-badge">05</span> Sekarang Giliran Kamu</div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p>Jelaskan ke Claude topik yang lagi kamu pelajari (atau situasi latihan interview/presentasi yang kamu hadapi). Minta dijelaskan ulang dengan caramu sendiri, lalu minta kuis singkat untuk menguji pemahamanmu.</p>
+          </div>
+        </div>
+
+        <div class="tip-box bonus">
+          <div class="tip-label">🎯 Tantangan Kecil <span class="step-optional">(opsional)</span></div>
+          <p>Coba follow-up dengan: "Kasih 1 pertanyaan jebakan yang sering bikin orang salah paham soal topik ini."</p>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">6 / 13</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <div class="module-panel" id="panel7">
+        <div class="breadcrumb"><span>Claude untuk Sehari-hari</span><span>›</span><strong>Modul 7</strong></div>
+        <div class="hero">
+          <h1 class="module-title">Cari Ide Penghasilan Sampingan</h1>
+          <p class="module-subtitle">Ide yang realistis berdasarkan skill, waktu, dan modal yang benar-benar kamu punya</p>
+          <div class="video-slot" data-placeholder="true" id="video-slot-7"></div>
+        </div>
+        <div class="downloads-slot" id="downloads-slot-7"></div>
+
+        <div class="step-label"><span class="step-badge">01</span> Masalah Sehari-hari</div>
+        <div class="module-desc-box">
+          Pengen tambahan penghasilan, tapi ide yang muncul di kepala itu-itu aja dan kayaknya nggak realistis.
+        </div>
+
+        <div class="step-label"><span class="step-badge">02</span> Contoh Nyata</div>
+        <div class="case-box">
+          <p>Punya waktu luang sekitar 2 jam/hari sepulang kerja, modal Rp 500.000, dan cukup jago desain grafis.</p>
+        </div>
+
+        <div class="step-label"><span class="step-badge">03</span> Prompt</div>
+        <p class="body-text">Salin prompt di bawah ini, lalu tempel ke chat Claude kamu.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Prompt</div>
+          <div class="prompt-box">Aku punya waktu luang 2 jam/hari sepulang kerja, modal sekitar
+Rp 500.000, dan cukup jago desain grafis (biasa pakai Canva).
+Kasih aku 3-5 ide penghasilan sampingan yang realistis buat
+dijalankan dengan kondisi ini — bukan daftar generik.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="step-label"><span class="step-badge">04</span> Hasil yang Bisa Kamu Dapat</div>
+
+        <div class="output-box">
+          <div class="output-icon">💡</div>
+          <div>
+            <h3>Contoh Jawaban Claude</h3>
+            <p>Dengan skill desain grafis dan modal Rp 500rb: (1) Jasa desain feed Instagram untuk UMKM lokal — modal cuma Canva Pro. (2) Jual template Canva di marketplace digital. (3) Desain undangan digital untuk acara kecil. (4) Freelance logo sederhana di Fiverr atau Sribu.</p>
+            <p style="margin-top:8px;font-size:11.5px;color:var(--ink-3);font-style:italic;">Catatan: ini contoh ilustrasi — jawaban Claude yang asli bisa berbeda tergantung detail yang kamu berikan.</p>
+          </div>
+        </div>
+
+        <div class="step-label"><span class="step-badge">05</span> Sekarang Giliran Kamu</div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p>Sebutkan skill yang kamu punya, waktu luang yang realistis, modal yang bisa dikeluarkan, dan minatmu. Minta Claude kasih 3-5 ide penghasilan sampingan yang benar-benar bisa dijalankan dengan kondisi itu.</p>
+          </div>
+        </div>
+
+        <div class="tip-box bonus">
+          <div class="tip-label">🎯 Tantangan Kecil <span class="step-optional">(opsional)</span></div>
+          <p>Coba follow-up dengan: "Dari 3 ide tadi, mana yang paling cepat bisa aku mulai minggu ini?"</p>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">7 / 13</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <div class="module-panel" id="panel8">
+        <div class="breadcrumb"><span>Claude untuk Sehari-hari</span><span>›</span><strong>Modul 8</strong></div>
+        <div class="hero">
+          <h1 class="module-title">Bingung Mau Masak Apa?</h1>
+          <p class="module-subtitle">Dari isi kulkas apa adanya jadi ide menu yang bisa langsung dimasak</p>
+          <div class="video-slot" data-placeholder="true" id="video-slot-8"></div>
+        </div>
+        <div class="downloads-slot" id="downloads-slot-8"></div>
+
+        <div class="step-label"><span class="step-badge">01</span> Masalah Sehari-hari</div>
+        <div class="module-desc-box">
+          Buka kulkas tiap sore, lihat bahan yang ada, terus bengong nggak tahu mau masak apa.
+        </div>
+
+        <div class="step-label"><span class="step-badge">02</span> Contoh Nyata</div>
+        <div class="case-box">
+          <p>Di kulkas ada telur, bayam, tempe, dan nasi sisa kemarin. Waktu masak cuma 20 menit.</p>
+        </div>
+
+        <div class="step-label"><span class="step-badge">03</span> Prompt</div>
+        <p class="body-text">Salin prompt di bawah ini, lalu tempel ke chat Claude kamu.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Prompt</div>
+          <div class="prompt-box">Di kulkasku ada telur, bayam, tempe, dan nasi sisa kemarin.
+Waktu masakku cuma sekitar 20 menit. Kasih 3 ide menu yang bisa
+aku masak dari bahan ini, plus cara masaknya yang simpel.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="step-label"><span class="step-badge">04</span> Hasil yang Bisa Kamu Dapat</div>
+
+        <div class="output-box">
+          <div class="output-icon">💡</div>
+          <div>
+            <h3>Contoh Jawaban Claude</h3>
+            <p>3 ide menu 20 menit dari telur, bayam, tempe, dan nasi sisa: (1) Nasi goreng bayam tempe — tumis semua jadi satu. (2) Telur dadar isi bayam cincang, tempe goreng terpisah. (3) Bubur nasi sisa + telur rebus + tempe bacem simpel.</p>
+            <p style="margin-top:8px;font-size:11.5px;color:var(--ink-3);font-style:italic;">Catatan: ini contoh ilustrasi — jawaban Claude yang asli bisa berbeda tergantung detail yang kamu berikan.</p>
+          </div>
+        </div>
+
+        <div class="step-label"><span class="step-badge">05</span> Sekarang Giliran Kamu</div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p>Sebutkan isi kulkas atau dapurmu hari ini apa adanya. Minta Claude kasih 3 ide menu dan cara masak yang simpel, sesuaikan dengan waktu masak yang kamu punya.</p>
+          </div>
+        </div>
+
+        <div class="tip-box bonus">
+          <div class="tip-label">🎯 Tantangan Kecil <span class="step-optional">(opsional)</span></div>
+          <p>Coba follow-up dengan: "Kalau aku nggak sempat masak sama sekali, ada versi yang lebih cepat nggak?"</p>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">8 / 13</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <div class="module-panel" id="panel9">
+        <div class="breadcrumb"><span>Claude untuk Sehari-hari</span><span>›</span><strong>Modul 9</strong></div>
+        <div class="hero">
+          <h1 class="module-title">Bikin To-Do List & Checklist</h1>
+          <p class="module-subtitle">Dari brain dump berantakan jadi checklist yang terorganisir dan berprioritas</p>
+          <div class="video-slot" data-placeholder="true" id="video-slot-9"></div>
+        </div>
+        <div class="downloads-slot" id="downloads-slot-9"></div>
+
+        <div class="step-label"><span class="step-badge">01</span> Masalah Sehari-hari</div>
+        <div class="module-desc-box">
+          Tugas menumpuk di kepala, saking banyaknya malah jadi nggak tahu mana yang harus dikerjain duluan.
+        </div>
+
+        <div class="step-label"><span class="step-badge">02</span> Contoh Nyata</div>
+        <div class="case-box">
+          <p>"Harus bayar listrik, jemput adik jam 3, kerjain laporan bulanan, beli galon, telpon dokter gigi buat janji kontrol, cuci motor..."</p>
+        </div>
+
+        <div class="step-label"><span class="step-badge">03</span> Prompt</div>
+        <p class="body-text">Salin prompt di bawah ini, lalu tempel ke chat Claude kamu.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Prompt</div>
+          <div class="prompt-box">Ini semua yang harus aku kerjain minggu ini, aku tumpahkan
+apa adanya: bayar listrik, jemput adik jam 3 hari Rabu, kerjain
+laporan bulanan (deadline Jumat), beli galon, telpon dokter
+gigi buat janji kontrol, cuci motor. Kelompokkan dan urutkan
+berdasarkan urgensi, buat jadi checklist yang bisa aku centang.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="step-label"><span class="step-badge">04</span> Hasil yang Bisa Kamu Dapat</div>
+
+        <div class="tip-box connector">
+          <div class="tip-label">🎨 Artifact: Checklist Interaktif</div>
+          <p>Hasil modul ini berupa Artifact checklist dengan checkbox yang bisa langsung kamu centang satu per satu di layar, dikelompokkan berdasarkan urgensi — jauh lebih rapi dibanding daftar tugas mentah yang campur aduk di kepala atau catatan HP.</p>
+        </div>
+        <div class="output-box">
+          <div class="output-icon">💡</div>
+          <div>
+            <h3>Contoh Jawaban Claude</h3>
+            <p>Checklist minggu ini (urut prioritas) — 🔴 Mendesak: Laporan bulanan (deadline Jumat), jemput adik Rabu jam 3. 🟡 Penting: Bayar listrik, telpon dokter gigi untuk janji kontrol. 🟢 Bisa nunggu: Beli galon, cuci motor.</p>
+            <p style="margin-top:8px;font-size:11.5px;color:var(--ink-3);font-style:italic;">Catatan: ini contoh ilustrasi — jawaban Claude yang asli bisa berbeda tergantung detail yang kamu berikan.</p>
+          </div>
+        </div>
+
+        <div class="step-label"><span class="step-badge">05</span> Sekarang Giliran Kamu</div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p>Tumpahkan semua yang harus kamu kerjakan minggu ini, tanpa mikir urutan dulu. Minta Claude kelompokkan dan urutkan berdasarkan urgensi jadi checklist interaktif.</p>
+          </div>
+        </div>
+
+        <div class="tip-box bonus">
+          <div class="tip-label">🎯 Tantangan Kecil <span class="step-optional">(opsional)</span></div>
+          <p>Coba follow-up dengan: "Kalau aku cuma punya waktu 2 jam hari ini, 3 hal mana yang harus diprioritaskan?"</p>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">9 / 13</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <div class="module-panel" id="panel10">
+        <div class="breadcrumb"><span>Claude untuk Sehari-hari</span><span>›</span><strong>Modul 10</strong></div>
+        <div class="hero">
+          <h1 class="module-title">Cari Ide & Rekomendasi</h1>
+          <p class="module-subtitle">Generator ide cepat untuk keputusan-keputusan kecil sehari-hari</p>
+          <div class="video-slot" data-placeholder="true" id="video-slot-10"></div>
+        </div>
+        <div class="downloads-slot" id="downloads-slot-10"></div>
+
+        <div class="step-label"><span class="step-badge">01</span> Masalah Sehari-hari</div>
+        <div class="module-desc-box">
+          Weekend udah di depan mata tapi masih belum ada rencana, atau bingung cari kado yang pas.
+        </div>
+
+        <div class="step-label"><span class="step-badge">02</span> Contoh Nyata</div>
+        <div class="case-box">
+          <p>Bingung mau ngapain akhir pekan ini di Jakarta. Atau: cari kado ulang tahun ibu, budget Rp 200.000.</p>
+        </div>
+
+        <div class="step-label"><span class="step-badge">03</span> Prompt</div>
+        <p class="body-text">Salin prompt di bawah ini, lalu tempel ke chat Claude kamu.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Prompt</div>
+          <div class="prompt-box">Aku bingung mau cari kado ulang tahun ibu, budget sekitar Rp
+200.000. Ibuku suka masak dan tanaman. Kasih beberapa opsi kado
+yang konkret, bukan yang generik.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="step-label"><span class="step-badge">04</span> Hasil yang Bisa Kamu Dapat</div>
+
+        <div class="output-box">
+          <div class="output-icon">💡</div>
+          <div>
+            <h3>Contoh Jawaban Claude</h3>
+            <p>Kado ulang tahun ibu (Rp 200rb, suka masak & tanaman): (1) Set talenan kayu + apron motif bunga. (2) Pot tanaman gantung + bibit herbal dapur. (3) Buku resep populer + spatula silikon premium.</p>
+            <p style="margin-top:8px;font-size:11.5px;color:var(--ink-3);font-style:italic;">Catatan: ini contoh ilustrasi — jawaban Claude yang asli bisa berbeda tergantung detail yang kamu berikan.</p>
+          </div>
+        </div>
+
+        <div class="step-label"><span class="step-badge">05</span> Sekarang Giliran Kamu</div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p>Sebutkan situasi dan batasanmu — budget, waktu, atau siapa saja yang terlibat. Minta Claude kasih beberapa opsi konkret sesuai situasimu.</p>
+          </div>
+        </div>
+
+        <div class="tip-box bonus">
+          <div class="tip-label">🎯 Tantangan Kecil <span class="step-optional">(opsional)</span></div>
+          <p>Coba follow-up dengan: "Kalau budgetnya aku turunin setengahnya, opsi mana yang masih masuk akal?"</p>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">10 / 13</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <div class="module-panel" id="panel11">
+        <div class="breadcrumb"><span>Claude untuk Sehari-hari</span><span>›</span><strong>Modul 11</strong></div>
+        <div class="hero">
+          <h1 class="module-title">Bantu Pilih & Bandingkan</h1>
+          <p class="module-subtitle">Perbandingan terstruktur dengan tradeoff yang jelas, bukan cuma daftar ide</p>
+          <div class="video-slot" data-placeholder="true" id="video-slot-11"></div>
+        </div>
+        <div class="downloads-slot" id="downloads-slot-11"></div>
+
+        <div class="step-label"><span class="step-badge">01</span> Masalah Sehari-hari</div>
+        <div class="module-desc-box">
+          Ada 2-3 pilihan di depan mata, tapi tiap dipikirin malah makin bingung mana yang lebih worth it.
+        </div>
+
+        <div class="step-label"><span class="step-badge">02</span> Contoh Nyata</div>
+        <div class="case-box">
+          <p>Motor bekas A (murah, tahun tua, servis lebih sering) vs motor bekas B (lebih mahal, masih baru, servis lebih jarang). Bingung mana yang lebih worth it.</p>
+        </div>
+
+        <div class="step-label"><span class="step-badge">03</span> Prompt</div>
+        <p class="body-text">Salin prompt di bawah ini, lalu tempel ke chat Claude kamu.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Prompt</div>
+          <div class="prompt-box">Aku mau beli motor bekas, ada 2 pilihan. Motor A: Rp 8 juta,
+tahun 2016, sudah sering servis. Motor B: Rp 13 juta, tahun
+2021, jarang servis. Yang penting buatku: harga, biaya rawatan
+ke depan, dan keawetan. Buatkan tabel perbandingan dengan
+tradeoff jelas dan 1 rekomendasi. Simpan sebagai file PDF.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="step-label"><span class="step-badge">04</span> Hasil yang Bisa Kamu Dapat</div>
+
+        <div class="tip-box">
+          <div class="tip-label">📄 PDF: Tabel Perbandingan</div>
+          <p>Sama seperti itinerary di Modul 3, hasil perbandingan ini disimpan sebagai 1 file PDF — memudahkan kalau keputusannya perlu didiskusikan bersama orang lain, misalnya pasangan atau keluarga, tinggal dikirim lewat WhatsApp.</p>
+        </div>
+        <div class="output-box">
+          <div class="output-icon">💡</div>
+          <div>
+            <h3>Contoh Jawaban Claude</h3>
+            <p>Tabel Perbandingan Motor — Harga: A Rp 8jt vs B Rp 13jt. Tahun: 2016 vs 2021. Estimasi servis/tahun: A Rp 1,5jt vs B Rp 500rb. Rekomendasi: kalau budget ketat, Motor A lebih hemat di depan tapi biaya rawatan lebih tinggi jangka panjang — Motor B lebih worth it kalau dipakai lebih dari 3 tahun.</p>
+            <p style="margin-top:8px;font-size:11.5px;color:var(--ink-3);font-style:italic;">Catatan: ini contoh ilustrasi — jawaban Claude yang asli bisa berbeda tergantung detail yang kamu berikan.</p>
+          </div>
+        </div>
+
+        <div class="step-label"><span class="step-badge">05</span> Sekarang Giliran Kamu</div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p>Sebutkan 2-3 pilihan yang sedang kamu pertimbangkan (motor, laptop, tawaran kerja, apa saja) dan hal-hal yang penting buatmu. Minta Claude susun tabel perbandingan dengan tradeoff jelas dan rekomendasi, simpan sebagai PDF.</p>
+          </div>
+        </div>
+
+        <div class="tip-box bonus">
+          <div class="tip-label">🎯 Tantangan Kecil <span class="step-optional">(opsional)</span></div>
+          <p>Coba follow-up dengan: "Kalau prioritasku ternyata harga, bukan keawetan, apa rekomendasinya berubah?"</p>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">11 / 13</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <div class="module-panel" id="panel12">
+        <div class="breadcrumb"><span>Claude untuk Sehari-hari</span><span>›</span><strong>Modul 12</strong></div>
+        <div class="hero">
+          <h1 class="module-title">Rapikan Tulisan & Chat</h1>
+          <p class="module-subtitle">Bikin tulisan sehari-hari lebih jelas dan natural, tanpa kedengaran kaku</p>
+          <div class="video-slot" data-placeholder="true" id="video-slot-12"></div>
+        </div>
+        <div class="downloads-slot" id="downloads-slot-12"></div>
+
+        <div class="step-label"><span class="step-badge">01</span> Masalah Sehari-hari</div>
+        <div class="module-desc-box">
+          Udah nulis pesan berkali-kali tapi tetep aja kedengarannya kaku atau malah kesannya ketus.
+        </div>
+
+        <div class="step-label"><span class="step-badge">02</span> Contoh Nyata</div>
+        <div class="case-box">
+          <p>Mau kirim pesan WhatsApp ke pemilik kos soal keluhan AC rusak, tapi draft yang sudah ditulis kedengarannya galak dan bisa bikin salah paham.</p>
+        </div>
+
+        <div class="step-label"><span class="step-badge">03</span> Prompt</div>
+        <p class="body-text">Salin prompt di bawah ini, lalu tempel ke chat Claude kamu.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Prompt</div>
+          <div class="prompt-box">Aku mau kirim pesan ke pemilik kos soal AC yang rusak sudah 3
+hari belum diperbaiki. Draftku: "AC kamar saya rusak dari 3
+hari lalu, tolong diperbaiki, saya sudah komplain berkali-kali
+tapi belum ditanggapi." Kedengarannya galak, tolong bikin versi
+yang lebih jelas dan sopan tapi tetap tegas.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="step-label"><span class="step-badge">04</span> Hasil yang Bisa Kamu Dapat</div>
+
+        <div class="output-box">
+          <div class="output-icon">💡</div>
+          <div>
+            <h3>Contoh Jawaban Claude</h3>
+            <p>"Selamat siang Pak/Bu, mohon maaf mengganggu. AC di kamar saya sudah rusak sejak 3 hari lalu dan sudah saya laporkan beberapa kali, namun belum ada tindak lanjut. Mohon bantuannya untuk diperbaiki secepatnya. Terima kasih banyak."</p>
+            <p style="margin-top:8px;font-size:11.5px;color:var(--ink-3);font-style:italic;">Catatan: ini contoh ilustrasi — jawaban Claude yang asli bisa berbeda tergantung detail yang kamu berikan.</p>
+          </div>
+        </div>
+
+        <div class="step-label"><span class="step-badge">05</span> Sekarang Giliran Kamu</div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p>Paste tulisan asli yang mau kamu kirim — pesan WA, email, caption, atau apa saja. Minta Claude bikin versi yang lebih jelas, sopan, atau natural, sesuaikan dengan konteks dan siapa penerimanya.</p>
+          </div>
+        </div>
+
+        <div class="tip-box bonus">
+          <div class="tip-label">🎯 Tantangan Kecil <span class="step-optional">(opsional)</span></div>
+          <p>Coba follow-up dengan: "Buatin 1 versi lagi yang lebih santai, buat dikirim ke temen deket."</p>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">12 / 13</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <div class="module-panel" id="panel13">
+        <div class="breadcrumb"><span>Claude untuk Sehari-hari</span><span>›</span><strong>Modul 13</strong></div>
+        <div class="hero">
+          <h1 class="module-title">Sekarang, Coba Sendiri</h1>
+          <p class="module-subtitle">Nggak perlu prompt yang sempurna — cukup ceritakan apa yang lagi kamu hadapi</p>
+          <div class="video-slot" data-placeholder="true" id="video-slot-13"></div>
+        </div>
+        <div class="downloads-slot" id="downloads-slot-13"></div>
+
+        <div class="module-desc-box">
+          Kamu sudah lihat 12 contoh penggunaan Claude untuk hal-hal sehari-hari. Sekarang giliranmu. Pilih satu situasi di bawah ini dan coba minta bantuan Claude. Tidak ada prompt yang benar atau salah — tulis saja seperti kamu sedang ngobrol biasa.
+        </div>
+
+        <div class="learn-grid">
+          <div class="learn-card"><div class="num">💸</div><h3>Uang terasa cepat habis</h3><p>Kamu merasa pengeluaran bulan ini lebih besar dari biasanya, tapi tidak tahu uangnya habis untuk apa.</p></div>
+          <div class="learn-card"><div class="num">🏖️</div><h3>Bingung mau ngapain weekend ini</h3><p>Weekend sudah dekat, tapi kamu belum punya rencana dan ingin melakukan sesuatu yang seru tanpa mengeluarkan terlalu banyak uang.</p></div>
+          <div class="learn-card"><div class="num">💼</div><h3>Mau melamar pekerjaan</h3><p>Kamu menemukan lowongan yang menarik, tapi bingung apakah pengalamanmu cocok dan harus mulai dari mana untuk melamar.</p></div>
+          <div class="learn-card"><div class="num">📚</div><h3>Mau belajar sesuatu yang baru</h3><p>Kamu ingin belajar skill baru, tapi bingung harus mulai dari mana dan apa yang perlu dipelajari terlebih dahulu.</p></div>
+          <div class="learn-card"><div class="num">😵</div><h3>Punya masalah, tapi nggak tahu harus mulai dari mana</h3><p>Ada sesuatu yang sedang kamu pikirkan dan ingin diselesaikan, tapi masalahnya terasa terlalu besar atau membingungkan.</p></div>
+          <div class="learn-card"><div class="num">💬</div><h3>Harus kirim pesan yang agak canggung</h3><p>Kamu perlu menolak ajakan, minta maaf, atau menyampaikan sesuatu yang sensitif, tapi bingung merangkai kalimatnya.</p></div>
+        </div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p>Coba ceritakan situasimu ke Claude dengan bahasamu sendiri. Lalu lihat apakah Claude bisa membantumu menentukan langkah berikutnya.</p>
+          </div>
+        </div>
+
+        <div class="tip-box bonus">
+          <div class="tip-label">💡 Yang Perlu Diingat</div>
+          <p>Situasi terakhir di atas penting banget untuk diingat: kamu nggak perlu tahu prompt yang "sempurna". Cukup ceritakan apa yang sedang terjadi dengan kata-katamu sendiri — dan Claude akan bantu cari langkah berikutnya bersama kamu.</p>
+        </div>
+
+        <div class="pro-tip-section">
+          <div class="pro-tip-top"><span class="pro-tip-star">🎉</span><span class="pro-tip-label">Sudah Coba?</span></div>
+          <p class="pro-tip-lead">Sudah coba? Yuk share hasil obrolanmu dengan Claude di halaman Community — mungkin bisa jadi inspirasi buat yang lain. <a href="community.html" style="color:#fff;font-weight:700;text-decoration:underline;">Buka Community →</a></p>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">13 / 13</span>
+          <button class="nav-btn primary" onclick="showModule(14)">Lanjut →</button>
+        </div>
+      </div>
+
+      <div class="module-panel" id="panel14">
+        <div class="feedback-panel">
+          <div class="completion-badge">
+            <div class="badge-check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h2>Kursus Selesai!</h2>
+            <p>Kamu telah menyelesaikan <strong>Claude untuk Sehari-hari</strong>.<br>Badge pencapaian sudah tersimpan di dashboard kamu.</p>
+          </div>
+
+          <div class="feedback-card" id="feedbackForm">
+            <h3>Bagaimana kursus ini menurut kamu?</h3>
+            <p class="feedback-sub">Feedback kamu membantu kami bikin kursus yang lebih baik.</p>
+            <div class="star-row" id="starRow" onmouseleave="hoverRating(0)">
+              <button class="star-btn" data-val="1" onclick="setRating(1)" onmouseenter="hoverRating(1)">★</button>
+              <button class="star-btn" data-val="2" onclick="setRating(2)" onmouseenter="hoverRating(2)">★</button>
+              <button class="star-btn" data-val="3" onclick="setRating(3)" onmouseenter="hoverRating(3)">★</button>
+              <button class="star-btn" data-val="4" onclick="setRating(4)" onmouseenter="hoverRating(4)">★</button>
+              <button class="star-btn" data-val="5" onclick="setRating(5)" onmouseenter="hoverRating(5)">★</button>
+            </div>
+            <div class="feedback-label">Komentar (opsional)</div>
+            <textarea class="feedback-textarea" id="feedbackComment" placeholder="Apa yang paling berguna? Ada yang bisa diperbaiki?"></textarea>
+            <button class="feedback-submit" id="feedbackSubmit" onclick="submitFeedback()">Kirim & Ke Dashboard →</button>
+          </div>
+
+          <div class="feedback-done" id="feedbackDone">
+            <p>Terima kasih atas feedbacknya!</p>
+          </div>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter"></span>
+          <a href="dashboard.html" class="nav-btn primary" style="text-decoration:none;">Ke Dashboard →</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Moved here from <head> (perf): these were blocking first paint on every load. -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="course-video.js"></script>
+<script>
+  const TOTAL = 14;
+  const CONTENT_MODULES = 13;
+  let current = 1;
+  const done = new Set();
+  let starRating = 0;
+
+  const sb = sbClient;
+
+  const ADMIN_EMAILS = ['julia.utomo@gmail.com', 'tiffany.utomo@gmail.com'];
+
+  async function init() {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) { window.location.href = 'login.html'; return; }
+    const email = session.user.email;
+
+    // Only grant access if a real enrollment for THIS course exists - holding all-access alone
+    // is not enough, it only unlocks a free one-click "Mulai Kursus" on the preview page - admins bypass
+    if (!ADMIN_EMAILS.includes(email)) {
+      const { data: existing } = await sb.from('enrollments').select('course_slug').eq('email', email).eq('course_slug', COURSE_SLUG);
+      if (!existing || existing.length === 0) { window.location.href = 'claude-sehari-hari.html'; return; }
+    }
+
+    // Touch last_accessed_at so the dashboard's spotlight card can show whichever course
+    // was opened most recently, not just whichever has the highest completion %.
+    sb.from('enrollments').update({ last_accessed_at: new Date().toISOString() }).eq('email', email).eq('course_slug', COURSE_SLUG).then(()=>{}, ()=>{});
+
+    document.getElementById('navEmail').textContent = email;
+
+    // Load completions
+    const { data } = await sb.from('module_completions')
+      .select('module_num')
+      .eq('email', email)
+      .eq('course_slug', COURSE_SLUG);
+    // Skip any stale module_num beyond the current module count, so a course that's ever
+    // restructured down to fewer modules can't inflate progress past 100%.
+    if (data) data.forEach(r => { if (r.module_num > CONTENT_MODULES) return; done.add(r.module_num); markDone(r.module_num); });
+    updateProgress();
+
+    // Check existing feedback
+    const { data: fb } = await sb.from('course_feedback')
+      .select('rating, comment')
+      .eq('email', email)
+      .eq('course_slug', COURSE_SLUG)
+      .maybeSingle();
+    if (fb) {
+      setRating(fb.rating || 0);
+      if (fb.comment) document.getElementById('feedbackComment').value = fb.comment;
+      document.getElementById('feedbackSubmit').textContent = 'Perbarui Feedback →';
+    }
+  }
+
+  function showModule(n) {
+    const from = current;
+    document.getElementById('panel' + current).classList.remove('active');
+    document.getElementById('nav-mod' + current).classList.remove('active');
+    current = n;
+    document.getElementById('panel' + n).classList.add('active');
+    document.getElementById('nav-mod' + n).classList.add('active');
+    document.querySelector('.main').scrollTo(0, 0);
+
+    // Mark the module you're actually navigating AWAY from as done — not
+    // blindly n-1, which wrongly marks an unvisited module when jumping
+    // ahead multiple modules.
+    if (from >= 1 && from <= CONTENT_MODULES && !done.has(from)) {
+      done.add(from);
+      markDone(from);
+      saveCompletion(from);
+      updateProgress();
+    }
+  }
+
+  function nextModule() { if (current < TOTAL) showModule(current + 1); }
+  function prevModule() { if (current > 1) showModule(current - 1); }
+
+  function markDone(n) {
+    const item = document.getElementById('nav-mod' + n);
+    const check = document.getElementById('check' + n);
+    if (item) item.classList.add('done');
+    if (check) check.textContent = '✓';
+  }
+
+  function updateProgress() {
+    const pct = Math.min(100, Math.round((done.size / CONTENT_MODULES) * 100));
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = done.size + '/' + CONTENT_MODULES;
+  }
+
+  async function saveCompletion(moduleNum) {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) return;
+    await sb.from('module_completions').upsert({
+      email: session.user.email,
+      course_slug: COURSE_SLUG,
+      module_num: moduleNum
+    }, { onConflict: 'email,course_slug,module_num' });
+  }
+
+  function copyPrompt(btn) {
+    const box = btn.closest('.prompt-box');
+    const clone = box.cloneNode(true);
+    clone.querySelectorAll('button').forEach(b => b.remove());
+    navigator.clipboard.writeText(clone.innerText.trim()).then(() => {
+      btn.textContent = 'Disalin!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Salin'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  function renderStars(val) {
+    document.querySelectorAll('.star-btn').forEach(function(btn) {
+      btn.classList.toggle('active', parseInt(btn.getAttribute('data-val')) <= val);
+    });
+  }
+
+  function setRating(val) {
+    starRating = val;
+    renderStars(val);
+  }
+
+  function hoverRating(val) {
+    renderStars(val || starRating);
+  }
+
+  async function submitFeedback() {
+    if (!starRating) { alert('Pilih dulu bintang penilaian kamu.'); return; }
+    const btn = document.getElementById('feedbackSubmit');
+    btn.disabled = true;
+    btn.textContent = 'Menyimpan...';
+    const comment = document.getElementById('feedbackComment').value.trim();
+    try {
+      const { data: { session } } = await sb.auth.getSession();
+      if (session) {
+        await sb.from('course_feedback').upsert({
+          email: session.user.email,
+          course_slug: COURSE_SLUG,
+          rating: starRating,
+          comment: comment || null,
+          submitted_at: new Date().toISOString()
+        }, { onConflict: 'email,course_slug' });
+
+        // Mark last content module done on feedback submission (safety net)
+        if (!done.has(CONTENT_MODULES)) { done.add(CONTENT_MODULES); markDone(CONTENT_MODULES); saveCompletion(CONTENT_MODULES); updateProgress(); }
+        var fbCheck = document.getElementById('check' + TOTAL);
+        var fbNav = document.getElementById('nav-mod' + TOTAL);
+        if (fbCheck) fbCheck.textContent = '✓';
+        if (fbNav) fbNav.classList.add('done');
+      }
+    } catch (e) { console.error(e); }
+    document.getElementById('feedbackForm').style.display = 'none';
+    document.getElementById('feedbackDone').style.display = 'block';
+  }
+
+  async function doLogout() {
+    await sb.auth.signOut();
+    window.location.href = 'index.html';
+  }
+
+  init();
+
+  // Show video placeholders for slots not filled by course-video.js
+  // course-video.js runs async; we wait 1.5s then show placeholder only in still-empty slots
+  setTimeout(function() {
+    document.querySelectorAll('.video-slot[data-placeholder="true"]').forEach(function(slot) {
+      if (slot.getAttribute('data-no-video') === 'true') return;
+      if (!slot.innerHTML.trim()) {
+        slot.innerHTML =
+          '<div style="display:flex;align-items:center;gap:12px;padding:14px 16px;' +
+          'background:var(--surface-2);border:1px dashed var(--border-strong);border-radius:12px;' +
+          'margin-bottom:20px;color:var(--ink-2);">' +
+          '<span style="font-size:22px;line-height:1;">🎬</span>' +
+          '<span style="font-size:13px;font-weight:500;">Video untuk modul ini akan segera hadir.</span>' +
+          '</div>';
+      }
+    });
+  }, 1500);
+
+</script>
+</body></html>

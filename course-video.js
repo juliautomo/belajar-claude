@@ -32,13 +32,20 @@ function withDownload(url) {
 
     sbClient
       .from('module_videos')
-      .select('module_num, video_url')
+      .select('module_num, video_url, no_video_planned')
       .eq('course_slug', COURSE_SLUG)
       .then(function (res) {
         (res.data || []).forEach(function (row) {
-          if (!row.video_url) return;
           var slot = document.getElementById('video-slot-' + row.module_num);
           if (!slot) return;
+          // Admin has marked this module as intentionally video-less — flag the slot
+          // so the content page's own placeholder timer (which otherwise shows
+          // "Video coming soon" for any still-empty slot) knows to leave it alone.
+          if (row.no_video_planned) {
+            slot.setAttribute('data-no-video', 'true');
+            return;
+          }
+          if (!row.video_url) return;
           var ytId = extractYoutubeId(row.video_url);
           if (ytId) {
             slot.innerHTML =

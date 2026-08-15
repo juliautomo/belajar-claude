@@ -20,7 +20,8 @@ var LIH_BG = {
   'produktivitas':     'linear-gradient(135deg,#FBD98A,#FDF0D5)',
   'content-marketing': 'linear-gradient(135deg,#FBC2D9,#FDE9F1)',
   'strategi-marketing':'linear-gradient(135deg,#A8D8FF,#E4F3FF)',
-  'analisis-data':     'linear-gradient(135deg,#9FE8D8,#E3FBF5)'
+  'analisis-data':     'linear-gradient(135deg,#9FE8D8,#E3FBF5)',
+  'claude-sehari-hari':'linear-gradient(135deg,#FFC9A8,#FFF0E4)'
 };
 var LIH_ILLUSTRATIONS = {
   // This one's viewBox is tighter than the others (5 10 205 90, not 0 0 400 100) —
@@ -107,5 +108,33 @@ var LIH_ILLUSTRATIONS = {
     '<circle cx="252" cy="44" r="4" fill="#6C47FF"/>' +
     '<line x1="263" y1="55" x2="272" y2="64" stroke="#111" stroke-width="3.5" stroke-linecap="round"/></g>' +
     '<g class="lih-sparkle" style="transform-origin:300px 24px"><path d="M300 16 L303 23 L310 24 L303 25 L300 32 L297 25 L290 24 L297 23 Z" fill="#6C47FF"/></g>' +
+    '</svg>',
+  // Home + person with coffee + chat bubble — reads as "daily life", not productivity.
+  // Content was drawn in a 400x100 canvas but only occupies roughly x:15-240, which the
+  // shared .lih-illustration 1.3x zoom (see each page's <style>) crops to a visible
+  // window of about x:60-340 — so it was clipping most of the house on the left. Wrapped
+  // everything in a translate(55,0) to shift the whole scene right into that window
+  // (matches the fix already validated in illustration_preview.html).
+  'claude-sehari-hari': '<svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">' +
+    '<g transform="translate(55,0)">' +
+    '<line x1="15" y1="88" x2="330" y2="88" stroke="#111" stroke-width="2.5" opacity="0.2"/>' +
+    '<path d="M22 58 L50 34 L78 58 Z" fill="#fff" stroke="#111" stroke-width="2.5" stroke-linejoin="round"/>' +
+    '<rect x="28" y="58" width="44" height="30" rx="2" fill="#fff" stroke="#111" stroke-width="2.5"/>' +
+    '<rect x="44" y="70" width="12" height="18" rx="1" fill="#6C47FF" opacity="0.85"/>' +
+    '<circle cx="62" cy="68" r="5" fill="none" stroke="#111" stroke-width="2"/>' +
+    '<line x1="62" y1="63" x2="62" y2="73" stroke="#111" stroke-width="1.2" opacity="0.5"/>' +
+    '<line x1="57" y1="68" x2="67" y2="68" stroke="#111" stroke-width="1.2" opacity="0.5"/>' +
+    '<path d="M132 88 Q132 62 152 58 Q172 62 172 88 Z" fill="#FFC9A8" stroke="#111" stroke-width="2.5"/>' +
+    '<circle cx="152" cy="44" r="13" fill="#fff" stroke="#111" stroke-width="3"/>' +
+    '<path d="M141 39 Q152 26 163 39" fill="none" stroke="#111" stroke-width="2.5"/>' +
+    '<rect x="182" y="70" width="20" height="18" rx="3" fill="#fff" stroke="#111" stroke-width="2.3"/>' +
+    '<path d="M202 75 Q212 75 212 82 Q212 89 202 87" fill="none" stroke="#111" stroke-width="2.2"/>' +
+    '<path class="lih-scribble" d="M188 68 Q185 60 189 54" fill="none" stroke="#111" stroke-width="1.8" stroke-linecap="round" opacity="0.5"/>' +
+    '<path class="lih-scribble-2" d="M196 68 Q193 60 197 54" fill="none" stroke="#111" stroke-width="1.8" stroke-linecap="round" opacity="0.5"/>' +
+    '<g class="lih-bubble" style="transform-origin:152px 18px"><rect x="128" y="6" width="48" height="22" rx="9" fill="#fff" stroke="#111" stroke-width="2.2"/>' +
+    '<path d="M146 28 L142 36 L154 28 Z" fill="#fff" stroke="#111" stroke-width="2.2"/>' +
+    '<circle class="lih-dot1" cx="138" cy="17" r="2.4" fill="#6C47FF"/><circle class="lih-dot2" cx="152" cy="17" r="2.4" fill="#6C47FF"/><circle class="lih-dot3" cx="166" cy="17" r="2.4" fill="#6C47FF"/></g>' +
+    '<g class="lih-sparkle" style="transform-origin:230px 20px"><path d="M230 12 L233 19 L240 20 L233 21 L230 28 L227 21 L220 20 L227 19 Z" fill="#6C47FF"/></g>' +
+    '</g>' +
     '</svg>'
 };

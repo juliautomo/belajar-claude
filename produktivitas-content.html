@@ -96,8 +96,8 @@
   .prompt-section .case-box{background:transparent;border:0;border-radius:0;margin-top:0;padding:20px;}
   .prompt-section .case-box::before{display:none;}
   .prompt-section .case-box + .prompt-box{margin:0 20px 20px;border-radius:12px;}
-  .output-box{background:var(--green-dim);border:1px solid var(--green-border);border-radius:14px;padding:20px 24px;margin-top:24px;display:flex;gap:14px;align-items:flex-start;}
-  .output-icon{width:36px;height:36px;border-radius:10px;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+  .output-box{background:var(--gold-pale);border:1px solid rgba(239,159,39,0.22);border-radius:14px;padding:20px 24px;margin-top:24px;display:flex;gap:14px;align-items:flex-start;}
+  .output-icon{width:36px;height:36px;border-radius:10px;background:rgba(239,159,39,0.15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
   .output-box h3{font-size:14.5px;font-weight:700;color:var(--ink);margin-bottom:5px;}
   .output-box p{font-size:13px;color:var(--ink-2);line-height:1.65;}
   .tip-box{background:var(--gold-pale);border:1px solid rgba(239,159,39,0.22);border-radius:14px;padding:18px 20px;margin:16px 0;}
@@ -225,8 +225,8 @@
     <span class="nav-course-title">Produktivitas Kantor</span>
   </div>
   <div class="nav-right">
-    <span class="nav-email" id="navEmail"></span>
     <a class="nav-back" href="dashboard.html">← Dashboard</a>
+    <span class="nav-email" id="navEmail"></span>
     <button class="logout-btn" onclick="doLogout()">Keluar</button>
   </div>
 </nav>
@@ -347,7 +347,7 @@
         </div>
 
         <div class="output-box">
-          <div class="output-icon">✅</div>
+          <div class="output-icon">💡</div>
           <div>
             <h3>Output yang Diharapkan</h3>
             <p>1 draft pesan siap kirim — kalau kamu pakai skenario di atas, artinya 1 balasan DM Instagram yang menjawab pertanyaan pelanggan dan mengarahkan ke pembelian, tanpa perlu diedit ulang.</p>
@@ -421,7 +421,7 @@
         </div>
 
         <div class="output-box">
-          <div class="output-icon">✅</div>
+          <div class="output-icon">💡</div>
           <div>
             <h3>Output yang Diharapkan</h3>
             <p>1 Claude Project aktif dengan System Instructions dari k2-m2-referensi-project.txt. Sudah coba minimal 3 prompt pendek dan Claude merespons sesuai konteks PT Kreatif Digital tanpa briefing ulang.</p>
@@ -576,7 +576,7 @@ ringkasan poin penting. Singkat, maks 60 kata.<button class="copy-btn" onclick="
         </div>
 
         <div class="output-box">
-          <div class="output-icon">✅</div>
+          <div class="output-icon">💡</div>
           <div>
             <h3>Output yang Diharapkan</h3>
             <p>1 draft balasan email siap kirim. Target: di bawah 3 menit.</p>
@@ -703,7 +703,7 @@ insight & rekomendasi dalam poin-poin. Format rapi.<button class="copy-btn" oncl
         </div>
 
         <div class="output-box">
-          <div class="output-icon">✅</div>
+          <div class="output-icon">💡</div>
           <div>
             <h3>Output yang Diharapkan</h3>
             <p>Formula SUMIF yang siap kamu paste ke sheet-mu sendiri, insight &amp; rekomendasi dari Claude di chat, dan 1 file Excel ringkasan (bisa langsung didownload) yang dibuatkan Claude dari hasil analisis.</p>
@@ -886,7 +886,7 @@ Produk: Kemeja linen putih, koleksi summer, harga Rp 189.000<button class="copy-
         </div>
 
         <div class="output-box">
-          <div class="output-icon">✅</div>
+          <div class="output-icon">💡</div>
           <div>
             <h3>Output yang Diharapkan</h3>
             <p>5–10 output terproses sekaligus. 1 template prompt tersimpan untuk dipakai lagi.</p>
@@ -999,7 +999,7 @@ Fokus pada bagian yang bisa membuat reseller ragu.<button class="copy-btn" oncli
         </div>
 
         <div class="output-box">
-          <div class="output-icon">✅</div>
+          <div class="output-icon">💡</div>
           <div>
             <h3>Output yang Diharapkan</h3>
             <p>1 output final dari chain minimal 3 step yang lebih baik dari yang dihasilkan 1 prompt langsung.</p>
@@ -1068,7 +1068,7 @@ Tolong buat:
           <p>Tidak perlu catatan yang rapi — poin acak, singkatan, bahkan typo tetap bisa diproses. Kalau rapat direkam: transkrip audio dulu, lalu paste hasilnya ke Claude. Minta Claude kirim ulang dalam format "siap dishare ke tim" kalau perlu.</p>
         </div>
         <div class="output-box" style="margin-bottom:24px;">
-          <div class="output-icon">✅</div>
+          <div class="output-icon">💡</div>
           <div><h3>Output</h3><p>Tabel action items siap dishare ke peserta rapat, dalam waktu di bawah 5 menit sejak rapat selesai.</p></div>
         </div>
 
@@ -1092,7 +1092,7 @@ Saya perlu memutuskan apakah mau lanjut atau tidak. Ringkas dalam format:
           <div class="info-card"><strong>Email thread panjang</strong><span>"Apa inti permasalahan dalam thread ini dan keputusan apa yang sudah disepakati?"</span></div>
         </div>
         <div class="output-box" style="margin-bottom:24px;">
-          <div class="output-icon">✅</div>
+          <div class="output-icon">💡</div>
           <div><h3>Output</h3><p>Ringkasan 1 halaman atau kurang — cukup untuk ambil keputusan atau membalas dengan percaya diri.</p></div>
         </div>
 
@@ -1116,7 +1116,7 @@ Buatkan SWOT analysis untuk keputusan ini.
 Setiap kuadran: 3–4 poin yang konkret dan spesifik — bukan generik.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
         <div class="output-box" style="margin-bottom:24px;">
-          <div class="output-icon">✅</div>
+          <div class="output-icon">💡</div>
           <div><h3>Output</h3><p>SWOT analysis 1 halaman siap dijadikan bahan diskusi atau dasar keputusan bisnis.</p></div>
         </div>
 
@@ -1139,7 +1139,7 @@ yang perlu ditambahkan atau diperbarui?<button class="copy-btn" onclick="copyPro
           <p>Hasil web search bantu melengkapi gambaran besar, tapi belum tentu setepat observasi langsungmu soal detail spesifik bisnis (harga real yang kamu lihat, komentar pelanggan langsung). Pakai web search untuk konteks tambahan, bukan pengganti observasi lapanganmu. Kalau Claude-mu belum punya fitur web search, cari sendiri di Google lalu paste hasil relevannya ke Claude untuk dianalisis bersama observasimu.</p>
         </div>
         <div class="output-box" style="margin-bottom:24px;">
-          <div class="output-icon">✅</div>
+          <div class="output-icon">💡</div>
           <div><h3>Output</h3><p>SWOT yang lebih lengkap — gabungan observasi lapanganmu dan konteks pasar terkini dari web search.</p></div>
         </div>
 
@@ -1162,7 +1162,7 @@ dipoles lebih lanjut di PowerPoint atau Google Slides.<button class="copy-btn" o
           <p>Kalau akun Claude-mu belum bisa langsung membuat file .pptx, prompt yang sama tetap menghasilkan teks terstruktur per slide — tinggal copy-paste manual ke PowerPoint atau Google Slides, judul dan bullet-nya sudah siap pakai.</p>
         </div>
         <div class="output-box" style="margin-bottom:24px;">
-          <div class="output-icon">✅</div>
+          <div class="output-icon">💡</div>
           <div><h3>Output</h3><p>1 slide deck ringkas (5–6 slide) siap presentasi, dari riset yang tadinya cuma catatan observasi.</p></div>
         </div>
 
@@ -1194,7 +1194,7 @@ Tulis ini sebagai SOP yang bisa dibaca pegawai baru. Formatnya:
         </div>
 
         <div class="output-box">
-          <div class="output-icon">✅</div>
+          <div class="output-icon">💡</div>
           <div>
             <h3>Output yang Diharapkan</h3>
             <p>1 SOP siap pakai yang bisa langsung diberikan ke pegawai baru atau disimpan sebagai dokumentasi bisnis.</p>
@@ -1240,247 +1240,6 @@ dokumen baru tiap minggu.<button class="copy-btn" onclick="copyPrompt(this)">Sal
           <span class="nav-counter">7 / 7</span>
           <button class="nav-btn primary" onclick="showModule(8)">Beri Feedback →</button>
         </div>
-      </div>
-
-      <!-- MODULE 8 (ARCHIVED — removed from active lesson flow, kept for a future dedicated case-studies section): Case Study -->
-      <div class="module-panel" id="panel-casestudy-archived">
-        <div class="breadcrumb"><span>Produktivitas Kantor</span><span>›</span><strong>Studi Kasus</strong></div>
-        <div class="hero">
-          <h1 class="module-title">Case Study: Satu Hari Kerja Penuh</h1>
-          <p class="module-subtitle">Semua modul dalam aksi nyata — pilih skenario yang paling mirip denganmu</p>
-          <div class="video-slot" data-placeholder="true" id="video-slot-8"></div>
-        </div>
-        <div class="downloads-slot" id="downloads-slot-8"></div>
-
-        <div class="module-desc-box">
-          Dua skenario berbeda — pilih yang paling mirip dengan situasimu. Ikuti salah satu step by step, dan perhatikan modul mana yang dipakai di setiap langkah.
-        </div>
-
-        <div class="tip-box">
-          <div class="tip-label">📎 Bahan Latihan</div>
-          <p>Mau langsung praktik dengan data konkret alih-alih data milikmu sendiri? Download <strong>k2-m8-starter-hari-kerja.txt</strong> dari halaman materi — bundel data 1 hari kerja penuh (sampel email, data penjualan, catatan meeting, daftar tugas) mengikuti Skenario A di bawah.</p>
-        </div>
-
-        <div class="two-col">
-          <div class="col-card highlight" id="scenario-card-a" onclick="showScenario('a')" style="cursor:pointer;">
-            <h4>Skenario A: Rina — UMKM Fashion Online</h4>
-            <p>Pulang liburan 3 hari: 23 email, 10 deskripsi produk baru, analisis penjualan, 1 proposal reseller, catatan meeting, deadline IG hari ini. Tanpa Claude: 5–6 jam. Dengan Claude: sebelum makan siang.</p>
-          </div>
-          <div class="col-card" id="scenario-card-b" onclick="showScenario('b')" style="cursor:pointer;">
-            <h4>Skenario B: Budi — Konsultan Freelance</h4>
-            <p>Pitching ke klien baru besok jam 10. Sekarang jam 2 siang. Belum ada: riset kompetitor, proposal, deck 8 slide, 2 follow-up klien. Tanpa Claude: lembur sampai tengah malam. Dengan Claude: selesai jam 6 sore.</p>
-          </div>
-        </div>
-
-        <div id="scenario-a">
-        <div class="section-heading">Skenario A: Senin Pagi di Kasual Studio</div>
-
-        <div class="sub-heading">Step 1 — Buka Claude Project, Langsung Kerja (Modul 2)</div>
-        <div class="prompt-section">
-          <div class="prompt-label">📋 Prompt Pertama Rina Hari Ini</div>
-          <div class="prompt-box">Bantu saya prioritaskan pekerjaan hari ini. Saya punya:
-- 23 email belum dibalas (campuran komplain, inquiry, konfirmasi)
-- 10 deskripsi produk baru untuk Tokopedia
-- Analisis data penjualan bulan lalu
-- 1 proposal reseller yang perlu dibuat
-- 1 post Instagram hari ini
-
-Urutkan dari yang paling urgent ke yang bisa ditunda.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-        </div>
-        <p class="body-text">Claude langsung menjawab dengan urutan yang logis — karena sudah tahu konteks bisnis Rina dari Project.</p>
-
-        <div class="sub-heading">Step 2 — Bersihkan 23 Email dalam 30 Menit (Modul 1 + 3 + 5)</div>
-        <p class="body-text">Rina kelompokkan email jadi 4 tipe dan proses masing-masing secara berbeda:</p>
-        <div class="compare-table-wrap">
-          <table class="compare-table">
-            <tr><th>Tipe Email</th><th>Jumlah</th><th>Cara Proses</th><th>Waktu</th></tr>
-            <tr><td>Komplain pelanggan</td><td>5</td><td>Template prompt komplain dari M03 + konteks per email</td><td>~10 menit</td></tr>
-            <tr><td>Inquiry reseller</td><td>3</td><td>Batch ringkas semua dulu (M05), lalu balas satu per satu</td><td>~8 menit</td></tr>
-            <tr><td>Konfirmasi pembayaran</td><td>12</td><td>Batch prompting 12 sekaligus dengan nama pembeli</td><td>~5 menit</td></tr>
-            <tr><td>Lain-lain</td><td>3</td><td>Manual (tidak butuh Claude)</td><td>~5 menit</td></tr>
-          </table>
-        </div>
-
-        <div class="prompt-section">
-          <div class="prompt-label">📋 Batch 12 Konfirmasi Pembayaran Sekaligus</div>
-          <div class="prompt-box">Tulis 12 balasan konfirmasi pembayaran. Setiap balasan:
-akui transfer, estimasi kirim 1-2 hari kerja, ucapkan terima kasih.
-Format: singkat, maks 3 kalimat, bahasa santai.
-
-Nama pembeli:
-1. Dinda - transfer Rp 189.000 - Kemeja Linen Putih
-2. Sarah - transfer Rp 245.000 - Dress Midi Floral
-[lanjut sampai 12]<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-        </div>
-
-        <div class="sub-heading">Step 3 — 10 Deskripsi Produk Sekaligus (Modul 5)</div>
-        <div class="prompt-section">
-          <div class="prompt-label">📋 Prompt</div>
-          <div class="prompt-box">Tulis deskripsi produk Tokopedia untuk 10 produk berikut.
-Format per produk:
-- Judul listing: maks 60 karakter, sertakan kata kunci pencarian
-- Deskripsi: 3 kalimat — bahan, kecocokan, dan keunggulan produk
-- Highlight: 4 bullet point singkat
-
-Produk koleksi Summer Linen Kasual Studio:
-1. Kemeja linen putih, 100% linen, adem, cocok kerja &amp; weekend
-2. Celana kulot krem, pinggang elastis, all size S–XL
-3. Dress midi sage green, lengan panjang, linen mix
-4. Blouse off-white, kerah V, bahan linen ringan
-5. Co-ord set linen hitam (atasan + celana)
-6. Jumpsuit linen dusty pink, tali adjustable, one size
-7. Rok midi linen stripe, zipper belakang, panjang di bawah lutut
-8. Kemeja oversized linen biru muda, fit boxy
-9. Set piyama linen krem, untuk tidur &amp; santai di rumah
-10. Dress mini linen terracotta, lengan balon, acara kasual<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-        </div>
-        <p class="body-text">10 deskripsi siap upload dalam 4 menit.</p>
-
-        <div class="sub-heading">Step 4 — Analisis Data Penjualan (Modul 4)</div>
-        <div class="prompt-section">
-          <div class="prompt-label">📋 Prompt</div>
-          <div class="prompt-box">Ini data penjualan Kasual Studio bulan Juni:
-[paste data: nama produk, jumlah terjual, revenue, stok tersisa]
-
-Analisis:
-1. Produk mana yang paling cepat habis (perlu restock segera)?
-2. Produk mana yang stagnan (perlu promosi atau diskon)?
-3. Koleksi warna apa yang sebaiknya saya tambah bulan depan?<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-        </div>
-
-        <div class="sub-heading">Step 5 — Proposal Reseller Yogyakarta (Modul 6)</div>
-        <p class="body-text">Rina pakai chain 4 step persis seperti di M06: Profil calon reseller → Kerangka proposal → Tulis proposal lengkap → Review &amp; perkuat 3 bagian lemah. Total: 22 menit untuk proposal yang biasanya butuh 2 jam.</p>
-
-        <div class="sub-heading">Step 6 — Rapikan Catatan Meeting Supplier (Modul 7)</div>
-        <div class="prompt-section">
-          <div class="prompt-label">📋 Prompt</div>
-          <div class="prompt-box">Ini catatan meeting saya minggu lalu dengan supplier kain:
-[paste catatan berantakan dari HP]
-
-Buat: ringkasan keputusan yang disepakati +
-action items (siapa / apa / kapan).<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-        </div>
-        <p class="body-text">Dapat tabel action items dalam 2 menit. Langsung forward ke supplier sebagai konfirmasi.</p>
-
-        <div class="sub-heading">Step 7 — Caption Instagram Hari Ini (Modul 1 + 2)</div>
-        <div class="prompt-section">
-          <div class="prompt-label">📋 Prompt (via Claude Project — super pendek)</div>
-          <div class="prompt-box">Tulis caption Instagram untuk kemeja linen putih dari koleksi summer baru.
-Hook tentang "senin yang adem". Sertakan CTA untuk DM.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-        </div>
-        <p class="body-text">Done. 45 detik.</p>
-
-        <div class="section-heading">Rekap Skenario A</div>
-        <div class="compare-table-wrap">
-          <table class="compare-table">
-            <tr><th>Tugas</th><th>Modul</th><th>Biasanya</th><th>Dengan Claude</th></tr>
-            <tr><td>23 email</td><td>M01 + M03 + M05</td><td>2 jam</td><td>28 menit</td></tr>
-            <tr><td>10 deskripsi produk</td><td>M05</td><td>40 menit</td><td>4 menit</td></tr>
-            <tr><td>Analisis penjualan</td><td>M04</td><td>45 menit</td><td>8 menit</td></tr>
-            <tr><td>Proposal reseller</td><td>M06</td><td>2 jam</td><td>22 menit</td></tr>
-            <tr><td>Catatan meeting</td><td>M07</td><td>20 menit</td><td>2 menit</td></tr>
-            <tr><td>Caption Instagram</td><td>M01 + M02</td><td>15 menit</td><td>2 menit</td></tr>
-            <tr><td><strong>Total</strong></td><td></td><td><strong>~6 jam</strong></td><td><strong>~66 menit</strong></td></tr>
-          </table>
-        </div>
-
-        </div><!-- /scenario-a -->
-
-        <div id="scenario-b" style="display:none;">
-        <div class="section-heading">Skenario B: Deadline Besok — Budi, Konsultan Freelance</div>
-        <p class="body-text">Pitching ke klien baru besok jam 10. Sekarang jam 2 siang. Yang belum ada: riset kompetitor, proposal kerjasama, deck presentasi 8 slide, 2 follow-up klien.</p>
-
-        <div class="sub-heading">Step 1 — Riset Kompetitor Klien (Modul 7)</div>
-        <div class="prompt-section">
-          <div class="prompt-label">📋 Prompt</div>
-          <div class="prompt-box">Klien saya adalah brand retail fashion lokal yang mau ekspansi ke e-commerce.
-Saya sudah observasi 3 kompetitor mereka:
-
-Kompetitor A: [deskripsi — harga, produk, cara promosi]
-Kompetitor B: [deskripsi]
-Kompetitor C: [deskripsi]
-
-Bantu saya:
-1. Identifikasi celah yang belum diisi kompetitor
-2. Susun SWOT singkat untuk klien saya
-3. Rekomendasikan 1 angle positioning yang bisa saya tawarkan<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-        </div>
-        <p class="body-text">Competitive brief terstruktur dalam 8 menit. Ini jadi fondasi proposal.</p>
-
-        <div class="sub-heading">Step 2 — Proposal Kerjasama (Modul 6)</div>
-        <p class="body-text">Pakai chain 4 step. Step 1 (profil klien) sudah selesai dari riset di atas. Lanjut ke kerangka → proposal lengkap → review. Total: 25 menit.</p>
-
-        <div class="sub-heading">Step 3 — Batch 3 Email Sekaligus (Modul 5)</div>
-        <div class="prompt-section">
-          <div class="prompt-label">📋 Prompt</div>
-          <div class="prompt-box">Tulis 3 email sekaligus:
-1. Konfirmasi jadwal pitching besok jam 10 ke klien baru — profesional, singkat
-2. Follow-up klien A yang belum balas soal revisi proposal minggu lalu — gentle reminder
-3. Follow-up klien B soal pembayaran invoice bulan lalu — sedikit lebih tegas tapi sopan
-
-Format masing-masing: subject line + isi email. Bahasa Indonesia formal.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-        </div>
-
-        <div class="sub-heading">Step 4 — Ringkas Proposal Jadi Deck 8 Slide (Modul 7 + 6)</div>
-        <div class="prompt-section">
-          <div class="prompt-label">📋 Prompt</div>
-          <div class="prompt-box">Ini proposal yang sudah saya tulis:
-[paste proposal]
-
-Ringkas menjadi kerangka deck presentasi 8 slide:
-- Slide 1: Problem klien
-- Slide 2–3: Situasi pasar &amp; kompetitor
-- Slide 4–5: Solusi yang saya tawarkan
-- Slide 6: Timeline &amp; deliverable
-- Slide 7: Investasi
-- Slide 8: Next steps
-
-Per slide: judul + 3 poin bullet maksimal.
-Singkat, cocok untuk diucapkan, bukan dibaca.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-        </div>
-
-        <div class="compare-table-wrap">
-          <table class="compare-table">
-            <tr><th>Tugas</th><th>Modul</th><th>Biasanya</th><th>Dengan Claude</th></tr>
-            <tr><td>Riset kompetitor</td><td>M07</td><td>90 menit</td><td>10 menit</td></tr>
-            <tr><td>Proposal kerjasama</td><td>M06</td><td>2 jam</td><td>25 menit</td></tr>
-            <tr><td>3 email</td><td>M05</td><td>20 menit</td><td>5 menit</td></tr>
-            <tr><td>Deck presentasi</td><td>M07 + M06</td><td>45 menit</td><td>15 menit</td></tr>
-            <tr><td><strong>Total</strong></td><td></td><td><strong>~4,5 jam</strong></td><td><strong>~55 menit</strong></td></tr>
-          </table>
-        </div>
-
-        </div><!-- /scenario-b -->
-
-        <div class="tip-box">
-          <div class="tip-label">🎯 Tantangan Akhir</div>
-          <p>Pilih skenario yang paling mirip denganmu — atau buat versimu sendiri. Sebelum hari kerja sibuk berikutnya: list semua tugas, tandai modul mana yang bisa bantu, kerjakan dengan Claude, dan catat waktu aktual yang dihemat.</p>
-        </div>
-
-        <div class="output-box">
-          <div class="output-icon">✅</div>
-          <div>
-            <h3>Output yang Diharapkan</h3>
-            <p>Satu hari kerja selesai lebih awal dari biasanya. Catat berapa jam yang berhasil kamu hemat.</p>
-          </div>
-        </div>
-
-        <div class="section-heading">Level Up: Daily Command Center</div>
-        <div class="tip-box connector">
-          <div class="tip-label">🛠️ Bonus: Satu Dashboard untuk Seluruh Hari Kerja</div>
-          <p>Ini penutup kursus — gabungkan semua yang sudah kamu kerjakan hari ini jadi 1 file HTML: papan prioritas email (Modul 3), insight penjualan (Modul 4), daftar tugas yang sudah selesai, dan rekap waktu yang dihemat. Bukan cuma laporan penutup — command center yang bisa kamu pakai ulang setiap hari kerja sibuk berikutnya.</p>
-        </div>
-        <div class="prompt-section">
-          <div class="prompt-label">📝 Contoh Prompt</div>
-          <div class="prompt-box">Dari semua yang saya kerjakan hari ini — triase email,
-analisis penjualan, proposal reseller, catatan meeting, dan
-caption Instagram — buatkan saya 1 halaman HTML "Daily Command
-Center": ringkasan status email (urgent/selesai), insight
-penjualan utama, daftar tugas hari ini dengan checkbox, dan
-rekap waktu Biasa vs Dengan Claude. Simpan sebagai 1 file HTML
-yang bisa saya buka lagi setiap hari kerja padat berikutnya.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-        </div>
-
       </div>
 
       <!-- PANEL 8: Feedback -->
@@ -1703,13 +1462,6 @@ yang bisa saya buka lagi setiap hari kerja padat berikutnya.<button class="copy-
       }
     });
   }, 1500);
-
-  function showScenario(name) {
-    document.getElementById('scenario-a').style.display = name === 'a' ? '' : 'none';
-    document.getElementById('scenario-b').style.display = name === 'b' ? '' : 'none';
-    document.getElementById('scenario-card-a').classList.toggle('highlight', name === 'a');
-    document.getElementById('scenario-card-b').classList.toggle('highlight', name === 'b');
-  }
 </script>
 </body>
 </html>

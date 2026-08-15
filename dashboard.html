@@ -418,6 +418,7 @@ const ALL_COURSES = {
   'mulai-claude':       { title:'Dasar Claude AI',               icon:'🤖', thumb:'et1', contentLink:'mulai-claude-content.html',      salesLink:'mulai-claude.html',      desc:'Dari nol sampai pakai Claude sehari-hari.',         price:'Termasuk All Access',     level:'Beginner',     exThumb:'ex-t1', modules:5 },
   'produktivitas':      { title:'Produktivitas Kantor',          icon:'💼', thumb:'et2', contentLink:'produktivitas-content.html',     salesLink:'produktivitas.html',     desc:'Hemat 3–5 jam kerja per minggu dengan Claude + tools kantor.',    price:'Termasuk All Access', level:'Beginner',     exThumb:'ex-t1', modules:7 },
   'content-marketing':  { title:'Kreasi Konten Pemasaran',      icon:'🏷', thumb:'et3', contentLink:'content-marketing-content.html', salesLink:'content-marketing.html', desc:'Dari positioning sampai konten siap posting: Instagram, copy iklan, dan komunikasi pelanggan.', price:'Termasuk All Access', level:'Beginner',     exThumb:'ex-t1', modules:5 },
+  'claude-sehari-hari': { title:'Claude untuk Sehari-hari',     icon:'☀️', thumb:'et1', contentLink:'claude-sehari-hari-content.html', salesLink:'claude-sehari-hari.html', desc:'Pakai Claude buat hal-hal sehari-hari: atur budget, rencanakan liburan, rapikan CV, sampai bantu ambil keputusan.', price:'Termasuk All Access', level:'Beginner', exThumb:'ex-t1', modules:13 },
   'strategi-marketing': { title:'Strategi & Analisis Marketing', icon:'📈', thumb:'et3', contentLink:'strategi-marketing-content.html', salesLink:'strategi-marketing.html', desc:'Analisis performa iklan, alokasi budget, dan 1 Strategi Command Center yang terus jalan.', price:'Termasuk All Access', level:'Intermediate', exThumb:'ex-t1', modules:3, comingSoon:true, visible:true },
   'analisis-data':      { title:'Analisis Data & Laporan',       icon:'📊', thumb:'et4', contentLink:'coming-soon.html',              salesLink:'coming-soon.html',       desc:'Ubah data mentah jadi insight bisnis yang bisa dijadikan keputusan.',price:'Termasuk All Access', level:'Intermediate', exThumb:'ex-t2', modules:6, comingSoon:true, visible:true },
   'build-automation':   { title:'Automasi Workflow',             icon:'⚡', thumb:'et4', contentLink:'coming-soon.html',              salesLink:'coming-soon.html',       desc:'Buat 3 automation aktif dengan Zapier, Make.com & n8n.',          price:'Termasuk All Access', level:'Intermediate', exThumb:'ex-t2', modules:7, comingSoon:true, visible:true },
@@ -425,6 +426,10 @@ const ALL_COURSES = {
   'claude-api-dev':     { title:'Claude API untuk Developer',    icon:'🔌', thumb:'et4', contentLink:'coming-soon.html',              salesLink:'coming-soon.html',       desc:'Integrasikan Claude ke project nyata: streaming, tool use, caching.',price:'Termasuk All Access', level:'Advanced',     exThumb:'ex-t3', modules:7, comingSoon:true, visible:true },
   'jual-produk-ai':     { title:'Build & Monetisasi Produk AI',  icon:'💰', thumb:'et4', contentLink:'coming-soon.html',              salesLink:'coming-soon.html',       desc:'Dari ide ke produk AI yang menghasilkan uang: Framer + Midtrans.', price:'Termasuk All Access', level:'Advanced',     exThumb:'ex-t3', modules:7, comingSoon:true, visible:true },
 };
+// Explore-grid slug order — starts as ALL_COURSES' own key order, re-sorted once the
+// live course_visibility fetch below reports each course's admin-set sort_order (see
+// the visibility merge block, which also updates this array).
+var ALL_COURSES_ORDER=Object.keys(ALL_COURSES);
 
 let progressMap = {}, userProfile = null, currentEmail = null;
 
@@ -616,11 +621,24 @@ async function _init(){
   try{
     if(settled[2].status==='fulfilled'){
       var vr=settled[2].value;
+      // dev_preview lets admin.html unhide a course on the dev deployment only
+      // (hostname starting with "dev-") without it going live on production.
+      var IS_DEV_ENV=/^dev-/.test(location.hostname);
       (vr.data||[]).forEach(function(row){
         if(!ALL_COURSES[row.course_slug])return;
-        ALL_COURSES[row.course_slug].hidden=!!row.hidden;
+        ALL_COURSES[row.course_slug].hidden=(IS_DEV_ENV&&row.dev_preview)?false:!!row.hidden;
         ALL_COURSES[row.course_slug].comingSoon=!!row.coming_soon;
         ALL_COURSES[row.course_slug].visible=true;
+        if(row.sort_order!=null)ALL_COURSES[row.course_slug].sortOrder=row.sort_order;
+      });
+      // Admin-set sort_order drives the explore-grid order — re-sort in place so the
+      // Object.keys(ALL_COURSES) usage further down (unenrolled grid) picks it up.
+      var fallbackIdx={};
+      ALL_COURSES_ORDER.forEach(function(slug,i){fallbackIdx[slug]=i+1;});
+      ALL_COURSES_ORDER=ALL_COURSES_ORDER.slice().sort(function(a,b){
+        var oa=(ALL_COURSES[a]&&ALL_COURSES[a].sortOrder!=null)?ALL_COURSES[a].sortOrder:fallbackIdx[a];
+        var ob=(ALL_COURSES[b]&&ALL_COURSES[b].sortOrder!=null)?ALL_COURSES[b].sortOrder:fallbackIdx[b];
+        return oa-ob;
       });
     }
   }catch(e){}
@@ -673,7 +691,7 @@ async function _init(){
   // course can't be enrolled in yet, so it doesn't belong here; it still surfaces as a
   // disabled "Segera Hadir" card in the explore/Jelajahi Kursus grid further down.
 
-  var COURSE_ORDER={'prompt-gratis':0,'mulai-claude':1,'produktivitas':2,'content-marketing':3,'strategi-marketing':4,'analisis-data':5,'build-automation':6,'ai-powered-app':7,'claude-api-dev':8,'jual-produk-ai':9};
+  var COURSE_ORDER={'prompt-gratis':0,'mulai-claude':1,'produktivitas':2,'content-marketing':3,'claude-sehari-hari':4,'strategi-marketing':5,'analisis-data':6,'build-automation':7,'ai-powered-app':8,'claude-api-dev':9,'jual-produk-ai':10};
   function courseSort(a,b){return (COURSE_ORDER[a.course_slug]||99)-(COURSE_ORDER[b.course_slug]||99);}
   activeCourses.sort(courseSort);
 
@@ -751,7 +769,7 @@ async function _init(){
   // UNLESS explicitly marked `visible:true`, which shows it greyed/disabled instead
   // of hiding it (same exception pattern used for Strategi & Analisis Marketing
   // elsewhere on the site: visible-but-unclickable, not a full hide).
-  var unenrolled=Object.keys(ALL_COURSES).filter(function(slug){return!ALL_COURSES[slug].hidden&&!enrolledSlugs.has(slug)&&(!ALL_COURSES[slug].comingSoon||ALL_COURSES[slug].visible);});
+  var unenrolled=ALL_COURSES_ORDER.filter(function(slug){return!ALL_COURSES[slug].hidden&&!enrolledSlugs.has(slug)&&(!ALL_COURSES[slug].comingSoon||ALL_COURSES[slug].visible);});
   if(unenrolled.length>0){
     document.getElementById('exploreSection').style.display='block';
     var grid=document.getElementById('exploreGrid');
