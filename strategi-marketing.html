@@ -396,14 +396,14 @@
     if (COMING_SOON) return;
     var original = btn.textContent;
     btn.textContent = 'Memproses...';
-    document.querySelectorAll('#ctaBtn, #bottomCtaBtn, #mulaiCardBtn').forEach(b => b.style.pointerEvents = 'none');
+    document.querySelectorAll('#bottomCtaBtn, #mulaiCardBtn').forEach(b => b.style.pointerEvents = 'none');
     try {
       const { error } = await sbClient.from('enrollments').insert({ email: email, course_slug: COURSE_SLUG, course_name: 'Strategi & Analisis Marketing', type: 'paid', enrolled_at: new Date().toISOString() });
       if (error) throw error;
       window.location.href = CONTENT_LINK;
     } catch (e) {
       btn.textContent = original;
-      document.querySelectorAll('#ctaBtn, #bottomCtaBtn, #mulaiCardBtn').forEach(b => b.style.pointerEvents = '');
+      document.querySelectorAll('#bottomCtaBtn, #mulaiCardBtn').forEach(b => b.style.pointerEvents = '');
       alert('Gagal mendaftar kursus: ' + (e.message || 'Terjadi kesalahan, coba lagi.'));
     }
   }
