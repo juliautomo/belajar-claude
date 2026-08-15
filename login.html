@@ -118,7 +118,6 @@
     <!-- Tabs -->
     <div class="tabs" id="tabs">
       <button class="tab-btn active" onclick="switchTab('login')">Masuk</button>
-      <button class="tab-btn" onclick="switchTab('register')" style="display:none;">Daftar</button>
     </div>
 
     <!-- Login view -->
@@ -130,18 +129,6 @@
       <button class="forgot-link" onclick="switchView('forgot')">Lupa password?</button>
       <button class="btn" id="login-btn" onclick="doLogin()">Masuk →</button>
       <div class="msg" id="login-msg"></div>
-    </div>
-
-    <!-- Register view -->
-    <div class="view" id="view-register">
-      <label for="reg-email">Email</label>
-      <input type="email" id="reg-email" placeholder="nama@email.com" autocomplete="email" />
-      <label for="reg-password">Password</label>
-      <input type="password" id="reg-password" placeholder="Minimal 6 karakter" autocomplete="new-password" />
-      <label for="reg-confirm">Konfirmasi Password</label>
-      <input type="password" id="reg-confirm" placeholder="Ulangi password" autocomplete="new-password" style="margin-bottom:14px;" />
-      <button class="btn" id="reg-btn" onclick="doRegister()">Daftar →</button>
-      <div class="msg" id="reg-msg"></div>
     </div>
 
     <!-- Forgot password view -->
@@ -225,42 +212,6 @@
       }
     }
 
-    async function doRegister() {
-      var email = document.getElementById('reg-email').value.trim();
-      var password = document.getElementById('reg-password').value;
-      var confirm = document.getElementById('reg-confirm').value;
-      var btn = document.getElementById('reg-btn');
-      var msg = document.getElementById('reg-msg');
-
-      if (!email || !password) return showMsg(msg, 'error', 'Isi semua kolom ya.');
-      if (password.length < 6) return showMsg(msg, 'error', 'Password minimal 6 karakter.');
-      if (password !== confirm) return showMsg(msg, 'error', 'Konfirmasi password tidak cocok.');
-
-      btn.disabled = true; btn.textContent = 'Mendaftar...';
-      msg.className = 'msg';
-
-      var res = await sbClient.auth.signUp({ email: email, password: password });
-      if (res.error) {
-        showMsg(msg, 'error', res.error.message);
-        btn.disabled = false; btn.textContent = 'Daftar →';
-        return;
-      }
-
-      // Fire-and-forget: trigger welcome email + ConvertKit/Sheets logging (non-blocking, no name field on this form)
-      fetch(BACKEND_URL + '/signup', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: email.split('@')[0], email: email, source: 'signup-page' })
-      }).catch(function() {});
-
-      if (res.data.session) {
-        btn.textContent = 'Berhasil!';
-        window.location.href = getNextUrl();
-      } else {
-        showMsg(msg, 'success', 'Cek inbox ' + email + ' untuk konfirmasi akun, lalu kembali ke sini untuk masuk.');
-        btn.disabled = false; btn.textContent = 'Daftar →';
-      }
-    }
-
     async function doForgot() {
       var email = document.getElementById('forgot-email').value.trim();
       var btn = document.getElementById('forgot-btn');
@@ -297,7 +248,6 @@
       var active = document.querySelector('.view.active');
       if (!active) return;
       if (active.id === 'view-login') doLogin();
-      else if (active.id === 'view-register') doRegister();
       else if (active.id === 'view-forgot') doForgot();
     });
   </script>

@@ -103,6 +103,40 @@
   .course-card-v2:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(0,0,0,0.06); border-color: rgba(108,71,255,0.2); }
   .ccv2-banner { height: 76px; display: flex; align-items: center; justify-content: center; }
   .ccv2-icon { width: 36px; height: 36px; border-radius: 10px; background: rgba(255,255,255,0.85); display: flex; align-items: center; justify-content: center; font-size: 17px; box-shadow: 0 4px 12px rgba(0,0,0,0.07); }
+  /* Same animated hand-drawn illustrations as index.html/dashboard.html (course-illustrations.js) —
+     these rules just provide the animation, the markup+colors come from that shared file. */
+  .lih-illustration { width: 100%; height: 100%; display: block; }
+  @keyframes lihBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+  @keyframes lihLegA { 0%,100% { transform: rotate(16deg); } 50% { transform: rotate(-16deg); } }
+  @keyframes lihLegB { 0%,100% { transform: rotate(-16deg); } 50% { transform: rotate(16deg); } }
+  @keyframes lihGround { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -24; } }
+  @keyframes lihTailWag { 0%,100% { transform: rotate(-10deg); } 50% { transform: rotate(14deg); } }
+  @keyframes lihScribble { 0%,100% { stroke-dashoffset: 0; opacity: 0.75; } 50% { stroke-dashoffset: 10; opacity: 0.35; } }
+  @keyframes lihPenWiggle { 0%,100% { transform: rotate(-8deg); } 50% { transform: rotate(6deg); } }
+  @keyframes lihSparkle { 0%,100% { opacity: 0.25; transform: scale(0.85); } 50% { opacity: 1; transform: scale(1.1); } }
+  @keyframes lihCursorBlink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
+  @keyframes lihDotPulse { 0%,80%,100% { opacity: 0.25; } 40% { opacity: 1; } }
+  @keyframes lihBubblePop { 0%,100% { transform: scale(0.94); opacity: 0.85; } 50% { transform: scale(1.03); opacity: 1; } }
+  @keyframes lihFlash { 0%,85%,100% { opacity: 0; } 92% { opacity: 0.9; } }
+  @keyframes lihCamClick { 0%,88%,100% { transform: scale(1); } 92% { transform: scale(0.93); } }
+  .lih-run-a { animation: lihBob 0.6s ease-in-out infinite; }
+  .lih-run-b { animation: lihBob 0.6s ease-in-out infinite; animation-delay: 0.15s; }
+  .lih-leg-a { animation: lihLegA 0.6s ease-in-out infinite; }
+  .lih-leg-b { animation: lihLegB 0.6s ease-in-out infinite; }
+  .lih-ground { animation: lihGround 1s linear infinite; }
+  .lih-tail { animation: lihTailWag 0.5s ease-in-out infinite; }
+  .lih-scribble { animation: lihScribble 1.6s ease-in-out infinite; }
+  .lih-scribble-2 { animation: lihScribble 1.6s ease-in-out infinite; animation-delay: 0.3s; }
+  .lih-scribble-3 { animation: lihScribble 1.6s ease-in-out infinite; animation-delay: 0.6s; }
+  .lih-pen { animation: lihPenWiggle 0.9s ease-in-out infinite; }
+  .lih-sparkle { animation: lihSparkle 1.8s ease-in-out infinite; }
+  .lih-cursor { animation: lihCursorBlink 1s step-end infinite; }
+  .lih-dot1 { animation: lihDotPulse 1.2s ease-in-out infinite; }
+  .lih-dot2 { animation: lihDotPulse 1.2s ease-in-out infinite; animation-delay: 0.2s; }
+  .lih-dot3 { animation: lihDotPulse 1.2s ease-in-out infinite; animation-delay: 0.4s; }
+  .lih-bubble { animation: lihBubblePop 2s ease-in-out infinite; }
+  .lih-flash { animation: lihFlash 2.4s ease-in-out infinite; }
+  .lih-cam { animation: lihCamClick 2.4s ease-in-out infinite; }
   .bnr-1 { background: linear-gradient(135deg,#C7CBFF,#EEF0FF); }
   .bnr-2 { background: linear-gradient(135deg,#B7F0D6,#E6FBF0); }
   .bnr-3 { background: linear-gradient(135deg,#FBD98A,#FDF0D5); }
@@ -152,7 +186,7 @@
   .footer-links ul a:hover { color: #fff; }
   .footer-bottom { max-width: 1100px; margin: 28px auto 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
   .footer-bottom p { font-size: 11px; color: rgba(255,255,255,0.18); }
-  @media (max-width: 640px) { footer { padding: 40px 20px 24px; } .footer-inner { flex-direction: column; gap: 24px; } }
+  @media (max-width: 640px) { footer { padding: 40px 20px 24px; } .footer-inner { flex-direction: column; gap: 24px; } .footer-links { flex: 0 0 auto; } }
 
   @media (max-width: 768px) { nav { padding: 0 20px; } .compare-box { flex-direction: column; } 
   /* Mobile nav — Kursus/Masuk/account links collapse into a hamburger-triggered
@@ -220,28 +254,28 @@
     <div class="section-label">Termasuk Dalam All Access</div>
     <h2 class="section-title">Semua Kursus, Sekarang & Nanti</h2>
     <p class="section-sub">Kursus yang sudah live bisa langsung diakses setelah pembelian. Kursus yang masih dalam pengembangan otomatis terbuka di dashboard kamu begitu dirilis — tanpa perlu bayar lagi.</p>
-    <div class="courses-grid">
-      <div class="course-card-v2">
+    <div class="courses-grid" id="aaCoursesGrid">
+      <div class="course-card-v2" data-slug="prompt-gratis">
         <div class="ccv2-banner bnr-1"><div class="ccv2-icon">📋</div></div>
         <div class="ccv2-body"><span class="ccv2-badge badge-green">Tersedia</span><h3>20 Prompt Dasar</h3><p>Prompt siap pakai untuk email, laporan, konten sosmed — langsung copy-paste.</p></div>
       </div>
-      <div class="course-card-v2">
+      <div class="course-card-v2" data-slug="mulai-claude">
         <div class="ccv2-banner bnr-2"><div class="ccv2-icon">🤖</div></div>
         <div class="ccv2-body"><span class="ccv2-badge badge-green">Tersedia</span><h3>Dasar Claude AI</h3><p>Dari nol sampai bisa pakai Claude sehari-hari.</p></div>
       </div>
-      <div class="course-card-v2">
+      <div class="course-card-v2" data-slug="produktivitas">
         <div class="ccv2-banner bnr-3"><div class="ccv2-icon">💼</div></div>
         <div class="ccv2-body"><span class="ccv2-badge badge-green">Tersedia</span><h3>Produktivitas Kantor</h3><p>Role prompting, Claude Projects, Gmail, Sheets — hemat 3–5 jam kerja per minggu.</p></div>
       </div>
-      <div class="course-card-v2">
+      <div class="course-card-v2" data-slug="content-marketing">
         <div class="ccv2-banner bnr-4"><div class="ccv2-icon">🏷</div></div>
         <div class="ccv2-body"><span class="ccv2-badge badge-green">Tersedia</span><h3>Kreasi Konten Pemasaran</h3><p>Positioning, konten Instagram, copy iklan, sampai komunikasi pelanggan.</p></div>
       </div>
-      <div class="course-card-v2">
+      <div class="course-card-v2" data-slug="strategi-marketing">
         <div class="ccv2-banner bnr-5"><div class="ccv2-icon">📈</div></div>
         <div class="ccv2-body"><span class="ccv2-badge badge-soon">Segera Hadir</span><h3>Strategi & Analisis Marketing</h3><p>Analisis performa iklan, alokasi budget, dan 1 Strategi Command Center yang terus jalan.</p></div>
       </div>
-      <div class="course-card-v2">
+      <div class="course-card-v2" data-slug="analisis-data">
         <div class="ccv2-banner bnr-6"><div class="ccv2-icon">📊</div></div>
         <div class="ccv2-body"><span class="ccv2-badge badge-soon">Segera Hadir</span><h3>Analisis Data & Laporan</h3><p>Ubah data mentah jadi insight bisnis yang bisa dijadikan keputusan.</p></div>
       </div>
@@ -288,6 +322,14 @@
   <div class="container" style="max-width:760px;">
     <div class="section-label">Pertanyaan Umum</div>
     <h2 class="section-title">Yang Sering Ditanyakan</h2>
+    <div class="faq-item">
+      <div class="faq-q">Saya nggak punya latar belakang teknis, apakah saya masih bisa belajar?</div>
+      <div class="faq-a">Bisa banget. Semua materi ditulis dari nol, tanpa istilah teknis yang bikin bingung — cocok buat siapa saja, termasuk yang belum pernah pakai AI sama sekali.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Apakah Claude gratis?</div>
+      <div class="faq-a">Ya. Untuk kursus di sini, kita menggunakan versi gratis Claude — kamu nggak perlu berlangganan apa pun untuk mulai praktik dan mengikuti semua materi.</div>
+    </div>
     <div class="faq-item">
       <div class="faq-q">Kalau kursusnya belum semua tersedia, kapan saya bisa akses?</div>
       <div class="faq-a">Kursus yang sudah live bisa langsung diakses setelah pembelian. Kursus yang masih "Segera Hadir" akan otomatis terbuka di dashboard kamu begitu diluncurkan — tanpa perlu bayar lagi.</div>
@@ -349,6 +391,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
   <script src="backend-config.js"></script>
+  <script src="course-illustrations.js"></script>
   <script src="login-modal.js"></script>
   <script src="payment-success-modal.js"></script>
 <script>
@@ -366,6 +409,77 @@
     const ue = document.getElementById('navUemail'); if (ue) ue.textContent = session.user.email;
     const lb = document.getElementById('navLoginBtn');
     if (lb) { lb.textContent = 'Dashboard'; lb.href = 'dashboard.html'; }
+  })();
+</script>
+<script>
+  // This grid used to be fully static HTML — it never read admin.html's
+  // course_visibility toggles (hidden/coming_soon/sort_order) the way index.html
+  // and dashboard.html do, so a course hidden or reordered in admin silently kept
+  // showing (or not showing) the stale default here. Mirrors index.html's
+  // LIH_COURSES/visibilityPromise pattern, scoped to just the courses relevant to
+  // All Access, capped to the first 6 non-hidden ones so this compact grid doesn't
+  // grow unbounded as more courses launch — the "new courses auto-included" promise
+  // is still true, they just don't all get a card on this particular page.
+  var AA_COURSES = {
+    'prompt-gratis':      { title: '20 Prompt Dasar', icon: '📋', desc: 'Prompt siap pakai untuk email, laporan, konten sosmed — langsung copy-paste.', bnr: 'bnr-1' },
+    'mulai-claude':       { title: 'Dasar Claude AI', icon: '🤖', desc: 'Dari nol sampai bisa pakai Claude sehari-hari.', bnr: 'bnr-2' },
+    'produktivitas':      { title: 'Produktivitas Kantor', icon: '💼', desc: 'Role prompting, Claude Projects, Gmail, Sheets — hemat 3–5 jam kerja per minggu.', bnr: 'bnr-3' },
+    'content-marketing':  { title: 'Kreasi Konten Pemasaran', icon: '🏷', desc: 'Positioning, konten Instagram, copy iklan, sampai komunikasi pelanggan.', bnr: 'bnr-4' },
+    'claude-sehari-hari': { title: 'Claude untuk Sehari-hari', icon: '☀️', desc: 'Atur budget, rencanakan liburan, rapikan CV, sampai bantu ambil keputusan sehari-hari.', bnr: 'bnr-5' },
+    'strategi-marketing': { title: 'Strategi & Analisis Marketing', icon: '📈', desc: 'Analisis performa iklan, alokasi budget, dan 1 Strategi Command Center yang terus jalan.', bnr: 'bnr-5', comingSoon: true },
+    'analisis-data':      { title: 'Analisis Data & Laporan', icon: '📊', desc: 'Ubah data mentah jadi insight bisnis yang bisa dijadikan keputusan.', bnr: 'bnr-6', comingSoon: true },
+    'build-automation':   { title: 'Automasi Workflow', icon: '⚡', desc: 'Automation aktif dengan Zapier, Make.com dan n8n.', bnr: 'bnr-1', comingSoon: true },
+    'ai-powered-app':     { title: 'Build AI App Sederhana', icon: '🚀', desc: 'Web app AI live di GitHub Pages — tanpa backend.', bnr: 'bnr-2', comingSoon: true },
+    'claude-api-dev':     { title: 'Claude API untuk Developer', icon: '🔌', desc: 'Integrasikan Claude ke project nyata.', bnr: 'bnr-3', comingSoon: true },
+    'jual-produk-ai':     { title: 'Build & Monetisasi Produk AI', icon: '💰', desc: 'Dari ide ke produk AI yang menghasilkan uang.', bnr: 'bnr-4', comingSoon: true }
+  };
+  var AA_ORDER = ['prompt-gratis','mulai-claude','produktivitas','content-marketing','claude-sehari-hari','strategi-marketing','analisis-data','build-automation','ai-powered-app','claude-api-dev','jual-produk-ai'];
+
+  function aaEsc(s) { return String(s).replace(/[&<>"]/g, function(c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function aaCardHtml(slug, meta) {
+    var badge = meta.comingSoon ? '<span class="ccv2-badge badge-soon">Segera Hadir</span>' : '<span class="ccv2-badge badge-green">Tersedia</span>';
+    // Same shared illustrations as index.html/dashboard.html (course-illustrations.js) —
+    // falls back to the plain icon+gradient for any slug that doesn't have one yet.
+    var hasIllustration = typeof LIH_ILLUSTRATIONS !== 'undefined' && LIH_ILLUSTRATIONS[slug];
+    var visual = hasIllustration ? LIH_ILLUSTRATIONS[slug] : ('<div class="ccv2-icon">' + meta.icon + '</div>');
+    var bg = (typeof LIH_BG !== 'undefined' && LIH_BG[slug]) || null;
+    var bannerClass = 'ccv2-banner' + (bg ? '' : ' ' + (meta.bnr || 'bnr-1'));
+    var bannerStyle = bg ? ' style="background:' + bg + ';"' : '';
+    return '<div class="course-card-v2" data-slug="' + slug + '"><div class="' + bannerClass + '"' + bannerStyle + '>' + visual + '</div><div class="ccv2-body">' + badge + '<h3>' + aaEsc(meta.title) + '</h3><p>' + aaEsc(meta.desc) + '</p></div></div>';
+  }
+  function renderAACourses() {
+    var grid = document.getElementById('aaCoursesGrid');
+    if (!grid) return;
+    var futureNote = grid.querySelector('.future-note');
+    var cardsHtml = AA_ORDER
+      .filter(function(slug) { return AA_COURSES[slug] && !AA_COURSES[slug].hidden; })
+      .slice(0, 6)
+      .map(function(slug) { return aaCardHtml(slug, AA_COURSES[slug]); })
+      .join('');
+    grid.innerHTML = cardsHtml;
+    if (futureNote) grid.appendChild(futureNote);
+  }
+
+  (function() {
+    try {
+      var IS_DEV_ENV = /^dev-/.test(location.hostname);
+      sbClient.from('course_visibility').select('*').then(function(vis) {
+        (vis.data || []).forEach(function(row) {
+          if (!AA_COURSES[row.course_slug]) return;
+          AA_COURSES[row.course_slug].hidden = (IS_DEV_ENV && row.dev_preview) ? false : !!row.hidden;
+          AA_COURSES[row.course_slug].comingSoon = !!row.coming_soon;
+          if (row.sort_order != null) AA_COURSES[row.course_slug].sortOrder = row.sort_order;
+        });
+        var fallbackIdx = {};
+        AA_ORDER.forEach(function(slug, i) { fallbackIdx[slug] = i + 1; });
+        AA_ORDER = AA_ORDER.slice().sort(function(a, b) {
+          var oa = (AA_COURSES[a] && AA_COURSES[a].sortOrder != null) ? AA_COURSES[a].sortOrder : fallbackIdx[a];
+          var ob = (AA_COURSES[b] && AA_COURSES[b].sortOrder != null) ? AA_COURSES[b].sortOrder : fallbackIdx[b];
+          return oa - ob;
+        });
+        renderAACourses();
+      }).catch(function() { renderAACourses(); });
+    } catch (e) {}
   })();
 </script>
 <script>

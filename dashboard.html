@@ -456,6 +456,12 @@ function getProgress(slug){
   return{done:done,total:total,pct:Math.min(100,Math.round((done/total)*100))};
 }
 function getInitials(name){return name.split(' ').map(function(w){return w[0];}).slice(0,2).join('').toUpperCase();}
+// Same escaping approach as community.html/admin.html — used below wherever a
+// user-editable value (like profiles.full_name) gets inserted via innerHTML
+// instead of textContent, so a display name containing HTML can't inject markup
+// into your own page when you view it. Self-XSS only (you'd have to attack your
+// own session), but worth being consistent about.
+function escapeHtml(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
 
 async function notifyMe(btn,slug){
   btn.disabled=true;
@@ -609,7 +615,7 @@ async function _init(){
   var hour=new Date().getHours();
   var greet=hour<12?'Selamat pagi':hour<17?'Selamat siang':'Selamat malam';
   document.getElementById('greetEyebrow').textContent=greet+' ·';
-  document.getElementById('greetH1').innerHTML='Selamat datang kembali,<br><em>'+firstName+'</em>';
+  document.getElementById('greetH1').innerHTML='Selamat datang kembali,<br><em>'+escapeHtml(firstName)+'</em>';
 
   // Already fetched above (settled[1]) — loadProgress() now just processes a result
   // instead of also fetching it, so the 2nd argument skips a redundant network call.

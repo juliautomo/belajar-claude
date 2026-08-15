@@ -63,7 +63,7 @@ function withDownload(url) {
           }
         });
       })
-      .catch(function (e) { console.log('course-video: gagal memuat video', e); });
+      .catch(function (e) { console.error('course-video: gagal memuat video', e); });
 
     sbClient
       .from('course_resources')
@@ -97,7 +97,7 @@ function withDownload(url) {
             '</span></a>';
         }
       })
-      .catch(function (e) { console.log('course-video: gagal memuat PDF', e); });
+      .catch(function (e) { console.error('course-video: gagal memuat PDF', e); });
 
     // PPT slides and practice documents are two separate tables, but they render
     // into one grouped "📥 Materi Unduhan" card per module — fetched together so
@@ -151,7 +151,7 @@ function withDownload(url) {
             items + '</div>';
         });
       })
-      .catch(function (e) { console.log('course-video: gagal memuat materi unduhan', e); });
+      .catch(function (e) { console.error('course-video: gagal memuat materi unduhan', e); });
   }
 
   if (document.readyState === 'loading') {

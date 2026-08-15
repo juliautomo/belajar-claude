@@ -59,17 +59,23 @@ nav {
 .nav-user-dropdown .dropdown-divider { height: 1px; background: var(--border, #E8E8E8); margin: 4px 0; }
 .nav-user-dropdown .dropdown-signout { color: #DC2626 !important; }
 .hero { padding: 144px 40px 0; max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
-.hero-grid { display: grid; grid-template-columns: 1fr; gap: 0; align-items: center; }
+.hero-grid { display: grid; grid-template-columns: 1fr; gap: 32px; align-items: center; }
+.hero-visual { display: flex; justify-content: center; }
+.hero-visual img { width: 100%; max-width: 400px; height: auto; display: block; }
+@media (min-width: 861px) {
+  .hero-grid { grid-template-columns: 1.1fr 0.9fr; gap: 20px; }
+  .hero-visual img { max-width: 100%; }
+}
 .hero-eyebrow { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 600; color: var(--accent); background: var(--accent-dim); border: 1px solid rgba(108,71,255,0.18); padding: 5px 12px; border-radius: 100px; margin-bottom: 28px; letter-spacing: 0.02em; }
 .eyebrow-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
-.hero h1 { font-family: 'Inter', sans-serif; font-size: clamp(38px, 4.4vw, 56px); font-weight: 700; line-height: 1.12; letter-spacing: -1.5px; color: var(--ink); margin-bottom: 22px; max-width: 620px; }
+.hero h1 { font-family: var(--font); font-size: clamp(38px, 4.4vw, 56px); font-weight: 700; line-height: 1.12; letter-spacing: -1.5px; color: var(--ink); margin-bottom: 22px; max-width: 620px; }
 .hero h1 em { font-style: italic; color: var(--accent); }
 .rot-wrap { display: inline-grid; position: relative; vertical-align: bottom; }
 .rot-word { grid-area: 1 / 1; font-style: normal; font-weight: 700; color: var(--accent); white-space: nowrap; opacity: 0; transform: translateY(60%); pointer-events: none; transition: opacity 0.4s cubic-bezier(.2,.8,.2,1), transform 0.4s cubic-bezier(.2,.8,.2,1); }
 .rot-word.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
 .rot-word.leaving { opacity: 0; transform: translateY(-60%); transition: opacity 0.32s cubic-bezier(.4,0,1,.6), transform 0.32s cubic-bezier(.4,0,1,.6); }
-.hero-sub { font-family: 'Playfair Display', Georgia, serif; font-size: 16px; color: var(--ink-2); line-height: 1.75; max-width: 480px; margin-bottom: 40px; font-weight: 400; }
+.hero-sub { font-family: var(--font); font-size: 16px; color: var(--ink-2); line-height: 1.75; max-width: 560px; margin-bottom: 40px; font-weight: 400; }
 .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 .btn-dark { display: inline-flex; align-items: center; gap: 8px; background: var(--ink); color: #fff; font-family: var(--font); font-size: 13px; font-weight: 600; padding: 12px 22px; border-radius: 10px; text-decoration: none; transition: all 0.18s; box-shadow: 0 2px 10px rgba(0,0,0,0.15); }
 .btn-dark:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
@@ -272,7 +278,17 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
   section { padding: 64px 0; } .container { padding: 0 20px; }
   .cases-section { padding: 56px 0 0; }
   .cta-section { padding: 64px 20px; }
-  footer { padding: 40px 20px 24px; } .footer-inner { flex-direction: column; gap: 24px; }
+  footer { padding: 40px 20px 24px; } .footer-inner { flex-direction: column; gap: 24px; } .footer-links { flex: 0 0 auto; }
+  /* The rotating headline word uses white-space: nowrap (needed on desktop so the
+     crossfade animation doesn't reflow line height between words), but on narrow
+     screens the longest variants ("hemat waktu setiap hari.", "tingkatkan
+     produktivitas.") are wider than the viewport itself, which forced the entire
+     hero — text, buttons, and the illustration — into a horizontally-scrolling
+     451px-wide box instead of fitting the real ~390px screen. Letting it wrap here
+     fixes that at the source, rather than just shrinking the image (which was only
+     wide because its grid column had already been stretched by this same bug). */
+  .rot-word { white-space: normal; }
+  .hero-visual { min-width: 0; }
 }
 .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.55s ease, transform 0.55s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
@@ -308,17 +324,21 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
 <div class="hero">
   <div class="hero-grid">
     <div>
-      <div class="hero-eyebrow"><span class="eyebrow-dot"></span>Belajar Claude untuk Kerja & Bisnis</div>
-      <h1>Kuasai Claude AI,<br><span class="rot-wrap" id="rotWrap">
-        <span class="rot-word active" data-i="0">tingkatkan karir</span>
-        <span class="rot-word" data-i="1">hemat waktu kerja</span>
-        <span class="rot-word" data-i="2">percepat konten</span>
+      <div class="hero-eyebrow"><span class="eyebrow-dot"></span>Belajar Claude AI untuk Semua</div>
+      <h1>Belajar Claude AI,<br><span class="rot-wrap" id="rotWrap">
+        <span class="rot-word active" data-i="0">mulai dari yang sederhana.</span>
+        <span class="rot-word" data-i="1">bikin kerja lebih mudah.</span>
+        <span class="rot-word" data-i="2">hemat waktu setiap hari.</span>
+        <span class="rot-word" data-i="3">tingkatkan produktivitas.</span>
       </span></h1>
-      <p class="hero-sub">Kursus dan panduan Claude AI yang praktis — sepenuhnya dalam Bahasa Indonesia, untuk profesional, UKM, dan mahasiswa.</p>
+      <p class="hero-sub">Panduan praktis untuk pemula yang ingin mengenal Claude dan mulai menggunakannya dalam pekerjaan dan aktivitas sehari-hari.</p>
       <div class="hero-actions">
         <a href="all-access.html" class="btn-dark" id="heroActionBtn">Mulai Belajar Sekarang →</a>
         <a href="#kursus" class="btn-outline">Lihat Semua Kursus</a>
       </div>
+    </div>
+    <div class="hero-visual">
+      <img src="img/hero-illustration.webp" alt="Ilustrasi belajar Claude AI" width="1000" height="776" loading="eager" fetchpriority="high">
     </div>
   </div>
 </div>
@@ -462,6 +482,17 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
 <script src="login-modal.js"></script>
 <script src="course-illustrations.js"></script>
 <script>
+  // Same escaping approach as community.html/admin.html — used below wherever a
+  // user-editable value (like profiles.full_name) gets inserted via innerHTML
+  // instead of textContent, so a display name containing HTML can't inject markup
+  // into your own page when you view it. Self-XSS only (you'd have to attack your
+  // own session), but worth being consistent about.
+  function escapeHtml(s) {
+    var d = document.createElement('div');
+    d.textContent = s || '';
+    return d.innerHTML;
+  }
+
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
   }, { threshold: 0.1 });
@@ -731,7 +762,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         var headline = document.getElementById('ctaHeadline');
         var subtext  = document.getElementById('ctaSubtext');
         var btn      = document.getElementById('ctaBtn');
-        if (headline) headline.innerHTML = 'Selamat datang kembali, <em>' + name + '</em>';
+        if (headline) headline.innerHTML = 'Selamat datang kembali, <em>' + escapeHtml(name) + '</em>';
         // Check enrollment for subtext
         try {
           if (settled[1].status !== 'fulfilled') { throw settled[1].reason; } // same fallback as an enrollments-fetch failure always had: catch below calls revealMarketing()
