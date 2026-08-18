@@ -34,3 +34,19 @@ posthog.init('phc_BMCSvkn3cFikgae5rXDoPoPiQZf2W6HK7vFodYM6ybym', {
   api_host: 'https://us.i.posthog.com',
   defaults: '2026-05-30',
 });
+
+// Identify logged-in users so their activity ties together across pages and
+// visits. Uses the Supabase auth user ID (a random, internal UUID) as the
+// PostHog identifier — deliberately NOT email or name, so no personal data
+// is sent to PostHog. Runs on window 'load' (not immediately) because this
+// script loads early in <head>, before supabase-config.js defines `sbClient`
+// later in the page — by the 'load' event, everything has run.
+window.addEventListener('load', function () {
+  if (typeof sbClient === 'undefined' || !sbClient.auth) return; // page has no Supabase auth (e.g. legal pages)
+  sbClient.auth.getSession().then(function (res) {
+    var user = res && res.data && res.data.session && res.data.session.user;
+    if (user && user.id) {
+      posthog.identify(user.id);
+    }
+  }).catch(function () {});
+});
