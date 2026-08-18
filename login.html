@@ -61,14 +61,14 @@
     }
 
     label { display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 6px; }
-    input[type="email"], input[type="password"], input[type="text"].pw-input {
+    input[type="email"], input[type="password"], .pw-wrap input[type="text"] {
       width: 100%; padding: 12px 14px;
       border: 1.5px solid var(--border); border-radius: 10px;
       font-size: 14px; color: var(--ink); outline: none;
       transition: border-color 0.2s; margin-bottom: 14px;
       font-family: inherit; background: #fff;
     }
-    input[type="email"]:focus, input[type="password"]:focus, input[type="text"].pw-input:focus { border-color: var(--accent); }
+    input[type="email"]:focus, input[type="password"]:focus, .pw-wrap input[type="text"]:focus { border-color: var(--accent); }
 
     /* Password field with a show/hide toggle icon on the right — styled to
        look like one continuous box with the email field above it. */
