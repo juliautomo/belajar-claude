@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analisis Data & Laporan — Belajar Claude</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script>const COURSE_SLUG = 'analisis-data';</script>
+  <script src="course-video.js"></script>
+<style>
+      :root {
+    --bg: #FAFAFA; --surface: #FFFFFF; --surface-2: #F5F5F7;
+    --border: #E8E8E8; --border-strong: #D0D0D0;
+    --ink: #111111; --ink-2: #777777; --ink-3: #BBBBBB;
+    --accent: #6C47FF; --accent-2: #9B7DFF;
+    --accent-dim: rgba(108,71,255,0.08); --accent-glow: rgba(108,71,255,0.18);
+    --green: #16A34A; --green-dim: rgba(22,163,74,0.08); --green-border: rgba(22,163,74,0.2);
+    --gold: #EF9F27; --gold-pale: rgba(239,159,39,0.08);
+    --shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.05);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 2px 8px rgba(0,0,0,0.04);
+    --serif: 'Fraunces', Georgia, serif;
+    --serif-2: 'Fraunces', Georgia, serif;
+    --font: 'Geist', sans-serif;
+    --r: 14px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--bg); color: var(--ink); height: 100vh; -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* Top nav */
+  nav {
+    height: 58px; padding: 0 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(250,250,250,0.9); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border);
+    flex-shrink: 0; z-index: 10;
+  }
+  .nav-left { display: flex; align-items: center; gap: 16px; }
+  .nav-logo { font-family: var(--font); font-size: 17px; color: var(--ink); text-decoration: none;  font-weight: 700; letter-spacing: -0.4px; }
+  .nav-logo span { color: var(--accent); }
+  .nav-divider { width: 1px; height: 20px; background: var(--border); }
+  .nav-course-title { font-size: 13px; font-weight: 600; color: var(--ink-2); }
+  .nav-right { display: flex; align-items: center; gap: 14px; }
+  .nav-email { font-size: 12px; color: var(--ink-2); }
+  .nav-back { font-size: 13px; color: var(--ink-2); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+  .nav-back:hover { color: var(--ink); }
+  .logout-btn { background: transparent; border: 1px solid var(--border); color: var(--ink-2); padding: 5px 12px; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: var(--font); transition: all 0.2s; }
+  .logout-btn:hover { border-color: var(--accent); color: var(--ink); }
+
+  @media (max-width: 640px) {
+    nav { padding: 0 16px; }
+    .nav-divider, .nav-course-title, .nav-email { display: none; }
+    .nav-back { font-size: 12.5px; }
+    .logout-btn { padding: 5px 10px; font-size: 11px; }
+  }
+
+  /* Layout */
+  .layout { display: flex; flex: 1; overflow: hidden; }
+
+  /* Sidebar */
+  .sidebar {
+    width: 288px; flex-shrink: 0;
+    background: var(--surface); border-right: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    overflow-y: auto;
+  }
+  .sidebar-header { padding: 22px 20px 18px; border-bottom: 1px solid var(--border); }
+  .sidebar-course-name { font-size: 14px; font-weight: 800; color: var(--ink); line-height: 1.35; margin-bottom: 12px; }
+  .progress-bar-wrap { display: flex; align-items: center; gap: 10px; }
+  .progress-bar { flex: 1; height: 7px; background: var(--surface-2); border-radius: 10px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius: 10px; transition: width 0.5s cubic-bezier(.2,.8,.2,1); }
+  .progress-label { font-size: 11.5px; font-weight: 700; color: var(--accent); white-space: nowrap; }
+
+  .sidebar-section-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); padding: 18px 20px 8px; }
+
+  .mod-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 16px; margin: 2px 8px; border-radius: 12px; cursor: pointer;
+    transition: background 0.15s, transform 0.15s;
+  }
+  .mod-item:hover { background: var(--surface-2); }
+  .mod-item.active { background: var(--accent-dim); }
+  .mod-item.active:hover { transform: translateX(2px); }
+  .mod-check {
+    width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; margin-top: 1px;
+    border: 2px solid var(--border); display: flex; align-items: center; justify-content: center;
+    font-size: 11px; transition: all 0.25s cubic-bezier(.2,.8,.2,1); background: #fff;
+  }
+  .mod-item.done .mod-check { background: var(--green); border-color: var(--green); color: #fff; }
+  .mod-item.active .mod-check { border-color: var(--accent); background: #fff; color: var(--accent); font-weight: 800; }
+  .mod-item-info { flex: 1; }
+  .mod-item-title { font-size: 12.5px; font-weight: 600; color: var(--ink); line-height: 1.4; margin-bottom: 2px; }
+  .mod-item.active .mod-item-title { color: var(--accent); font-weight: 700; }
+  .mod-item-sub { font-size: 11px; color: var(--ink-3); }
+
+  .sidebar-footer { margin-top: auto; padding: 18px 20px; border-top: 1px solid var(--border); }
+  .sidebar-tools { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tool-chip { font-size: 10.5px; font-weight: 600; background: var(--accent-dim); color: var(--accent); padding: 4px 10px; border-radius: 100px; }
+
+  /* Main content */
+  .main { flex: 1; overflow-y: auto; background: var(--bg); }
+  .main-inner { max-width: 880px; margin: 0 auto; padding: 40px 40px 80px; }
+
+  .breadcrumb { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 700; color: var(--accent); background: var(--accent-dim); border: 1px solid rgba(108,71,255,0.18); padding: 5px 12px; border-radius: 100px; margin-bottom: 18px; letter-spacing: 0.02em; }
+  .breadcrumb span { color: inherit; }
+  .breadcrumb strong { color: inherit; font-weight: 800; }
+
+  .module-panel { display: none; }
+  .module-panel.active { display: block; }
+
+  .module-title { font-family: var(--serif-2); font-size: 34px; font-weight: 400; letter-spacing: -0.8px; color: var(--ink); margin-bottom: 8px; line-height: 1.15; }
+  .module-subtitle { font-size: 14.5px; color: var(--ink-2); margin-bottom: 24px; line-height: 1.6; }
+
+  .module-desc-box {
+    background: var(--accent-dim); border: 1px solid rgba(108,71,255,0.15); border-radius: 14px;
+    padding: 20px 24px; margin-bottom: 24px;
+    font-size: 14px; color: var(--ink); line-height: 1.8;
+  }
+  .module-desc-box strong { color: var(--accent); }
+
+  .prompt-section { margin-bottom: 22px; }
+  .prompt-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--ink-3); margin-bottom: 8px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .prompt-section.latihan { background: var(--accent-dim); border: 1.5px solid rgba(108,71,255,0.25); border-radius: 18px; padding: 20px 22px 22px; }
+  .prompt-section.latihan .prompt-label { font-family: var(--font); font-size: 17px; font-weight: 700; text-transform: none; letter-spacing: -0.2px; color: var(--accent); margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid rgba(108,71,255,0.15); }
+  .prompt-box {
+    background: var(--ink); border-radius: 14px;
+    padding: 18px 52px 18px 18px; font-size: 13px; color: #f2f2f2;
+    line-height: 1.75; font-family: 'SF Mono', Consolas, monospace;
+    white-space: pre-wrap; position: relative;
+  }
+  .copy-btn {
+    position: absolute; top: 12px; right: 12px;
+    background: rgba(255,255,255,0.12); color: #fff; border: none; border-radius: 8px;
+    padding: 6px 12px; font-size: 11px; font-weight: 700; cursor: pointer;
+    font-family: var(--font); transition: background 0.2s;
+  }
+  .copy-btn:hover { background: var(--accent); }
+  .copy-btn.copied { background: var(--green); animation: btnPop 0.35s ease; }
+  @keyframes btnPop { 0% { transform: scale(1); } 50% { transform: scale(0.88); } 100% { transform: scale(1); } }
+
+  .case-box {
+    background: #fff; border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px 18px; margin-top: 14px; position: relative; padding-left: 22px;
+  }
+  .case-box::before { content: ''; position: absolute; left: 0; top: 12px; bottom: 12px; width: 4px; border-radius: 4px; background: linear-gradient(180deg, var(--accent), var(--accent-2)); }
+  .case-role { font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .case-box p { font-size: 13px; color: var(--ink); line-height: 1.65; }
+
+  /* Output / completion box */
+  .output-box {
+    background: var(--green-dim); border: 1px solid var(--green-border);
+    border-radius: 14px; padding: 20px 22px; margin-top: 24px;
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .output-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--green); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .output-box h3 { font-size: 14.5px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+  .output-box p { font-size: 13px; color: var(--ink-2); line-height: 1.65; }
+
+  /* Tip / analogy / warning box */
+  .tip-box { background: var(--gold-pale); border: 1px solid rgba(239,159,39,0.22); border-radius: 14px; padding: 16px 18px; margin: 16px 0; }
+  .tip-box .tip-label { font-size: 10px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .tip-box p { font-size: 13px; color: var(--ink); line-height: 1.65; }
+  .tip-box.warn { background: rgba(220,38,38,0.05); border-color: rgba(220,38,38,0.18); }
+  .tip-box.warn .tip-label { color: #DC2626; }
+  .mistake-list { list-style: none; margin: 4px 0 0; }
+  .mistake-list li { font-size: 13px; color: var(--ink); line-height: 1.65; padding-left: 28px; position: relative; margin-bottom: 9px; }
+  .mistake-list li:last-child { margin-bottom: 0; }
+  .mistake-list li::before { content: "✕"; position: absolute; left: 0; top: 1px; width: 18px; height: 18px; border-radius: 50%; background: rgba(220,38,38,0.12); color: #DC2626; font-size: 9.5px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+  .mistake-list li strong { color: var(--ink); }
+
+  /* Ringkasan modul */
+  .summary-box { background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 20px 0; }
+  .summary-box .summary-label { font-size: 10px; font-weight: 700; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; }
+  .summary-box ul { list-style: none; }
+  .summary-box li { font-size: 13px; color: var(--ink); line-height: 1.7; padding-left: 26px; position: relative; margin-bottom: 8px; }
+  .summary-box li:last-child { margin-bottom: 0; }
+  .summary-box li::before { content: "✓"; position: absolute; left: 0; top: 1px; width: 18px; height: 18px; border-radius: 6px; background: var(--green-dim); color: var(--green); font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+
+  /* Comparison table */
+  .compare-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 12.5px; border-radius: 12px; overflow: hidden; }
+  .compare-table th { background: var(--ink); color: #fff; text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 700; }
+  .compare-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--ink); vertical-align: top; line-height: 1.55; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table-wrap { overflow: hidden; border-radius: 12px; border: 1px solid var(--border); margin: 14px 0; }
+
+  /* Step-by-step row */
+  .step-row { display: flex; flex-wrap: wrap; gap: 12px; margin: 4px 0 20px; }
+  .step-card { flex: 1; min-width: 140px; background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 16px; text-align: center; }
+  .step-num { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
+  .step-card p { font-size: 12px; color: var(--ink-2); line-height: 1.5; }
+
+  /* Two-column compare cards */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 4px 0 14px; }
+  .two-col .col-card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; }
+  .two-col .col-card.highlight { border-color: rgba(22,163,74,0.3); background: var(--green-dim); }
+  .two-col .col-card h4 { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+  .two-col .col-card ul { list-style: none; }
+  .two-col .col-card li { font-size: 12.5px; color: var(--ink-2); line-height: 1.7; padding-left: 14px; position: relative; margin-bottom: 3px; }
+  .two-col .col-card li::before { content: "\2013"; position: absolute; left: 0; }
+  .two-col .col-card p { font-size: 12.5px; color: var(--ink-2); line-height: 1.7; }
+
+  /* Grid of small info cards (roles, interface areas, etc.) */
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0; }
+  .info-card { background: var(--accent-dim); border-radius: 12px; padding: 14px 16px; }
+  .info-card strong { font-size: 12.5px; color: var(--ink); display: block; margin-bottom: 3px; }
+  .info-card span { font-size: 11.5px; color: var(--ink-2); }
+
+  .section-heading { font-family: var(--serif-2); font-size: 21px; font-weight: 400; color: var(--ink); margin: 32px 0 6px; letter-spacing: -0.3px; }
+  .body-text { font-size: 13.5px; color: var(--ink-2); line-height: 1.75; margin-bottom: 10px; }
+
+  @media (max-width: 600px) {
+    .two-col, .info-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Next courses (shown on last panel) */
+  .next-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-3); margin: 28px 0 12px; }
+  .next-card {
+    background: #fff; border: 1px solid var(--border); border-radius: 14px;
+    padding: 16px 20px; display: flex; align-items: center; gap: 14px;
+    text-decoration: none; margin-bottom: 10px; transition: border-color 0.2s, transform 0.2s;
+  }
+  .next-card:hover { border-color: rgba(108,71,255,0.3); transform: translateY(-2px); }
+  .next-icon { font-size: 26px; flex-shrink: 0; }
+  .next-info { flex: 1; }
+  .next-info h4 { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+  .next-info p  { font-size: 12px; color: var(--ink-2); }
+  .next-arrow { font-size: 16px; color: var(--accent); }
+
+  /* Bottom navigation */
+  .nav-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border);
+  }
+  .nav-btn {
+    display: flex; align-items: center; gap: 8px;
+    padding: 11px 20px; border-radius: 10px; font-size: 13px; font-weight: 600;
+    cursor: pointer; border: 1.5px solid var(--border); transition: all 0.18s;
+    background: #fff; color: var(--ink); font-family: var(--font);
+  }
+  .nav-btn:hover { border-color: var(--border-strong); }
+  .nav-btn:disabled { opacity: 0.35; cursor: default; pointer-events: none; }
+  .nav-btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .nav-btn.primary:hover { background: var(--accent); border-color: var(--accent); transform: translateY(-1px); }
+  .nav-counter { font-size: 12px; color: var(--ink-3); font-weight: 600; }
+
+  /* Loading */
+  .loading { display: flex; align-items: center; justify-content: center; height: 100vh; font-size: 14px; color: var(--ink-2); }
+
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main-inner { padding: 24px 16px 48px; }
+    .module-title { font-size: 26px; }
+  }
+
+    /* Feedback panel */
+    .feedback-panel { max-width: 600px; }
+    .completion-badge { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 24px; background: var(--green-dim); border: 1px solid rgba(29,158,117,0.2); border-radius: 16px; margin-bottom: 32px; }
+    .completion-badge .badge-check { width: 56px; height: 56px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+    .completion-badge .badge-check svg { width: 26px; height: 26px; color: #fff; }
+    .completion-badge h2 { font-family: var(--serif); font-size: 26px; font-weight: 400; color: var(--ink); margin-bottom: 8px; letter-spacing: -0.3px; }
+    .completion-badge p { font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+    .feedback-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 28px; box-shadow: var(--shadow-sm); }
+    .feedback-card h3 { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+    .feedback-card .feedback-sub { font-size: 13px; color: var(--ink-2); margin-bottom: 24px; }
+    .star-row { display: flex; gap: 8px; margin-bottom: 24px; }
+    .star-btn { background: none; border: none; cursor: pointer; padding: 4px; font-size: 28px; color: var(--border); transition: color 0.15s, transform 0.1s; line-height: 1; }
+    .star-btn:hover, .star-btn.active { color: var(--gold); transform: scale(1.1); }
+    .feedback-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--ink-2); margin-bottom: 8px; }
+    .feedback-textarea { width: 100%; border: 1.5px solid var(--border); border-radius: 10px; padding: 12px 14px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: var(--ink); resize: vertical; min-height: 90px; background: var(--bg); transition: border-color 0.15s; outline: none; }
+    .feedback-textarea:focus { border-color: var(--ink); background: #fff; }
+    .feedback-submit { display: block; width: 100%; margin-top: 20px; background: var(--ink); color: #fff; border: none; padding: 14px; border-radius: 10px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+    .feedback-submit:hover { background: var(--accent); }
+    .feedback-submit:disabled { opacity: 0.5; cursor: default; }
+    .feedback-done { display: none; text-align: center; padding: 24px; }
+    .feedback-done p { font-size: 14px; color: var(--ink-2); margin-bottom: 16px; }
+
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <a href="index.html" class="nav-logo">belajar<span>claude</span></a>
+    <div class="nav-divider"></div>
+    <span class="nav-course-title">Analisis Data & Laporan</span>
+  </div>
+  <div class="nav-right">
+    <a href="dashboard.html" class="nav-back">← Dashboard</a>
+    <span class="nav-email" id="navEmail"></span>
+    <button class="logout-btn" onclick="logout()">Keluar</button>
+  </div>
+</nav>
+
+<div id="loadingScreen" class="loading">Memuat materi kursus...</div>
+
+<div class="layout" id="mainLayout" style="display:none;">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-course-name">Analisis Data & Laporan</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        <span class="progress-label" id="progressLabel">0/7</span>
+      </div>
+    </div>
+    <div id="pdf-download-slot"></div>
+
+    <div class="sidebar-section-label">Materi Kursus</div>
+
+    <div class="mod-item active" id="nav-mod1" onclick="showModule(1)">
+      <div class="mod-check" id="check1"></div>
+      <div class="mod-item-info">
+        <div class="mod-item-title">Apa itu Analisis Data?</div>
+        <div class="mod-item-sub">Modul 1 · Fondasi</div>
+      </div>
+    </div>
+    <div class="mod-item" id="nav-mod2" onclick="showModule(2)">
+      <div class="mod-check" id="check2"></div>
+      <div class="mod-item-info">
+        <div class="mod-item-title">Upload & Baca Data</div>
+        <div class="mod-item-sub">Modul 2 · Kesiapan Data</div>
+      </div>
+    </div>
+    <div class="mod-item" id="nav-mod3" onclick="showModule(3)">
+      <div class="mod-check" id="check3"></div>
+      <div class="mod-item-info">
+        <div class="mod-item-title">Prompt yang Pas untuk Analisis Data</div>
+        <div class="mod-item-sub">Modul 3 · Framework K-P-I</div>
+      </div>
+    </div>
+    <div class="mod-item" id="nav-mod4" onclick="showModule(4)">
+      <div class="mod-check" id="check4"></div>
+      <div class="mod-item-info">
+        <div class="mod-item-title">Mengolah & Menyusun Data Spreadsheet</div>
+        <div class="mod-item-sub">Modul 4 · Spreadsheet</div>
+      </div>
+    </div>
+    <div class="mod-item" id="nav-mod5" onclick="showModule(5)">
+      <div class="mod-check" id="check5"></div>
+      <div class="mod-item-info">
+        <div class="mod-item-title">Dari Analisis ke Laporan</div>
+        <div class="mod-item-sub">Modul 5 · Pelaporan</div>
+      </div>
+    </div>
+    <div class="mod-item" id="nav-mod6" onclick="showModule(6)">
+      <div class="mod-check" id="check6"></div>
+      <div class="mod-item-info">
+        <div class="mod-item-title">Dari Angka ke Grafik</div>
+        <div class="mod-item-sub">Modul 6 · Visualisasi</div>
+      </div>
+    </div>
+    <div class="mod-item" id="nav-mod7" onclick="showModule(7)">
+      <div class="mod-check" id="check7"></div>
+      <div class="mod-item-info">
+        <div class="mod-item-title">Cek Ulang Sebelum Percaya</div>
+        <div class="mod-item-sub">Modul 7 · Kontrol Kualitas</div>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-section-label" style="padding:0 0 8px;">Tools yang dipakai</div>
+      <div class="sidebar-tools">
+        <span class="tool-chip">Claude.ai</span>
+        <span class="tool-chip">Claude Artifacts</span>
+        <span class="tool-chip">Google Sheets</span>
+      </div>
+    </div>
+    <div class="mod-feedback">
+      <div class="mod-item" id="nav-mod8" onclick="showModule(8)">
+        <div class="mod-check" id="check8">★</div>
+        <div><div class="mod-item-title">Feedback</div><div class="mod-item-sub">Nilai kursus ini</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <div class="main-inner">
+
+      <!-- MODULE 1 -->
+      <div class="module-panel active" id="panel1">
+        <div class="video-slot" id="video-slot-1"></div>
+        <div class="breadcrumb">
+          <span>Analisis Data & Laporan</span>
+          <span>›</span>
+          <strong>Modul 1</strong>
+        </div>
+        <h1 class="module-title">Apa itu Analisis Data?</h1>
+        <p class="module-subtitle">Kenalan dengan 5 jenis analisis data, dan gimana Claude beda dari Excel</p>
+        <div class="downloads-slot" id="downloads-slot-1"></div>
+
+        <div class="module-desc-box">
+          Banyak yang mikir "analisis data" itu kerjaan khusus buat data analyst atau orang IT yang jago rumus Excel dan SQL. Padahal, hampir semua orang yang sehari-hari berurusan dengan data — sekecil apapun datanya — sebenarnya butuh analisis data. Bedanya cuma di skala dan alatnya. Sepanjang kursus ini, kita pakai satu studi kasus yang sama: kamu punya usaha kecil jualan roti online, dan mau pakai Claude buat memahami data penjualan, review pelanggan, dan performa produkmu.
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">💡 Analogi</div>
+          <p>Analisis data itu kayak nanya "kenapa" dan "terus gimana" ke tumpukan angka atau catatan. Kamu nggak harus jadi ahli statistik buat nanya pertanyaan yang tepat — kamu cuma butuh tahu apa yang mau kamu ketahui. Sisanya, Claude yang bantu cari jawabannya dari data yang kamu kasih.</p>
+        </div>
+
+        <div class="section-heading">5 Jenis Analisis Data — dan yang Paling Claude Bisa Bantu</div>
+        <p class="body-text">Ada 4 jenis analisis data yang umum dipakai di dunia kerja, plus 1 jenis yang lebih baru dan justru jadi kekuatan utama Claude.</p>
+        <div class="compare-table-wrap">
+          <table class="compare-table">
+            <tr><th>Jenis</th><th>Pertanyaan yang Dijawab</th><th>Contoh</th></tr>
+            <tr><td>Deskriptif</td><td>Apa yang terjadi?</td><td>"Berapa total penjualan bulan lalu?"</td></tr>
+            <tr><td>Diagnostik</td><td>Kenapa itu terjadi?</td><td>"Kenapa penjualan turun di minggu ke-3?"</td></tr>
+            <tr><td>Prediktif</td><td>Apa yang mungkin terjadi selanjutnya?</td><td>"Kira-kira berapa penjualan bulan depan?"</td></tr>
+            <tr><td>Preskriptif</td><td>Sebaiknya ngapain?</td><td>"Produk apa yang perlu ditambah stoknya?"</td></tr>
+            <tr><td>Kognitif <em>(lebih baru)</em></td><td>Apa makna di balik data yang berantakan?</td><td>"Apa keluhan yang paling sering muncul di review pelanggan?"</td></tr>
+          </table>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">📌 Catatan soal "Kognitif"</div>
+          <p>Istilah ini lebih baru dibanding empat jenis lainnya. Ini justru area yang paling pas buat Claude: baca teks yang berantakan (review, transkrip wawancara, catatan rapat) dan menemukan pola atau makna di baliknya — sesuatu yang susah dilakukan spreadsheet biasa. Fokus kursus ini: analisis Deskriptif, Diagnostik, dan Kognitif — karena paling sering dibutuhkan orang non-teknis dan paling bisa langsung dipakai tanpa keahlian statistik.</p>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-card"><strong>Karyawan kantoran</strong><span>Bikin laporan penjualan bulanan, rekap hasil survei internal, ringkasan performa tim</span></div>
+          <div class="info-card"><strong>Pemilik usaha kecil</strong><span>Cek produk mana yang paling laku, baca feedback pelanggan, pantau tren penjualan</span></div>
+          <div class="info-card"><strong>Mahasiswa</strong><span>Olah data kuesioner penelitian, rangkum hasil wawancara, analisis data buat skripsi/tugas akhir</span></div>
+          <div class="info-card"><strong>Catatan penting</strong><span>Hasil analisis dari Claude tetap perlu kamu validasi ulang sebelum dipakai untuk keputusan penting — anggap ini draft dari rekan kerja yang cekatan, bukan keputusan final</span></div>
+        </div>
+
+        <div class="section-heading">Claude vs Excel: Apa Bedanya?</div>
+        <div class="two-col">
+          <div class="col-card">
+            <h4>Excel / Spreadsheet Biasa</h4>
+            <ul>
+              <li>Kamu yang harus tahu rumus/fungsi yang tepat (VLOOKUP, pivot table, dll)</li>
+              <li>Susah baca data yang nggak terstruktur (teks bebas, review, catatan)</li>
+              <li>Kamu yang harus menyusun sendiri kesimpulan dari angka mentah</li>
+            </ul>
+          </div>
+          <div class="col-card highlight">
+            <h4>Claude</h4>
+            <ul>
+              <li>Cukup jelaskan apa yang mau kamu tahu, pakai bahasa sehari-hari</li>
+              <li>Bisa baca dan menyimpulkan dari teks yang berantakan</li>
+              <li>Bisa langsung kasih insight dan narasi, bukan cuma angka</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="section-heading">Bukan Cuma CSV — Apa Aja yang Bisa Dibaca Claude</div>
+        <p class="body-text">Data yang kamu kasih ke Claude nggak harus rapi dalam bentuk CSV. Cara kasih ke Claude: klik ikon upload/attach di kolom chat, drag-and-drop file langsung ke jendela chat, atau paste teksnya langsung kalau datanya pendek.</p>
+        <div class="info-grid">
+          <div class="info-card"><strong>CSV</strong><span>Format paling umum buat data tabel</span></div>
+          <div class="info-card"><strong>Excel (.xlsx)</strong><span>Termasuk file yang punya beberapa sheet sekaligus</span></div>
+          <div class="info-card"><strong>Google Sheets</strong><span>Tinggal upload filenya, atau kasih linknya</span></div>
+          <div class="info-card"><strong>PDF berisi tabel</strong><span>Misalnya laporan atau invoice</span></div>
+          <div class="info-card"><strong>Teks biasa</strong><span>Di-paste langsung dari email, catatan, atau chat — nggak harus dalam bentuk file</span></div>
+        </div>
+
+        <div class="two-col">
+          <div class="col-card highlight">
+            <h4>Biasanya Lancar</h4>
+            <ul>
+              <li>File dengan header kolom yang jelas</li>
+              <li>Ukuran wajar (bukan jutaan baris)</li>
+              <li>Campuran data angka dan teks bebas</li>
+            </ul>
+          </div>
+          <div class="col-card">
+            <h4>Perlu Hati-Hati</h4>
+            <ul>
+              <li>Hasil scan/foto tanpa teks yang jelas</li>
+              <li>File sangat besar — kemungkinan cuma sebagian yang terbaca</li>
+              <li>Merged cells berantakan atau banyak sheet tersembunyi</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">💡 Kebiasaan Praktis</div>
+          <p>Kalau ragu, minta Claude konfirmasi dulu berapa baris dan kolom yang berhasil dia baca — supaya kamu tahu dia "melihat" data yang sama kayak kamu, sebelum lanjut nanya insight. Ini bakal kita latih lebih detail di Modul 2.</p>
+        </div>
+
+        <div class="summary-box">
+          <div class="summary-label">Ringkasan Modul 1</div>
+          <ul>
+            <li>Analisis data bukan cuma buat data analyst — karyawan kantoran, pemilik usaha, dan mahasiswa semua bisa pakai</li>
+            <li>Ada 4 jenis analisis "klasik" (deskriptif, diagnostik, prediktif, preskriptif) + 1 jenis lebih baru (kognitif) yang jadi kekuatan Claude</li>
+            <li>Claude beda dari Excel karena bisa dikasih instruksi bahasa biasa dan bisa baca data yang nggak terstruktur</li>
+            <li>Claude bisa baca banyak format file, tapi tetap ada batasan yang perlu dicek ulang</li>
+            <li>Hasil dari Claude tetap perlu divalidasi ulang, dan makin lengkap konteks yang kamu kasih, makin akurat hasilnya</li>
+          </ul>
+        </div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p><strong>Data contoh (15 review pelanggan roti online, dipersingkat jadi 6 baris):</strong><br>
+            1. "Croissant-nya enak banget, tapi pengiriman telat 2 hari."<br>
+            2. "Roti tawar gandumnya favorit keluarga, selalu stok ulang."<br>
+            3. "Kemasan penyok pas sampai, roti jadi gepeng."<br>
+            4. "Harga naik tapi porsinya kok jadi lebih kecil ya."<br>
+            5. "Brownies-nya juara, packing rapi, cepat sampai."<br>
+            6. "CS lambat balas chat, tapi rotinya tetap enak."</p>
+          </div>
+          <div class="prompt-box">Tolong bantu saya analisis review ini. Tandai masing-masing review sebagai
+positif, negatif, atau netral, dan kasih tau action item yang perlu dilakukan.
+
+[PASTE DATA REVIEW DI ATAS]<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>1 kategorisasi review (positif/negatif/netral) plus daftar action item. Kamu juga sudah lihat langsung gimana Claude membaca data yang nggak terstruktur (analisis kognitif).</p>
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">💡 Tips</div>
+          <p>Jangan mulai dari "analisis apa yang keren", mulai dari "keputusan apa yang mau aku ambil". Analisis data paling berguna kalau kamu sudah tahu dulu pertanyaan yang mau dijawab.</p>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" disabled>← Sebelumnya</button>
+          <span class="nav-counter">1 / 7</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <!-- MODULE 2 -->
+      <div class="module-panel" id="panel2">
+        <div class="video-slot" id="video-slot-2"></div>
+        <div class="breadcrumb"><span>Analisis Data & Laporan</span><span>›</span><strong>Modul 2</strong></div>
+        <h1 class="module-title">Upload & Baca Data</h1>
+        <p class="module-subtitle">Kebiasaan cek & rapikan data dulu, sebelum mulai nanya insight</p>
+        <div class="downloads-slot" id="downloads-slot-2"></div>
+
+        <div class="module-desc-box">
+          Di Modul 1 kamu udah tau jenis file apa aja yang bisa dibaca Claude, dan kenapa kadang perlu hati-hati. Modul ini fokus ke kebiasaan praktis: gimana caranya mastiin Claude "melihat" data kamu dengan benar, sebelum kamu mulai nanya insight pakai framework K-P-I yang akan kita bahas di Modul 3.
+        </div>
+
+        <div class="section-heading">Kebiasaan Wajib: Minta Ringkasan Awal Dulu</div>
+        <p class="body-text">Sebelum langsung nembak pertanyaan besar, biasain cek dulu apakah Claude "lihat" data kamu dengan benar. Ini langkah yang sering dilewatin, padahal cuma butuh 1 prompt tambahan.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Prompt Ringkasan Awal</div>
+          <div class="prompt-box">Ini data saya. Ada berapa baris dan kolom? Jelasin masing-masing kolom
+isinya apa, dan ada yang kosong atau kelihatan aneh nggak?<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">📌 Kenapa Ini Penting</div>
+          <p>Kalau Claude cuma "kebaca" sebagian data (misalnya karena file kegedean atau ada sheet yang kelewat), kamu bakal dapat analisis yang keliatannya meyakinkan tapi sebenarnya berdasarkan data yang nggak lengkap.</p>
+        </div>
+
+        <div class="section-heading">Data Berantakan? Minta Dirapikan Dulu</div>
+        <p class="body-text">Data mentah — apalagi hasil export langsung dari sistem kasir atau form — biasanya nggak serapi contoh-contoh di modul sebelumnya. Beberapa masalah umum:</p>
+        <ul class="mistake-list">
+          <li><strong>Format tanggal beda-beda</strong> dalam satu file (2026-06-02, 03/06/2026, 5 Juni 2026)</li>
+          <li><strong>Nama produk/kategori yang sama ditulis beda-beda</strong> (huruf besar-kecil, typo, spasi ganda)</li>
+          <li><strong>Angka dengan simbol mata uang atau pemisah ribuan yang nggak konsisten</strong> (Rp25000, 25,000, 25.000)</li>
+          <li><strong>Baris duplikat atau kosong</strong></li>
+        </ul>
+
+        <div class="prompt-section" style="margin-top:16px;">
+          <div class="prompt-label">📝 Prompt Rapikan Data</div>
+          <div class="prompt-box">Rapikan data ini: samakan semua format tanggal jadi DD/MM/YYYY,
+samakan penulisan nama produk yang sama tapi ditulis beda-beda,
+dan tandai kalau ada baris yang kelihatan duplikat.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">📌 Catatan</div>
+          <p>Minta Claude tunjukkan apa aja yang diubah — jangan langsung percaya semua perubahan otomatis benar. Ini masih sejalan dengan pesan validasi dari Modul 1: hasil Claude tetap perlu dicek, apalagi kalau dia yang mengubah data aslimu.</p>
+        </div>
+
+        <div class="summary-box">
+          <div class="summary-label">Ringkasan Modul 2</div>
+          <ul>
+            <li>Sebelum nanya insight, biasain minta Claude ringkas dulu: berapa baris/kolom, isi tiap kolom apa, ada yang kosong/aneh nggak</li>
+            <li>Ini memastikan konteks yang nanti kamu pakai di framework K-P-I (Modul 3) sesuai dengan apa yang benar-benar dibaca Claude</li>
+            <li>Data mentah biasanya berantakan — format tanggal, penulisan nama produk, dan format angka yang nggak konsisten adalah masalah paling umum</li>
+            <li>Minta Claude rapikan datanya, tapi tetap cek hasil perubahannya — jangan langsung dipercaya begitu saja</li>
+          </ul>
+        </div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p><strong>Data contoh (transaksi toko roti, sengaja belum dirapikan):</strong><br>
+            2026-06-02, Roti Tawar Gandum, Rp25000<br>
+            03/06/2026, roti tawar gandum, 25,000<br>
+            5 Juni 2026, CROISSANT, Rp 18.000<br>
+            2026-06-06, Brownies , 22000<br>
+            2026-06-06, Brownies , 22000 <em>(baris duplikat)</em></p>
+          </div>
+          <p class="body-text">Upload/paste data di atas ke Claude, lalu jalankan 2 langkah berurutan: (1) minta ringkasan awal, (2) minta Claude rapikan datanya. Bandingkan data sebelum dan sesudah dirapikan, dan cek apakah Claude kasih tau dengan jelas apa aja yang dia ubah.</p>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>1 ringkasan awal data dari Claude, dan 1 versi data yang sudah dirapikan — lengkap dengan penjelasan apa aja yang diubah. Kamu jadi punya kebiasaan "cek dulu sebelum analisis" yang bisa dipakai ke data apapun ke depannya.</p>
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">💡 Tips</div>
+          <p>Kalau datamu bakal dipakai buat keputusan penting, simpan juga versi asli sebelum dirapikan. Gampang buat balik cek kalau ternyata ada perubahan yang salah.</p>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">2 / 7</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <!-- MODULE 3 -->
+      <div class="module-panel" id="panel3">
+        <div class="video-slot" id="video-slot-3"></div>
+        <div class="breadcrumb"><span>Analisis Data & Laporan</span><span>›</span><strong>Modul 3</strong></div>
+        <h1 class="module-title">Prompt yang Pas untuk Analisis Data</h1>
+        <p class="module-subtitle">Framework K-P-I: Konteks Bisnis + Pertanyaan Spesifik + Jenis Insight</p>
+        <div class="downloads-slot" id="downloads-slot-3"></div>
+
+        <div class="module-desc-box">
+          Di Modul 2, kamu udah pastikan Claude bisa "melihat" datamu dengan benar. Tapi itu aja belum cukup — kamu juga perlu tau cara nanya yang tepat, supaya jawabannya benar-benar jawab pertanyaan yang ada di kepala kamu.
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">💡 Analogi</div>
+          <p>Coba bayangin kamu kasih Claude prompt kayak gini: "Analisa data penjualan toko roti aku dong." Ini sama kayak nyuruh karyawan baru "tolong cek data penjualan" tanpa bilang mau dicek apa. Dia bisa aja balik dengan laporan 10 halaman yang isinya nggak ada yang kamu butuhin. Makin spesifik kamu nanya, makin tajam jawaban yang kamu dapat.</p>
+        </div>
+
+        <div class="section-heading">Framework K-P-I</div>
+        <div class="two-col">
+          <div class="col-card">
+            <h4>Prompt Buruk</h4>
+            <p>"Analisa data penjualan toko roti aku dong."</p>
+            <p style="margin-top:8px;"><strong>Hasil:</strong> tidak ada konteks, pertanyaan, atau jenis insight yang jelas — hasilnya generik.</p>
+          </div>
+          <div class="col-card highlight">
+            <h4>Prompt K-P-I</h4>
+            <p>"Saya jualan roti online, penjualan Juni turun dibanding Mei. Saya sempat naikin harga beberapa produk di pertengahan bulan. Produk apa yang penurunannya paling signifikan, dan apakah waktunya berbarengan dengan kenaikan harga? Saya butuh diagnosis, bukan cuma angka penurunannya, tapi juga dugaan penyebabnya."</p>
+            <p style="margin-top:8px;"><strong>Hasil:</strong> konteks, pertanyaan spesifik, dan jenis insight semuanya jelas — hasilnya tajam dan langsung terpakai.</p>
+          </div>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-card"><strong>Konteks Bisnis</strong><span>Situasi di balik data: jenis usaha, periode waktu, hal khusus yang lagi terjadi</span></div>
+          <div class="info-card"><strong>Pertanyaan Spesifik</strong><span>Bukan "analisa data ini", tapi pertanyaan yang bisa dijawab dengan jelas</span></div>
+          <div class="info-card"><strong>Jenis Insight</strong><span>Mau angka aja, penyebabnya, atau rekomendasi tindakan? — nyambung ke 5 jenis analisis di Modul 1</span></div>
+        </div>
+
+        <div class="section-heading">Prompt Siap Pakai untuk Berbagai Kebutuhan</div>
+        <p class="body-text">Selain buat mendiagnosis masalah, framework K-P-I ini juga bisa dipakai untuk kebutuhan analisis data lain sehari-hari:</p>
+        <div class="info-grid">
+          <div class="info-card"><strong>Ringkasan & deteksi anomali</strong><span>"Ini data penjualan roti saya 3 bulan terakhir. Ringkas tren utamanya, dan kasih tau kalau ada angka yang kelihatan aneh."</span></div>
+          <div class="info-card"><strong>Bandingkan performa dua periode</strong><span>"Bandingkan penjualan Mei dan Juni per produk. Urutkan dari yang paling perlu diperhatikan."</span></div>
+          <div class="info-card"><strong>Cari pola atau korelasi</strong><span>"Apakah ada pola tertentu yang penjualannya selalu naik/turun bareng? Kasih tau kalau ada."</span></div>
+          <div class="info-card"><strong>Ide visualisasi</strong><span>"Saya punya data penjualan per produk per bulan. Kasih 2-3 ide cara menampilkannya biar gampang dipahami di rapat tim."</span></div>
+          <div class="info-card"><strong>Cek ulang hasil analisis</strong><span>"Ini kesimpulan saya soal kenapa penjualan turun bulan ini. Ada hal yang mungkin saya lewatkan?"</span></div>
+          <div class="info-card"><strong>Ringkasan eksekutif</strong><span>"Dari temuan ini, tolong buatkan ringkasan 2 paragraf yang bisa saya kirim ke atasan saya, tanpa istilah teknis."</span></div>
+        </div>
+
+        <div class="summary-box">
+          <div class="summary-label">Ringkasan Modul 3</div>
+          <ul>
+            <li>Pertanyaan yang terlalu umum ke data menghasilkan analisis yang generik</li>
+            <li>Framework K-P-I: Konteks Bisnis + Pertanyaan Spesifik + Jenis Insight</li>
+            <li>"Jenis Insight" nyambung ke 5 jenis analisis di Modul 1 — makin jelas jenisnya, makin tepat kedalaman jawaban Claude</li>
+            <li>Framework yang sama bisa dipakai untuk: ringkasan tren, bandingkan periode, cari pola, ide visualisasi, cek ulang analisis, ringkasan eksekutif</li>
+          </ul>
+        </div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p><strong>Data contoh (penjualan mingguan 5 produk, Mei–Juni):</strong><br>
+            Minggu 1 Mei: Roti Sobek Keju 78, Brownies 58, Roti Tawar 90, Donat 65, Croissant 70<br>
+            Minggu 3 Juni (harga Roti Sobek Keju & Brownies naik 15-18%): Roti Sobek Keju 48, Brownies 35, Roti Tawar 88, Donat 63, Croissant 72</p>
+          </div>
+          <p class="body-text">Tulis ulang prompt buruk "Analisa data penjualan toko roti aku dong" pakai framework K-P-I. Konteksnya: penjualan Juni turun dibanding Mei, dan kamu sempat naikin harga beberapa produk di pertengahan bulan. Tentukan sendiri pertanyaan spesifik dan jenis insight yang kamu mau, lalu kirim ke Claude bareng data di atas.</p>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>1 prompt lengkap dengan 3 elemen K-P-I, dan 1 hasil analisis nyata dari Claude berdasarkan data yang kamu upload — bukan cuma prompt di atas kertas, tapi kamu sudah lihat langsung bedanya dibanding prompt buruk di awal modul.</p>
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">💡 Tips</div>
+          <p>Kalau bingung mulai dari mana, mulai dari "jenis insight" dulu. Begitu kamu tahu kamu butuh angka, penyebab, atau rekomendasi, konteks dan pertanyaan spesifiknya biasanya lebih gampang nyusul.</p>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">3 / 7</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <!-- MODULE 4 -->
+      <div class="module-panel" id="panel4">
+        <div class="video-slot" id="video-slot-4"></div>
+        <div class="breadcrumb"><span>Analisis Data & Laporan</span><span>›</span><strong>Modul 4</strong></div>
+        <h1 class="module-title">Mengolah & Menyusun Data Spreadsheet</h1>
+        <p class="module-subtitle">Kategorikan, rapikan, bikin rumus, dan gabungkan data — gratis lewat chat</p>
+        <div class="downloads-slot" id="downloads-slot-4"></div>
+
+        <div class="module-desc-box">
+          Sejauh ini kamu udah bisa mastiin Claude baca datamu dengan benar (Modul 2) dan menyusun pertanyaan yang tepat (Modul 3). Modul ini membahas cara mengolah data spreadsheet lebih jauh — mengkategorikan, merekap, sampai menggabungkan beberapa sumber data — semuanya cukup lewat chat biasa, gratis.
+        </div>
+
+        <p class="body-text">Sebelum lanjut ke kategorisasi dan agregasi, ada 2 masalah tambahan yang sering luput dicek khusus untuk data spreadsheet — kalau ketemu salah satunya, minta Claude beresin dulu pakai kebiasaan dari Modul 2:</p>
+        <ul class="mistake-list">
+          <li><strong>Cell tergabung (merged cells)</strong> — bikin Claude bingung baris mana yang punya nilai yang mana</li>
+          <li><strong>Baris header bertingkat</strong> — usahakan baris 1 cuma berisi nama kolom, bukan 2-3 baris judul yang ditumpuk</li>
+        </ul>
+
+        <div class="section-heading">1. Menambahkan Kolom Analisis Kualitatif Secara Otomatis</div>
+        <p class="body-text">Kekuatan utama Claude di spreadsheet adalah kemampuannya membaca teks opini/review dan mengkategorikannya ke kolom-kolom baru — cukup lewat copy-paste ke chat biasa, nggak perlu paket berbayar.</p>
+        <div class="case-box">
+          <p><strong>Contoh skenario:</strong> kamu punya 15 baris review pelanggan toko roti (dari Modul 1). Kamu butuh 3 kolom baru: Topik Utama, Sentimen, dan Tingkat Urgensi.</p>
+        </div>
+        <div class="prompt-section" style="margin-top:14px;">
+          <div class="prompt-label">📝 Prompt Kategorisasi Massal</div>
+          <div class="prompt-box">Analisis data ulasan pelanggan roti berikut: [PASTE DATA]. Tambahkan 3
+kolom baru di samping data asli: [Topik Utama]: pilih antara (Rasa &
+Kualitas / Pengiriman / Harga / Pelayanan), [Sentimen]: Positif / Netral /
+Negatif, [Urgensi]: Tinggi (butuh respon cepat) / Rendah. Tampilkan
+output lengkap dalam bentuk tabel yang bisa saya copy-paste balik ke
+spreadsheet.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="section-heading">2. Membuat Tabel Agregasi (Bahan Baku Laporan & Grafik)</div>
+        <p class="body-text">Setelah tiap baris dikasih tag, langkah selanjutnya adalah merekapitulasi jadi 1 tabel ringkasan. Tabel inilah yang nanti dipakai untuk Ringkasan Eksekutif (Modul 5) dan Grafik (Modul 6).</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Prompt Ringkasan Agregasi</div>
+          <div class="prompt-box">Berdasarkan data yang sudah diberi tag topik di atas, buatkan 1 tabel
+ringkasan agregat yang berisi: Nama Topik, Jumlah Mentions, Persentase
+Sentimen Negatif, dan ringkasan singkat masalah utama di topik itu.
+Urutkan dari topik yang paling banyak dikeluhkan.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+        <p class="body-text" style="margin-top:14px;"><strong>Contoh hasil tabel agregasi:</strong></p>
+        <div class="compare-table-wrap">
+          <table class="compare-table">
+            <tr><th>Topik Utama</th><th>Jumlah Mentions</th><th>% Sentimen Negatif</th><th>Temuan/Masalah Utama</th></tr>
+            <tr><td>Pengiriman</td><td>6</td><td>67%</td><td>Kurir sering telat, kemasan roti penyok pas sampai</td></tr>
+            <tr><td>Harga</td><td>4</td><td>75%</td><td>Pelanggan merasa rasa/porsi nggak sepadan sama kenaikan harga</td></tr>
+            <tr><td>Rasa & Kualitas</td><td>5</td><td>20%</td><td>Mayoritas puas, favorit tetap Croissant dan Roti Tawar Gandum</td></tr>
+          </table>
+        </div>
+
+        <div class="section-heading">3. Rumus, Tabel Silang, dan Gabungan Data</div>
+        <p class="body-text">Setelah tabel agregasi dasar, ada 3 kemampuan lanjutan yang bisa langsung kamu pakai — semuanya masih lewat chat biasa, gratis:</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 a. Rumus Otomatis dengan Kondisi</div>
+          <div class="prompt-box">Dari data penjualan roti ini, buatkan rumus untuk hitung total penjualan
+per kategori produk DAN persentase kontribusinya terhadap total
+keseluruhan bulan itu. Rumusnya harus otomatis ter-update kalau saya
+tambah baris data baru.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 b. Tabel Silang + Deteksi Tren</div>
+          <div class="prompt-box">Dari data review ini, buatkan tabel silang: baris = Topik Utama, kolom =
+Bulan, isinya jumlah komplain di tiap kombinasi. Habis itu, kasih tau
+topik mana yang trennya makin naik dari bulan ke bulan — ini yang
+paling perlu diprioritaskan.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 c. Menggabungkan 2 Sumber Data untuk Mencari Korelasi</div>
+          <div class="prompt-box">Saya punya 2 data: review pelanggan (yang sudah ditag topik &
+sentimen) dan data penjualan mingguan per produk. Gabungkan
+keduanya dan cari tau: apakah Roti Sobek Keju dan Brownies — yang
+penjualannya turun sejak kenaikan harga — juga produk yang paling
+banyak dikomplain soal harga? Tunjukkan buktinya dari kedua data itu.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="case-box">
+            <p>Ini otomatis membuktikan (atau membantah) dugaan yang udah dibangun sejak Modul 3 — kalau ternyata memang nyambung, ini bukti kuat untuk masuk ke laporan atau rekomendasi tindakan.</p>
+          </div>
+        </div>
+
+        <div class="section-heading">4. Menghubungkan Hasil Spreadsheet ke Modul Selanjutnya</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Di Modul 5 (Laporan)</strong><span>Tinggal minta Claude ubah kolom "Temuan/Masalah Utama" jadi paragraf Situasi → Temuan → Rekomendasi untuk atasan</span></div>
+          <div class="info-card"><strong>Di Modul 6 (Visualisasi)</strong><span>Tinggal ambil kolom "Topik Utama" dan "Jumlah Mentions" buat dimasukkan ke Artifacts atau chart Google Sheets</span></div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">📌 Bonus — Paket Pro/Max/Team/Enterprise</div>
+          <p>Ada add-in bernama Claude for Excel yang bisa kerja langsung di dalam file Excel-mu tanpa copy-paste. Ini cuma jalan pintas — semua yang diajarkan di modul ini tetap penuh berfungsi lewat chat biasa di paket gratis.</p>
+        </div>
+
+        <div class="summary-box">
+          <div class="summary-label">Ringkasan Modul 4</div>
+          <ul>
+            <li>Cek 2 masalah tambahan sebelum kategorisasi: merged cells dan header bertingkat</li>
+            <li>Gunakan Claude buat menambahkan kolom kategori kualitatif (Topik, Sentimen, Urgensi) — cukup lewat chat biasa, gratis</li>
+            <li>Buat Tabel Agregasi sebagai jembatan menuju Laporan Eksekutif (Modul 5) dan Grafik (Modul 6)</li>
+            <li>Level lanjut: rumus otomatis dengan kondisi, tabel silang + deteksi tren, dan menggabungkan 2 sumber data untuk mencari korelasi</li>
+          </ul>
+        </div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p>Ambil data review dari Modul 1, pakai Prompt Kategorisasi Massal untuk nambah kolom Topik & Sentimen, lalu pakai Prompt Ringkasan Agregasi untuk hasilkan 1 tabel ringkasan akhir. Simpan tabel ini — dipakai lagi di Modul 5 dan Modul 6. (Opsional, level lanjut) Coba prompt (c): gabungkan hasil kategorisasi review-mu dengan data penjualan Modul 3, lihat apakah dugaan soal Roti Sobek Keju & Brownies terbukti.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>1 tabel data yang sudah ditag (Topik/Sentimen/Urgensi) + 1 tabel agregasi siap pakai untuk laporan dan grafik.</p>
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">💡 Tips</div>
+          <p>Kalau daftar Topik Utama yang kamu tentukan ternyata nggak nangkep semua jenis komplain, minta Claude usul kategori tambahan dari pola yang dia lihat di data — jangan cuma dipaksa masuk ke kategori yang udah ada.</p>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">4 / 7</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <!-- MODULE 5 -->
+      <div class="module-panel" id="panel5">
+        <div class="video-slot" id="video-slot-5"></div>
+        <div class="breadcrumb"><span>Analisis Data & Laporan</span><span>›</span><strong>Modul 5</strong></div>
+        <h1 class="module-title">Dari Analisis ke Laporan</h1>
+        <p class="module-subtitle">Ubah temuan jadi ringkasan eksekutif, kutipan pendukung, dan rencana aksi</p>
+        <div class="downloads-slot" id="downloads-slot-5"></div>
+
+        <div class="module-desc-box">
+          Sejauh ini kamu sudah bisa memastikan data bersih (Modul 2), mendiagnosis masalah (Modul 3), dan mengolah data spreadsheet (Modul 4). Tapi temuan mentah — sepintar apa pun analisisnya — belum berguna kalau cuma tersimpan di kepala kamu. Modul ini membahas cara mengubah temuan mentah menjadi laporan ringkas yang siap dikirim ke atasan, partner bisnis, atau tim.
+        </div>
+
+        <div class="section-heading">1. Ringkasan Eksekutif: Versi Singkat untuk Orang Sibuk</div>
+        <p class="body-text">Atasan atau partner bisnis biasanya tidak punya waktu membaca laporan panjang. Mereka butuh versi singkat: apa yang terjadi, kenapa, dan harus apa — dalam beberapa kalimat atau maksimal 1 halaman.</p>
+        <div class="tip-box">
+          <div class="tip-label">🧭 Formula Prompt Ringkasan Eksekutif</div>
+          <p>[Konteks Temuan] + [Format Output] + [Target Audiens & Gaya Bahasa]</p>
+        </div>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Contoh Prompt</div>
+          <div class="prompt-box">Dari temuan saya soal penurunan penjualan Roti Sobek Keju dan
+Brownies setelah kenaikan harga pertengahan Juni, tolong buatkan
+ringkasan eksekutif 1 halaman yang bisa saya kirim ke partner bisnis
+saya. Jangan pakai istilah teknis, langsung ke poin penting.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+        <p class="body-text">Pola struktur utama — sama persis dengan konsep "kenapa dan terus gimana" dari Modul 1, bedanya sekarang hasilnya dirapikan untuk dibaca orang lain:</p>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Situasi: Apa yang terjadi?</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Temuan Utama: Kenapa hal itu terjadi?</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Rekomendasi: Lalu, apa yang harus dilakukan?</p></div>
+        </div>
+
+        <div class="section-heading">2. Mengambil Kutipan Pendukung untuk Presentasi</div>
+        <p class="body-text">Angka saja sering kali kurang membekas di pikiran audiens. Kutipan asli dari pelanggan membuat temuan kamu terasa lebih nyata, berempati, dan mudah diingat saat presentasi.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Contoh Prompt</div>
+          <div class="prompt-box">Dari data review pelanggan di Modul 1, ambilkan 3 kutipan yang paling
+mewakili keluhan tentang pengiriman. Buatkan format yang rapi untuk
+saya masukkan ke slide presentasi.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="section-heading">3. Mengubah Temuan Menjadi Rencana Aksi</div>
+        <p class="body-text">Analisis tanpa rencana aksi hanya berakhir jadi informasi, bukan keputusan. Ini saatnya meminta jenis Insight Preskriptif yang sempat kita bahas di Modul 1 — tidak hanya menjelaskan apa yang terjadi, tapi juga memberi arahan tindakan terbaik.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Contoh Prompt</div>
+          <div class="prompt-box">Berdasarkan temuan soal penurunan penjualan usai kenaikan harga,
+berikan saya 3 rekomendasi konkret yang bisa saya eksekusi minggu
+ini beserta perkiraan dampaknya.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="section-heading">4. Prompt Siap Pakai untuk Berbagai Kebutuhan</div>
+        <p class="body-text">Formula yang sama (Ringkasan Eksekutif, Kutipan, Rencana Aksi) bisa kamu pakai ke berbagai jenis masalah:</p>
+
+        <div class="case-box">
+          <div class="case-role">Laporan Mingguan Rutin</div>
+          <p><strong>Data:</strong> "Minggu ini tim support closed 142 tiket (naik dari 128 minggu lalu), rata-rata waktu respons 4.2 jam (turun dari 5.1 jam), tingkat kepuasan pelanggan 87% (stabil)."<br><strong>Prompt:</strong> "Dari data mingguan ini, buatkan laporan singkat rutin yang bisa saya pakai tiap minggu — formatnya: ringkasan performa, apa yang membaik/memburuk, dan 1 catatan untuk minggu depan. Tulis santai, buat dikirim ke grup tim internal."</p>
+        </div>
+        <div class="case-box">
+          <div class="case-role">Diagnosis Over-Budget</div>
+          <p><strong>Data:</strong> "Biaya operasional bulan ini Rp42 juta, budget Rp38 juta (over 10%). Kenaikan utama di biaya pengiriman, naik 25% dibanding bulan lalu karena ongkos kirim ekspedisi naik pertengahan bulan."<br><strong>Prompt:</strong> "Dari data ini, buatkan ringkasan eksekutif untuk atasan saya soal kenapa kita over budget bulan ini, penyebabnya, dan 2 opsi tindakan untuk bulan depan. Jangan pakai istilah akuntansi yang rumit."</p>
+        </div>
+        <div class="case-box">
+          <div class="case-role">Sebelum/Sesudah Kampanye</div>
+          <p><strong>Data:</strong> "Sebelum promo: rata-rata 320 pengunjung/hari, konversi 2.1%. Selama promo (2 minggu): pengunjung naik jadi 510/hari, tapi konversi turun ke 1.4%."<br><strong>Prompt:</strong> "Bandingkan performa sebelum dan sesudah kampanye promo ini. Buat dalam format 2 kolom yang gampang dibaca sekilas, dan kasih 1 dugaan kenapa konversi malah turun padahal pengunjung naik."</p>
+        </div>
+
+        <div class="summary-box">
+          <div class="summary-label">Ringkasan Modul 5</div>
+          <ul>
+            <li>Temuan analisis baru berguna jika sudah diubah menjadi format laporan yang siap dipresentasikan</li>
+            <li>Struktur ringkasan eksekutif: Situasi → Temuan Utama → Rekomendasi</li>
+            <li>Gunakan kutipan asli (voice of customer) untuk memperkuat angka/data statistik</li>
+            <li>Selalu minta Insight Preskriptif agar analisis berujung pada tindakan nyata</li>
+          </ul>
+        </div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p><strong>Temuan mentah:</strong> "Penjualan Roti Sobek Keju turun dari rata-rata 80 unit/minggu jadi 48 unit/minggu, dan Brownies turun dari 60 jadi 35 unit/minggu, keduanya mulai minggu ke-3 Juni — bertepatan dengan kenaikan harga masing-masing 18% dan 15%. Produk lain (Roti Tawar, Donat, Croissant) relatif stabil di periode yang sama."</p>
+          </div>
+          <p class="body-text">Kirim Prompt Ringkasan Eksekutif ke Claude pakai temuan di atas, lalu lanjutkan dalam chat yang sama dengan mengirim Prompt Rekomendasi Aksi. (Opsional) Coba juga fitur kutipan, pakai data review dari Modul 1.</p>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>Satu ringkasan eksekutif siap kirim + daftar rekomendasi aksi konkret yang diolah dari data mentah.</p>
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">💡 Tips: Sesuaikan Target Audiens!</div>
+          <p>Selalu sebutkan siapa yang akan membaca laporanmu di dalam prompt (misal: Investor, Atasan, atau Tim Operasional). Laporan untuk investor butuh fokus pada angka revenue, risiko, dan margin. Laporan untuk tim internal butuh fokus pada alur kerja, kendala teknis, dan eksekusi lapangan.</p>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">5 / 7</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <!-- MODULE 6 -->
+      <div class="module-panel" id="panel6">
+        <div class="video-slot" id="video-slot-6"></div>
+        <div class="breadcrumb"><span>Analisis Data & Laporan</span><span>›</span><strong>Modul 6</strong></div>
+        <h1 class="module-title">Dari Angka ke Grafik</h1>
+        <p class="module-subtitle">Bikin chart langsung dari data pakai fitur Artifacts</p>
+        <div class="downloads-slot" id="downloads-slot-6"></div>
+
+        <div class="module-desc-box">
+          Sejauh ini kamu sudah bisa memastikan data bersih (Modul 2), mendiagnosis masalah (Modul 3), mengolah data spreadsheet (Modul 4), dan mengubah temuan jadi laporan (Modul 5). Tapi laporan yang isinya teks dan angka saja kadang masih sulit "kebaca" dengan cepat, apalagi kalau harus dipresentasikan. Modul ini membahas cara mengubah data jadi visual langsung lewat Claude, pakai fitur bernama Artifacts.
+        </div>
+
+        <div class="section-heading">1. Nyalakan Fitur Artifacts Dulu (Cukup Sekali)</div>
+        <p class="body-text">Sebelum bisa minta chart, pastikan fitur ini aktif — biasanya cuma perlu dilakukan sekali di awal. Tanpa ini, Claude tidak akan membuat chart-nya sebagai Artifact yang bisa kamu lihat dan edit.</p>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Klik nama/inisial kamu di pojok kiri bawah</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Buka Settings → Capabilities</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Aktifkan toggle "Code execution and file creation"</p></div>
+        </div>
+
+        <div class="section-heading">2. Formula Prompt untuk Minta Chart</div>
+        <div class="tip-box">
+          <div class="tip-label">🧭 Formula Prompt</div>
+          <p>[Jenis Chart] + [Data yang Mau Divisualisasikan] + [Apa yang Perlu Di-highlight]</p>
+        </div>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Contoh Prompt</div>
+          <div class="prompt-box">Buatkan line chart penjualan mingguan tiap produk dari Mei ke Juni.
+Kasih tanda di titik waktu Roti Sobek Keju dan Brownies mulai turun
+tajam.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="case-box">
+            <p>Karena chart itu berbasis kode dan berdiri sendiri, Claude otomatis membukanya di panel Artifacts — kamu tidak perlu minta "buatkan di Artifacts" secara terpisah.</p>
+          </div>
+        </div>
+
+        <div class="section-heading">3. Iterasi Tanpa Perlu Mulai dari Nol</div>
+        <p class="body-text">Kalau chart-nya belum pas, cukup minta revisi langsung, misalnya:</p>
+        <div class="info-grid">
+          <div class="info-card"><strong>"Ganti jadi bar chart"</strong><span>Ganti jenis chart tanpa mengulang data dari awal</span></div>
+          <div class="info-card"><strong>"Warnanya kurang kontras, ganti yang lebih tegas"</strong><span>Perbaiki tampilan visual saja</span></div>
+          <div class="info-card"><strong>"Tambahin garis vertikal di titik kenaikan harga"</strong><span>Tambah anotasi tanpa membuat ulang chart</span></div>
+        </div>
+        <p class="body-text">Perubahannya langsung muncul di panel yang sama. Ada version selector kalau kamu mau membandingkan versi sebelum dan sesudah revisi.</p>
+
+        <div class="section-heading">4. Ekspor & Simpan</div>
+        <p class="body-text">Di pojok kanan bawah panel Artifact, kamu bisa lihat kode di baliknya, copy isinya, atau download file untuk dipakai di laporan atau slide presentasi. Kalau mau disimpan permanen di koleksi Artifacts kamu, klik Publish.</p>
+
+        <div class="summary-box">
+          <div class="summary-label">Ringkasan Modul 6</div>
+          <ul>
+            <li>Setup sekali di awal: aktifkan Code execution and file creation sebelum minta chart pertama kali</li>
+            <li>Formula Prompt: Jenis Chart + Data yang Divisualisasikan + Apa yang Perlu Di-highlight</li>
+            <li>Chart muncul di panel Artifacts, bisa diiterasi langsung tanpa mulai dari nol</li>
+            <li>Ekspor: download filenya untuk dipakai di laporan, atau Publish kalau mau disimpan permanen</li>
+          </ul>
+        </div>
+
+        <div class="section-heading">5. Alternatif Gratis Tanpa Artifacts</div>
+        <p class="body-text">Artifacts sendiri sebenarnya sudah gratis (cuma perlu toggle di atas). Tapi kalau kamu lebih nyaman kerja di tools yang sudah biasa kamu pakai, atau toggle-nya nggak bisa diaktifkan di akun kamu, kamu tetap bisa minta Claude menyiapkan datanya, lalu bikin chart-nya langsung di Google Sheets atau Excel — sama-sama gratis, tanpa fitur tambahan apapun.</p>
+        <div class="two-col">
+          <div class="col-card">
+            <h4>Google Sheets</h4>
+            <p>"Ini data penjualan roti saya Mei-Juni. Rangkum jadi 1 tabel: baris = minggu, kolom = tiap produk, isinya total unit terjual per minggu. Format rapi supaya saya bisa langsung paste ke Google Sheets dan buat line chart dari situ."</p>
+            <ul style="margin-top:10px;"><li>Copy hasil ringkasan dari Claude</li><li>Paste ke Google Sheets</li><li>Select data → Insert → Chart → pilih jenis chart</li></ul>
+          </div>
+          <div class="col-card">
+            <h4>Excel</h4>
+            <p>"Ini data penjualan roti saya Mei-Juni. Rangkum jadi 1 tabel ringkas: baris = minggu, kolom = tiap produk, isinya total unit terjual. Formatnya harus rapi buat langsung di-paste ke Excel, biar saya tinggal select semua terus Insert > Chart."</p>
+            <ul style="margin-top:10px;"><li>Copy hasil ringkasan dari Claude</li><li>Paste ke Excel</li><li>Select data → tab Insert → pilih Line/Bar Chart</li></ul>
+          </div>
+        </div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p>Pakai data yang sama dari Modul 3 (penjualan mingguan Mei-Juni). Pastikan Code execution and file creation sudah aktif, lalu kirim prompt: "Buatkan line chart penjualan mingguan tiap produk dari Mei ke Juni. Kasih tanda di titik waktu Roti Sobek Keju dan Brownies mulai turun tajam, dan tambahkan keterangan singkat soal kenaikan harga di periode itu." Minta minimal 1 revisi (misalnya ganti warna atau jenis chart), lalu download hasilnya.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>1 chart di Artifacts yang sudah direvisi minimal 1 kali, plus file hasil download-nya — siap ditempel ke ringkasan eksekutif dari Modul 5.</p>
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">💡 Tips</div>
+          <p>Sebutkan bagian mana dari data yang paling penting untuk di-highlight di chart-nya (misalnya titik kenaikan harga). Kalau tidak disebut, Claude bisa saja bikin chart yang teknis benar tapi tidak menonjolkan poin yang sebenarnya paling penting buat audiensmu.</p>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">6 / 7</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <!-- MODULE 7 -->
+      <div class="module-panel" id="panel7">
+        <div class="video-slot" id="video-slot-7"></div>
+        <div class="breadcrumb"><span>Analisis Data & Laporan</span><span>›</span><strong>Modul 7</strong></div>
+        <h1 class="module-title">Cek Ulang Sebelum Percaya</h1>
+        <p class="module-subtitle">Spot-check, cegah halusinasi, dan waspada sarkasme sebelum hasilnya dipakai</p>
+        <div class="downloads-slot" id="downloads-slot-7"></div>
+
+        <div class="module-desc-box">
+          Ini modul terakhir, dan mungkin yang paling penting: gimana caranya mastiin hasil analisis Claude bisa dipercaya sebelum kamu pakai buat keputusan, laporan, atau presentasi. Dari Modul 1 kita udah bilang "hasil Claude tetap perlu divalidasi" — modul ini kasih kamu caranya secara konkret.
+        </div>
+
+        <div class="section-heading">1. Strategi Spot-Check 10%</div>
+        <p class="body-text">Kalau Claude ngasih kategori ke 100 baris data, kamu nggak perlu cek semuanya satu-satu — cukup ambil sekitar 10% secara acak (kalau datanya 100 baris, cek 10 baris) dan bandingin manual: apakah kategorinya masuk akal?</p>
+        <div class="tip-box">
+          <div class="tip-label">🧭 Aturan Sederhana</div>
+          <p>Kalau dari sampel 10% itu ada lebih dari 1-2 yang salah, jangan lanjut pakai hasilnya. Minta Claude cek ulang semua, atau perbaiki instruksi/promptnya dulu. Semakin penting hasil analisisnya, semakin besar porsi yang perlu kamu cek — 10% itu patokan minimum, bukan aturan mati.</p>
+        </div>
+
+        <div class="section-heading">2. Mencegah Claude "Mengarang" Informasi</div>
+        <p class="body-text">Claude kadang bisa menghasilkan detail yang kedengarannya masuk akal, tapi sebenarnya tidak ada di data aslinya — ini disebut halusinasi. Paling sering muncul kalau kamu nanya sesuatu yang jawabannya nggak benar-benar ada di data.</p>
+        <div class="tip-box warn">
+          <div class="tip-label">🛡️ Prompt Pengaman (Guardrail)</div>
+          <p>Tambahkan kalimat ini di akhir prompt kamu, terutama kalau kamu minta kesimpulan atau alasan di balik sebuah temuan:</p>
+        </div>
+        <div class="prompt-section">
+          <div class="prompt-box">Hanya gunakan fakta yang ada di data/teks ini. Kalau informasinya
+tidak tercantum, bilang saja "tidak ada di data" — jangan berasumsi
+atau mengarang.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="section-heading">3. Sarkasme & Konteks yang Rumit</div>
+        <p class="body-text">Claude bisa salah membaca nada — terutama sarkasme, sindiran, atau kalimat yang punya makna ganda.</p>
+        <div class="case-box">
+          <p><strong>Contoh:</strong> "Wah, mantap banget rotinya sampai basi duluan sebelum sempat dimakan." Kalau dibaca terlalu literal, ini bisa salah ke-tag sebagai positif — padahal jelas ini komplain soal roti yang cepat basi. Cara mengurangi risikonya: minta Claude menjelaskan alasan di balik setiap kategorisasi, bukan cuma kasih label.</p>
+        </div>
+
+        <div class="summary-box">
+          <div class="summary-label">Ringkasan Modul 7</div>
+          <ul>
+            <li>Spot-check 10%: cek sampel acak sebelum mempercayai keseluruhan hasil, terutama untuk data yang penting</li>
+            <li>Cegah halusinasi: tambahkan instruksi "hanya pakai fakta yang ada di data, jangan mengarang"</li>
+            <li>Waspada sarkasme: minta Claude jelaskan alasan di balik kategorisasinya, bukan cuma labelnya</li>
+            <li>Ketiga kebiasaan ini adalah penutup dari pesan yang berulang sejak Modul 1: hasil Claude itu draft cekatan dari rekan kerja, bukan keputusan final</li>
+          </ul>
+        </div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p><strong>Data contoh (6 review, sengaja dibuat rumit):</strong><br>
+            1. "Wah mantap banget rotinya sampai basi duluan sebelum sempat dimakan." <em>(sarkasme)</em><br>
+            2. "Enak sih, tapi kemasannya bisa lebih bagus."<br>
+            3. "Pengiriman cepat, rasanya standar aja."<br>
+            4. "Kalau dibanding toko sebelah, harganya di sini lebih murah kok."<br>
+            5. "Pelayanannya top deh, nunggu konfirmasi cuma 3 hari." <em>(sarkasme)</em><br>
+            6. "Rasanya konsisten enak dari dulu, selalu jadi favorit keluarga."</p>
+          </div>
+          <div class="prompt-box">Tandai masing-masing review sebagai positif, negatif, atau netral, dan
+jelaskan alasannya. Hanya gunakan fakta yang ada di data ini — jangan
+berasumsi.
+
+[PASTE 6 REVIEW DI ATAS]<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <p class="body-text" style="margin-top:12px;">Cek semua 6 hasilnya secara manual (karena datanya kecil — di data yang lebih besar, cukup sampel 10%). Perhatikan khususnya review nomor 1 dan 5 yang sarkastik. Coba juga tanya: "Kenapa toko sebelah (dari review nomor 4) harganya lebih mahal?" — perhatikan apakah Claude mengarang jawaban atau jujur bilang informasinya tidak ada di data.</p>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>Kamu menemukan minimal 1 kesalahan kategorisasi atau 1 momen Claude yang hampir "mengarang" jawaban — dan tahu cara memperbaikinya lewat prompt yang lebih spesifik.</p>
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">💡 Tips</div>
+          <p>Kalau kamu nemu Claude salah baca sesuatu, jangan cuma perbaiki jawabannya — perbaiki juga promptnya. Tambahkan konteks yang bikin kesalahan itu nggak akan terulang lagi (misalnya: "review ini kadang sarkastik, baca konteksnya baik-baik sebelum kasih label").</p>
+        </div>
+
+        <div class="output-box" style="background:var(--accent-dim);border-color:var(--accent-glow);">
+          <div class="output-icon">🎉</div>
+          <div>
+            <h3 style="color:var(--accent);">Kursus Selesai!</h3>
+            <p>Dari sekadar tau apa itu analisis data, sampai bisa mendiagnosis masalah, mengolah data spreadsheet, bikin laporan, bikin chart, dan cek ulang hasilnya — kamu sekarang punya alur kerja lengkap buat kerja dengan data pakai Claude. Coba terapkan alur ini ke data asli kamu sendiri, mulai dari yang kecil, misalnya laporan mingguan atau feedback pelanggan yang paling baru kamu terima.</p>
+          </div>
+        </div>
+
+        <div class="next-label">Lanjutkan Belajar (sudah termasuk All Access kamu)</div>
+        <a href="produktivitas-content.html" class="next-card">
+          <span class="next-icon">💼</span>
+          <div class="next-info">
+            <h4>Produktivitas Kantor</h4>
+            <p>Hemat 3–5 jam kerja per minggu · Role Prompting, Gmail, Sheets, Docs</p>
+          </div>
+          <span class="next-arrow">→</span>
+        </a>
+        <a href="content-marketing-content.html" class="next-card">
+          <span class="next-icon">🏪</span>
+          <div class="next-info">
+            <h4>Kreasi Konten Pemasaran</h4>
+            <p>Positioning, konten Instagram, copy iklan, komunikasi pelanggan</p>
+          </div>
+          <span class="next-arrow">→</span>
+        </a>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">7 / 7</span>
+          <button class="nav-btn primary" onclick="showModule(8)">Lanjut →</button>
+        </div>
+      </div>
+
+
+      <div class="module-panel" id="panel8">
+
+        <div class="feedback-panel">
+          <div class="completion-badge">
+            <div class="badge-check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h2>Kursus Selesai!</h2>
+            <p>Kamu telah menyelesaikan <strong>Analisis Data & Laporan</strong>.<br>Badge pencapaian sudah tersimpan di dashboard kamu.</p>
+          </div>
+
+          <div class="feedback-card" id="feedbackForm">
+            <h3>Bagaimana kursus ini menurut kamu?</h3>
+            <p class="feedback-sub">Feedback kamu membantu kami bikin kursus yang lebih baik.</p>
+            <div class="star-row" id="starRow" onmouseleave="hoverRating(0)">
+              <button class="star-btn" data-val="1" onclick="setRating(1)" onmouseenter="hoverRating(1)">★</button>
+              <button class="star-btn" data-val="2" onclick="setRating(2)" onmouseenter="hoverRating(2)">★</button>
+              <button class="star-btn" data-val="3" onclick="setRating(3)" onmouseenter="hoverRating(3)">★</button>
+              <button class="star-btn" data-val="4" onclick="setRating(4)" onmouseenter="hoverRating(4)">★</button>
+              <button class="star-btn" data-val="5" onclick="setRating(5)" onmouseenter="hoverRating(5)">★</button>
+            </div>
+            <div class="feedback-label">Komentar (opsional)</div>
+            <textarea class="feedback-textarea" id="feedbackComment" placeholder="Apa yang paling berguna? Ada yang bisa diperbaiki?"></textarea>
+            <button class="feedback-submit" id="feedbackSubmit" onclick="submitFeedback()">Kirim & Ke Dashboard →</button>
+          </div>
+
+          <div class="feedback-done" id="feedbackDone">
+            <p>Terima kasih atas feedbacknya!</p>
+          </div>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter"></span>
+          <a href="dashboard.html" class="nav-btn primary" style="text-decoration:none;">Ke Dashboard →</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+  const TOTAL = 8;
+  const CONTENT_MODULES = 7;
+  let current = 1;
+  const done = new Set();
+  const ADMIN_EMAILS = ['julia.utomo@gmail.com', 'tiffany.utomo@gmail.com'];
+
+  async function init() {
+    const { data: { session } } = await sbClient.auth.getSession();
+    if (!session) { window.location.href = 'login.html'; return; }
+    const email = session.user.email;
+
+    // Only grant access if a real 'analisis-data' enrollment exists - holding all-access alone
+    // is not enough, it only unlocks a free one-click "Mulai Kursus" on the preview page. Admins bypass.
+    if (!ADMIN_EMAILS.includes(email)) {
+      const { data: existing } = await sbClient.from('enrollments').select('course_slug').eq('email', email).eq('course_slug', 'analisis-data');
+      if (!existing || existing.length === 0) { window.location.href = 'analisis-data.html'; return; }
+    }
+
+    // Touch last_accessed_at so the dashboard's spotlight card can show whichever course
+    // was opened most recently, not just whichever has the highest completion %.
+    sbClient.from('enrollments').update({ last_accessed_at: new Date().toISOString() }).eq('email', email).eq('course_slug', COURSE_SLUG).then(()=>{}, ()=>{});
+
+    document.getElementById('navEmail').textContent = email;
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('mainLayout').style.display = 'flex';
+
+    // Restore saved progress from Supabase
+    try {
+      const { data: completions } = await sbClient
+        .from('module_completions').select('module_num')
+        .eq('email', session.user.email).eq('course_slug', 'analisis-data');
+      if (completions && completions.length > 0) {
+        completions.forEach(function(row) {
+          if (row.module_num > CONTENT_MODULES) return;
+          done.add(row.module_num);
+          var checkEl = document.getElementById('check' + row.module_num);
+          var navEl = document.getElementById('nav-mod' + row.module_num);
+          if (checkEl) checkEl.textContent = '✓';
+          if (navEl) navEl.classList.add('done');
+        });
+      }
+    } catch(e) {}
+    updateProgress();
+
+    loadExistingFeedback(session.user.email);
+  }
+
+  async function saveProgress(moduleNum) {
+    localStorage.setItem('klaud_progress_analisis-data', done.size);
+    try {
+      const { data: { session } } = await sbClient.auth.getSession();
+      if (session) {
+        await sbClient.from('module_completions').upsert({
+          email: session.user.email, course_slug: 'analisis-data', module_num: moduleNum
+        }, { onConflict: 'email,course_slug,module_num', ignoreDuplicates: true });
+      }
+    } catch (e) {}
+  }
+
+  function showModule(n) {
+    // Mark previous as done
+    done.add(current);
+    saveProgress(current);
+    document.getElementById(`check${current}`).textContent = '✓';
+    document.getElementById(`nav-mod${current}`).classList.add('done');
+
+    // Hide current panel
+    document.getElementById(`panel${current}`).classList.remove('active');
+    document.getElementById(`nav-mod${current}`).classList.remove('active');
+
+    // Show new panel
+    current = n;
+    document.getElementById(`panel${current}`).classList.add('active');
+    document.getElementById(`nav-mod${current}`).classList.add('active');
+
+    // Scroll main to top
+    document.querySelector('.main').scrollTo({ top: 0, behavior: 'smooth' });
+
+    updateProgress();
+  }
+
+  function nextModule() { if (current < TOTAL) showModule(current + 1); }
+  function prevModule() { if (current > 1) showModule(current - 1); }
+
+  function updateProgress() {
+    const pct = Math.min(100, Math.round((done.size / CONTENT_MODULES) * 100));
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = `${done.size}/${CONTENT_MODULES}`;
+  }
+
+  async function logout() {
+    await sbClient.auth.signOut();
+    window.location.href = 'index.html';
+  }
+
+  function copyPrompt(btn) {
+    const box = btn.closest('.prompt-box');
+    const clone = box.cloneNode(true);
+    clone.querySelector('button')?.remove();
+    navigator.clipboard.writeText(clone.innerText.trim()).then(() => {
+      btn.textContent = '✓ Tersalin';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Salin'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  init();
+
+  // ── Feedback ─────────────────────────────────────
+  let currentRating = 0;
+
+  function renderStars(val) {
+    document.querySelectorAll('.star-btn').forEach(function(btn) {
+      btn.classList.toggle('active', parseInt(btn.getAttribute('data-val')) <= val);
+    });
+  }
+
+  function setRating(val) {
+    currentRating = val;
+    renderStars(val);
+  }
+
+  function hoverRating(val) {
+    renderStars(val || currentRating);
+  }
+
+  async function loadExistingFeedback(email) {
+    try {
+      const { data: fb } = await sbClient.from('course_feedback')
+        .select('rating, comment')
+        .eq('email', email).eq('course_slug', 'analisis-data')
+        .maybeSingle();
+      if (fb) {
+        setRating(fb.rating || 0);
+        if (fb.comment) document.getElementById('feedbackComment').value = fb.comment;
+        document.getElementById('feedbackSubmit').textContent = 'Perbarui Feedback →';
+      }
+    } catch (e) {}
+  }
+
+  async function submitFeedback() {
+    if (!currentRating) { alert('Pilih dulu bintang penilaian kamu.'); return; }
+    const btn = document.getElementById('feedbackSubmit');
+    btn.disabled = true;
+    btn.textContent = 'Menyimpan...';
+    const comment = document.getElementById('feedbackComment').value.trim();
+    try {
+      const r = await sbClient.auth.getSession();
+      const session = r.data.session;
+      if (session) {
+        await sbClient.from('course_feedback').upsert({
+          email: session.user.email,
+          course_slug: 'analisis-data',
+          rating: currentRating,
+          comment: comment || null,
+          submitted_at: new Date().toISOString()
+        }, { onConflict: 'email,course_slug' });
+
+        // Safety net: progress is measured against CONTENT_MODULES (this feedback
+        // panel isn't counted in it), so make sure the last content module is
+        // marked done here too, and give the Feedback nav item its own checkmark.
+        if (!done.has(CONTENT_MODULES)) {
+          done.add(CONTENT_MODULES);
+          var checkEl = document.getElementById('check' + CONTENT_MODULES);
+          var navEl = document.getElementById('nav-mod' + CONTENT_MODULES);
+          if (checkEl) checkEl.textContent = '✓';
+          if (navEl) navEl.classList.add('done');
+          saveProgress(CONTENT_MODULES);
+          updateProgress();
+        }
+        var fbCheck = document.getElementById('check' + TOTAL);
+        if (fbCheck) fbCheck.textContent = '✓';
+        var fbNav = document.getElementById('nav-mod' + TOTAL);
+        if (fbNav) fbNav.classList.add('done');
+      }
+    } catch(e) { console.error(e); }
+    document.getElementById('feedbackForm').style.display = 'none';
+    document.getElementById('feedbackDone').style.display = 'block';
+  }
+
+</script>
+</body>
+</html>
