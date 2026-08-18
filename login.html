@@ -61,14 +61,29 @@
     }
 
     label { display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 6px; }
-    input[type="email"], input[type="password"] {
+    input[type="email"], input[type="password"], input[type="text"].pw-input {
       width: 100%; padding: 12px 14px;
       border: 1.5px solid var(--border); border-radius: 10px;
       font-size: 14px; color: var(--ink); outline: none;
       transition: border-color 0.2s; margin-bottom: 14px;
       font-family: inherit; background: #fff;
     }
-    input[type="email"]:focus, input[type="password"]:focus { border-color: var(--accent); }
+    input[type="email"]:focus, input[type="password"]:focus, input[type="text"].pw-input:focus { border-color: var(--accent); }
+
+    /* Password field with a show/hide toggle icon on the right */
+    .pw-wrap { position: relative; margin-bottom: 14px; }
+    .pw-wrap input { padding-right: 42px; margin-bottom: 0; }
+    .pw-toggle {
+      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; padding: 4px; cursor: pointer;
+      color: var(--ink-3); display: flex; align-items: center; justify-content: center;
+      transition: color 0.15s;
+    }
+    .pw-toggle:hover { color: var(--ink-2); }
+    .pw-toggle svg { width: 18px; height: 18px; }
+    .pw-toggle .icon-eye-off { display: none; }
+    .pw-toggle.showing .icon-eye { display: none; }
+    .pw-toggle.showing .icon-eye-off { display: block; }
     .btn {
       width: 100%; padding: 13px;
       background: var(--ink); color: #fff;
@@ -126,7 +141,13 @@
       <label for="login-email">Email</label>
       <input type="email" id="login-email" placeholder="nama@email.com" autocomplete="email" autofocus />
       <label for="login-password">Password</label>
-      <input type="password" id="login-password" placeholder="Password kamu" autocomplete="current-password" />
+      <div class="pw-wrap">
+        <input type="password" id="login-password" placeholder="Password kamu" autocomplete="current-password" />
+        <button type="button" class="pw-toggle" onclick="togglePw('login-password', this)" aria-label="Tampilkan password">
+          <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>
+          <svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><path d="M6.1 6.1C3.51 7.86 1 12 1 12s4 8 11 8a9.26 9.26 0 0 0 5.9-2.1"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+        </button>
+      </div>
       <button class="forgot-link" onclick="switchView('forgot')">Lupa password?</button>
       <button class="btn" id="login-btn" onclick="doLogin()">Masuk →</button>
       <div class="msg" id="login-msg"></div>
@@ -238,6 +259,14 @@
         showMsg(msg, 'success', 'Link reset sudah dikirim ke ' + email + '. Cek inbox kamu.');
         btn.textContent = 'Terkirim!';
       }
+    }
+
+    function togglePw(inputId, btn) {
+      var input = document.getElementById(inputId);
+      var showing = input.type === 'text';
+      input.type = showing ? 'password' : 'text';
+      btn.classList.toggle('showing', !showing);
+      btn.setAttribute('aria-label', showing ? 'Tampilkan password' : 'Sembunyikan password');
     }
 
     function showMsg(el, type, text) {
