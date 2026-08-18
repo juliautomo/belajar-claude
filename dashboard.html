@@ -634,7 +634,7 @@ async function _init(){
       (vr.data||[]).forEach(function(row){
         if(!ALL_COURSES[row.course_slug])return;
         ALL_COURSES[row.course_slug].hidden=(IS_DEV_ENV&&row.dev_preview)?false:!!row.hidden;
-        ALL_COURSES[row.course_slug].comingSoon=!!row.coming_soon;
+        ALL_COURSES[row.course_slug].comingSoon=(IS_DEV_ENV&&row.dev_preview)?false:!!row.coming_soon;
         ALL_COURSES[row.course_slug].visible=true;
         if(row.sort_order!=null)ALL_COURSES[row.course_slug].sortOrder=row.sort_order;
       });
