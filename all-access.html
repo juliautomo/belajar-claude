@@ -468,7 +468,7 @@
         (vis.data || []).forEach(function(row) {
           if (!AA_COURSES[row.course_slug]) return;
           AA_COURSES[row.course_slug].hidden = (IS_DEV_ENV && row.dev_preview) ? false : !!row.hidden;
-          AA_COURSES[row.course_slug].comingSoon = !!row.coming_soon;
+          AA_COURSES[row.course_slug].comingSoon = (IS_DEV_ENV && row.dev_preview) ? false : !!row.coming_soon;
           if (row.sort_order != null) AA_COURSES[row.course_slug].sortOrder = row.sort_order;
         });
         var fallbackIdx = {};
