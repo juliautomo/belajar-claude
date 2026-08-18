@@ -70,17 +70,28 @@
     }
     input[type="email"]:focus, input[type="password"]:focus, input[type="text"].pw-input:focus { border-color: var(--accent); }
 
-    /* Password field with a show/hide toggle icon on the right */
-    .pw-wrap { position: relative; margin-bottom: 14px; }
-    .pw-wrap input { padding-right: 42px; margin-bottom: 0; }
-    .pw-toggle {
-      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-      background: none; border: none; padding: 4px; cursor: pointer;
-      color: var(--ink-3); display: flex; align-items: center; justify-content: center;
-      transition: color 0.15s;
+    /* Password field with a show/hide toggle icon on the right — styled to
+       look like one continuous box with the email field above it. */
+    .pw-wrap { position: relative; width: 100%; margin-bottom: 14px; }
+    .pw-wrap input[type="password"], .pw-wrap input[type="text"] {
+      width: 100%; box-sizing: border-box; padding-right: 42px; margin-bottom: 0;
     }
-    .pw-toggle:hover { color: var(--ink-2); }
-    .pw-toggle svg { width: 18px; height: 18px; }
+    /* Hide browser-native reveal/clear icons (Edge, some Chromium builds) so
+       they don't double up with our own eye icon and squeeze the input. */
+    input[type="password"]::-ms-reveal, input[type="password"]::-ms-clear { display: none; }
+    input::-webkit-credentials-auto-fill-button { display: none !important; }
+    input::-webkit-strong-password-auto-fill-button { display: none !important; }
+    .pw-toggle {
+      position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+      width: 30px; height: 30px; margin: 0;
+      background: none; border: none; outline: none; padding: 0;
+      border-radius: 8px; cursor: pointer;
+      color: var(--ink-3); display: flex; align-items: center; justify-content: center;
+      transition: color 0.15s, background 0.15s;
+    }
+    .pw-toggle:hover { color: var(--ink-2); background: var(--surface-2); }
+    .pw-toggle:focus-visible { box-shadow: 0 0 0 2px var(--accent-glow); }
+    .pw-toggle svg { width: 18px; height: 18px; display: block; }
     .pw-toggle .icon-eye-off { display: none; }
     .pw-toggle.showing .icon-eye { display: none; }
     .pw-toggle.showing .icon-eye-off { display: block; }
