@@ -786,6 +786,25 @@ banyak dikomplain soal harga? Tunjukkan buktinya dari kedua data itu.<button cla
           <p>Ada add-in bernama Claude for Excel yang bisa kerja langsung di dalam file Excel-mu tanpa copy-paste. Ini cuma jalan pintas — semua yang diajarkan di modul ini tetap penuh berfungsi lewat chat biasa di paket gratis.</p>
         </div>
 
+        <div class="section-heading">5. Bonus: Level Up — Tab Ringkasan Otomatis (Apps Script)</div>
+        <p class="body-text">Bagian 1-4 di atas sudah cukup untuk kerja sehari-hari lewat chat biasa. Bagian ini opsional, untuk kamu yang mau lebih hemat waktu jangka panjang: sekali setup, tab ringkasan di Google Sheets-mu bisa di-refresh otomatis kapan saja kamu tambah data baru — nggak perlu minta Claude bikin ulang rumus dari nol setiap kali.</p>
+
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Buka Google Sheet-mu, lalu Extensions/Ekstensi → Apps Script</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Hapus kode default, paste script dari file helper di bawah</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Sesuaikan 4 baris di bagian KONFIGURASI dengan nama sheet & kolom kamu</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Klik Run — izinkan akses, lalu tab "Ringkasan Otomatis" langsung muncul</p></div>
+        </div>
+
+        <div class="case-box">
+          <p>Unduh <strong>ad-m4-ringkasan-otomatis-helper.txt</strong> dari bagian "📥 Materi Unduhan" di atas modul ini — berisi script Apps Script siap pakai (tinggal sesuaikan 4 baris konfigurasi), plus contoh prompt untuk versi VBA kalau kamu pakai Excel.</p>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">📌 Pakai Excel, Bukan Google Sheets?</div>
+          <p>Fitur setara Apps Script di Excel namanya VBA macro. Karena cara install-nya beda-beda tergantung versi Excel, cara paling praktis bukan copy-paste kode generik — minta Claude generate kode VBA khusus untuk struktur datamu sekaligus langkah instalasinya (sebutkan versi Excel yang kamu pakai). Contoh prompt-nya juga ada di file helper di atas.</p>
+        </div>
+
         <div class="summary-box">
           <div class="summary-label">Ringkasan Modul 4</div>
           <ul>
@@ -793,14 +812,22 @@ banyak dikomplain soal harga? Tunjukkan buktinya dari kedua data itu.<button cla
             <li>Gunakan Claude buat menambahkan kolom kategori kualitatif (Topik, Sentimen, Urgensi) — cukup lewat chat biasa, gratis</li>
             <li>Buat Tabel Agregasi sebagai jembatan menuju Laporan Eksekutif (Modul 5) dan Grafik (Modul 6)</li>
             <li>Level lanjut: rumus otomatis dengan kondisi, tabel silang + deteksi tren, dan menggabungkan 2 sumber data untuk mencari korelasi</li>
+            <li>Bonus: Apps Script buat bikin tab "Ringkasan Otomatis" yang bisa di-refresh kapan saja tanpa minta Claude ulang</li>
           </ul>
         </div>
 
         <div class="prompt-section latihan">
           <div class="prompt-label">🎯 Latihan</div>
           <div class="case-box">
-            <p>Ambil data review dari Modul 1, pakai Prompt Kategorisasi Massal untuk nambah kolom Topik & Sentimen, lalu pakai Prompt Ringkasan Agregasi untuk hasilkan 1 tabel ringkasan akhir. Simpan tabel ini — dipakai lagi di Modul 5 dan Modul 6. (Opsional, level lanjut) Coba prompt (c): gabungkan hasil kategorisasi review-mu dengan data penjualan Modul 3, lihat apakah dugaan soal Roti Sobek Keju & Brownies terbukti.</p>
+            <p><strong>Data contoh:</strong> unduh <strong>analisis-data-m1-contoh-review-roti.csv</strong> dari bagian "📥 Materi Unduhan" di atas modul ini (file yang sama dengan Modul 1) — 15 review pelanggan roti online.</p>
           </div>
+          <ol style="margin:14px 0 0; padding-left:20px; font-size:13px; color:var(--ink); line-height:1.85;">
+            <li>Upload file CSV yang sudah kamu unduh ke Claude.</li>
+            <li>Kirim <strong>Prompt Kategorisasi Massal</strong> (bagian 1 di atas) untuk nambah kolom Topik Utama, Sentimen, dan Urgensi.</li>
+            <li>Di chat yang sama, kirim <strong>Prompt Ringkasan Agregasi</strong> (bagian 2 di atas) untuk hasilkan 1 tabel ringkasan akhir per topik.</li>
+            <li>Simpan tabel ringkasan ini — dipakai lagi di Modul 5 (Laporan) dan Modul 6 (Grafik).</li>
+            <li><em>(Opsional, level lanjut)</em> Coba Prompt (c) di atas — gabungkan hasil kategorisasi review-mu dengan data penjualan Modul 3, dan cek apakah dugaan soal Roti Sobek Keju & Brownies terbukti.</li>
+          </ol>
         </div>
 
         <div class="output-box">

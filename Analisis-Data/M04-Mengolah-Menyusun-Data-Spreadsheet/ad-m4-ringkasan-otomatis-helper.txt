@@ -1,0 +1,131 @@
+ANALISIS DATA & LAPORAN — Modul 4 Bonus
+"Tab Ringkasan Otomatis" — Google Apps Script starter
+=========================================================
+
+APA FUNGSINYA
+-------------
+Membuat (atau me-refresh) 1 tab baru bernama "Ringkasan Otomatis" yang
+otomatis menghitung total & persentase kontribusi per kategori dari data
+mentahmu — jadi setiap kali kamu tambah baris data baru, kamu tinggal
+jalankan ulang script ini, bukan minta Claude bikin ulang rumus dari nol.
+
+Cocok dipakai setelah kamu kategorisasi data (Prompt Kategorisasi Massal
+di atas) — baik untuk data review pelanggan (kolom "Topik Utama") maupun
+data penjualan (kolom kategori produk).
+
+
+CARA PAKAI
+----------
+1. Buka Google Sheet-mu (yang sudah berisi data mentah / sudah ditag).
+2. Menu Extensions / Ekstensi -> Apps Script.
+3. Hapus semua kode default (function myFunction() {...}), lalu copy-paste
+   semua kode di bagian "KODE APPS SCRIPT" di bawah ini.
+4. Sesuaikan 4 baris di bagian KONFIGURASI (di dalam kode) dengan nama
+   sheet dan nama kolom di data kamu sendiri.
+5. Klik tombol Run / Jalankan (pilih fungsi buatRingkasanOtomatis). Kali
+   pertama, Google akan minta izin akses ke Sheet kamu — klik Allow /
+   Izinkan, lalu Run lagi.
+6. Tab baru "Ringkasan Otomatis" langsung muncul di Sheet-mu.
+7. Setiap kali data mentah berubah, buka Apps Script lagi dan klik Run
+   sekali lagi untuk refresh tab-nya.
+
+Nggak wajib paham semua baris kode di bawah — cukup ganti bagian
+KONFIGURASI. Kalau struktur datamu beda jauh dari asumsi di script ini
+(misalnya headernya di baris ke-2, bukan baris 1), paste script ini ke
+Claude dan minta disesuaikan — itu lebih cepat daripada edit manual.
+
+
+KODE APPS SCRIPT (copy semua di bawah ini)
+-------------------------------------------
+
+// ─── KONFIGURASI — sesuaikan 4 baris ini dengan data kamu ─────────────
+var SHEET_SUMBER = 'Data';              // nama tab yang berisi data mentah/sudah ditag
+var KOLOM_KATEGORI = 'Topik Utama';     // nama kolom kategori yang mau direkap
+var KOLOM_NILAI = '';                   // nama kolom angka yang mau dijumlah (kosongkan '' untuk hitung jumlah baris saja)
+var SHEET_HASIL = 'Ringkasan Otomatis'; // nama tab hasil (dibuat otomatis kalau belum ada)
+// ────────────────────────────────────────────────────────────────────
+
+function buatRingkasanOtomatis() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sumber = ss.getSheetByName(SHEET_SUMBER);
+  if (!sumber) {
+    SpreadsheetApp.getUi().alert('Sheet "' + SHEET_SUMBER + '" tidak ditemukan. Cek nama tab di bagian KONFIGURASI.');
+    return;
+  }
+
+  var data = sumber.getDataRange().getValues();
+  var header = data[0];
+  var idxKategori = header.indexOf(KOLOM_KATEGORI);
+  var idxNilai = KOLOM_NILAI ? header.indexOf(KOLOM_NILAI) : -1;
+
+  if (idxKategori === -1) {
+    SpreadsheetApp.getUi().alert('Kolom "' + KOLOM_KATEGORI + '" tidak ditemukan di tab "' + SHEET_SUMBER + '". Cek nama kolom di bagian KONFIGURASI.');
+    return;
+  }
+
+  // Hitung total & jumlah per kategori
+  var rekap = {}; // { kategori: { jumlah: n, total: n } }
+  var totalKeseluruhan = 0;
+
+  for (var i = 1; i < data.length; i++) {
+    var kategori = data[i][idxKategori];
+    if (!kategori) continue; // lewati baris kosong
+
+    var nilai = idxNilai !== -1 ? (Number(data[i][idxNilai]) || 0) : 1;
+    if (!rekap[kategori]) rekap[kategori] = { jumlah: 0, total: 0 };
+    rekap[kategori].jumlah += 1;
+    rekap[kategori].total += nilai;
+    totalKeseluruhan += nilai;
+  }
+
+  // Urutkan dari kontribusi terbesar
+  var baris = Object.keys(rekap).map(function (kategori) {
+    var d = rekap[kategori];
+    var persen = totalKeseluruhan ? (d.total / totalKeseluruhan) * 100 : 0;
+    return [kategori, d.jumlah, d.total, persen.toFixed(1) + '%'];
+  });
+  baris.sort(function (a, b) { return b[2] - a[2]; });
+
+  // Tulis ke tab hasil (dibuat ulang setiap kali dijalankan)
+  var hasil = ss.getSheetByName(SHEET_HASIL);
+  if (hasil) hasil.clear();
+  else hasil = ss.insertSheet(SHEET_HASIL);
+
+  var labelNilai = KOLOM_NILAI ? ('Total ' + KOLOM_NILAI) : 'Jumlah Baris';
+  hasil.appendRow([KOLOM_KATEGORI, 'Jumlah Mentions', labelNilai, '% Kontribusi']);
+  hasil.getRange(1, 1, 1, 4).setFontWeight('bold');
+  baris.forEach(function (row) { hasil.appendRow(row); });
+  hasil.autoResizeColumns(1, 4);
+
+  SpreadsheetApp.getUi().alert('Tab "' + SHEET_HASIL + '" berhasil di-refresh — ' + baris.length + ' kategori.');
+}
+
+-------------------------------------------
+(akhir kode Apps Script)
+
+
+PAKAI EXCEL, BUKAN GOOGLE SHEETS?
+----------------------------------
+Fitur setara Apps Script di Excel namanya VBA macro. Bedanya:
+- Apps Script (di atas) bisa langsung kamu paste-jalankan di semua akun
+  Google Sheets tanpa setup tambahan.
+- VBA di Excel butuh file disimpan sebagai .xlsm (macro-enabled workbook)
+  dan cara mengaktifkan tab Developer beda-beda tergantung versi Excel
+  (Windows/Mac, Microsoft 365 vs versi lama) — jadi tidak ada 1 kode VBA
+  generik yang pasti langsung jalan buat semua orang.
+
+Cara paling praktis: JANGAN copy-paste kode generik. Sebaliknya, minta
+Claude generate VBA khusus untuk struktur data kamu sekaligus langkah
+instalasinya, pakai prompt ini:
+
+  "Saya pakai Excel (bukan Google Sheets), versi [sebutkan versi Excel
+  kamu, misalnya Excel 365 di Mac / Excel 2021 di Windows]. Saya punya
+  data di sheet bernama [nama sheet], dengan kolom kategori bernama
+  [nama kolom]. Tolong buatkan kode VBA macro yang bikin sheet baru
+  bernama 'Ringkasan Otomatis' berisi total dan persentase kontribusi
+  per kategori, dan jelaskan langkah-langkah cara install macro-nya di
+  Excel versi saya."
+
+Claude akan sekalian jelasin cara aktifkan tab Developer dan cara paste
+macro-nya sesuai versi Excel yang kamu sebutkan — jauh lebih reliable
+daripada template VBA generik yang belum tentu cocok dengan versi kamu.
