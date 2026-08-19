@@ -74,7 +74,8 @@
       color: #374151; margin-bottom: 6px;
     }
     #klaud-modal input[type="email"],
-    #klaud-modal input[type="password"] {
+    #klaud-modal input[type="password"],
+    #klaud-modal .pw-wrap input[type="text"] {
       width: 100%; padding: 12px 14px;
       border: 1.5px solid #E8EAF0; border-radius: 10px;
       font-size: 14px; color: #13163A; outline: none;
@@ -82,7 +83,8 @@
       font-family: inherit; background: #fff;
     }
     #klaud-modal input[type="email"]:focus,
-    #klaud-modal input[type="password"]:focus { border-color: #6C47FF; }
+    #klaud-modal input[type="password"]:focus,
+    #klaud-modal .pw-wrap input[type="text"]:focus { border-color: #6C47FF; }
 
     #klaud-modal .pw-wrap { position: relative; width: 100%; margin-bottom: 14px; }
     #klaud-modal .pw-wrap input[type="password"],
