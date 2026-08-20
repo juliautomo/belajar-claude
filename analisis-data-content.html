@@ -756,7 +756,18 @@ hitung jumlah review per Topik Utama DAN persentase kontribusinya
 terhadap total keseluruhan. Rumusnya harus otomatis ter-update kalau
 saya tambah baris data baru.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
-        <div class="prompt-section">
+        <p class="body-text" style="margin-top:14px;"><strong>Contoh hasil (simulasi dari data 66 review Modul 1):</strong></p>
+        <div class="compare-table-wrap">
+          <table class="compare-table">
+            <tr><th>Topik Utama</th><th>Jumlah Review</th><th>% Kontribusi</th></tr>
+            <tr><td>Rasa & Kualitas</td><td>26</td><td>39.4%</td></tr>
+            <tr><td>Pengiriman</td><td>19</td><td>28.8%</td></tr>
+            <tr><td>Harga</td><td>14</td><td>21.2%</td></tr>
+            <tr><td>Pelayanan</td><td>7</td><td>10.6%</td></tr>
+          </table>
+        </div>
+
+        <div class="prompt-section" style="margin-top:22px;">
           <div class="prompt-label">📝 b. Tabel Silang + Deteksi Tren</div>
           <div class="prompt-box">Dari data review ini, buatkan tabel silang: baris = Topik Utama, kolom =
 Bulan, isinya jumlah komplain di tiap kombinasi. Habis itu, kasih tau
@@ -765,6 +776,19 @@ paling perlu diprioritaskan.<button class="copy-btn" onclick="copyPrompt(this)">
           <div class="case-box">
             <p>Data contoh dari Modul 1 sudah mencakup tanggal Mei-Juni, jadi kamu punya 2 bulan asli buat dibandingkan di tabel silang ini.</p>
           </div>
+        </div>
+        <p class="body-text" style="margin-top:14px;"><strong>Contoh hasil (simulasi dari data 66 review Modul 1):</strong></p>
+        <div class="compare-table-wrap">
+          <table class="compare-table">
+            <tr><th>Topik Utama</th><th>Mei</th><th>Juni</th><th>Tren</th></tr>
+            <tr><td>Harga</td><td>5</td><td>9</td><td>📈 Naik</td></tr>
+            <tr><td>Pengiriman</td><td>13</td><td>6</td><td>📉 Turun</td></tr>
+            <tr><td>Rasa & Kualitas</td><td>21</td><td>5</td><td>📉 Turun</td></tr>
+            <tr><td>Pelayanan</td><td>5</td><td>2</td><td>📉 Turun</td></tr>
+          </table>
+        </div>
+        <div class="case-box">
+          <p>Topik <strong>Harga</strong> naik dari 5 ke 9 review (Mei → Juni) — ini yang paling perlu diprioritaskan, dan waktunya berbarengan dengan kenaikan harga Roti Sobek Keju & Brownies pertengahan Juni yang dibahas di Modul 3.</p>
         </div>
 
         <div class="section-heading">4. Menghubungkan Hasil Spreadsheet ke Modul Selanjutnya</div>
