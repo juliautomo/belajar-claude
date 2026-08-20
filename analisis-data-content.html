@@ -747,14 +747,14 @@ Urutkan dari topik yang paling banyak dikeluhkan.<button class="copy-btn" onclic
           </table>
         </div>
 
-        <div class="section-heading">3. Rumus, Tabel Silang, dan Gabungan Data</div>
-        <p class="body-text">Setelah tabel agregasi dasar, ada 3 kemampuan lanjutan yang bisa langsung kamu pakai — semuanya masih lewat chat biasa, gratis:</p>
+        <div class="section-heading">3. Rumus Otomatis & Tabel Silang</div>
+        <p class="body-text">Setelah tabel agregasi dasar, ada 2 kemampuan lanjutan yang bisa langsung kamu pakai ke data yang sama — semuanya masih lewat chat biasa, gratis:</p>
         <div class="prompt-section">
           <div class="prompt-label">📝 a. Rumus Otomatis dengan Kondisi</div>
-          <div class="prompt-box">Dari data penjualan roti ini, buatkan rumus untuk hitung total penjualan
-per kategori produk DAN persentase kontribusinya terhadap total
-keseluruhan bulan itu. Rumusnya harus otomatis ter-update kalau saya
-tambah baris data baru.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="prompt-box">Dari data review yang sudah ditag Topik Utama, buatkan rumus untuk
+hitung jumlah review per Topik Utama DAN persentase kontribusinya
+terhadap total keseluruhan. Rumusnya harus otomatis ter-update kalau
+saya tambah baris data baru.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
         <div class="prompt-section">
           <div class="prompt-label">📝 b. Tabel Silang + Deteksi Tren</div>
@@ -762,6 +762,20 @@ tambah baris data baru.<button class="copy-btn" onclick="copyPrompt(this)">Salin
 Bulan, isinya jumlah komplain di tiap kombinasi. Habis itu, kasih tau
 topik mana yang trennya makin naik dari bulan ke bulan — ini yang
 paling perlu diprioritaskan.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+          <div class="case-box">
+            <p>Data contoh dari Modul 1 sudah mencakup tanggal Mei-Juni, jadi kamu punya 2 bulan asli buat dibandingkan di tabel silang ini.</p>
+          </div>
+        </div>
+
+        <div class="section-heading">4. Menghubungkan Hasil Spreadsheet ke Modul Selanjutnya</div>
+        <div class="info-grid">
+          <div class="info-card"><strong>Di Modul 5 (Laporan)</strong><span>Tinggal minta Claude ubah kolom "Temuan/Masalah Utama" jadi paragraf Situasi → Temuan → Rekomendasi untuk atasan</span></div>
+          <div class="info-card"><strong>Di Modul 6 (Visualisasi)</strong><span>Tinggal ambil kolom "Topik Utama" dan "Jumlah Mentions" buat dimasukkan ke Artifacts atau chart Google Sheets</span></div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">🚀 Opsional, Level Lanjut: Gabungkan dengan Data Lain</div>
+          <p>Kalau kamu juga punya data penjualan (misalnya data contoh Modul 3), kamu bisa menggabungkannya dengan hasil kategorisasi review di atas untuk mencari korelasi — bukan cuma "review-nya negatif", tapi "review negatif ini juga nyambung sama penjualan yang turun". Ini butuh 2 file sekaligus, jadi terpisah dari 4 langkah utama di atas.</p>
         </div>
         <div class="prompt-section">
           <div class="prompt-label">📝 c. Menggabungkan 2 Sumber Data untuk Mencari Korelasi</div>
@@ -773,12 +787,6 @@ banyak dikomplain soal harga? Tunjukkan buktinya dari kedua data itu.<button cla
           <div class="case-box">
             <p>Ini otomatis membuktikan (atau membantah) dugaan yang udah dibangun sejak Modul 3 — kalau ternyata memang nyambung, ini bukti kuat untuk masuk ke laporan atau rekomendasi tindakan.</p>
           </div>
-        </div>
-
-        <div class="section-heading">4. Menghubungkan Hasil Spreadsheet ke Modul Selanjutnya</div>
-        <div class="info-grid">
-          <div class="info-card"><strong>Di Modul 5 (Laporan)</strong><span>Tinggal minta Claude ubah kolom "Temuan/Masalah Utama" jadi paragraf Situasi → Temuan → Rekomendasi untuk atasan</span></div>
-          <div class="info-card"><strong>Di Modul 6 (Visualisasi)</strong><span>Tinggal ambil kolom "Topik Utama" dan "Jumlah Mentions" buat dimasukkan ke Artifacts atau chart Google Sheets</span></div>
         </div>
 
         <div class="tip-box">
@@ -811,7 +819,8 @@ banyak dikomplain soal harga? Tunjukkan buktinya dari kedua data itu.<button cla
             <li>Cek 2 masalah tambahan sebelum kategorisasi: merged cells dan header bertingkat</li>
             <li>Gunakan Claude buat menambahkan kolom kategori kualitatif (Topik, Sentimen, Urgensi) — cukup lewat chat biasa, gratis</li>
             <li>Buat Tabel Agregasi sebagai jembatan menuju Laporan Eksekutif (Modul 5) dan Grafik (Modul 6)</li>
-            <li>Level lanjut: rumus otomatis dengan kondisi, tabel silang + deteksi tren, dan menggabungkan 2 sumber data untuk mencari korelasi</li>
+            <li>Level lanjut di data yang sama: rumus otomatis dengan kondisi, dan tabel silang + deteksi tren</li>
+            <li>Opsional: gabungkan dengan data penjualan (file kedua) untuk mencari korelasi</li>
             <li>Bonus: Apps Script buat bikin tab "Ringkasan Otomatis" yang bisa di-refresh kapan saja tanpa minta Claude ulang</li>
           </ul>
         </div>
@@ -819,14 +828,16 @@ banyak dikomplain soal harga? Tunjukkan buktinya dari kedua data itu.<button cla
         <div class="prompt-section latihan">
           <div class="prompt-label">🎯 Latihan</div>
           <div class="case-box">
-            <p><strong>Data contoh:</strong> unduh <strong>analisis-data-m1-contoh-review-roti.csv</strong> dari bagian "📥 Materi Unduhan" di atas modul ini (file yang sama dengan Modul 1) — 66 review pelanggan roti online lengkap dengan tanggal.</p>
+            <p><strong>Data contoh:</strong> unduh <strong>analisis-data-m1-contoh-review-roti.csv</strong> dari bagian "📥 Materi Unduhan" di atas modul ini (file yang sama dengan Modul 1) — 66 review pelanggan roti online lengkap dengan tanggal. Semua langkah 1-6 di bawah cukup pakai file ini saja.</p>
           </div>
           <ol style="margin:14px 0 0; padding-left:20px; font-size:13px; color:var(--ink); line-height:1.85;">
             <li>Upload file CSV yang sudah kamu unduh ke Claude.</li>
-            <li>Kirim <strong>Prompt Kategorisasi Massal</strong> (bagian 1 di atas) untuk nambah kolom Topik Utama, Sentimen, dan Urgensi.</li>
-            <li>Di chat yang sama, kirim <strong>Prompt Ringkasan Agregasi</strong> (bagian 2 di atas) untuk hasilkan 1 tabel ringkasan akhir per topik.</li>
-            <li>Simpan tabel ringkasan ini — dipakai lagi di Modul 5 (Laporan) dan Modul 6 (Grafik).</li>
-            <li><em>(Opsional, level lanjut)</em> Coba Prompt (c) di atas — gabungkan hasil kategorisasi review-mu dengan data penjualan Modul 3, dan cek apakah dugaan soal Roti Sobek Keju & Brownies terbukti.</li>
+            <li>Kirim <strong>Prompt Kategorisasi Massal</strong> (bagian 1) untuk nambah kolom Topik Utama, Sentimen, dan Urgensi.</li>
+            <li>Di chat yang sama, kirim <strong>Prompt Ringkasan Agregasi</strong> (bagian 2) untuk hasilkan 1 tabel ringkasan akhir per topik.</li>
+            <li>Coba <strong>Prompt (a) Rumus Otomatis</strong> (bagian 3) untuk dapat jumlah & persentase kontribusi per Topik Utama yang otomatis ter-update.</li>
+            <li>Coba <strong>Prompt (b) Tabel Silang</strong> (bagian 3) untuk lihat topik mana yang trennya naik dari Mei ke Juni.</li>
+            <li>Simpan tabel ringkasan dari langkah 3 — dipakai lagi di Modul 5 (Laporan) dan Modul 6 (Grafik).</li>
+            <li><em>(Opsional, level lanjut, butuh file kedua)</em> Kalau kamu juga punya data penjualan Modul 3, coba <strong>Prompt (c)</strong> di bagian 4 untuk menggabungkan keduanya dan cek apakah dugaan soal Roti Sobek Keju & Brownies terbukti.</li>
           </ol>
         </div>
 
