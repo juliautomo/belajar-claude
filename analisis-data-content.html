@@ -668,11 +668,9 @@ dan tandai kalau ada baris yang kelihatan duplikat.<button class="copy-btn" oncl
         <div class="prompt-section latihan">
           <div class="prompt-label">🎯 Latihan</div>
           <div class="case-box">
-            <p><strong>Data contoh (penjualan mingguan 5 produk, Mei–Juni):</strong><br>
-            Minggu 1 Mei: Roti Sobek Keju 78, Brownies 58, Roti Tawar 90, Donat 65, Croissant 70<br>
-            Minggu 3 Juni (harga Roti Sobek Keju & Brownies naik 15-18%): Roti Sobek Keju 48, Brownies 35, Roti Tawar 88, Donat 63, Croissant 72</p>
+            <p><strong>Data contoh:</strong> unduh <strong>analisis-data-m3-contoh-penjualan-mingguan.csv</strong> dari bagian "📥 Materi Unduhan" di atas modul ini — penjualan mingguan 5 produk, Mei-Juni (8 minggu). Harga Roti Sobek Keju & Brownies naik 15-18% mulai Minggu 3 Juni — keduanya mulai turun tepat di minggu itu, produk lain relatif stabil.</p>
           </div>
-          <p class="body-text">Tulis ulang prompt buruk "Analisa data penjualan toko roti aku dong" pakai framework K-P-I. Konteksnya: penjualan Juni turun dibanding Mei, dan kamu sempat naikin harga beberapa produk di pertengahan bulan. Tentukan sendiri pertanyaan spesifik dan jenis insight yang kamu mau, lalu kirim ke Claude bareng data di atas.</p>
+          <p class="body-text">Upload file CSV yang sudah kamu unduh ke Claude. Tulis ulang prompt buruk "Analisa data penjualan toko roti aku dong" pakai framework K-P-I. Konteksnya: penjualan Juni turun dibanding Mei, dan kamu sempat naikin harga beberapa produk di pertengahan bulan. Tentukan sendiri pertanyaan spesifik dan jenis insight yang kamu mau, lalu kirim ke Claude bareng data yang sudah kamu upload.</p>
         </div>
 
         <div class="output-box">
@@ -799,10 +797,13 @@ paling perlu diprioritaskan.<button class="copy-btn" onclick="copyPrompt(this)">
 
         <div class="tip-box">
           <div class="tip-label">🚀 Opsional, Level Lanjut: Gabungkan dengan Data Lain</div>
-          <p>Kalau kamu juga punya data penjualan (misalnya data contoh Modul 3), kamu bisa menggabungkannya dengan hasil kategorisasi review di atas untuk mencari korelasi — bukan cuma "review-nya negatif", tapi "review negatif ini juga nyambung sama penjualan yang turun". Ini butuh 2 file sekaligus, jadi terpisah dari 4 langkah utama di atas.</p>
+          <p>Kalau kamu juga punya data penjualan, kamu bisa menggabungkannya dengan hasil kategorisasi review di atas untuk mencari korelasi — bukan cuma "review-nya negatif", tapi "review negatif ini juga nyambung sama penjualan yang turun". Ini butuh 2 file sekaligus, jadi terpisah dari 4 langkah utama di atas.</p>
         </div>
         <div class="prompt-section">
           <div class="prompt-label">📝 c. Menggabungkan 2 Sumber Data untuk Mencari Korelasi</div>
+          <div class="case-box">
+            <p><strong>File kedua:</strong> unduh <strong>analisis-data-m3-contoh-penjualan-mingguan.csv</strong> dari Modul 3 (bagian "📥 Materi Unduhan") — penjualan mingguan 5 produk, Mei-Juni. Upload file ini bersama hasil kategorisasi review yang sudah kamu buat di atas.</p>
+          </div>
           <div class="prompt-box">Saya punya 2 data: review pelanggan (yang sudah ditag topik &
 sentimen) dan data penjualan mingguan per produk. Gabungkan
 keduanya dan cari tau: apakah Roti Sobek Keju dan Brownies — yang
@@ -820,6 +821,7 @@ banyak dikomplain soal harga? Tunjukkan buktinya dari kedua data itu.<button cla
 
         <div class="section-heading">5. Bonus: Level Up — Tab Ringkasan Otomatis (Apps Script)</div>
         <p class="body-text">Bagian 1-4 di atas sudah cukup untuk kerja sehari-hari lewat chat biasa. Bagian ini opsional, untuk kamu yang mau lebih hemat waktu jangka panjang: sekali setup, tab ringkasan di Google Sheets-mu bisa di-refresh otomatis kapan saja kamu tambah data baru — nggak perlu minta Claude bikin ulang rumus dari nol setiap kali.</p>
+        <p class="body-text">Script ini bekerja di atas data hasil kategorisasi dari langkah 1 (data review yang sudah ditag kolom "Topik Utama") — bukan data mentah. Jadi urutannya: jalankan dulu Prompt Kategorisasi Massal, paste hasilnya ke satu tab Google Sheets, baru pasang script di tab itu. Setiap kamu tambah baris review baru dan tag ulang, tinggal klik Run lagi untuk refresh ringkasannya — nggak perlu minta Claude susun ulang tabelnya dari nol.</p>
 
         <div class="step-row">
           <div class="step-card"><div class="step-num">1</div><p>Buka Google Sheet-mu, lalu Extensions/Ekstensi → Apps Script</p></div>
