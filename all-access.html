@@ -571,6 +571,15 @@
     document.getElementById('paymentSubmitBtn').disabled = false;
     document.getElementById('paymentSubmitBtn').textContent = 'Lanjutkan Pembayaran →';
     document.getElementById('paymentModal').style.display = 'flex';
+    // InitiateCheckout: fires when the buyer actually starts checkout (opens this
+    // modal), ahead of AddPaymentInfo (fired later in submitPayment(), once a real
+    // payment reference exists). Two standard Meta events instead of one, so the
+    // funnel step where people drop off before ever submitting the form is visible.
+    try {
+      if (typeof fbq !== 'undefined') {
+        fbq('track', 'InitiateCheckout', { value: effectiveAmount, currency: 'IDR' });
+      }
+    } catch (e) { /* fail silent — worst case this one event is missed */ }
   }
 
   function closePaymentModal() {
@@ -597,13 +606,14 @@
       });
       const data = await res.json();
       if (!data.success) throw new Error(data.message);
-      // InitiateCheckout: mid-funnel signal for Meta's ad delivery algorithm.
-      // At low daily budget, real Purchase events are too sparse for optimization
-      // to learn from quickly — this fires as soon as a payment reference exists,
-      // well before the buyer completes payment in the Duitku widget.
+      // AddPaymentInfo: fires once a real Duitku payment reference exists, right
+      // before the buyer completes payment in the widget. Second of two funnel
+      // events (InitiateCheckout fires earlier, when the modal opens in buyCourse())
+      // — gives Meta's ad delivery algorithm more signal than waiting on sparse
+      // real Purchase events alone at this budget.
       try {
         if (typeof fbq !== 'undefined') {
-          fbq('track', 'InitiateCheckout', { value: effectiveAmount, currency: 'IDR' }, { eventID: data.reference });
+          fbq('track', 'AddPaymentInfo', { value: effectiveAmount, currency: 'IDR' }, { eventID: data.reference });
         }
       } catch (e) { /* fail silent — worst case this one event is missed */ }
       closePaymentModal();
