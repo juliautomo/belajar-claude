@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="posthog-config.js"></script>
+<script src="meta-pixel.js"></script>
 <title>Pembayaran Berhasil — Belajar Claude</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&display=swap" rel="stylesheet">
 <style>
@@ -101,6 +103,32 @@
     <p class="note">Ada pertanyaan? Hubungi kami di WhatsApp Community.</p>
   </div>
 
+<script>
+  // Fire Meta Pixel Purchase once per order. `amount` and `order` come from the
+  // Duitku returnUrl (set server-side in belajar-claude-backend/index.js), so the
+  // value reported to Meta is the real amount charged, not a guess.
+  //
+  // Caveat: this page loads on redirect from Duitku's checkout, which for some
+  // payment methods (e.g. bank transfer VA) can happen before the transfer is
+  // actually confirmed by the /webhook/duitku handler. For a first low-budget
+  // test this is an acceptable approximation; if paid traffic scales up, move
+  // this event server-side (in the webhook, gated on resultCode === '00') via
+  // Meta Conversions API instead, which fires only on confirmed payment.
+  (function () {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const amount = params.get('amount');
+      const order  = params.get('order');
+      if (!amount || !order || typeof fbq === 'undefined') return;
+
+      const firedKey = 'fb_purchase_fired_' + order;
+      if (localStorage.getItem(firedKey)) return; // already tracked (e.g. page refresh)
+
+      fbq('track', 'Purchase', { value: parseInt(amount, 10), currency: 'IDR' }, { eventID: order });
+      localStorage.setItem(firedKey, '1');
+    } catch (e) { /* fail silent — worst case this one event is missed */ }
+  })();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script>
