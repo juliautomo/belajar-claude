@@ -74,7 +74,8 @@
       color: #374151; margin-bottom: 6px;
     }
     #klaud-modal input[type="email"],
-    #klaud-modal input[type="password"] {
+    #klaud-modal input[type="password"],
+    #klaud-modal .pw-wrap input[type="text"] {
       width: 100%; padding: 12px 14px;
       border: 1.5px solid #E8EAF0; border-radius: 10px;
       font-size: 14px; color: #13163A; outline: none;
@@ -82,7 +83,32 @@
       font-family: inherit; background: #fff;
     }
     #klaud-modal input[type="email"]:focus,
-    #klaud-modal input[type="password"]:focus { border-color: #6C47FF; }
+    #klaud-modal input[type="password"]:focus,
+    #klaud-modal .pw-wrap input[type="text"]:focus { border-color: #6C47FF; }
+
+    #klaud-modal .pw-wrap { position: relative; width: 100%; margin-bottom: 14px; }
+    #klaud-modal .pw-wrap input[type="password"],
+    #klaud-modal .pw-wrap input[type="text"] {
+      width: 100%; box-sizing: border-box; padding-right: 42px; margin-bottom: 0;
+    }
+    #klaud-modal input[type="password"]::-ms-reveal,
+    #klaud-modal input[type="password"]::-ms-clear { display: none; }
+    #klaud-modal .pw-toggle {
+      -webkit-appearance: none; -moz-appearance: none; appearance: none;
+      position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+      width: 30px; height: 30px; margin: 0;
+      background: transparent; background-color: transparent;
+      border: none; box-shadow: none; outline: none; padding: 0;
+      border-radius: 8px; cursor: pointer;
+      color: #BBBBBB; display: flex; align-items: center; justify-content: center;
+      transition: color 0.15s, background-color 0.15s;
+    }
+    #klaud-modal .pw-toggle:hover { color: #6B7080; background-color: #F5F5F7; }
+    #klaud-modal .pw-toggle:focus-visible { box-shadow: 0 0 0 2px rgba(108,71,255,0.18); }
+    #klaud-modal .pw-toggle svg { width: 18px; height: 18px; display: block; }
+    #klaud-modal .pw-toggle .icon-eye-off { display: none; }
+    #klaud-modal .pw-toggle.showing .icon-eye { display: none; }
+    #klaud-modal .pw-toggle.showing .icon-eye-off { display: block; }
 
     #klaud-modal .m-btn {
       width: 100%; padding: 13px;
@@ -154,7 +180,13 @@
         <label for="m-login-email">Email</label>
         <input type="email" id="m-login-email" placeholder="nama@email.com" autocomplete="email" />
         <label for="m-login-password">Password</label>
-        <input type="password" id="m-login-password" placeholder="Password kamu" autocomplete="current-password" />
+        <div class="pw-wrap">
+          <input type="password" id="m-login-password" placeholder="Password kamu" autocomplete="current-password" />
+          <button type="button" class="pw-toggle" id="m-pw-toggle" aria-label="Tampilkan password">
+            <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><path d="M6.1 6.1C3.51 7.86 1 12 1 12s4 8 11 8a9.26 9.26 0 0 0 5.9-2.1"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
+        </div>
         <button class="m-forgot" id="m-forgot-link">Lupa password?</button>
         <button class="m-btn" id="m-login-btn">Masuk →</button>
         <div class="m-msg" id="m-login-msg"></div>
@@ -205,6 +237,15 @@
   // ── Event listeners ─────────────────────────────────────────────────────────
   overlay.querySelector('#klaud-modal-close').addEventListener('click', function() {
     window.closeLoginModal();
+  });
+
+  // Password show/hide toggle
+  overlay.querySelector('#m-pw-toggle').addEventListener('click', function() {
+    var input = overlay.querySelector('#m-login-password');
+    var showing = input.type === 'text';
+    input.type = showing ? 'password' : 'text';
+    this.classList.toggle('showing', !showing);
+    this.setAttribute('aria-label', showing ? 'Tampilkan password' : 'Sembunyikan password');
   });
 
   // Tab clicks
