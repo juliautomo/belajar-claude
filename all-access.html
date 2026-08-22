@@ -597,6 +597,15 @@
       });
       const data = await res.json();
       if (!data.success) throw new Error(data.message);
+      // InitiateCheckout: mid-funnel signal for Meta's ad delivery algorithm.
+      // At low daily budget, real Purchase events are too sparse for optimization
+      // to learn from quickly — this fires as soon as a payment reference exists,
+      // well before the buyer completes payment in the Duitku widget.
+      try {
+        if (typeof fbq !== 'undefined') {
+          fbq('track', 'InitiateCheckout', { value: effectiveAmount, currency: 'IDR' }, { eventID: data.reference });
+        }
+      } catch (e) { /* fail silent — worst case this one event is missed */ }
       closePaymentModal();
       checkout.process(data.reference, {
         successEvent: () => { window.showPaymentSuccess(); },
