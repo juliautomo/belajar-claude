@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: August 19, 2026 (checkpoint 221)_
+_Last updated: August 19, 2026 (checkpoint 222)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -3900,3 +3900,18 @@ Merged via PR (`#1`, "Sync dev to main: Claude Sehari-hari course launch-ready +
 **Next step for whoever picks this up**: nothing has been written into any HTML file for either the Dasar bonus additions or the Advanced course yet — this checkpoint is the planning record. The next session should start with either (a) drafting the actual bonus box copy + Apps Script generation prompts for Dasar Modules 4/5/6, or (b) building out the Advanced course's full module content, per Julia's direction on which to prioritize.
 
 **Commits this checkpoint** (`belajar-claude`, both on `dev`): `b181aac`, `4779e25`. (Plus this checkpoint's own `CONTEXT.md` commit.)
+
+
+---
+
+## SHIPPED (Checkpoint 222, August 19, 2026): Basic SEO metadata added to 6 key pages; Tiffany independently began implementing the Checkpoint 221 Dasar-bonus plan on Analisis Data
+
+**Status: shipped to `dev`. Not merged to `main`.**
+
+**SEO audit + fix.** Julia asked how to improve SEO; audited the live site directly rather than giving generic advice. Findings: zero pages had a meta description, zero had Open Graph/Twitter Card tags, no canonical tags, no `robots.txt`/`sitemap.xml`, no JSON-LD structured data, no favicon, and the 8 legacy sales pages (`produktivitas.html` etc., retired as redirect stubs back in Checkpoint 34) redirect via client-side JS rather than a real 301. Highest-impact/lowest-risk items — meta descriptions and Open Graph tags — were shipped this checkpoint: `index.html`, `all-access.html`, `analisis-data.html`, `strategi-marketing.html`, `claude-sehari-hari.html`, and `prompt-gratis.html` each got a unique `<meta name="description">` grounded in that page's actual hero copy, a `<link rel="canonical">`, and full OG/Twitter Card tags (`og:title`, `og:description`, `og:image` pointing at the existing `img/hero-illustration.webp`, `twitter:card=summary_large_image`, etc.). This directly fixes links shared via WhatsApp/social currently showing no preview image or description. Redirect-stub pages were deliberately left untouched since they redirect away immediately. (`10f77c4`)
+
+**Still open, not yet built, ranked by priority for a future session**: `robots.txt` + `sitemap.xml` (don't exist at all), `Course`/`FAQPage` JSON-LD structured data (all-access.html's existing FAQ content is a natural fit for FAQ rich results), converting the 8 legacy pages' client-side JS redirects to real 301s (would need a Cloudflare-level `_redirects` file or Workers routing rule, since `wrangler.jsonc` currently only serves static assets with no redirect config), and a favicon (none exists in the repo).
+
+**Separately discovered while pushing the above: Tiffany had independently started implementing a chunk of the Checkpoint 221 planning pass** on `analisis-data-content.html`, landing 8 commits on `dev` between Checkpoint 221 and this one (`a47ad3f` through `aa64555`) — Module 1 and Module 2's latihan exercises now reference downloadable CSVs instead of inline pasted data (46-row and part of a 66-row set), Module 4 got a full restructure (numbered latihan steps, a 66-row review CSV, an attached-file-only section 3, example-result tables for the rumus/tabel-silang prompts) plus **the Apps Script "bonus/level-up" section Checkpoint 221 had proposed but not yet built**, and Module 3 got its own sales CSV. Confirmed with Julia this was Tiffany's work (not a session mix-up) and that no reconciliation against the Checkpoint 221 plan was needed right now — noting it here mainly so a future session doesn't duplicate it, and so whoever picks up the remaining Checkpoint 221 items (Module 5 PPTX bonus, Module 6 PDF/dashboard bonus + pro-tip box, the separate paid Advanced course) knows Modules 1/2/3/4 may already be partly or fully done — worth diffing against the live file before starting, rather than assuming Checkpoint 221's plan is all still greenfield.
+
+**Commits this checkpoint** (`belajar-claude`, on `dev`): `10f77c4` (this session's SEO work). Tiffany's 8 commits (`a47ad3f`–`aa64555`) are noted above for context but weren't made by this session. (Plus this checkpoint's own `CONTEXT.md` commit.)
