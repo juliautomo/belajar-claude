@@ -8,7 +8,6 @@ Disallow: /payment-success.html
 Disallow: /reset-password.html
 Disallow: /community.html
 Disallow: /coming-soon.html
-Disallow: /kebijakan-pengembalian.html
 Disallow: /kursus-karyawan.html
 Disallow: /kursus-mahasiswa.html
 Disallow: /kursus-ukm.html
