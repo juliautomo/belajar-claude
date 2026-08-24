@@ -9,6 +9,11 @@ Disallow: /reset-password.html
 Disallow: /community.html
 Disallow: /coming-soon.html
 Disallow: /kebijakan-pengembalian.html
+Disallow: /kursus-karyawan.html
+Disallow: /kursus-mahasiswa.html
+Disallow: /kursus-ukm.html
+Disallow: /paket.html
+Disallow: /paket-content-creator.html
 Disallow: /*-content.html$
 
 Sitemap: https://belajarclaude.id/sitemap.xml
