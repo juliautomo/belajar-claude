@@ -580,6 +580,12 @@
         fbq('track', 'InitiateCheckout', { value: effectiveAmount, currency: 'IDR' });
       }
     } catch (e) { /* fail silent — worst case this one event is missed */ }
+    // PostHog mirror of the Meta Pixel event above — independent tracking destination.
+    try {
+      if (typeof posthog !== 'undefined') {
+        posthog.capture('checkout_started', { value: effectiveAmount, currency: 'IDR' });
+      }
+    } catch (e) { /* fail silent */ }
   }
 
   function closePaymentModal() {
@@ -616,6 +622,12 @@
           fbq('track', 'AddPaymentInfo', { value: effectiveAmount, currency: 'IDR' }, { eventID: data.reference });
         }
       } catch (e) { /* fail silent — worst case this one event is missed */ }
+      // PostHog mirror of the Meta Pixel event above — independent tracking destination.
+      try {
+        if (typeof posthog !== 'undefined') {
+          posthog.capture('payment_info_added', { value: effectiveAmount, currency: 'IDR', reference: data.reference });
+        }
+      } catch (e) { /* fail silent */ }
       closePaymentModal();
       checkout.process(data.reference, {
         successEvent: () => { window.showPaymentSuccess(); },

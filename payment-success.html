@@ -128,6 +128,23 @@
       localStorage.setItem(firedKey, '1');
     } catch (e) { /* fail silent — worst case this one event is missed */ }
   })();
+
+  // PostHog mirror of the Meta Pixel Purchase event above — independent tracking
+  // destination, own dedupe key so one firing doesn't suppress the other.
+  (function () {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const amount = params.get('amount');
+      const order  = params.get('order');
+      if (!amount || !order || typeof posthog === 'undefined') return;
+
+      const firedKey = 'ph_purchase_fired_' + order;
+      if (localStorage.getItem(firedKey)) return; // already tracked (e.g. page refresh)
+
+      posthog.capture('purchase_completed', { value: parseInt(amount, 10), currency: 'IDR', order_id: order });
+      localStorage.setItem(firedKey, '1');
+    } catch (e) { /* fail silent — worst case this one event is missed */ }
+  })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
