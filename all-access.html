@@ -570,6 +570,14 @@
     document.getElementById('paymentSubmitBtn').disabled = false;
     document.getElementById('paymentSubmitBtn').textContent = 'Lanjutkan Pembayaran →';
     document.getElementById('paymentModal').style.display = 'flex';
+    // PostHog: checkout_started fires when the buyer opens this modal — the funnel
+    // step before payment_info_added (submitPayment()) and purchase_completed
+    // (payment-success.html), so drop-off before ever submitting the form is visible.
+    try {
+      if (typeof posthog !== 'undefined') {
+        posthog.capture('checkout_started', { value: effectiveAmount, currency: 'IDR' });
+      }
+    } catch (e) { /* fail silent — worst case this one event is missed */ }
   }
 
   function closePaymentModal() {
@@ -596,6 +604,13 @@
       });
       const data = await res.json();
       if (!data.success) throw new Error(data.message);
+      // PostHog: payment_info_added fires once a real Duitku payment reference
+      // exists, right before the buyer completes payment in the widget.
+      try {
+        if (typeof posthog !== 'undefined') {
+          posthog.capture('payment_info_added', { value: effectiveAmount, currency: 'IDR', reference: data.reference });
+        }
+      } catch (e) { /* fail silent — worst case this one event is missed */ }
       closePaymentModal();
       checkout.process(data.reference, {
         successEvent: () => { window.showPaymentSuccess(); },

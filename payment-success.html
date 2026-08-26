@@ -4,6 +4,32 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="posthog-config.js"></script>
+<script>
+  // PostHog: purchase_completed, mirrors the Meta Pixel Purchase event on `main`
+  // (not present here — Meta Pixel is main-only, see TEAM-WORKFLOW.md). `amount`/
+  // `order` come from the Duitku returnUrl (set server-side in
+  // belajar-claude-backend/index.js), so the value reported is the real amount
+  // charged, not a guess.
+  //
+  // Caveat: this page loads on redirect from Duitku's checkout, which for some
+  // payment methods (e.g. bank transfer VA) can happen before the transfer is
+  // actually confirmed by the /webhook/duitku handler — same approximation as
+  // the Meta Pixel Purchase event on `main`.
+  (function () {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const amount = params.get('amount');
+      const order  = params.get('order');
+      if (!amount || !order || typeof posthog === 'undefined') return;
+
+      const firedKey = 'ph_purchase_fired_' + order;
+      if (localStorage.getItem(firedKey)) return; // already tracked (e.g. page refresh)
+
+      posthog.capture('purchase_completed', { value: parseInt(amount, 10), currency: 'IDR', order_id: order });
+      localStorage.setItem(firedKey, '1');
+    } catch (e) { /* fail silent — worst case this one event is missed */ }
+  })();
+</script>
 <title>Pembayaran Berhasil — Belajar Claude</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&display=swap" rel="stylesheet">
 <style>
