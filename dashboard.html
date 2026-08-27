@@ -423,7 +423,7 @@ const ALL_COURSES = {
   'strategi-marketing': { title:'Strategi & Analisis Marketing', icon:'📈', thumb:'et3', contentLink:'strategi-marketing-content.html', salesLink:'strategi-marketing.html', desc:'Analisis performa iklan, alokasi budget, dan 1 Strategi Command Center yang terus jalan.', price:'Termasuk All Access', level:'Intermediate', exThumb:'ex-t1', modules:3, comingSoon:true, visible:true },
   'analisis-data':      { title:'Analisis Data & Laporan',       icon:'📊', thumb:'et4', contentLink:'analisis-data-content.html',   salesLink:'analisis-data.html',     desc:'Ubah data mentah jadi insight bisnis yang bisa dijadikan keputusan.',price:'Termasuk All Access', level:'Intermediate', exThumb:'ex-t2', modules:7, comingSoon:false, visible:true },
   'build-automation':   { title:'Automasi Workflow',             icon:'⚡', thumb:'et4', contentLink:'coming-soon.html',              salesLink:'coming-soon.html',       desc:'Buat 3 automation aktif dengan Zapier, Make.com & n8n.',          price:'Termasuk All Access', level:'Intermediate', exThumb:'ex-t2', modules:7, comingSoon:true, visible:true },
-  'ai-powered-app':     { title:'Build AI App Sederhana',        icon:'🚀', thumb:'et4', contentLink:'coming-soon.html',              salesLink:'coming-soon.html',       desc:'Buat web app AI live di GitHub Pages — tanpa backend.',           price:'Termasuk All Access', level:'Advanced',     exThumb:'ex-t3', modules:7, comingSoon:true, visible:true },
+  'bikin-website':      { title:'Bikin Website Sendiri Tanpa Coding', icon:'🌐', thumb:'et4', contentLink:'bikin-website-content.html', salesLink:'bikin-website.html',    desc:'Katalog toko, portfolio, atau landing page — live di internet, tanpa coding.', price:'Termasuk All Access', level:'Pemula',      exThumb:'ex-t3', modules:8, comingSoon:true, visible:true },
   'claude-api-dev':     { title:'Claude API untuk Developer',    icon:'🔌', thumb:'et4', contentLink:'coming-soon.html',              salesLink:'coming-soon.html',       desc:'Integrasikan Claude ke project nyata: streaming, tool use, caching.',price:'Termasuk All Access', level:'Advanced',     exThumb:'ex-t3', modules:7, comingSoon:true, visible:true },
   'jual-produk-ai':     { title:'Build & Monetisasi Produk AI',  icon:'💰', thumb:'et4', contentLink:'coming-soon.html',              salesLink:'coming-soon.html',       desc:'Dari ide ke produk AI yang menghasilkan uang: Framer + Midtrans.', price:'Termasuk All Access', level:'Advanced',     exThumb:'ex-t3', modules:7, comingSoon:true, visible:true },
 };
@@ -698,7 +698,7 @@ async function _init(){
   // course can't be enrolled in yet, so it doesn't belong here; it still surfaces as a
   // disabled "Segera Hadir" card in the explore/Jelajahi Kursus grid further down.
 
-  var COURSE_ORDER={'prompt-gratis':0,'mulai-claude':1,'produktivitas':2,'content-marketing':3,'claude-sehari-hari':4,'strategi-marketing':5,'analisis-data':6,'build-automation':7,'ai-powered-app':8,'claude-api-dev':9,'jual-produk-ai':10};
+  var COURSE_ORDER={'prompt-gratis':0,'mulai-claude':1,'produktivitas':2,'content-marketing':3,'claude-sehari-hari':4,'strategi-marketing':5,'analisis-data':6,'build-automation':7,'bikin-website':8,'claude-api-dev':9,'jual-produk-ai':10};
   function courseSort(a,b){return (COURSE_ORDER[a.course_slug]||99)-(COURSE_ORDER[b.course_slug]||99);}
   activeCourses.sort(courseSort);
 

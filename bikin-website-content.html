@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bikin Website Sendiri Tanpa Coding — Belajar Claude</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script>const COURSE_SLUG = 'bikin-website';</script>
+  <script src="course-video.js"></script>
+<style>
+      :root {
+    --bg: #FAFAFA; --surface: #FFFFFF; --surface-2: #F5F5F7;
+    --border: #E8E8E8; --border-strong: #D0D0D0;
+    --ink: #111111; --ink-2: #777777; --ink-3: #BBBBBB;
+    --accent: #6C47FF; --accent-2: #9B7DFF;
+    --accent-dim: rgba(108,71,255,0.08); --accent-glow: rgba(108,71,255,0.18);
+    --green: #16A34A; --green-dim: rgba(22,163,74,0.08); --green-border: rgba(22,163,74,0.2);
+    --gold: #EF9F27; --gold-pale: rgba(239,159,39,0.08);
+    --shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.05);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 2px 8px rgba(0,0,0,0.04);
+    --serif: 'Fraunces', Georgia, serif;
+    --serif-2: 'Fraunces', Georgia, serif;
+    --font: 'Geist', sans-serif;
+    --r: 14px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--bg); color: var(--ink); height: 100vh; -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* Top nav */
+  nav {
+    height: 58px; padding: 0 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(250,250,250,0.9); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border);
+    flex-shrink: 0; z-index: 10;
+  }
+  .nav-left { display: flex; align-items: center; gap: 16px; }
+  .nav-logo { font-family: var(--font); font-size: 17px; color: var(--ink); text-decoration: none;  font-weight: 700; letter-spacing: -0.4px; }
+  .nav-logo span { color: var(--accent); }
+  .nav-divider { width: 1px; height: 20px; background: var(--border); }
+  .nav-course-title { font-size: 13px; font-weight: 600; color: var(--ink-2); }
+  .nav-right { display: flex; align-items: center; gap: 14px; }
+  .nav-email { font-size: 12px; color: var(--ink-2); }
+  .nav-back { font-size: 13px; color: var(--ink-2); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+  .nav-back:hover { color: var(--ink); }
+  .logout-btn { background: transparent; border: 1px solid var(--border); color: var(--ink-2); padding: 5px 12px; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: var(--font); transition: all 0.2s; }
+  .logout-btn:hover { border-color: var(--accent); color: var(--ink); }
+
+  @media (max-width: 640px) {
+    nav { padding: 0 16px; }
+    .nav-divider, .nav-course-title, .nav-email { display: none; }
+    .nav-back { font-size: 12.5px; }
+    .logout-btn { padding: 5px 10px; font-size: 11px; }
+  }
+
+  /* Layout */
+  .layout { display: flex; flex: 1; overflow: hidden; }
+
+  /* Sidebar */
+  .sidebar {
+    width: 288px; flex-shrink: 0;
+    background: var(--surface); border-right: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    overflow-y: auto;
+  }
+  .sidebar-header { padding: 22px 20px 18px; border-bottom: 1px solid var(--border); }
+  .sidebar-course-name { font-size: 14px; font-weight: 800; color: var(--ink); line-height: 1.35; margin-bottom: 12px; }
+  .progress-bar-wrap { display: flex; align-items: center; gap: 10px; }
+  .progress-bar { flex: 1; height: 7px; background: var(--surface-2); border-radius: 10px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius: 10px; transition: width 0.5s cubic-bezier(.2,.8,.2,1); }
+  .progress-label { font-size: 11.5px; font-weight: 700; color: var(--accent); white-space: nowrap; }
+
+  .sidebar-section-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); padding: 18px 20px 8px; }
+
+  .mod-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 16px; margin: 2px 8px; border-radius: 12px; cursor: pointer;
+    transition: background 0.15s, transform 0.15s;
+  }
+  .mod-item:hover { background: var(--surface-2); }
+  .mod-item.active { background: var(--accent-dim); }
+  .mod-item.active:hover { transform: translateX(2px); }
+  .mod-check {
+    width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; margin-top: 1px;
+    border: 2px solid var(--border); display: flex; align-items: center; justify-content: center;
+    font-size: 11px; transition: all 0.25s cubic-bezier(.2,.8,.2,1); background: #fff;
+  }
+  .mod-item.done .mod-check { background: var(--green); border-color: var(--green); color: #fff; }
+  .mod-item.active .mod-check { border-color: var(--accent); background: #fff; color: var(--accent); font-weight: 800; }
+  .mod-item-info { flex: 1; }
+  .mod-item-title { font-size: 12.5px; font-weight: 600; color: var(--ink); line-height: 1.4; margin-bottom: 2px; }
+  .mod-item.active .mod-item-title { color: var(--accent); font-weight: 700; }
+  .mod-item-sub { font-size: 11px; color: var(--ink-3); }
+
+  .sidebar-footer { margin-top: auto; padding: 18px 20px; border-top: 1px solid var(--border); }
+  .sidebar-tools { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tool-chip { font-size: 10.5px; font-weight: 600; background: var(--accent-dim); color: var(--accent); padding: 4px 10px; border-radius: 100px; }
+
+  /* Main content */
+  .main { flex: 1; overflow-y: auto; background: var(--bg); }
+  .main-inner { max-width: 880px; margin: 0 auto; padding: 40px 40px 80px; }
+
+  .breadcrumb { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 700; color: var(--accent); background: var(--accent-dim); border: 1px solid rgba(108,71,255,0.18); padding: 5px 12px; border-radius: 100px; margin-bottom: 18px; letter-spacing: 0.02em; }
+  .breadcrumb span { color: inherit; }
+  .breadcrumb strong { color: inherit; font-weight: 800; }
+
+  .module-panel { display: none; }
+  .module-panel.active { display: block; }
+
+  .module-title { font-family: var(--serif-2); font-size: 34px; font-weight: 400; letter-spacing: -0.8px; color: var(--ink); margin-bottom: 8px; line-height: 1.15; }
+  .module-subtitle { font-size: 14.5px; color: var(--ink-2); margin-bottom: 24px; line-height: 1.6; }
+
+  .module-desc-box {
+    background: var(--accent-dim); border: 1px solid rgba(108,71,255,0.15); border-radius: 14px;
+    padding: 20px 24px; margin-bottom: 24px;
+    font-size: 14px; color: var(--ink); line-height: 1.8;
+  }
+  .module-desc-box strong { color: var(--accent); }
+
+  .prompt-section { margin-bottom: 22px; }
+  .prompt-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--ink-3); margin-bottom: 8px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .prompt-section.latihan { background: var(--accent-dim); border: 1.5px solid rgba(108,71,255,0.25); border-radius: 18px; padding: 20px 22px 22px; }
+  .prompt-section.latihan .prompt-label { font-family: var(--font); font-size: 17px; font-weight: 700; text-transform: none; letter-spacing: -0.2px; color: var(--accent); margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid rgba(108,71,255,0.15); }
+  .prompt-box {
+    background: var(--ink); border-radius: 14px;
+    padding: 18px 52px 18px 18px; font-size: 13px; color: #f2f2f2;
+    line-height: 1.75; font-family: 'SF Mono', Consolas, monospace;
+    white-space: pre-wrap; position: relative;
+  }
+  .copy-btn {
+    position: absolute; top: 12px; right: 12px;
+    background: rgba(255,255,255,0.12); color: #fff; border: none; border-radius: 8px;
+    padding: 6px 12px; font-size: 11px; font-weight: 700; cursor: pointer;
+    font-family: var(--font); transition: background 0.2s;
+  }
+  .copy-btn:hover { background: var(--accent); }
+  .copy-btn.copied { background: var(--green); animation: btnPop 0.35s ease; }
+  @keyframes btnPop { 0% { transform: scale(1); } 50% { transform: scale(0.88); } 100% { transform: scale(1); } }
+
+  .case-box {
+    background: #fff; border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px 18px; margin-top: 14px; position: relative; padding-left: 22px;
+  }
+  .case-box::before { content: ''; position: absolute; left: 0; top: 12px; bottom: 12px; width: 4px; border-radius: 4px; background: linear-gradient(180deg, var(--accent), var(--accent-2)); }
+  .case-role { font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .case-box p { font-size: 13px; color: var(--ink); line-height: 1.65; }
+
+  /* Output / completion box */
+  .output-box {
+    background: var(--green-dim); border: 1px solid var(--green-border);
+    border-radius: 14px; padding: 20px 22px; margin-top: 24px;
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .output-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--green); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .output-box h3 { font-size: 14.5px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+  .output-box p { font-size: 13px; color: var(--ink-2); line-height: 1.65; }
+
+  /* Tip / analogy / warning box */
+  .tip-box { background: var(--gold-pale); border: 1px solid rgba(239,159,39,0.22); border-radius: 14px; padding: 16px 18px; margin: 16px 0; }
+  .tip-box .tip-label { font-size: 10px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .tip-box p { font-size: 13px; color: var(--ink); line-height: 1.65; }
+  .tip-box.warn { background: rgba(220,38,38,0.05); border-color: rgba(220,38,38,0.18); }
+  .tip-box.warn .tip-label { color: #DC2626; }
+  .mistake-list { list-style: none; margin: 4px 0 0; }
+  .mistake-list li { font-size: 13px; color: var(--ink); line-height: 1.65; padding-left: 28px; position: relative; margin-bottom: 9px; }
+  .mistake-list li:last-child { margin-bottom: 0; }
+  .mistake-list li::before { content: "✕"; position: absolute; left: 0; top: 1px; width: 18px; height: 18px; border-radius: 50%; background: rgba(220,38,38,0.12); color: #DC2626; font-size: 9.5px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+  .mistake-list li strong { color: var(--ink); }
+
+  /* Ringkasan modul */
+  .summary-box { background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 20px 0; }
+  .summary-box .summary-label { font-size: 10px; font-weight: 700; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; }
+  .summary-box ul { list-style: none; }
+  .summary-box li { font-size: 13px; color: var(--ink); line-height: 1.7; padding-left: 26px; position: relative; margin-bottom: 8px; }
+  .summary-box li:last-child { margin-bottom: 0; }
+  .summary-box li::before { content: "✓"; position: absolute; left: 0; top: 1px; width: 18px; height: 18px; border-radius: 6px; background: var(--green-dim); color: var(--green); font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+
+  /* Comparison table */
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 12.5px; border-radius: 12px; overflow: hidden; }
+  .compare-table th { background: var(--ink); color: #fff; text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 700; }
+  .compare-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--ink); vertical-align: top; line-height: 1.55; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table-wrap { overflow: hidden; border-radius: 12px; border: 1px solid var(--border); margin: 14px 0; }
+
+  /* Step-by-step row */
+  .step-row { display: flex; flex-wrap: wrap; gap: 12px; margin: 4px 0 20px; }
+  .step-card { flex: 1; min-width: 140px; background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 16px; text-align: center; }
+  .step-num { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
+  .step-card p { font-size: 12px; color: var(--ink-2); line-height: 1.5; }
+
+  /* Two-column compare cards */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 4px 0 14px; }
+  .two-col .col-card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; }
+  .two-col .col-card.highlight { border-color: rgba(22,163,74,0.3); background: var(--green-dim); }
+  .two-col .col-card h4 { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+  .two-col .col-card ul { list-style: none; }
+  .two-col .col-card li { font-size: 12.5px; color: var(--ink-2); line-height: 1.7; padding-left: 14px; position: relative; margin-bottom: 3px; }
+  .two-col .col-card li::before { content: "\2013"; position: absolute; left: 0; }
+  .two-col .col-card p { font-size: 12.5px; color: var(--ink-2); line-height: 1.7; }
+
+  /* Grid of small info cards (roles, interface areas, etc.) */
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0; }
+  .info-card { background: var(--accent-dim); border-radius: 12px; padding: 14px 16px; }
+  .info-card strong { font-size: 12.5px; color: var(--ink); display: block; margin-bottom: 3px; }
+  .info-card span { font-size: 11.5px; color: var(--ink-2); }
+
+  .section-heading { font-family: var(--serif-2); font-size: 21px; font-weight: 400; color: var(--ink); margin: 32px 0 6px; letter-spacing: -0.3px; }
+  .body-text { font-size: 13.5px; color: var(--ink-2); line-height: 1.75; margin-bottom: 10px; }
+
+  @media (max-width: 600px) {
+    .two-col, .info-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Next courses (shown on last panel) */
+  .next-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-3); margin: 28px 0 12px; }
+  .next-card {
+    background: #fff; border: 1px solid var(--border); border-radius: 14px;
+    padding: 16px 20px; display: flex; align-items: center; gap: 14px;
+    text-decoration: none; margin-bottom: 10px; transition: border-color 0.2s, transform 0.2s;
+  }
+  .next-card:hover { border-color: rgba(108,71,255,0.3); transform: translateY(-2px); }
+  .next-icon { font-size: 26px; flex-shrink: 0; }
+  .next-info { flex: 1; }
+  .next-info h4 { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+  .next-info p  { font-size: 12px; color: var(--ink-2); }
+  .next-arrow { font-size: 16px; color: var(--accent); }
+
+  /* Bottom navigation */
+  .nav-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border);
+  }
+  .nav-btn {
+    display: flex; align-items: center; gap: 8px;
+    padding: 11px 20px; border-radius: 10px; font-size: 13px; font-weight: 600;
+    cursor: pointer; border: 1.5px solid var(--border); transition: all 0.18s;
+    background: #fff; color: var(--ink); font-family: var(--font);
+  }
+  .nav-btn:hover { border-color: var(--border-strong); }
+  .nav-btn:disabled { opacity: 0.35; cursor: default; pointer-events: none; }
+  .nav-btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .nav-btn.primary:hover { background: var(--accent); border-color: var(--accent); transform: translateY(-1px); }
+  .nav-counter { font-size: 12px; color: var(--ink-3); font-weight: 600; }
+
+  /* Loading */
+  .loading { display: flex; align-items: center; justify-content: center; height: 100vh; font-size: 14px; color: var(--ink-2); }
+
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main-inner { padding: 24px 16px 48px; }
+    .module-title { font-size: 26px; }
+  }
+
+    /* Feedback panel */
+    .feedback-panel { max-width: 600px; }
+    .completion-badge { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 24px; background: var(--green-dim); border: 1px solid rgba(29,158,117,0.2); border-radius: 16px; margin-bottom: 32px; }
+    .completion-badge .badge-check { width: 56px; height: 56px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+    .completion-badge .badge-check svg { width: 26px; height: 26px; color: #fff; }
+    .completion-badge h2 { font-family: var(--serif); font-size: 26px; font-weight: 400; color: var(--ink); margin-bottom: 8px; letter-spacing: -0.3px; }
+    .completion-badge p { font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+    .feedback-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 28px; box-shadow: var(--shadow-sm); }
+    .feedback-card h3 { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+    .feedback-card .feedback-sub { font-size: 13px; color: var(--ink-2); margin-bottom: 24px; }
+    .star-row { display: flex; gap: 8px; margin-bottom: 24px; }
+    .star-btn { background: none; border: none; cursor: pointer; padding: 4px; font-size: 28px; color: var(--border); transition: color 0.15s, transform 0.1s; line-height: 1; }
+    .star-btn:hover, .star-btn.active { color: var(--gold); transform: scale(1.1); }
+    .feedback-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--ink-2); margin-bottom: 8px; }
+    .feedback-textarea { width: 100%; border: 1.5px solid var(--border); border-radius: 10px; padding: 12px 14px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: var(--ink); resize: vertical; min-height: 90px; background: var(--bg); transition: border-color 0.15s; outline: none; }
+    .feedback-textarea:focus { border-color: var(--ink); background: #fff; }
+    .feedback-submit { display: block; width: 100%; margin-top: 20px; background: var(--ink); color: #fff; border: none; padding: 14px; border-radius: 10px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+    .feedback-submit:hover { background: var(--accent); }
+    .feedback-submit:disabled { opacity: 0.5; cursor: default; }
+    .feedback-done { display: none; text-align: center; padding: 24px; }
+    .feedback-done p { font-size: 14px; color: var(--ink-2); margin-bottom: 16px; }
+
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <a href="index.html" class="nav-logo">belajar<span>claude</span></a>
+    <div class="nav-divider"></div>
+    <span class="nav-course-title">Bikin Website Sendiri Tanpa Coding</span>
+  </div>
+  <div class="nav-right">
+    <a href="dashboard.html" class="nav-back">← Dashboard</a>
+    <span class="nav-email" id="navEmail"></span>
+    <button class="logout-btn" onclick="logout()">Keluar</button>
+  </div>
+</nav>
+
+<div id="loadingScreen" class="loading">Memuat materi kursus...</div>
+
+<div class="layout" id="mainLayout" style="display:none;">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-course-name">Bikin Website Sendiri Tanpa Coding</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        <span class="progress-label" id="progressLabel">0/8</span>
+      </div>
+    </div>
+    <div id="pdf-download-slot"></div>
+
+    <div class="sidebar-section-label">Materi Kursus</div>
+
+    <div class="mod-item active" id="nav-mod1" onclick="showModule(1)">
+      <div class="mod-check" id="check1"></div>
+      <div class="mod-item-info">
+        <div class="mod-item-title">Apa yang Bisa Dibangun</div>
+        <div class="mod-item-sub">Modul 1 · Fondasi</div>
+      </div>
+    </div>
+    <div class="mod-item" id="nav-mod2" onclick="showModule(2)">
+      <div class="mod-check" id="check2"></div>
+      <div class="mod-item-info">
+        <div class="mod-item-title">Rancang Struktur & Kumpulkan Konten</div>
+        <div class="mod-item-sub">Modul 2 · Perencanaan</div>
+      </div>
+    </div>
+    <div class="mod-item" id="nav-mod3" onclick="showModule(3)">
+      <div class="mod-check" id="check3"></div>
+      <div class="mod-item-info">
+        <div class="mod-item-title">Prompt untuk Desain Katalog</div>
+        <div class="mod-item-sub">Modul 3 · Desain</div>
+      </div>
+    </div>
+    <div class="mod-item" id="nav-mod4" onclick="showModule(4)">
+      <div class="mod-check" id="check4"></div>
+      <div class="mod-item-info">
+        <div class="mod-item-title">Bangun Halaman Katalog</div>
+        <div class="mod-item-sub">Modul 4 · Membangun</div>
+      </div>
+    </div>
+    <div class="mod-item" id="nav-mod5" onclick="showModule(5)">
+      <div class="mod-check" id="check5"></div>
+      <div class="mod-item-info">
+        <div class="mod-item-title">Tambah Filter & Order via WhatsApp</div>
+        <div class="mod-item-sub">Modul 5 · Interaktivitas</div>
+      </div>
+    </div>
+    <div class="mod-item" id="nav-mod6" onclick="showModule(6)">
+      <div class="mod-check" id="check6"></div>
+      <div class="mod-item-info">
+        <div class="mod-item-title">Rapikan: Mobile & Cek Ulang</div>
+        <div class="mod-item-sub">Modul 6 · Kontrol Kualitas</div>
+      </div>
+    </div>
+    <div class="mod-item" id="nav-mod7" onclick="showModule(7)">
+      <div class="mod-check" id="check7"></div>
+      <div class="mod-item-info">
+        <div class="mod-item-title">Kenalan dengan GitHub & Bikin Akun</div>
+        <div class="mod-item-sub">Modul 7 · GitHub</div>
+      </div>
+    </div>
+    <div class="mod-item" id="nav-mod8" onclick="showModule(8)">
+      <div class="mod-check" id="check8"></div>
+      <div class="mod-item-info">
+        <div class="mod-item-title">Hubungkan ke Vercel & Publish</div>
+        <div class="mod-item-sub">Modul 8 · Publish</div>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-section-label" style="padding:0 0 8px;">Tools yang dipakai</div>
+      <div class="sidebar-tools">
+        <span class="tool-chip">Claude.ai</span>
+        <span class="tool-chip">Claude Artifacts</span>
+        <span class="tool-chip">GitHub</span>
+        <span class="tool-chip">Vercel</span>
+      </div>
+    </div>
+    <div class="mod-feedback">
+      <div class="mod-item" id="nav-mod9" onclick="showModule(9)">
+        <div class="mod-check" id="check9">★</div>
+        <div><div class="mod-item-title">Feedback</div><div class="mod-item-sub">Nilai kursus ini</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <div class="main-inner">
+
+      <!-- MODULE 1 -->
+      <div class="module-panel active" id="panel1">
+        <div class="video-slot" id="video-slot-1"></div>
+        <div class="breadcrumb">
+          <span>Bikin Website Sendiri Tanpa Coding</span>
+          <span>›</span>
+          <strong>Modul 1</strong>
+        </div>
+        <h1 class="module-title">Apa yang Bisa Dibangun</h1>
+        <p class="module-subtitle">Kenalan dengan yang bisa (dan belum bisa) dibangun di kursus ini, plus kenapa skill ini berharga</p>
+        <div class="downloads-slot" id="downloads-slot-1"></div>
+
+        <div class="module-desc-box">
+          Banyak orang mikir "bikin website" itu harus ngoding, harus sewa developer, atau minimal harus ngerti HTML. Padahal sekarang, dengan Claude, kamu bisa merancang, membangun, dan mempublikasikan website sungguhan — <strong>tanpa menulis satu baris kode pun</strong>. Sepanjang kursus ini, kita pakai satu studi kasus yang sama: kamu punya usaha kecil (kita pakai contoh toko roti online) dan mau bikin katalog produk yang bisa dilihat calon pembeli, lengkap dengan cara order lewat WhatsApp.
+        </div>
+
+        <div class="section-heading">Apa yang Bisa — dan Belum Bisa — Dibangun di Sini</div>
+        <p class="body-text">Penting untuk jujur soal batasannya dari awal, supaya ekspektasi kamu tepat sebelum mulai.</p>
+        <div class="two-col">
+          <div class="col-card highlight">
+            <h4>Bisa dibangun di kursus ini</h4>
+            <ul>
+              <li>Halaman katalog produk lengkap dengan kategori</li>
+              <li>Portfolio pribadi (foto karya, CV singkat, kontak)</li>
+              <li>Landing page bisnis satu halaman</li>
+              <li>Order lewat link WhatsApp — tanpa checkout</li>
+            </ul>
+          </div>
+          <div class="col-card">
+            <h4>Belum dibahas di kursus ini</h4>
+            <ul>
+              <li>Sistem checkout & pembayaran online</li>
+              <li>Akun/login untuk pelanggan</li>
+              <li>Inventori & harga yang update otomatis dari database</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tip-box">
+          <div class="tip-label">📌 Kenapa Batasannya di Sini</div>
+          <p>Hal-hal di kolom kanan butuh sesuatu yang disebut "backend" — server dan database yang menyimpan data secara live. Itu topik yang lebih teknis, dan jadi bahasan kursus lanjutan (lihat penutup Modul 8). Kursus ini sengaja fokus ke situs statis: cepat dibangun, gratis di-hosting, dan cukup buat kebutuhan katalog atau portfolio kebanyakan usaha kecil.</p>
+        </div>
+
+        <div class="section-heading">Apa yang Claude Bisa Bantu</div>
+        <p class="body-text">Sepanjang kursus ini, Claude bukan cuma "asisten nulis" — Claude yang benar-benar membangun situsnya. Ini peran-peran yang akan dia pegang:</p>
+        <div class="info-grid">
+          <div class="info-card"><strong>Brainstorming struktur & konten</strong><span>Bantu susun halaman apa saja yang dibutuhkan, dan bahkan menuliskan draft copy-nya</span></div>
+          <div class="info-card"><strong>Desain & layout</strong><span>Bikin tampilan lengkap dari deskripsi kamu — atau dari gambar referensi yang kamu kasih (lihat Modul 3)</span></div>
+          <div class="info-card"><strong>Membangun kode Artifact</strong><span>Menulis HTML/CSS-nya langsung, kamu nggak perlu ngoding manual sama sekali</span></div>
+          <div class="info-card"><strong>Troubleshooting</strong><span>Bantu perbaiki kalau ada yang error atau nyangkut, termasuk pas proses publish nanti</span></div>
+        </div>
+        <div class="tip-box">
+          <div class="tip-label">💡 Intinya</div>
+          <p>Claude yang membangun, kamu yang mengarahkan dan mereview. Tugas kamu adalah tahu apa yang kamu mau, mendeskripsikannya dengan jelas, dan mengecek hasilnya — bukan menulis kodenya sendiri.</p>
+        </div>
+
+        <div class="section-heading">Kenapa Skill Ini Berharga</div>
+        <p class="body-text">Selain buat toko atau portfolio kamu sendiri, skill ini bisa jadi jasa yang kamu tawarkan. Banyak UMKM di sekitar kamu — warung, jasa titip, katering rumahan, jasa kerajinan — belum punya website sama sekali, cuma jualan lewat story WhatsApp/Instagram. Begitu kamu selesai kursus ini, kamu bisa menawarkan jasa serupa ke mereka, dengan bukti kerja nyata yang bisa kamu tunjukkan (lihat Modul 7 soal GitHub sebagai portfolio).</p>
+
+        <div class="section-heading">Fleksibel: Katalog atau Portfolio?</div>
+        <p class="body-text">Kursus ini berjalan dengan studi kasus katalog toko roti online. Tapi metodenya — rancang struktur, desain, bangun, publish — sama persis kalau yang kamu butuhkan adalah portfolio pribadi, landing page bisnis, atau situs satu-tujuan lainnya. Kalau itu yang kamu butuhkan, ikuti saja tiap modul pakai kontenmu sendiri, bukan katalog produk.</p>
+
+        <div class="summary-box">
+          <div class="summary-label">Ringkasan Modul 1</div>
+          <ul>
+            <li>Situs statis (katalog, portfolio, landing page) bisa dibangun tanpa coding dan tanpa backend</li>
+            <li>Checkout, login pelanggan, dan database live belum dibahas di kursus ini — itu topik kursus lanjutan</li>
+            <li>Claude memegang peran membangun: struktur, desain, kode, dan troubleshooting — kamu yang mengarahkan</li>
+            <li>Skill ini bisa dimonetisasi: tawarkan sebagai jasa ke UMKM lain yang belum punya website</li>
+            <li>Studi kasusnya katalog toko roti, tapi metodenya berlaku sama untuk portfolio atau situs lain</li>
+          </ul>
+        </div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p><strong>Tentukan dulu:</strong> kalau kamu mau ikut studi kasus katalog toko, siapkan jenis produk yang mau dikatalogkan. Kalau kamu mau bikin portfolio atau situs lain, tentukan tujuannya sekarang — kamu akan pakai keputusan ini di semua modul berikutnya.</p>
+          </div>
+          <div class="prompt-box">Saya mau bikin [katalog online untuk toko saya / portfolio pribadi / landing
+page bisnis]. Ini gambaran singkatnya: [jelaskan jenis produk/jasa, atau
+jenis portfolio yang kamu mau]. Target pengunjungnya adalah [siapa].
+Bantu saya pikirkan: halaman apa saja yang kira-kira saya butuhkan?<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>Satu brief singkat: jenis situs yang mau kamu bangun, target pengunjung, dan draft daftar halaman yang dibutuhkan. Ini jadi fondasi buat Modul 2.</p>
+          </div>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" disabled>← Sebelumnya</button>
+          <span class="nav-counter">1 / 8</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <!-- MODULE 2 -->
+      <div class="module-panel" id="panel2">
+        <div class="video-slot" id="video-slot-2"></div>
+        <div class="breadcrumb"><span>Bikin Website Sendiri Tanpa Coding</span><span>›</span><strong>Modul 2</strong></div>
+        <h1 class="module-title">Rancang Struktur & Kumpulkan Konten</h1>
+        <p class="module-subtitle">Sitemap dan konten asli disiapkan dulu, sebelum masuk ke desain</p>
+        <div class="downloads-slot" id="downloads-slot-2"></div>
+
+        <div class="module-desc-box">
+          Godaan terbesar waktu bikin website adalah langsung loncat ke desain. Masalahnya, kalau strukturnya belum jelas, kamu bakal bolak-balik ubah tata letak setiap kali sadar ada halaman atau informasi yang ketinggalan. Modul ini menyusun dulu apa yang perlu ada, dan mengumpulkan konten aslinya, sebelum satu piksel pun didesain.
+        </div>
+
+        <div class="section-heading">Langkah 1: Susun Sitemap</div>
+        <p class="body-text">Sitemap itu sekadar daftar halaman yang dibutuhkan situsmu, dan bagaimana halaman itu saling terhubung. Untuk katalog toko roti, biasanya cukup 4 bagian: halaman utama (home), daftar produk per kategori, detail tiap produk, dan kontak/cara order.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Prompt Sitemap</div>
+          <div class="prompt-box">Saya mau bikin katalog online untuk toko roti saya. Produknya ada 3
+kategori: roti tawar, roti manis, dan kue ulang tahun custom. Bantu
+saya susun sitemap (halaman apa saja yang dibutuhkan) dan struktur
+informasi di tiap halaman.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="section-heading">Langkah 2: Kumpulkan Konten Asli — Baru Desain</div>
+        <p class="body-text">Sebelum masuk ke desain di Modul 3, kumpulkan dulu data produk yang sebenarnya: nama produk, harga, kategori, deskripsi singkat, dan foto. Prinsip ini sama dengan yang dipakai di kursus Analisis Data — rapikan datanya dulu, baru diolah.</p>
+        <div class="tip-box">
+          <div class="tip-label">💡 Belum Punya Foto Bagus?</div>
+          <p>Nggak masalah kalau foto produkmu belum ada yang bagus — pakai saja placeholder sementara (misalnya foto seadanya, atau minta Claude deskripsikan visual yang dimaksud), ganti nanti kalau sudah ada foto yang lebih baik. Yang penting strukturnya selesai dulu.</p>
+        </div>
+
+        <div class="summary-box">
+          <div class="summary-label">Ringkasan Modul 2</div>
+          <ul>
+            <li>Susun sitemap dulu — halaman apa saja yang dibutuhkan — sebelum masuk ke desain</li>
+            <li>Kumpulkan konten produk asli (nama, harga, kategori, deskripsi, foto) sebelum Modul 3</li>
+            <li>Belum punya foto bagus tidak masalah — pakai placeholder sementara, ganti belakangan</li>
+          </ul>
+        </div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p>Tulis daftar produk asli kamu (atau isi portfolio/landing page kamu) — minimal 6-8 item kalau katalog, lengkap dengan nama, harga, kategori, dan deskripsi 1-2 kalimat tiap item.</p>
+          </div>
+          <div class="prompt-box">Ini daftar produk saya: [tempel daftar produk kamu di sini — nama,
+kategori, harga, deskripsi singkat]. Bantu saya rapikan jadi format
+yang konsisten dan siap dipakai untuk katalog.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>Sitemap (daftar halaman) dan draft konten/data produk yang sudah rapi — siap dipakai jadi input desain di Modul 3.</p>
+          </div>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">2 / 8</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <!-- MODULE 3 -->
+      <div class="module-panel" id="panel3">
+        <div class="video-slot" id="video-slot-3"></div>
+        <div class="breadcrumb"><span>Bikin Website Sendiri Tanpa Coding</span><span>›</span><strong>Modul 3</strong></div>
+        <h1 class="module-title">Prompt untuk Desain Katalog</h1>
+        <p class="module-subtitle">Cari inspirasi dulu, baru minta Claude bikin kerangka visualnya</p>
+        <div class="downloads-slot" id="downloads-slot-3"></div>
+
+        <div class="module-desc-box">
+          Prompt desain paling sering gagal karena satu alasan: kita mendeskripsikan tampilan dari kosong, padahal susah menjelaskan sesuatu yang belum pernah kita lihat. Modul ini membalik urutannya — cari referensi visual dulu, baru minta Claude membangun kerangkanya.
+        </div>
+
+        <div class="section-heading">Cari Inspirasi Dulu, Sebelum Menulis Prompt</div>
+        <p class="body-text">Lihat 2-3 contoh situs atau katalog yang kamu suka tampilannya — bisa dari Pinterest, Dribbble, atau langsung situs kompetitor/UMKM lain yang sudah punya website bagus. Kamu tidak perlu mendeskripsikan desain dari nol.</p>
+        <div class="tip-box">
+          <div class="tip-label">💡 Kasih Referensinya Langsung ke Claude</div>
+          <p>Upload screenshot referensi yang kamu suka langsung ke chat, lalu bilang misalnya "buat desain kayak gambar ini tapi untuk katalog produk saya." Claude bisa membaca gambar yang kamu upload dan menangkap gaya visualnya — warna, layout, mood — jauh lebih akurat dibanding kalau kamu mendeskripsikannya dengan kata-kata dari nol.</p>
+        </div>
+
+        <div class="section-heading">Elemen Katalog yang Perlu Disebutkan</div>
+        <p class="body-text">Waktu menulis prompt desain, sebutkan elemen-elemen spesifik katalog supaya hasilnya lebih terarah: grid produk, kartu produk (product card) dengan foto+nama+harga, tab kategori, dan bagian hero di paling atas.</p>
+        <div class="info-grid">
+          <div class="info-card"><strong>Hero section</strong><span>Bagian paling atas — nama toko, tagline singkat, mungkin 1 foto andalan</span></div>
+          <div class="info-card"><strong>Tab kategori</strong><span>Tombol untuk beralih antar kategori produk</span></div>
+          <div class="info-card"><strong>Grid produk</strong><span>Kartu-kartu produk tersusun rapi, biasanya 2-3 kolom</span></div>
+          <div class="info-card"><strong>Kartu produk</strong><span>Foto, nama, harga — dan nanti tombol order di Modul 5</span></div>
+        </div>
+
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Contoh Prompt Desain (dengan referensi gambar)</div>
+          <div class="prompt-box">[upload screenshot referensi yang kamu suka]
+Saya suka gaya visual di gambar ini — warnanya soft, kartu produknya
+rapi dengan foto besar di atas. Bikinkan kerangka layout katalog
+produk dengan gaya serupa: grid 3 kolom, tab kategori di atas, tiap
+kartu produk ada foto + nama + harga.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">📌 Catatan</div>
+          <p>Artifact yang dihasilkan di modul ini murni kerangka visual — layout dan gaya. Belum diisi data produk asli, itu bagian Modul 4.</p>
+        </div>
+
+        <div class="summary-box">
+          <div class="summary-label">Ringkasan Modul 3</div>
+          <ul>
+            <li>Cari 2-3 referensi visual dulu sebelum menulis prompt desain — jangan dari kosong</li>
+            <li>Upload screenshot referensi langsung ke Claude, jauh lebih akurat daripada mendeskripsikan dari kata-kata</li>
+            <li>Sebutkan elemen katalog spesifik: hero, tab kategori, grid produk, kartu produk</li>
+            <li>Hasil di modul ini adalah kerangka layout — belum diisi konten asli</li>
+          </ul>
+        </div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p>Cari 2-3 referensi visual yang kamu suka (screenshot atau link), lalu buat kerangka layout katalog pertamamu di Artifact, memakai referensi itu.</p>
+          </div>
+          <p class="body-text">Upload referensi yang sudah kamu kumpulkan ke Claude, jelaskan gaya yang kamu suka dari referensi itu, lalu minta kerangka layout katalog sesuai elemen-elemen di atas.</p>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>Artifact pertama: kerangka layout visual katalog (grid, kartu produk, tab kategori) — belum diisi data asli.</p>
+          </div>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">3 / 8</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <!-- MODULE 4 -->
+      <div class="module-panel" id="panel4">
+        <div class="video-slot" id="video-slot-4"></div>
+        <div class="breadcrumb"><span>Bikin Website Sendiri Tanpa Coding</span><span>›</span><strong>Modul 4</strong></div>
+        <h1 class="module-title">Bangun Halaman Katalog</h1>
+        <p class="module-subtitle">Isi kerangka Modul 3 dengan konten asli dari Modul 2, jadi halaman yang benar-benar berfungsi</p>
+        <div class="downloads-slot" id="downloads-slot-4"></div>
+
+        <div class="module-desc-box">
+          Kerangka visual sudah ada, data produk asli juga sudah siap dari Modul 2 — sekarang saatnya digabung jadi halaman katalog yang benar-benar berfungsi dan bisa di-preview langsung.
+        </div>
+
+        <div class="section-heading">Masukkan Data Produk Asli</div>
+        <p class="body-text">Tempelkan data produk yang sudah kamu rapikan di Modul 2 ke kerangka layout dari Modul 3.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Prompt Isi Konten</div>
+          <div class="prompt-box">Ini data produk saya (dari daftar yang sudah kita rapikan sebelumnya):
+[tempel data produk]. Masukkan semua data ini ke kerangka katalog
+yang sudah kita buat, sesuai kategorinya masing-masing.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="section-heading">Pola Refine-by-Chat</div>
+        <p class="body-text">Jangan berharap prompt pertama langsung sempurna. Pola yang paling efektif: lihat hasilnya, screenshot bagian yang mau diubah kalau perlu, lalu bilang ke Claude apa yang mau diperbaiki — ulangi beberapa kali sampai pas. Ini normal dan justru cara paling efisien, dibanding coba menulis satu prompt yang sempurna dari awal.</p>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Lihat hasil Artifact saat ini</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Screenshot bagian yang mau diubah (opsional)</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Jelaskan perubahan yang diinginkan ke Claude</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Ulangi sampai hasilnya pas</p></div>
+        </div>
+
+        <div class="tip-box warn">
+          <div class="tip-label">⚠️ Catatan Realistis</div>
+          <p>Claude versi gratis punya batas jumlah pesan untuk artifact HTML dalam sesi refine yang panjang. Kalau kamu banyak bolak-balik memperbaiki desain dalam waktu singkat, mungkin akan kena jeda sebentar sebelum bisa lanjut — ini wajar, bukan tanda ada yang salah.</p>
+        </div>
+
+        <div class="summary-box">
+          <div class="summary-label">Ringkasan Modul 4</div>
+          <ul>
+            <li>Masukkan data produk asli ke kerangka layout yang sudah dibuat di Modul 3</li>
+            <li>Pakai pola refine-by-chat: lihat hasil, jelaskan yang mau diubah, ulangi — bukan mengejar prompt sempurna sekali jadi</li>
+            <li>Free tier Claude ada batas wajar untuk sesi refine artifact yang panjang</li>
+          </ul>
+        </div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p>Selesaikan halaman katalog sampai semua produkmu tampil dengan benar, di kategori yang tepat, dengan tampilan yang kamu suka.</p>
+          </div>
+          <p class="body-text">Masukkan data produkmu ke Artifact, lalu lakukan minimal 2-3 putaran refine (perbaiki warna, ukuran foto, jarak antar elemen, dsb) sampai kamu puas dengan hasilnya.</p>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>Homepage + halaman katalog produk yang sudah jadi, berisi data aslimu, dan bisa di-preview langsung di Artifact.</p>
+          </div>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">4 / 8</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <!-- MODULE 5 -->
+      <div class="module-panel" id="panel5">
+        <div class="video-slot" id="video-slot-5"></div>
+        <div class="breadcrumb"><span>Bikin Website Sendiri Tanpa Coding</span><span>›</span><strong>Modul 5</strong></div>
+        <h1 class="module-title">Tambah Filter Kategori & Order via WhatsApp</h1>
+        <p class="module-subtitle">Bikin katalog interaktif dan siap terima order — tanpa backend</p>
+        <div class="downloads-slot" id="downloads-slot-5"></div>
+
+        <div class="module-desc-box">
+          Katalog yang statis saja sudah bagus, tapi dua tambahan kecil ini yang bikin situsmu benar-benar bisa dipakai jualan: filter kategori yang berfungsi, dan tombol order langsung ke WhatsApp — semua tanpa butuh server atau database.
+        </div>
+
+        <div class="section-heading">Filter Kategori</div>
+        <p class="body-text">Waktu pengunjung klik tab kategori (misalnya "Roti Manis"), produk yang tampil harus berubah otomatis — ini semua bisa dilakukan dengan JavaScript sederhana yang tetap berjalan di sisi browser pengunjung, tanpa perlu server.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Prompt Filter Kategori</div>
+          <div class="prompt-box">Tambahkan fungsi filter: waktu tab kategori di-klik, tampilkan hanya
+produk dari kategori itu, sembunyikan yang lain. Tab "Semua" untuk
+menampilkan semua produk lagi.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="section-heading">Order via WhatsApp</div>
+        <p class="body-text">Tambahkan tombol "Order via WhatsApp" di tiap kartu produk. Link ini pakai format khusus (<code>wa.me/...</code>) yang bisa langsung mengisi draft pesan berisi nama produk yang dipesan, jadi pengunjung tinggal klik dan kirim.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Prompt Order via WhatsApp</div>
+          <div class="prompt-box">Tambahkan tombol "Order via WhatsApp" di setiap kartu produk. Nomor
+WhatsApp saya [nomor kamu, format 62xxx]. Waktu diklik, buka
+WhatsApp dengan draft pesan yang sudah otomatis berisi nama produk
+yang dipesan.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+        <div class="tip-box">
+          <div class="tip-label">💡 Kenapa Ini Cukup untuk Jualan</div>
+          <p>Situs statis tidak bisa memproses pembayaran, tapi menghubungkan pengunjung ke WhatsApp sudah lebih dari cukup untuk kebanyakan UMKM — pembeli chat, kamu konfirmasi stok dan ongkir manual, transaksi selesai. Banyak toko online kecil justru sengaja pakai alur ini karena lebih personal.</p>
+        </div>
+
+        <div class="summary-box">
+          <div class="summary-label">Ringkasan Modul 5</div>
+          <ul>
+            <li>Filter kategori dan tombol WhatsApp bisa dibangun tanpa backend, cukup JavaScript yang berjalan di browser</li>
+            <li>Link <code>wa.me</code> bisa mengisi draft pesan otomatis, memudahkan pengunjung langsung order</li>
+            <li>Alur browse-lalu-chat ini cukup untuk kebanyakan UMKM — tidak semua situs butuh sistem checkout</li>
+          </ul>
+        </div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p>Tambahkan filter kategori dan tombol order WhatsApp ke katalog yang sudah kamu bangun di Modul 4. Coba klik-klik sendiri: apakah filternya berfungsi, dan apakah tombol WhatsApp membuka draft pesan yang benar?</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>Katalog interaktif: filter kategori berfungsi, dan setiap produk punya tombol order ke WhatsApp yang benar-benar berfungsi.</p>
+          </div>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">5 / 8</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <!-- MODULE 6 -->
+      <div class="module-panel" id="panel6">
+        <div class="video-slot" id="video-slot-6"></div>
+        <div class="breadcrumb"><span>Bikin Website Sendiri Tanpa Coding</span><span>›</span><strong>Modul 6</strong></div>
+        <h1 class="module-title">Rapikan: Mobile & Cek Ulang</h1>
+        <p class="module-subtitle">Cek tampilan di HP dan sapu bersih sebelum publish</p>
+        <div class="downloads-slot" id="downloads-slot-6"></div>
+
+        <div class="module-desc-box">
+          Sebelum situsmu dilihat orang lain, ada satu langkah yang sering dilewatkan: memastikan semuanya benar-benar berfungsi, khususnya di HP — karena sebagian besar pengunjung toko online kecil membuka dari ponsel, bukan laptop.
+        </div>
+
+        <div class="section-heading">Cek Tampilan Mobile</div>
+        <p class="body-text">Minta Claude mengecek dan memperbaiki tampilan untuk layar HP — teks yang kepotong, tombol yang kekecilan untuk di-tap jari, atau grid produk yang malah berantakan di layar sempit.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Prompt Cek Mobile</div>
+          <div class="prompt-box">Pastikan tampilan katalog ini rapi dan mudah dipakai di layar HP —
+cek ukuran tombol, jarak antar elemen, dan apakah grid produknya
+otomatis menyesuaikan jadi 1-2 kolom di layar sempit.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+
+        <div class="section-heading">Sapu Bersih Sebelum Publish</div>
+        <p class="body-text">Cek satu per satu: apakah semua tombol order WhatsApp mengarah ke nomor yang benar, apakah ada typo di nama/harga produk, apakah semua foto muncul dengan benar (tidak ada gambar rusak/kosong).</p>
+        <ul class="mistake-list">
+          <li><strong>Link WhatsApp salah nomor</strong> — pengunjung order tapi pesannya nyasar</li>
+          <li><strong>Harga belum diisi atau salah ketik</strong> — bikin bingung calon pembeli</li>
+          <li><strong>Foto tidak muncul</strong> — biasanya karena link gambar yang salah/rusak</li>
+          <li><strong>Nama kategori tidak konsisten</strong> — bikin filter kategori tidak berfungsi dengan benar</li>
+        </ul>
+
+        <div class="summary-box">
+          <div class="summary-label">Ringkasan Modul 6</div>
+          <ul>
+            <li>Selalu cek tampilan mobile — mayoritas pengunjung toko online membuka dari HP</li>
+            <li>Sapu bersih sebelum publish: link WhatsApp, harga, foto, konsistensi nama kategori</li>
+            <li>Checklist singkat ini mencegah kesalahan kecil yang bisa merusak kesan pertama pengunjung</li>
+          </ul>
+        </div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p>Buka katalogmu di ukuran layar HP (kecilkan jendela browser, atau pakai mode preview mobile kalau ada), lalu jalankan checklist sapu bersih di atas satu per satu.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>Checklist QA yang sudah selesai dijalankan, dan versi situs yang sudah responsive dan bebas dari kesalahan-kesalahan umum di atas.</p>
+          </div>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">6 / 8</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <!-- MODULE 7 -->
+      <div class="module-panel" id="panel7">
+        <div class="video-slot" id="video-slot-7"></div>
+        <div class="breadcrumb"><span>Bikin Website Sendiri Tanpa Coding</span><span>›</span><strong>Modul 7</strong></div>
+        <h1 class="module-title">Kenalan dengan GitHub & Bikin Akun</h1>
+        <p class="module-subtitle">GitHub sebagai portfolio, bukan cuma tempat nyimpan file</p>
+        <div class="downloads-slot" id="downloads-slot-7"></div>
+
+        <div class="module-desc-box">
+          Situsmu sudah siap — sekarang tinggal dipublikasikan. Modul ini menyiapkan tempatnya: GitHub, sekaligus mengenalkan kenapa akun GitHub sendiri sudah berharga, bahkan sebelum situsmu live.
+        </div>
+
+        <div class="section-heading">Apa Itu GitHub?</div>
+        <p class="body-text">GitHub adalah tempat menyimpan dan menampilkan project — bayangkan seperti Google Drive, tapi dirancang khusus untuk kode/file project, dan bisa dilihat publik. Setiap project yang kamu simpan di sana disebut "repository" (repo).</p>
+
+        <div class="section-heading">GitHub sebagai Portfolio</div>
+        <p class="body-text">Ini yang sering dilewatkan pemula: profil GitHub publik dengan project-project nyata di dalamnya adalah bukti kerja yang bisa ditunjukkan ke calon klien atau siapapun yang mau tahu kamu bisa apa. Ingat poin monetisasi di Modul 1 — repo katalog yang kamu bangun di kursus ini adalah bukti kerja pertamamu.</p>
+        <div class="tip-box">
+          <div class="tip-label">💡 Kenapa Ini Penting</div>
+          <p>Kalau nanti kamu menawarkan jasa bikin situs ke UMKM lain, jauh lebih meyakinkan menunjukkan "ini contoh nyata yang saya buat, linknya bisa dicek langsung" dibanding cuma bilang "saya bisa bikin website."</p>
+        </div>
+
+        <div class="section-heading">Bikin Akun & Repo Pertama</div>
+        <p class="body-text">Semua langkah berikut dilakukan lewat web browser biasa — tidak butuh command line atau perintah git apapun.</p>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Buat akun gratis di github.com</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Klik "New repository", beri nama (misalnya nama tokomu)</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Upload file situsmu lewat tombol "Add file → Upload files"</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Klik "Commit changes" untuk menyimpan</p></div>
+        </div>
+        <div class="tip-box">
+          <div class="tip-label">📌 Catatan</div>
+          <p>Kalau Claude membangun situsmu sebagai satu file HTML di Artifact, kamu perlu menyimpannya dulu jadi file (biasanya dengan nama <code>index.html</code>) sebelum upload — tanya Claude cara menyimpan Artifact-nya jadi file kalau kamu belum tahu caranya.</p>
+        </div>
+
+        <div class="summary-box">
+          <div class="summary-label">Ringkasan Modul 7</div>
+          <ul>
+            <li>GitHub adalah tempat menyimpan dan menampilkan project, gratis untuk digunakan</li>
+            <li>Profil dan repo publik di GitHub jadi portfolio nyata — relevan langsung ke poin monetisasi Modul 1</li>
+            <li>Bikin akun, bikin repo, upload file — semua lewat web browser, tanpa command line</li>
+          </ul>
+        </div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p>Simpan Artifact situsmu jadi file HTML, buat akun GitHub kalau belum punya, buat repo baru, dan upload file situsmu ke repo itu.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>Akun GitHub aktif dan repo pertama berisi file situsmu yang sudah diupload — portfolio piece pertamamu, bahkan sebelum situsnya live di internet.</p>
+          </div>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">7 / 8</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <!-- MODULE 8 -->
+      <div class="module-panel" id="panel8">
+        <div class="video-slot" id="video-slot-8"></div>
+        <div class="breadcrumb"><span>Bikin Website Sendiri Tanpa Coding</span><span>›</span><strong>Modul 8</strong></div>
+        <h1 class="module-title">Hubungkan ke Vercel & Publish</h1>
+        <p class="module-subtitle">Situsmu live di internet, dan siap dikembangkan lebih lanjut</p>
+        <div class="downloads-slot" id="downloads-slot-8"></div>
+
+        <div class="module-desc-box">
+          Ini modul terakhir, dan yang paling memuaskan: situsmu benar-benar hidup di internet, dengan URL yang bisa dibagikan ke siapapun.
+        </div>
+
+        <div class="section-heading">Hubungkan Repo ke Vercel</div>
+        <p class="body-text">Vercel bisa login langsung pakai akun GitHub-mu, jadi tidak perlu daftar akun terpisah.</p>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Buka vercel.com, klik "Continue with GitHub"</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Klik "Import Project", pilih repo yang kamu buat di Modul 7</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Klik "Deploy" — tunggu beberapa detik</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Situsmu live! Dapat URL <code>namamu.vercel.app</code></p></div>
+        </div>
+        <div class="tip-box">
+          <div class="tip-label">💡 Update Situs Nanti</div>
+          <p>Mau tambah produk baru atau ubah sesuatu? Edit atau upload file baru ke repo GitHub-mu (langsung lewat web GitHub, tetap tanpa command line) — Vercel otomatis mendeteksi perubahan dan mem-publish ulang situsmu tanpa kamu perlu drag-and-drop manual lagi.</p>
+        </div>
+
+        <div class="section-heading">Penutup: Monetisasi & Langkah Selanjutnya</div>
+        <p class="body-text">Repo GitHub dan situs live ini sekarang jadi bukti kerja nyata (proof-of-work) yang bisa kamu tunjukkan ke UMKM lain yang butuh jasa serupa. Kamu tidak perlu menunggu "jago" dulu — satu contoh nyata yang berfungsi sudah cukup untuk mulai menawarkan jasa.</p>
+
+        <div class="tip-box">
+          <div class="tip-label">🧭 Bonus — Opsional, Tidak Wajib untuk Selesai Kursus</div>
+          <p>Kalau kamu mau mengeksplorasi lebih jauh: <strong>Claude Code</strong> untuk yang nyaman pakai terminal dan mau Claude mengelola file & deploy langsung dari sana; <strong>Cowork</strong> untuk workflow yang lebih hands-off, tinggal bilang apa yang mau diubah; <strong>GitHub connector</strong> supaya Claude bisa membaca dan push perubahan repo langsung dari chat. Semua ini bonus untuk yang penasaran — bukan syarat menyelesaikan kursus ini.</p>
+        </div>
+
+        <div class="summary-box">
+          <div class="summary-label">Ringkasan Modul 8</div>
+          <ul>
+            <li>Login Vercel pakai akun GitHub, import repo, deploy — situsmu langsung live dengan URL sendiri</li>
+            <li>Update selanjutnya cukup edit/upload file baru ke GitHub — Vercel otomatis mem-publish ulang</li>
+            <li>Situs live + repo GitHub adalah bukti kerja nyata yang bisa dipakai untuk menawarkan jasa ke UMKM lain</li>
+            <li>Claude Code, Cowork, dan GitHub connector adalah eksplorasi opsional — bukan wajib</li>
+          </ul>
+        </div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p>Login ke Vercel pakai akun GitHub-mu, import repo dari Modul 7, deploy, dan buka URL yang dihasilkan untuk memastikan situsmu benar-benar live dan berfungsi.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>URL live yang bisa dikunjungi siapa saja — situs katalog (atau portfolio) yang sudah selesai dan ter-deploy.</p>
+          </div>
+        </div>
+
+        <div class="output-box" style="background:var(--accent-dim);border-color:var(--accent-glow);">
+          <div class="output-icon">🎉</div>
+          <div>
+            <h3 style="color:var(--accent);">Kursus Selesai!</h3>
+            <p>Dari sekadar tau apa yang bisa dibangun, sampai punya situs yang benar-benar live di internet dengan repo GitHub sebagai portfolio — kamu sekarang punya alur kerja lengkap untuk membangun dan mempublikasikan website tanpa coding. Kalau kamu butuh data produk yang benar-benar hidup (update stok/harga tanpa sentuh kode) dan order yang tersimpan rapi di database, itu jadi bahasan kursus lanjutan mendatang.</p>
+          </div>
+        </div>
+
+        <div class="next-label">Lanjutkan Belajar (sudah termasuk All Access kamu)</div>
+        <a href="produktivitas-content.html" class="next-card">
+          <span class="next-icon">💼</span>
+          <div class="next-info">
+            <h4>Produktivitas Kantor</h4>
+            <p>Hemat 3–5 jam kerja per minggu · Role Prompting, Gmail, Sheets, Docs</p>
+          </div>
+          <span class="next-arrow">→</span>
+        </a>
+        <a href="content-marketing-content.html" class="next-card">
+          <span class="next-icon">🏷</span>
+          <div class="next-info">
+            <h4>Kreasi Konten Pemasaran</h4>
+            <p>Positioning, konten Instagram, copy iklan, komunikasi pelanggan</p>
+          </div>
+          <span class="next-arrow">→</span>
+        </a>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">8 / 8</span>
+          <button class="nav-btn primary" onclick="showModule(9)">Lanjut →</button>
+        </div>
+      </div>
+
+      <div class="module-panel" id="panel9">
+
+        <div class="feedback-panel">
+          <div class="completion-badge">
+            <div class="badge-check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h2>Kursus Selesai!</h2>
+            <p>Kamu telah menyelesaikan <strong>Bikin Website Sendiri Tanpa Coding</strong>.<br>Badge pencapaian sudah tersimpan di dashboard kamu.</p>
+          </div>
+
+          <div class="feedback-card" id="feedbackForm">
+            <h3>Bagaimana kursus ini menurut kamu?</h3>
+            <p class="feedback-sub">Feedback kamu membantu kami bikin kursus yang lebih baik.</p>
+            <div class="star-row" id="starRow" onmouseleave="hoverRating(0)">
+              <button class="star-btn" data-val="1" onclick="setRating(1)" onmouseenter="hoverRating(1)">★</button>
+              <button class="star-btn" data-val="2" onclick="setRating(2)" onmouseenter="hoverRating(2)">★</button>
+              <button class="star-btn" data-val="3" onclick="setRating(3)" onmouseenter="hoverRating(3)">★</button>
+              <button class="star-btn" data-val="4" onclick="setRating(4)" onmouseenter="hoverRating(4)">★</button>
+              <button class="star-btn" data-val="5" onclick="setRating(5)" onmouseenter="hoverRating(5)">★</button>
+            </div>
+            <div class="feedback-label">Komentar (opsional)</div>
+            <textarea class="feedback-textarea" id="feedbackComment" placeholder="Apa yang paling berguna? Ada yang bisa diperbaiki?"></textarea>
+            <button class="feedback-submit" id="feedbackSubmit" onclick="submitFeedback()">Kirim & Ke Dashboard →</button>
+          </div>
+
+          <div class="feedback-done" id="feedbackDone">
+            <p>Terima kasih atas feedbacknya!</p>
+          </div>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter"></span>
+          <a href="dashboard.html" class="nav-btn primary" style="text-decoration:none;">Ke Dashboard →</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+  const TOTAL = 9;
+  const CONTENT_MODULES = 8;
+  let current = 1;
+  const done = new Set();
+  const ADMIN_EMAILS = ['julia.utomo@gmail.com', 'tiffany.utomo@gmail.com', 'tffnyy26@gmail.com'];
+
+  async function init() {
+    const { data: { session } } = await sbClient.auth.getSession();
+    if (!session) { window.location.href = 'login.html'; return; }
+    const email = session.user.email;
+
+    // Only grant access if a real 'bikin-website' enrollment exists - holding all-access alone
+    // is not enough, it only unlocks a free one-click "Mulai Kursus" on the preview page. Admins bypass.
+    if (!ADMIN_EMAILS.includes(email)) {
+      const { data: existing } = await sbClient.from('enrollments').select('course_slug').eq('email', email).eq('course_slug', 'bikin-website');
+      if (!existing || existing.length === 0) { window.location.href = 'bikin-website.html'; return; }
+    }
+
+    // Touch last_accessed_at so the dashboard's spotlight card can show whichever course
+    // was opened most recently, not just whichever has the highest completion %.
+    sbClient.from('enrollments').update({ last_accessed_at: new Date().toISOString() }).eq('email', email).eq('course_slug', COURSE_SLUG).then(()=>{}, ()=>{});
+
+    document.getElementById('navEmail').textContent = email;
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('mainLayout').style.display = 'flex';
+
+    // Restore saved progress from Supabase
+    try {
+      const { data: completions } = await sbClient
+        .from('module_completions').select('module_num')
+        .eq('email', session.user.email).eq('course_slug', 'bikin-website');
+      if (completions && completions.length > 0) {
+        completions.forEach(function(row) {
+          if (row.module_num > CONTENT_MODULES) return;
+          done.add(row.module_num);
+          var checkEl = document.getElementById('check' + row.module_num);
+          var navEl = document.getElementById('nav-mod' + row.module_num);
+          if (checkEl) checkEl.textContent = '✓';
+          if (navEl) navEl.classList.add('done');
+        });
+      }
+    } catch(e) {}
+    updateProgress();
+
+    loadExistingFeedback(session.user.email);
+  }
+
+  async function saveProgress(moduleNum) {
+    localStorage.setItem('klaud_progress_bikin-website', done.size);
+    try {
+      const { data: { session } } = await sbClient.auth.getSession();
+      if (session) {
+        await sbClient.from('module_completions').upsert({
+          email: session.user.email, course_slug: 'bikin-website', module_num: moduleNum
+        }, { onConflict: 'email,course_slug,module_num', ignoreDuplicates: true });
+      }
+    } catch (e) {}
+  }
+
+  function showModule(n) {
+    // Mark previous as done
+    done.add(current);
+    saveProgress(current);
+    document.getElementById(`check${current}`).textContent = '✓';
+    document.getElementById(`nav-mod${current}`).classList.add('done');
+
+    // Hide current panel
+    document.getElementById(`panel${current}`).classList.remove('active');
+    document.getElementById(`nav-mod${current}`).classList.remove('active');
+
+    // Show new panel
+    current = n;
+    document.getElementById(`panel${current}`).classList.add('active');
+    document.getElementById(`nav-mod${current}`).classList.add('active');
+
+    // Scroll main to top
+    document.querySelector('.main').scrollTo({ top: 0, behavior: 'smooth' });
+
+    updateProgress();
+  }
+
+  function nextModule() { if (current < TOTAL) showModule(current + 1); }
+  function prevModule() { if (current > 1) showModule(current - 1); }
+
+  function updateProgress() {
+    const pct = Math.min(100, Math.round((done.size / CONTENT_MODULES) * 100));
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = `${done.size}/${CONTENT_MODULES}`;
+  }
+
+  async function logout() {
+    await sbClient.auth.signOut();
+    window.location.href = 'index.html';
+  }
+
+  function copyPrompt(btn) {
+    const box = btn.closest('.prompt-box');
+    const clone = box.cloneNode(true);
+    clone.querySelector('button')?.remove();
+    navigator.clipboard.writeText(clone.innerText.trim()).then(() => {
+      btn.textContent = '✓ Tersalin';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Salin'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  init();
+
+  // ── Feedback ─────────────────────────────────────
+  let currentRating = 0;
+
+  function renderStars(val) {
+    document.querySelectorAll('.star-btn').forEach(function(btn) {
+      btn.classList.toggle('active', parseInt(btn.getAttribute('data-val')) <= val);
+    });
+  }
+
+  function setRating(val) {
+    currentRating = val;
+    renderStars(val);
+  }
+
+  function hoverRating(val) {
+    renderStars(val || currentRating);
+  }
+
+  async function loadExistingFeedback(email) {
+    try {
+      const { data: fb } = await sbClient.from('course_feedback')
+        .select('rating, comment')
+        .eq('email', email).eq('course_slug', 'bikin-website')
+        .maybeSingle();
+      if (fb) {
+        setRating(fb.rating || 0);
+        if (fb.comment) document.getElementById('feedbackComment').value = fb.comment;
+        document.getElementById('feedbackSubmit').textContent = 'Perbarui Feedback →';
+      }
+    } catch (e) {}
+  }
+
+  async function submitFeedback() {
+    if (!currentRating) { alert('Pilih dulu bintang penilaian kamu.'); return; }
+    const btn = document.getElementById('feedbackSubmit');
+    btn.disabled = true;
+    btn.textContent = 'Menyimpan...';
+    const comment = document.getElementById('feedbackComment').value.trim();
+    try {
+      const r = await sbClient.auth.getSession();
+      const session = r.data.session;
+      if (session) {
+        await sbClient.from('course_feedback').upsert({
+          email: session.user.email,
+          course_slug: 'bikin-website',
+          rating: currentRating,
+          comment: comment || null,
+          submitted_at: new Date().toISOString()
+        }, { onConflict: 'email,course_slug' });
+
+        // Safety net: progress is measured against CONTENT_MODULES (this feedback
+        // panel isn't counted in it), so make sure the last content module is
+        // marked done here too, and give the Feedback nav item its own checkmark.
+        if (!done.has(CONTENT_MODULES)) {
+          done.add(CONTENT_MODULES);
+          var checkEl = document.getElementById('check' + CONTENT_MODULES);
+          var navEl = document.getElementById('nav-mod' + CONTENT_MODULES);
+          if (checkEl) checkEl.textContent = '✓';
+          if (navEl) navEl.classList.add('done');
+          saveProgress(CONTENT_MODULES);
+          updateProgress();
+        }
+        var fbCheck = document.getElementById('check' + TOTAL);
+        if (fbCheck) fbCheck.textContent = '✓';
+        var fbNav = document.getElementById('nav-mod' + TOTAL);
+        if (fbNav) fbNav.classList.add('done');
+      }
+    } catch(e) { console.error(e); }
+    document.getElementById('feedbackForm').style.display = 'none';
+    document.getElementById('feedbackDone').style.display = 'block';
+  }
+
+</script>
+</body>
+</html>
