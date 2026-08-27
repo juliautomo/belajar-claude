@@ -712,17 +712,27 @@ function renderAccessList() {
 
 // ─── COURSE SUB-NAVIGATION ───────────────────────────────────────────────────
 
+// Same live-override pattern as renderVisibilityToggles() below: the Tersedia/Segera
+// Hadir grouping used to read the static COURSES[].comingSoon default directly, so it
+// could silently disagree with the actual Hide/Segera Hadir toggle for that course
+// (whose true state lives in dataCache.visibility) — confusing since they're right next
+// to each other on the same page. Route both through the same effective-state lookup.
+function effectiveComingSoon(c) {
+  var row = dataCache.visibility.find(function (v) { return v.course_slug === c.slug; });
+  return row ? !!row.coming_soon : !!c.comingSoon;
+}
+
 function subnavItemHtml(c) {
   return '<button class="subnav-item' + (c.slug === activeCourse ? ' active' : '') + '" onclick="switchCourse(\'' + c.slug + '\')">' +
     '<span>' + escapeHtml(c.name) + '</span>' +
-    (c.comingSoon ? '<span class="tag-soon">Segera Hadir</span>' : '') +
+    (effectiveComingSoon(c) ? '<span class="tag-soon">Segera Hadir</span>' : '') +
     '</button>';
 }
 
 function renderCourseTabs() {
   var el = document.getElementById('courseSubnav');
-  var live = COURSES.filter(function (c) { return !c.comingSoon; });
-  var soon = COURSES.filter(function (c) { return c.comingSoon; });
+  var live = COURSES.filter(function (c) { return !effectiveComingSoon(c); });
+  var soon = COURSES.filter(function (c) { return effectiveComingSoon(c); });
   var html = '<div class="subnav-group-label">Tersedia</div>' + live.map(subnavItemHtml).join('');
   if (soon.length) {
     html += '<div class="subnav-group-label">Segera Hadir</div>' + soon.map(subnavItemHtml).join('');
