@@ -902,7 +902,7 @@ otomatis menyesuaikan jadi 1-2 kolom di layar sempit.<button class="copy-btn" on
         </div>
         <div class="tip-box">
           <div class="tip-label">📌 Kalau Ada yang Perlu Diperbaiki</div>
-          <p>Minta Claude memperbaiki bagian yang bermasalah, simpan ulang perubahannya ke file HTML-mu, lalu upload ulang ke repo GitHub-mu — Vercel otomatis mendeteksi perubahan itu dan mem-publish ulang situsmu, tanpa kamu perlu deploy manual lagi.</p>
+          <p>Minta Claude memperbaiki bagian yang bermasalah — caranya sama persis dengan update situs kapan pun nanti, lihat bagian "Cara Update Situs Kapan Saja" di bawah.</p>
         </div>
 
         <div class="section-heading">Sapu Bersih Terakhir</div>
@@ -934,6 +934,25 @@ pengalaman mereka.<button class="copy-btn" onclick="copyPrompt(this)">Salin</but
           <p>Testing bukan cuma soal nemuin bug teknis — kadang situsnya berfungsi sempurna secara teknis, tapi orang tetap bingung harus klik ke mana, atau nggak sadar ada tombol order. Feedback jujur dari orang yang belum tahu apa-apa soal situsmu jauh lebih berharga daripada kamu cek sendiri berkali-kali, karena kamu sudah tahu jawabannya sebelum bertanya.</p>
         </div>
 
+        <div class="section-heading">Cara Update Situs Kapan Saja</div>
+        <p class="body-text">Baik dari hasil testing di atas, atau kapan pun nanti kamu mau tambah produk baru, ubah harga, atau ganti sesuatu di desain — alurnya selalu sama, dan kamu nggak perlu mengulang dari nol.</p>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Jelaskan perubahan yang kamu mau ke Claude — produk baru, ubah harga, ganti foto, dsb</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Simpan ulang hasilnya jadi file HTML, timpa file <code>index.html</code> yang lama</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Buka repo GitHub-mu, upload file yang sudah diperbarui, lalu "Commit changes"</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Tunggu sebentar — Vercel otomatis mendeteksi dan mem-publish ulang, tanpa langkah tambahan</p></div>
+        </div>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Prompt Contoh Perubahan</div>
+          <div class="prompt-box">Tolong tambahkan produk baru ke katalog ini: nama [nama produk], harga
+[harga], kategori [kategori], deskripsi singkat [deskripsi]. Ikuti gaya
+dan struktur produk yang sudah ada.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
+        </div>
+        <div class="tip-box">
+          <div class="tip-label">💡 Nggak Perlu Ulang dari Modul 6-7</div>
+          <p>Repo GitHub dan project Vercel yang sudah kamu buat tetap dipakai selamanya — kamu cuma upload file yang sudah diperbarui ke repo yang sama, bukan bikin repo atau project baru setiap kali ada perubahan.</p>
+        </div>
+
         <div class="section-heading">Penutup: Monetisasi & Langkah Selanjutnya</div>
         <p class="body-text">Repo GitHub dan situs live ini sekarang jadi bukti kerja nyata (proof-of-work) yang bisa kamu tunjukkan ke UMKM lain yang butuh jasa serupa. Kamu tidak perlu menunggu "jago" dulu — satu contoh nyata yang berfungsi sudah cukup untuk mulai menawarkan jasa.</p>
 
@@ -948,7 +967,7 @@ pengalaman mereka.<button class="copy-btn" onclick="copyPrompt(this)">Salin</but
             <li>Situs sudah live — sekarang saatnya cek beneran di HP asli, bukan cuma preview</li>
             <li>Sapu bersih terakhir: link WhatsApp, harga, foto, konsistensi nama kategori</li>
             <li>Minta 2-3 orang lain coba situsmu — mereka akan lihat kebingungan yang kamu sendiri sudah nggak sadari</li>
-            <li>Ada perbaikan? Edit lewat Claude, upload ulang ke GitHub — Vercel otomatis publish ulang</li>
+            <li>Update kapan saja (perbaikan, produk baru, ubah harga): minta Claude, upload ke GitHub, Vercel otomatis publish ulang</li>
             <li>Situs live + repo GitHub adalah bukti kerja nyata yang bisa dipakai untuk menawarkan jasa ke UMKM lain</li>
             <li>Claude Code, Cowork, dan GitHub connector adalah eksplorasi opsional — bukan wajib</li>
           </ul>
