@@ -21,7 +21,8 @@ var LIH_BG = {
   'content-marketing': 'linear-gradient(135deg,#FBC2D9,#FDE9F1)',
   'strategi-marketing':'linear-gradient(135deg,#A8D8FF,#E4F3FF)',
   'analisis-data':     'linear-gradient(135deg,#9FE8D8,#E3FBF5)',
-  'claude-sehari-hari':'linear-gradient(135deg,#FFC9A8,#FFF0E4)'
+  'claude-sehari-hari':'linear-gradient(135deg,#FFC9A8,#FFF0E4)',
+  'bikin-website':     'linear-gradient(135deg,#D9CBFF,#F2ECFF)'
 };
 var LIH_ILLUSTRATIONS = {
   // This one's viewBox is tighter than the others (5 10 205 90, not 0 0 400 100) —
@@ -136,5 +137,34 @@ var LIH_ILLUSTRATIONS = {
     '<circle class="lih-dot1" cx="138" cy="17" r="2.4" fill="#6C47FF"/><circle class="lih-dot2" cx="152" cy="17" r="2.4" fill="#6C47FF"/><circle class="lih-dot3" cx="166" cy="17" r="2.4" fill="#6C47FF"/></g>' +
     '<g class="lih-sparkle" style="transform-origin:230px 20px"><path d="M230 12 L233 19 L240 20 L233 21 L230 28 L227 21 L220 20 L227 19 Z" fill="#6C47FF"/></g>' +
     '</g>' +
+    '</svg>',
+  // Sketchpad + pen sketching a layout, an arrow turning that sketch into a real browser
+  // window with a hero block/text lines/button, a cursor clicking the button, a sparkle,
+  // and a small globe — reads as "design it, then publish it live on the internet".
+  'bikin-website': '<svg class="lih-illustration" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">' +
+    '<line x1="70" y1="88" x2="330" y2="88" stroke="#111" stroke-width="2.5" opacity="0.2"/>' +
+    '<rect x="75" y="38" width="34" height="42" rx="3" fill="#fff" stroke="#111" stroke-width="2.3"/>' +
+    '<line x1="82" y1="48" x2="102" y2="48" stroke="#111" stroke-width="1.8" opacity="0.4"/>' +
+    '<line x1="82" y1="56" x2="98" y2="56" stroke="#111" stroke-width="1.8" opacity="0.4"/>' +
+    '<line x1="82" y1="64" x2="102" y2="64" stroke="#111" stroke-width="1.8" opacity="0.4"/>' +
+    '<g class="lih-pen" style="transform-origin:98px 46px"><line x1="86" y1="54" x2="100" y2="40" stroke="#111" stroke-width="3" stroke-linecap="round"/><path d="M98 42 L102 38 L100 36 Z" fill="#6C47FF"/></g>' +
+    '<path d="M113 58 Q121 58 127 58" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"/>' +
+    '<path d="M123 54 L129 58 L123 62" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+    '<rect x="132" y="24" width="140" height="58" rx="6" fill="#fff" stroke="#111" stroke-width="2.5"/>' +
+    '<line x1="132" y1="38" x2="272" y2="38" stroke="#111" stroke-width="2"/>' +
+    '<circle cx="141" cy="31" r="2.2" fill="#111"/><circle cx="149" cy="31" r="2.2" fill="#111"/><circle cx="157" cy="31" r="2.2" fill="#111"/>' +
+    '<rect x="140" y="46" width="46" height="28" rx="3" fill="#6C47FF" opacity="0.18" stroke="#111" stroke-width="2"/>' +
+    '<path d="M142 70 L154 58 L162 66 L174 52 L184 70 Z" fill="#6C47FF" opacity="0.35"/><circle cx="152" cy="55" r="4" fill="#6C47FF" opacity="0.5"/>' +
+    '<line x1="192" y1="50" x2="262" y2="50" stroke="#111" stroke-width="2.2" opacity="0.4"/>' +
+    '<line x1="192" y1="58" x2="252" y2="58" stroke="#111" stroke-width="2.2" opacity="0.3"/>' +
+    '<line x1="192" y1="66" x2="242" y2="66" stroke="#111" stroke-width="2.2" opacity="0.3"/>' +
+    '<rect x="192" y="72" width="42" height="10" rx="5" fill="#6C47FF"/>' +
+    '<path class="lih-cursor" d="M239 78 L239 96 L243.5 92 L247 99.5 L250.5 98 L247 90.5 L252 90 Z" fill="#111"/>' +
+    '<g class="lih-sparkle" style="transform-origin:284px 26px"><path d="M284 18 L287 25 L294 26 L287 27 L284 34 L281 27 L274 26 L281 25 Z" fill="#6C47FF"/></g>' +
+    '<g class="lih-bubble" style="transform-origin:308px 50px"><circle cx="308" cy="50" r="14" fill="none" stroke="#111" stroke-width="2.5"/>' +
+    '<ellipse cx="308" cy="50" rx="6" ry="14" fill="none" stroke="#111" stroke-width="1.5" opacity="0.5"/>' +
+    '<line x1="294" y1="50" x2="322" y2="50" stroke="#111" stroke-width="1.5" opacity="0.5"/>' +
+    '<line x1="297" y1="42" x2="319" y2="42" stroke="#111" stroke-width="1.3" opacity="0.4"/>' +
+    '<line x1="297" y1="58" x2="319" y2="58" stroke="#111" stroke-width="1.3" opacity="0.4"/></g>' +
     '</svg>'
 };
