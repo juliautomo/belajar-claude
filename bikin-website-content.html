@@ -350,22 +350,22 @@
     <div class="mod-item" id="nav-mod6" onclick="showModule(6)">
       <div class="mod-check" id="check6"></div>
       <div class="mod-item-info">
-        <div class="mod-item-title">Rapikan: Mobile & Cek Ulang</div>
-        <div class="mod-item-sub">Modul 6 · Kontrol Kualitas</div>
+        <div class="mod-item-title">Kenalan dengan GitHub & Bikin Akun</div>
+        <div class="mod-item-sub">Modul 6 · GitHub</div>
       </div>
     </div>
     <div class="mod-item" id="nav-mod7" onclick="showModule(7)">
       <div class="mod-check" id="check7"></div>
       <div class="mod-item-info">
-        <div class="mod-item-title">Kenalan dengan GitHub & Bikin Akun</div>
-        <div class="mod-item-sub">Modul 7 · GitHub</div>
+        <div class="mod-item-title">Hubungkan ke Vercel & Publish</div>
+        <div class="mod-item-sub">Modul 7 · Publish</div>
       </div>
     </div>
     <div class="mod-item" id="nav-mod8" onclick="showModule(8)">
       <div class="mod-check" id="check8"></div>
       <div class="mod-item-info">
-        <div class="mod-item-title">Hubungkan ke Vercel & Publish</div>
-        <div class="mod-item-sub">Modul 8 · Publish</div>
+        <div class="mod-item-title">Uji Coba Nyata & Terus Diperbaiki</div>
+        <div class="mod-item-sub">Modul 8 · Uji Coba & Maintenance</div>
       </div>
     </div>
 
@@ -446,7 +446,7 @@
         </div>
 
         <div class="section-heading">Kenapa Skill Ini Berharga</div>
-        <p class="body-text">Selain buat toko atau portfolio kamu sendiri, skill ini bisa jadi jasa yang kamu tawarkan. Banyak UMKM di sekitar kamu — warung, jasa titip, katering rumahan, jasa kerajinan — belum punya website sama sekali, cuma jualan lewat story WhatsApp/Instagram. Begitu kamu selesai kursus ini, kamu bisa menawarkan jasa serupa ke mereka, dengan bukti kerja nyata yang bisa kamu tunjukkan (lihat Modul 7 soal GitHub sebagai portfolio).</p>
+        <p class="body-text">Selain buat toko atau portfolio kamu sendiri, skill ini bisa jadi jasa yang kamu tawarkan. Banyak UMKM di sekitar kamu — warung, jasa titip, katering rumahan, jasa kerajinan — belum punya website sama sekali, cuma jualan lewat story WhatsApp/Instagram. Begitu kamu selesai kursus ini, kamu bisa menawarkan jasa serupa ke mereka, dengan bukti kerja nyata yang bisa kamu tunjukkan (lihat Modul 6 soal GitHub sebagai portfolio).</p>
 
         <div class="section-heading">Fleksibel: Katalog atau Portfolio?</div>
         <p class="body-text">Kursus ini berjalan dengan studi kasus katalog toko roti online. Tapi metodenya — rancang struktur, desain, bangun, publish — sama persis kalau yang kamu butuhkan adalah portfolio pribadi, landing page bisnis, atau situs satu-tujuan lainnya. Kalau itu yang kamu butuhkan, ikuti saja tiap modul pakai kontenmu sendiri, bukan katalog produk.</p>
@@ -763,76 +763,9 @@ yang dipesan.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button><
       <div class="module-panel" id="panel6">
         <div class="video-slot" id="video-slot-6"></div>
         <div class="breadcrumb"><span>Bikin Website Sendiri Tanpa Coding</span><span>›</span><strong>Modul 6</strong></div>
-        <h1 class="module-title">Rapikan: Mobile & Cek Ulang</h1>
-        <p class="module-subtitle">Cek tampilan mobile di Artifact dan sapu bersih sebelum publish</p>
-        <div class="downloads-slot" id="downloads-slot-6"></div>
-
-        <div class="module-desc-box">
-          Sebelum situsmu dilihat orang lain, ada satu langkah yang sering dilewatkan: memastikan semuanya benar-benar berfungsi, khususnya di layar HP — karena sebagian besar pengunjung toko online kecil membuka dari ponsel, bukan laptop.
-        </div>
-
-        <div class="tip-box">
-          <div class="tip-label">📌 File Lokal vs Online — Kenapa Belum Bisa Dibuka di HP Asli</div>
-          <p>Sampai titik ini, situsmu masih hidup sebagai Artifact di dalam chat Claude — belum jadi file, dan belum punya alamat (URL) yang bisa dibuka dari perangkat lain. Di Modul 7 kamu akan menyimpannya jadi file HTML asli di komputermu ("file lokal") — itu sudah bisa dibuka lewat browser, tapi cuma di komputer itu saja, belum ada link yang bisa dibagikan atau dibuka dari HP. Baru setelah file itu di-upload ke GitHub dan online lewat Vercel di Modul 8, situsmu punya alamat sungguhan (misalnya <code>https://namaproyek.vercel.app</code>) yang bisa dibuka siapa saja, dari perangkat mana saja — termasuk HP-mu sendiri. Jadi untuk sekarang, "cek tampilan mobile" artinya memakai fitur preview di dalam Artifact, bukan membuka link di HP.</p>
-        </div>
-
-        <div class="section-heading">Cek Tampilan Mobile</div>
-        <p class="body-text">Di panel Artifact, biasanya ada ikon ukuran layar (Desktop/Tablet/Mobile) di pojok atas preview — klik yang Mobile untuk melihat tampilan sempit. Kalau ikon itu tidak ada, perkecil saja jendela browsermu. Lalu minta Claude mengecek dan memperbaiki tampilan untuk layar sempit itu — teks yang kepotong, tombol yang kekecilan untuk di-tap jari, atau grid produk yang malah berantakan.</p>
-        <div class="prompt-section">
-          <div class="prompt-label">📝 Prompt Cek Mobile</div>
-          <div class="prompt-box">Pastikan tampilan katalog ini rapi dan mudah dipakai di layar HP —
-cek ukuran tombol, jarak antar elemen, dan apakah grid produknya
-otomatis menyesuaikan jadi 1-2 kolom di layar sempit.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
-        </div>
-
-        <div class="section-heading">Sapu Bersih Sebelum Publish</div>
-        <p class="body-text">Cek satu per satu: apakah semua tombol order WhatsApp mengarah ke nomor yang benar, apakah ada typo di nama/harga produk, apakah semua foto muncul dengan benar (tidak ada gambar rusak/kosong).</p>
-        <ul class="mistake-list">
-          <li><strong>Link WhatsApp salah nomor</strong> — pengunjung order tapi pesannya nyasar</li>
-          <li><strong>Harga belum diisi atau salah ketik</strong> — bikin bingung calon pembeli</li>
-          <li><strong>Foto tidak muncul</strong> — biasanya karena link gambar yang salah/rusak</li>
-          <li><strong>Nama kategori tidak konsisten</strong> — bikin filter kategori tidak berfungsi dengan benar</li>
-        </ul>
-
-        <div class="summary-box">
-          <div class="summary-label">Ringkasan Modul 6</div>
-          <ul>
-            <li>Sampai modul ini, situsmu masih Artifact — belum jadi file, belum ada link untuk dibuka dari HP</li>
-            <li>Cek mobile pakai preview Mobile di Artifact dulu; cek langsung di HP asli baru bisa setelah online (Modul 8)</li>
-            <li>Sapu bersih sebelum publish: link WhatsApp, harga, foto, konsistensi nama kategori</li>
-            <li>Checklist singkat ini mencegah kesalahan kecil yang bisa merusak kesan pertama pengunjung</li>
-          </ul>
-        </div>
-
-        <div class="prompt-section latihan">
-          <div class="prompt-label">🎯 Latihan</div>
-          <div class="case-box">
-            <p>Ganti preview Artifact katalogmu ke ukuran Mobile (atau kecilkan jendela browser kalau tombolnya tidak ada), lalu jalankan checklist sapu bersih di atas satu per satu.</p>
-          </div>
-        </div>
-
-        <div class="output-box">
-          <div class="output-icon">✅</div>
-          <div>
-            <h3>Output yang Diharapkan</h3>
-            <p>Checklist QA yang sudah selesai dijalankan, dan versi situs yang sudah responsive dan bebas dari kesalahan-kesalahan umum di atas.</p>
-          </div>
-        </div>
-
-        <div class="nav-bottom">
-          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
-          <span class="nav-counter">6 / 8</span>
-          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
-        </div>
-      </div>
-
-      <!-- MODULE 7 -->
-      <div class="module-panel" id="panel7">
-        <div class="video-slot" id="video-slot-7"></div>
-        <div class="breadcrumb"><span>Bikin Website Sendiri Tanpa Coding</span><span>›</span><strong>Modul 7</strong></div>
         <h1 class="module-title">Kenalan dengan GitHub & Bikin Akun</h1>
         <p class="module-subtitle">GitHub sebagai portfolio, bukan cuma tempat nyimpan file</p>
-        <div class="downloads-slot" id="downloads-slot-7"></div>
+        <div class="downloads-slot" id="downloads-slot-6"></div>
 
         <div class="module-desc-box">
           Situsmu sudah siap — sekarang tinggal dipublikasikan. Modul ini menyiapkan tempatnya: GitHub, sekaligus mengenalkan kenapa akun GitHub sendiri sudah berharga, bahkan sebelum situsmu live.
@@ -862,7 +795,7 @@ otomatis menyesuaikan jadi 1-2 kolom di layar sempit.<button class="copy-btn" on
         </div>
 
         <div class="summary-box">
-          <div class="summary-label">Ringkasan Modul 7</div>
+          <div class="summary-label">Ringkasan Modul 6</div>
           <ul>
             <li>GitHub adalah tempat menyimpan dan menampilkan project, gratis untuk digunakan</li>
             <li>Profil dan repo publik di GitHub jadi portfolio nyata — relevan langsung ke poin monetisasi Modul 1</li>
@@ -887,6 +820,61 @@ otomatis menyesuaikan jadi 1-2 kolom di layar sempit.<button class="copy-btn" on
 
         <div class="nav-bottom">
           <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
+          <span class="nav-counter">6 / 8</span>
+          <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <!-- MODULE 7 -->
+      <div class="module-panel" id="panel7">
+        <div class="video-slot" id="video-slot-7"></div>
+        <div class="breadcrumb"><span>Bikin Website Sendiri Tanpa Coding</span><span>›</span><strong>Modul 7</strong></div>
+        <h1 class="module-title">Hubungkan ke Vercel & Publish</h1>
+        <p class="module-subtitle">Situsmu live di internet dengan URL sendiri</p>
+        <div class="downloads-slot" id="downloads-slot-7"></div>
+
+        <div class="module-desc-box">
+          Momen yang paling memuaskan: situsmu benar-benar hidup di internet, dengan URL yang bisa dibagikan ke siapapun.
+        </div>
+
+        <div class="section-heading">Hubungkan Repo ke Vercel</div>
+        <p class="body-text">Vercel bisa login langsung pakai akun GitHub-mu, jadi tidak perlu daftar akun terpisah.</p>
+        <div class="step-row">
+          <div class="step-card"><div class="step-num">1</div><p>Buka vercel.com, klik "Continue with GitHub"</p></div>
+          <div class="step-card"><div class="step-num">2</div><p>Klik "Import Project", pilih repo yang kamu buat di Modul 6</p></div>
+          <div class="step-card"><div class="step-num">3</div><p>Klik "Deploy" — tunggu beberapa detik</p></div>
+          <div class="step-card"><div class="step-num">4</div><p>Situsmu live! Dapat URL <code>namamu.vercel.app</code></p></div>
+        </div>
+        <div class="tip-box">
+          <div class="tip-label">💡 Update Situs Nanti</div>
+          <p>Mau tambah produk baru atau ubah sesuatu? Edit atau upload file baru ke repo GitHub-mu (langsung lewat web GitHub, tetap tanpa command line) — Vercel otomatis mendeteksi perubahan dan mem-publish ulang situsmu tanpa kamu perlu drag-and-drop manual lagi. Lebih lanjut soal ini di Modul 8.</p>
+        </div>
+
+        <div class="summary-box">
+          <div class="summary-label">Ringkasan Modul 7</div>
+          <ul>
+            <li>Login Vercel pakai akun GitHub, import repo, deploy — situsmu langsung live dengan URL sendiri</li>
+            <li>Update selanjutnya cukup edit/upload file baru ke GitHub — Vercel otomatis mem-publish ulang</li>
+          </ul>
+        </div>
+
+        <div class="prompt-section latihan">
+          <div class="prompt-label">🎯 Latihan</div>
+          <div class="case-box">
+            <p>Login ke Vercel pakai akun GitHub-mu, import repo dari Modul 6, deploy, dan buka URL yang dihasilkan untuk memastikan situsmu benar-benar live dan berfungsi.</p>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-icon">✅</div>
+          <div>
+            <h3>Output yang Diharapkan</h3>
+            <p>URL live yang bisa dikunjungi siapa saja — situs katalog (atau portfolio) yang sudah selesai dan ter-deploy.</p>
+          </div>
+        </div>
+
+        <div class="nav-bottom">
+          <button class="nav-btn" onclick="prevModule()">← Sebelumnya</button>
           <span class="nav-counter">7 / 8</span>
           <button class="nav-btn primary" onclick="nextModule()">Selanjutnya →</button>
         </div>
@@ -896,26 +884,35 @@ otomatis menyesuaikan jadi 1-2 kolom di layar sempit.<button class="copy-btn" on
       <div class="module-panel" id="panel8">
         <div class="video-slot" id="video-slot-8"></div>
         <div class="breadcrumb"><span>Bikin Website Sendiri Tanpa Coding</span><span>›</span><strong>Modul 8</strong></div>
-        <h1 class="module-title">Hubungkan ke Vercel & Publish</h1>
-        <p class="module-subtitle">Situsmu live di internet, dan siap dikembangkan lebih lanjut</p>
+        <h1 class="module-title">Uji Coba Nyata & Terus Diperbaiki</h1>
+        <p class="module-subtitle">Cek langsung di HP asli, sapu bersih, dan rencana ke depan</p>
         <div class="downloads-slot" id="downloads-slot-8"></div>
 
         <div class="module-desc-box">
-          Ini modul terakhir, dan yang paling memuaskan: situsmu benar-benar hidup di internet, dengan URL yang bisa dibagikan ke siapapun.
+          Situsmu sekarang benar-benar live di internet. Modul terakhir ini bukan cuma soal cek-cek sebelum "selesai" — tapi kebiasaan yang bakal terus kamu pakai: uji coba nyata di perangkat asli, beres-beres kecil, dan tahu cara mengembangkan situs ini kapan saja.
         </div>
 
-        <div class="section-heading">Hubungkan Repo ke Vercel</div>
-        <p class="body-text">Vercel bisa login langsung pakai akun GitHub-mu, jadi tidak perlu daftar akun terpisah.</p>
-        <div class="step-row">
-          <div class="step-card"><div class="step-num">1</div><p>Buka vercel.com, klik "Continue with GitHub"</p></div>
-          <div class="step-card"><div class="step-num">2</div><p>Klik "Import Project", pilih repo yang kamu buat di Modul 7</p></div>
-          <div class="step-card"><div class="step-num">3</div><p>Klik "Deploy" — tunggu beberapa detik</p></div>
-          <div class="step-card"><div class="step-num">4</div><p>Situsmu live! Dapat URL <code>namamu.vercel.app</code></p></div>
+        <div class="section-heading">Cek di HP Asli</div>
+        <p class="body-text">Sekarang situsmu sudah punya URL sungguhan — buka langsung dari HP-mu sendiri. Ini baru benar-benar tes tampilan mobile, bukan sekadar preview di Artifact seperti waktu situsnya belum online. Perhatikan teks yang kepotong, tombol yang kekecilan untuk di-tap jari, atau grid produk yang berantakan di layar sempit.</p>
+        <div class="prompt-section">
+          <div class="prompt-label">📝 Prompt Cek Mobile</div>
+          <div class="prompt-box">Pastikan tampilan katalog ini rapi dan mudah dipakai di layar HP —
+cek ukuran tombol, jarak antar elemen, dan apakah grid produknya
+otomatis menyesuaikan jadi 1-2 kolom di layar sempit.<button class="copy-btn" onclick="copyPrompt(this)">Salin</button></div>
         </div>
         <div class="tip-box">
-          <div class="tip-label">💡 Update Situs Nanti</div>
-          <p>Mau tambah produk baru atau ubah sesuatu? Edit atau upload file baru ke repo GitHub-mu (langsung lewat web GitHub, tetap tanpa command line) — Vercel otomatis mendeteksi perubahan dan mem-publish ulang situsmu tanpa kamu perlu drag-and-drop manual lagi.</p>
+          <div class="tip-label">📌 Kalau Ada yang Perlu Diperbaiki</div>
+          <p>Minta Claude memperbaiki bagian yang bermasalah, simpan ulang perubahannya ke file HTML-mu, lalu upload ulang ke repo GitHub-mu — Vercel otomatis mendeteksi perubahan itu dan mem-publish ulang situsmu, tanpa kamu perlu deploy manual lagi.</p>
         </div>
+
+        <div class="section-heading">Sapu Bersih Terakhir</div>
+        <p class="body-text">Cek satu per satu langsung di situs yang sudah live: apakah semua tombol order WhatsApp mengarah ke nomor yang benar, apakah ada typo di nama/harga produk, apakah semua foto muncul dengan benar (tidak ada gambar rusak/kosong).</p>
+        <ul class="mistake-list">
+          <li><strong>Link WhatsApp salah nomor</strong> — pengunjung order tapi pesannya nyasar</li>
+          <li><strong>Harga belum diisi atau salah ketik</strong> — bikin bingung calon pembeli</li>
+          <li><strong>Foto tidak muncul</strong> — biasanya karena link gambar yang salah/rusak</li>
+          <li><strong>Nama kategori tidak konsisten</strong> — bikin filter kategori tidak berfungsi dengan benar</li>
+        </ul>
 
         <div class="section-heading">Penutup: Monetisasi & Langkah Selanjutnya</div>
         <p class="body-text">Repo GitHub dan situs live ini sekarang jadi bukti kerja nyata (proof-of-work) yang bisa kamu tunjukkan ke UMKM lain yang butuh jasa serupa. Kamu tidak perlu menunggu "jago" dulu — satu contoh nyata yang berfungsi sudah cukup untuk mulai menawarkan jasa.</p>
@@ -928,8 +925,9 @@ otomatis menyesuaikan jadi 1-2 kolom di layar sempit.<button class="copy-btn" on
         <div class="summary-box">
           <div class="summary-label">Ringkasan Modul 8</div>
           <ul>
-            <li>Login Vercel pakai akun GitHub, import repo, deploy — situsmu langsung live dengan URL sendiri</li>
-            <li>Update selanjutnya cukup edit/upload file baru ke GitHub — Vercel otomatis mem-publish ulang</li>
+            <li>Situs sudah live — sekarang saatnya cek beneran di HP asli, bukan cuma preview</li>
+            <li>Sapu bersih terakhir: link WhatsApp, harga, foto, konsistensi nama kategori</li>
+            <li>Ada perbaikan? Edit lewat Claude, upload ulang ke GitHub — Vercel otomatis publish ulang</li>
             <li>Situs live + repo GitHub adalah bukti kerja nyata yang bisa dipakai untuk menawarkan jasa ke UMKM lain</li>
             <li>Claude Code, Cowork, dan GitHub connector adalah eksplorasi opsional — bukan wajib</li>
           </ul>
@@ -938,7 +936,7 @@ otomatis menyesuaikan jadi 1-2 kolom di layar sempit.<button class="copy-btn" on
         <div class="prompt-section latihan">
           <div class="prompt-label">🎯 Latihan</div>
           <div class="case-box">
-            <p>Login ke Vercel pakai akun GitHub-mu, import repo dari Modul 7, deploy, dan buka URL yang dihasilkan untuk memastikan situsmu benar-benar live dan berfungsi. Lalu buka URL itu juga dari HP-mu — ini pertama kalinya kamu bisa cek tampilan mobile di perangkat asli, bukan cuma preview di Artifact seperti di Modul 6.</p>
+            <p>Buka URL live-mu langsung dari HP, jalankan checklist sapu bersih di atas satu per satu, dan perbaiki (lalu upload ulang) kalau ada yang kurang pas di layar sempit.</p>
           </div>
         </div>
 
@@ -946,7 +944,7 @@ otomatis menyesuaikan jadi 1-2 kolom di layar sempit.<button class="copy-btn" on
           <div class="output-icon">✅</div>
           <div>
             <h3>Output yang Diharapkan</h3>
-            <p>URL live yang bisa dikunjungi siapa saja — situs katalog (atau portfolio) yang sudah selesai dan ter-deploy, sudah dicek juga langsung dari HP-mu sendiri.</p>
+            <p>Situs yang sudah dicek langsung dari HP asli, bebas dari kesalahan-kesalahan umum di atas, dan siap dipakai sebagai bukti kerja nyata.</p>
           </div>
         </div>
 
