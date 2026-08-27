@@ -124,10 +124,15 @@ td a:hover { text-decoration: underline; }
 .pdf-status a:hover { text-decoration: underline; }
 .btn-mini { padding: 6px 12px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--ink); cursor: pointer; font-family: inherit; }
 .btn-mini:hover { border-color: var(--border-strong); }
-.order-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; font-size: 13.5px; font-weight: 600; color: var(--ink); }
-.order-row:last-child { margin-bottom: 0; }
-.order-arrows { display: flex; gap: 6px; }
-.order-arrows .btn-mini { padding: 5px 11px; font-size: 13px; line-height: 1; }
+/* Single bordered list with row dividers, not a stack of individually-bordered/
+   margined cards — that read as oversized for an 11-row reorder control (each row
+   was ~50px tall including its own border-radius + 8px gap, ~600px total just to
+   see every course). One outer border + thin dividers + tighter padding instead. */
+#courseOrderList { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.order-row { display: flex; align-items: center; justify-content: space-between; padding: 7px 14px; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 600; color: var(--ink); }
+.order-row:last-child { border-bottom: none; }
+.order-arrows { display: flex; gap: 4px; }
+.order-arrows .btn-mini { padding: 2px 8px; font-size: 12px; line-height: 1.6; }
 .order-arrows .btn-mini:disabled { opacity: 0.35; cursor: not-allowed; }
 .order-arrows .btn-mini:disabled:hover { border-color: var(--border); }
 table.matrix-table { width: 100%; border-collapse: collapse; font-size: 13px; }
