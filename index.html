@@ -794,7 +794,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         document.getElementById('navUserPill').style.display = 'flex';
         document.getElementById('navUname').textContent  = firstName;
         document.getElementById('navUemail').textContent = s.user.email;
-        var ADMIN_EMAILS = ['julia.utomo@gmail.com', 'tiffany.utomo@gmail.com', 'tffnyy26@gmail.com'];
+        var ADMIN_EMAILS = ['julia.utomo@gmail.com', 'tiffany.utomo@gmail.com'];
         if (ADMIN_EMAILS.indexOf(s.user.email.toLowerCase()) !== -1) {
           document.getElementById('navAdminLink').style.display = 'block';
         }

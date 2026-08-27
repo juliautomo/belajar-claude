@@ -569,6 +569,13 @@
     // PostHog: checkout_started fires when the buyer opens this modal — the funnel
     // step before payment_info_added (submitPayment()) and purchase_completed
     // (payment-success.html), so drop-off before ever submitting the form is visible.
+    //
+    // Meta Pixel (fbq) intentionally does NOT fire here — main/prod has matching
+    // InitiateCheckout/AddPaymentInfo calls alongside PostHog, dev does not. This is
+    // deliberate, not drift to be merged: dev is a preview/testing environment, and
+    // its traffic (our own clicks, QA runs) shouldn't be reported to Meta's ad
+    // pixel as real buyer behavior. Keep this branch difference when merging dev
+    // into main — don't let a "sync the branches" pass add fbq calls here.
     try {
       if (typeof posthog !== 'undefined') {
         posthog.capture('checkout_started', { value: effectiveAmount, currency: 'IDR' });
@@ -601,7 +608,9 @@
       const data = await res.json();
       if (!data.success) throw new Error(data.message);
       // PostHog: payment_info_added fires once a real Duitku payment reference
-      // exists, right before the buyer completes payment in the widget.
+      // exists, right before the buyer completes payment in the widget. No Meta
+      // Pixel call here either — see the note by checkout_started above, same
+      // reason (dev traffic shouldn't be reported to Meta as real buyer activity).
       try {
         if (typeof posthog !== 'undefined') {
           posthog.capture('payment_info_added', { value: effectiveAmount, currency: 'IDR', reference: data.reference });
