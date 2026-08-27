@@ -571,6 +571,12 @@
     // modal), ahead of AddPaymentInfo (fired later in submitPayment(), once a real
     // payment reference exists). Two standard Meta events instead of one, so the
     // funnel step where people drop off before ever submitting the form is visible.
+    //
+    // This fbq tracking is intentionally main/prod-only — dev.all-access.html has
+    // the same PostHog capture below but no Meta Pixel calls, on purpose: dev is a
+    // preview/testing environment, and its traffic (our own clicks, QA runs)
+    // shouldn't be reported to Meta's ad pixel as real buyer behavior. Don't add
+    // fbq calls to dev when merging/syncing branches.
     try {
       if (typeof fbq !== 'undefined') {
         fbq('track', 'InitiateCheckout', { value: effectiveAmount, currency: 'IDR' });
@@ -612,7 +618,8 @@
       // before the buyer completes payment in the widget. Second of two funnel
       // events (InitiateCheckout fires earlier, when the modal opens in buyCourse())
       // — gives Meta's ad delivery algorithm more signal than waiting on sparse
-      // real Purchase events alone at this budget.
+      // real Purchase events alone at this budget. Main/prod-only — same reason as
+      // the InitiateCheckout note above.
       try {
         if (typeof fbq !== 'undefined') {
           fbq('track', 'AddPaymentInfo', { value: effectiveAmount, currency: 'IDR' }, { eventID: data.reference });
