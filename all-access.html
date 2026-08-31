@@ -608,9 +608,19 @@
     if (!email || !email.includes('@')) { alert('Mohon masukkan email yang valid.'); return; }
     btn.disabled = true; btn.textContent = 'Memproses...';
     try {
+      // PostHog distinct_id (anonymous, pre-login is normal for guest checkout) is
+      // passed through so the backend can fire purchase_completed server-side from
+      // the Duitku webhook — see belajar-claude-backend/index.js — under the same
+      // distinct_id as checkout_started/payment_info_added above, keeping the funnel
+      // linked. Client-side purchase tracking was unreliable: many Indonesian
+      // payment methods (QRIS, e-wallets) complete inside a separate app and never
+      // redirect the browser back to payment-success.html.
+      let distinctId;
+      try { if (typeof posthog !== 'undefined') distinctId = posthog.get_distinct_id(); } catch (e) { /* fail silent */ }
+
       const res  = await fetch(BACKEND_URL + '/create-payment', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ courseSlug: 'all-access', customerName: name, customerEmail: email })
+        body: JSON.stringify({ courseSlug: 'all-access', customerName: name, customerEmail: email, distinctId })
       });
       const data = await res.json();
       if (!data.success) throw new Error(data.message);
