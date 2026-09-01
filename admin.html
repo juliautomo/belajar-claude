@@ -157,6 +157,27 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
 .doc-item a { color: var(--accent); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .doc-item a:hover { text-decoration: underline; }
 .doc-list { margin-bottom: 16px; }
+.chip { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 100px; background: var(--surface-2); color: var(--ink-2); white-space: nowrap; }
+.chip-accent { background: var(--accent-dim); color: var(--accent); }
+.user-row { border-bottom: 1px solid var(--border); }
+.user-row:last-child { border-bottom: none; }
+.user-row-main { display: flex; align-items: center; gap: 12px; padding: 12px 4px; cursor: pointer; flex-wrap: wrap; border-radius: 8px; }
+.user-row-main:hover { background: var(--surface-2); }
+.user-info { display: flex; flex-direction: column; margin-right: auto; min-width: 140px; }
+.user-info strong { font-size: 13.5px; }
+.user-info span { font-size: 12px; color: var(--ink-2); }
+.user-last-active { font-size: 12px; color: var(--ink-2); white-space: nowrap; }
+.user-chevron { font-size: 11px; color: var(--ink-3); transition: transform 0.15s; }
+.user-chevron.open { transform: rotate(180deg); }
+.user-detail { padding: 4px 4px 14px 52px; }
+.user-course-row { padding: 8px 0; border-top: 1px dashed var(--border); }
+.user-course-row:first-child { border-top: none; }
+.ucr-name { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+.ucr-sub { font-size: 11.5px; color: var(--ink-3); font-weight: 400; margin-left: 8px; }
+.ucr-progress { display: flex; align-items: center; gap: 10px; }
+.progress-track { flex: 1; max-width: 240px; height: 7px; background: var(--surface-2); border-radius: 100px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 100px; }
+.progress-label { font-size: 11.5px; color: var(--ink-2); font-weight: 600; white-space: nowrap; }
 </style>
 </head>
 <body>
@@ -193,6 +214,7 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
   <div class="sidebar">
     <a class="sidebar-link active" data-panel="pricing" onclick="switchPanel('pricing');return false;"><span class="ic">💰</span> Pricing</a>
     <a class="sidebar-link" data-panel="content" onclick="switchPanel('content');return false;"><span class="ic">🎓</span> Course Content</a>
+    <a class="sidebar-link" data-panel="users" onclick="switchPanel('users');return false;"><span class="ic">👥</span> Users</a>
     <a class="sidebar-link" data-panel="social" onclick="switchPanel('social');return false;"><span class="ic">🔗</span> Social Media Links</a>
     <a class="sidebar-link" data-panel="access" onclick="switchPanel('access');return false;"><span class="ic">🔐</span> Who Has Access</a>
   </div>
@@ -302,6 +324,20 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
             </table>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Panel: Users -->
+    <div class="panel" id="panel-users">
+      <h1 class="page-title">Users</h1>
+      <p class="page-sub">Semua orang yang punya akses ke minimal satu kursus, dengan progress modul per kursus.</p>
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+          <h2 style="margin-bottom:0;" id="usersCountLabel">Memuat...</h2>
+          <input type="text" id="usersSearch" placeholder="Cari nama atau email..." oninput="renderUsers()" style="max-width:260px;">
+        </div>
+        <div id="usersList"></div>
+        <p class="hint" id="usersEmpty" style="display:none;margin-bottom:0;">Belum ada user.</p>
       </div>
     </div>
 
@@ -552,7 +588,7 @@ async function ensureFreshSession() {
   return currentSession;
 }
 let activeCourse = COURSES[0].slug;
-let dataCache = { resources: [], videos: [], ppts: [], docs: [], visibility: [] };
+let dataCache = { resources: [], videos: [], ppts: [], docs: [], visibility: [], enrollmentsAll: [], completions: [], profiles: [] };
 let pricingCache = null;
 let pricingHistoryCache = [];
 let socialCache = null;
@@ -609,11 +645,17 @@ async function loadAllData() {
   var pricingHistoryRes = await sbClient.from('course_pricing_history').select('*').eq('course_slug', 'all-access').order('changed_at', { ascending: false }).limit(20);
   var socialRes = await sbClient.from('social_links').select('*').eq('id', 'main').maybeSingle();
   var visibilityRes = await sbClient.from('course_visibility').select('*');
+  var enrollmentsRes = await sbClient.from('enrollments').select('email,course_slug,course_name,type,enrolled_at,last_accessed_at');
+  var completionsRes = await sbClient.from('module_completions').select('email,course_slug,module_num');
+  var profilesRes = await sbClient.from('profiles').select('email,full_name');
   dataCache.resources = resourcesRes.data || [];
   dataCache.videos = videosRes.data || [];
   dataCache.ppts = pptsRes.data || [];
   dataCache.docs = docsRes.data || [];
   dataCache.visibility = visibilityRes.data || [];
+  dataCache.enrollmentsAll = enrollmentsRes.data || [];
+  dataCache.completions = completionsRes.data || [];
+  dataCache.profiles = profilesRes.data || [];
   pricingCache = pricingRes.data || null;
   pricingHistoryCache = pricingHistoryRes.data || [];
   socialCache = socialRes.data || null;
@@ -715,6 +757,162 @@ function renderAccessList() {
   }).join('');
 }
 
+// ─── USERS (learners — enrollment + module progress per course) ────────────
+// "Touched" courses for a user = courses they have a dedicated enrollment row
+// for, PLUS any course with at least one module_completions row. The second
+// half matters for all-access buyers: they get a single 'all-access'
+// enrollment row (see dashboard.html's PAKET_COURSES expansion), not one row
+// per course, so module_completions is the only signal for which specific
+// courses they've actually opened. All-access itself is shown as a badge,
+// never as a course row (it isn't a real course with modules).
+
+var usersDataCache = [];
+var expandedUsers = {};
+
+function buildUsersData() {
+  var byEmail = {};
+  function ensureUser(email) {
+    if (!byEmail[email]) byEmail[email] = { email: email, name: null, rows: [], hasAllAccess: false };
+    return byEmail[email];
+  }
+  (dataCache.enrollmentsAll || []).forEach(function (e) {
+    var u = ensureUser(e.email);
+    u.rows.push(e);
+    if (e.course_slug === 'all-access') u.hasAllAccess = true;
+  });
+  (dataCache.profiles || []).forEach(function (p) {
+    if (byEmail[p.email] && p.full_name) byEmail[p.email].name = p.full_name;
+  });
+
+  var completionsByUser = {};
+  (dataCache.completions || []).forEach(function (c) {
+    ensureUser(c.email);
+    completionsByUser[c.email] = completionsByUser[c.email] || {};
+    completionsByUser[c.email][c.course_slug] = completionsByUser[c.email][c.course_slug] || {};
+    completionsByUser[c.email][c.course_slug][c.module_num] = true;
+  });
+
+  var users = Object.keys(byEmail).map(function (email) {
+    var u = byEmail[email];
+    var comp = completionsByUser[email] || {};
+    var courseSlugs = {};
+    u.rows.forEach(function (e) { if (e.course_slug !== 'all-access') courseSlugs[e.course_slug] = true; });
+    Object.keys(comp).forEach(function (slug) { courseSlugs[slug] = true; });
+
+    var courses = Object.keys(courseSlugs).map(function (slug) {
+      var courseDef = COURSES.find(function (c) { return c.slug === slug; });
+      var enrollRow = u.rows.find(function (e) { return e.course_slug === slug; });
+      var total = courseDef ? courseDef.modules : 0;
+      var doneCount = comp[slug] ? Object.keys(comp[slug]).length : 0;
+      if (total && doneCount > total) doneCount = total;
+      return {
+        slug: slug,
+        name: courseDef ? courseDef.name : (enrollRow ? enrollRow.course_name : slug),
+        total: total,
+        done: doneCount,
+        pct: total ? Math.round(doneCount / total * 100) : 0,
+        enrolledAt: enrollRow ? enrollRow.enrolled_at : null,
+        lastAccessed: enrollRow ? enrollRow.last_accessed_at : null,
+        viaAllAccess: !enrollRow,
+      };
+    });
+    courses.sort(function (a, b) {
+      return new Date(b.lastAccessed || b.enrolledAt || 0) - new Date(a.lastAccessed || a.enrolledAt || 0);
+    });
+
+    var earliestEnrolled = null, latestAccessed = null;
+    u.rows.forEach(function (e) {
+      if (e.enrolled_at && (!earliestEnrolled || new Date(e.enrolled_at) < new Date(earliestEnrolled))) earliestEnrolled = e.enrolled_at;
+      if (e.last_accessed_at && (!latestAccessed || new Date(e.last_accessed_at) > new Date(latestAccessed))) latestAccessed = e.last_accessed_at;
+    });
+
+    return {
+      email: email,
+      name: u.name,
+      hasAllAccess: u.hasAllAccess,
+      earliestEnrolled: earliestEnrolled,
+      latestAccessed: latestAccessed,
+      courses: courses,
+    };
+  });
+
+  users.sort(function (a, b) { return new Date(b.earliestEnrolled || 0) - new Date(a.earliestEnrolled || 0); });
+  return users;
+}
+
+function fmtDate(iso) {
+  if (!iso) return null;
+  return new Date(iso).toLocaleDateString('id-ID', { dateStyle: 'medium' });
+}
+
+function userCourseRowHtml(c) {
+  var barColor = c.pct >= 100 ? 'var(--green)' : 'var(--accent)';
+  var meta = c.viaAllAccess ? 'Akses via All Access' :
+    ('Terdaftar ' + (fmtDate(c.enrolledAt) || '—') + (c.lastAccessed ? ' · Terakhir dibuka ' + fmtDate(c.lastAccessed) : ''));
+  return '<div class="user-course-row">' +
+    '<div class="ucr-name">' + escapeHtml(c.name) + '<span class="ucr-sub">' + meta + '</span></div>' +
+    '<div class="ucr-progress"><div class="progress-track"><div class="progress-fill" style="width:' + c.pct + '%;background:' + barColor + ';"></div></div>' +
+    '<span class="progress-label">' + c.done + '/' + c.total + ' modul (' + c.pct + '%)</span></div>' +
+  '</div>';
+}
+
+function userRowHtml(u, idx) {
+  var displayName = u.name || u.email.split('@')[0];
+  var isOpen = !!expandedUsers[idx];
+  var lastActive = u.latestAccessed ? new Date(u.latestAccessed).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) : '—';
+  var courseCountLabel = u.courses.length + (u.courses.length === 1 ? ' kursus' : ' kursus');
+  var allAccessChip = u.hasAllAccess ? '<span class="chip chip-accent">All Access</span>' : '';
+  var detailHtml = u.courses.length ? u.courses.map(userCourseRowHtml).join('') :
+    '<p class="hint" style="margin:0;">Belum ada aktivitas di kursus manapun.</p>';
+
+  return '<div class="user-row">' +
+    '<div class="user-row-main" onclick="toggleUserExpand(' + idx + ')">' +
+      '<div class="access-avatar">' + escapeHtml(displayName.charAt(0).toUpperCase()) + '</div>' +
+      '<div class="user-info"><strong>' + escapeHtml(displayName) + '</strong><span>' + escapeHtml(u.email) + '</span></div>' +
+      allAccessChip +
+      '<span class="chip">' + courseCountLabel + '</span>' +
+      '<span class="user-last-active">Aktif: ' + lastActive + '</span>' +
+      '<span class="user-chevron' + (isOpen ? ' open' : '') + '" id="chev-' + idx + '">&#9662;</span>' +
+    '</div>' +
+    '<div class="user-detail" id="detail-' + idx + '" style="display:' + (isOpen ? 'block' : 'none') + ';">' + detailHtml + '</div>' +
+  '</div>';
+}
+
+function toggleUserExpand(idx) {
+  expandedUsers[idx] = !expandedUsers[idx];
+  var detail = document.getElementById('detail-' + idx);
+  var chev = document.getElementById('chev-' + idx);
+  if (detail) detail.style.display = expandedUsers[idx] ? 'block' : 'none';
+  if (chev) chev.classList.toggle('open', !!expandedUsers[idx]);
+}
+
+function renderUsers() {
+  usersDataCache = buildUsersData();
+  var searchEl = document.getElementById('usersSearch');
+  var q = searchEl ? searchEl.value.trim().toLowerCase() : '';
+  var filtered = !q ? usersDataCache : usersDataCache.filter(function (u) {
+    return u.email.toLowerCase().indexOf(q) !== -1 || (u.name || '').toLowerCase().indexOf(q) !== -1;
+  });
+
+  var countLabel = document.getElementById('usersCountLabel');
+  if (countLabel) {
+    countLabel.textContent = filtered.length + ' user' + (q ? ' (dari ' + usersDataCache.length + ')' : '');
+  }
+
+  var listEl = document.getElementById('usersList');
+  var emptyEl = document.getElementById('usersEmpty');
+  if (!listEl) return;
+  if (!filtered.length) {
+    listEl.innerHTML = '';
+    if (emptyEl) emptyEl.style.display = 'block';
+    return;
+  }
+  if (emptyEl) emptyEl.style.display = 'none';
+  listEl.innerHTML = filtered.map(function (u) {
+    return userRowHtml(u, usersDataCache.indexOf(u));
+  }).join('');
+}
+
 // ─── COURSE SUB-NAVIGATION ───────────────────────────────────────────────────
 
 // Same live-override pattern as renderVisibilityToggles() below: the Tersedia/Segera
@@ -763,6 +961,7 @@ function renderAll() {
   renderCourseOrder();
   renderSocialLinks();
   renderAccessList();
+  renderUsers();
 }
 
 // ─── PRICING (All Access — base price + optional scheduled discount) ───────
