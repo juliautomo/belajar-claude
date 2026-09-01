@@ -637,17 +637,25 @@ function extractYoutubeId(url) {
 // ─── DATA LOADING ────────────────────────────────────────────────────────────
 
 async function loadAllData() {
-  var resourcesRes = await sbClient.from('course_resources').select('*');
-  var videosRes = await sbClient.from('module_videos').select('*').order('course_slug').order('module_num');
-  var pptsRes = await sbClient.from('module_ppts').select('*').order('course_slug').order('module_num');
-  var docsRes = await sbClient.from('module_documents').select('*').order('course_slug').order('module_num').order('created_at');
-  var pricingRes = await sbClient.from('course_pricing').select('*').eq('course_slug', 'all-access').maybeSingle();
-  var pricingHistoryRes = await sbClient.from('course_pricing_history').select('*').eq('course_slug', 'all-access').order('changed_at', { ascending: false }).limit(20);
-  var socialRes = await sbClient.from('social_links').select('*').eq('id', 'main').maybeSingle();
-  var visibilityRes = await sbClient.from('course_visibility').select('*');
-  var enrollmentsRes = await sbClient.from('enrollments').select('email,course_slug,course_name,type,enrolled_at,last_accessed_at');
-  var completionsRes = await sbClient.from('module_completions').select('email,course_slug,module_num');
-  var profilesRes = await sbClient.from('profiles').select('email,full_name');
+  // All 11 queries are independent, so fire them concurrently (Promise.all) instead
+  // of one-at-a-time -- was 11 sequential round-trips, now bounded by the slowest
+  // single query rather than the sum of all of them.
+  var results = await Promise.all([
+    sbClient.from('course_resources').select('*'),
+    sbClient.from('module_videos').select('*').order('course_slug').order('module_num'),
+    sbClient.from('module_ppts').select('*').order('course_slug').order('module_num'),
+    sbClient.from('module_documents').select('*').order('course_slug').order('module_num').order('created_at'),
+    sbClient.from('course_pricing').select('*').eq('course_slug', 'all-access').maybeSingle(),
+    sbClient.from('course_pricing_history').select('*').eq('course_slug', 'all-access').order('changed_at', { ascending: false }).limit(20),
+    sbClient.from('social_links').select('*').eq('id', 'main').maybeSingle(),
+    sbClient.from('course_visibility').select('*'),
+    sbClient.from('enrollments').select('email,course_slug,course_name,type,enrolled_at,last_accessed_at'),
+    sbClient.from('module_completions').select('email,course_slug,module_num'),
+    sbClient.from('profiles').select('email,full_name'),
+  ]);
+  var resourcesRes = results[0], videosRes = results[1], pptsRes = results[2], docsRes = results[3],
+    pricingRes = results[4], pricingHistoryRes = results[5], socialRes = results[6], visibilityRes = results[7],
+    enrollmentsRes = results[8], completionsRes = results[9], profilesRes = results[10];
   dataCache.resources = resourcesRes.data || [];
   dataCache.videos = videosRes.data || [];
   dataCache.ppts = pptsRes.data || [];
