@@ -74,7 +74,8 @@ select, input[type="file"], input[type="text"], input[type="number"], input[type
   width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 10px;
   font-size: 13.5px; color: var(--ink); font-family: inherit; background: #fff;
 }
-.price-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.price-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+.price-row label { margin-top: 0; }
 @media (max-width: 480px) { .price-row { grid-template-columns: 1fr; } }
 .current-indicator.discount-active { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-glow); }
 select:focus { outline: none; border-color: var(--accent); }
@@ -992,6 +993,9 @@ function renderPricing() {
   discEl.value = pricingCache && pricingCache.discount_price != null ? pricingCache.discount_price : '';
   startEl.value = pricingCache && pricingCache.discount_start ? toLocalInputValue(pricingCache.discount_start) : '';
   endEl.value = pricingCache && pricingCache.discount_end ? toLocalInputValue(pricingCache.discount_end) : '';
+  // Can't schedule a discount to start in the past -- advisory in the native picker (min
+  // doesn't block a programmatic save, savePricing() below re-checks this for real).
+  startEl.min = toLocalInputValue(new Date().toISOString());
 
   var now = new Date();
   var discountActive = pricingCache && pricingCache.discount_price != null
@@ -1025,6 +1029,19 @@ function renderPricingHistory() {
   }
   table.style.display = '';
   empty.style.display = 'none';
+  // "Active" here means "this is the row that matches what's actually live in course_pricing
+  // right now" -- not "this row's discount window happens to be in effect today" (a scheduled-
+  // but-not-yet-active row is still the live config, it just hasn't kicked in). Matched by
+  // value against pricingCache rather than assumed to always be the top row, so it stays
+  // correct even if history and the live row ever drift out of sync.
+  function sameVal(a, b) { return (a == null ? null : a) === (b == null ? null : b); }
+  function isLiveRow(h) {
+    if (!pricingCache) return false;
+    return sameVal(h.base_price, pricingCache.base_price)
+      && sameVal(h.discount_price, pricingCache.discount_price)
+      && sameVal(h.discount_start, pricingCache.discount_start)
+      && sameVal(h.discount_end, pricingCache.discount_end);
+  }
   body.innerHTML = pricingHistoryCache.map(function (h) {
     var when = new Date(h.changed_at).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
     var base = 'Rp ' + Number(h.base_price).toLocaleString('id-ID');
@@ -1034,7 +1051,8 @@ function renderPricingHistory() {
       var fmt = function (iso) { return iso ? new Date(iso).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) : '?'; };
       period = fmt(h.discount_start) + ' – ' + fmt(h.discount_end);
     }
-    return '<tr><td>' + when + '</td><td>' + base + '</td><td>' + disc + '</td><td>' + period + '</td><td>' + escapeHtml(h.changed_by) + '</td></tr>';
+    var activeBadge = isLiveRow(h) ? ' <span class="chip chip-accent">AKTIF</span>' : '';
+    return '<tr><td>' + when + activeBadge + '</td><td>' + base + '</td><td>' + disc + '</td><td>' + period + '</td><td>' + escapeHtml(h.changed_by) + '</td></tr>';
   }).join('');
 }
 
@@ -1059,6 +1077,11 @@ async function savePricing() {
   if (disc != null && startRaw && endRaw && new Date(startRaw) >= new Date(endRaw)) {
     statusEl.className = 'status show error'; statusEl.textContent = 'Tanggal "Diskon Mulai" harus sebelum "Diskon Berakhir".'; return;
   }
+  // The datetime picker's min attribute is advisory only -- it doesn't block this JS call,
+  // so re-check for real here.
+  if (startRaw && new Date(startRaw) < new Date()) {
+    statusEl.className = 'status show error'; statusEl.textContent = 'Tanggal "Diskon Mulai" tidak boleh di masa lalu.'; return;
+  }
 
   btn.disabled = true; btn.textContent = 'Menyimpan...';
   try {
@@ -1075,6 +1098,12 @@ async function savePricing() {
     if (res.error) throw res.error;
     pricingCache = payload;
     renderPricing();
+    // renderPricing() just repopulated the discount-window fields from what was saved --
+    // clear them right after so the form reads as "saved, ready for a new schedule" instead
+    // of showing values that look like they're still pending confirmation. The saved
+    // schedule itself isn't lost: it's live in pricingCache and in the indicator above.
+    document.getElementById('priceDiscountStart').value = '';
+    document.getElementById('priceDiscountEnd').value = '';
     try {
       var histRow = {
         course_slug: payload.course_slug,
