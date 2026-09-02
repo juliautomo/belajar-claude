@@ -234,11 +234,6 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
         <input type="number" id="priceBase" min="0" step="1000" placeholder="399000">
         <label>Harga Diskon (Rp)</label>
         <input type="number" id="priceDiscount" min="0" step="1000" placeholder="Kosongkan jika tidak ada diskon">
-        <label style="display:flex;align-items:center;gap:8px;margin-top:8px;font-weight:400;font-size:12.5px;color:var(--ink-2);">
-          <input type="checkbox" id="priceDiscountClear" style="width:auto;">
-          Hapus harga diskon saat disimpan (jual di harga normal saja, tanpa diskon)
-        </label>
-        <p class="hint" id="priceCurrentHint" style="margin-top:6px;margin-bottom:0;"></p>
         <div class="price-row">
           <div>
             <label>Diskon Mulai</label>
@@ -249,11 +244,7 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
             <input type="datetime-local" id="priceDiscountEnd">
           </div>
         </div>
-        <p class="hint" id="priceScheduleHint" style="margin-top:6px;margin-bottom:0;"></p>
-        <label style="display:flex;align-items:center;gap:8px;margin-top:10px;font-weight:400;font-size:12.5px;color:var(--ink-2);">
-          <input type="checkbox" id="priceScheduleClear" style="width:auto;">
-          Hapus jadwal diskon di atas saat disimpan (diskon jadi aktif tanpa batas waktu)
-        </label>
+        <p class="hint" style="margin-top:6px;margin-bottom:0;">Kosongkan Harga Diskon untuk menjual di harga normal saja. Kosongkan tanggal untuk diskon aktif tanpa batas waktu.</p>
         <button class="btn" id="priceSaveBtn" onclick="savePricing()">Simpan Harga</button>
         <div class="current-indicator" id="priceIndicator"></div>
         <div class="status" id="priceStatus"></div>
@@ -1000,54 +991,13 @@ function renderPricing() {
   var indicator = document.getElementById('priceIndicator');
 
   var fallback = 399000;
-  // Harga Normal/Diskon are also never pre-filled (same reasoning as the date fields below) --
-  // blank means "keep the current value," made safe the same way: savePricing() carries the
-  // existing base_price forward when left blank (it always needs SOME value), and carries the
-  // existing discount_price forward too unless priceDiscountClear is checked, which is the
-  // explicit "remove the discount, sell at full price" action. The actual current numbers are
-  // shown as placeholder ghost-text in the boxes and as read-only text below (priceCurrentHint).
-  baseEl.value = '';
-  discEl.value = '';
-  document.getElementById('priceDiscountClear').checked = false;
-  baseEl.placeholder = pricingCache && pricingCache.base_price != null ? String(pricingCache.base_price) : String(fallback);
-  discEl.placeholder = pricingCache && pricingCache.discount_price != null ? String(pricingCache.discount_price) : 'Kosongkan jika tidak ada diskon';
-
-  var currentHint = document.getElementById('priceCurrentHint');
-  var fmtRp = function (n) { return 'Rp ' + Number(n).toLocaleString('id-ID'); };
-  if (pricingCache && pricingCache.base_price != null) {
-    currentHint.textContent = 'Harga tersimpan saat ini: ' + fmtRp(pricingCache.base_price)
-      + (pricingCache.discount_price != null ? ', diskon ' + fmtRp(pricingCache.discount_price) : ' (tanpa diskon)')
-      + '. Biarkan kosong untuk mempertahankannya, atau isi angka baru untuk mengganti.';
-  } else {
-    currentHint.textContent = '';
-  }
-
-  // Diskon Mulai/Berakhir are deliberately never pre-filled from pricingCache (always blank
-  // on load and after every save) -- these two fields are "schedule a NEW window," not "edit
-  // the currently-saved one," so the boxes never show stale-looking dates. To make that safe
-  // (leaving them blank to just tweak the price shouldn't silently wipe an existing schedule),
-  // savePricing() treats blank as "no change" and carries the existing dates forward unless
-  // priceScheduleClear is checked, which is the explicit "remove the schedule" action. The
-  // currently-saved window is shown as read-only text below (priceScheduleHint) instead of
-  // being echoed back into the editable inputs.
-  startEl.value = '';
-  endEl.value = '';
-  document.getElementById('priceScheduleClear').checked = false;
-  // Can't schedule a discount to start in the past -- advisory in the native picker (min
-  // doesn't block a programmatic save, savePricing() below re-checks this for real).
-  startEl.min = toLocalInputValue(new Date().toISOString());
-
-  var scheduleHint = document.getElementById('priceScheduleHint');
-  if (pricingCache && (pricingCache.discount_start || pricingCache.discount_end)) {
-    var fmtFull = function (iso) {
-      return iso ? new Date(iso).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) : '(tanpa batas)';
-    };
-    scheduleHint.textContent = 'Jadwal tersimpan saat ini: ' + fmtFull(pricingCache.discount_start) + ' – ' + fmtFull(pricingCache.discount_end) + '. Biarkan kosong untuk mempertahankannya, atau isi tanggal baru untuk mengganti.';
-  } else if (pricingCache && pricingCache.discount_price != null) {
-    scheduleHint.textContent = 'Tidak ada jadwal tersimpan — diskon ini aktif terus tanpa batas waktu.';
-  } else {
-    scheduleHint.textContent = '';
-  }
+  // Fields show the real saved state directly -- what's in the box IS what's saved. Blank
+  // Harga Diskon means no discount; blank dates mean no schedule (unlimited if a discount is
+  // set). Editing and saving writes exactly what's shown, no separate "clear" step needed.
+  baseEl.value = pricingCache && pricingCache.base_price != null ? pricingCache.base_price : fallback;
+  discEl.value = pricingCache && pricingCache.discount_price != null ? pricingCache.discount_price : '';
+  startEl.value = pricingCache && pricingCache.discount_start ? toLocalInputValue(pricingCache.discount_start) : '';
+  endEl.value = pricingCache && pricingCache.discount_end ? toLocalInputValue(pricingCache.discount_end) : '';
 
   var now = new Date();
   var discountActive = pricingCache && pricingCache.discount_price != null
@@ -1123,43 +1073,21 @@ async function savePricing() {
   var statusEl = document.getElementById('priceStatus');
   var baseRaw = document.getElementById('priceBase').value;
   var discRaw = document.getElementById('priceDiscount').value;
-  var discountClear = document.getElementById('priceDiscountClear').checked;
   var startRaw = document.getElementById('priceDiscountStart').value;
   var endRaw = document.getElementById('priceDiscountEnd').value;
-  var clearSchedule = document.getElementById('priceScheduleClear').checked;
 
-  // Harga Normal/Diskon are always blank in the form (see renderPricing()), same "blank means
-  // didn't touch it" rule as the schedule fields below. Harga Normal always needs SOME value,
-  // so blank just carries the existing one forward. Harga Diskon's blank->carry-forward is
-  // overridden by the explicit checkbox, same pattern as priceScheduleClear.
-  var base = baseRaw !== '' ? parseInt(baseRaw, 10) : (pricingCache && pricingCache.base_price != null ? pricingCache.base_price : NaN);
-  var disc;
-  if (discountClear) {
-    disc = null;
-  } else if (discRaw !== '') {
-    disc = parseInt(discRaw, 10);
-  } else {
-    disc = pricingCache ? pricingCache.discount_price : null;
-  }
-
-  // Diskon Mulai/Berakhir are always blank in the form (see renderPricing()), so "blank" here
-  // doesn't mean "no schedule" -- it means "didn't touch it," and the existing saved schedule
-  // (if any) carries forward unchanged. The only way to actually remove a schedule is the
-  // explicit checkbox; typing new dates always replaces it. Removing the discount price removes
-  // its schedule too -- a schedule with no discount to apply is meaningless.
+  // Fields hold the real state directly -- save exactly what's shown. Blank Harga Diskon
+  // means no discount. A schedule only means anything when there's a discount to apply, so
+  // clearing the discount price clears its schedule too.
+  var base = parseInt(baseRaw, 10);
+  var disc = discRaw === '' ? null : parseInt(discRaw, 10);
   var newStart, newEnd;
   if (disc == null) {
     newStart = null;
     newEnd = null;
-  } else if (startRaw || endRaw) {
+  } else {
     newStart = startRaw ? new Date(startRaw).toISOString() : null;
     newEnd = endRaw ? new Date(endRaw).toISOString() : null;
-  } else if (clearSchedule) {
-    newStart = null;
-    newEnd = null;
-  } else {
-    newStart = pricingCache ? pricingCache.discount_start : null;
-    newEnd = pricingCache ? pricingCache.discount_end : null;
   }
 
   statusEl.className = 'status';
@@ -1172,9 +1100,11 @@ async function savePricing() {
   if (disc != null && startRaw && endRaw && new Date(startRaw) >= new Date(endRaw)) {
     statusEl.className = 'status show error'; statusEl.textContent = 'Tanggal "Diskon Mulai" harus sebelum "Diskon Berakhir".'; return;
   }
-  // The datetime picker's min attribute is advisory only -- it doesn't block this JS call,
-  // so re-check for real here.
-  if (startRaw && new Date(startRaw) < new Date()) {
+  // Only block a start date in the past when it's actually being changed to a new one --
+  // leaving an already-elapsed saved start date untouched (e.g. while just editing the price)
+  // shouldn't be blocked by this check.
+  var savedStartLocal = pricingCache && pricingCache.discount_start ? toLocalInputValue(pricingCache.discount_start) : '';
+  if (startRaw && startRaw !== savedStartLocal && new Date(startRaw) < new Date()) {
     statusEl.className = 'status show error'; statusEl.textContent = 'Tanggal "Diskon Mulai" tidak boleh di masa lalu.'; return;
   }
 
@@ -1192,7 +1122,7 @@ async function savePricing() {
     var res = await sbClient.from('course_pricing').upsert(payload, { onConflict: 'course_slug' });
     if (res.error) throw res.error;
     pricingCache = payload;
-    renderPricing(); // also re-blanks the date fields and unchecks priceScheduleClear
+    renderPricing(); // re-fills fields with the just-saved values
     try {
       var histRow = {
         course_slug: payload.course_slug,
