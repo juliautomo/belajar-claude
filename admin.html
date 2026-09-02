@@ -1030,11 +1030,14 @@ function renderPricingHistory() {
   }
   table.style.display = '';
   empty.style.display = 'none';
-  // "Active" here means "this is the row that matches what's actually live in course_pricing
-  // right now" -- not "this row's discount window happens to be in effect today" (a scheduled-
-  // but-not-yet-active row is still the live config, it just hasn't kicked in). Matched by
-  // value against pricingCache rather than assumed to always be the top row, so it stays
-  // correct even if history and the live row ever drift out of sync.
+  // "AKTIF" means: this row is both (a) the config that matches what's actually saved in
+  // course_pricing right now, AND (b) its discount window genuinely covers this exact moment.
+  // Only checking (a) was wrong -- it labeled the most-recently-saved row "AKTIF" even when
+  // its own Periode Diskon had already passed, which reads as "this discount is running" when
+  // it isn't (a scheduled-but-expired row is still the live config, it's just not discounting
+  // anyone right now). Same discountActive formula as the indicator above renderPricing(),
+  // so the two can never visually disagree with each other.
+  var now = new Date();
   function sameVal(a, b) { return (a == null ? null : a) === (b == null ? null : b); }
   function isLiveRow(h) {
     if (!pricingCache) return false;
@@ -1042,6 +1045,11 @@ function renderPricingHistory() {
       && sameVal(h.discount_price, pricingCache.discount_price)
       && sameVal(h.discount_start, pricingCache.discount_start)
       && sameVal(h.discount_end, pricingCache.discount_end);
+  }
+  function isDiscountActiveNow(h) {
+    return h.discount_price != null
+      && (!h.discount_start || new Date(h.discount_start) <= now)
+      && (!h.discount_end || new Date(h.discount_end) >= now);
   }
   body.innerHTML = pricingHistoryCache.map(function (h) {
     var when = new Date(h.changed_at).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
@@ -1052,7 +1060,7 @@ function renderPricingHistory() {
       var fmt = function (iso) { return iso ? new Date(iso).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) : '?'; };
       period = fmt(h.discount_start) + ' – ' + fmt(h.discount_end);
     }
-    var activeBadge = isLiveRow(h) ? ' <span class="chip chip-accent">AKTIF</span>' : '';
+    var activeBadge = (isLiveRow(h) && isDiscountActiveNow(h)) ? ' <span class="chip chip-accent">AKTIF</span>' : '';
     return '<tr><td>' + when + activeBadge + '</td><td>' + base + '</td><td>' + disc + '</td><td>' + period + '</td><td>' + escapeHtml(h.changed_by) + '</td></tr>';
   }).join('');
 }
