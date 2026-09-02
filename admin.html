@@ -244,6 +244,11 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
             <input type="datetime-local" id="priceDiscountEnd">
           </div>
         </div>
+        <p class="hint" id="priceScheduleHint" style="margin-top:6px;margin-bottom:0;"></p>
+        <label style="display:flex;align-items:center;gap:8px;margin-top:10px;font-weight:400;font-size:12.5px;color:var(--ink-2);">
+          <input type="checkbox" id="priceScheduleClear" style="width:auto;">
+          Hapus jadwal diskon di atas saat disimpan (diskon jadi aktif tanpa batas waktu)
+        </label>
         <button class="btn" id="priceSaveBtn" onclick="savePricing()">Simpan Harga</button>
         <div class="current-indicator" id="priceIndicator"></div>
         <div class="status" id="priceStatus"></div>
@@ -992,11 +997,32 @@ function renderPricing() {
   var fallback = 399000;
   baseEl.value = pricingCache && pricingCache.base_price != null ? pricingCache.base_price : fallback;
   discEl.value = pricingCache && pricingCache.discount_price != null ? pricingCache.discount_price : '';
-  startEl.value = pricingCache && pricingCache.discount_start ? toLocalInputValue(pricingCache.discount_start) : '';
-  endEl.value = pricingCache && pricingCache.discount_end ? toLocalInputValue(pricingCache.discount_end) : '';
+  // Diskon Mulai/Berakhir are deliberately never pre-filled from pricingCache (always blank
+  // on load and after every save) -- these two fields are "schedule a NEW window," not "edit
+  // the currently-saved one," so the boxes never show stale-looking dates. To make that safe
+  // (leaving them blank to just tweak the price shouldn't silently wipe an existing schedule),
+  // savePricing() treats blank as "no change" and carries the existing dates forward unless
+  // priceScheduleClear is checked, which is the explicit "remove the schedule" action. The
+  // currently-saved window is shown as read-only text below (priceScheduleHint) instead of
+  // being echoed back into the editable inputs.
+  startEl.value = '';
+  endEl.value = '';
+  document.getElementById('priceScheduleClear').checked = false;
   // Can't schedule a discount to start in the past -- advisory in the native picker (min
   // doesn't block a programmatic save, savePricing() below re-checks this for real).
   startEl.min = toLocalInputValue(new Date().toISOString());
+
+  var scheduleHint = document.getElementById('priceScheduleHint');
+  if (pricingCache && (pricingCache.discount_start || pricingCache.discount_end)) {
+    var fmtFull = function (iso) {
+      return iso ? new Date(iso).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) : '(tanpa batas)';
+    };
+    scheduleHint.textContent = 'Jadwal tersimpan saat ini: ' + fmtFull(pricingCache.discount_start) + ' – ' + fmtFull(pricingCache.discount_end) + '. Biarkan kosong untuk mempertahankannya, atau isi tanggal baru untuk mengganti.';
+  } else if (pricingCache && pricingCache.discount_price != null) {
+    scheduleHint.textContent = 'Tidak ada jadwal tersimpan — diskon ini aktif terus tanpa batas waktu.';
+  } else {
+    scheduleHint.textContent = '';
+  }
 
   var now = new Date();
   var discountActive = pricingCache && pricingCache.discount_price != null
@@ -1075,6 +1101,23 @@ async function savePricing() {
   var disc = discRaw === '' ? null : parseInt(discRaw, 10);
   var startRaw = document.getElementById('priceDiscountStart').value;
   var endRaw = document.getElementById('priceDiscountEnd').value;
+  var clearSchedule = document.getElementById('priceScheduleClear').checked;
+
+  // Diskon Mulai/Berakhir are always blank in the form (see renderPricing()), so "blank" here
+  // doesn't mean "no schedule" -- it means "didn't touch it," and the existing saved schedule
+  // (if any) carries forward unchanged. The only way to actually remove a schedule is the
+  // explicit checkbox; typing new dates always replaces it.
+  var newStart, newEnd;
+  if (startRaw || endRaw) {
+    newStart = startRaw ? new Date(startRaw).toISOString() : null;
+    newEnd = endRaw ? new Date(endRaw).toISOString() : null;
+  } else if (clearSchedule) {
+    newStart = null;
+    newEnd = null;
+  } else {
+    newStart = pricingCache ? pricingCache.discount_start : null;
+    newEnd = pricingCache ? pricingCache.discount_end : null;
+  }
 
   statusEl.className = 'status';
   if (!base || base <= 0) {
@@ -1098,21 +1141,15 @@ async function savePricing() {
       course_slug: 'all-access',
       base_price: base,
       discount_price: disc,
-      discount_start: startRaw ? new Date(startRaw).toISOString() : null,
-      discount_end: endRaw ? new Date(endRaw).toISOString() : null,
+      discount_start: newStart,
+      discount_end: newEnd,
       updated_at: new Date().toISOString(),
       updated_by: currentSession.user.email,
     };
     var res = await sbClient.from('course_pricing').upsert(payload, { onConflict: 'course_slug' });
     if (res.error) throw res.error;
     pricingCache = payload;
-    renderPricing();
-    // renderPricing() just repopulated the discount-window fields from what was saved --
-    // clear them right after so the form reads as "saved, ready for a new schedule" instead
-    // of showing values that look like they're still pending confirmation. The saved
-    // schedule itself isn't lost: it's live in pricingCache and in the indicator above.
-    document.getElementById('priceDiscountStart').value = '';
-    document.getElementById('priceDiscountEnd').value = '';
+    renderPricing(); // also re-blanks the date fields and unchecks priceScheduleClear
     try {
       var histRow = {
         course_slug: payload.course_slug,
