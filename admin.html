@@ -233,6 +233,7 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
         <input type="number" id="priceBase" min="0" step="1000" placeholder="399000">
         <label>Harga Diskon (Rp)</label>
         <input type="number" id="priceDiscount" min="0" step="1000" placeholder="Kosongkan jika tidak ada diskon">
+        <p class="hint" style="margin-top:6px;margin-bottom:0;">Kosongkan Harga Diskon untuk menjual di harga normal saja.</p>
         <div class="price-row">
           <div>
             <label>Diskon Mulai</label>
@@ -243,7 +244,7 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
             <input type="datetime-local" id="priceDiscountEnd">
           </div>
         </div>
-        <p class="hint" style="margin-top:6px;margin-bottom:0;">Kosongkan Harga Diskon untuk menjual di harga normal saja. Kosongkan tanggal untuk diskon aktif tanpa batas waktu.</p>
+        <p class="hint" id="priceScheduleHint" style="margin-top:6px;margin-bottom:0;"></p>
         <button class="btn" id="priceSaveBtn" onclick="savePricing()">Simpan Harga</button>
         <div class="current-indicator" id="priceIndicator"></div>
         <div class="status" id="priceStatus"></div>
@@ -990,13 +991,28 @@ function renderPricing() {
   var indicator = document.getElementById('priceIndicator');
 
   var fallback = 399000;
-  // Fields show the real saved state directly -- what's in the box IS what's saved. Blank
-  // Harga Diskon means no discount; blank dates mean no schedule (unlimited if a discount is
-  // set). Editing and saving writes exactly what's shown, no separate "clear" step needed.
+  // Harga Normal/Diskon show the real saved state directly -- what's in the box IS what's
+  // saved. Blank Harga Diskon means no discount.
   baseEl.value = pricingCache && pricingCache.base_price != null ? pricingCache.base_price : fallback;
   discEl.value = pricingCache && pricingCache.discount_price != null ? pricingCache.discount_price : '';
-  startEl.value = pricingCache && pricingCache.discount_start ? toLocalInputValue(pricingCache.discount_start) : '';
-  endEl.value = pricingCache && pricingCache.discount_end ? toLocalInputValue(pricingCache.discount_end) : '';
+
+  // Diskon Mulai/Berakhir are always blank -- they're for entering a NEW schedule, not
+  // re-displaying the current one. Leaving them blank at save time keeps whatever schedule is
+  // already saved (see savePricing()); typing dates replaces it. The current schedule (if any)
+  // is shown as read-only text below instead, so it's still visible without being editable.
+  startEl.value = '';
+  endEl.value = '';
+  var scheduleHint = document.getElementById('priceScheduleHint');
+  var fmtFull = function (iso) {
+    return iso ? new Date(iso).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) : '(tanpa batas)';
+  };
+  if (pricingCache && (pricingCache.discount_start || pricingCache.discount_end)) {
+    scheduleHint.textContent = 'Jadwal tersimpan saat ini: ' + fmtFull(pricingCache.discount_start) + ' – ' + fmtFull(pricingCache.discount_end) + '. Kosongkan untuk mempertahankannya, atau isi tanggal baru untuk mengganti.';
+  } else if (pricingCache && pricingCache.discount_price != null) {
+    scheduleHint.textContent = 'Belum ada jadwal — diskon ini aktif terus tanpa batas waktu. Isi tanggal untuk menjadwalkannya.';
+  } else {
+    scheduleHint.textContent = '';
+  }
 
   var now = new Date();
   var discountActive = pricingCache && pricingCache.discount_price != null
@@ -1075,18 +1091,25 @@ async function savePricing() {
   var startRaw = document.getElementById('priceDiscountStart').value;
   var endRaw = document.getElementById('priceDiscountEnd').value;
 
-  // Fields hold the real state directly -- save exactly what's shown. Blank Harga Diskon
-  // means no discount. A schedule only means anything when there's a discount to apply, so
-  // clearing the discount price clears its schedule too.
+  // Harga Normal/Diskon hold the real state directly -- save exactly what's shown. Blank
+  // Harga Diskon means no discount, which also drops any schedule (a schedule with no
+  // discount to apply is meaningless).
   var base = parseInt(baseRaw, 10);
   var disc = discRaw === '' ? null : parseInt(discRaw, 10);
+
+  // Diskon Mulai/Berakhir are always blank (see renderPricing()), so blank here means
+  // "didn't touch it" -- the existing saved schedule carries forward unchanged. Typing either
+  // date replaces the schedule entirely.
   var newStart, newEnd;
   if (disc == null) {
     newStart = null;
     newEnd = null;
-  } else {
+  } else if (startRaw || endRaw) {
     newStart = startRaw ? new Date(startRaw).toISOString() : null;
     newEnd = endRaw ? new Date(endRaw).toISOString() : null;
+  } else {
+    newStart = pricingCache ? pricingCache.discount_start : null;
+    newEnd = pricingCache ? pricingCache.discount_end : null;
   }
 
   statusEl.className = 'status';
@@ -1121,7 +1144,7 @@ async function savePricing() {
     var res = await sbClient.from('course_pricing').upsert(payload, { onConflict: 'course_slug' });
     if (res.error) throw res.error;
     pricingCache = payload;
-    renderPricing(); // re-fills fields with the just-saved values
+    renderPricing(); // re-fills price fields, blanks the schedule fields again
     try {
       var histRow = {
         course_slug: payload.course_slug,
