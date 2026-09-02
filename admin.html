@@ -232,8 +232,8 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
         <label>Harga Normal (Rp)</label>
         <input type="number" id="priceBase" min="0" step="1000" placeholder="399000">
         <label>Harga Diskon (Rp)</label>
-        <input type="number" id="priceDiscount" min="0" step="1000" placeholder="Kosongkan jika tidak ada diskon">
-        <p class="hint" style="margin-top:6px;margin-bottom:0;">Kosongkan Harga Diskon untuk menjual di harga normal saja.</p>
+        <input type="number" id="priceDiscount" min="0" step="1000" placeholder="Kosongkan untuk mempertahankan">
+        <p class="hint" id="priceDiscountHint" style="margin-top:6px;margin-bottom:0;"></p>
         <div class="price-row">
           <div>
             <label>Diskon Mulai</label>
@@ -991,10 +991,19 @@ function renderPricing() {
   var indicator = document.getElementById('priceIndicator');
 
   var fallback = 399000;
-  // Harga Normal/Diskon show the real saved state directly -- what's in the box IS what's
-  // saved. Blank Harga Diskon means no discount.
+  // Harga Normal shows the real saved state directly -- what's in the box IS what's saved.
   baseEl.value = pricingCache && pricingCache.base_price != null ? pricingCache.base_price : fallback;
-  discEl.value = pricingCache && pricingCache.discount_price != null ? pricingCache.discount_price : '';
+
+  // Harga Diskon, like the schedule fields below, is always blank -- it's for entering a NEW
+  // discount price, not re-displaying the current one. Leaving it blank at save time keeps
+  // whatever discount is already saved (see savePricing()); typing a value replaces it. To end
+  // an active discount, set Diskon Berakhir to now (or a past date) instead of clearing this.
+  discEl.value = '';
+  var discHint = document.getElementById('priceDiscountHint');
+  var fmtRp = function (n) { return 'Rp ' + Number(n).toLocaleString('id-ID'); };
+  discHint.textContent = pricingCache && pricingCache.discount_price != null
+    ? 'Diskon tersimpan saat ini: ' + fmtRp(pricingCache.discount_price) + '. Kosongkan untuk mempertahankannya, atau isi angka baru untuk mengganti.'
+    : 'Belum ada diskon tersimpan — kosongkan untuk menjual di harga normal saja.';
 
   // Diskon Mulai/Berakhir are always blank -- they're for entering a NEW schedule, not
   // re-displaying the current one. Leaving them blank at save time keeps whatever schedule is
@@ -1091,11 +1100,14 @@ async function savePricing() {
   var startRaw = document.getElementById('priceDiscountStart').value;
   var endRaw = document.getElementById('priceDiscountEnd').value;
 
-  // Harga Normal/Diskon hold the real state directly -- save exactly what's shown. Blank
-  // Harga Diskon means no discount, which also drops any schedule (a schedule with no
-  // discount to apply is meaningless).
+  // Harga Normal holds the real state directly -- save exactly what's shown.
   var base = parseInt(baseRaw, 10);
-  var disc = discRaw === '' ? null : parseInt(discRaw, 10);
+
+  // Harga Diskon is always blank (see renderPricing()), so blank here means "didn't touch it"
+  // -- the existing saved discount price carries forward unchanged. Typing a value replaces
+  // it. (There's no field-level way to remove a discount entirely; end one by setting Diskon
+  // Berakhir to now/a past date instead.)
+  var disc = discRaw !== '' ? parseInt(discRaw, 10) : (pricingCache ? pricingCache.discount_price : null);
 
   // Diskon Mulai/Berakhir are always blank (see renderPricing()), so blank here means
   // "didn't touch it" -- the existing saved schedule carries forward unchanged. Typing either
@@ -1116,7 +1128,7 @@ async function savePricing() {
   if (!base || base <= 0 || isNaN(base)) {
     statusEl.className = 'status show error'; statusEl.textContent = 'Harga normal wajib diisi dan lebih besar dari 0.'; return;
   }
-  if (disc != null && disc <= 0) {
+  if (disc != null && (isNaN(disc) || disc <= 0)) {
     statusEl.className = 'status show error'; statusEl.textContent = 'Harga diskon harus lebih besar dari 0.'; return;
   }
   if (disc != null && startRaw && endRaw && new Date(startRaw) >= new Date(endRaw)) {
