@@ -1236,24 +1236,13 @@ async function toggleDiscountPause(btnEl) {
     var res = await sbClient.from('course_pricing').upsert(payload, { onConflict: 'course_slug' });
     if (res.error) throw res.error;
     pricingCache = payload;
+    // No new Riwayat row here, deliberately -- pausing/resuming doesn't change the price or
+    // schedule, so it isn't a "price change" the way savePricing() logs one. The existing row
+    // that matches the current price/schedule (isLiveRow() in renderPricingHistory()) already
+    // re-derives its AKTIF/DIJEDA badge from pricingCache.discount_paused on every render, so
+    // just re-rendering both pieces here flips that row's badge in place.
     renderPricing();
-    try {
-      var histRow = {
-        course_slug: payload.course_slug,
-        base_price: payload.base_price,
-        discount_price: payload.discount_price,
-        discount_start: payload.discount_start,
-        discount_end: payload.discount_end,
-        discount_paused: payload.discount_paused,
-        changed_by: payload.updated_by,
-        changed_at: new Date().toISOString(),
-      };
-      var histRes = await sbClient.from('course_pricing_history').insert(histRow);
-      if (!histRes.error) {
-        pricingHistoryCache.unshift(histRow);
-        renderPricingHistory();
-      }
-    } catch (histErr) { console.error('Gagal mencatat riwayat harga:', histErr); }
+    renderPricingHistory();
     statusEl.className = 'status show success';
     statusEl.textContent = newPaused
       ? 'Diskon dijeda ✓ — harga jual sekarang harga normal, harga & jadwal diskon tetap tersimpan.'
@@ -1262,9 +1251,8 @@ async function toggleDiscountPause(btnEl) {
     statusEl.className = 'status show error';
     statusEl.textContent = 'Gagal: ' + e.message;
   }
-  // Re-enable regardless of outcome -- on success the row is already replaced by
-  // renderPricingHistory() above (when the history-log insert itself succeeds), but on any
-  // failure this button is what's still on screen and shouldn't be left stuck disabled.
+  // Re-enable regardless of outcome -- on success the row is already re-rendered above, but on
+  // any failure this button is what's still on screen and shouldn't be left stuck disabled.
   if (btnEl) btnEl.disabled = false;
 }
 
