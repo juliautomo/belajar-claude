@@ -247,7 +247,6 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
         </div>
         <p class="hint" id="priceScheduleHint" style="margin-top:6px;margin-bottom:0;"></p>
         <button class="btn" id="priceSaveBtn" onclick="savePricing()">Simpan Harga</button>
-        <button class="btn-mini" id="priceToggleBtn" style="margin-top:16px;margin-left:8px;display:none;" onclick="toggleDiscountPause()"></button>
         <div class="current-indicator" id="priceIndicator"></div>
         <div class="status" id="priceStatus"></div>
       </div>
@@ -1048,15 +1047,9 @@ function renderPricing() {
     indicator.classList.add('no-video');
     indicator.innerHTML = 'Tidak ada diskon aktif — harga jual saat ini: <strong>' + formatted + '</strong>';
   }
-
-  // Jeda/Lanjutkan toggle only makes sense when there's an actual saved discount to pause.
-  var toggleBtn = document.getElementById('priceToggleBtn');
-  if (pricingCache && pricingCache.discount_price != null) {
-    toggleBtn.style.display = 'inline-block';
-    toggleBtn.textContent = paused ? '▶ Lanjutkan Diskon' : '⏸ Jeda Diskon';
-  } else {
-    toggleBtn.style.display = 'none';
-  }
+  // The Jeda/Lanjutkan control itself lives on the AKTIF/DIJEDA row in Riwayat Perubahan
+  // Harga below (renderPricingHistory()), right next to the badge it affects, instead of up
+  // here disconnected from it.
 }
 
 function renderPricingHistory() {
@@ -1100,12 +1093,16 @@ function renderPricingHistory() {
       var fmt = function (iso) { return iso ? new Date(iso).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) : '?'; };
       period = fmt(h.discount_start) + ' – ' + fmt(h.discount_end);
     }
+    // The Jeda/Lanjutkan control lives right on this row -- next to the badge it affects,
+    // rather than disconnected further up the page.
     var activeBadge = '';
     if (isLiveRow(h)) {
       if (pricingCache.discount_paused) {
-        activeBadge = ' <span class="chip">DIJEDA</span>';
+        activeBadge = ' <span class="chip">DIJEDA</span>'
+          + ' <button class="btn-mini" style="padding:2px 8px;font-size:11px;" onclick="toggleDiscountPause(this)">▶ Lanjutkan</button>';
       } else if (isDiscountActiveNow(h)) {
-        activeBadge = ' <span class="chip chip-accent">AKTIF</span>';
+        activeBadge = ' <span class="chip chip-accent">AKTIF</span>'
+          + ' <button class="btn-mini" style="padding:2px 8px;font-size:11px;" onclick="toggleDiscountPause(this)">⏸ Jeda</button>';
       }
     }
     return '<tr><td>' + when + activeBadge + '</td><td>' + base + '</td><td>' + disc + '</td><td>' + period + '</td><td>' + escapeHtml(h.changed_by) + '</td></tr>';
@@ -1212,16 +1209,19 @@ async function savePricing() {
 // Pauses/resumes the currently-saved discount without touching its price or schedule --
 // separate from savePricing() so it can't be confused with (or lost inside) an ordinary price
 // edit. A paused discount keeps its discount_price/discount_start/discount_end exactly as
-// saved; only discount_paused flips, so resuming later needs no re-entry.
-async function toggleDiscountPause() {
+// saved; only discount_paused flips, so resuming later needs no re-entry. Called from the
+// Jeda/Lanjutkan button that renderPricingHistory() renders on the AKTIF/DIJEDA row -- btnEl
+// is that button (passed as `this`), disabled while the request is in flight; the row itself
+// gets replaced by the next renderPricingHistory() call regardless, so nothing needs to
+// explicitly re-enable it after.
+async function toggleDiscountPause(btnEl) {
   var _sess = await ensureFreshSession();
   if (!_sess) return;
   if (!pricingCache || pricingCache.discount_price == null) return;
-  var btn = document.getElementById('priceToggleBtn');
   var statusEl = document.getElementById('priceStatus');
   var newPaused = !pricingCache.discount_paused;
 
-  btn.disabled = true;
+  if (btnEl) btnEl.disabled = true;
   statusEl.className = 'status';
   try {
     var payload = {
@@ -1263,7 +1263,10 @@ async function toggleDiscountPause() {
     statusEl.className = 'status show error';
     statusEl.textContent = 'Gagal: ' + e.message;
   }
-  btn.disabled = false;
+  // Re-enable regardless of outcome -- on success the row is already replaced by
+  // renderPricingHistory() above (when the history-log insert itself succeeds), but on any
+  // failure this button is what's still on screen and shouldn't be left stuck disabled.
+  if (btnEl) btnEl.disabled = false;
 }
 
 // ─── PDF ROW (satu file per kursus, bukan per modul) ────────────────────────
