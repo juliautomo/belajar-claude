@@ -581,6 +581,17 @@ async function ensureFreshSession() {
   var res = await sbClient.auth.getSession();
   if (!res.data.session) { window.location.href = 'login.html'; return null; }
 
+  // getSession() is a local read (no network call) -- only pay for an actual refreshSession()
+  // network round-trip when the token is genuinely close to expiring, instead of on every
+  // single admin action (save, toggle, upload...). Access tokens live ~1hr, so most clicks
+  // don't need a refresh at all; this was adding a full extra round-trip to every one anyway.
+  var expiresAt = res.data.session.expires_at; // unix seconds
+  var expiresInMs = expiresAt ? (expiresAt * 1000 - Date.now()) : 0;
+  if (expiresInMs > 5 * 60 * 1000) {
+    currentSession = res.data.session;
+    return currentSession;
+  }
+
   var refreshed = await sbClient.auth.refreshSession();
   if (refreshed.error || !refreshed.data.session) {
     await sbClient.auth.signOut();
