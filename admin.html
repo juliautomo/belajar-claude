@@ -246,6 +246,7 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
         </div>
         <p class="hint" id="priceScheduleHint" style="margin-top:6px;margin-bottom:0;"></p>
         <button class="btn" id="priceSaveBtn" onclick="savePricing()">Simpan Harga</button>
+        <button class="btn-mini" id="priceToggleBtn" style="margin-top:16px;margin-left:8px;display:none;" onclick="toggleDiscountPause()"></button>
         <div class="current-indicator" id="priceIndicator"></div>
         <div class="status" id="priceStatus"></div>
       </div>
@@ -1024,7 +1025,8 @@ function renderPricing() {
   }
 
   var now = new Date();
-  var discountActive = pricingCache && pricingCache.discount_price != null
+  var paused = !!(pricingCache && pricingCache.discount_paused);
+  var discountActive = pricingCache && pricingCache.discount_price != null && !paused
     && (!pricingCache.discount_start || new Date(pricingCache.discount_start) <= now)
     && (!pricingCache.discount_end || new Date(pricingCache.discount_end) >= now);
   var effective = discountActive ? pricingCache.discount_price : (pricingCache ? pricingCache.base_price : fallback);
@@ -1035,12 +1037,24 @@ function renderPricing() {
   if (discountActive) {
     indicator.classList.add('discount-active');
     indicator.innerHTML = '✓ Diskon AKTIF sekarang — harga jual saat ini: <strong>' + formatted + '</strong>';
+  } else if (pricingCache && pricingCache.discount_price != null && paused) {
+    indicator.classList.add('no-video');
+    indicator.innerHTML = '⏸ Diskon dijeda — harga jual saat ini: <strong>' + formatted + '</strong> (harga normal, jadwal & harga diskon tetap tersimpan)';
   } else if (pricingCache && pricingCache.discount_price != null) {
     indicator.classList.add('no-video');
     indicator.innerHTML = 'Diskon terjadwal tapi belum/tidak aktif — harga jual saat ini: <strong>' + formatted + '</strong>';
   } else {
     indicator.classList.add('no-video');
     indicator.innerHTML = 'Tidak ada diskon aktif — harga jual saat ini: <strong>' + formatted + '</strong>';
+  }
+
+  // Jeda/Lanjutkan toggle only makes sense when there's an actual saved discount to pause.
+  var toggleBtn = document.getElementById('priceToggleBtn');
+  if (pricingCache && pricingCache.discount_price != null) {
+    toggleBtn.style.display = 'inline-block';
+    toggleBtn.textContent = paused ? '▶ Lanjutkan Diskon' : '⏸ Jeda Diskon';
+  } else {
+    toggleBtn.style.display = 'none';
   }
 }
 
@@ -1085,7 +1099,14 @@ function renderPricingHistory() {
       var fmt = function (iso) { return iso ? new Date(iso).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) : '?'; };
       period = fmt(h.discount_start) + ' – ' + fmt(h.discount_end);
     }
-    var activeBadge = (isLiveRow(h) && isDiscountActiveNow(h)) ? ' <span class="chip chip-accent">AKTIF</span>' : '';
+    var activeBadge = '';
+    if (isLiveRow(h)) {
+      if (pricingCache.discount_paused) {
+        activeBadge = ' <span class="chip">DIJEDA</span>';
+      } else if (isDiscountActiveNow(h)) {
+        activeBadge = ' <span class="chip chip-accent">AKTIF</span>';
+      }
+    }
     return '<tr><td>' + when + activeBadge + '</td><td>' + base + '</td><td>' + disc + '</td><td>' + period + '</td><td>' + escapeHtml(h.changed_by) + '</td></tr>';
   }).join('');
 }
@@ -1150,6 +1171,10 @@ async function savePricing() {
       discount_price: disc,
       discount_start: newStart,
       discount_end: newEnd,
+      // Pause state isn't a field in this form -- it only changes via the dedicated
+      // Jeda/Lanjutkan button (toggleDiscountPause()), so an ordinary save always carries
+      // whatever pause state was already saved forward unchanged.
+      discount_paused: pricingCache ? !!pricingCache.discount_paused : false,
       updated_at: new Date().toISOString(),
       updated_by: currentSession.user.email,
     };
@@ -1164,6 +1189,7 @@ async function savePricing() {
         discount_price: payload.discount_price,
         discount_start: payload.discount_start,
         discount_end: payload.discount_end,
+        discount_paused: payload.discount_paused,
         changed_by: payload.updated_by,
         changed_at: new Date().toISOString(),
       };
@@ -1180,6 +1206,63 @@ async function savePricing() {
     statusEl.textContent = 'Gagal menyimpan: ' + e.message;
   }
   btn.disabled = false; btn.textContent = 'Simpan Harga';
+}
+
+// Pauses/resumes the currently-saved discount without touching its price or schedule --
+// separate from savePricing() so it can't be confused with (or lost inside) an ordinary price
+// edit. A paused discount keeps its discount_price/discount_start/discount_end exactly as
+// saved; only discount_paused flips, so resuming later needs no re-entry.
+async function toggleDiscountPause() {
+  var _sess = await ensureFreshSession();
+  if (!_sess) return;
+  if (!pricingCache || pricingCache.discount_price == null) return;
+  var btn = document.getElementById('priceToggleBtn');
+  var statusEl = document.getElementById('priceStatus');
+  var newPaused = !pricingCache.discount_paused;
+
+  btn.disabled = true;
+  statusEl.className = 'status';
+  try {
+    var payload = {
+      course_slug: pricingCache.course_slug,
+      base_price: pricingCache.base_price,
+      discount_price: pricingCache.discount_price,
+      discount_start: pricingCache.discount_start,
+      discount_end: pricingCache.discount_end,
+      discount_paused: newPaused,
+      updated_at: new Date().toISOString(),
+      updated_by: currentSession.user.email,
+    };
+    var res = await sbClient.from('course_pricing').upsert(payload, { onConflict: 'course_slug' });
+    if (res.error) throw res.error;
+    pricingCache = payload;
+    renderPricing();
+    try {
+      var histRow = {
+        course_slug: payload.course_slug,
+        base_price: payload.base_price,
+        discount_price: payload.discount_price,
+        discount_start: payload.discount_start,
+        discount_end: payload.discount_end,
+        discount_paused: payload.discount_paused,
+        changed_by: payload.updated_by,
+        changed_at: new Date().toISOString(),
+      };
+      var histRes = await sbClient.from('course_pricing_history').insert(histRow);
+      if (!histRes.error) {
+        pricingHistoryCache.unshift(histRow);
+        renderPricingHistory();
+      }
+    } catch (histErr) { console.error('Gagal mencatat riwayat harga:', histErr); }
+    statusEl.className = 'status show success';
+    statusEl.textContent = newPaused
+      ? 'Diskon dijeda ✓ — harga jual sekarang harga normal, harga & jadwal diskon tetap tersimpan.'
+      : 'Diskon dilanjutkan ✓ — aktif lagi sesuai jadwal dan harga yang tersimpan.';
+  } catch (e) {
+    statusEl.className = 'status show error';
+    statusEl.textContent = 'Gagal: ' + e.message;
+  }
+  btn.disabled = false;
 }
 
 // ─── PDF ROW (satu file per kursus, bukan per modul) ────────────────────────

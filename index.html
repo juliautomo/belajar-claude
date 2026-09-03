@@ -1117,6 +1117,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
       if (!data) return;
       var now = new Date();
       var discountActive = data.discount_price != null
+        && !data.discount_paused
         && (!data.discount_start || new Date(data.discount_start) <= now)
         && (!data.discount_end || new Date(data.discount_end) >= now);
       if (!discountActive) return;
