@@ -12,6 +12,12 @@ create table if not exists course_pricing (
   discount_price int,
   discount_start timestamptz,
   discount_end timestamptz,
+  -- When true, the discount is treated as inactive everywhere (admin.html, all sales pages,
+  -- and the backend checkout price lookup) regardless of discount_price/start/end -- lets an
+  -- admin turn a discount off and back on via a dedicated toggle without losing its saved
+  -- price/schedule. Added Checkpoint 231 (Sep 2, 2026), applied directly to production via
+  -- Supabase MCP migration `add_discount_paused_to_course_pricing`.
+  discount_paused boolean not null default false,
   updated_at timestamptz default now(),
   updated_by text
 );

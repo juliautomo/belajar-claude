@@ -542,6 +542,7 @@
       if (!data) return;
       const now = new Date();
       const discountActive = data.discount_price != null
+        && !data.discount_paused
         && (!data.discount_start || new Date(data.discount_start) <= now)
         && (!data.discount_end || new Date(data.discount_end) >= now);
       const amount = discountActive ? data.discount_price : (data.base_price != null ? data.base_price : 399000);

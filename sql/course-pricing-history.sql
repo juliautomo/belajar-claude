@@ -14,6 +14,9 @@ create table if not exists course_pricing_history (
   discount_price int,
   discount_start timestamptz,
   discount_end timestamptz,
+  -- Snapshot of course_pricing.discount_paused at the moment this row was written -- see
+  -- that column's comment in course-pricing.sql. Added Checkpoint 231 (Sep 2, 2026).
+  discount_paused boolean not null default false,
   changed_by text not null,
   changed_at timestamptz default now()
 );
