@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: September 4, 2026 (checkpoint 232)_
+_Last updated: September 5, 2026 (checkpoint 233)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -4071,3 +4071,27 @@ Backend commits: `dev` — `73391c6` (PostHog), `edf6a08` (trust proxy). `main` 
 **Still open**: the actual proof is the next real Duitku purchase — no real order has landed since the token went live, so a genuine end-to-end Purchase event hasn't been observed in Events Manager yet. Worth a follow-up check after the next sale. Same ~65 `dev`-only commits from Checkpoint 231 remain unshipped to `main`, unrelated to this checkpoint.
 
 **Commits this checkpoint.** `belajar-claude-backend`, `dev`: `14ccc53`. `belajar-claude-backend`, `main`: `1f0411f`. No `belajar-claude` (frontend) commits this checkpoint. No database migration — Railway environment variable only, set directly by Julia (not via any Claude tool, per the standing credential-handling rule). Plus this checkpoint's own `CONTEXT.md` commit, one per branch.
+
+---
+
+## SHIPPED (Checkpoint 233, September 5, 2026): Google tag (gtag.js) + Google Ads purchase-conversion tracking — `belajar-claude` only, shipped to `main` only
+
+**Status: shipped to `main`, real IDs not yet supplied — ships as placeholders, safe to leave live until Julia has them.**
+
+**The ask.** Julia is setting up Google Ads for belajarclaude.id and needed the base Google tag installed plus a working purchase-conversion firing point, mirroring the shape of the existing PostHog/Meta Pixel setup.
+
+**Investigated the actual success-detection flow before writing anything**, per her explicit request: `/create-payment` in `belajar-claude-backend/index.js` sends Duitku a `returnUrl` of `payment-success.html?course=...&amount=...&order=...`, so a dedicated redirect landing page already exists (same one Meta Pixel's client-side Purchase call already uses). Separately, `all-access.html`'s Duitku POP widget also has an in-page `successEvent` callback (`checkout.process(...)`) that fires without any page navigation — a second, currently-untapped success signal that covers QRIS/e-wallet buyers who never redirect back. Implemented only the first (the redirect page), per Julia's own stated preference order in the request; the widget callback is flagged below as a follow-up option, not built.
+
+**Site-wide base tag**: new shared `gtag-config.js` (one `<script src="gtag-config.js">` per page, same inclusion pattern as `posthog-config.js`/`meta-pixel.js`), added to all 30 pages that exist on `main` (the two unlaunched-course pages don't exist on `main` yet, nothing to add there). Placeholders `GA_MEASUREMENT_ID`, `AW_CONVERSION_ID`, `AW_CONVERSION_LABEL` sit at the top of that one file — real values go there, nowhere else. Note `AW_CONVERSION_LABEL` wasn't in Julia's original ask (she only mentioned the conversion ID) but Google Ads' `send_to` field requires both; flagged to her directly.
+
+**Main/prod-only, matching `meta-pixel.js`'s existing convention** — not added to `dev`. `all-access.html`'s own code comments already establish this exact rule for Meta Pixel ("dev is a preview/testing environment ... shouldn't be reported ... as real buyer behavior. Don't add fbq calls to dev when merging/syncing branches") — extended the same logic to Google Ads/GA4 rather than inventing a different convention for this one integration.
+
+**Conversion fires from `payment-success.html`**, reading the same `amount`/`order` query params the existing Meta Pixel Purchase call already reads, right after that call in the same `<script>` block. Guarded two ways against double-counting: a `localStorage` flag per order id (mirroring Meta Pixel's own `fb_purchase_fired_` pattern exactly, just under a different key), plus `transaction_id` passed to `gtag('event','conversion', ...)` so Google Ads' own server-side dedup is a second line of defense.
+
+**Known, flagged limitation — not fixed here.** Same root cause as the pre-Checkpoint-232 Meta gap: this only fires for buyers whose browser actually redirects back to `payment-success.html`, which historically has excluded most Indonesian QRIS/e-wallet payments. Unlike PostHog/Meta, this can't be moved server-side to close that gap — Google Ads conversion import needs the click ID (`gclid`), which only ever exists in the browser and never reaches the Duitku webhook. Two options if Julia wants better coverage later: (1) also fire from `all-access.html`'s widget `successEvent` callback (covers all payment methods, still browser-side, so `gclid` still available — not built this checkpoint since it wasn't the requested "best" option), or (2) Google Ads Enhanced Conversions / server-side Conversion API, which was explicitly out of scope per her request unless asked.
+
+**No git-history commit trail from the working tree this checkpoint** — the mounted `belajar-claude` repo's `.git` had a stuck `index.lock` the whole session (every git write left an unremovable lock file behind, a mount-level restriction rather than a real concurrent git process), so normal `add`/`commit`/`checkout` were unusable. Worked around it with git plumbing directly against the object database (`hash-object`, `mktree`, `commit-tree`) and pushed the resulting commit straight to `origin/main` by SHA, bypassing the local index entirely. Functionally identical result to a normal commit, just built differently — flagged here so the workaround itself doesn't look like a mystery later. Julia may want to check what's holding that lock (another git GUI/editor open on the repo, or antivirus) since it'll block normal `git` commands from her own machine's perspective too, not just from a session like this one.
+
+**Still open**: real `GA_MEASUREMENT_ID`/`AW_CONVERSION_ID`/`AW_CONVERSION_LABEL` values from Julia. The `index.lock` issue on `belajar-claude`'s working tree, unrelated to this feature. The QRIS/e-wallet coverage gap above, if Julia wants it closed. Same ~65 `dev`-only commits from prior checkpoints remain unshipped to `main`, unrelated to this checkpoint.
+
+**Commits this checkpoint.** `belajar-claude`, `main`: `69a646b746e264632c11a64ee0f34768b6783fd2`. No `belajar-claude-backend` commits — backend needed no changes (Google Ads conversion tracking is entirely client-side; nothing to add server-side per Julia's explicit instruction not to build Conversion API unless asked). No `belajar-claude` `dev` commit — deliberately main-only, see above. Plus this checkpoint's own `CONTEXT.md` commit, one per branch.
