@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="posthog-config.js"></script>
 <script src="meta-pixel.js"></script>
+<script src="gtag-config.js"></script>
 <title>Pembayaran Berhasil — Belajar Claude</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&display=swap" rel="stylesheet">
 <style>
@@ -127,6 +128,25 @@
       fbq('track', 'Purchase', { value: parseInt(amount, 10), currency: 'IDR' }, { eventID: order });
       localStorage.setItem(firedKey, '1');
     } catch (e) { /* fail silent — worst case this one event is missed */ }
+  })();
+
+  // Google Ads conversion for the same order -- see gtag-config.js for the
+  // fireGoogleAdsConversion() function and its own dedup logic (localStorage
+  // flag + transaction_id). Same caveat as the Meta Pixel Purchase call above:
+  // only fires for buyers whose browser actually redirects back here, which
+  // historically has NOT included most Indonesian QRIS/e-wallet payments (see
+  // Checkpoint 232's Meta CAPI investigation). Unlike PostHog/Meta, this can't
+  // be moved server-side to close that gap -- Google Ads conversion import
+  // needs the click ID (gclid), which only ever exists in the browser and
+  // never reaches the backend. Known, accepted limitation for now.
+  (function () {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const amount = params.get('amount');
+      const order  = params.get('order');
+      if (!amount || !order || typeof window.fireGoogleAdsConversion !== 'function') return;
+      window.fireGoogleAdsConversion(order, parseInt(amount, 10));
+    } catch (e) { /* fail silent — worst case this one conversion is missed */ }
   })();
 
   // PostHog's purchase_completed used to mirror the Meta Pixel Purchase event
