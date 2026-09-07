@@ -8,22 +8,30 @@
 // AW_CONVERSION_LABEL: the label half of the specific "purchase" conversion
 //   action's send_to string (Google Ads -> Goals/Conversions -> that
 //   conversion action -> "Use Google tag" -- shows the full AW-XXXX/LABEL).
-// All three are placeholders until Julia supplies the real values -- swap
-// them here, nowhere else. Until then this still loads without erroring,
-// it just has nothing real to report to.
+// GA_MEASUREMENT_ID is real (set at Checkpoint 234, GA4 property created
+// Sept 2026). AW_CONVERSION_ID / AW_CONVERSION_LABEL are still placeholders
+// until the Google Ads account exists -- swap them here, nowhere else. Until
+// then gtag('config', window.AW_CONVERSION_ID) below is a harmless no-op:
+// Google just has no conversion action to attach it to yet.
 //
 // Main/prod-only, like meta-pixel.js -- dev.* does not include this file, so
 // QA/testing traffic never counts as real visitors/buyers in GA4 or Google
 // Ads. Don't add this include to dev when merging/syncing branches (same
 // rule as meta-pixel.js -- see the notes in all-access.html).
-window.GA_MEASUREMENT_ID   = 'GA_MEASUREMENT_ID';
+window.GA_MEASUREMENT_ID   = 'G-8MT5FVXPVY';
 window.AW_CONVERSION_ID    = 'AW_CONVERSION_ID';
 window.AW_CONVERSION_LABEL = 'AW_CONVERSION_LABEL';
 
 (function () {
   var s = document.createElement('script');
   s.async = true;
-  s.src = 'https://www.googletagmanager.com/gtag/js?id=' + window.AW_CONVERSION_ID;
+  // Loader is fetched under GA_MEASUREMENT_ID specifically, not
+  // AW_CONVERSION_ID -- it's the one guaranteed to be a real ID right now.
+  // One valid ID in this URL is enough to load the shared gtag.js library;
+  // both gtag('config', ...) calls below then register against it, so
+  // Google Ads config will start working the moment AW_CONVERSION_ID is
+  // filled in above, with no change needed here.
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=' + window.GA_MEASUREMENT_ID;
   document.head.appendChild(s);
 
   window.dataLayer = window.dataLayer || [];
