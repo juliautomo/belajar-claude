@@ -666,7 +666,29 @@
       } catch (e) { /* fail silent */ }
       closePaymentModal();
       checkout.process(data.reference, {
-        successEvent: () => { window.showPaymentSuccess(); },
+        successEvent: () => {
+          // Google Ads conversion + GA4 purchase, fired from the widget's own
+          // in-page success signal rather than waiting for a redirect back to
+          // payment-success.html. This is what actually closes the QRIS/
+          // e-wallet coverage gap documented there: those payment methods
+          // complete inside this same popup/overlay and never redirect the
+          // browser anywhere, so this callback is often the ONLY browser-side
+          // signal that ever fires for them. Both functions dedup by
+          // data.orderId via localStorage, so if the browser *also* later
+          // redirects to payment-success.html for the same order (e.g. bank
+          // transfer VA), that second firing is a safe no-op, not a double
+          // count. Main/prod-only, same as every other gtag call on this page
+          // — these are no-ops if gtag-config.js wasn't loaded (dev).
+          try {
+            if (typeof window.fireGoogleAdsConversion === 'function') {
+              window.fireGoogleAdsConversion(data.orderId, effectiveAmount);
+            }
+            if (typeof window.fireGA4Purchase === 'function') {
+              window.fireGA4Purchase(data.orderId, effectiveAmount);
+            }
+          } catch (e) { /* fail silent — worst case this one event is missed */ }
+          window.showPaymentSuccess();
+        },
         pendingEvent: () => { alert('Pembayaran pending — selesaikan pembayaran Anda ya!'); },
         errorEvent:   () => { alert('Terjadi kesalahan. Silakan coba lagi.'); btn.disabled = false; btn.textContent = 'Lanjutkan Pembayaran →'; },
         closeEvent:   () => { btn.disabled = false; btn.textContent = 'Lanjutkan Pembayaran →'; }

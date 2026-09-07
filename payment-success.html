@@ -132,13 +132,14 @@
 
   // Google Ads conversion for the same order -- see gtag-config.js for the
   // fireGoogleAdsConversion() function and its own dedup logic (localStorage
-  // flag + transaction_id). Same caveat as the Meta Pixel Purchase call above:
-  // only fires for buyers whose browser actually redirects back here, which
-  // historically has NOT included most Indonesian QRIS/e-wallet payments (see
-  // Checkpoint 232's Meta CAPI investigation). Unlike PostHog/Meta, this can't
-  // be moved server-side to close that gap -- Google Ads conversion import
-  // needs the click ID (gclid), which only ever exists in the browser and
-  // never reaches the backend. Known, accepted limitation for now.
+  // flag + transaction_id). Backup coverage as of Checkpoint 235: the
+  // primary firing point is now all-access.html's Duitku widget successEvent
+  // callback, which fires in-page for every payment method including QRIS/
+  // e-wallet without needing a redirect at all. This call here only matters
+  // for whatever that one misses (e.g. the browser tab got closed before the
+  // widget detected success, then the buyer later followed a bank-transfer
+  // VA redirect back). Same orderId dedup means firing here after the
+  // widget already fired is a safe no-op, not a double count.
   (function () {
     try {
       const params = new URLSearchParams(window.location.search);
@@ -151,9 +152,9 @@
 
   // GA4's own "purchase" event — see gtag-config.js's fireGA4Purchase() for
   // why this needs to be a separate call from the Ads conversion above (that
-  // one's send_to keeps it from ever reaching GA4 on its own). Same caveat
-  // as both calls above it: only fires for buyers whose browser redirects
-  // back to this page.
+  // one's send_to keeps it from ever reaching GA4 on its own). Same backup
+  // role as the Ads call above it -- all-access.html's widget successEvent
+  // is the primary firing point now.
   (function () {
     try {
       const params = new URLSearchParams(window.location.search);

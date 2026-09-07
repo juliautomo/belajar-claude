@@ -42,16 +42,22 @@ window.AW_CONVERSION_LABEL = 'AW_CONVERSION_LABEL';
 })();
 
 // Fires the Google Ads "purchase" conversion exactly once per order. Called
-// from payment-success.html (the Duitku returnUrl redirect) -- the one place
-// the browser is guaranteed to still be around with a click ID (gclid) to
-// attribute the sale back to an ad click. gclid never reaches the backend,
-// so unlike PostHog's purchase_completed or Meta's CAPI Purchase, this event
-// cannot be moved server-side without losing ad attribution entirely.
+// from two places (Checkpoint 235): primarily all-access.html's Duitku
+// widget successEvent callback -- the in-page signal that fires for every
+// payment method, including QRIS/e-wallet, without needing a page redirect
+// -- and also payment-success.html's returnUrl redirect, as backup coverage
+// for whatever the widget path misses. Both are browser-side by necessity:
+// this needs a click ID (gclid) to attribute the sale to an ad click, gclid
+// never reaches the backend, so unlike PostHog's purchase_completed or
+// Meta's CAPI Purchase this can't be moved server-side without losing ad
+// attribution entirely.
 //
 // Guarded two ways against double-counting: a localStorage flag per orderId
 // (belt) and passing transaction_id so Google Ads' own dedup also catches it
 // (suspenders) -- same two-layer pattern already used for the Meta Pixel
-// Purchase call right above this one in payment-success.html.
+// Purchase call. The shared orderId-keyed flag is also what makes firing
+// from both call sites for the same order safe -- whichever fires first
+// wins, the second is a no-op.
 window.fireGoogleAdsConversion = function (orderId, value) {
   if (!orderId || typeof gtag === 'undefined') return;
   var firedKey = 'ads_purchase_fired_' + orderId;
@@ -71,8 +77,9 @@ window.fireGoogleAdsConversion = function (orderId, value) {
 // conversion above, since that one's `send_to` locks it to the Ads
 // destination only -- without a matching call here, GA4's own Ecommerce
 // reports/Key events would show zero purchases despite Ads receiving them).
-// Same caller (payment-success.html), same order data, own dedup key so
-// firing both from the same page load never double-fires either one.
+// Same two call sites as fireGoogleAdsConversion above, own dedup key so
+// firing both functions for the same order, from either or both call sites,
+// never double-fires either one.
 window.fireGA4Purchase = function (orderId, value) {
   if (!orderId || typeof gtag === 'undefined') return;
   var firedKey = 'ga4_purchase_fired_' + orderId;
