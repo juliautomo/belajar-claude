@@ -149,6 +149,21 @@
     } catch (e) { /* fail silent — worst case this one conversion is missed */ }
   })();
 
+  // GA4's own "purchase" event — see gtag-config.js's fireGA4Purchase() for
+  // why this needs to be a separate call from the Ads conversion above (that
+  // one's send_to keeps it from ever reaching GA4 on its own). Same caveat
+  // as both calls above it: only fires for buyers whose browser redirects
+  // back to this page.
+  (function () {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const amount = params.get('amount');
+      const order  = params.get('order');
+      if (!amount || !order || typeof window.fireGA4Purchase !== 'function') return;
+      window.fireGA4Purchase(order, parseInt(amount, 10));
+    } catch (e) { /* fail silent — worst case this one event is missed */ }
+  })();
+
   // PostHog's purchase_completed used to mirror the Meta Pixel Purchase event
   // above, firing here on page load. But this page only loads if the buyer's
   // browser redirects back after paying -- many Indonesian payment methods

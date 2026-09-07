@@ -584,6 +584,18 @@
         fbq('track', 'InitiateCheckout', { value: effectiveAmount, currency: 'IDR' });
       }
     } catch (e) { /* fail silent — worst case this one event is missed */ }
+    // GA4's own recommended-event name for this step (not a custom name like
+    // PostHog's, so it plugs into GA4's built-in Ecommerce reports/funnels
+    // automatically). Main/prod-only, same reason as the fbq call above —
+    // gtag-config.js itself isn't even loaded on dev.
+    try {
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'begin_checkout', {
+          currency: 'IDR', value: effectiveAmount,
+          items: [{ item_id: 'all-access', item_name: 'All Access', price: effectiveAmount, quantity: 1 }],
+        });
+      }
+    } catch (e) { /* fail silent — worst case this one event is missed */ }
     // PostHog mirror of the Meta Pixel event above — independent tracking destination.
     try {
       if (typeof posthog !== 'undefined') {
@@ -635,6 +647,15 @@
       try {
         if (typeof fbq !== 'undefined') {
           fbq('track', 'AddPaymentInfo', { value: effectiveAmount, currency: 'IDR' }, { eventID: data.reference });
+        }
+      } catch (e) { /* fail silent — worst case this one event is missed */ }
+      // GA4's own recommended-event name, same reasoning as begin_checkout above.
+      try {
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'add_payment_info', {
+            currency: 'IDR', value: effectiveAmount,
+            items: [{ item_id: 'all-access', item_name: 'All Access', price: effectiveAmount, quantity: 1 }],
+          });
         }
       } catch (e) { /* fail silent — worst case this one event is missed */ }
       // PostHog mirror of the Meta Pixel event above — independent tracking destination.

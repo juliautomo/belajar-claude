@@ -66,3 +66,24 @@ window.fireGoogleAdsConversion = function (orderId, value) {
     try { localStorage.setItem(firedKey, '1'); } catch (e) { /* fail silent */ }
   } catch (e) { /* fail silent -- worst case this one conversion is missed */ }
 };
+
+// Fires GA4's own recommended "purchase" event (separate call from the Ads
+// conversion above, since that one's `send_to` locks it to the Ads
+// destination only -- without a matching call here, GA4's own Ecommerce
+// reports/Key events would show zero purchases despite Ads receiving them).
+// Same caller (payment-success.html), same order data, own dedup key so
+// firing both from the same page load never double-fires either one.
+window.fireGA4Purchase = function (orderId, value) {
+  if (!orderId || typeof gtag === 'undefined') return;
+  var firedKey = 'ga4_purchase_fired_' + orderId;
+  try { if (localStorage.getItem(firedKey)) return; } catch (e) { /* fail open */ }
+  try {
+    gtag('event', 'purchase', {
+      transaction_id: orderId,
+      value: value,
+      currency: 'IDR',
+      items: [{ item_id: 'all-access', item_name: 'All Access', price: value, quantity: 1 }],
+    });
+    try { localStorage.setItem(firedKey, '1'); } catch (e) { /* fail silent */ }
+  } catch (e) { /* fail silent -- worst case this one event is missed */ }
+};
