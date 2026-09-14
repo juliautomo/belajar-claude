@@ -1,5 +1,5 @@
 # Belajar Claude — Project Context & Checkpoint
-_Last updated: September 14, 2026 (checkpoint 235)_
+_Last updated: September 14, 2026 (checkpoint 236)_
 
 ## What is Belajar Claude
 Indonesian-language Claude AI learning platform (formerly Klaud.id). Users sign up, enroll in courses, complete modules, and earn badges. Hosted on **Cloudflare** (`belajar-claude.belajarclaude-id.workers.dev`) — migrated off Vercel July 24, 2026.
@@ -4142,4 +4142,20 @@ Backend commits: `dev` — `73391c6` (PostHog), `edf6a08` (trust proxy). `main` 
 
 **Still open**: the Google Ads campaign itself is not published — still need the Rp 20.000/day budget, the negative keyword list, more ad-headline diversity (2 of 5 currently distinct), and one more check of the Final URL field (it reset to the bare domain twice already). GA4 Admin's data-retention bump and linking Google Ads to GA4 (Admin → Product Links), both dashboard-only steps for Julia. Option B (gclid capture + server-side Google Ads API conversion upload) for the last sliver of the QRIS/e-wallet gap, still deliberately deferred until there's real ad spend to justify it. Whether `admin.html` on `dev` also needs the new admin email is unchecked — this checkpoint only touched `main`. Same ~65 `dev`-only commits from prior checkpoints remain unshipped to `main`, unrelated to this checkpoint. Worth flagging for a future session: the GitHub-web-editor workaround only works for small, surgical edits typed via real keystrokes — never via a single-line input's `.value` for multi-line content — and it's not a substitute for real git access for anything bigger (multi-file changes, new files, merges), so if a sandbox outage recurs, scope what's actually fixable this way before promising it.
 
-**Commits this checkpoint.** `belajar-claude`, `main`: `063de48` (real Google Ads conversion ID/label in `gtag-config.js`), `b4e210f` (`admin.html` `ADMIN_EMAILS`), plus a follow-up `CONTEXT.md` commit correcting this entry's own newline corruption — all three made directly through GitHub's web editor, not `git push`, due to the sandbox outage above. One Supabase migration on project `ctqtdqbsucbhikwnagvl`: `add_belajarclaude_admin_email` (32 `ALTER POLICY` statements). No `belajar-claude-backend` commits. No `belajar-claude` `dev` commits this checkpoint — see "Still open" above.
+**Commits this checkpoint.** `belajar-claude`, `main`: `063de48` (real Google Ads conversion ID/label in `gtag-config.js`), `b4e210f` (`admin.html` `ADMIN_EMAILS`), plus a follow-up `CONTEXT.md` commit correcting this entry's own newline corruption — all three made directly through GitHub's web editor, not `git push`, due to the sandbox outage above. One Supabase migration on project `ctqtdqbsucbhikwnagvl`: `add_belajarclaude_admin_email` (32 `ALTER POLICY` statements). No `belajar-claude-backend` commits. No `belajar-claude` `dev` commits this checkpoint — see "Still open" above. 
+
+---
+
+## SHIPPED (Checkpoint 236, September 14, 2026): Google Ads campaign published; GA4 data retention bumped to 14 months; belajarclaude.id@gmail.com added as admin on `dev` too (main-only gap from Checkpoint 235 closed)
+
+**Status: all of Checkpoint 235's "still open" items are now closed except Option B (gclid + server-side conversion upload) and the long-standing dev-only backlog, both still deliberately deferred.**
+
+**Julia published the Google Ads campaign** — first live campaign for belajarclaude.id, using the Conversion Action and budget/targeting/keyword setup walked through in Checkpoint 235.
+
+**Julia bumped GA4's data retention to 14 months** in GA4 Admin — the last of the three GA4 Admin cleanup steps originally flagged back in Checkpoint 233 (the other two, marking `purchase` as a Key Event and this retention bump, are both now done; linking Google Ads to GA4 is still open, see below).
+
+**Found and fixed a real gap Julia flagged**: Checkpoint 235 added `belajarclaude.id@gmail.com` to `admin.html`'s `ADMIN_EMAILS` on `main` only, explicitly leaving `dev` unchecked. Checked `dev`'s copy of `admin.html` directly via the GitHub Contents API (still no local shell this session — see Checkpoint 235) and confirmed it independently hardcodes its own `ADMIN_EMAILS` array, still on the old 2-email list. Added `belajarclaude.id@gmail.com` there too via the same GitHub web-editor workaround, commit `839d2e5` on `dev`, verified live via the Contents API afterward.
+
+**Still open**: linking Google Ads to GA4 (Admin → Product Links) — not yet confirmed done, worth checking next session now that a real Ads account exists. Option B (gclid capture + server-side Google Ads API conversion upload) for the remaining sliver of the QRIS/e-wallet gap, still deliberately deferred until there's real ad spend/data to justify building it. Same ~65 `dev`-only commits from prior checkpoints, unrelated, still unshipped to `main`. Sandbox shell/bash access was still down for the entirety of this checkpoint too — everything here was done via the GitHub web-editor workaround plus direct GitHub Contents API reads for verification, same pattern as Checkpoint 235.
+
+**Commits this checkpoint.** `belajar-claude`, `dev`: `839d2e5` (`admin.html` `ADMIN_EMAILS`). No `main` code commits — the campaign publish and GA4 retention bump were both dashboard-only actions by Julia, nothing to commit. No `belajar-claude-backend` commits.
