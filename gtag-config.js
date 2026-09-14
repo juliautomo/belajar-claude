@@ -19,8 +19,8 @@
 // Ads. Don't add this include to dev when merging/syncing branches (same
 // rule as meta-pixel.js -- see the notes in all-access.html).
 window.GA_MEASUREMENT_ID   = 'G-8MT5FVXPVY';
-window.AW_CONVERSION_ID    = 'AW_CONVERSION_ID';
-window.AW_CONVERSION_LABEL = 'AW_CONVERSION_LABEL';
+window.AW_CONVERSION_ID    = 'AW-1841115767';
+window.AW_CONVERSION_LABEL = 'OUAdCIjLhfUcEPepjctE';
 
 (function () {
   var s = document.createElement('script');
