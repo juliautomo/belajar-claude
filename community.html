@@ -14,6 +14,8 @@
   --ink:#111111;--ink-2:#888888;--ink-3:#BBBBBB;
   --accent:#6C47FF;--accent-2:#8B6DFF;--accent-dim:rgba(108,71,255,0.08);--accent-glow:rgba(108,71,255,0.18);
   --green:#16A34A;--green-dim:rgba(22,163,74,0.08);--green-border:rgba(22,163,74,0.2);
+  --amber:#B4650A;--amber-dim:rgba(180,101,10,0.09);--amber-border:rgba(180,101,10,0.22);
+  --teal:#0D8577;--teal-dim:rgba(13,133,119,0.09);--teal-border:rgba(13,133,119,0.22);
   --red:#DC2626;--red-dim:rgba(220,38,38,0.08);
   --font:'Geist',sans-serif;--serif:'Fraunces',Georgia,serif;
   --nav-h:58px;--sidebar-w:280px;--r:14px;
@@ -55,9 +57,15 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 
 /* MAIN */
 .main{padding:40px 44px;display:flex;flex-direction:column;gap:28px;min-width:0;max-width:680px;}
-.g-eyebrow{font-size:11px;font-weight:500;color:var(--ink-3);letter-spacing:0.04em;margin-bottom:8px;}
+.hero{display:flex;flex-direction:column;gap:16px;}
+.g-eyebrow{font-size:11px;font-weight:600;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;}
 .g-h1{font-family:var(--serif);font-size:clamp(28px,3.5vw,40px);letter-spacing:-0.5px;line-height:1.1;color:var(--ink);margin-bottom:8px;}
 .g-sub{font-size:13.5px;color:var(--ink-2);}
+.hero-illo-wrap{border:1px solid var(--border);background:linear-gradient(180deg,var(--accent-dim),transparent 75%);border-radius:var(--r);padding:6px 20px 0;overflow:hidden;}
+.hero-illo{display:block;width:100%;height:auto;}
+.stat-pills{display:flex;flex-wrap:wrap;gap:8px;min-height:27px;}
+.stat-pill{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--ink-2);background:var(--surface);border:1px solid var(--border);padding:6px 12px;border-radius:100px;}
+.stat-pill b{color:var(--ink);font-weight:700;}
 
 /* COMPOSER */
 .composer{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px 22px;display:flex;flex-direction:column;gap:14px;}
@@ -66,7 +74,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 .cat-select{display:flex;flex-wrap:wrap;gap:6px;}
 .cat-opt{font-family:var(--font);padding:6px 13px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;font-weight:500;color:var(--ink-2);cursor:pointer;background:#fff;transition:all 0.15s;}
 .cat-opt:hover{border-color:var(--accent);color:var(--ink);}
-.cat-opt.selected{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);font-weight:600;}
+.cat-opt.selected{font-weight:600;}
+.cat-opt[data-cat="Diskusi"].selected{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);}
+.cat-opt[data-cat="Pertanyaan"].selected{border-color:var(--amber);color:var(--amber);background:var(--amber-dim);}
+.cat-opt[data-cat="Showcase"].selected{border-color:var(--teal);color:var(--teal);background:var(--teal-dim);}
 .composer-img-row{display:flex;align-items:center;gap:10px;}
 .img-attach-btn{display:flex;align-items:center;gap:6px;font-family:var(--font);font-size:12.5px;font-weight:500;color:var(--ink-2);background:var(--surface-2);border:1.5px solid var(--border);border-radius:9px;padding:7px 13px;cursor:pointer;transition:all 0.15s;}
 .img-attach-btn:hover{border-color:var(--accent);color:var(--ink);}
@@ -79,10 +90,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 
 /* TOOLBAR: search + filter */
 .feed-toolbar{display:flex;flex-direction:column;gap:12px;}
-.search-wrap{position:relative;}
+.toolbar-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.search-wrap{position:relative;flex:1;min-width:180px;}
 .search-input{width:100%;font-family:var(--font);font-size:13.5px;color:var(--ink);background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:10px 14px 10px 38px;transition:all 0.15s;}
 .search-input:focus{outline:none;border-color:var(--accent);}
 .search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--ink-3);pointer-events:none;}
+.sort-toggle{display:flex;background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:2px;flex-shrink:0;}
+.sort-opt{font-family:var(--font);font-size:12px;font-weight:600;color:var(--ink-2);background:none;border:none;padding:7px 13px;border-radius:7px;cursor:pointer;white-space:nowrap;}
+.sort-opt.active{background:var(--surface);color:var(--ink);}
 .filter-row{display:flex;flex-wrap:wrap;gap:8px;}
 .filter-pill{font-family:var(--font);padding:7px 15px;border-radius:100px;border:1.5px solid var(--border);font-size:12.5px;font-weight:500;color:var(--ink-2);cursor:pointer;background:#fff;transition:all 0.15s;white-space:nowrap;}
 .filter-pill:hover{border-color:var(--accent);color:var(--ink);}
@@ -97,13 +112,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 .pinned-badge svg{width:12px;height:12px;}
 .post-head{display:flex;align-items:center;gap:10px;}
 .post-avatar{width:34px;height:34px;border-radius:50%;background:var(--ink);color:#fff;font-size:12.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.unanswered-badge{display:inline-block;font-size:10.5px;font-weight:700;color:var(--red);background:var(--red-dim);padding:3px 10px;border-radius:100px;white-space:nowrap;align-self:flex-start;}
 .post-meta{min-width:0;flex:1;}
 .post-author-row{display:flex;align-items:center;gap:6px;}
 .post-author{font-size:13.5px;font-weight:600;color:var(--ink);}
 .post-time{font-size:11.5px;color:var(--ink-3);}
 .admin-badge{display:inline-flex;align-items:center;gap:3px;font-size:9.5px;font-weight:700;letter-spacing:0.02em;color:#fff;background:var(--ink);padding:2px 7px 2px 6px;border-radius:100px;white-space:nowrap;}
 .admin-badge svg{width:9px;height:9px;}
-.post-cat-tag{font-size:10.5px;font-weight:600;color:var(--accent);background:var(--accent-dim);padding:3px 10px;border-radius:100px;white-space:nowrap;}
+.post-cat-tag{font-size:10.5px;font-weight:600;padding:3px 10px;border-radius:100px;white-space:nowrap;}
+.post-cat-tag.diskusi{color:var(--accent);background:var(--accent-dim);}
+.post-cat-tag.pertanyaan{color:var(--amber);background:var(--amber-dim);}
+.post-cat-tag.showcase{color:var(--teal);background:var(--teal-dim);}
 .post-content{font-size:14px;line-height:1.55;color:var(--ink);white-space:pre-wrap;word-break:break-word;}
 .post-image{max-width:100%;max-height:420px;border-radius:12px;border:1px solid var(--border);object-fit:contain;cursor:zoom-in;}
 .post-actions{display:flex;align-items:center;gap:16px;padding-top:2px;}
@@ -178,10 +197,42 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
   </aside>
 
   <main class="main">
-    <div>
-      <div class="g-eyebrow">Komunitas</div>
-      <h1 class="g-h1">Komunitas Belajar Claude</h1>
-      <p class="g-sub">Tukar ide, tanya jawab, dan berbagi hasil belajar dengan sesama member.</p>
+    <div class="hero">
+      <div>
+        <div class="g-eyebrow">Komunitas</div>
+        <h1 class="g-h1">Komunitas Belajar Claude</h1>
+        <p class="g-sub">Tukar ide, tanya jawab, dan berbagi hasil belajar dengan sesama member.</p>
+      </div>
+      <div class="hero-illo-wrap">
+        <svg class="hero-illo" viewBox="0 0 640 130" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="112" x2="640" y2="112" stroke="#111" stroke-width="2.5" stroke-dasharray="9 9" opacity="0.18"/>
+          <circle cx="66" cy="58" r="15" fill="#fff" stroke="#111" stroke-width="2.5"/>
+          <path d="M58 54q8-10 16 0" fill="none" stroke="#111" stroke-width="2"/>
+          <rect x="42" y="78" width="48" height="34" rx="12" fill="#fff" stroke="#111" stroke-width="2.5"/>
+          <path d="M96 62c0-15 14-15 20-8 8-6 22-2 20 10-1 8-11 12-20 16-9-4-20-9-20-18z" fill="#F2A93B" stroke="#111" stroke-width="2" opacity="0.9"/>
+          <rect x="150" y="30" width="118" height="52" rx="14" fill="#fff" stroke="#111" stroke-width="2.5"/>
+          <path d="M168 82 L160 96 L182 82 Z" fill="#fff" stroke="#111" stroke-width="2.5"/>
+          <circle cx="178" cy="56" r="4.2" fill="#6C47FF"/>
+          <circle cx="200" cy="56" r="4.2" fill="#6C47FF" opacity="0.55"/>
+          <circle cx="222" cy="56" r="4.2" fill="#6C47FF" opacity="0.3"/>
+          <circle cx="322" cy="46" r="16" fill="#fff" stroke="#111" stroke-width="2.5"/>
+          <path d="M313 43q9-9 18 0" fill="none" stroke="#111" stroke-width="2"/>
+          <rect x="297" y="68" width="50" height="36" rx="12" fill="#fff" stroke="#111" stroke-width="2.5"/>
+          <rect x="382" y="52" width="120" height="50" rx="13" fill="#fff" stroke="#111" stroke-width="2.5"/>
+          <line x1="398" y1="68" x2="452" y2="68" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 5" opacity="0.55"/>
+          <line x1="398" y1="80" x2="470" y2="80" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 5" opacity="0.55"/>
+          <line x1="398" y1="92" x2="440" y2="92" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 5" opacity="0.55"/>
+          <path d="M382 100 L372 112 L396 100 Z" fill="#fff" stroke="#111" stroke-width="2.5"/>
+          <circle cx="568" cy="52" r="15" fill="#fff" stroke="#111" stroke-width="2.5"/>
+          <path d="M560 49q8-9 16 0" fill="none" stroke="#111" stroke-width="2"/>
+          <rect x="545" y="72" width="46" height="34" rx="12" fill="#fff" stroke="#111" stroke-width="2.5"/>
+          <g stroke="#111" stroke-width="2" opacity="0.55"><line x1="605" y1="18" x2="605" y2="26"/><line x1="620" y1="28" x2="613" y2="33"/><line x1="628" y1="44" x2="619" y2="41"/></g>
+          <circle cx="612" cy="40" r="9" fill="#BFEAD1" stroke="#111" stroke-width="2"/>
+          <circle cx="20" cy="30" r="7" fill="#6C47FF" opacity="0.16"/>
+          <circle cx="500" cy="22" r="5" fill="#6C47FF" opacity="0.22"/>
+        </svg>
+      </div>
+      <div class="stat-pills" id="heroStats"></div>
     </div>
 
     <div class="composer">
@@ -205,9 +256,15 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
     </div>
 
     <div class="feed-toolbar">
-      <div class="search-wrap">
-        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-        <input class="search-input" id="searchInput" placeholder="Cari post berdasarkan kata kunci..." oninput="setSearchQuery(this.value)">
+      <div class="toolbar-row">
+        <div class="search-wrap">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input class="search-input" id="searchInput" placeholder="Cari post berdasarkan kata kunci..." oninput="setSearchQuery(this.value)">
+        </div>
+        <div class="sort-toggle">
+          <button type="button" class="sort-opt active" id="sortTerbaru" onclick="setSort('terbaru')">Terbaru</button>
+          <button type="button" class="sort-opt" id="sortPopuler" onclick="setSort('populer')">Populer</button>
+        </div>
       </div>
       <div class="filter-row" id="filterRow"></div>
     </div>
@@ -235,7 +292,17 @@ var openComments = {};       // postId -> bool
 var selectedComposerCat = null;
 var activeFilter = 'Semua';
 var searchQuery = '';
+var sortMode = 'terbaru';
 var selectedImageFile = null;
+var AVATAR_GRADIENTS = [['#6C47FF','#8B6DFF'],['#0D8577','#3EBFAE'],['#B4650A','#F2A93B'],['#C0266F','#F472B6'],['#2563EB','#60A5FA']];
+
+function getAvatarGradient(name){
+  var s = name || '?';
+  var h = 0;
+  for (var i = 0; i < s.length; i++) { h = (h * 31 + s.charCodeAt(i)) >>> 0; }
+  var pair = AVATAR_GRADIENTS[h % AVATAR_GRADIENTS.length];
+  return 'linear-gradient(135deg,' + pair[0] + ',' + pair[1] + ')';
+}
 
 function getInitials(name){
   return (name||'').trim().split(/\s+/).slice(0,2).map(function(w){return w[0]||'';}).join('').toUpperCase() || '?';
@@ -451,6 +518,25 @@ async function loadFeed(){
       commentCountByPost[row.post_id] = (commentCountByPost[row.post_id] || 0) + 1;
     });
   }
+  updateHeroStats();
+  renderFeed();
+}
+
+function updateHeroStats(){
+  var el = document.getElementById('heroStats');
+  if (!el) return;
+  var total = posts.length >= 100 ? '100+' : posts.length;
+  var weekAgo = Date.now() - 7 * 86400 * 1000;
+  var thisWeek = posts.filter(function(p){ return new Date(p.created_at).getTime() >= weekAgo; }).length;
+  el.innerHTML =
+    '<span class="stat-pill">💬 <b>' + total + '</b> diskusi</span>' +
+    '<span class="stat-pill">🕒 <b>' + thisWeek + '</b> post minggu ini</span>';
+}
+
+function setSort(mode){
+  sortMode = mode;
+  document.getElementById('sortTerbaru').classList.toggle('active', mode === 'terbaru');
+  document.getElementById('sortPopuler').classList.toggle('active', mode === 'populer');
   renderFeed();
 }
 
@@ -464,8 +550,17 @@ function renderFeed(){
     }
     return true;
   });
-  // stable sort: pinned posts first, otherwise keep existing created_at-desc order
-  visible = visible.slice().sort(function(a, b){ return (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0); });
+  // stable sort: pinned posts first; within that, keep created_at-desc (default) or rank by like count ("Populer")
+  visible = visible.slice().sort(function(a, b){
+    var pa = a.pinned ? 1 : 0, pb = b.pinned ? 1 : 0;
+    if (pa !== pb) return pb - pa;
+    if (sortMode === 'populer') {
+      var la = (likesByPost[a.id] || {}).count || 0;
+      var lb = (likesByPost[b.id] || {}).count || 0;
+      if (lb !== la) return lb - la;
+    }
+    return 0;
+  });
 
   if (!visible.length){
     container.innerHTML = '<div class="feed-empty">' + (posts.length ? 'Tidak ada post yang cocok.' : 'Belum ada post. Jadi yang pertama!') + '</div>';
@@ -479,7 +574,9 @@ function renderPostCard(p){
   var cCount = commentCountByPost[p.id] || 0;
   var commentsHtml = openComments[p.id] ? renderCommentsSection(p.id) : '';
   var pinnedBadge = p.pinned ? '<div class="pinned-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-4 3.5L16 18l-4-3-4 3 1-5.5L5 9l5.5-1.5z"/></svg>Disematkan</div>' : '';
-  var catTag = p.category ? '<span class="post-cat-tag">' + escapeHtml(p.category) + '</span>' : '';
+  var catClass = p.category === 'Pertanyaan' ? 'pertanyaan' : (p.category === 'Showcase' ? 'showcase' : 'diskusi');
+  var catTag = p.category ? '<span class="post-cat-tag ' + catClass + '">' + escapeHtml(p.category) + '</span>' : '';
+  var unansweredBadge = (p.category === 'Pertanyaan' && cCount === 0) ? '<div class="unanswered-badge">Belum terjawab</div>' : '';
   var authorBadge = ADMIN_EMAILS.indexOf((p.email || '').toLowerCase()) !== -1
     ? '<span class="admin-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg>Admin</span>'
     : '';
@@ -501,7 +598,7 @@ function renderPostCard(p){
     '<div class="post-card' + (p.pinned ? ' pinned' : '') + '" id="post-' + p.id + '">' +
       pinnedBadge +
       '<div class="post-head">' +
-        '<div class="post-avatar">' + escapeHtml(getInitials(p.author_name)) + '</div>' +
+        '<div class="post-avatar" style="background:' + getAvatarGradient(p.author_name) + '">' + escapeHtml(getInitials(p.author_name)) + '</div>' +
         '<div class="post-meta">' +
           '<div class="post-author-row"><div class="post-author">' + escapeHtml(p.author_name) + '</div>' + authorBadge + '</div>' +
           '<div class="post-time">' + timeAgo(p.created_at) + '</div>' +
@@ -510,6 +607,7 @@ function renderPostCard(p){
       '</div>' +
       '<div class="post-content">' + escapeHtml(p.content) + '</div>' +
       imgHtml +
+      unansweredBadge +
       '<div class="post-actions">' +
         '<button class="post-action-btn' + (like.mine ? ' liked' : '') + '" onclick="toggleLike(\'' + p.id + '\')">' +
           '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>' +
@@ -537,7 +635,7 @@ function renderCommentsSection(postId){
         ? '<span class="admin-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg>Admin</span>'
         : '';
       return '<div class="comment-row">' +
-        '<div class="comment-avatar">' + escapeHtml(getInitials(c.author_name)) + '</div>' +
+        '<div class="comment-avatar" style="background:' + getAvatarGradient(c.author_name) + '">' + escapeHtml(getInitials(c.author_name)) + '</div>' +
         '<div class="comment-bubble"><div class="post-author-row"><div class="comment-author">' + escapeHtml(c.author_name) + '</div>' + authorBadge + '</div><div class="comment-text">' + escapeHtml(c.content) + '</div></div>' +
         delBtn +
       '</div>';
