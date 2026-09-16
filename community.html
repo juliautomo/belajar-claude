@@ -74,6 +74,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 .composer-textarea{font-family:var(--font);font-size:14px;color:var(--ink);background:var(--surface-2);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;width:100%;min-height:76px;resize:vertical;transition:all 0.15s;}
 .composer-textarea:focus{outline:none;border-color:var(--accent);background:#fff;}
 .cat-select{display:flex;flex-wrap:wrap;gap:6px;}
+.cat-select-label{font-size:10px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;}
 .cat-opt{font-family:var(--font);padding:6px 13px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;font-weight:500;color:var(--ink-2);cursor:pointer;background:#fff;transition:all 0.15s;}
 .cat-opt:hover{border-color:var(--accent);color:var(--ink);}
 .cat-opt.selected{font-weight:600;}
@@ -239,6 +240,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 
     <div class="composer">
       <textarea class="composer-textarea" id="postInput" placeholder="Apa yang ingin kamu bagikan?" maxlength="4000"></textarea>
+      <div class="cat-select-label">Pilih kategori</div>
       <div class="cat-select" id="composerCats"></div>
       <div class="composer-footer">
         <div class="composer-img-row">
