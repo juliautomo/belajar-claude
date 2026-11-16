@@ -194,6 +194,7 @@ section { padding: 88px 0; position: relative; z-index: 1; }
 .badge-i { color: #D97706; background: rgba(217,119,6,0.1); }
 .badge-adv { color: #9333EA; background: rgba(147,51,234,0.1); }
 .badge-soon { color: #71717A; background: #F4F4F5; }
+.badge-free { color: #1E8E5A; background: #E6FBF0; }
 /* .cc-soon dimming rule lives in course-card-shared.css — shared across every
    coming-soon card component on the site, don't redefine it here. */
 .ccv2-body h3 { font-family: var(--font); font-size: 25px; font-weight: 700; color: var(--ink); line-height: 1.2; letter-spacing: -0.5px; }
@@ -632,7 +633,12 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
   function buildLiveCourseCardHtml(slug, meta) {
     var visual = LIH_ILLUSTRATIONS[slug] || ('<div class="lih-icon">' + meta.icon + '</div>');
     var bg = LIH_BG[slug] || 'var(--accent-dim)';
-    return '<div class="course-card-v2" data-slug="' + slug + '"><div class="ccv2-banner" style="background:' + bg + ';">' + visual + '</div><div class="ccv2-body"><span class="ccv2-badge badge-b">ALL ACCESS</span><h3>' + meta.title + '</h3><p>' + meta.desc + '</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">✨ Termasuk All Access</div></div><a href="' + meta.previewLink + '" class="ccv2-btn"><span class="lbl">Lihat</span><span>→</span></a></div></div></div>';
+    // Admin-togglable "coba gratis" course (course_visibility.free_trial) gets a
+    // GRATIS badge/footer instead of the usual All Access framing — see the
+    // visibilityPromise block below, which sets meta.freeTrial from the live table.
+    var badge = meta.freeTrial ? '<span class="ccv2-badge badge-free">GRATIS</span>' : '<span class="ccv2-badge badge-b">ALL ACCESS</span>';
+    var included = meta.freeTrial ? '🎁 Coba gratis, tanpa bayar' : '✨ Termasuk All Access';
+    return '<div class="course-card-v2" data-slug="' + slug + '"><div class="ccv2-banner" style="background:' + bg + ';">' + visual + '</div><div class="ccv2-body">' + badge + '<h3>' + meta.title + '</h3><p>' + meta.desc + '</p><div class="ccv2-divider"></div><div class="ccv2-footer"><div><div class="ccv2-included">' + included + '</div></div><a href="' + meta.previewLink + '" class="ccv2-btn"><span class="lbl">Lihat</span><span>→</span></a></div></div></div>';
   }
   function syncKursusLiveGrid() {
     var grid = document.querySelector('.course-lib-grid');
@@ -643,7 +649,14 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
       var existing = grid.querySelector('[data-slug="' + slug + '"]');
       if (meta.hidden) { if (existing) existing.remove(); return; }
       if (meta.comingSoon) return; // handled by renderKursusComingSoon() below
-      if (!existing) grid.insertAdjacentHTML('beforeend', buildLiveCourseCardHtml(slug, meta));
+      if (!existing) { grid.insertAdjacentHTML('beforeend', buildLiveCourseCardHtml(slug, meta)); return; }
+      // The 4 original courses are pre-rendered as static HTML (fast first paint),
+      // so their badge/footer text is baked in at build time and won't reflect a
+      // freeTrial flag turned on later — rebuild just that one card's markup when
+      // the live flag disagrees with what's already in the DOM.
+      var wantsFreeBadge = !!meta.freeTrial;
+      var hasFreeBadge = existing.querySelector('.ccv2-badge') && existing.querySelector('.ccv2-badge').textContent.trim() === 'GRATIS';
+      if (wantsFreeBadge !== hasFreeBadge) existing.outerHTML = buildLiveCourseCardHtml(slug, meta);
     });
   }
 
@@ -743,6 +756,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
             if (!LIH_COURSES[row.course_slug]) return;
             LIH_COURSES[row.course_slug].hidden = (IS_DEV_ENV && row.dev_preview) ? false : !!row.hidden;
             LIH_COURSES[row.course_slug].comingSoon = (IS_DEV_ENV && row.dev_preview) ? false : !!row.coming_soon;
+            LIH_COURSES[row.course_slug].freeTrial = !!row.free_trial;
             LIH_COURSES[row.course_slug].visible = true;
             if (row.sort_order != null) LIH_COURSES[row.course_slug].sortOrder = row.sort_order;
           });

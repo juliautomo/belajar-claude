@@ -655,9 +655,12 @@ async function _init(){
   // 'mulai-claude' is no longer free-standing (moved behind All Access) - drop any
   // legacy free enrollment rows for it so the dashboard doesn't show it as owned
   // unless the user actually has all-access (which re-adds it further below).
+  // Exception: a row with type 'free_trial' is NOT legacy junk — it's a real,
+  // current self-enroll from the backend's /enroll-free-trial endpoint (Nov 2026,
+  // admin-togglable "coba gratis" course), so it's kept even without all-access.
   var hasRealAllAccess=rawEnrollments.some(function(e){return e.course_slug==='all-access';});
   var LEGACY_FREE_SLUGS=['mulai-claude','prompt-gratis'];
-  if(!hasRealAllAccess){rawEnrollments=rawEnrollments.filter(function(e){return LEGACY_FREE_SLUGS.indexOf(e.course_slug)===-1;});}
+  if(!hasRealAllAccess){rawEnrollments=rawEnrollments.filter(function(e){return LEGACY_FREE_SLUGS.indexOf(e.course_slug)===-1 || e.type==='free_trial';});}
   var PAKET_COURSES={'paket-karyawan':['mulai-claude','produktivitas','analisis-data'],'paket-mahasiswa':['mulai-claude','analisis-data'],'paket-pengusaha':['mulai-claude','content-marketing','build-automation'],'paket-creator':['mulai-claude','content-marketing']};
   var existingSlugs=new Set(rawEnrollments.map(function(e){return e.course_slug;}));
   var paketExpanded=rawEnrollments.slice();

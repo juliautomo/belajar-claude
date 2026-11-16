@@ -315,6 +315,16 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
               </div>
               <p class="hint" style="margin-top:6px;">Kalau aktif, kursus ini tetap tampil di situs dev (dev-belajar-claude...) meski "Sembunyikan dari situs" nyala — supaya bisa direview sebelum go-live. Tidak berpengaruh ke situs production.</p>
             </div>
+            <div class="social-field">
+              <div class="social-label-row">
+                <label>Kursus Coba Gratis</label>
+                <div class="social-toggle-wrap">
+                  <span class="social-toggle-text" id="courseFreeTrialLabel">Nonaktif</span>
+                  <label class="toggle-switch"><input type="checkbox" id="courseFreeTrialToggle" onchange="onCourseVisibilityToggle('free_trial')"><span class="toggle-slider"></span></label>
+                </div>
+              </div>
+              <p class="hint" style="margin-top:6px;">Satu kursus saja yang bisa jadi "coba gratis" di satu waktu — mengaktifkan ini otomatis menonaktifkan kursus lain yang sebelumnya gratis. Pengunjung yang login bisa mulai kursus ini tanpa bayar/All Access, lewat tombol "Mulai Gratis" di halaman kursus.</p>
+            </div>
             <div class="status" id="courseVisibilityStatus"></div>
           </div>
 
@@ -1384,6 +1394,10 @@ function renderVisibilityToggles() {
   document.getElementById('courseDevPreviewToggle').checked = devPreview;
   document.getElementById('courseDevPreviewLabel').textContent = devPreview ? 'Aktif' : 'Nonaktif';
 
+  var freeTrial = row ? !!row.free_trial : false;
+  document.getElementById('courseFreeTrialToggle').checked = freeTrial;
+  document.getElementById('courseFreeTrialLabel').textContent = freeTrial ? 'Aktif' : 'Nonaktif';
+
   var statusEl = document.getElementById('courseVisibilityStatus');
   statusEl.className = 'status';
   statusEl.textContent = '';
@@ -1395,29 +1409,48 @@ async function onCourseVisibilityToggle(changedField) {
   var hidden = document.getElementById('courseHiddenToggle').checked;
   var comingSoon = document.getElementById('courseComingSoonToggle').checked;
   var devPreview = document.getElementById('courseDevPreviewToggle').checked;
+  var freeTrial = document.getElementById('courseFreeTrialToggle').checked;
   document.getElementById('courseHiddenLabel').textContent = hidden ? 'Disembunyikan' : 'Tampil';
   document.getElementById('courseComingSoonLabel').textContent = comingSoon ? 'Segera Hadir' : 'Live';
   document.getElementById('courseDevPreviewLabel').textContent = devPreview ? 'Aktif' : 'Nonaktif';
+  document.getElementById('courseFreeTrialLabel').textContent = freeTrial ? 'Aktif' : 'Nonaktif';
 
   var statusEl = document.getElementById('courseVisibilityStatus');
   statusEl.className = 'status show';
   statusEl.textContent = 'Menyimpan...';
 
+  var nowIso = new Date().toISOString();
   var payload = {
     course_slug: activeCourse,
     hidden: hidden,
     coming_soon: comingSoon,
     dev_preview: devPreview,
-    updated_at: new Date().toISOString(),
+    free_trial: freeTrial,
+    updated_at: nowIso,
     updated_by: currentSession.user.email,
   };
   try {
-    var res = await sbClient.from('course_visibility').upsert(payload, { onConflict: 'course_slug' });
+    // Only one course can be "coba gratis" at a time -- if this one was just turned
+    // on, clear the flag on every other course_visibility row in the same request
+    // (not on the row we're about to upsert, which already carries the right value).
+    var otherPayloads = [];
+    if (changedField === 'free_trial' && freeTrial) {
+      otherPayloads = dataCache.visibility
+        .filter(function (v) { return v.course_slug !== activeCourse && v.free_trial; })
+        .map(function (v) { return Object.assign({}, v, { free_trial: false, updated_at: nowIso, updated_by: currentSession.user.email }); });
+    }
+    var res = await sbClient.from('course_visibility').upsert([payload].concat(otherPayloads), { onConflict: 'course_slug' });
     if (res.error) throw res.error;
     var idx = dataCache.visibility.findIndex(function (v) { return v.course_slug === activeCourse; });
     if (idx === -1) dataCache.visibility.push(payload); else dataCache.visibility[idx] = payload;
+    otherPayloads.forEach(function (p) {
+      var oIdx = dataCache.visibility.findIndex(function (v) { return v.course_slug === p.course_slug; });
+      if (oIdx !== -1) dataCache.visibility[oIdx] = p;
+    });
     statusEl.className = 'status show success';
-    statusEl.textContent = 'Tersimpan ✓ — langsung berlaku di seluruh situs.';
+    statusEl.textContent = otherPayloads.length
+      ? 'Tersimpan ✓ — kursus gratis sebelumnya otomatis dinonaktifkan.'
+      : 'Tersimpan ✓ — langsung berlaku di seluruh situs.';
   } catch (e) {
     statusEl.className = 'status show error';
     statusEl.textContent = 'Gagal menyimpan: ' + e.message;

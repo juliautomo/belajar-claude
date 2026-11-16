@@ -369,7 +369,20 @@
   const COURSE_SLUG = 'mulai-claude';
   const CONTENT_LINK = 'mulai-claude-content.html';
 
+  // Admin-controlled: whether THIS course is currently the site's one free-to-try
+  // course (course_visibility.free_trial, toggled in admin.html). Checked up front,
+  // in parallel with everything else, since it changes both the logged-out CTA
+  // (points at login instead of all-access.html) and the logged-in enroll button.
+  const freeTrialPromise = sbClient.from('course_visibility').select('free_trial').eq('course_slug', COURSE_SLUG).maybeSingle()
+    .then(function(r) { return !!(r.data && r.data.free_trial); }).catch(function(){ return false; });
+
   (async () => {
+    const isFreeTrial = await freeTrialPromise;
+    if (isFreeTrial) {
+      var cta = document.getElementById('bottomCtaBtn');
+      if (cta) { cta.textContent = 'Mulai Gratis →'; cta.setAttribute('href', 'login.html?next=mulai-claude.html'); }
+    }
+
     const { data: { session } } = await sbClient.auth.getSession();
     if (!session) return;
     // profile and enrollments only need session.user.email, not each other's results —
@@ -412,6 +425,24 @@
             enrollAndOpen(mBtn, session.user.email);
           });
         }
+      } else if (isFreeTrial) {
+        // No real enrollment, no all-access, but this is the site's free-to-try
+        // course right now — same card swap, but the button goes through the
+        // backend (/enroll-free-trial) instead of a direct client insert, since
+        // enrollments' RLS insert policy only allows self-enroll for all-access
+        // holders. The backend re-checks course_visibility.free_trial itself
+        // rather than trusting COURSE_SLUG from here.
+        document.querySelector('.aa-card').style.display = 'none';
+        var freeCard = document.getElementById('mulaiCard');
+        freeCard.style.display = 'flex';
+        var fBtn = document.getElementById('mulaiCardBtn');
+        fBtn.textContent = 'Mulai Gratis →';
+        fBtn.removeAttribute('href');
+        fBtn.style.cursor = 'pointer';
+        fBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          enrollFreeTrialAndOpen(fBtn, session.user.email, name);
+        });
       }
     } catch (e) {}
   })();
@@ -419,15 +450,39 @@
   async function enrollAndOpen(btn, email) {
     var original = btn.textContent;
     btn.textContent = 'Memproses...';
-    document.querySelectorAll('#ctaBtn, #bottomCtaBtn, #mulaiCardBtn').forEach(b => b.style.pointerEvents = 'none');
+    document.querySelectorAll('#bottomCtaBtn, #mulaiCardBtn').forEach(b => b.style.pointerEvents = 'none');
     try {
       const { error } = await sbClient.from('enrollments').insert({ email: email, course_slug: COURSE_SLUG, course_name: 'Dasar Claude AI', type: 'paid', enrolled_at: new Date().toISOString() });
       if (error) throw error;
       window.location.href = CONTENT_LINK;
     } catch (e) {
       btn.textContent = original;
-      document.querySelectorAll('#ctaBtn, #bottomCtaBtn, #mulaiCardBtn').forEach(b => b.style.pointerEvents = '');
+      document.querySelectorAll('#bottomCtaBtn, #mulaiCardBtn').forEach(b => b.style.pointerEvents = '');
       alert('Gagal mendaftar kursus: ' + (e.message || 'Terjadi kesalahan, coba lagi.'));
+    }
+  }
+
+  // Free-trial self-enroll — goes through the backend (service-role key) since the
+  // free course can change anytime via admin.html and the DB's own RLS insert policy
+  // only allows a direct client insert for all-access holders (closed off a real
+  // exploit in an earlier security pass — see CONTEXT.md). The backend looks up
+  // which course is free itself; it never trusts a course_slug from the client.
+  async function enrollFreeTrialAndOpen(btn, email, name) {
+    var original = btn.textContent;
+    btn.textContent = 'Memproses...';
+    document.querySelectorAll('#bottomCtaBtn, #mulaiCardBtn').forEach(b => b.style.pointerEvents = 'none');
+    try {
+      const res = await fetch(BACKEND_URL + '/enroll-free-trial', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name, email: email })
+      });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.message || 'Gagal mendaftar.');
+      window.location.href = CONTENT_LINK;
+    } catch (e) {
+      btn.textContent = original;
+      document.querySelectorAll('#bottomCtaBtn, #mulaiCardBtn').forEach(b => b.style.pointerEvents = '');
+      alert('Gagal mendaftar kursus gratis: ' + (e.message || 'Terjadi kesalahan, coba lagi.'));
     }
   }
 
