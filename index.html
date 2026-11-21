@@ -120,6 +120,22 @@ section { padding: 88px 0; position: relative; z-index: 1; }
 .ft-card-slot { flex: 1 1 320px; min-width: 260px; max-width: 380px; }
 .ft-card-slot .course-card-v2 { height: auto; }
 
+.benefits-section { background: var(--surface); }
+.benefits-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 40px; }
+.benefit-card { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 28px 24px; }
+.benefit-icon { width: 40px; height: 40px; border-radius: 11px; background: var(--accent-dim); color: var(--accent); display: grid; place-items: center; font-size: 18px; margin-bottom: 18px; }
+.benefit-card h3 { font-family: var(--font); font-size: 15px; font-weight: 700; color: var(--ink); margin: 0 0 8px; letter-spacing: -0.2px; }
+.benefit-card p { font-size: 13.5px; color: var(--ink-2); line-height: 1.65; margin: 0; }
+@media (max-width: 900px) { .benefits-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .benefits-grid { grid-template-columns: 1fr; } }
+
+.final-cta-section { background: linear-gradient(135deg, var(--accent), var(--accent-2)); text-align: center; }
+.final-cta-section .section-eyebrow { color: rgba(255,255,255,0.75); }
+.final-cta-section h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 3.5vw, 42px); letter-spacing: -1.2px; color: #fff; margin: 0 auto 14px; max-width: 560px; line-height: 1.15; }
+.final-cta-section p { font-size: 14.5px; color: rgba(255,255,255,0.85); margin: 0 auto 30px; max-width: 420px; line-height: 1.6; }
+.final-cta-btn { display: inline-flex; align-items: center; gap: 8px; background: #fff; color: var(--accent); font-family: var(--font); font-size: 14px; font-weight: 700; padding: 14px 28px; border-radius: 10px; text-decoration: none; transition: all 0.18s; }
+.final-cta-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,0,0,0.18); }
+
 .course-grid-wrap { margin-top: 52px; }
 .course-lib-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
 .cta-card { max-width: 1100px; margin: 0 auto; background: var(--ink); border-radius: 20px; padding: 44px 48px; display: flex; justify-content: space-between; align-items: center; gap: 32px; flex-wrap: wrap; position: relative; overflow: hidden; }
@@ -331,6 +347,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
   <div class="nav-links" id="navLinks">
     <a href="#kursus" id="navKursusLink">Kursus</a>
     <a href="login.html?next=index.html" id="navLoginBtn">Masuk</a>
+    <a href="login.html?tab=register&next=index.html" id="navSignupBtn" class="nav-cta">Daftar Gratis</a>
     <div class="nav-user-pill" id="navUserPill" onclick="toggleUserMenu(event)">
       <div><span class="nav-uname" id="navUname"></span><span class="nav-uemail" id="navUemail"></span></div>
       <span class="nav-user-chevron">▾</span>
@@ -447,6 +464,42 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         <div id="kursusComingSoonSlot" style="display:contents;"></div>
       </div>
     </div>
+  </div>
+</section>
+<section class="benefits-section">
+  <div class="container" style="text-align:center;">
+    <div class="section-eyebrow">Kenapa Belajar di Sini</div>
+    <h2 class="section-title">Belajar AI untuk kebutuhan sehari-hari</h2>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon">💻</div>
+        <h3>Tidak perlu coding</h3>
+        <p>Semua materi dirancang untuk pemula — tidak ada latar belakang teknis yang dibutuhkan.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">🎯</div>
+        <h3>Contoh yang praktis</h3>
+        <p>Belajar lewat studi kasus nyata, bukan teori — langsung lihat bagaimana Claude dipakai.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">📘</div>
+        <h3>Mudah dipahami</h3>
+        <p>Materi disusun bertahap dengan bahasa sederhana, cocok untuk pemula sekalipun.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">⚡</div>
+        <h3>Langsung diterapkan</h3>
+        <p>Setiap pelajaran bisa langsung dipakai di pekerjaan, bisnis, atau aktivitas harianmu.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="final-cta-section">
+  <div class="container">
+    <div class="section-eyebrow">Siap Mulai?</div>
+    <h2>Mulai perjalanan AI kamu hari ini.</h2>
+    <p>Daftar gratis dan mulai belajar menggunakan AI.</p>
+    <a href="login.html?tab=register&next=index.html" class="final-cta-btn">Daftar Gratis <span>→</span></a>
   </div>
 </section>
 </div>
@@ -862,6 +915,8 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         }
         var lb = document.getElementById('navLoginBtn');
         lb.textContent = 'Dashboard'; lb.href = 'dashboard.html';
+        var sb = document.getElementById('navSignupBtn');
+        if (sb) sb.style.display = 'none';
         // Personalize bottom CTA
         var headline = document.getElementById('ctaHeadline');
         var subtext  = document.getElementById('ctaSubtext');

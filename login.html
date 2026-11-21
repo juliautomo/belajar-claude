@@ -218,6 +218,13 @@
       switchView(tab);
     }
 
+    // Deep-link straight to the register tab, e.g. login.html?tab=register&next=index.html
+    // — used by the homepage's "Daftar Gratis" buttons so visitors land ready to sign up
+    // instead of on the "Masuk" tab by default.
+    if (new URLSearchParams(window.location.search).get('tab') === 'register') {
+      switchTab('register');
+    }
+
     function switchView(view) {
       document.querySelectorAll('.view').forEach(function(v) { v.classList.remove('active'); });
       document.getElementById('view-' + view).classList.add('active');
