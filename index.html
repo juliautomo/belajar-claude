@@ -109,14 +109,14 @@ section { padding: 88px 0; position: relative; z-index: 1; }
 .section-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 14px; }
 .section-title { font-family: var(--serif); font-size: clamp(30px, 3.5vw, 46px); font-weight: 400; letter-spacing: -1.5px; color: var(--ink); margin-bottom: 12px; line-height: 1.1; }
 .section-sub { font-size: 14px; color: var(--ink-2); line-height: 1.75; max-width: 440px; }
-.ft-section { background: linear-gradient(180deg, #EFFBF4 0%, #FAFAFA 100%); border-top: 1px solid #DFF3E8; border-bottom: 1px solid #DFF3E8; }
+.ft-section { background: linear-gradient(180deg, var(--accent-dim) 0%, #FAFAFA 100%); border-top: 1px solid rgba(108,71,255,0.14); border-bottom: 1px solid rgba(108,71,255,0.14); }
 .ft-grid { display: flex; flex-wrap: wrap; gap: 48px; align-items: center; }
 .ft-copy { flex: 1 1 440px; min-width: 0; }
-.ft-eyebrow { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 600; color: #1E8E5A; background: #E6FBF0; border: 1px solid rgba(30,142,90,0.18); padding: 5px 12px; border-radius: 100px; margin-bottom: 20px; letter-spacing: 0.02em; }
+.ft-eyebrow { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 600; color: var(--accent); background: var(--accent-dim); border: 1px solid rgba(108,71,255,0.18); padding: 5px 12px; border-radius: 100px; margin-bottom: 20px; letter-spacing: 0.02em; }
 .ft-em { font-style: italic; color: var(--accent); }
-.ft-cta { display: inline-flex; align-items: center; gap: 8px; background: #1E8E5A; color: #fff; font-family: var(--font); font-size: 14px; font-weight: 600; padding: 13px 24px; border-radius: 10px; text-decoration: none; margin-top: 8px; transition: all 0.18s; }
-.ft-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(30,142,90,0.22); }
-.ft-cta-note { font-size: 12.5px; color: #4B7A62; margin-top: 14px; }
+.ft-cta { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; font-family: var(--font); font-size: 14px; font-weight: 600; padding: 13px 24px; border-radius: 10px; text-decoration: none; margin-top: 8px; transition: all 0.18s; }
+.ft-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px var(--accent-glow); }
+.ft-cta-note { font-size: 12.5px; color: #6B6577; margin-top: 14px; }
 .ft-card-slot { flex: 1 1 320px; min-width: 260px; max-width: 380px; }
 .ft-card-slot .course-card-v2 { height: auto; }
 
@@ -205,7 +205,7 @@ section { padding: 88px 0; position: relative; z-index: 1; }
 .badge-i { color: #D97706; background: rgba(217,119,6,0.1); }
 .badge-adv { color: #9333EA; background: rgba(147,51,234,0.1); }
 .badge-soon { color: #71717A; background: #F4F4F5; }
-.badge-free { color: #1E8E5A; background: #E6FBF0; }
+.badge-free { color: var(--accent-2); background: rgba(155,125,255,0.14); }
 /* .cc-soon dimming rule lives in course-card-shared.css — shared across every
    coming-soon card component on the site, don't redefine it here. */
 .ccv2-body h3 { font-family: var(--font); font-size: 25px; font-weight: 700; color: var(--ink); line-height: 1.2; letter-spacing: -0.5px; }
