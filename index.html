@@ -926,7 +926,12 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
         try {
           if (settled[1].status !== 'fulfilled') { throw settled[1].reason; } // same fallback as an enrollments-fetch failure always had: catch below calls revealMarketing()
           var enr = settled[1].value;
-          var paid = (enr.data || []).filter(function(e){ return e.course_slug !== 'prompt-gratis'; });
+          // Exclude the free-trial row from this "you're enrolled in N courses" count,
+          // same reasoning as dashboard.html's LEGACY_FREE_SLUGS handling — it's a real
+          // enrollment, but counting it here would tell a brand-new Free Member (who
+          // registration now auto-enrolls into the free course) that they're already
+          // "enrolled in 1 course" before they've paid for anything.
+          var paid = (enr.data || []).filter(function(e){ return e.course_slug !== 'prompt-gratis' && e.type !== 'free_trial'; });
           var hasAllAccess = paid.some(function(e){ return e.course_slug === 'all-access'; });
           if (subtext) subtext.textContent = hasAllAccess
             ? 'Kamu punya akses ke semua kursus — lanjutkan belajarmu sekarang.'
