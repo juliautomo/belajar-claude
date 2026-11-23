@@ -109,15 +109,12 @@ section { padding: 88px 0; position: relative; z-index: 1; }
 .section-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 14px; }
 .section-title { font-family: var(--serif); font-size: clamp(30px, 3.5vw, 46px); font-weight: 400; letter-spacing: -1.5px; color: var(--ink); margin-bottom: 12px; line-height: 1.1; }
 .section-sub { font-size: 14px; color: var(--ink-2); line-height: 1.75; max-width: 440px; }
-.ft-section { background: linear-gradient(180deg, var(--accent-dim) 0%, #FAFAFA 100%); border-top: 1px solid rgba(108,71,255,0.14); border-bottom: 1px solid rgba(108,71,255,0.14); }
-.ft-grid { display: flex; flex-wrap: wrap; gap: 48px; align-items: center; }
-.ft-copy { flex: 1 1 440px; min-width: 0; }
 .ft-eyebrow { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 600; color: var(--accent); background: var(--accent-dim); border: 1px solid rgba(108,71,255,0.18); padding: 5px 12px; border-radius: 100px; margin-bottom: 20px; letter-spacing: 0.02em; }
 .ft-em { font-style: italic; color: var(--accent); }
 .ft-cta { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; font-family: var(--font); font-size: 14px; font-weight: 600; padding: 13px 24px; border-radius: 10px; text-decoration: none; margin-top: 8px; transition: all 0.18s; }
 .ft-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px var(--accent-glow); }
 .ft-cta-note { font-size: 12.5px; color: #6B6577; margin-top: 14px; }
-.ft-card-slot { flex: 1 1 320px; min-width: 260px; max-width: 380px; }
+.ft-card-slot { max-width: 380px; margin: 0 auto; }
 .ft-card-slot .course-card-v2 { height: auto; }
 
 .benefits-section { background: var(--surface); }
@@ -129,12 +126,19 @@ section { padding: 88px 0; position: relative; z-index: 1; }
 @media (max-width: 900px) { .benefits-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 560px) { .benefits-grid { grid-template-columns: 1fr; } }
 
-.final-cta-section { background: linear-gradient(135deg, var(--accent), var(--accent-2)); text-align: center; }
-.final-cta-section .section-eyebrow { color: rgba(255,255,255,0.75); }
-.final-cta-section h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 3.5vw, 42px); letter-spacing: -1.2px; color: #fff; margin: 0 auto 14px; max-width: 560px; line-height: 1.15; }
-.final-cta-section p { font-size: 14.5px; color: rgba(255,255,255,0.85); margin: 0 auto 30px; max-width: 420px; line-height: 1.6; }
-.final-cta-btn { display: inline-flex; align-items: center; gap: 8px; background: #fff; color: var(--accent); font-family: var(--font); font-size: 14px; font-weight: 700; padding: 14px 28px; border-radius: 10px; text-decoration: none; transition: all 0.18s; }
-.final-cta-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,0,0,0.18); }
+/* Merged "how do I start" section — free trial + All Access pricing side by
+   side, replacing what used to be three separate pitches (free-trial section,
+   generic final CTA banner, All Access pricing card) stacked on top of each
+   other near the bottom of the page. */
+.decision-section { padding: 64px 0 96px; }
+.decision-head { text-align: center; max-width: 560px; margin: 0 auto 40px; }
+.decision-grid { display: flex; gap: 28px; align-items: stretch; }
+.free-card { flex: 1 1 420px; background: #fff; border: 1px solid var(--border); border-radius: 24px; padding: 48px 44px; display: flex; flex-direction: column; }
+.free-card-title { font-family: var(--serif); font-size: clamp(22px, 2.4vw, 28px); font-weight: 400; letter-spacing: -0.5px; color: var(--ink); line-height: 1.2; margin-bottom: 14px; }
+.free-card .ft-card-slot { margin-top: 24px; margin-bottom: 8px; }
+.free-card .ft-cta { margin-top: auto; align-self: flex-start; }
+.decision-grid .pricing-card { flex: 1 1 480px; margin: 0; }
+@media (max-width: 860px) { .decision-grid { flex-direction: column; } }
 
 .course-grid-wrap { margin-top: 52px; }
 .course-lib-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
@@ -412,26 +416,6 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     </div>
   </div>
 </div>
-<!-- Standalone "coba gratis" section -- separate from the All Access course
-     library below (not just a badge on a card in it). Hidden by default and
-     only shown when course_visibility.free_trial flags a course live, via
-     renderFreeTrialSection() below -- see the visibilityPromise block. -->
-<section id="freeTrialSection" class="ft-section" style="display:none;">
-  <div class="container">
-    <div class="ft-grid">
-      <div class="ft-copy">
-        <span class="ft-eyebrow">🎁 Gratis · Tanpa Kartu Kredit</span>
-        <h2 class="section-title">Coba dulu, <em class="ft-em">baru</em> putuskan.</h2>
-        <p class="section-sub" id="ftDesc" style="max-width:480px;">Pelajari dasar-dasarnya — gratis, tanpa bayar, tanpa All Access. Kalau cocok, lanjutkan ke semua kursus lain kapan saja.</p>
-        <div>
-          <a href="#" id="ftCta" class="ft-cta">Mulai Gratis <span>→</span></a>
-        </div>
-        <p class="ft-cta-note">Langsung akses · Tidak perlu kartu kredit</p>
-      </div>
-      <div class="ft-card-slot" id="ftCardSlot"></div>
-    </div>
-  </div>
-</section>
 <section class="cases-section">
   <div class="container">
     <div class="section-eyebrow">Dari Pekerjaan Sehari-hari</div>
@@ -494,12 +478,54 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     </div>
   </div>
 </section>
-<section class="final-cta-section">
+<!-- Merged "how do I start" section: the free-trial pitch and the All Access
+     pricing card side by side, instead of the three separate CTA pushes that
+     used to be stacked here (free-trial section further up the page, a
+     generic final-CTA banner, then this pricing card) -- see decision-grid
+     and renderFreeTrialSection() below. Hidden by default, same as the old
+     #komunitas section was, and revealed together with the rest of
+     marketingHome by revealMarketing(); explicitly hidden for All Access
+     holders (who don't need to be sold on either option) a few lines below. -->
+<section id="decisionSection" class="decision-section" style="display:none;">
   <div class="container">
-    <div class="section-eyebrow">Siap Mulai?</div>
-    <h2>Mulai perjalanan AI kamu hari ini.</h2>
-    <p>Daftar gratis dan mulai belajar menggunakan AI.</p>
-    <a href="login.html?tab=register&next=index.html" class="final-cta-btn">Daftar Gratis <span>→</span></a>
+    <div class="decision-head">
+      <div class="section-eyebrow">Siap Mulai?</div>
+      <h2 class="section-title">Pilih cara kamu mulai.</h2>
+      <p class="section-sub">Coba satu kursus gratis dulu, atau langsung buka semua kursus dengan All Access.</p>
+    </div>
+    <div class="decision-grid">
+      <div class="free-card" id="freeTrialColumn" style="display:none;">
+        <span class="ft-eyebrow">🎁 Gratis · Tanpa Kartu Kredit</span>
+        <h3 class="free-card-title">Coba dulu, <em class="ft-em">baru</em> putuskan.</h3>
+        <p class="section-sub" id="ftDesc">Pelajari dasar-dasarnya — gratis, tanpa bayar, tanpa All Access. Kalau cocok, lanjutkan ke semua kursus lain kapan saja.</p>
+        <div class="ft-card-slot" id="ftCardSlot"></div>
+        <p class="ft-cta-note" style="margin-top:0;margin-bottom:14px;">Langsung akses · Tidak perlu kartu kredit</p>
+        <a href="#" id="ftCta" class="ft-cta">Mulai Gratis <span>→</span></a>
+      </div>
+      <div class="pricing-card">
+        <div>
+          <span class="pricing-badge">ALL ACCESS</span>
+          <h2 class="pricing-name" id="ctaHeadline">Satu akses, semua kursus.</h2>
+          <p class="pricing-desc" id="ctaSubtext">Satu kali pembayaran membuka seluruh course library — sekarang dan setiap kursus baru yang ditambahkan nanti.</p>
+          <div class="pricing-discount-row">
+            <div class="pricing-discount-badge" id="pricingDiscountBadge"></div>
+            <span class="pricing-discount-end" id="pricingDiscountEnd"></span>
+          </div>
+          <div class="pricing-price-row">
+            <span class="pricing-price-old" id="pricingOldPrice"></span>
+            <span class="pricing-price-big" id="pricingBigPrice">Rp 399K</span>
+            <span class="pricing-price-note">sekali bayar</span>
+          </div>
+          <p class="pricing-sub-note">Akses selamanya · Bukan langganan bulanan</p>
+          <a class="pricing-btn" id="ctaBtn" href="all-access.html">Mulai Belajar Sekarang →</a>
+        </div>
+        <div class="pricing-features">
+          <div class="pricing-feature"><div class="pricing-feature-icon">✓</div><div><div class="pricing-feature-title">Semua kursus</div><div class="pricing-feature-desc">Akses semua materi yang tersedia dalam satu pembelian.</div></div></div>
+          <div class="pricing-feature"><div class="pricing-feature-icon">✓</div><div><div class="pricing-feature-title">Sekali bayar</div><div class="pricing-feature-desc">Tidak ada biaya bulanan atau langganan berulang.</div></div></div>
+          <div class="pricing-feature"><div class="pricing-feature-icon">✓</div><div><div class="pricing-feature-title">Kursus baru termasuk</div><div class="pricing-feature-desc">Kursus baru yang ditambahkan ke library juga termasuk.</div></div></div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 </div>
@@ -538,33 +564,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     <div class="course-lib-grid" id="lihCourseGrid"></div>
   </div>
 </div>
-<section id="komunitas" class="pricing-section" style="display:none;">
-  <div class="container">
-    <div class="pricing-card">
-      <div>
-        <span class="pricing-badge">ALL ACCESS</span>
-        <h2 class="pricing-name" id="ctaHeadline">Satu akses, semua kursus.</h2>
-        <p class="pricing-desc" id="ctaSubtext">Satu kali pembayaran membuka seluruh course library — sekarang dan setiap kursus baru yang ditambahkan nanti.</p>
-        <div class="pricing-discount-row">
-          <div class="pricing-discount-badge" id="pricingDiscountBadge"></div>
-          <span class="pricing-discount-end" id="pricingDiscountEnd"></span>
-        </div>
-        <div class="pricing-price-row">
-          <span class="pricing-price-old" id="pricingOldPrice"></span>
-          <span class="pricing-price-big" id="pricingBigPrice">Rp 399K</span>
-          <span class="pricing-price-note">sekali bayar</span>
-        </div>
-        <p class="pricing-sub-note">Akses selamanya · Bukan langganan bulanan</p>
-        <a class="pricing-btn" id="ctaBtn" href="all-access.html">Mulai Belajar Sekarang →</a>
-      </div>
-      <div class="pricing-features">
-        <div class="pricing-feature"><div class="pricing-feature-icon">✓</div><div><div class="pricing-feature-title">Semua kursus</div><div class="pricing-feature-desc">Akses semua materi yang tersedia dalam satu pembelian.</div></div></div>
-        <div class="pricing-feature"><div class="pricing-feature-icon">✓</div><div><div class="pricing-feature-title">Sekali bayar</div><div class="pricing-feature-desc">Tidak ada biaya bulanan atau langganan berulang.</div></div></div>
-        <div class="pricing-feature"><div class="pricing-feature-icon">✓</div><div><div class="pricing-feature-title">Kursus baru termasuk</div><div class="pricing-feature-desc">Kursus baru yang ditambahkan ke library juga termasuk.</div></div></div>
-      </div>
-    </div>
-  </div>
-</section>
+
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">
@@ -747,10 +747,13 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
   // consistent with the rest of the site. Hides the section entirely when no
   // course is flagged free right now.
   function renderFreeTrialSection() {
-    var section = document.getElementById('freeTrialSection');
-    if (!section) return;
+    // Toggles just the free-trial column inside the merged #decisionSection --
+    // not the whole section, since the All Access column there should stay
+    // visible even when no course is currently flagged free-trial.
+    var column = document.getElementById('freeTrialColumn');
+    if (!column) return;
     var freeSlug = LIH_COURSE_ORDER.find(function(slug) { return LIH_COURSES[slug] && LIH_COURSES[slug].freeTrial; });
-    if (!freeSlug) { section.style.display = 'none'; return; }
+    if (!freeSlug) { column.style.display = 'none'; return; }
     var meta = LIH_COURSES[freeSlug];
     var descEl = document.getElementById('ftDesc');
     if (descEl) descEl.textContent = 'Pelajari ' + meta.title + ' — gratis, tanpa bayar, tanpa All Access. Kalau cocok, lanjutkan ke semua kursus lain kapan saja.';
@@ -758,7 +761,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     if (ctaEl) ctaEl.setAttribute('href', meta.previewLink || '#');
     var slot = document.getElementById('ftCardSlot');
     if (slot) slot.innerHTML = buildLiveCourseCardHtml(freeSlug, meta);
-    section.style.display = '';
+    column.style.display = '';
   }
 
   // The coming-soon teasers used to be a single hardcoded card (only Strategi
@@ -819,7 +822,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     // personalized. All Access holders never call revealMarketing() (loggedInHome shows
     // instead), so #komunitas correctly stays hidden for them the whole time — the
     // separate explicit hide further down is now just a harmless no-op safety net.
-    var km = document.getElementById('komunitas');
+    var km = document.getElementById('decisionSection');
     if (km) km.style.display = '';
     var il = document.getElementById('indexLoading');
     if (il) il.style.display = 'none';
@@ -954,7 +957,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
             // marketingRevealed=true above is a no-op once the timeout already ran.
             var mhAA = document.getElementById('marketingHome');
             if (mhAA) mhAA.style.display = 'none';
-            var kmAA = document.getElementById('komunitas');
+            var kmAA = document.getElementById('decisionSection');
             if (kmAA) kmAA.style.display = 'none';
             document.getElementById('loggedInHome').style.display = 'block';
             var ilAA = document.getElementById('indexLoading');
@@ -1056,7 +1059,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
 
             // The bottom marketing CTA (personalized earlier in this function) is now
             // redundant with the banner above — hide it for All Access holders.
-            var komunitasEl = document.getElementById('komunitas');
+            var komunitasEl = document.getElementById('decisionSection');
             if (komunitasEl) komunitasEl.style.display = 'none';
 
             // Make sure admin.html's Visibilitas Kursus overrides have actually landed
