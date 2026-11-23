@@ -6,3 +6,18 @@ node_modules
 CONTEXT.md
 TEAM-WORKFLOW.md
 ci-check.js
+
+# Not part of the website -- keep these off belajarclaude.id. They were being
+# published as static files: database setup scripts, paid course source files
+# (slides/PDF guides, which the site serves from Supabase storage instead),
+# and internal notes/drafts. Nothing on the site links to any of these paths.
+sql
+*.md
+*.bat
+Analisis-Data
+Bikin-Website
+Claude-Sehari-Hari
+Content-Marketing
+K1-Mulai-Claude
+K2-Produktivitas
+Strategi-Marketing
