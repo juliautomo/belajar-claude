@@ -72,47 +72,19 @@
   <div class="card">
     <div class="badge">Segera Hadir</div>
     <h1 id="courseTitle">Kursus Baru</h1>
-    <p class="sub">Kursus ini sedang dalam pengembangan. Daftarkan emailmu untuk mendapat notifikasi saat tersedia — termasuk harga early bird.</p>
-    <label for="email">Email kamu</label>
-    <input type="email" id="email" placeholder="nama@email.com" />
-    <button class="btn" onclick="notify()">Beritahu Saya →</button>
-    <div class="msg" id="msg"></div>
+    <p class="sub">Kursus ini sedang dalam pengembangan dan akan segera hadir. Pantau terus dashboard kamu ya.</p>
     <a href="index.html" class="back">← Kembali ke beranda</a>
   </div>
 
   <!-- Moved here from <head> (perf): these were blocking first paint on every load. -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
-  <script src="backend-config.js"></script>
   <script>
     // Get course name from URL param
     var params = new URLSearchParams(window.location.search);
     var course = params.get('course');
     if (course) document.getElementById('courseTitle').textContent = decodeURIComponent(course);
 
-    async function notify() {
-      var email = document.getElementById('email').value.trim();
-      var msg   = document.getElementById('msg');
-      if (!email || !email.includes('@')) {
-        msg.textContent = 'Masukkan email yang valid ya.';
-        msg.className = 'msg error'; return;
-      }
-      try {
-        await fetch(BACKEND_URL + '/signup', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: email.split('@')[0], email: email, source: 'coming-soon' })
-        });
-        msg.textContent = 'Berhasil! Kami akan email kamu saat kursus tersedia.';
-        msg.className = 'msg success';
-        document.getElementById('email').disabled = true;
-      } catch(e) {
-        msg.textContent = 'Gagal mendaftar. Silakan coba lagi.';
-        msg.className = 'msg error';
-      }
-    }
-    document.getElementById('email').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') notify();
-    });
   </script>
 </body>
 </html>
