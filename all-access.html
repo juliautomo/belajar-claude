@@ -101,6 +101,13 @@
   .btn-primary { width: 100%; padding: 15px; background: var(--ink); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: var(--font); margin-top: 18px; transition: background 0.2s, transform 0.15s; text-decoration: none; display: block; text-align: center; }
   .btn-primary:hover { background: var(--accent); transform: translateY(-1px); }
   .cta-note { font-size: 12px; color: var(--ink-3); text-align: center; margin-top: 10px; }
+  /* Free-trial way in, under the buy button: clearly the second option. */
+  .ft-alt { margin-top: 22px; padding-top: 18px; border-top: 1px dashed var(--border); text-align: center; }
+  .ft-alt[hidden] { display: none; }
+  .ft-alt-text { font-size: 13.5px; color: var(--ink-2); margin: 0 0 12px; line-height: 1.5; }
+  .ft-alt-btn { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 48px; border-radius: 10px; border: 1.5px solid var(--accent); color: var(--accent); background: #fff; font-family: var(--font); font-size: 14.5px; font-weight: 700; text-decoration: none; transition: background 0.15s; }
+  .ft-alt-btn:hover { background: rgba(108,71,255,0.06); }
+  .ft-alt-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
   .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
   section.pad { padding: 80px 0; }
@@ -258,6 +265,10 @@
       <div id="discountEnd" style="display:none;font-size:12px;color:var(--accent);font-weight:600;margin-top:8px;"></div>
       <a class="btn-primary price-pending" onclick="buyCourse()" href="#" style="margin-top:18px;" id="ctaBuyBtn">Beli All Access — Rp 399K →</a>
       <p class="cta-note">🔒 Pembayaran aman. Akses langsung setelah bayar.</p>
+      <div class="ft-alt" id="ftAlt" hidden>
+        <p class="ft-alt-text">Belum yakin? Mulai hari ini dengan <strong id="ftAltTitle">satu kursus</strong> — gratis.</p>
+        <a class="ft-alt-btn" id="ftAltBtn" href="login.html?tab=register&next=dashboard.html">Mulai gratis</a>
+      </div>
     </div>
   </div>
 </section>
@@ -476,6 +487,16 @@
       sbClient.from('course_visibility').select('*').then(function(vis) {
         (vis.data || []).forEach(function(row) {
           if (!AA_COURSES[row.course_slug]) return;
+          // Free-trial course (admin.html): offer it under the buy button.
+          if (row.free_trial && !row.hidden) {
+            var t = AA_COURSES[row.course_slug].title;
+            document.getElementById('ftAltTitle').textContent = t;
+            var fb = document.getElementById('ftAltBtn');
+            fb.setAttribute('href', 'login.html?tab=register&next=' + row.course_slug + '-content.html');
+            fb.setAttribute('data-dest', row.course_slug + '.html');
+            fb.setAttribute('data-context', 'Daftar gratis untuk mulai ' + t + ' — tanpa bayar.');
+            document.getElementById('ftAlt').hidden = false;
+          }
           AA_COURSES[row.course_slug].hidden = (IS_DEV_ENV && row.dev_preview) ? false : !!row.hidden;
           AA_COURSES[row.course_slug].comingSoon = (IS_DEV_ENV && row.dev_preview) ? false : !!row.coming_soon;
           if (row.sort_order != null) AA_COURSES[row.course_slug].sortOrder = row.sort_order;
