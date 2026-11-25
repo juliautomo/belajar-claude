@@ -288,7 +288,7 @@
         ? 'Tunggu ' + wait[1] + ' detik lagi, lalu coba kirim ulang.'
         : 'Gagal mengirim ulang. Coba lagi sebentar lagi ya.');
     } else {
-      mShowMsg(msgEl, 'success', 'Email konfirmasi baru sudah dikirim ke ' + email + '. Cek inbox atau folder spam.');
+      mShowMsg(msgEl, 'success', 'Email konfirmasi baru sudah dikirim ke ' + email + '. Cek inbox atau folder spam — pakai link di email yang paling baru.');
     }
   }
 

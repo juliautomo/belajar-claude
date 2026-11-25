@@ -245,6 +245,13 @@
     // Deep-link straight to the register tab, e.g. login.html?tab=register&next=index.html
     // — used by the homepage's "Daftar Gratis" buttons so visitors land ready to sign up
     // instead of on the "Masuk" tab by default.
+    // Arrived from an email link that no longer works (see supabase-config.js).
+    if (new URLSearchParams(window.location.search).get('link') === 'expired' || /error_code=otp_expired/.test(location.hash)) {
+      showMsg(document.getElementById('login-msg'), 'error',
+        'Link di email itu sudah tidak berlaku — sudah pernah dipakai, sudah lewat 24 jam, atau ada email yang lebih baru. Coba masuk di sini. Kalau email kamu belum dikonfirmasi, isi email lalu klik "Kirim ulang email konfirmasi".');
+      document.getElementById('login-resend').style.display = 'block';
+    }
+
     if (new URLSearchParams(window.location.search).get('tab') === 'register') {
       switchTab('register');
     }
@@ -390,7 +397,7 @@
         var wait = /(\d+)\s*seconds?/i.exec(res.error.message);
         showMsg(msgEl, 'error', wait ? 'Tunggu ' + wait[1] + ' detik lagi, lalu coba kirim ulang.' : 'Gagal mengirim ulang. Coba lagi sebentar lagi ya.');
       } else {
-        showMsg(msgEl, 'success', 'Email konfirmasi baru sudah dikirim ke ' + email + '. Cek inbox atau folder spam.');
+        showMsg(msgEl, 'success', 'Email konfirmasi baru sudah dikirim ke ' + email + '. Cek inbox atau folder spam — pakai link di email yang paling baru.');
       }
     }
 
