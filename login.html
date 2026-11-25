@@ -167,6 +167,7 @@
       <button class="forgot-link" onclick="switchView('forgot')">Lupa password?</button>
       <button class="btn" id="login-btn" onclick="doLogin()">Masuk →</button>
       <div class="msg" id="login-msg"></div>
+      <button class="forgot-link" id="login-resend" style="display:none;margin-top:10px" onclick="doResend(document.getElementById('login-email').value.trim(), this, document.getElementById('login-msg'))">Kirim ulang email konfirmasi</button>
     </div>
 
     <!-- Register view -->
@@ -185,6 +186,7 @@
       </div>
       <button class="btn" id="register-btn" onclick="doRegister()">Daftar Gratis →</button>
       <div class="msg" id="register-msg"></div>
+      <button class="forgot-link" id="register-resend" style="display:none;margin-top:10px" onclick="doResend(document.getElementById('reg-email').value.trim(), this, document.getElementById('register-msg'))">Belum dapat email? Kirim ulang</button>
       <p class="reg-note">Sudah pernah beli kursus? Kamu sudah punya akun — pilih <a href="#" onclick="switchTab('login');return false;">Masuk</a>, atau "Lupa password?" kalau belum pernah buat password.</p>
     </div>
 
@@ -262,6 +264,7 @@
       if (!email || !password) return showMsg(msg, 'error', 'Isi email dan password ya.');
       btn.disabled = true; btn.textContent = 'Memproses...';
       msg.className = 'msg';
+      document.getElementById('login-resend').style.display = 'none';
 
       var res = await sbClient.auth.signInWithPassword({ email: email, password: password });
       if (res.error) {
@@ -271,6 +274,7 @@
             ? 'Email kamu belum dikonfirmasi. Cek inbox (atau folder spam) dan klik tombol "Konfirmasi Email" dulu ya.'
             : res.error.message;
         showMsg(msg, 'error', text);
+        if (/not confirmed/i.test(res.error.message)) document.getElementById('login-resend').style.display = 'block';
         btn.disabled = false; btn.textContent = 'Masuk →';
       } else {
         btn.textContent = 'Berhasil!';
@@ -334,6 +338,7 @@
       } else {
         // Project has email confirmation turned on — no session yet.
         showMsg(msg, 'success', 'Hampir selesai! Cek email ' + email + ' (juga folder spam) dan klik "Konfirmasi Email" — kamu akan langsung masuk.');
+        document.getElementById('register-resend').style.display = 'block';
         btn.textContent = 'Daftar Gratis →';
         btn.disabled = false;
       }
@@ -372,6 +377,21 @@
       input.type = showing ? 'password' : 'text';
       btn.classList.toggle('showing', !showing);
       btn.setAttribute('aria-label', showing ? 'Tampilkan password' : 'Sembunyikan password');
+    }
+
+    // Fresh confirmation email for someone who signed up but never confirmed.
+    async function doResend(email, btn, msgEl) {
+      if (!email) return showMsg(msgEl, 'error', 'Isi email kamu dulu ya.');
+      var label = btn.textContent;
+      btn.disabled = true; btn.textContent = 'Mengirim...';
+      var res = await sbClient.auth.resend({ type: 'signup', email: email, options: { emailRedirectTo: window.location.origin + '/' + getNextUrl() } });
+      btn.disabled = false; btn.textContent = label;
+      if (res.error) {
+        var wait = /(\d+)\s*seconds?/i.exec(res.error.message);
+        showMsg(msgEl, 'error', wait ? 'Tunggu ' + wait[1] + ' detik lagi, lalu coba kirim ulang.' : 'Gagal mengirim ulang. Coba lagi sebentar lagi ya.');
+      } else {
+        showMsg(msgEl, 'success', 'Email konfirmasi baru sudah dikirim ke ' + email + '. Cek inbox atau folder spam.');
+      }
     }
 
     function showMsg(el, type, text) {

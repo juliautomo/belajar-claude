@@ -197,6 +197,7 @@
         <button class="m-forgot" id="m-forgot-link">Lupa password?</button>
         <button class="m-btn" id="m-login-btn">Masuk →</button>
         <div class="m-msg" id="m-login-msg"></div>
+        <button class="m-back-link" id="m-login-resend" style="display:none">Kirim ulang email konfirmasi</button>
       </div>
 
       <!-- Register view (free sign-up; auto-enrols into the free-trial course) -->
@@ -224,6 +225,8 @@
           <div class="m-done-icon">📩</div>
           <h3>Cek email kamu</h3>
           <p id="m-done-text"></p>
+          <button class="m-back-link" id="m-done-resend">Belum dapat email? Kirim ulang</button>
+          <div class="m-msg" id="m-done-msg" style="margin-top:12px"></div>
         </div>
       </div>
 
@@ -270,6 +273,25 @@
   var mNext = 'dashboard.html';
   function mSafeNext(n) { return (n && /^[a-zA-Z0-9_-]+\.html$/.test(n)) ? n : 'dashboard.html'; }
 
+  // Sends a fresh confirmation email for an account that signed up but never
+  // clicked the link (lost it, spam, or it expired after 24h).
+  var mLastRegEmail = '';
+  async function mResend(email, btn, msgEl) {
+    if (!email) return mShowMsg(msgEl, 'error', 'Isi email kamu dulu ya.');
+    var label = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Mengirim...';
+    var res = await sbClient.auth.resend({ type: 'signup', email: email, options: { emailRedirectTo: location.origin + '/' + mNext } });
+    btn.disabled = false; btn.textContent = label;
+    if (res.error) {
+      var wait = /(\d+)\s*seconds?/i.exec(res.error.message);
+      mShowMsg(msgEl, 'error', wait
+        ? 'Tunggu ' + wait[1] + ' detik lagi, lalu coba kirim ulang.'
+        : 'Gagal mengirim ulang. Coba lagi sebentar lagi ya.');
+    } else {
+      mShowMsg(msgEl, 'success', 'Email konfirmasi baru sudah dikirim ke ' + email + '. Cek inbox atau folder spam.');
+    }
+  }
+
   function mShowMsg(el, type, text) {
     el.textContent = text; el.className = 'm-msg ' + type; el.style.display = '';
   }
@@ -298,6 +320,12 @@
     });
   });
   overlay.querySelector('#m-reg-to-login').addEventListener('click', function() { mSwitchTab('login'); });
+  overlay.querySelector('#m-login-resend').addEventListener('click', function() {
+    mResend(overlay.querySelector('#m-login-email').value.trim(), this, overlay.querySelector('#m-login-msg'));
+  });
+  overlay.querySelector('#m-done-resend').addEventListener('click', function() {
+    mResend(mLastRegEmail, this, overlay.querySelector('#m-done-msg'));
+  });
 
   // Register button
   overlay.querySelector('#m-reg-btn').addEventListener('click', async function() {
@@ -336,6 +364,7 @@
     } catch (e) { /* never block sign-up on this */ }
 
     if (res.data && res.data.session) { window.location.href = mNext; return; }
+    mLastRegEmail = email;
     overlay.querySelector('#m-done-text').textContent =
       'Kami kirim email konfirmasi ke ' + email + '. Klik tombol "Konfirmasi Email" di email itu (cek juga folder spam) — kamu akan langsung masuk ke kursus.';
     mSwitchView('done');
@@ -367,6 +396,7 @@
     if (!email || !password) return mShowMsg(msg, 'error', 'Isi email dan password ya.');
     btn.disabled = true; btn.textContent = 'Memproses...';
     msg.className = 'm-msg';
+    overlay.querySelector('#m-login-resend').style.display = 'none';
 
     var res = await sbClient.auth.signInWithPassword({ email: email, password: password });
     if (res.error) {
@@ -376,6 +406,7 @@
           ? 'Email kamu belum dikonfirmasi. Cek inbox (atau folder spam) dan klik tombol "Konfirmasi Email" dulu ya.'
           : res.error.message;
       mShowMsg(msg, 'error', text);
+      if (/not confirmed/i.test(res.error.message)) overlay.querySelector('#m-login-resend').style.display = '';
       btn.disabled = false; btn.textContent = 'Masuk →';
     } else {
       btn.textContent = 'Berhasil!';
@@ -437,6 +468,7 @@
     overlay.querySelectorAll('input').forEach(function(i) { i.value = ''; });
     overlay.querySelectorAll('.m-msg').forEach(function(m) { m.className = 'm-msg'; m.style.display = ''; });
     overlay.querySelectorAll('.m-btn').forEach(function(b) { b.disabled = false; });
+    overlay.querySelector('#m-login-resend').style.display = 'none';
     overlay.querySelector('#m-login-btn').textContent = 'Masuk →';
     overlay.querySelector('#m-forgot-btn').textContent = 'Kirim Link Reset →';
     overlay.querySelector('#m-reg-btn').textContent = 'Daftar Gratis →';
