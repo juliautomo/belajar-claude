@@ -60,6 +60,8 @@
       height: 2px; background: var(--accent); border-radius: 2px 2px 0 0;
     }
 
+    .reg-note { font-size: 12.5px; color: #6B7280; margin: 14px 0 0; line-height: 1.5; }
+    .reg-note a { color: var(--accent); font-weight: 600; }
     label { display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 6px; }
     input[type="email"], input[type="password"], input[type="text"] {
       width: 100%; padding: 12px 14px;
@@ -183,6 +185,7 @@
       </div>
       <button class="btn" id="register-btn" onclick="doRegister()">Daftar Gratis →</button>
       <div class="msg" id="register-msg"></div>
+      <p class="reg-note">Sudah pernah beli kursus? Kamu sudah punya akun — pilih <a href="#" onclick="switchTab('login');return false;">Masuk</a>, atau "Lupa password?" kalau belum pernah buat password.</p>
     </div>
 
     <!-- Forgot password view -->
@@ -264,7 +267,9 @@
       if (res.error) {
         var text = res.error.message.includes('Invalid login credentials')
           ? 'Email atau password salah. Belum punya password? Klik "Lupa password?" untuk buat password baru.'
-          : res.error.message;
+          : /not confirmed/i.test(res.error.message)
+            ? 'Email kamu belum dikonfirmasi. Cek inbox (atau folder spam) dan klik tombol "Konfirmasi Email" dulu ya.'
+            : res.error.message;
         showMsg(msg, 'error', text);
         btn.disabled = false; btn.textContent = 'Masuk →';
       } else {
@@ -298,7 +303,13 @@
       var res = await sbClient.auth.signUp({
         email: email,
         password: password,
-        options: { data: { full_name: name } }
+        options: {
+          data: { full_name: name },
+          // Bring them back to THIS site (live or dev preview) after they click the
+          // confirmation link, straight into the course they came for — not the
+          // project's default Site URL (live homepage).
+          emailRedirectTo: window.location.origin + '/' + getNextUrl()
+        }
       });
 
       if (res.error) {
@@ -322,7 +333,7 @@
         window.location.href = getNextUrl();
       } else {
         // Project has email confirmation turned on — no session yet.
-        showMsg(msg, 'success', 'Hampir selesai! Cek email ' + email + ' untuk konfirmasi akun kamu, lalu masuk di sini.');
+        showMsg(msg, 'success', 'Hampir selesai! Cek email ' + email + ' (juga folder spam) dan klik "Konfirmasi Email" — kamu akan langsung masuk.');
         btn.textContent = 'Daftar Gratis →';
         btn.disabled = false;
       }
