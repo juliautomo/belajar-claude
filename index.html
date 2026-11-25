@@ -351,7 +351,7 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
   <div class="nav-links" id="navLinks">
     <a href="#kursus" id="navKursusLink">Kursus</a>
     <a href="login.html?next=index.html" id="navLoginBtn">Masuk</a>
-    <a href="login.html?tab=register&next=index.html" id="navSignupBtn" class="nav-cta">Daftar Gratis</a>
+    <a href="login.html?tab=register&next=dashboard.html" id="navSignupBtn" class="nav-cta">Daftar Gratis</a>
     <div class="nav-user-pill" id="navUserPill" onclick="toggleUserMenu(event)">
       <div><span class="nav-uname" id="navUname"></span><span class="nav-uemail" id="navUemail"></span></div>
       <span class="nav-user-chevron">▾</span>
@@ -758,7 +758,14 @@ footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); p
     var descEl = document.getElementById('ftDesc');
     if (descEl) descEl.textContent = 'Pelajari ' + meta.title + ' — gratis, tanpa bayar, tanpa All Access. Kalau cocok, lanjutkan ke semua kursus lain kapan saja.';
     var ctaEl = document.getElementById('ftCta');
-    if (ctaEl) ctaEl.setAttribute('href', meta.previewLink || '#');
+    if (ctaEl) {
+      // Logged out: opens the sign-up popup straight away (login-modal.js); after the
+      // confirmation email they land inside the free course. Logged in: the course page.
+      var contentFile = (meta.contentLink || '').split('/').pop();
+      ctaEl.setAttribute('href', 'login.html?tab=register&next=' + (contentFile || 'dashboard.html'));
+      ctaEl.setAttribute('data-dest', meta.previewLink || 'dashboard.html');
+      ctaEl.setAttribute('data-context', 'Daftar gratis untuk mulai ' + meta.title + ' — tanpa bayar.');
+    }
     var slot = document.getElementById('ftCardSlot');
     if (slot) slot.innerHTML = buildLiveCourseCardHtml(freeSlug, meta);
     column.style.display = '';

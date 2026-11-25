@@ -193,7 +193,7 @@
     </div>
     <!-- Shown only while this course is the admin-chosen free-trial course. -->
     <div class="hero-ft" id="heroFree" hidden>
-      <a class="hero-ft-btn" id="heroFreeBtn" href="login.html?tab=register&amp;next=mulai-claude.html">Mulai Gratis →</a>
+      <a class="hero-ft-btn" id="heroFreeBtn" href="login.html?tab=register&amp;next=mulai-claude-content.html" data-context="Daftar gratis untuk mulai Dasar Claude AI — tanpa bayar.">Mulai Gratis →</a>
       <p class="hero-ft-note" id="heroFreeNote">Gratis, tanpa bayar — cukup daftar pakai email.</p>
     </div>
   </div>
@@ -403,7 +403,8 @@
         document.getElementById('mulaiEyebrow').textContent = 'Gratis';
         var b = document.getElementById('mulaiCardBtn');
         b.textContent = 'Daftar Gratis →';
-        b.setAttribute('href', 'login.html?tab=register&next=mulai-claude.html');
+        b.setAttribute('href', 'login.html?tab=register&next=mulai-claude-content.html');
+        b.setAttribute('data-context', 'Daftar gratis untuk mulai Dasar Claude AI — tanpa bayar.');
       }
     }
     if (!session) return;

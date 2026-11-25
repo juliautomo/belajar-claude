@@ -75,8 +75,8 @@
     }
     #klaud-modal input[type="email"],
     #klaud-modal input[type="password"],
-    #klaud-modal .pw-wrap input[type="text"] {
-      width: 100%; padding: 12px 14px;
+    #klaud-modal input[type="text"] {
+      width: 100%; box-sizing: border-box; padding: 12px 14px;
       border: 1.5px solid #E8EAF0; border-radius: 10px;
       font-size: 14px; color: #13163A; outline: none;
       transition: border-color 0.2s; margin-bottom: 14px;
@@ -84,7 +84,7 @@
     }
     #klaud-modal input[type="email"]:focus,
     #klaud-modal input[type="password"]:focus,
-    #klaud-modal .pw-wrap input[type="text"]:focus { border-color: #6C47FF; }
+    #klaud-modal input[type="text"]:focus { border-color: #6C47FF; }
 
     #klaud-modal .pw-wrap { position: relative; width: 100%; margin-bottom: 14px; }
     #klaud-modal .pw-wrap input[type="password"],
@@ -157,6 +157,12 @@
       text-align: center; margin-bottom: 20px;
     }
 
+    #klaud-modal .m-reg-note { font-size: 12.5px; color: #6B7080; margin-top: 14px; line-height: 1.5; text-align: center; }
+    #klaud-modal .m-reg-note a { color: #6C47FF; font-weight: 600; cursor: pointer; }
+    #klaud-modal .m-done { text-align: center; padding: 8px 0 4px; }
+    #klaud-modal .m-done-icon { font-size: 40px; margin-bottom: 10px; }
+    #klaud-modal .m-done h3 { font-size: 19px; margin: 0 0 8px; color: #13163A; }
+    #klaud-modal .m-done p { font-size: 14px; color: #6B7080; line-height: 1.6; margin: 0; }
     #klaud-modal .m-view { display: none; }
     #klaud-modal .m-view.active { display: block; }
   `;
@@ -173,6 +179,7 @@
 
       <div class="m-tabs" id="m-tabs">
         <button class="m-tab active" data-tab="login">Masuk</button>
+        <button class="m-tab" data-tab="register">Daftar</button>
       </div>
 
       <!-- Login view -->
@@ -190,6 +197,34 @@
         <button class="m-forgot" id="m-forgot-link">Lupa password?</button>
         <button class="m-btn" id="m-login-btn">Masuk →</button>
         <div class="m-msg" id="m-login-msg"></div>
+      </div>
+
+      <!-- Register view (free sign-up; auto-enrols into the free-trial course) -->
+      <div class="m-view" id="m-view-register">
+        <label for="m-reg-name">Nama Lengkap</label>
+        <input type="text" id="m-reg-name" placeholder="Nama kamu" autocomplete="name" />
+        <label for="m-reg-email">Email</label>
+        <input type="email" id="m-reg-email" placeholder="nama@email.com" autocomplete="email" />
+        <label for="m-reg-password">Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="m-reg-password" placeholder="Minimal 6 karakter" autocomplete="new-password" />
+          <button type="button" class="pw-toggle" data-target="m-reg-password" aria-label="Tampilkan password">
+            <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><path d="M6.1 6.1C3.51 7.86 1 12 1 12s4 8 11 8a9.26 9.26 0 0 0 5.9-2.1"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
+        </div>
+        <button class="m-btn" id="m-reg-btn">Daftar Gratis →</button>
+        <div class="m-msg" id="m-reg-msg"></div>
+        <p class="m-reg-note">Sudah pernah beli kursus? Kamu sudah punya akun — pilih <a id="m-reg-to-login">Masuk</a>.</p>
+      </div>
+
+      <!-- Shown after a successful sign-up while the email still needs confirming -->
+      <div class="m-view" id="m-view-done">
+        <div class="m-done">
+          <div class="m-done-icon">📩</div>
+          <h3>Cek email kamu</h3>
+          <p id="m-done-text"></p>
+        </div>
       </div>
 
       <!-- Forgot password view -->
@@ -222,13 +257,18 @@
     var el = overlay.querySelector('#m-view-' + view);
     if (el) el.classList.add('active');
     var tabs = overlay.querySelector('#m-tabs');
-    if (tabs) tabs.style.display = view === 'forgot' ? 'none' : 'flex';
+    if (tabs) tabs.style.display = (view === 'forgot' || view === 'done') ? 'none' : 'flex';
     // Focus first input in active view
     if (el) {
       var inp = el.querySelector('input');
       if (inp) setTimeout(function() { inp.focus(); }, 60);
     }
   }
+
+  // Where to send someone after login / after they click the confirmation email.
+  // Only plain same-site page names are accepted.
+  var mNext = 'dashboard.html';
+  function mSafeNext(n) { return (n && /^[a-zA-Z0-9_-]+\.html$/.test(n)) ? n : 'dashboard.html'; }
 
   function mShowMsg(el, type, text) {
     el.textContent = text; el.className = 'm-msg ' + type; el.style.display = '';
@@ -246,6 +286,59 @@
     input.type = showing ? 'password' : 'text';
     this.classList.toggle('showing', !showing);
     this.setAttribute('aria-label', showing ? 'Tampilkan password' : 'Sembunyikan password');
+  });
+
+  overlay.querySelectorAll('.pw-toggle[data-target]').forEach(function(t) {
+    t.addEventListener('click', function() {
+      var input = overlay.querySelector('#' + t.dataset.target);
+      var showing = input.type === 'text';
+      input.type = showing ? 'password' : 'text';
+      t.classList.toggle('showing', !showing);
+      t.setAttribute('aria-label', showing ? 'Tampilkan password' : 'Sembunyikan password');
+    });
+  });
+  overlay.querySelector('#m-reg-to-login').addEventListener('click', function() { mSwitchTab('login'); });
+
+  // Register button
+  overlay.querySelector('#m-reg-btn').addEventListener('click', async function() {
+    var name = overlay.querySelector('#m-reg-name').value.trim();
+    var email = overlay.querySelector('#m-reg-email').value.trim();
+    var password = overlay.querySelector('#m-reg-password').value;
+    var btn = overlay.querySelector('#m-reg-btn');
+    var msg = overlay.querySelector('#m-reg-msg');
+
+    if (!name) return mShowMsg(msg, 'error', 'Isi nama kamu ya.');
+    if (!email || !email.includes('@')) return mShowMsg(msg, 'error', 'Masukkan email yang valid ya.');
+    if (!password || password.length < 6) return mShowMsg(msg, 'error', 'Password minimal 6 karakter.');
+    btn.disabled = true; btn.textContent = 'Memproses...';
+    msg.className = 'm-msg';
+
+    var res = await sbClient.auth.signUp({
+      email: email, password: password,
+      options: { data: { full_name: name }, emailRedirectTo: location.origin + '/' + mNext }
+    });
+    if (res.error) {
+      var text = /already registered|already exists/i.test(res.error.message)
+        ? 'Email ini sudah terdaftar. Pilih Masuk, atau "Lupa password?" kalau lupa.'
+        : res.error.message;
+      mShowMsg(msg, 'error', text);
+      btn.disabled = false; btn.textContent = 'Daftar Gratis →';
+      return;
+    }
+    // Best-effort: enrol into whichever course is the free trial (backend decides).
+    try {
+      var backend = (typeof BACKEND_URL !== 'undefined') ? BACKEND_URL
+        : (location.hostname === 'belajarclaude.id' ? 'https://klaud-backend-production.up.railway.app' : 'https://belajar-claude-backend-dev.up.railway.app');
+      await fetch(backend + '/enroll-free-trial', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name, email: email })
+      });
+    } catch (e) { /* never block sign-up on this */ }
+
+    if (res.data && res.data.session) { window.location.href = mNext; return; }
+    overlay.querySelector('#m-done-text').textContent =
+      'Kami kirim email konfirmasi ke ' + email + '. Klik tombol "Konfirmasi Email" di email itu (cek juga folder spam) — kamu akan langsung masuk ke kursus.';
+    mSwitchView('done');
   });
 
   // Tab clicks
@@ -279,12 +372,14 @@
     if (res.error) {
       var text = res.error.message.includes('Invalid login credentials')
         ? 'Email atau password salah. Belum punya password? Klik "Lupa password?" untuk buat password baru.'
-        : res.error.message;
+        : /not confirmed/i.test(res.error.message)
+          ? 'Email kamu belum dikonfirmasi. Cek inbox (atau folder spam) dan klik tombol "Konfirmasi Email" dulu ya.'
+          : res.error.message;
       mShowMsg(msg, 'error', text);
       btn.disabled = false; btn.textContent = 'Masuk →';
     } else {
       btn.textContent = 'Berhasil!';
-      window.location.href = 'dashboard.html';
+      window.location.href = mNext;
     }
   });
 
@@ -326,6 +421,7 @@
     var active = overlay.querySelector('.m-view.active');
     if (!active) return;
     if (active.id === 'm-view-login') overlay.querySelector('#m-login-btn').click();
+    else if (active.id === 'm-view-register') overlay.querySelector('#m-reg-btn').click();
     else if (active.id === 'm-view-forgot') overlay.querySelector('#m-forgot-btn').click();
   });
 
@@ -334,7 +430,8 @@
   // modal is triggered by an action other than a plain "Masuk"/"Daftar" nav click
   // (e.g. clicking "Beli All Access" while logged out) so it's clear why a login/signup
   // prompt just interrupted them instead of it feeling like a random popup.
-  window.openLoginModal = function(defaultTab, contextMsg) {
+  window.openLoginModal = function(defaultTab, contextMsg, next) {
+    mNext = mSafeNext(next);
     overlay.classList.add('open');
     // Reset all forms
     overlay.querySelectorAll('input').forEach(function(i) { i.value = ''; });
@@ -342,6 +439,7 @@
     overlay.querySelectorAll('.m-btn').forEach(function(b) { b.disabled = false; });
     overlay.querySelector('#m-login-btn').textContent = 'Masuk →';
     overlay.querySelector('#m-forgot-btn').textContent = 'Kirim Link Reset →';
+    overlay.querySelector('#m-reg-btn').textContent = 'Daftar Gratis →';
     // Context banner
     var ctxEl = overlay.querySelector('#m-context');
     if (contextMsg) { ctxEl.textContent = contextMsg; ctxEl.style.display = 'block'; }
@@ -357,16 +455,20 @@
 
   // ── Intercept all login.html links ──────────────────────────────────────────
   document.addEventListener('click', async function(e) {
-    const link = e.target.closest('a[href="login.html"]');
+    // Plain "login.html" and "login.html?tab=register&next=x.html" links both open
+    // the modal (register tab for the latter) instead of leaving the page.
+    const link = e.target.closest('a[href^="login.html"]');
     if (!link) return;
     e.preventDefault();
+    const params = new URLSearchParams((link.getAttribute('href').split('?')[1]) || '');
+    const tab = params.get('tab') === 'register' ? 'register' : 'login';
+    const next = params.get('next');
 
     const { data: { session } } = await sbClient.auth.getSession();
     if (session) {
-      const dest = link.getAttribute('data-dest') || 'dashboard.html';
-      window.location.href = dest;
+      window.location.href = link.getAttribute('data-dest') || mSafeNext(next);
     } else {
-      window.openLoginModal();
+      window.openLoginModal(tab, link.getAttribute('data-context') || '', next);
     }
   });
 
