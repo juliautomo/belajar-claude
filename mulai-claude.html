@@ -71,6 +71,11 @@
   .hero h1 { font-size: clamp(32px, 5.5vw, 54px); font-weight: 800; line-height: 1.1; letter-spacing: -2px; margin-bottom: 16px; color: var(--ink); }
   .hero h1 .accent { color: var(--accent); }
   .hero-sub { font-size: 17px; color: var(--ink-2); line-height: 1.7; max-width: 520px; margin: 0 auto 16px; }
+  .hero-ft { margin: -12px auto 8px; }
+  .hero-ft[hidden] { display: none; }
+  .hero-ft-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: #fff; font-weight: 700; font-size: 16px; padding: 15px 30px; border-radius: 12px; text-decoration: none; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+  .hero-ft-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(108,71,255,0.3); }
+  .hero-ft-note { font-size: 13px; color: var(--ink-2); margin-top: 10px; }
   .hero-meta { display: flex; align-items: center; justify-content: center; gap: 20px; margin: 0 auto 36px; font-size: 13px; color: var(--ink-2); flex-wrap: wrap; }
   .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
   section.pad { padding: 80px 0; }
@@ -185,6 +190,11 @@
     <p class="hero-sub">Dari nol sampai bisa pakai Claude untuk kebutuhan sehari-hari. Prompt library personal siap dipakai besok kerja.</p>
     <div class="hero-meta">
       <span>🛠 Claude.ai · Artifacts · Google Docs</span>
+    </div>
+    <!-- Shown only while this course is the admin-chosen free-trial course. -->
+    <div class="hero-ft" id="heroFree" hidden>
+      <a class="hero-ft-btn" id="heroFreeBtn" href="login.html?tab=register&amp;next=mulai-claude.html">Mulai Gratis →</a>
+      <p class="hero-ft-note" id="heroFreeNote">Gratis, tanpa bayar — cukup daftar pakai email.</p>
     </div>
   </div>
 </section>
@@ -378,12 +388,24 @@
 
   (async () => {
     const isFreeTrial = await freeTrialPromise;
-    if (isFreeTrial) {
-      var cta = document.getElementById('bottomCtaBtn');
-      if (cta) { cta.textContent = 'Mulai Gratis →'; cta.setAttribute('href', 'login.html?next=mulai-claude.html'); }
-    }
-
     const { data: { session } } = await sbClient.auth.getSession();
+
+    if (isFreeTrial) {
+      // Free course: a clear "Mulai Gratis" in the hero, plus a free card at the
+      // bottom ABOVE the All Access card (which stays as the paid option).
+      document.getElementById('heroFree').hidden = false;
+      var bottomCard = document.getElementById('mulaiCard');
+      var aaCard = document.querySelector('.aa-card');
+      if (!session) {
+        bottomCard.style.display = 'flex';
+        bottomCard.style.marginBottom = '20px';
+        aaCard.parentNode.insertBefore(bottomCard, aaCard);
+        document.getElementById('mulaiEyebrow').textContent = 'Gratis';
+        var b = document.getElementById('mulaiCardBtn');
+        b.textContent = 'Daftar Gratis →';
+        b.setAttribute('href', 'login.html?tab=register&next=mulai-claude.html');
+      }
+    }
     if (!session) return;
     // profile and enrollments only need session.user.email, not each other's results —
     // fire both together instead of the two sequential round trips this used to be.
@@ -416,6 +438,11 @@
         if (isEnrolled) {
           mBtn.textContent = 'Buka Kursus →';
           mBtn.setAttribute('href', CONTENT_LINK);
+          if (isFreeTrial) {
+            var hb = document.getElementById('heroFreeBtn');
+            hb.textContent = 'Buka Kursus →'; hb.setAttribute('href', CONTENT_LINK);
+            document.getElementById('heroFreeNote').textContent = 'Kamu sudah terdaftar di kursus ini.';
+          }
         } else {
           mBtn.textContent = 'Mulai Kursus →';
           mBtn.removeAttribute('href');
@@ -424,6 +451,13 @@
             e.preventDefault();
             enrollAndOpen(mBtn, session.user.email);
           });
+          if (isFreeTrial) {
+            // All Access holder: same one-click enroll from the hero.
+            var hb2 = document.getElementById('heroFreeBtn');
+            hb2.textContent = 'Mulai Kursus →'; hb2.removeAttribute('href'); hb2.style.cursor = 'pointer';
+            document.getElementById('heroFreeNote').textContent = 'Sudah termasuk All Access kamu.';
+            hb2.addEventListener('click', function(e) { e.preventDefault(); enrollAndOpen(hb2, session.user.email); });
+          }
         }
       } else if (isFreeTrial) {
         // No real enrollment, no all-access, but this is the site's free-to-try
@@ -443,6 +477,12 @@
           e.preventDefault();
           enrollFreeTrialAndOpen(fBtn, session.user.email, name);
         });
+        var hb3 = document.getElementById('heroFreeBtn');
+        hb3.removeAttribute('href'); hb3.style.cursor = 'pointer';
+        hb3.addEventListener('click', function(e) {
+          e.preventDefault();
+          enrollFreeTrialAndOpen(hb3, session.user.email, name);
+        });
       }
     } catch (e) {}
   })();
@@ -450,14 +490,14 @@
   async function enrollAndOpen(btn, email) {
     var original = btn.textContent;
     btn.textContent = 'Memproses...';
-    document.querySelectorAll('#bottomCtaBtn, #mulaiCardBtn').forEach(b => b.style.pointerEvents = 'none');
+    document.querySelectorAll('#bottomCtaBtn, #mulaiCardBtn, #heroFreeBtn').forEach(b => b.style.pointerEvents = 'none');
     try {
       const { error } = await sbClient.from('enrollments').insert({ email: email, course_slug: COURSE_SLUG, course_name: 'Dasar Claude AI', type: 'paid', enrolled_at: new Date().toISOString() });
       if (error) throw error;
       window.location.href = CONTENT_LINK;
     } catch (e) {
       btn.textContent = original;
-      document.querySelectorAll('#bottomCtaBtn, #mulaiCardBtn').forEach(b => b.style.pointerEvents = '');
+      document.querySelectorAll('#bottomCtaBtn, #mulaiCardBtn, #heroFreeBtn').forEach(b => b.style.pointerEvents = '');
       alert('Gagal mendaftar kursus: ' + (e.message || 'Terjadi kesalahan, coba lagi.'));
     }
   }
@@ -470,7 +510,7 @@
   async function enrollFreeTrialAndOpen(btn, email, name) {
     var original = btn.textContent;
     btn.textContent = 'Memproses...';
-    document.querySelectorAll('#bottomCtaBtn, #mulaiCardBtn').forEach(b => b.style.pointerEvents = 'none');
+    document.querySelectorAll('#bottomCtaBtn, #mulaiCardBtn, #heroFreeBtn').forEach(b => b.style.pointerEvents = 'none');
     try {
       const res = await fetch(BACKEND_URL + '/enroll-free-trial', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -481,7 +521,7 @@
       window.location.href = CONTENT_LINK;
     } catch (e) {
       btn.textContent = original;
-      document.querySelectorAll('#bottomCtaBtn, #mulaiCardBtn').forEach(b => b.style.pointerEvents = '');
+      document.querySelectorAll('#bottomCtaBtn, #mulaiCardBtn, #heroFreeBtn').forEach(b => b.style.pointerEvents = '');
       alert('Gagal mendaftar kursus gratis: ' + (e.message || 'Terjadi kesalahan, coba lagi.'));
     }
   }
