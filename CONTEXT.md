@@ -4267,3 +4267,21 @@ Backend commits: `dev` — `73391c6` (PostHog), `edf6a08` (trust proxy). `main` 
 **Workflow notes for future sessions:** dev first, then main; Julia pushes (`push-dev.bat`, then `git push origin main`); hotfixes are copied to `main` with git plumbing so dev-only work stays off production. Railway env vars can be set by Claude via the Railway connector; deleting needs Railway's own agent. Julia's network shows a certificate error for `*.workers.dev`, so test dev via the backend or another network. Full architecture, subscriptions and history are kept in the claude.ai Project doc `claude/belajar-claude-checkpoint.md`.
 
 **Commits this checkpoint.** `belajar-claude-backend` `dev`: `38ac3d2`, `9bdb0ac`, `2397e23`, `4195dec`, `b3a29d6`, `dd32973`, `45b5237`, `9e6838b`, `b631824`, `47dbe32` (sandbox guard). `main`: `32fe075`, `83e2129`, `34677dd`, `0337e63`, `14075ba`, `3386f91`, `8488238`, `220756a`, `fc0efcf`. `belajar-claude` `dev`: `d535762`, `6759bc9`, `871dc50` (+ earlier dev-only feature work). `main`: `7681ad9`, `2238312`, `afa1f04`. All pushed by Julia except the sandbox guard and this journal entry.
+
+---
+
+## SHIPPED (Checkpoint 242, November 25, 2026): sandbox guard live, main/dev re-synced, clean-up, architecture page
+
+**Sandbox guard live on both backends** (backend dev `47dbe32`, main `23919b3`). Dev writes to the shared Supabase and Duitku's sandbox simulator is public, so anyone could have "paid" in sandbox and received real All Access. Outside production, `/create-payment`, `/enroll-free-trial` and the webhook now only act for emails matching `DEV_ALLOWED_EMAILS` (default `belajarclaude.id+*@gmail.com`; the plain `belajarclaude.id@gmail.com` is refused). Verified: stranger email → 403, `+guardtest` → 200. All 6 All Access orders checked — the hole was not used.
+
+**Main/dev re-synced.** Three fixes existed on only one side: login show-password style and reset-password eye-icon colours → dev (`e32132b`); admin Bikin Website module titles → main (`05a9563`; main's list was the stale one — the course page uses "Apa yang Akan Kita Bangun" … "Uji Coba Nyata & Terus Diperbaiki"). Now main-only = tracking only (GA4/Ads, Meta Pixel + its privacy-policy row, Facebook domain verification); dev-only = on-hold features (homepage redesign, sign-up + free trial, Analisis Data course).
+
+**Production health check (14:10 WIB):** backend in PRODUCTION mode, health 200, bad input 400, forged webhook 401, key pages 200, All Access price loads from the DB, GA4/Meta/PostHog load. 7 users / 6 All Access.
+
+**Clean-up:** QA test enrollment (`QA-TEST-DEDUPE`) deleted with Julia's OK. ~65 stale git lock files removed from both `.git` folders. Local branches `main-view` and `feature/meta-pixel-tracking` deleted (content already on main). Backend README rewritten (it still described the old Klaud/Midtrans/Gmail setup). Julia decided not to chase the two August Duitku orders.
+
+**Architecture page** (wiring diagram, purchase flow, live vs dev, subscriptions, open items): https://claude.ai/artifact/TKNXZUpR9aMJCWVxagKFhn
+
+**Still open:** confirm SendGrid cancellation before 1 Dec → then delete `SENDGRID_API_KEY`, remove the SendGrid fallback in `mailer.js`, delete its DNS records; make both GitHub repos private; delete the merged remote branch `feature/meta-pixel-tracking` (Julia: `git push origin --delete feature/meta-pixel-tracking` in each repo). Optional: Supabase leaked-password protection, replace the `klaud-id` Sheets service account, "Ganti password" on profile.html.
+
+**Commits this checkpoint.** Frontend `dev`: `614f723` (Checkpoint 241), `e32132b`, this entry. `main`: `d51445b`, `05a9563`, this entry. Backend `dev`: `47dbe32`, `7592b80` (README). `main`: `23919b3`, README copy.
