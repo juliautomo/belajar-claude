@@ -1291,7 +1291,7 @@ dokumen baru tiap minggu.<button class="copy-btn" onclick="copyPrompt(this)">Sal
 
   async function init() {
     const { data: { session } } = await sb.auth.getSession();
-    if (!session) { window.location.href = 'login.html'; return; }
+    if (!session) { window.location.href = 'login.html?next=' + location.pathname.split('/').pop().replace(/\.html$/, '') + '.html'; return; }
     const email = session.user.email;
 
     // Only grant access if a real enrollment for THIS course exists - holding all-access alone

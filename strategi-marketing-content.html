@@ -776,7 +776,7 @@ yang bisa saya buka lagi setiap kali launching produk baru.<button class="copy-b
 
   async function init() {
     const { data: { session } } = await sbClient.auth.getSession();
-    if (!session) { window.location.href = 'login.html'; return; }
+    if (!session) { window.location.href = 'login.html?next=' + location.pathname.split('/').pop().replace(/\.html$/, '') + '.html'; return; }
 
     // Only grant access if a real enrollment for THIS course exists - holding all-access alone
     // is not enough, it only unlocks a free one-click "Mulai Kursus" on the preview page - admins bypass

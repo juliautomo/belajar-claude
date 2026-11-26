@@ -909,7 +909,7 @@ saya export ke Google Docs.<button class="copy-btn" onclick="copyPrompt(this)">S
 
   async function init() {
     const { data: { session } } = await sbClient.auth.getSession();
-    if (!session) { window.location.href = 'login.html'; return; }
+    if (!session) { window.location.href = 'login.html?next=' + location.pathname.split('/').pop().replace(/\.html$/, '') + '.html'; return; }
     const email = session.user.email;
 
     // Only grant access if a real 'mulai-claude' enrollment exists - holding all-access alone

@@ -1082,7 +1082,7 @@ dan struktur produk yang sudah ada.<button class="copy-btn" onclick="copyPrompt(
 
   async function init() {
     const { data: { session } } = await sbClient.auth.getSession();
-    if (!session) { window.location.href = 'login.html'; return; }
+    if (!session) { window.location.href = 'login.html?next=' + location.pathname.split('/').pop().replace(/\.html$/, '') + '.html'; return; }
     const email = session.user.email;
 
     // Only grant access if a real 'bikin-website' enrollment exists - holding all-access alone
