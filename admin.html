@@ -94,6 +94,8 @@ select, input[type="file"], input[type="text"], input[type="number"], input[type
 .cp-editor-grid { display: grid; grid-template-columns: minmax(0,1fr) 160px; gap: 12px; }
 .cp-editor-foot { display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
 .cp-editor-foot .cp-sched { flex: 1 1 220px; }
+.cp-check { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 12.5px; font-weight: 600; color: var(--ink); min-height: 40px; flex-basis: 100%; }
+.cp-check input { width: 16px; height: 16px; accent-color: var(--accent); }
 .cp-editor-foot .btn { margin-top: 0; }
 .btn.btn-accent-solid { background: var(--accent); }
 .btn.btn-accent-solid:hover:not(:disabled) { background: #5A36F0; }
@@ -389,7 +391,7 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
     <!-- Panel: Community Posts -->
     <div class="panel" id="panel-community">
       <h1 class="page-title">Community Posts</h1>
-      <p class="page-sub">Kerjakan ide post, lalu jadwalkan. Post muncul otomatis di halaman Komunitas pada waktunya, atas nama "Belajar Claude".</p>
+      <p class="page-sub">Satu post seminggu (saran: Senin 09:00). Kerjakan ide, lalu jadwalkan — post muncul otomatis di Komunitas atas nama "Belajar Claude", dan member mendapat email saat post tayang.</p>
 
       <div class="card">
         <div class="cp-toolbar">
@@ -715,15 +717,15 @@ function cpWhen(iso) {
   var d = new Date(iso);
   return d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long' }) + ', ' + d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
 }
-// Next Monday or Thursday 09:00 that doesn't already have a post scheduled.
+// Next Monday 09:00 that doesn't already have a post scheduled (one post a week).
 function cpNextSlot() {
   var taken = {};
   cpScheduled.forEach(function (p) { var d = new Date(p.publish_at); taken[d.toDateString()] = true; });
   var d = new Date(); d.setHours(9, 0, 0, 0);
-  for (var i = 0; i < 60; i++) {
+  for (var i = 0; i < 120; i++) {
     d.setDate(d.getDate() + (i === 0 && new Date().getHours() < 8 ? 0 : 1));
     var wd = d.getDay();
-    if ((wd === 1 || wd === 4) && !taken[d.toDateString()] && d.getTime() > Date.now()) return d.getTime();
+    if (wd === 1 && !taken[d.toDateString()] && d.getTime() > Date.now()) return d.getTime();
   }
   var f = new Date(); f.setDate(f.getDate() + 1); f.setHours(9, 0, 0, 0); return f.getTime();
 }
@@ -732,7 +734,7 @@ async function loadCommunityAdmin() {
   try {
     var res = await Promise.all([
       sbClient.from('community_post_ideas').select('*').order('sort_order').order('created_at'),
-      sbClient.from('community_posts').select('id,content,category,publish_at').gt('publish_at', new Date().toISOString()).order('publish_at')
+      sbClient.from('community_posts').select('id,content,category,publish_at,send_email').gt('publish_at', new Date().toISOString()).order('publish_at')
     ]);
     if (res[0].error) throw res[0].error;
     if (res[1].error) throw res[1].error;
@@ -760,7 +762,7 @@ function renderCpScheduled() {
     return '<div class="cp-row" id="cps-' + p.id + '"><div class="cp-row-head"><div>' +
       '<div class="cp-title">' + escapeHtml(cpTitleFor(p)) + '</div>' +
       '<div class="cp-meta">' + (p.category ? '<span class="cp-cat ' + escapeHtml(p.category) + '">' + escapeHtml(p.category) + '</span>' : '') +
-      '<span class="cp-when">' + escapeHtml(cpWhen(p.publish_at)) + '</span></div></div>' +
+      '<span class="cp-when">' + escapeHtml(cpWhen(p.publish_at)) + '</span>' + (p.send_email ? ' · + email ke member' : '') + '</div></div>' +
       '<div class="cp-actions">' +
         '<button type="button" class="btn-mini" onclick="cpEditTime(\'' + p.id + '\')">Ubah waktu</button>' +
         '<button type="button" class="btn-mini" onclick="cpPublishNow(\'' + p.id + '\')">Posting sekarang</button>' +
@@ -795,6 +797,7 @@ function renderCpIdeas() {
         '<label for="cpX-' + i.id + '">Isi post (tampil persis seperti ini)</label><textarea id="cpX-' + i.id + '">' + escapeHtml(i.content) + '</textarea>' +
         '<div class="cp-editor-foot">' +
           '<div class="cp-sched"><label for="cpW-' + i.id + '">Waktu posting</label><input type="datetime-local" id="cpW-' + i.id + '" value="' + cpToInput(cpNextSlot()) + '"></div>' +
+          '<label class="cp-check"><input type="checkbox" id="cpM-' + i.id + '" checked> Kirim email ke member saat tayang</label>' +
           '<button type="button" class="btn btn-accent-solid" onclick="cpSchedule(\'' + i.id + '\')">Jadwalkan</button>' +
           '<button type="button" class="btn-mini" onclick="cpSaveDraft(\'' + i.id + '\')">Simpan draf</button>' +
           '<button type="button" class="btn-mini" onclick="cpArchive(\'' + i.id + '\')">Arsipkan</button>' +
@@ -834,8 +837,9 @@ async function cpSchedule(id) {
   try {
     var ins = await sbClient.from('community_posts').insert({
       email: currentSession.user.email, author_name: 'Belajar Claude',
-      content: v.content, category: v.category, publish_at: new Date(ms).toISOString()
-    }).select('id,content,category,publish_at').single();
+      content: v.content, category: v.category, publish_at: new Date(ms).toISOString(),
+      send_email: document.getElementById('cpM-' + id).checked
+    }).select('id,content,category,publish_at,send_email').single();
     if (ins.error) throw ins.error;
     v.status = 'scheduled'; v.post_id = ins.data.id;
     await cpUpdateIdea(id, v);
@@ -868,7 +872,7 @@ function cpEditTime(id) {
     '<button type="button" class="btn" onclick="cpSaveTime(\'' + id + '\')">Simpan</button><button type="button" class="btn-mini" onclick="renderCpScheduled()">Batal</button></div>');
 }
 async function cpSetPublishAt(id, iso) {
-  var r = await sbClient.from('community_posts').update({ publish_at: iso }).eq('id', id).select('id,content,category,publish_at').single();
+  var r = await sbClient.from('community_posts').update({ publish_at: iso }).eq('id', id).select('id,content,category,publish_at,send_email').single();
   if (r.error) throw r.error;
   return r.data;
 }

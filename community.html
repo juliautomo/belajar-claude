@@ -377,7 +377,7 @@ async function init(){
 async function _init(){
   var sr = await sbClient.auth.getSession();
   var session = sr.data.session;
-  if (!session) { window.location.href = 'login.html'; return; }
+  if (!session) { window.location.href = 'login.html?next=community.html'; return; }
   currentEmail = session.user.email;
 
   isAdmin = ADMIN_EMAILS.indexOf(currentEmail.toLowerCase()) !== -1;
