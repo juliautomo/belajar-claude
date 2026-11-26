@@ -673,7 +673,7 @@ Tolong bantu saya dengan: outline struktur yang kuat, poin-poin kunci yang perlu
 
   async function init() {
     const { data: { session } } = await sbClient.auth.getSession();
-    if (!session) { window.location.href = 'login.html'; return; }
+    if (!session) { window.location.href = 'login.html?next=' + location.pathname.split('/').pop().replace(/\.html$/, '') + '.html'; return; }
     const email = session.user.email;
 
     // Only grant access if a real 'prompt-gratis' enrollment exists - holding all-access alone
