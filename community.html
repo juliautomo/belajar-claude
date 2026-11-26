@@ -88,6 +88,28 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 .img-preview-remove{position:absolute;top:-8px;right:-8px;width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;border:2px solid var(--surface);cursor:pointer;font-size:13px;line-height:1;display:flex;align-items:center;justify-content:center;}
 .composer-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
 .composer-err{font-size:12px;color:var(--red);}
+/* Admin-only: post now or schedule */
+.sched-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px 14px;padding-top:12px;border-top:1px dashed var(--border);}
+.sched-row[hidden],.sched-panel[hidden]{display:none;}
+.sched-choice{display:inline-flex;background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:3px;}
+.sched-choice button{font-family:var(--font);font-size:12px;font-weight:600;color:var(--ink-2);background:none;border:none;padding:6px 12px;border-radius:7px;cursor:pointer;}
+.sched-choice button.on{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,0.06);}
+.sched-when{font-family:var(--font);font-size:13px;color:var(--ink);border:1.5px solid var(--border);border-radius:9px;padding:6px 10px;background:#fff;}
+.sched-when:focus,.sched-choice button:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+.sched-hint{font-size:12px;color:var(--ink-3);}
+.sched-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;}
+.sched-panel h3{font-family:var(--font);font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 2px;}
+.sched-panel .sched-sub{font-size:12px;color:var(--ink-3);margin:0 0 10px;}
+.sched-item{display:grid;grid-template-columns:118px minmax(0,1fr) auto;gap:6px 14px;align-items:start;padding:12px 0;border-top:1px solid var(--border);}
+.sched-time{font-size:12.5px;font-weight:700;color:var(--accent);line-height:1.4;}
+.sched-time span{display:block;font-weight:500;color:var(--ink-3);}
+.sched-text{font-size:13px;color:var(--ink-2);line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;white-space:pre-line;}
+.sched-actions{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;}
+.sched-actions button{font-family:var(--font);font-size:12px;font-weight:600;color:var(--ink-2);background:none;border:1px solid var(--border);border-radius:7px;padding:5px 9px;cursor:pointer;white-space:nowrap;}
+.sched-actions button:hover{border-color:var(--accent);color:var(--accent);}
+.sched-actions button.danger:hover{border-color:var(--red);color:var(--red);}
+.sched-edit{grid-column:2 / -1;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+@media(max-width:600px){.sched-item{grid-template-columns:1fr;}.sched-actions{justify-content:flex-start;}.sched-edit{grid-column:1;}}
 
 /* TOOLBAR: search + filter */
 .feed-toolbar{display:flex;flex-direction:column;gap:12px;}
@@ -254,8 +276,22 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
         </div>
         <button class="btn-accent" id="postBtn" onclick="submitPost()">Posting →</button>
       </div>
+      <div class="sched-row" id="schedRow" hidden>
+        <div class="sched-choice" role="group" aria-label="Waktu posting">
+          <button type="button" class="on" id="schedNowBtn" onclick="setScheduleMode(false)">Posting sekarang</button>
+          <button type="button" id="schedLaterBtn" onclick="setScheduleMode(true)">Jadwalkan</button>
+        </div>
+        <input type="datetime-local" class="sched-when" id="schedWhen" aria-label="Tanggal dan jam posting" hidden>
+        <span class="sched-hint" id="schedHint" hidden>Muncul otomatis untuk member pada waktu ini (WIB).</span>
+      </div>
       <div class="composer-err" id="postErr" style="display:none;"></div>
     </div>
+
+    <section class="sched-panel" id="schedPanel" hidden aria-label="Post terjadwal">
+      <h3 id="schedTitle">Post terjadwal</h3>
+      <p class="sched-sub">Hanya admin yang melihat ini. Member baru melihat post saat waktunya tiba.</p>
+      <div id="schedList"></div>
+    </section>
 
     <div class="feed-toolbar">
       <div class="toolbar-row">
@@ -287,6 +323,8 @@ var currentEmail = null;
 var currentAuthorName = null;
 var isAdmin = false;
 var posts = [];
+var scheduledPosts = [];
+var scheduleMode = false;
 var likesByPost = {};   // postId -> { count, mine }
 var commentCountByPost = {}; // postId -> count
 var loadedComments = {};     // postId -> [comment rows], only once expanded
@@ -345,6 +383,7 @@ async function _init(){
   isAdmin = ADMIN_EMAILS.indexOf(currentEmail.toLowerCase()) !== -1;
   if (isAdmin) {
     document.getElementById('adminNavItem').style.display = 'flex';
+    document.getElementById('schedRow').hidden = false;
   }
 
   var metaName = (session.user.user_metadata && session.user.user_metadata.full_name) || null;
@@ -497,8 +536,14 @@ async function deleteComment(postId, commentId){
 }
 
 async function loadFeed(){
-  var pr = await sbClient.from('community_posts').select('*').order('created_at', {ascending:false}).limit(100);
-  posts = pr.data || [];
+  var pr = await sbClient.from('community_posts').select('*').order('publish_at', {ascending:false}).limit(100);
+  var all = pr.data || [];
+  var nowMs = Date.now();
+  // Only admins ever receive future posts (database rule); split them out of the feed.
+  scheduledPosts = all.filter(function(p){ return postTime(p) > nowMs; })
+    .sort(function(a, b){ return postTime(a) - postTime(b); });
+  posts = all.filter(function(p){ return postTime(p) <= nowMs; });
+  renderScheduled();
   var postIds = posts.map(function(p){ return p.id; });
   likesByPost = {};
   commentCountByPost = {};
@@ -529,7 +574,7 @@ function updateHeroStats(){
   if (!el) return;
   var total = posts.length >= 100 ? '100+' : posts.length;
   var weekAgo = Date.now() - 7 * 86400 * 1000;
-  var thisWeek = posts.filter(function(p){ return new Date(p.created_at).getTime() >= weekAgo; }).length;
+  var thisWeek = posts.filter(function(p){ return postTime(p) >= weekAgo; }).length;
   el.innerHTML =
     '<span class="stat-pill">💬 <b>' + total + '</b> diskusi</span>' +
     '<span class="stat-pill">🕒 <b>' + thisWeek + '</b> post minggu ini</span>';
@@ -603,7 +648,7 @@ function renderPostCard(p){
         '<div class="post-avatar" style="background:' + getAvatarGradient(p.author_name) + '">' + escapeHtml(getInitials(p.author_name)) + '</div>' +
         '<div class="post-meta">' +
           '<div class="post-author-row"><div class="post-author">' + escapeHtml(p.author_name) + '</div>' + authorBadge + '</div>' +
-          '<div class="post-time">' + timeAgo(p.created_at) + '</div>' +
+          '<div class="post-time">' + timeAgo(p.publish_at || p.created_at) + '</div>' +
         '</div>' +
         catTag +
       '</div>' +
@@ -720,6 +765,17 @@ async function submitPost(){
     errEl.style.display = 'block';
     return;
   }
+  var publishAt = null;
+  if (isAdmin && scheduleMode) {
+    var whenVal = document.getElementById('schedWhen').value;
+    var whenMs = whenVal ? new Date(whenVal).getTime() : NaN;
+    if (!whenVal || isNaN(whenMs) || whenMs <= Date.now() + 60000) {
+      errEl.textContent = 'Pilih tanggal dan jam di masa depan untuk jadwal posting.';
+      errEl.style.display = 'block';
+      return;
+    }
+    publishAt = new Date(whenMs).toISOString();
+  }
   btn.disabled = true;
   var original = btn.textContent;
   try {
@@ -736,9 +792,18 @@ async function submitPost(){
     }
     btn.textContent = 'Mengirim...';
     var row = {email: currentEmail, author_name: currentAuthorName, content: text, category: selectedComposerCat, image_url: imageUrl, image_path: imagePath};
+    if (publishAt) row.publish_at = publishAt;
     var res = await sbClient.from('community_posts').insert(row).select().single();
     if (res.error) throw res.error;
-    posts.unshift(res.data);
+    if (publishAt) {
+      scheduledPosts.push(res.data);
+      scheduledPosts.sort(function(a, b){ return postTime(a) - postTime(b); });
+      renderScheduled();
+      setScheduleMode(false);
+      document.getElementById('schedPanel').scrollIntoView({behavior: 'smooth', block: 'nearest'});
+    } else {
+      posts.unshift(res.data);
+    }
     input.value = '';
     selectedComposerCat = null;
     document.querySelectorAll('#composerCats .cat-opt').forEach(function(b){ b.classList.remove('selected'); });
@@ -752,6 +817,100 @@ async function submitPost(){
     btn.disabled = false;
     btn.textContent = original;
   }
+}
+
+// ── Scheduled posts (admin) ───────────────────────────────
+function postTime(p){ return new Date(p.publish_at || p.created_at).getTime(); }
+
+function toLocalInput(ms){
+  var d = new Date(ms), pad = function(n){ return String(n).padStart(2, '0'); };
+  return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + 'T' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+}
+function defaultScheduleTime(){
+  var d = new Date(); d.setDate(d.getDate() + 1); d.setHours(9, 0, 0, 0); return d.getTime();
+}
+function setScheduleMode(on){
+  scheduleMode = !!on;
+  document.getElementById('schedNowBtn').classList.toggle('on', !scheduleMode);
+  document.getElementById('schedLaterBtn').classList.toggle('on', scheduleMode);
+  var when = document.getElementById('schedWhen');
+  when.hidden = !scheduleMode;
+  document.getElementById('schedHint').hidden = !scheduleMode;
+  if (scheduleMode && !when.value) when.value = toLocalInput(defaultScheduleTime());
+  when.min = toLocalInput(Date.now() + 5 * 60000);
+  document.getElementById('postBtn').textContent = scheduleMode ? 'Jadwalkan →' : 'Posting →';
+}
+function formatSchedule(ms){
+  var d = new Date(ms);
+  return {
+    day: d.toLocaleDateString('id-ID', {weekday: 'short', day: 'numeric', month: 'short'}),
+    time: d.toLocaleTimeString('id-ID', {hour: '2-digit', minute: '2-digit'})
+  };
+}
+function renderScheduled(){
+  var panel = document.getElementById('schedPanel');
+  if (!isAdmin || !scheduledPosts.length) { panel.hidden = true; return; }
+  panel.hidden = false;
+  document.getElementById('schedTitle').textContent = scheduledPosts.length + ' post terjadwal';
+  document.getElementById('schedList').innerHTML = scheduledPosts.map(function(p){
+    var f = formatSchedule(postTime(p));
+    return '<div class="sched-item" id="sched-' + p.id + '">' +
+      '<div class="sched-time">' + escapeHtml(f.day) + '<span>' + escapeHtml(f.time) + ' WIB</span></div>' +
+      '<div class="sched-text">' + (p.category ? '<b>' + escapeHtml(p.category) + ' · </b>' : '') + escapeHtml(p.content) + '</div>' +
+      '<div class="sched-actions">' +
+        '<button type="button" onclick="editSchedule(\'' + p.id + '\')">Ubah waktu</button>' +
+        '<button type="button" onclick="publishNow(\'' + p.id + '\')">Posting sekarang</button>' +
+        '<button type="button" class="danger" onclick="deleteScheduled(\'' + p.id + '\')">Hapus</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+function editSchedule(id){
+  var p = scheduledPosts.find(function(x){ return x.id === id; }); if (!p) return;
+  var row = document.getElementById('sched-' + id);
+  if (row.querySelector('.sched-edit')) return;
+  row.insertAdjacentHTML('beforeend',
+    '<div class="sched-edit"><input type="datetime-local" class="sched-when" id="edit-' + id + '" value="' + toLocalInput(postTime(p)) + '" min="' + toLocalInput(Date.now() + 5 * 60000) + '">' +
+    '<button type="button" class="btn-accent" onclick="saveSchedule(\'' + id + '\')">Simpan</button>' +
+    '<button type="button" class="sort-opt" onclick="renderScheduled()">Batal</button></div>');
+}
+async function updatePublishAt(id, iso){
+  var r = await sbClient.from('community_posts').update({publish_at: iso}).eq('id', id).select().single();
+  if (r.error) throw r.error;
+  return r.data;
+}
+async function saveSchedule(id){
+  var v = document.getElementById('edit-' + id).value;
+  var ms = v ? new Date(v).getTime() : NaN;
+  if (isNaN(ms) || ms <= Date.now() + 60000) { alertBox('Pilih waktu di masa depan.'); return; }
+  try {
+    var updated = await updatePublishAt(id, new Date(ms).toISOString());
+    scheduledPosts = scheduledPosts.map(function(x){ return x.id === id ? updated : x; })
+      .sort(function(a, b){ return postTime(a) - postTime(b); });
+    renderScheduled();
+  } catch(e) { console.error(e); alertBox('Gagal mengubah jadwal: ' + (e.message || 'coba lagi')); }
+}
+async function publishNow(id){
+  try {
+    var updated = await updatePublishAt(id, new Date().toISOString());
+    scheduledPosts = scheduledPosts.filter(function(x){ return x.id !== id; });
+    posts.unshift(updated);
+    renderScheduled(); renderFeed(); updateHeroStats();
+  } catch(e) { console.error(e); alertBox('Gagal memposting: ' + (e.message || 'coba lagi')); }
+}
+async function deleteScheduled(id){
+  if (!confirm('Hapus post terjadwal ini?')) return;
+  var r = await sbClient.from('community_posts').delete().eq('id', id);
+  if (r.error) { alertBox('Gagal menghapus: ' + r.error.message); return; }
+  var gone = scheduledPosts.find(function(x){ return x.id === id; });
+  if (gone && gone.image_path) { try { await sbClient.storage.from('community-images').remove([gone.image_path]); } catch (e) {} }
+  scheduledPosts = scheduledPosts.filter(function(x){ return x.id !== id; });
+  renderScheduled();
+}
+function alertBox(msg){
+  var errEl = document.getElementById('postErr');
+  errEl.textContent = msg; errEl.style.display = 'block';
+  errEl.scrollIntoView({behavior: 'smooth', block: 'nearest'});
 }
 
 init();
