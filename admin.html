@@ -74,6 +74,37 @@ select, input[type="file"], input[type="text"], input[type="number"], input[type
   width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 10px;
   font-size: 13.5px; color: var(--ink); font-family: inherit; background: #fff;
 }
+/* ── Community posts panel ── */
+.cp-list { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.cp-row { padding: 14px 16px; border-top: 1px solid var(--border); background: #fff; }
+.cp-row:first-child { border-top: 0; }
+.cp-row-head { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px 14px; align-items: start; }
+.cp-title { font-size: 14px; font-weight: 700; color: var(--ink); line-height: 1.4; }
+.cp-meta { font-size: 12px; color: var(--ink-2); margin-top: 3px; }
+.cp-when { font-weight: 700; color: var(--accent); }
+.cp-cat { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 100px; background: var(--surface-2); color: var(--ink-2); margin-right: 6px; }
+.cp-cat.Diskusi { background: var(--accent-dim); color: var(--accent); }
+.cp-cat.Pertanyaan { background: rgba(217,119,6,0.10); color: #B45309; }
+.cp-cat.Showcase { background: rgba(13,148,136,0.10); color: #0F766E; }
+.cp-excerpt { font-size: 12.5px; color: var(--ink-2); margin-top: 6px; line-height: 1.5; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.cp-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.cp-editor { margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--border); }
+.cp-editor textarea { width: 100%; min-height: 220px; padding: 12px; border: 1.5px solid var(--border); border-radius: 10px; font: 13.5px/1.6 var(--font); color: var(--ink); resize: vertical; }
+.cp-editor textarea:focus, .cp-editor input:focus, .cp-editor select:focus { outline: none; border-color: var(--accent); }
+.cp-editor-grid { display: grid; grid-template-columns: minmax(0,1fr) 160px; gap: 12px; }
+.cp-editor-foot { display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.cp-editor-foot .cp-sched { flex: 1 1 220px; }
+.cp-editor-foot .btn { margin-top: 0; }
+.btn.btn-accent-solid { background: var(--accent); }
+.btn.btn-accent-solid:hover:not(:disabled) { background: #5A36F0; }
+.cp-editor-foot .btn-mini { min-height: 40px; }
+.cp-editor > label { margin-top: 14px; }
+.cp-empty { padding: 18px 16px; font-size: 13px; color: var(--ink-2); background: #fff; }
+.cp-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.cp-toolbar h2 { margin-bottom: 0; }
+.btn-link { background: none; border: none; color: var(--accent); font: 600 12.5px var(--font); cursor: pointer; padding: 4px 0; }
+.btn-mini:focus-visible, .btn-link:focus-visible, .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (max-width: 600px) { .cp-row-head, .cp-editor-grid { grid-template-columns: 1fr; } .cp-actions { justify-content: flex-start; } }
 .price-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
 .price-row label { margin-top: 0; }
 @media (max-width: 480px) { .price-row { grid-template-columns: 1fr; } }
@@ -216,6 +247,7 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
     <a class="sidebar-link active" data-panel="pricing" onclick="switchPanel('pricing');return false;"><span class="ic">💰</span> Pricing</a>
     <a class="sidebar-link" data-panel="content" onclick="switchPanel('content');return false;"><span class="ic">🎓</span> Course Content</a>
     <a class="sidebar-link" data-panel="users" onclick="switchPanel('users');return false;"><span class="ic">👥</span> Users</a>
+    <a class="sidebar-link" data-panel="community" onclick="switchPanel('community');return false;"><span class="ic">💬</span> Community Posts</a>
     <a class="sidebar-link" data-panel="social" onclick="switchPanel('social');return false;"><span class="ic">🔗</span> Social Media Links</a>
     <a class="sidebar-link" data-panel="access" onclick="switchPanel('access');return false;"><span class="ic">🔐</span> Who Has Access</a>
   </div>
@@ -351,6 +383,33 @@ table.matrix-table th { color: var(--ink-2); font-weight: 600; font-size: 11.5px
         </div>
         <div id="usersList"></div>
         <p class="hint" id="usersEmpty" style="display:none;margin-bottom:0;">Belum ada user.</p>
+      </div>
+    </div>
+
+    <!-- Panel: Community Posts -->
+    <div class="panel" id="panel-community">
+      <h1 class="page-title">Community Posts</h1>
+      <p class="page-sub">Kerjakan ide post, lalu jadwalkan. Post muncul otomatis di halaman Komunitas pada waktunya, atas nama "Belajar Claude".</p>
+
+      <div class="card">
+        <div class="cp-toolbar">
+          <h2 id="cpSchedTitle">Terjadwal</h2>
+          <a class="btn-link" href="community.html" target="_blank" rel="noopener">Buka halaman Komunitas</a>
+        </div>
+        <div class="cp-list" id="cpScheduled"><div class="cp-empty">Memuat...</div></div>
+        <div class="status" id="cpStatus"></div>
+      </div>
+
+      <div class="card">
+        <div class="cp-toolbar">
+          <h2 id="cpIdeasTitle">Ide post</h2>
+          <div style="display:flex;gap:12px;align-items:center;">
+            <button type="button" class="btn-link" id="cpArchiveToggle" onclick="toggleCpArchive()">Lihat arsip</button>
+            <button type="button" class="btn-mini" onclick="newCpIdea()">+ Ide baru</button>
+          </div>
+        </div>
+        <p class="hint">Klik "Kerjakan" untuk mengedit teks, pilih waktu, lalu "Jadwalkan". Ide yang sudah dijadwalkan pindah ke daftar di atas.</p>
+        <div class="cp-list" id="cpIdeas"><div class="cp-empty">Memuat...</div></div>
       </div>
     </div>
 
@@ -632,6 +691,7 @@ function switchPanel(panel) {
   var linkEl = document.querySelector('.sidebar-link[data-panel="' + panel + '"]');
   if (panelEl) panelEl.classList.add('active');
   if (linkEl) linkEl.classList.add('active');
+  if (panel === 'community') loadCommunityAdmin();
 }
 
 function courseName(slug) {
@@ -643,6 +703,204 @@ function escapeHtml(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
     return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
   });
+}
+
+// ─── COMMUNITY POSTS (ideas → scheduled posts) ───────────────────────────────
+var cpIdeas = [], cpScheduled = [], cpOpen = null, cpShowArchive = false;
+var CP_CATS = ['Diskusi', 'Pertanyaan', 'Showcase'];
+
+function cpPad(n) { return String(n).padStart(2, '0'); }
+function cpToInput(ms) { var d = new Date(ms); return d.getFullYear() + '-' + cpPad(d.getMonth() + 1) + '-' + cpPad(d.getDate()) + 'T' + cpPad(d.getHours()) + ':' + cpPad(d.getMinutes()); }
+function cpWhen(iso) {
+  var d = new Date(iso);
+  return d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long' }) + ', ' + d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+}
+// Next Monday or Thursday 09:00 that doesn't already have a post scheduled.
+function cpNextSlot() {
+  var taken = {};
+  cpScheduled.forEach(function (p) { var d = new Date(p.publish_at); taken[d.toDateString()] = true; });
+  var d = new Date(); d.setHours(9, 0, 0, 0);
+  for (var i = 0; i < 60; i++) {
+    d.setDate(d.getDate() + (i === 0 && new Date().getHours() < 8 ? 0 : 1));
+    var wd = d.getDay();
+    if ((wd === 1 || wd === 4) && !taken[d.toDateString()] && d.getTime() > Date.now()) return d.getTime();
+  }
+  var f = new Date(); f.setDate(f.getDate() + 1); f.setHours(9, 0, 0, 0); return f.getTime();
+}
+
+async function loadCommunityAdmin() {
+  try {
+    var res = await Promise.all([
+      sbClient.from('community_post_ideas').select('*').order('sort_order').order('created_at'),
+      sbClient.from('community_posts').select('id,content,category,publish_at').gt('publish_at', new Date().toISOString()).order('publish_at')
+    ]);
+    if (res[0].error) throw res[0].error;
+    if (res[1].error) throw res[1].error;
+    cpIdeas = res[0].data || [];
+    cpScheduled = res[1].data || [];
+    renderCpScheduled(); renderCpIdeas();
+  } catch (e) {
+    console.error(e);
+    setStatus('cpStatus', 'Gagal memuat data komunitas: ' + (e.message || e), 'error');
+  }
+}
+
+function cpTitleFor(post) {
+  var idea = cpIdeas.find(function (i) { return i.post_id === post.id; });
+  if (idea) return idea.title;
+  var first = String(post.content || '').split('\n').find(function (l) { return l.trim(); }) || '';
+  return first.length > 70 ? first.slice(0, 70) + '…' : first;
+}
+
+function renderCpScheduled() {
+  document.getElementById('cpSchedTitle').textContent = cpScheduled.length ? cpScheduled.length + ' post terjadwal' : 'Terjadwal';
+  var el = document.getElementById('cpScheduled');
+  if (!cpScheduled.length) { el.innerHTML = '<div class="cp-empty">Belum ada post terjadwal. Pilih ide di bawah untuk dijadwalkan.</div>'; return; }
+  el.innerHTML = cpScheduled.map(function (p) {
+    return '<div class="cp-row" id="cps-' + p.id + '"><div class="cp-row-head"><div>' +
+      '<div class="cp-title">' + escapeHtml(cpTitleFor(p)) + '</div>' +
+      '<div class="cp-meta">' + (p.category ? '<span class="cp-cat ' + escapeHtml(p.category) + '">' + escapeHtml(p.category) + '</span>' : '') +
+      '<span class="cp-when">' + escapeHtml(cpWhen(p.publish_at)) + '</span></div></div>' +
+      '<div class="cp-actions">' +
+        '<button type="button" class="btn-mini" onclick="cpEditTime(\'' + p.id + '\')">Ubah waktu</button>' +
+        '<button type="button" class="btn-mini" onclick="cpPublishNow(\'' + p.id + '\')">Posting sekarang</button>' +
+        '<button type="button" class="btn-mini" onclick="cpUnschedule(\'' + p.id + '\')">Batalkan</button>' +
+      '</div></div></div>';
+  }).join('');
+}
+
+function renderCpIdeas() {
+  var list = cpIdeas.filter(function (i) { return cpShowArchive ? (i.status === 'archived' || i.status === 'posted') : i.status === 'idea'; });
+  var open = cpIdeas.filter(function (i) { return i.status === 'idea'; }).length;
+  document.getElementById('cpIdeasTitle').textContent = cpShowArchive ? 'Arsip ide' : (open + ' ide post');
+  document.getElementById('cpArchiveToggle').textContent = cpShowArchive ? 'Kembali ke ide' : 'Lihat arsip';
+  var el = document.getElementById('cpIdeas');
+  if (!list.length) { el.innerHTML = '<div class="cp-empty">' + (cpShowArchive ? 'Arsip kosong.' : 'Belum ada ide. Klik "+ Ide baru".') + '</div>'; return; }
+  el.innerHTML = list.map(function (i) {
+    var isOpen = cpOpen === i.id;
+    var head = '<div class="cp-row-head"><div>' +
+      '<div class="cp-title">' + escapeHtml(i.title || 'Ide tanpa judul') + '</div>' +
+      '<div class="cp-meta">' + (i.category ? '<span class="cp-cat ' + escapeHtml(i.category) + '">' + escapeHtml(i.category) + '</span>' : '') + (i.status === 'archived' ? 'Diarsipkan' : i.status === 'posted' ? 'Sudah diposting' : '') + '</div>' +
+      (isOpen ? '' : '<div class="cp-excerpt">' + escapeHtml(String(i.content || '').replace(/\s+/g, ' ').trim()) + '</div>') +
+      '</div><div class="cp-actions">' +
+      (cpShowArchive
+        ? '<button type="button" class="btn-mini" onclick="cpRestore(\'' + i.id + '\')">Kembalikan</button>'
+        : '<button type="button" class="btn-mini" onclick="cpToggle(\'' + i.id + '\')">' + (isOpen ? 'Tutup' : 'Kerjakan') + '</button>') +
+      '</div></div>';
+    var editor = isOpen ? (
+      '<div class="cp-editor">' +
+        '<div class="cp-editor-grid"><div><label for="cpT-' + i.id + '">Judul (hanya untuk admin)</label><input type="text" id="cpT-' + i.id + '" value="' + escapeHtml(i.title) + '"></div>' +
+        '<div><label for="cpC-' + i.id + '">Kategori</label><select id="cpC-' + i.id + '"><option value="">Tanpa kategori</option>' +
+          CP_CATS.map(function (c) { return '<option' + (c === i.category ? ' selected' : '') + '>' + c + '</option>'; }).join('') + '</select></div></div>' +
+        '<label for="cpX-' + i.id + '">Isi post (tampil persis seperti ini)</label><textarea id="cpX-' + i.id + '">' + escapeHtml(i.content) + '</textarea>' +
+        '<div class="cp-editor-foot">' +
+          '<div class="cp-sched"><label for="cpW-' + i.id + '">Waktu posting</label><input type="datetime-local" id="cpW-' + i.id + '" value="' + cpToInput(cpNextSlot()) + '"></div>' +
+          '<button type="button" class="btn btn-accent-solid" onclick="cpSchedule(\'' + i.id + '\')">Jadwalkan</button>' +
+          '<button type="button" class="btn-mini" onclick="cpSaveDraft(\'' + i.id + '\')">Simpan draf</button>' +
+          '<button type="button" class="btn-mini" onclick="cpArchive(\'' + i.id + '\')">Arsipkan</button>' +
+        '</div>' +
+      '</div>') : '';
+    return '<div class="cp-row" id="cpi-' + i.id + '">' + head + editor + '</div>';
+  }).join('');
+}
+
+function cpToggle(id) { cpOpen = cpOpen === id ? null : id; renderCpIdeas(); if (cpOpen) { var t = document.getElementById('cpX-' + id); if (t) t.focus(); } }
+function toggleCpArchive() { cpShowArchive = !cpShowArchive; cpOpen = null; renderCpIdeas(); }
+
+function cpReadEditor(id) {
+  return {
+    title: document.getElementById('cpT-' + id).value.trim() || 'Ide tanpa judul',
+    category: document.getElementById('cpC-' + id).value || null,
+    content: document.getElementById('cpX-' + id).value.trim()
+  };
+}
+async function cpUpdateIdea(id, patch) {
+  patch.updated_at = new Date().toISOString();
+  var r = await sbClient.from('community_post_ideas').update(patch).eq('id', id).select().single();
+  if (r.error) throw r.error;
+  cpIdeas = cpIdeas.map(function (x) { return x.id === id ? r.data : x; });
+  return r.data;
+}
+async function cpSaveDraft(id) {
+  try { await cpUpdateIdea(id, cpReadEditor(id)); setStatus('cpStatus', 'Draf disimpan.', 'success'); }
+  catch (e) { setStatus('cpStatus', 'Gagal menyimpan: ' + (e.message || e), 'error'); }
+}
+async function cpSchedule(id) {
+  var v = cpReadEditor(id);
+  var when = document.getElementById('cpW-' + id).value;
+  var ms = when ? new Date(when).getTime() : NaN;
+  if (!v.content) { setStatus('cpStatus', 'Isi post masih kosong.', 'error'); return; }
+  if (isNaN(ms) || ms < Date.now() + 60000) { setStatus('cpStatus', 'Pilih waktu di masa depan.', 'error'); return; }
+  try {
+    var ins = await sbClient.from('community_posts').insert({
+      email: currentSession.user.email, author_name: 'Belajar Claude',
+      content: v.content, category: v.category, publish_at: new Date(ms).toISOString()
+    }).select('id,content,category,publish_at').single();
+    if (ins.error) throw ins.error;
+    v.status = 'scheduled'; v.post_id = ins.data.id;
+    await cpUpdateIdea(id, v);
+    cpScheduled.push(ins.data);
+    cpScheduled.sort(function (a, b) { return new Date(a.publish_at) - new Date(b.publish_at); });
+    cpOpen = null;
+    renderCpScheduled(); renderCpIdeas();
+    setStatus('cpStatus', 'Dijadwalkan: ' + cpWhen(ins.data.publish_at) + '.', 'success');
+  } catch (e) { setStatus('cpStatus', 'Gagal menjadwalkan: ' + (e.message || e), 'error'); }
+}
+async function cpArchive(id) {
+  try { await cpUpdateIdea(id, { status: 'archived' }); cpOpen = null; renderCpIdeas(); }
+  catch (e) { setStatus('cpStatus', 'Gagal mengarsipkan: ' + (e.message || e), 'error'); }
+}
+async function cpRestore(id) {
+  try { await cpUpdateIdea(id, { status: 'idea', post_id: null }); renderCpIdeas(); }
+  catch (e) { setStatus('cpStatus', 'Gagal: ' + (e.message || e), 'error'); }
+}
+async function newCpIdea() {
+  var r = await sbClient.from('community_post_ideas').insert({ title: 'Ide baru', category: 'Diskusi', content: '', sort_order: 999 }).select().single();
+  if (r.error) { setStatus('cpStatus', 'Gagal menambah ide: ' + r.error.message, 'error'); return; }
+  cpIdeas.push(r.data); cpShowArchive = false; cpOpen = r.data.id; renderCpIdeas();
+  var t = document.getElementById('cpT-' + r.data.id); if (t) { t.focus(); t.select(); }
+}
+function cpEditTime(id) {
+  var p = cpScheduled.find(function (x) { return x.id === id; }); if (!p) return;
+  var row = document.getElementById('cps-' + id);
+  if (row.querySelector('.cp-editor')) return;
+  row.insertAdjacentHTML('beforeend', '<div class="cp-editor cp-editor-foot" style="margin-top:12px;"><div class="cp-sched"><label for="cpE-' + id + '">Waktu baru</label><input type="datetime-local" id="cpE-' + id + '" value="' + cpToInput(new Date(p.publish_at).getTime()) + '"></div>' +
+    '<button type="button" class="btn" onclick="cpSaveTime(\'' + id + '\')">Simpan</button><button type="button" class="btn-mini" onclick="renderCpScheduled()">Batal</button></div>');
+}
+async function cpSetPublishAt(id, iso) {
+  var r = await sbClient.from('community_posts').update({ publish_at: iso }).eq('id', id).select('id,content,category,publish_at').single();
+  if (r.error) throw r.error;
+  return r.data;
+}
+async function cpSaveTime(id) {
+  var v = document.getElementById('cpE-' + id).value; var ms = v ? new Date(v).getTime() : NaN;
+  if (isNaN(ms) || ms < Date.now() + 60000) { setStatus('cpStatus', 'Pilih waktu di masa depan.', 'error'); return; }
+  try {
+    var u = await cpSetPublishAt(id, new Date(ms).toISOString());
+    cpScheduled = cpScheduled.map(function (x) { return x.id === id ? u : x; }).sort(function (a, b) { return new Date(a.publish_at) - new Date(b.publish_at); });
+    renderCpScheduled(); setStatus('cpStatus', 'Jadwal diubah: ' + cpWhen(u.publish_at) + '.', 'success');
+  } catch (e) { setStatus('cpStatus', 'Gagal mengubah jadwal: ' + (e.message || e), 'error'); }
+}
+async function cpPublishNow(id) {
+  try {
+    await cpSetPublishAt(id, new Date().toISOString());
+    cpScheduled = cpScheduled.filter(function (x) { return x.id !== id; });
+    var idea = cpIdeas.find(function (i) { return i.post_id === id; });
+    if (idea) await cpUpdateIdea(idea.id, { status: 'posted' });
+    renderCpScheduled(); renderCpIdeas(); setStatus('cpStatus', 'Sudah tampil di Komunitas.', 'success');
+  } catch (e) { setStatus('cpStatus', 'Gagal memposting: ' + (e.message || e), 'error'); }
+}
+// Cancel a scheduled post: removes it from the community and puts its idea back in the list.
+async function cpUnschedule(id) {
+  if (!confirm('Batalkan post terjadwal ini? Teksnya kembali ke daftar ide.')) return;
+  try {
+    var d = await sbClient.from('community_posts').delete().eq('id', id);
+    if (d.error) throw d.error;
+    cpScheduled = cpScheduled.filter(function (x) { return x.id !== id; });
+    var idea = cpIdeas.find(function (i) { return i.post_id === id; });
+    if (idea) await cpUpdateIdea(idea.id, { status: 'idea', post_id: null });
+    renderCpScheduled(); renderCpIdeas();
+  } catch (e) { setStatus('cpStatus', 'Gagal membatalkan: ' + (e.message || e), 'error'); }
 }
 
 function setStatus(id, text, kind) {
