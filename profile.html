@@ -79,7 +79,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 .save-msg.show{opacity:1;}
 .onboard-banner{display:flex;align-items:center;gap:10px;background:var(--accent-dim);border:1px solid rgba(108,71,255,0.2);border-radius:12px;padding:14px 18px;font-size:13px;color:var(--ink);line-height:1.4;}
 
-@media(max-width:900px){.sidebar{display:none;}.main{padding:24px 20px;}}
+@media(max-width:900px){.layout{grid-template-columns:1fr;}.sidebar{display:none;}.main{padding:24px 20px;min-width:0;}}
+
+/* Komunitas: unread badge (sidebar + phone nav link) */
+.nb-count{margin-left:auto;min-width:20px;height:20px;padding:0 6px;border-radius:100px;background:var(--accent);color:#fff;font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;line-height:1;}
+.nb-count[hidden]{display:none;}
+.nav-community{display:none;align-items:center;gap:6px;text-decoration:none;}
+.nav-community .nb-count{margin-left:0;}
+@media(max-width:900px){.nav-community{display:inline-flex;}}
+.nav-right .btn-nav{white-space:nowrap;}
+@media(max-width:600px){.nav-right{gap:8px;}.nav-right a.btn-nav[href="index.html"]{display:none;}}
+.nav-community:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
 </style>
 </head>
 <body>
@@ -87,6 +97,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 <nav>
   <a class="brand" href="index.html">belajar<span>claude</span></a>
   <div class="nav-right">
+    <a href="community.html" class="btn-nav nav-community">Komunitas<span class="nb-count" data-community-badge hidden></span></a>
     <a href="index.html" class="btn-nav" style="text-decoration:none;">← Beranda</a>
     <button class="btn-nav" onclick="logout()">Keluar</button>
   </div>
@@ -112,7 +123,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
         <span class="ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>Dashboard
       </a>
       <a class="nav-item" href="community.html">
-        <span class="ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 8.5c0 3-2.5 5.5-5.5 6.5C8.5 14 6 11.5 6 8.5a5.5 5.5 0 0 1 11 0z"/><path d="M3 21c1-3 4-5 8.5-5s7.5 2 8.5 5"/></svg></span>Komunitas
+        <span class="ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 8.5c0 3-2.5 5.5-5.5 6.5C8.5 14 6 11.5 6 8.5a5.5 5.5 0 0 1 11 0z"/><path d="M3 21c1-3 4-5 8.5-5s7.5 2 8.5 5"/></svg></span>Komunitas<span class="nb-count" data-community-badge hidden></span>
       </a>
       <div class="nav-item active">
         <span class="ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>Profil
@@ -199,6 +210,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 <!-- Moved here from <head> (perf): these were blocking first paint on every load. -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
+<script src="community-badge.js"></script>
 <script>
 let currentEmail = null;
 let answers = { role: null, goal: null, experience: null };
