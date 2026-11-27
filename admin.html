@@ -771,10 +771,18 @@ function renderCpScheduled() {
   }).join('');
 }
 
+// The stored status can lag behind reality: a scheduled post goes live on its own
+// (→ posted), and a post deleted from the community page leaves post_id empty
+// (→ back to idea). Work out the real state for display.
+function cpStatusOf(i) {
+  if (i.status !== 'scheduled') return i.status;
+  if (!i.post_id) return 'idea';
+  return cpScheduled.some(function (p) { return p.id === i.post_id; }) ? 'scheduled' : 'posted';
+}
 function renderCpIdeas() {
-  var list = cpIdeas.filter(function (i) { return cpShowArchive ? (i.status === 'archived' || i.status === 'posted') : i.status === 'idea'; });
-  var open = cpIdeas.filter(function (i) { return i.status === 'idea'; }).length;
-  document.getElementById('cpIdeasTitle').textContent = cpShowArchive ? 'Arsip ide' : (open + ' ide post');
+  var list = cpIdeas.filter(function (i) { var st = cpStatusOf(i); return cpShowArchive ? (st === 'archived' || st === 'posted') : st === 'idea'; });
+  var open = cpIdeas.filter(function (i) { return cpStatusOf(i) === 'idea'; }).length;
+  document.getElementById('cpIdeasTitle').textContent = cpShowArchive ? 'Arsip & sudah tayang' : (open + ' ide post');
   document.getElementById('cpArchiveToggle').textContent = cpShowArchive ? 'Kembali ke ide' : 'Lihat arsip';
   var el = document.getElementById('cpIdeas');
   if (!list.length) { el.innerHTML = '<div class="cp-empty">' + (cpShowArchive ? 'Arsip kosong.' : 'Belum ada ide. Klik "+ Ide baru".') + '</div>'; return; }
@@ -782,7 +790,7 @@ function renderCpIdeas() {
     var isOpen = cpOpen === i.id;
     var head = '<div class="cp-row-head"><div>' +
       '<div class="cp-title">' + escapeHtml(i.title || 'Ide tanpa judul') + '</div>' +
-      '<div class="cp-meta">' + (i.category ? '<span class="cp-cat ' + escapeHtml(i.category) + '">' + escapeHtml(i.category) + '</span>' : '') + (i.status === 'archived' ? 'Diarsipkan' : i.status === 'posted' ? 'Sudah diposting' : '') + '</div>' +
+      '<div class="cp-meta">' + (i.category ? '<span class="cp-cat ' + escapeHtml(i.category) + '">' + escapeHtml(i.category) + '</span>' : '') + (cpStatusOf(i) === 'archived' ? 'Diarsipkan' : cpStatusOf(i) === 'posted' ? 'Sudah tayang' : '') + '</div>' +
       (isOpen ? '' : '<div class="cp-excerpt">' + escapeHtml(String(i.content || '').replace(/\s+/g, ' ').trim()) + '</div>') +
       '</div><div class="cp-actions">' +
       (cpShowArchive
