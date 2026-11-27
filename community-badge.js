@@ -1,7 +1,6 @@
-// "N baru" badge for the Komunitas link, and an optional banner.
+// "N baru" badge for the Komunitas link.
 // Include after supabase-config.js on member pages (dashboard, profile).
-// Marks: any element with data-community-badge gets the count (hidden at 0);
-// #communityNewBanner (optional) is shown with the count.
+// Any element with data-community-badge gets the count (hidden at 0).
 // "New" = published after the member last opened community.html (table
 // community_seen), excluding their own posts. First visit: last 14 days.
 (function () {
@@ -20,12 +19,6 @@
         el.hidden = n === 0;
         el.setAttribute('aria-label', n + ' post baru');
       });
-      var banner = document.getElementById('communityNewBanner');
-      if (banner && n > 0) {
-        var t = banner.querySelector('[data-community-count-text]');
-        if (t) t.textContent = n === 1 ? '1 post baru di Komunitas' : n + ' post baru di Komunitas';
-        banner.hidden = false;
-      }
     } catch (e) { /* a badge is never worth breaking the page */ }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
