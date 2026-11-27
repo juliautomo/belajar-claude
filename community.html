@@ -142,6 +142,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 .post-time{font-size:11.5px;color:var(--ink-3);}
 .admin-badge{display:inline-flex;align-items:center;gap:3px;font-size:9.5px;font-weight:700;letter-spacing:0.02em;color:#fff;background:var(--ink);padding:2px 7px 2px 6px;border-radius:100px;white-space:nowrap;}
 .admin-badge svg{width:9px;height:9px;}
+.new-tag{font-size:10.5px;font-weight:700;color:#fff;background:var(--accent);padding:3px 9px;border-radius:100px;white-space:nowrap;}
 .post-cat-tag{font-size:10.5px;font-weight:600;padding:3px 10px;border-radius:100px;white-space:nowrap;}
 .post-cat-tag.diskusi{color:var(--accent);background:var(--accent-dim);}
 .post-cat-tag.pertanyaan{color:var(--amber);background:var(--amber-dim);}
@@ -324,6 +325,7 @@ var currentAuthorName = null;
 var isAdmin = false;
 var posts = [];
 var scheduledPosts = [];
+var prevSeenMs = null; // when this member last opened the community (for "Baru" tags)
 var scheduleMode = false;
 var likesByPost = {};   // postId -> { count, mine }
 var commentCountByPost = {}; // postId -> count
@@ -536,6 +538,14 @@ async function deleteComment(postId, commentId){
 }
 
 async function loadFeed(){
+  if (prevSeenMs === null) {
+    // Read the previous visit once, then record this visit (community_seen).
+    try {
+      var seen = await sbClient.from('community_seen').select('seen_at').eq('email', currentEmail).maybeSingle();
+      prevSeenMs = seen.data && seen.data.seen_at ? new Date(seen.data.seen_at).getTime() : Date.now() - 14 * 864e5;
+      sbClient.from('community_seen').upsert({ email: currentEmail, seen_at: new Date().toISOString() }, { onConflict: 'email' }).then(function(){});
+    } catch (e) { prevSeenMs = Date.now(); }
+  }
   var pr = await sbClient.from('community_posts').select('*').order('publish_at', {ascending:false}).limit(100);
   var all = pr.data || [];
   var nowMs = Date.now();
@@ -647,7 +657,8 @@ function renderPostCard(p){
       '<div class="post-head">' +
         '<div class="post-avatar" style="background:' + getAvatarGradient(p.author_name) + '">' + escapeHtml(getInitials(p.author_name)) + '</div>' +
         '<div class="post-meta">' +
-          '<div class="post-author-row"><div class="post-author">' + escapeHtml(p.author_name) + '</div>' + authorBadge + '</div>' +
+          '<div class="post-author-row"><div class="post-author">' + escapeHtml(p.author_name) + '</div>' + authorBadge +
+            ((prevSeenMs && postTime(p) > prevSeenMs && p.email !== currentEmail) ? '<span class="new-tag">Baru</span>' : '') + '</div>' +
           '<div class="post-time">' + timeAgo(p.publish_at || p.created_at) + '</div>' +
         '</div>' +
         catTag +
