@@ -75,6 +75,24 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
 .form-footer{display:flex;align-items:center;gap:14px;}
 .save-msg{font-size:13px;font-weight:600;color:var(--green);opacity:0;transition:opacity 0.2s;}
 .save-msg.show{opacity:1;}
+.pw-wrap{position:relative;}
+.pw-wrap .field-input{width:100%;padding-right:44px;}
+.pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:34px;height:34px;border:none;background:transparent;color:var(--ink-3);border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.pw-toggle:hover{color:var(--ink-2);background:var(--surface-2);}
+.pw-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:1px;}
+.pw-toggle svg{width:18px;height:18px;}
+.pw-toggle .icon-eye-off{display:none;}
+.pw-toggle.showing .icon-eye{display:none;}
+.pw-toggle.showing .icon-eye-off{display:block;}
+.card-title{font-size:15px;font-weight:700;color:var(--ink);margin:0 0 4px;}
+.card-sub{font-size:13px;color:var(--ink-2);margin:0;line-height:1.5;}
+.pw-msg{font-size:13px;line-height:1.5;padding:10px 12px;border-radius:9px;}
+.pw-msg[hidden]{display:none;}
+.pw-msg.ok{background:var(--green-dim, rgba(22,163,74,0.08));color:#14532D;}
+.pw-msg.err{background:rgba(220,38,38,0.08);color:#7F1D1D;}
+#pwBtn{white-space:nowrap;}
+.link-btn{background:none;border:none;padding:0;font:600 13px var(--font);color:var(--accent);cursor:pointer;}
+.link-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
 .onboard-banner{display:flex;align-items:center;gap:10px;background:var(--accent-dim);border:1px solid rgba(108,71,255,0.2);border-radius:12px;padding:14px 18px;font-size:13px;color:var(--ink);line-height:1.4;}
 
 @media(max-width:900px){.layout{grid-template-columns:1fr;}.sidebar{display:none;}.main{padding:24px 20px;min-width:0;}}
@@ -202,6 +220,45 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:
         <span class="save-msg" id="saveMsg">Tersimpan!</span>
       </div>
     </div>
+
+    <!-- Change password (hidden during onboarding) -->
+    <div class="form-card" id="pwCard">
+      <div>
+        <h2 class="card-title">Ganti password</h2>
+        <p class="card-sub">Masukkan password kamu sekarang, lalu password baru.</p>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="pwCurrent">Password sekarang</label>
+        <div class="pw-wrap">
+          <input class="field-input" id="pwCurrent" type="password" autocomplete="current-password" placeholder="Password kamu saat ini">
+          <button type="button" class="pw-toggle" data-target="pwCurrent" aria-label="Tampilkan password"><svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg><svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><path d="M6.1 6.1C3.51 7.86 1 12 1 12s4 8 11 8a9.26 9.26 0 0 0 5.9-2.1"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="pwNew">Password baru</label>
+        <div class="pw-wrap">
+          <input class="field-input" id="pwNew" type="password" autocomplete="new-password" placeholder="Minimal 6 karakter">
+          <button type="button" class="pw-toggle" data-target="pwNew" aria-label="Tampilkan password"><svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg><svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><path d="M6.1 6.1C3.51 7.86 1 12 1 12s4 8 11 8a9.26 9.26 0 0 0 5.9-2.1"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="pwConfirm">Ulangi password baru</label>
+        <div class="pw-wrap">
+          <input class="field-input" id="pwConfirm" type="password" autocomplete="new-password" placeholder="Ketik ulang password baru">
+          <button type="button" class="pw-toggle" data-target="pwConfirm" aria-label="Tampilkan password"><svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg><svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><path d="M6.1 6.1C3.51 7.86 1 12 1 12s4 8 11 8a9.26 9.26 0 0 0 5.9-2.1"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
+        </div>
+      </div>
+      <div class="field-group" id="pwCodeGroup" style="display:none">
+        <label class="field-label" for="pwCode">Kode verifikasi</label>
+        <input class="field-input" id="pwCode" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="Kode dari email">
+        <span class="field-hint">Demi keamanan, kami kirim kode ke email kamu. Masukkan kodenya di sini.</span>
+      </div>
+      <div class="pw-msg" id="pwMsg" role="status" hidden></div>
+      <div class="form-footer">
+        <button class="btn-accent" id="pwBtn" onclick="changePassword()">Ganti Password</button>
+        <button type="button" class="link-btn" id="pwForgotBtn" onclick="sendResetLink()">Lupa password sekarang?</button>
+      </div>
+    </div>
   </main>
 </div>
 
@@ -260,6 +317,77 @@ setupOtherOption('optsGoal', 'fGoalOther', 'goal');
 document.querySelectorAll('#optsExperience .popt').forEach(function(b){b.addEventListener('click', function(){answers.experience = b.getAttribute('data-val'); selectOpt('optsExperience', answers.experience);});});
 
 async function logout(){await sbClient.auth.signOut();window.location.href='index.html';}
+
+// ── Change password ──────────────────────────────────────
+function pwMsg(kind, text) {
+  var el = document.getElementById('pwMsg');
+  el.className = 'pw-msg ' + kind; el.textContent = text; el.hidden = false;
+}
+document.querySelectorAll('.pw-toggle').forEach(function (t) {
+  t.addEventListener('click', function () {
+    var input = document.getElementById(t.dataset.target);
+    var showing = input.type === 'text';
+    input.type = showing ? 'password' : 'text';
+    t.classList.toggle('showing', !showing);
+    t.setAttribute('aria-label', showing ? 'Tampilkan password' : 'Sembunyikan password');
+  });
+});
+var pwNeedsCode = false;
+async function changePassword() {
+  var cur = document.getElementById('pwCurrent').value;
+  var nw = document.getElementById('pwNew').value;
+  var cf = document.getElementById('pwConfirm').value;
+  var code = document.getElementById('pwCode').value.trim();
+  var btn = document.getElementById('pwBtn');
+  if (!cur) return pwMsg('err', 'Isi password kamu sekarang dulu.');
+  if (nw.length < 6) return pwMsg('err', 'Password baru minimal 6 karakter.');
+  if (nw !== cf) return pwMsg('err', 'Password baru dan ulangannya belum sama.');
+  if (nw === cur) return pwMsg('err', 'Password baru harus berbeda dari password sekarang.');
+  if (pwNeedsCode && !code) return pwMsg('err', 'Masukkan kode verifikasi dari email kamu.');
+  btn.disabled = true; var label = btn.textContent; btn.textContent = 'Memproses...';
+  try {
+    // Check the current password first, so an unattended logged-in laptop
+    // can't be used to take over the account.
+    var chk = await sbClient.auth.signInWithPassword({ email: currentEmail, password: cur });
+    if (chk.error) { pwMsg('err', 'Password sekarang salah. Kalau lupa, klik "Lupa password sekarang?".'); return; }
+    var payload = { password: nw };
+    if (pwNeedsCode) payload.nonce = code;
+    var res = await sbClient.auth.updateUser(payload);
+    if (res.error) {
+      var m = res.error.message || '';
+      if (/reauthenticat|nonce/i.test(m) && !pwNeedsCode) {
+        // Project requires a one-time code for password changes: send it.
+        var re = await sbClient.auth.reauthenticate();
+        if (re.error) throw re.error;
+        pwNeedsCode = true;
+        document.getElementById('pwCodeGroup').style.display = '';
+        document.getElementById('pwCode').focus();
+        pwMsg('ok', 'Kode verifikasi sudah dikirim ke ' + currentEmail + '. Masukkan kodenya, lalu klik "Ganti Password" lagi.');
+        return;
+      }
+      if (/different from the old/i.test(m)) return pwMsg('err', 'Password baru harus berbeda dari password sekarang.');
+      if (/nonce|otp|expired|invalid/i.test(m) && pwNeedsCode) return pwMsg('err', 'Kode verifikasi salah atau sudah kedaluwarsa. Coba lagi.');
+      if (/weak|pwned|leaked|characters/i.test(m)) return pwMsg('err', 'Password baru terlalu lemah. Pakai kombinasi huruf, angka, dan simbol.');
+      throw res.error;
+    }
+    ['pwCurrent', 'pwNew', 'pwConfirm', 'pwCode'].forEach(function (id) { document.getElementById(id).value = ''; });
+    pwNeedsCode = false; document.getElementById('pwCodeGroup').style.display = 'none';
+    pwMsg('ok', 'Password berhasil diganti ✓ Pakai password baru ini saat masuk berikutnya.');
+  } catch (e) {
+    console.error(e);
+    pwMsg('err', 'Gagal mengganti password: ' + (e.message || 'coba lagi sebentar lagi.'));
+  } finally {
+    btn.disabled = false; btn.textContent = label;
+  }
+}
+async function sendResetLink() {
+  var b = document.getElementById('pwForgotBtn');
+  b.disabled = true;
+  var res = await sbClient.auth.resetPasswordForEmail(currentEmail, { redirectTo: location.origin + '/reset-password.html' });
+  b.disabled = false;
+  if (res.error) return pwMsg('err', /second|rate/i.test(res.error.message) ? 'Tunggu sebentar sebelum minta link lagi.' : 'Gagal mengirim link: ' + res.error.message);
+  pwMsg('ok', 'Link untuk membuat password baru sudah dikirim ke ' + currentEmail + '. Cek inbox atau folder spam.');
+}
 
 async function saveProfile(){
   var btn = document.getElementById('saveBtn');
@@ -321,6 +449,7 @@ async function _init(){
   if (isOnboarding) {
     document.getElementById('onboardBanner').style.display = 'flex';
     document.getElementById('saveBtn').textContent = 'Simpan & Lanjutkan ke Dashboard';
+    document.getElementById('pwCard').style.display = 'none';
   }
 
   var ADMIN_EMAILS = ['julia.utomo@gmail.com', 'tiffany.utomo@gmail.com', 'belajarclaude.id@gmail.com'];
