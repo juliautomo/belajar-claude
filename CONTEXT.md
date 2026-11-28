@@ -4285,3 +4285,23 @@ Backend commits: `dev` — `73391c6` (PostHog), `edf6a08` (trust proxy). `main` 
 **Still open:** confirm SendGrid cancellation before 1 Dec → then delete `SENDGRID_API_KEY`, remove the SendGrid fallback in `mailer.js`, delete its DNS records; make both GitHub repos private; delete the merged remote branch `feature/meta-pixel-tracking` (Julia: `git push origin --delete feature/meta-pixel-tracking` in each repo). Optional: Supabase leaked-password protection, replace the `klaud-id` Sheets service account, "Ganti password" on profile.html.
 
 **Commits this checkpoint.** Frontend `dev`: `614f723` (Checkpoint 241), `e32132b`, this entry. `main`: `d51445b`, `05a9563`, this entry. Backend `dev`: `47dbe32`, `7592b80` (README). `main`: `23919b3`, README copy.
+
+## SHIPPED (Checkpoint 243, November 26–28, 2026): reminder emails, scheduled community posts + email, unread badges, Ganti password, SendGrid gone
+
+**SendGrid fully removed** (Julia cancelled it before the 1 Dec renewal). `SENDGRID_API_KEY` deleted in Railway dev + production; fallback code removed from `mailer.js` — all email (backend + Supabase Auth) goes through Resend (free: 100/day, 3,000/month). Julia still to delete SendGrid's old DNS records in Cloudflare.
+
+**"Lanjutkan belajar" reminder email (backend `reminders.js`, live 26 Nov).** Learners (All Access + free trial) idle for 3 days get one reminder with their progress and a button to the dashboard; if they study again and later go idle for 3 days, another; max 2 per person ever. Sent only in the 09:00 WIB hour, cap `REMINDERS_MAX_PER_DAY` 25, switch `REMINDERS_MODE` (production on, dev off). Signed one-click unsubscribe (`/unsubscribe`, `email_prefs.reminders_off`) + List-Unsubscribe headers. Admins and team (Maggie, Tiffany) skipped. First real sends 27 Nov.
+
+**Scheduled community posts (live 27 Nov).** `community_posts.publish_at`: members only see posts once they are due; admins see everything. Admin → **Community Posts**: idea bank (`community_post_ideas`, admins only) → Kerjakan → edit → Jadwalkan (suggested next Monday 09:00, one post a week) with "Kirim email ke member saat tayang"; Terjadwal list with Ubah waktu / Posting sekarang / Batalkan. Community page composer also has Jadwalkan for admins. Feed ordered by publish time.
+
+**Community post email (backend `community-emails.js`, live 27 Nov).** When an admin post with `send_email` goes live, every learner gets one email (checked every 15 min, 08:00–20:59 WIB, posts older than 3 days skipped, cap 50/day, `COMMUNITY_EMAILS_MODE` production on, dev off, own unsubscribe `k=community`). `belajarclaude.id@gmail.com` always gets a copy for monitoring ("Halo,"). Member posts, comments and quick composer posts are never emailed. First send 27 Nov 12:55 WIB: 6 sent, 0 failed.
+
+**Unread indicators.** "Baru" tag on posts newer than the member's last visit (`community_seen`), count badge on the Komunitas sidebar link (dashboard, profile), phone top-bar Komunitas button. Dashboard banner removed (Julia: sidebar is enough). Community + profile pages no longer squeezed on phones.
+
+**Ganti password on profile.html (live 28 Nov).** Logged-in users change their password: current password is checked first (signInWithPassword), then `auth.updateUser`. Show/hide eye buttons, Indonesian messages, "Lupa password sekarang?" sends a reset link. If Supabase "Secure password change" is ever switched on, a one-time code field appears automatically (keep it off). Hidden during onboarding. No backend change needed. Tested by Julia on dev.
+
+**Other.** `belajarclaude.id@gmail.com` is admin on every page. Its account and posts renamed "Belajar Claude". Course pages send logged-out visitors to login and back to the course. Test account `+freetrial2` deleted; no test accounts remain.
+
+**Still on dev only:** free trial + new homepage (waits for Julia's homepage review), Analisis Data course. Backend main = dev except `/enroll-free-trial`.
+
+**Commits.** Frontend dev → `e7af435` (+ this entry); main → `f857149` (+ this entry). Backend dev → `236ee9b` (README); main → `e6df0ed`.
